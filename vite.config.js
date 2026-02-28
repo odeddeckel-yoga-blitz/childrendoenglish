@@ -7,9 +7,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'prompt',
-      includeAssets: ['favicon.png'],
+      includeAssets: ['favicon.png', 'icon-192.png', 'og-image.png'],
       workbox: {
-        globPatterns: ['**/*.{js,css,html}', 'favicon.png'],
+        globPatterns: ['**/*.{js,css,html}', 'favicon.png', 'icon-192.png', 'og-image.png'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         runtimeCaching: [
           {
@@ -46,6 +46,12 @@ export default defineConfig({
         orientation: 'portrait',
         categories: ['education', 'games', 'kids'],
         icons: [
+          {
+            src: 'icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'any maskable',
+          },
           {
             src: 'favicon.png',
             sizes: '512x512',
