@@ -37,7 +37,7 @@ async function searchWikimedia(query) {
 
   if (pages.length === 0) return [];
 
-  return pages.slice(0, 3).map(p => {
+  return pages.slice(0, 4).map(p => {
     const info = p.imageinfo[0];
     return {
       url: info.thumburl || info.url,
