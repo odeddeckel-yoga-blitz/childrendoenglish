@@ -11,6 +11,10 @@ const LEVEL_COLORS = {
   advanced: 'bg-purple-500',
 };
 
+// Cache-bust all admin images so replaced ones show immediately
+const cacheBuster = `?v=${Date.now()}`;
+const adminImageUrl = (word) => getImageUrl(word) + cacheBuster;
+
 export default function WordGrid({ password, onBack }) {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -123,7 +127,7 @@ export default function WordGrid({ password, onBack }) {
           >
             <div className={`aspect-square bg-slate-100 relative ${brokenImages.has(word.id) ? 'ring-2 ring-red-500' : ''}`}>
               <img
-                src={imageOverrides[word.id] || getImageUrl(word)}
+                src={imageOverrides[word.id] || adminImageUrl(word)}
                 alt={word.word}
                 className="w-full h-full object-cover"
                 loading="lazy"

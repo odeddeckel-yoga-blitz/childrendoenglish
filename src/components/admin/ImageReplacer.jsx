@@ -107,7 +107,7 @@ export default function ImageReplacer({ word, password, onClose, onReplaced }) {
             <p className="text-xs font-semibold text-slate-500 mb-2">Current image</p>
             <div className="w-48 h-48 rounded-xl overflow-hidden bg-slate-100">
               <img
-                src={getImageUrl(word)}
+                src={getImageUrl(word) + '?v=' + Date.now()}
                 alt={word.word}
                 className="w-full h-full object-cover"
               />
