@@ -8,7 +8,7 @@ function verifyAuth(req) {
   if (!auth?.startsWith('Bearer ')) return false;
   const password = auth.slice(7);
   const hash = crypto.createHash('sha256').update(password).digest('hex');
-  return hash === process.env.ADMIN_HASH;
+  return hash === (process.env.ADMIN_HASH || '').trim();
 }
 
 async function searchWikimedia(query) {
