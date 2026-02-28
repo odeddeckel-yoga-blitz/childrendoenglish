@@ -10,6 +10,7 @@ import { selectQuizWords, updateWordSR } from './utils/spaced-repetition';
 import { fisherYatesShuffle } from './utils/shuffle';
 import { preloadImages } from './utils/images';
 import { initTTS, playSound } from './utils/sound';
+import { isRTL } from './utils/i18n';
 
 
 const LevelSelect = lazy(() => import('./components/LevelSelect'));
@@ -58,8 +59,53 @@ export default function App() {
     document.documentElement.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
+  // Language direction sync
+  const lang = stats.uiLanguage || 'en';
+  useEffect(() => {
+    document.documentElement.dir = isRTL(lang) ? 'rtl' : 'ltr';
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   // Init TTS
   useEffect(() => { initTTS(); }, []);
+
+  // PWA install prompt
+  const deferredPrompt = useRef(null);
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      deferredPrompt.current = e;
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  // Show install banner on menu after first quiz if prompt is available
+  useEffect(() => {
+    if (gameState === 'menu' && stats.totalQuizzes >= 1 && deferredPrompt.current && !localStorage.getItem('childrendoenglish-install-dismissed')) {
+      setShowInstallBanner(true);
+    } else {
+      setShowInstallBanner(false);
+    }
+  }, [gameState, stats.totalQuizzes]);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt.current) return;
+    deferredPrompt.current.prompt();
+    const { outcome } = await deferredPrompt.current.userChoice;
+    deferredPrompt.current = null;
+    setShowInstallBanner(false);
+    if (outcome === 'dismissed') {
+      localStorage.setItem('childrendoenglish-install-dismissed', '1');
+    }
+  };
+
+  const dismissInstall = () => {
+    setShowInstallBanner(false);
+    localStorage.setItem('childrendoenglish-install-dismissed', '1');
+  };
 
   // Detect hash routes: #admin, #quiz/{mode}/{ids}
   useEffect(() => {
@@ -262,6 +308,10 @@ export default function App() {
             stats={stats}
             darkMode={darkMode}
             soundEnabled={soundEnabled}
+            lang={lang}
+            showInstallBanner={showInstallBanner}
+            onInstall={handleInstall}
+            onDismissInstall={dismissInstall}
             onNavigate={navigate}
             onToggleDark={toggleDarkMode}
             onToggleSound={toggleSound}

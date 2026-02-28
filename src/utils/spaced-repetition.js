@@ -1,7 +1,14 @@
+/** Interval ladder in days: 1 → 3 → 7 → 14 → 30, then doubles up to 60 */
 const SR_INTERVALS = [1, 3, 7, 14, 30];
 const DAY = 86400000;
 
-// Sort words by spaced repetition priority: overdue (2) > unseen (1) > not-yet-due (0)
+/**
+ * Sort words by spaced-repetition priority.
+ * Priority: overdue (2) > unseen (1) > not-yet-due (0). Ties broken randomly.
+ * @param {Array<{id: string}>} words - Word objects to sort
+ * @param {Object<string, {lastSeen: number, interval: number}>} wordProgress - Per-word SR state
+ * @returns {Array<{id: string}>} Sorted copy (does not mutate input)
+ */
 export const spacedRepetitionSort = (words, wordProgress) => {
   const now = Date.now();
   return [...words].sort((a, b) => {
@@ -14,7 +21,15 @@ export const spacedRepetitionSort = (words, wordProgress) => {
   });
 };
 
-// Update a word's SR data after answering
+/**
+ * Update a word's SR state after a quiz answer.
+ * Correct → advance to next interval on the ladder (max 60 days).
+ * Wrong → reset interval to 1 day.
+ * @param {Object<string, {lastSeen: number, interval: number, correct: number, wrong: number}>} wordProgress
+ * @param {string} wordId
+ * @param {boolean} correct - Whether the answer was correct
+ * @returns {Object} New wordProgress object (immutable update)
+ */
 export const updateWordSR = (wordProgress, wordId, correct) => {
   const card = wordProgress[wordId] || { lastSeen: 0, interval: 1, easeFactor: 2.5, correct: 0, wrong: 0 };
 
@@ -54,7 +69,15 @@ export const updateWordSR = (wordProgress, wordId, correct) => {
   };
 };
 
-// Select quiz words: 60% due-for-review + 20% new + 20% reinforcement
+/**
+ * Select a balanced set of quiz words from a pool.
+ * Mix: ~60% due for review, ~20% unseen, ~20% reinforcement.
+ * Fills remaining slots from any pool if one is too small.
+ * @param {Array<{id: string}>} words - Available word pool
+ * @param {Object<string, {lastSeen: number, interval: number}>} wordProgress
+ * @param {number} [count=10] - Number of words to select
+ * @returns {Array<{id: string}>} Shuffled selection (length ≤ count)
+ */
 export const selectQuizWords = (words, wordProgress, count = 10) => {
   const now = Date.now();
   const due = [];
@@ -102,7 +125,12 @@ export const selectQuizWords = (words, wordProgress, count = 10) => {
   return shuffle(selected).slice(0, count);
 };
 
-// Check if a word is "mastered" (interval >= 14 days)
+/**
+ * Check if a word is considered "mastered" (review interval ≥ 14 days).
+ * @param {Object<string, {interval: number}>} wordProgress
+ * @param {string} wordId
+ * @returns {boolean}
+ */
 export const isWordMastered = (wordProgress, wordId) => {
   const card = wordProgress[wordId];
   return card && card.interval >= 14;

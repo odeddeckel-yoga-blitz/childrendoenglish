@@ -25,12 +25,12 @@ export default function PrivacyPolicy({ onBack }) {
 
         <section className="space-y-2">
           <h3 className="font-bold text-slate-800">Cookies & tracking</h3>
-          <p>We do not use cookies. We do not use any third-party analytics, advertising, or tracking services.</p>
+          <p>We do not use cookies. We do not use any advertising or tracking services. We use <strong>Plausible Analytics</strong>, a privacy-focused analytics tool that does not use cookies, does not collect personal data, and is fully GDPR/CCPA compliant. It only counts page views and basic device information (browser, country) with no way to identify individual users.</p>
         </section>
 
         <section className="space-y-2">
           <h3 className="font-bold text-slate-800">Third-party services</h3>
-          <p>The app does not connect to any third-party services during normal use. All word data and images are bundled with the app.</p>
+          <p>The app uses Plausible Analytics (plausible.io) for anonymous usage statistics. The browser's built-in speech synthesis may connect to your device's speech engine for word pronunciation. All word data and images are bundled with the app.</p>
         </section>
 
         <section className="space-y-2">
@@ -45,7 +45,7 @@ export default function PrivacyPolicy({ onBack }) {
 
         <section className="space-y-2">
           <h3 className="font-bold text-slate-800">Contact</h3>
-          <p>If you have questions about this privacy policy, please open an issue on our GitHub repository.</p>
+          <p>Children Do English is made by Oded Deckelbaum. If you have questions about this privacy policy or the app, email <a href="mailto:odeddeckel@gmail.com" className="text-blue-600 underline">odeddeckel@gmail.com</a>.</p>
         </section>
       </div>
     </div>

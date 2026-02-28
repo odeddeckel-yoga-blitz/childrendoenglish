@@ -78,6 +78,15 @@ npm test              # Unit tests
 npm run test:e2e      # E2E tests (requires Playwright browsers)
 ```
 
+## Contributing
+
+1. Fork the repo and create a feature branch from `main`.
+2. Run `npm install` and `npm run dev` to start the local server.
+3. Make your changes — keep components small, use Tailwind utility classes, and follow existing naming conventions.
+4. Run `npm test` to ensure all 34+ unit tests pass.
+5. If adding a word: add the entry in `src/data/words.js` **and** a matching 512x512 WebP image at `public/images/{id}.webp`.
+6. Submit a PR with a clear description of what changed and why.
+
 ## License
 
 Private project.

@@ -1,6 +1,7 @@
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X } from 'lucide-react';
+import { t } from '../utils/i18n';
 
-export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onToggleDark, onToggleSound }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', showInstallBanner, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound }) {
   const dailyProgress = stats.dailyGoal?.date === new Date().toISOString().slice(0, 10)
     ? Math.min(stats.dailyGoal.wordsReviewed / 10, 1) * 100
     : 0;
@@ -14,9 +15,9 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-black text-slate-800">
-            Children Do English
+            {t('appName', lang)}
           </h1>
-          <p className="text-slate-500 text-sm">Build your vocabulary!</p>
+          <p className="text-slate-500 text-sm">{t('tagline', lang)}</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -47,12 +48,12 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-amber-500" />
-            <span className="text-sm font-semibold text-slate-700">Daily Goal</span>
+            <span className="text-sm font-semibold text-slate-700">{t('dailyGoal', lang)}</span>
           </div>
           <span className="text-xs text-slate-500">
             {stats.dailyGoal?.date === new Date().toISOString().slice(0, 10)
               ? stats.dailyGoal.wordsReviewed
-              : 0} / 10 words
+              : 0} / 10 {t('words', lang)}
           </span>
         </div>
         <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={Math.round(dailyProgress)} aria-valuemin={0} aria-valuemax={100} aria-label="Daily goal progress">
@@ -81,8 +82,8 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
             <TrendingUp className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">Find Your Level</h3>
-            <p className="text-slate-500 text-sm">Quick assessment to match your skill</p>
+            <h3 className="font-bold text-slate-800">{t('findYourLevel', lang)}</h3>
+            <p className="text-slate-500 text-sm">{t('findYourLevelDesc', lang)}</p>
           </div>
         </button>
       )}
@@ -99,8 +100,8 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
             <BookOpen className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">Learn Words</h3>
-            <p className="text-slate-500 text-sm">Browse and study vocabulary</p>
+            <h3 className="font-bold text-slate-800">{t('learnWords', lang)}</h3>
+            <p className="text-slate-500 text-sm">{t('learnWordsDesc', lang)}</p>
           </div>
         </button>
 
@@ -114,8 +115,8 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
             <Layers className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">Flashcards</h3>
-            <p className="text-slate-500 text-sm">Swipe to review words</p>
+            <h3 className="font-bold text-slate-800">{t('flashcards', lang)}</h3>
+            <p className="text-slate-500 text-sm">{t('flashcardsDesc', lang)}</p>
           </div>
         </button>
 
@@ -129,8 +130,8 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
             <Play className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">Play Quiz</h3>
-            <p className="text-slate-500 text-sm">Test your vocabulary</p>
+            <h3 className="font-bold text-slate-800">{t('playQuiz', lang)}</h3>
+            <p className="text-slate-500 text-sm">{t('playQuizDesc', lang)}</p>
           </div>
         </button>
 
@@ -144,8 +145,8 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
             <ListChecks className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">My Word List</h3>
-            <p className="text-slate-500 text-sm">Practice custom words</p>
+            <h3 className="font-bold text-slate-800">{t('myWordList', lang)}</h3>
+            <p className="text-slate-500 text-sm">{t('myWordListDesc', lang)}</p>
           </div>
         </button>
       </div>
@@ -159,8 +160,8 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
         >
           <BarChart2 className="w-5 h-5 text-blue-600" />
           <div className="text-left">
-            <p className="font-semibold text-sm text-slate-800">Progress</p>
-            <p className="text-xs text-slate-500">{wordsLearned} words</p>
+            <p className="font-semibold text-sm text-slate-800">{t('progress', lang)}</p>
+            <p className="text-xs text-slate-500">{wordsLearned} {t('words', lang)}</p>
           </div>
         </button>
 
@@ -171,8 +172,8 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
         >
           <Award className="w-5 h-5 text-amber-600" />
           <div className="text-left">
-            <p className="font-semibold text-sm text-slate-800">Badges</p>
-            <p className="text-xs text-slate-500">{stats.badges?.length || 0} earned</p>
+            <p className="font-semibold text-sm text-slate-800">{t('badges', lang)}</p>
+            <p className="text-xs text-slate-500">{stats.badges?.length || 0} {t('earned', lang)}</p>
           </div>
         </button>
       </div>
@@ -182,27 +183,47 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
             <p className="text-2xl font-black text-blue-600">{stats.totalQuizzes}</p>
-            <p className="text-xs text-slate-500">Quizzes</p>
+            <p className="text-xs text-slate-500">{t('quizzes', lang)}</p>
           </div>
           <div>
             <p className="text-2xl font-black text-emerald-600">{wordsLearned}</p>
-            <p className="text-xs text-slate-500">Learned</p>
+            <p className="text-xs text-slate-500">{t('learned', lang)}</p>
           </div>
           <div>
             <p className="text-2xl font-black text-amber-600">{wordsMastered}</p>
-            <p className="text-xs text-slate-500">Mastered</p>
+            <p className="text-xs text-slate-500">{t('mastered', lang)}</p>
           </div>
         </div>
       </div>
 
-      <p className="text-center">
+      {/* PWA install banner */}
+      {showInstallBanner && (
+        <div className="glass rounded-2xl p-4 flex items-center gap-3 border border-blue-200 bg-blue-50/50">
+          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+            <Download className="w-5 h-5 text-blue-600" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-slate-800">Install App</p>
+            <p className="text-xs text-slate-500">Add to your home screen for quick access</p>
+          </div>
+          <button onClick={onInstall} className="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all">
+            Install
+          </button>
+          <button onClick={onDismissInstall} className="p-1 rounded-lg hover:bg-slate-200 transition-colors" aria-label="Dismiss install prompt">
+            <X className="w-4 h-4 text-slate-400" />
+          </button>
+        </div>
+      )}
+
+      <div className="text-center space-y-1">
+        <p className="text-xs text-slate-400">{t('madeBy', lang)}</p>
         <button
           onClick={() => onNavigate('privacy')}
           className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
         >
-          Privacy Policy
+          {t('privacyPolicy', lang)}
         </button>
-      </p>
+      </div>
     </div>
   );
 }

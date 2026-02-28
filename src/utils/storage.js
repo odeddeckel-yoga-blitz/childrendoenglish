@@ -1,7 +1,10 @@
+/** @module storage — localStorage persistence for user stats and preferences */
+
 const STORAGE_KEY = 'childrendoenglish-stats';
 const DARK_KEY = 'childrendoenglish-dark';
 const SOUND_KEY = 'childrendoenglish-sound';
 
+/** @returns {Stats} Default stats object with all fields initialized */
 const getDefaultStats = () => ({
   totalQuizzes: 0,
   bestScores: { beginner: 0, intermediate: 0, advanced: 0 },
@@ -18,6 +21,7 @@ const getDefaultStats = () => ({
   quizHistory: [],          // [{ date, mode, level, score, total }]
 });
 
+/** Load stats from localStorage, merging with defaults for any missing keys. */
 export const loadStats = () => {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -31,6 +35,7 @@ export const loadStats = () => {
   return getDefaultStats();
 };
 
+/** Persist stats to localStorage. Silently catches quota/write errors. */
 export const saveStats = (stats) => {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
@@ -70,7 +75,12 @@ export const saveSoundEnabled = (enabled) => {
   } catch {}
 };
 
-// Update streak based on today's date
+/**
+ * Update the user's daily streak. Increments if last active was yesterday,
+ * resets to 1 if a day was missed, no-op if already active today.
+ * @param {Stats} stats
+ * @returns {Stats} Updated stats with currentStreak, longestStreak, lastActiveDate
+ */
 export const updateStreak = (stats) => {
   const today = new Date().toISOString().slice(0, 10);
   const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
@@ -89,7 +99,12 @@ export const updateStreak = (stats) => {
   };
 };
 
-// Update daily goal
+/**
+ * Add reviewed words to today's daily goal counter. Resets if the date changed.
+ * @param {Stats} stats
+ * @param {number} wordsCount - Number of words reviewed in this session
+ * @returns {Stats} Updated stats with dailyGoal.wordsReviewed incremented
+ */
 export const updateDailyGoal = (stats, wordsCount) => {
   const today = new Date().toISOString().slice(0, 10);
   const daily = stats.dailyGoal;
