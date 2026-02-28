@@ -35,13 +35,15 @@ async function searchWikimedia(query) {
       return ratioA - ratioB;
     });
 
-  if (pages.length === 0) return null;
+  if (pages.length === 0) return [];
 
-  const info = pages[0].imageinfo[0];
-  return {
-    url: info.thumburl || info.url,
-    sourceUrl: info.descriptionurl || info.url,
-  };
+  return pages.slice(0, 3).map(p => {
+    const info = p.imageinfo[0];
+    return {
+      url: info.thumburl || info.url,
+      sourceUrl: info.descriptionurl || info.url,
+    };
+  });
 }
 
 export default async function handler(req, res) {
@@ -62,24 +64,30 @@ export default async function handler(req, res) {
 
   for (const query of queries.slice(0, 3)) {
     try {
-      const found = await searchWikimedia(query);
-      if (!found) continue;
+      const candidates = await searchWikimedia(query);
+      if (!candidates.length) continue;
 
-      const imgRes = await fetch(found.url, { headers: { 'User-Agent': UA } });
-      if (!imgRes.ok) continue;
+      for (const found of candidates) {
+        try {
+          const imgRes = await fetch(found.url, { headers: { 'User-Agent': UA } });
+          if (!imgRes.ok) continue;
 
-      const buffer = Buffer.from(await imgRes.arrayBuffer());
-      const optimized = await sharp(buffer)
-        .resize(512, 512, { fit: 'cover', position: 'centre' })
-        .webp({ quality: 82 })
-        .toBuffer();
+          const buffer = Buffer.from(await imgRes.arrayBuffer());
+          const optimized = await sharp(buffer)
+            .resize(512, 512, { fit: 'cover', position: 'centre' })
+            .webp({ quality: 82 })
+            .toBuffer();
 
-      results.push({
-        imageBase64: optimized.toString('base64'),
-        sourceUrl: found.sourceUrl,
-        query,
-        sizeKB: +(optimized.length / 1024).toFixed(1),
-      });
+          results.push({
+            imageBase64: optimized.toString('base64'),
+            sourceUrl: found.sourceUrl,
+            query,
+            sizeKB: +(optimized.length / 1024).toFixed(1),
+          });
+        } catch (err) {
+          console.error(`Failed downloading "${found.url}":`, err.message);
+        }
+      }
     } catch (err) {
       console.error(`Failed for query "${query}":`, err.message);
     }
