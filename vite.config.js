@@ -14,7 +14,7 @@ export default defineConfig({
         runtimeCaching: [
           {
             urlPattern: /\/images\/.*\.webp$/,
-            handler: 'CacheFirst',
+            handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'word-images',
               expiration: {
