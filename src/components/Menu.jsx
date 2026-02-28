@@ -71,21 +71,6 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
       {/* Main actions */}
       <div className="space-y-3">
         <button
-          onClick={() => onNavigate('levelSelect')}
-          className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-left"
-        >
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600
-                          flex items-center justify-center flex-shrink-0">
-            <Play className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h3 className="font-bold text-slate-800">Play Quiz</h3>
-            <p className="text-slate-500 text-sm">Test your vocabulary</p>
-          </div>
-        </button>
-
-        <button
           onClick={() => onNavigate('learning')}
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
                      hover:shadow-lg active:scale-[0.98] transition-all text-left"
@@ -112,6 +97,21 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
           <div>
             <h3 className="font-bold text-slate-800">Flashcards</h3>
             <p className="text-slate-500 text-sm">Swipe to review words</p>
+          </div>
+        </button>
+
+        <button
+          onClick={() => onNavigate('levelSelect')}
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-left"
+        >
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600
+                          flex items-center justify-center flex-shrink-0">
+            <Play className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h3 className="font-bold text-slate-800">Play Quiz</h3>
+            <p className="text-slate-500 text-sm">Test your vocabulary</p>
           </div>
         </button>
 
