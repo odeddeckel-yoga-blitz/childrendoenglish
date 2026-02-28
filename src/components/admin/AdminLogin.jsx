@@ -18,6 +18,7 @@ export default function AdminLogin({ onAuth }) {
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
+      console.log('DEBUG hash:', hashHex, 'expected:', import.meta.env.VITE_ADMIN_HASH);
       if (hashHex === import.meta.env.VITE_ADMIN_HASH) {
         onAuth(password);
       } else {
