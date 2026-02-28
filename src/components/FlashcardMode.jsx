@@ -124,7 +124,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
     <div className="animate-fade-in space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <button onClick={onBack} className="p-2 rounded-xl hover:bg-slate-100 transition-colors">
+        <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to menu">
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
         <span className="text-sm text-slate-500">{currentIdx + 1} / {cards.length}</span>
@@ -184,11 +184,12 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
                 <button
                   onClick={(e) => { e.stopPropagation(); speakWord(currentCard.word); }}
                   className="p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
+                  aria-label="Pronounce word"
                 >
                   <Volume2 className="w-5 h-5 text-blue-600" />
                 </button>
               </div>
-              <p className="text-center text-slate-400 font-mono text-sm">{currentCard.phonetic}</p>
+              <p className="text-center text-slate-500 font-mono text-sm">{currentCard.phonetic}</p>
               <p className="text-center text-slate-600">{currentCard.definition}</p>
               <p className="text-center text-sm text-slate-500 italic">"{currentCard.exampleSentence}"</p>
               <div className="pt-3 border-t border-slate-200">

@@ -10,7 +10,7 @@ import { selectQuizWords } from './utils/spaced-repetition';
 import { fisherYatesShuffle } from './utils/shuffle';
 import { preloadImages } from './utils/images';
 import { initTTS, playSound } from './utils/sound';
-import { trackEvent } from './utils/analytics';
+
 
 const LevelSelect = lazy(() => import('./components/LevelSelect'));
 const ModeSelect = lazy(() => import('./components/ModeSelect'));
@@ -25,6 +25,7 @@ const ProgressDashboard = lazy(() => import('./components/ProgressDashboard'));
 const AssessmentFlow = lazy(() => import('./components/AssessmentFlow'));
 const PersonalWordList = lazy(() => import('./components/PersonalWordList'));
 const UpdatePrompt = lazy(() => import('./components/UpdatePrompt'));
+const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
 const AdminPanel = lazy(() => import('./components/admin/AdminPanel'));
 
 export default function App() {
@@ -150,7 +151,7 @@ export default function App() {
 
     setQuizWords(selected);
     navigate(mode === 'image' ? 'imageQuiz' : mode === 'word' ? 'wordQuiz' : 'audioQuiz');
-    trackEvent('quiz_start', { level, mode, wordCount: selected.length });
+
   }, [navigate, stats.wordProgress]);
 
   const handleQuizComplete = useCallback((results) => {
@@ -225,7 +226,7 @@ export default function App() {
 
     setQuizResults(results);
     navigate('finished');
-    trackEvent('quiz_complete', { score, total, mode, level: selectedLevel });
+
   }, [selectedLevel, navigate]);
 
   const handleAssessmentComplete = useCallback((level) => {
@@ -381,6 +382,11 @@ export default function App() {
             onStartQuiz={handleStartPersonalQuiz}
             onBack={() => navigate('menu', 'back')}
           />
+        );
+
+      case 'privacy':
+        return (
+          <PrivacyPolicy onBack={() => navigate('menu', 'back')} />
         );
 
       case 'admin':

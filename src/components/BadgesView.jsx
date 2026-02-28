@@ -5,7 +5,7 @@ export default function BadgesView({ stats, onBack }) {
   return (
     <div className="animate-fade-in space-y-6">
       <div className="flex items-center gap-3">
-        <button onClick={onBack} className="p-2 rounded-xl hover:bg-slate-100 transition-colors">
+        <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to menu">
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
         <h2 className="text-xl font-bold text-slate-800">Badges</h2>

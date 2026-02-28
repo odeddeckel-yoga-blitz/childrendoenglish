@@ -175,6 +175,15 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
           </div>
         </div>
       </div>
+
+      <p className="text-center">
+        <button
+          onClick={() => onNavigate('privacy')}
+          className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
+        >
+          Privacy Policy
+        </button>
+      </p>
     </div>
   );
 }

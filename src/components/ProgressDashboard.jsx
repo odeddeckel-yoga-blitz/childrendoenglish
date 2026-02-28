@@ -16,7 +16,7 @@ export default function ProgressDashboard({ stats, onBack, onAssessment }) {
     <div className="animate-fade-in space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button onClick={onBack} className="p-2 rounded-xl hover:bg-slate-100 transition-colors">
+        <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to menu">
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
         <h2 className="text-xl font-bold text-slate-800">Progress</h2>
@@ -28,13 +28,13 @@ export default function ProgressDashboard({ stats, onBack, onAssessment }) {
           <Flame className="w-6 h-6 text-amber-500 mx-auto" />
           <p className="text-3xl font-black text-amber-600">{stats.currentStreak}</p>
           <p className="text-xs text-slate-500">Day Streak</p>
-          <p className="text-xs text-slate-400">Best: {stats.longestStreak}</p>
+          <p className="text-xs text-slate-500">Best: {stats.longestStreak}</p>
         </div>
         <div className="glass rounded-2xl p-4 text-center space-y-1">
           <BookOpen className="w-6 h-6 text-blue-500 mx-auto" />
           <p className="text-3xl font-black text-blue-600">{wordsLearned}</p>
           <p className="text-xs text-slate-500">Words Seen</p>
-          <p className="text-xs text-slate-400">of {totalWords}</p>
+          <p className="text-xs text-slate-500">of {totalWords}</p>
         </div>
         <div className="glass rounded-2xl p-4 text-center space-y-1">
           <Trophy className="w-6 h-6 text-emerald-500 mx-auto" />
@@ -89,13 +89,13 @@ export default function ProgressDashboard({ stats, onBack, onAssessment }) {
               <div key={i} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
                 <div>
                   <span className="text-sm font-semibold text-slate-700 capitalize">{quiz.mode}</span>
-                  <span className="text-xs text-slate-400 ml-2 capitalize">{quiz.level}</span>
+                  <span className="text-xs text-slate-500 ml-2 capitalize">{quiz.level}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={`text-sm font-bold ${quiz.score >= 7 ? 'text-emerald-600' : 'text-amber-600'}`}>
                     {quiz.score}/{quiz.total}
                   </span>
-                  <span className="text-xs text-slate-400">
+                  <span className="text-xs text-slate-500">
                     {new Date(quiz.date).toLocaleDateString()}
                   </span>
                 </div>

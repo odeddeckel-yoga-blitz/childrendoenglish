@@ -91,6 +91,7 @@ export default function Onboarding({ onComplete, onSelectLanguage }) {
             <button
               onClick={() => setStep(s => s - 1)}
               className="p-3 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
+              aria-label="Previous step"
             >
               <ArrowLeft className="w-5 h-5 text-slate-600" />
             </button>
@@ -111,6 +112,7 @@ export default function Onboarding({ onComplete, onSelectLanguage }) {
           <button
             onClick={() => setStep(s => s + 1)}
             className="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+            aria-label="Next step"
           >
             <ArrowRight className="w-5 h-5" />
           </button>

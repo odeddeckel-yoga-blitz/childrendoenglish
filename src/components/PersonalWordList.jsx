@@ -58,7 +58,7 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
     <div className="animate-fade-in space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button onClick={onBack} className="p-2 rounded-xl hover:bg-slate-100 transition-colors">
+        <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to menu">
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
         <h2 className="text-xl font-bold text-slate-800">My Word List</h2>
@@ -141,7 +141,7 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
                 <button
                   onClick={() => handleShare('image')}
                   className="px-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 active:scale-95 transition-all"
-                  title="Share Image Quiz"
+                  aria-label={copiedMode === 'image' ? 'Link copied' : 'Share image quiz'}
                 >
                   {copiedMode === 'image' ? <Check className="w-5 h-5" /> : <Share2 className="w-5 h-5" />}
                 </button>
@@ -157,7 +157,7 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
                 <button
                   onClick={() => handleShare('word')}
                   className="px-3 glass rounded-xl text-blue-600 hover:shadow-md active:scale-95 transition-all"
-                  title="Share Word Quiz"
+                  aria-label={copiedMode === 'word' ? 'Link copied' : 'Share word quiz'}
                 >
                   {copiedMode === 'word' ? <Check className="w-5 h-5" /> : <Share2 className="w-5 h-5" />}
                 </button>

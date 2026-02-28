@@ -50,7 +50,7 @@ export default function WordGrid({ password, onBack }) {
     <div className="animate-fade-in space-y-4">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button onClick={onBack} className="p-2 rounded-xl hover:bg-slate-100 transition-colors">
+        <button onClick={onBack} className="p-2 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to admin panel">
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
         <h2 className="text-xl font-bold text-slate-800">Image Manager</h2>

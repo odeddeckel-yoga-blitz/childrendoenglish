@@ -43,7 +43,7 @@ export default function LearnMode({ stats, onBack }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2 rounded-xl hover:bg-slate-100 transition-colors">
+          <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to menu">
             <ArrowLeft className="w-5 h-5 text-slate-600" />
           </button>
           <h2 className="text-xl font-bold text-slate-800">Learn Words</h2>
@@ -52,12 +52,14 @@ export default function LearnMode({ stats, onBack }) {
           <button
             onClick={() => setView('grid')}
             className={`p-2 rounded-lg transition-colors ${view === 'grid' ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:bg-slate-100'}`}
+            aria-label="Grid view"
           >
             <Grid3X3 className="w-5 h-5" />
           </button>
           <button
             onClick={() => setView('detail')}
             className={`p-2 rounded-lg transition-colors ${view === 'detail' ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:bg-slate-100'}`}
+            aria-label="Detail view"
           >
             <BookOpen className="w-5 h-5" />
           </button>
@@ -141,6 +143,7 @@ export default function LearnMode({ stats, onBack }) {
               onClick={() => { setDetailIndex(i => Math.max(0, i - 1)); setImgLoaded(false); }}
               disabled={detailIndex === 0}
               className="p-2 rounded-lg hover:bg-slate-100 disabled:opacity-30 transition-colors"
+              aria-label="Previous word"
             >
               <ChevronLeft className="w-5 h-5 text-slate-600" />
             </button>
@@ -149,6 +152,7 @@ export default function LearnMode({ stats, onBack }) {
               onClick={() => { setDetailIndex(i => Math.min(filtered.length - 1, i + 1)); setImgLoaded(false); }}
               disabled={detailIndex === filtered.length - 1}
               className="p-2 rounded-lg hover:bg-slate-100 disabled:opacity-30 transition-colors"
+              aria-label="Next word"
             >
               <ChevronRight className="w-5 h-5 text-slate-600" />
             </button>
@@ -176,11 +180,12 @@ export default function LearnMode({ stats, onBack }) {
                 <button
                   onClick={() => speakWord(currentWord.word)}
                   className="p-2.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
+                  aria-label="Pronounce word"
                 >
                   <Volume2 className="w-5 h-5 text-blue-600" />
                 </button>
               </div>
-              <p className="text-sm text-slate-400 font-mono">{currentWord.phonetic}</p>
+              <p className="text-sm text-slate-500 font-mono">{currentWord.phonetic}</p>
               <p className="text-slate-600">{currentWord.definition}</p>
               <p className="text-sm text-slate-500 italic">"{currentWord.exampleSentence}"</p>
               <div className="pt-2 border-t border-slate-200">

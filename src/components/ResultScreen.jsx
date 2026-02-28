@@ -116,7 +116,7 @@ export default function ResultScreen({ results, stats, level, mode, onPlayAgain,
                   </div>
                   <span className="font-semibold text-sm text-slate-700">{word.word}</span>
                   {!answer.correct && answer.selected && (
-                    <span className="text-xs text-slate-400 ml-auto">
+                    <span className="text-xs text-slate-500 ml-auto">
                       You picked: {getWordById(answer.selected)?.word}
                     </span>
                   )}

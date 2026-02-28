@@ -96,7 +96,7 @@ export default function ImageReplacer({ word, password, onClose, onReplaced }) {
             <h3 className="text-lg font-bold text-slate-800">{word.word}</h3>
             <p className="text-xs text-slate-400 capitalize">{word.category} &middot; {word.level}</p>
           </div>
-          <button onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 transition-colors">
+          <button onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 transition-colors" aria-label="Close">
             <X className="w-5 h-5 text-slate-500" />
           </button>
         </div>
