@@ -31,7 +31,7 @@ export default function QuizHeader({ score, total, streak, soundEnabled, onToggl
         </div>
       </div>
 
-      <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+      <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={currentIndex} aria-valuemin={0} aria-valuemax={total} aria-label="Quiz progress">
         <div
           className={`h-full bg-gradient-to-r ${gradientColor} rounded-full transition-all duration-300`}
           style={{ width: `${((currentIndex) / total) * 100}%` }}

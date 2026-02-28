@@ -66,10 +66,11 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
 
       {/* Input */}
       <div className="glass rounded-2xl p-4 space-y-3">
-        <p className="text-sm text-slate-600">
+        <label htmlFor="word-list-input" className="text-sm text-slate-600 block">
           Enter or paste your word list (one word per line or comma-separated):
-        </p>
+        </label>
         <textarea
+          id="word-list-input"
           value={input}
           onChange={e => { setInput(e.target.value); setParsed(false); }}
           placeholder="cat, dog, apple, tree..."

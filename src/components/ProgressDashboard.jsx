@@ -54,7 +54,7 @@ export default function ProgressDashboard({ stats, onBack, onAssessment }) {
           <span className="font-semibold text-slate-700">Vocabulary Mastery</span>
           <span className="text-slate-500">{wordsLearned}/{totalWords}</span>
         </div>
-        <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
+        <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={wordsLearned} aria-valuemin={0} aria-valuemax={totalWords} aria-label="Vocabulary mastery">
           <div
             className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all"
             style={{ width: `${(wordsLearned / totalWords) * 100}%` }}

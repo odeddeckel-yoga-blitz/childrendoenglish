@@ -68,8 +68,10 @@ export default function LearnMode({ stats, onBack }) {
 
       {/* Search */}
       <div className="relative">
+        <label htmlFor="learn-search" className="sr-only">Search words</label>
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
         <input
+          id="learn-search"
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}

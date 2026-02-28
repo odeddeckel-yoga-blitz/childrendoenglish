@@ -89,6 +89,8 @@ export default function ImageQuiz({ words, soundEnabled, onToggleSound, onComple
         </button>
       )}
 
+      <div aria-live="polite" className="sr-only">{quiz.feedbackMessage}</div>
+
       {quiz.showQuitConfirm && (
         <QuitModal onContinue={quiz.closeQuitConfirm} onQuit={quiz.handleQuit} />
       )}

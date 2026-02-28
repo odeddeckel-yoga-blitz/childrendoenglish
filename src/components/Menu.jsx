@@ -1,4 +1,4 @@
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp } from 'lucide-react';
 
 export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onToggleDark, onToggleSound }) {
   const dailyProgress = stats.dailyGoal?.date === new Date().toISOString().slice(0, 10)
@@ -55,7 +55,7 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
               : 0} / 10 words
           </span>
         </div>
-        <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+        <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={Math.round(dailyProgress)} aria-valuemin={0} aria-valuemax={100} aria-label="Daily goal progress">
           <div
             className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
             style={{ width: `${dailyProgress}%` }}
@@ -67,6 +67,25 @@ export default function Menu({ stats, darkMode, soundEnabled, onNavigate, onTogg
           </p>
         )}
       </div>
+
+      {/* Assessment prompt */}
+      {!stats.assessmentLevel && stats.totalQuizzes === 0 && (
+        <button
+          onClick={() => onNavigate('assessment')}
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-left
+                     border border-blue-200 bg-blue-50/50"
+        >
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600
+                          flex items-center justify-center flex-shrink-0">
+            <TrendingUp className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h3 className="font-bold text-slate-800">Find Your Level</h3>
+            <p className="text-slate-500 text-sm">Quick assessment to match your skill</p>
+          </div>
+        </button>
+      )}
 
       {/* Main actions */}
       <div className="space-y-3">

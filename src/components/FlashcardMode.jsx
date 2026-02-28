@@ -135,7 +135,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
       </div>
 
       {/* Progress */}
-      <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+      <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={currentIdx} aria-valuemin={0} aria-valuemax={cards.length} aria-label="Flashcard progress">
         <div
           className="h-full bg-blue-500 rounded-full transition-all duration-300"
           style={{ width: `${((currentIdx) / cards.length) * 100}%` }}
@@ -148,10 +148,12 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div
-          className={`flashcard-inner relative w-full cursor-pointer ${flipped ? 'flipped' : ''}`}
+        <button
+          type="button"
+          className={`flashcard-inner relative w-full cursor-pointer text-left ${flipped ? 'flipped' : ''}`}
           onClick={() => setFlipped(f => !f)}
           style={{ minHeight: '380px' }}
+          aria-label={flipped ? 'Flip card to front' : 'Flip card to see answer'}
         >
           {/* Front */}
           <div className="flashcard-front absolute inset-0">
@@ -199,7 +201,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
               </div>
             </div>
           </div>
-        </div>
+        </button>
 
         {/* Swipe overlay */}
         {swipeOverlay && (

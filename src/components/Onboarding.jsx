@@ -79,6 +79,7 @@ export default function Onboarding({ onComplete, onSelectLanguage }) {
               >
                 עברית (Hebrew)
               </button>
+              <p className="text-xs text-slate-400">Hebrew translations are shown in flashcards and word details.</p>
             </div>
           </>
         )}

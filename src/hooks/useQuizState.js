@@ -13,6 +13,7 @@ export default function useQuizState({ words, mode, onComplete, speakOnCorrect =
   const [answers, setAnswers] = useState([]);
   const [options, setOptions] = useState([]);
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState('');
   const feedbackTimeout = useRef(null);
 
   const currentWord = words[currentIndex];
@@ -25,6 +26,7 @@ export default function useQuizState({ words, mode, onComplete, speakOnCorrect =
     setOptions(fisherYatesShuffle([currentWord, ...distractors]));
     setAnswered(null);
     setSelectedAnswer(null);
+    setFeedbackMessage('');
   }, [currentIndex, currentWord]);
 
   // Cleanup timeout on unmount
@@ -41,11 +43,13 @@ export default function useQuizState({ words, mode, onComplete, speakOnCorrect =
     if (correct) {
       setScore(s => s + 1);
       setStreak(s => s + 1);
+      setFeedbackMessage(`Correct! The answer is ${currentWord.word}.`);
       playSound('correct');
       haptic('success');
       if (speakOnCorrect) speakWord(currentWord.word);
     } else {
       setStreak(0);
+      setFeedbackMessage(`Wrong. The correct answer is ${currentWord.word}.`);
       playSound('wrong');
       haptic('error');
       if (speakDelay > 0) {
@@ -74,6 +78,7 @@ export default function useQuizState({ words, mode, onComplete, speakOnCorrect =
     if (answered) return;
 
     setAnswered('wrong');
+    setFeedbackMessage(`Skipped. The answer is ${currentWord.word}.`);
     setAnswers(prev => [...prev, { wordId: currentWord.id, correct: false, selected: null }]);
     setStreak(0);
     speakWord(currentWord.word);
@@ -110,6 +115,7 @@ export default function useQuizState({ words, mode, onComplete, speakOnCorrect =
     selectedAnswer,
     options,
     showQuitConfirm,
+    feedbackMessage,
     handleAnswer,
     handleSkip,
     handleQuit,

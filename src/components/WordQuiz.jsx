@@ -96,6 +96,8 @@ export default function WordQuiz({ words, soundEnabled, onToggleSound, onComplet
         </button>
       )}
 
+      <div aria-live="polite" className="sr-only">{quiz.feedbackMessage}</div>
+
       {quiz.showQuitConfirm && (
         <QuitModal onContinue={quiz.closeQuitConfirm} onQuit={quiz.handleQuit} />
       )}

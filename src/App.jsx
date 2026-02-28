@@ -6,7 +6,7 @@ import Onboarding from './components/Onboarding';
 import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, updateStreak, updateDailyGoal } from './utils/storage';
 import { WORDS, getWordsByLevel, getDistractors, getWordById } from './data/words';
 import { BADGES } from './data/badges';
-import { selectQuizWords } from './utils/spaced-repetition';
+import { selectQuizWords, updateWordSR } from './utils/spaced-repetition';
 import { fisherYatesShuffle } from './utils/shuffle';
 import { preloadImages } from './utils/images';
 import { initTTS, playSound } from './utils/sound';
@@ -46,6 +46,12 @@ export default function App() {
   const [customWords, setCustomWords] = useState(null); // for PersonalWordList quiz
 
   const transitionDir = useRef('forward');
+  const mainRef = useRef(null);
+
+  // Move focus to main container on view change for screen readers
+  useEffect(() => {
+    if (mainRef.current) mainRef.current.focus();
+  }, [gameState]);
 
   // Dark mode sync
   useEffect(() => {
@@ -122,17 +128,17 @@ export default function App() {
     navigate('modeSelect');
   }, [navigate]);
 
-  const handleModeSelect = useCallback((mode) => {
-    setSelectedMode(mode);
-    startQuiz(selectedLevel, mode);
-  }, [selectedLevel]);
-
   const startQuiz = useCallback(async (level, mode, words = null) => {
     navigate('loading');
     setLoadingProgress(0);
 
     const pool = words || getWordsByLevel(level);
     const selected = selectQuizWords(pool, stats.wordProgress, 10);
+
+    if (selected.length === 0) {
+      navigate('menu');
+      return;
+    }
 
     // Collect all images needed (quiz words + their distractors)
     const allWordsNeeded = new Set();
@@ -153,6 +159,11 @@ export default function App() {
     navigate(mode === 'image' ? 'imageQuiz' : mode === 'word' ? 'wordQuiz' : 'audioQuiz');
 
   }, [navigate, stats.wordProgress]);
+
+  const handleModeSelect = useCallback((mode) => {
+    setSelectedMode(mode);
+    startQuiz(selectedLevel, mode);
+  }, [selectedLevel, startQuiz]);
 
   const handleQuizComplete = useCallback((results) => {
     const { score, total, answers, mode } = results;
@@ -189,17 +200,7 @@ export default function App() {
       if (answers) {
         let wp = { ...updated.wordProgress };
         answers.forEach(({ wordId, correct }) => {
-          const card = wp[wordId] || { lastSeen: 0, interval: 1, correct: 0, wrong: 0 };
-          if (correct) {
-            const intervals = [1, 3, 7, 14, 30];
-            const idx = intervals.indexOf(card.interval);
-            const nextInterval = idx >= 0 && idx < intervals.length - 1
-              ? intervals[idx + 1]
-              : Math.min((card.interval || 1) * 2, 60);
-            wp[wordId] = { ...card, lastSeen: Date.now(), interval: nextInterval, correct: card.correct + 1 };
-          } else {
-            wp[wordId] = { ...card, lastSeen: Date.now(), interval: 1, wrong: card.wrong + 1 };
-          }
+          wp = updateWordSR(wp, wordId, correct);
         });
         updated.wordProgress = wp;
       }
@@ -286,7 +287,7 @@ export default function App() {
         );
 
       case 'loading':
-        return <LoadingScreen progress={loadingProgress} />;
+        return <LoadingScreen progress={loadingProgress} onCancel={resetToMenu} />;
 
       case 'imageQuiz':
         return (
@@ -406,10 +407,10 @@ export default function App() {
 
   return (
     <div className="app-bg min-h-screen pb-safe">
-      <div className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg'} mx-auto px-4 py-6`}>
+      <div ref={mainRef} tabIndex={-1} className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg'} mx-auto px-4 py-6 outline-none`}>
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-[60vh]">
-            <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
+            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
           </div>
         }>
           <ErrorBoundary key={gameState} onReset={resetToMenu}>

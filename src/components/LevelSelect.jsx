@@ -65,7 +65,12 @@ export default function LevelSelect({ stats, onSelect, onBack }) {
                   )}
                 </div>
                 <p className="text-slate-500 text-sm">{level.description}</p>
-                <p className="text-xs text-slate-500 mt-1">{wordCount} words</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  {wordCount} words
+                  {!unlocked && index > 0 && (
+                    <span className="text-amber-600"> · Score 7/10 on {LEVELS[index - 1].name} to unlock</span>
+                  )}
+                </p>
               </div>
               {unlocked && bestScore >= 7 && (
                 <Check className="w-5 h-5 text-emerald-500 flex-shrink-0" />

@@ -22,6 +22,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'wordId and imageBase64 required' });
   }
 
+  if (!/^[a-z0-9_-]+$/i.test(wordId)) {
+    return res.status(400).json({ error: 'Invalid wordId format' });
+  }
+
   const repo = process.env.GITHUB_REPO;
   const token = process.env.GITHUB_TOKEN;
 
