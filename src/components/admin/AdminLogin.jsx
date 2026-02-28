@@ -18,8 +18,11 @@ export default function AdminLogin({ onAuth }) {
       const hashArray = Array.from(new Uint8Array(hashBuffer));
       const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 
-      console.log('DEBUG hash:', hashHex, 'expected:', import.meta.env.VITE_ADMIN_HASH);
-      if (hashHex === import.meta.env.VITE_ADMIN_HASH) {
+      const expected = import.meta.env.VITE_ADMIN_HASH;
+      console.log('DEBUG lengths:', hashHex.length, expected.length);
+      console.log('DEBUG json:', JSON.stringify(hashHex), JSON.stringify(expected));
+      console.log('DEBUG equal:', hashHex === expected, hashHex === expected.trim());
+      if (hashHex === expected || hashHex === expected.trim()) {
         onAuth(password);
       } else {
         setError('Wrong password');
