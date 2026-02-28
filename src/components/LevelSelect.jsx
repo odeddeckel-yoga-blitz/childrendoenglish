@@ -1,6 +1,7 @@
 import { ArrowLeft, Lock, Check } from 'lucide-react';
 import { LEVELS } from '../data/levels';
 import { getWordsByLevel } from '../data/words';
+import { t } from '../utils/i18n';
 
 const colorMap = {
   blue: {
@@ -17,18 +18,20 @@ const colorMap = {
   },
 };
 
-export default function LevelSelect({ stats, onSelect, onBack }) {
+const levelNameKey = { beginner: 'beginner', intermediate: 'intermediate', advanced: 'advanced' };
+
+export default function LevelSelect({ stats, lang = 'en', onSelect, onBack }) {
   return (
     <div className="animate-fade-in space-y-6">
       <div className="flex items-center gap-3">
         <button
           onClick={onBack}
           className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors"
-          aria-label="Back to menu"
+          aria-label={t('backToMenu', lang)}
         >
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
-        <h2 className="text-xl font-bold text-slate-800">Choose Level</h2>
+        <h2 className="text-xl font-bold text-slate-800">{t('chooseLevel', lang)}</h2>
       </div>
 
       <div className="space-y-3">
@@ -37,6 +40,7 @@ export default function LevelSelect({ stats, onSelect, onBack }) {
           const colors = colorMap[level.color];
           const wordCount = getWordsByLevel(level.id).length;
           const bestScore = stats.bestScores[level.id] || 0;
+          const localName = t(levelNameKey[level.id], lang);
 
           return (
             <button
@@ -57,18 +61,18 @@ export default function LevelSelect({ stats, onSelect, onBack }) {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <h3 className={`font-bold ${colors.text}`}>{level.name}</h3>
+                  <h3 className={`font-bold ${colors.text}`}>{localName}</h3>
                   {bestScore > 0 && (
                     <span className={`text-xs px-2 py-0.5 rounded-full text-white ${colors.badge}`}>
-                      Best: {bestScore}/10
+                      {t('bestScore', lang, { score: bestScore })}
                     </span>
                   )}
                 </div>
                 <p className="text-slate-500 text-sm">{level.description}</p>
                 <p className="text-xs text-slate-500 mt-1">
-                  {wordCount} words
+                  {t('wordsCount', lang, { count: wordCount })}
                   {!unlocked && index > 0 && (
-                    <span className="text-amber-600"> · Score 7/10 on {LEVELS[index - 1].name} to unlock</span>
+                    <span className="text-amber-600"> · {t('unlockHint', lang, { level: t(levelNameKey[LEVELS[index - 1].id], lang) })}</span>
                   )}
                 </p>
               </div>

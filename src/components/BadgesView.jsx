@@ -1,14 +1,15 @@
 import { ArrowLeft } from 'lucide-react';
 import { BADGES } from '../data/badges';
+import { t } from '../utils/i18n';
 
-export default function BadgesView({ stats, onBack }) {
+export default function BadgesView({ stats, lang = 'en', onBack }) {
   return (
     <div className="animate-fade-in space-y-6">
       <div className="flex items-center gap-3">
-        <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to menu">
+        <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
-        <h2 className="text-xl font-bold text-slate-800">Badges</h2>
+        <h2 className="text-xl font-bold text-slate-800">{t('badgesTitle', lang)}</h2>
         <span className="text-sm text-slate-500 ml-auto">
           {stats.badges?.length || 0} / {BADGES.length}
         </span>
@@ -31,7 +32,7 @@ export default function BadgesView({ stats, onBack }) {
               {earned && (
                 <span className="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-700
                                text-xs font-semibold rounded-full">
-                  Earned!
+                  {t('earnedBadge', lang)}
                 </span>
               )}
             </div>

@@ -5,8 +5,9 @@ import QuizHeader from './QuizHeader';
 import QuitModal from './QuitModal';
 import { getImageUrl } from '../utils/images';
 import { speakWord, isTTSAvailable } from '../utils/sound';
+import { t } from '../utils/i18n';
 
-export default function AudioQuiz({ words, soundEnabled, onToggleSound, onComplete, onQuit }) {
+export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit }) {
   const [loadedImages, setLoadedImages] = useState(new Set());
   const [ttsUnavailableToast, setTtsUnavailableToast] = useState(false);
 
@@ -31,16 +32,16 @@ export default function AudioQuiz({ words, soundEnabled, onToggleSound, onComple
   useEffect(() => {
     if (ttsOk === false) {
       setTtsUnavailableToast(true);
-      const t = setTimeout(() => setTtsUnavailableToast(false), 4000);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => setTtsUnavailableToast(false), 4000);
+      return () => clearTimeout(timer);
     }
   }, [ttsOk]);
 
   // Auto-speak current word
   useEffect(() => {
     if (ttsOk && quiz.currentWord) {
-      const t = setTimeout(() => speakWord(quiz.currentWord.word), 300);
-      return () => clearTimeout(t);
+      const timer = setTimeout(() => speakWord(quiz.currentWord.word), 300);
+      return () => clearTimeout(timer);
     }
   }, [quiz.currentIndex, quiz.currentWord, ttsOk]);
 
@@ -52,7 +53,7 @@ export default function AudioQuiz({ words, soundEnabled, onToggleSound, onComple
       {ttsUnavailableToast && (
         <div className="fixed top-4 left-4 right-4 z-50 animate-slide-up">
           <div className="glass rounded-xl p-3 text-center text-sm text-amber-700 border border-amber-200 max-w-md mx-auto">
-            Audio not available on this device. Showing words instead.
+            {t('audioUnavailable', lang)}
           </div>
         </div>
       )}
@@ -66,6 +67,7 @@ export default function AudioQuiz({ words, soundEnabled, onToggleSound, onComple
         onQuit={quiz.openQuitConfirm}
         gradientColor="from-amber-500 to-amber-600"
         currentIndex={quiz.currentIndex}
+        lang={lang}
       />
 
       {/* Speaker / fallback word display */}
@@ -77,12 +79,12 @@ export default function AudioQuiz({ words, soundEnabled, onToggleSound, onComple
               className="mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-amber-400 to-amber-600
                          flex items-center justify-center shadow-lg hover:shadow-xl
                          active:scale-95 transition-all"
-              aria-label="Hear word again"
+              aria-label={t('hearAgain', lang)}
             >
               <Volume2 className="w-12 h-12 text-white" />
             </button>
             <p className="text-slate-400 text-sm flex items-center justify-center gap-2">
-              <RefreshCw className="w-3 h-3" /> Tap to hear again
+              <RefreshCw className="w-3 h-3" /> {t('hearAgain', lang)}
             </p>
             {quiz.answered && (
               <p className="text-2xl font-bold text-slate-800 animate-fade-in">{quiz.currentWord.word}</p>
@@ -142,14 +144,14 @@ export default function AudioQuiz({ words, soundEnabled, onToggleSound, onComple
           onClick={quiz.handleSkip}
           className="w-full text-center text-sm text-slate-400 hover:text-slate-600 transition-colors py-1"
         >
-          Skip this word
+          {t('skipThisWord', lang)}
         </button>
       )}
 
       <div aria-live="polite" className="sr-only">{quiz.feedbackMessage}</div>
 
       {quiz.showQuitConfirm && (
-        <QuitModal onContinue={quiz.closeQuitConfirm} onQuit={quiz.handleQuit} />
+        <QuitModal onContinue={quiz.closeQuitConfirm} onQuit={quiz.handleQuit} lang={lang} />
       )}
     </div>
   );

@@ -5,8 +5,9 @@ import { spacedRepetitionSort, updateWordSR } from '../utils/spaced-repetition';
 import { getImageUrl } from '../utils/images';
 import { speakWord } from '../utils/sound';
 import { haptic } from '../utils/haptic';
+import { t } from '../utils/i18n';
 
-export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
+export default function FlashcardMode({ stats, lang = 'en', onUpdateStats, onBack }) {
   const sorted = spacedRepetitionSort(WORDS, stats.wordProgress || {});
   const [cards] = useState(sorted);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -94,17 +95,17 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
         <div className="glass rounded-3xl p-8 space-y-4">
           <div className="text-6xl">🎴</div>
           <h2 className="text-2xl font-bold text-slate-800">
-            {cards.length === 0 ? 'No cards to review!' : 'Session Complete!'}
+            {cards.length === 0 ? t('noCardsToReview', lang) : t('sessionComplete', lang)}
           </h2>
           {cards.length > 0 && (
             <div className="flex justify-center gap-6">
               <div className="text-center">
                 <p className="text-3xl font-black text-emerald-600">{known}</p>
-                <p className="text-xs text-slate-500">Know it</p>
+                <p className="text-xs text-slate-500">{t('knowIt', lang)}</p>
               </div>
               <div className="text-center">
                 <p className="text-3xl font-black text-amber-600">{learning}</p>
-                <p className="text-xs text-slate-500">Still learning</p>
+                <p className="text-xs text-slate-500">{t('stillLearning', lang)}</p>
               </div>
             </div>
           )}
@@ -114,7 +115,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
           className="w-full py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold
                      hover:bg-blue-700 active:scale-95 transition-all"
         >
-          Back to Menu
+          {t('backToMenuBtn', lang)}
         </button>
       </div>
     );
@@ -124,7 +125,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
     <div className="animate-fade-in space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to menu">
+        <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
         <span className="text-sm text-slate-500">{currentIdx + 1} / {cards.length}</span>
@@ -135,7 +136,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
       </div>
 
       {/* Progress */}
-      <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={currentIdx} aria-valuemin={0} aria-valuemax={cards.length} aria-label="Flashcard progress">
+      <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={currentIdx} aria-valuemin={0} aria-valuemax={cards.length} aria-label={t('flashcardProgress', lang)}>
         <div
           className="h-full bg-blue-500 rounded-full transition-all duration-300"
           style={{ width: `${((currentIdx) / cards.length) * 100}%` }}
@@ -153,7 +154,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
           className={`flashcard-inner relative w-full cursor-pointer text-left ${flipped ? 'flipped' : ''}`}
           onClick={() => setFlipped(f => !f)}
           style={{ minHeight: '380px' }}
-          aria-label={flipped ? 'Flip card to front' : 'Flip card to see answer'}
+          aria-label={flipped ? t('flipToFront', lang) : t('flipToBack', lang)}
         >
           {/* Front */}
           <div className="flashcard-front absolute inset-0">
@@ -165,6 +166,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
                   alt=""
                   className={`w-full h-full object-cover transition-opacity ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onLoad={() => setImgLoaded(true)}
+                  loading="lazy"
                   width={512}
                   height={512}
                 />
@@ -173,7 +175,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
                 </span>
               </div>
               <div className="p-4 text-center">
-                <p className="text-slate-400 text-sm">Tap to flip</p>
+                <p className="text-slate-400 text-sm">{t('tapToFlip', lang)}</p>
               </div>
             </div>
           </div>
@@ -186,7 +188,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
                 <button
                   onClick={(e) => { e.stopPropagation(); speakWord(currentCard.word); }}
                   className="p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
-                  aria-label="Pronounce word"
+                  aria-label={t('pronounceWord', lang)}
                 >
                   <Volume2 className="w-5 h-5 text-blue-600" />
                 </button>
@@ -207,7 +209,7 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
         {swipeOverlay && (
           <div className={`absolute inset-0 rounded-2xl flex items-center justify-center text-4xl font-black
                           ${swipeOverlay === 'know' ? 'bg-emerald-400/30 text-emerald-600' : 'bg-amber-400/30 text-amber-600'}`}>
-            {swipeOverlay === 'know' ? '✓ Know it!' : '✗ Learning'}
+            {swipeOverlay === 'know' ? `✓ ${t('knowIt', lang)}` : `✗ ${t('stillLearning', lang)}`}
           </div>
         )}
       </div>
@@ -219,18 +221,18 @@ export default function FlashcardMode({ stats, onUpdateStats, onBack }) {
           className="flex-1 py-3 rounded-xl border-2 border-amber-400 text-amber-600 font-semibold
                      hover:bg-amber-50 active:scale-95 transition-all flex items-center justify-center gap-2"
         >
-          <XIcon className="w-5 h-5" /> Still Learning
+          <XIcon className="w-5 h-5" /> {t('stillLearning', lang)}
         </button>
         <button
           onClick={handleKnow}
           className="flex-1 py-3 rounded-xl bg-emerald-500 text-white font-semibold
                      hover:bg-emerald-600 active:scale-95 transition-all flex items-center justify-center gap-2"
         >
-          <Check className="w-5 h-5" /> Know It
+          <Check className="w-5 h-5" /> {t('knowIt', lang)}
         </button>
       </div>
 
-      <p className="text-center text-xs text-slate-400">Swipe right = Know it, Swipe left = Still learning</p>
+      <p className="text-center text-xs text-slate-400">{t('swipeHint', lang)}</p>
     </div>
   );
 }

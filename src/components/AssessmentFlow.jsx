@@ -4,8 +4,9 @@ import { fisherYatesShuffle } from '../utils/shuffle';
 import { getImageUrl } from '../utils/images';
 import { playSound, speakWord } from '../utils/sound';
 import { haptic } from '../utils/haptic';
+import { t } from '../utils/i18n';
 
-export default function AssessmentFlow({ onComplete, onSkip }) {
+export default function AssessmentFlow({ lang = 'en', onComplete, onSkip }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentLevel, setCurrentLevel] = useState('intermediate');
   const [questions, setQuestions] = useState([]);
@@ -103,12 +104,12 @@ export default function AssessmentFlow({ onComplete, onSkip }) {
     <div className="animate-fade-in space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-slate-800">Quick Assessment</h2>
+        <h2 className="text-lg font-bold text-slate-800">{t('quickAssessment', lang)}</h2>
         <button
           onClick={onSkip}
           className="text-sm text-slate-500 hover:text-slate-700 font-semibold"
         >
-          Skip
+          {t('skip', lang)}
         </button>
       </div>
 
@@ -120,7 +121,7 @@ export default function AssessmentFlow({ onComplete, onSkip }) {
         />
       </div>
       <p className="text-center text-sm text-slate-500">
-        Question {currentIndex + 1} of {totalQuestions}
+        {t('question', lang)} {currentIndex + 1} {t('of', lang)} {totalQuestions}
       </p>
 
       {/* Image */}
@@ -128,7 +129,7 @@ export default function AssessmentFlow({ onComplete, onSkip }) {
         {!imgLoaded && <div className="absolute inset-0 skeleton-pulse bg-slate-200 rounded-2xl" />}
         <img
           src={getImageUrl(currentWord)}
-          alt="What is this?"
+          alt={t('whatIsThis', lang)}
           className={`w-full h-full object-cover transition-opacity ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImgLoaded(true)}
           width={512}

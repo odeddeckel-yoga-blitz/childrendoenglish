@@ -107,30 +107,6 @@ export default function App() {
     localStorage.setItem('childrendoenglish-install-dismissed', '1');
   };
 
-  // Detect hash routes: #admin, #quiz/{mode}/{ids}
-  useEffect(() => {
-    const checkHash = () => {
-      const hash = window.location.hash;
-      if (hash === '#admin') {
-        setGameState('admin');
-        return;
-      }
-      const quizMatch = hash.match(/^#quiz\/(image|word)\/(.+)$/);
-      if (quizMatch) {
-        const mode = quizMatch[1];
-        const ids = quizMatch[2].split(',');
-        const words = ids.map(id => getWordById(id)).filter(Boolean);
-        window.location.hash = '';
-        if (words.length >= 4) {
-          startQuiz(null, mode, words);
-        }
-      }
-    };
-    checkHash();
-    window.addEventListener('hashchange', checkHash);
-    return () => window.removeEventListener('hashchange', checkHash);
-  }, [startQuiz]);
-
   // Persist stats
   useEffect(() => { saveStats(stats); }, [stats]);
 
@@ -205,6 +181,30 @@ export default function App() {
     navigate(mode === 'image' ? 'imageQuiz' : mode === 'word' ? 'wordQuiz' : 'audioQuiz');
 
   }, [navigate, stats.wordProgress]);
+
+  // Detect hash routes: #admin, #quiz/{mode}/{ids}
+  useEffect(() => {
+    const checkHash = () => {
+      const hash = window.location.hash;
+      if (hash === '#admin') {
+        setGameState('admin');
+        return;
+      }
+      const quizMatch = hash.match(/^#quiz\/(image|word)\/(.+)$/);
+      if (quizMatch) {
+        const mode = quizMatch[1];
+        const ids = quizMatch[2].split(',');
+        const words = ids.map(id => getWordById(id)).filter(Boolean);
+        window.location.hash = '';
+        if (words.length >= 4) {
+          startQuiz(null, mode, words);
+        }
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    return () => window.removeEventListener('hashchange', checkHash);
+  }, [startQuiz]);
 
   const handleModeSelect = useCallback((mode) => {
     setSelectedMode(mode);
@@ -322,6 +322,7 @@ export default function App() {
         return (
           <LevelSelect
             stats={stats}
+            lang={lang}
             onSelect={handleLevelSelect}
             onBack={() => navigate('menu', 'back')}
           />
@@ -331,18 +332,20 @@ export default function App() {
         return (
           <ModeSelect
             level={selectedLevel}
+            lang={lang}
             onSelect={handleModeSelect}
             onBack={() => navigate('levelSelect', 'back')}
           />
         );
 
       case 'loading':
-        return <LoadingScreen progress={loadingProgress} onCancel={resetToMenu} />;
+        return <LoadingScreen progress={loadingProgress} lang={lang} onCancel={resetToMenu} />;
 
       case 'imageQuiz':
         return (
           <ImageQuiz
             words={quizWords}
+            lang={lang}
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={handleQuizComplete}
@@ -354,6 +357,7 @@ export default function App() {
         return (
           <WordQuiz
             words={quizWords}
+            lang={lang}
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={handleQuizComplete}
@@ -365,6 +369,7 @@ export default function App() {
         return (
           <AudioQuiz
             words={quizWords}
+            lang={lang}
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={handleQuizComplete}
@@ -377,6 +382,7 @@ export default function App() {
           <ResultScreen
             results={quizResults}
             stats={stats}
+            lang={lang}
             level={selectedLevel}
             mode={selectedMode}
             onPlayAgain={() => startQuiz(selectedLevel, selectedMode, customWords)}
@@ -389,6 +395,7 @@ export default function App() {
         return (
           <LearnMode
             stats={stats}
+            lang={lang}
             onBack={() => navigate('menu', 'back')}
           />
         );
@@ -397,6 +404,7 @@ export default function App() {
         return (
           <FlashcardMode
             stats={stats}
+            lang={lang}
             onUpdateStats={setStats}
             onBack={() => navigate('menu', 'back')}
           />
@@ -406,6 +414,7 @@ export default function App() {
         return (
           <BadgesView
             stats={stats}
+            lang={lang}
             onBack={() => navigate('menu', 'back')}
           />
         );
@@ -414,6 +423,7 @@ export default function App() {
         return (
           <ProgressDashboard
             stats={stats}
+            lang={lang}
             onBack={() => navigate('menu', 'back')}
             onAssessment={() => navigate('assessment')}
           />
@@ -422,6 +432,7 @@ export default function App() {
       case 'assessment':
         return (
           <AssessmentFlow
+            lang={lang}
             onComplete={handleAssessmentComplete}
             onSkip={() => navigate('menu', 'back')}
           />
@@ -430,6 +441,7 @@ export default function App() {
       case 'personalList':
         return (
           <PersonalWordList
+            lang={lang}
             onStartQuiz={handleStartPersonalQuiz}
             onBack={() => navigate('menu', 'back')}
           />

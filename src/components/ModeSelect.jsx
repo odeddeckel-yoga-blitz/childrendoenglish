@@ -1,10 +1,11 @@
 import { ArrowLeft, Image, Type, Volume2 } from 'lucide-react';
+import { t } from '../utils/i18n';
 
 const modes = [
   {
     id: 'image',
-    name: 'Image Quiz',
-    description: 'See an image, pick the right word',
+    nameKey: 'imageQuiz',
+    descKey: 'imageQuizDesc',
     icon: Image,
     color: 'from-blue-500 to-blue-600',
     iconBg: 'bg-blue-100',
@@ -12,8 +13,8 @@ const modes = [
   },
   {
     id: 'word',
-    name: 'Word Quiz',
-    description: 'See a word, pick the right image',
+    nameKey: 'wordQuiz',
+    descKey: 'wordQuizDesc',
     icon: Type,
     color: 'from-emerald-500 to-emerald-600',
     iconBg: 'bg-emerald-100',
@@ -21,8 +22,8 @@ const modes = [
   },
   {
     id: 'audio',
-    name: 'Audio Quiz',
-    description: 'Hear a word, pick the right image',
+    nameKey: 'audioQuiz',
+    descKey: 'audioQuizDesc',
     icon: Volume2,
     color: 'from-amber-500 to-amber-600',
     iconBg: 'bg-amber-100',
@@ -30,20 +31,22 @@ const modes = [
   },
 ];
 
-export default function ModeSelect({ level, onSelect, onBack }) {
+const levelNameKey = { beginner: 'beginner', intermediate: 'intermediate', advanced: 'advanced' };
+
+export default function ModeSelect({ level, lang = 'en', onSelect, onBack }) {
   return (
     <div className="animate-fade-in space-y-6">
       <div className="flex items-center gap-3">
         <button
           onClick={onBack}
           className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors"
-          aria-label="Back to levels"
+          aria-label={t('backToMenu', lang)}
         >
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
         <div>
-          <h2 className="text-xl font-bold text-slate-800">Choose Mode</h2>
-          <p className="text-sm text-slate-500 capitalize">{level} level</p>
+          <h2 className="text-xl font-bold text-slate-800">{t('chooseMode', lang)}</h2>
+          <p className="text-sm text-slate-500">{t('levelLabel', lang, { level: t(levelNameKey[level] || level, lang) })}</p>
         </div>
       </div>
 
@@ -62,8 +65,8 @@ export default function ModeSelect({ level, onSelect, onBack }) {
                 <Icon className={`w-7 h-7 ${mode.iconColor}`} />
               </div>
               <div>
-                <h3 className="font-bold text-slate-800">{mode.name}</h3>
-                <p className="text-slate-500 text-sm">{mode.description}</p>
+                <h3 className="font-bold text-slate-800">{t(mode.nameKey, lang)}</h3>
+                <p className="text-slate-500 text-sm">{t(mode.descKey, lang)}</p>
               </div>
             </button>
           );

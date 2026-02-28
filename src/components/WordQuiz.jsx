@@ -5,8 +5,9 @@ import QuizHeader from './QuizHeader';
 import QuitModal from './QuitModal';
 import { getImageUrl } from '../utils/images';
 import { speakWord } from '../utils/sound';
+import { t } from '../utils/i18n';
 
-export default function WordQuiz({ words, soundEnabled, onToggleSound, onComplete, onQuit }) {
+export default function WordQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit }) {
   const [loadedImages, setLoadedImages] = useState(new Set());
 
   const quiz = useQuizState({ words, mode: 'word', onComplete, speakOnCorrect: true });
@@ -31,6 +32,7 @@ export default function WordQuiz({ words, soundEnabled, onToggleSound, onComplet
         onQuit={quiz.openQuitConfirm}
         gradientColor="from-emerald-500 to-emerald-600"
         currentIndex={quiz.currentIndex}
+        lang={lang}
       />
 
       {/* Word display */}
@@ -40,7 +42,7 @@ export default function WordQuiz({ words, soundEnabled, onToggleSound, onComplet
         <button
           onClick={() => speakWord(quiz.currentWord.word)}
           className="mx-auto p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
-          aria-label="Pronounce word"
+          aria-label={t('pronounceWord', lang)}
         >
           <Volume2 className="w-5 h-5 text-blue-600" />
         </button>
@@ -92,14 +94,14 @@ export default function WordQuiz({ words, soundEnabled, onToggleSound, onComplet
           onClick={quiz.handleSkip}
           className="w-full text-center text-sm text-slate-400 hover:text-slate-600 transition-colors py-1"
         >
-          Skip this word
+          {t('skipThisWord', lang)}
         </button>
       )}
 
       <div aria-live="polite" className="sr-only">{quiz.feedbackMessage}</div>
 
       {quiz.showQuitConfirm && (
-        <QuitModal onContinue={quiz.closeQuitConfirm} onQuit={quiz.handleQuit} />
+        <QuitModal onContinue={quiz.closeQuitConfirm} onQuit={quiz.handleQuit} lang={lang} />
       )}
     </div>
   );

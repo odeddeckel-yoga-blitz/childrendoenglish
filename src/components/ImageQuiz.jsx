@@ -3,8 +3,9 @@ import useQuizState from '../hooks/useQuizState';
 import QuizHeader from './QuizHeader';
 import QuitModal from './QuitModal';
 import { getImageUrl } from '../utils/images';
+import { t } from '../utils/i18n';
 
-export default function ImageQuiz({ words, soundEnabled, onToggleSound, onComplete, onQuit }) {
+export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit }) {
   const [imgLoaded, setImgLoaded] = useState(false);
 
   const quiz = useQuizState({ words, mode: 'image', onComplete, speakOnCorrect: true, speakDelay: 600 });
@@ -28,6 +29,7 @@ export default function ImageQuiz({ words, soundEnabled, onToggleSound, onComple
         onToggleSound={onToggleSound}
         onQuit={quiz.openQuitConfirm}
         currentIndex={quiz.currentIndex}
+        lang={lang}
       />
 
       {/* Image */}
@@ -37,7 +39,7 @@ export default function ImageQuiz({ words, soundEnabled, onToggleSound, onComple
         )}
         <img
           src={getImageUrl(quiz.currentWord)}
-          alt="What is this?"
+          alt={t('whatIsThis', lang)}
           className={`w-full h-full object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImgLoaded(true)}
           width={512}
@@ -85,14 +87,14 @@ export default function ImageQuiz({ words, soundEnabled, onToggleSound, onComple
           onClick={quiz.handleSkip}
           className="w-full text-center text-sm text-slate-400 hover:text-slate-600 transition-colors py-1"
         >
-          Skip this word
+          {t('skipThisWord', lang)}
         </button>
       )}
 
       <div aria-live="polite" className="sr-only">{quiz.feedbackMessage}</div>
 
       {quiz.showQuitConfirm && (
-        <QuitModal onContinue={quiz.closeQuitConfirm} onQuit={quiz.handleQuit} />
+        <QuitModal onContinue={quiz.closeQuitConfirm} onQuit={quiz.handleQuit} lang={lang} />
       )}
     </div>
   );

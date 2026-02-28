@@ -1,8 +1,9 @@
 import { useState, useCallback } from 'react';
 import { ArrowLeft, Play, AlertCircle, Share2, Check } from 'lucide-react';
 import { WORDS, getWordById } from '../data/words';
+import { t } from '../utils/i18n';
 
-export default function PersonalWordList({ onStartQuiz, onBack }) {
+export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack }) {
   const [input, setInput] = useState('');
   const [matched, setMatched] = useState([]);
   const [unmatched, setUnmatched] = useState([]);
@@ -58,16 +59,16 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
     <div className="animate-fade-in space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to menu">
+        <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
-        <h2 className="text-xl font-bold text-slate-800">My Word List</h2>
+        <h2 className="text-xl font-bold text-slate-800">{t('myWordList', lang)}</h2>
       </div>
 
       {/* Input */}
       <div className="glass rounded-2xl p-4 space-y-3">
         <label htmlFor="word-list-input" className="text-sm text-slate-600 block">
-          Enter or paste your word list (one word per line or comma-separated):
+          {t('enterWords', lang)}
         </label>
         <textarea
           id="word-list-input"
@@ -84,7 +85,7 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
           className="w-full py-2.5 bg-blue-600 text-white rounded-xl font-semibold
                      hover:bg-blue-700 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Find Words
+          {t('findWords', lang)}
         </button>
       </div>
 
@@ -94,7 +95,9 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
           {matched.length > 0 && (
             <div className="glass rounded-2xl p-4 space-y-3">
               <h3 className="text-sm font-semibold text-emerald-600">
-                Found {matched.length} word{matched.length !== 1 ? 's' : ''}
+                {matched.length === 1
+                  ? t('foundWords', lang, { count: matched.length })
+                  : t('foundWordsPlural', lang, { count: matched.length })}
               </h3>
               <div className="flex flex-wrap gap-2">
                 {matched.map(word => (
@@ -113,7 +116,7 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
             <div className="glass rounded-2xl p-4 space-y-3">
               <div className="flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 text-slate-400" />
-                <h3 className="text-sm text-slate-500">Not in word bank yet</h3>
+                <h3 className="text-sm text-slate-500">{t('notInWordBank', lang)}</h3>
               </div>
               <div className="flex flex-wrap gap-2">
                 {unmatched.map(word => (
@@ -137,12 +140,12 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
                   className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-semibold
                              hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
                 >
-                  <Play className="w-5 h-5" /> Image Quiz ({matched.length} words)
+                  <Play className="w-5 h-5" /> {t('imageQuizCount', lang, { count: matched.length })}
                 </button>
                 <button
                   onClick={() => handleShare('image')}
                   className="px-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 active:scale-95 transition-all"
-                  aria-label={copiedMode === 'image' ? 'Link copied' : 'Share image quiz'}
+                  aria-label={copiedMode === 'image' ? t('linkCopied', lang) : t('shareImageQuiz', lang)}
                 >
                   {copiedMode === 'image' ? <Check className="w-5 h-5" /> : <Share2 className="w-5 h-5" />}
                 </button>
@@ -153,12 +156,12 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
                   className="flex-1 py-3 glass rounded-xl font-semibold text-blue-600 text-sm
                              hover:shadow-md active:scale-95 transition-all"
                 >
-                  Word Quiz
+                  {t('wordQuiz', lang)}
                 </button>
                 <button
                   onClick={() => handleShare('word')}
                   className="px-3 glass rounded-xl text-blue-600 hover:shadow-md active:scale-95 transition-all"
-                  aria-label={copiedMode === 'word' ? 'Link copied' : 'Share word quiz'}
+                  aria-label={copiedMode === 'word' ? t('linkCopied', lang) : t('shareWordQuiz', lang)}
                 >
                   {copiedMode === 'word' ? <Check className="w-5 h-5" /> : <Share2 className="w-5 h-5" />}
                 </button>
@@ -166,13 +169,13 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
             </div>
           ) : parsed && matched.length > 0 && (
             <p className="text-sm text-amber-600 text-center">
-              Need at least 4 matching words to start a quiz.
+              {t('needMinWords', lang)}
             </p>
           )}
 
           {parsed && matched.length === 0 && (
             <p className="text-sm text-slate-500 text-center">
-              None of those words are in our word bank. Try words like: cat, dog, apple, house, car.
+              {t('noWordsInBank', lang)}
             </p>
           )}
         </>

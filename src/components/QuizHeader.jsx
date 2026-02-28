@@ -1,13 +1,14 @@
 import { X, Volume2, VolumeX, Flame } from 'lucide-react';
+import { t } from '../utils/i18n';
 
-export default function QuizHeader({ score, total, streak, soundEnabled, onToggleSound, onQuit, gradientColor = 'from-blue-500 to-blue-600', currentIndex }) {
+export default function QuizHeader({ score, total, streak, soundEnabled, onToggleSound, onQuit, gradientColor = 'from-blue-500 to-blue-600', currentIndex, lang = 'en' }) {
   return (
     <>
       <div className="flex items-center justify-between">
         <button
           onClick={onQuit}
           className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors"
-          aria-label="Quit quiz"
+          aria-label={t('quitQuiz', lang)}
         >
           <X className="w-5 h-5 text-slate-500" />
         </button>
@@ -21,7 +22,7 @@ export default function QuizHeader({ score, total, streak, soundEnabled, onToggl
           <button
             onClick={onToggleSound}
             className="p-2.5 rounded-lg hover:bg-slate-100 transition-colors"
-            aria-label={soundEnabled ? 'Mute sound' : 'Enable sound'}
+            aria-label={soundEnabled ? t('muteSound', lang) : t('enableSound', lang)}
           >
             {soundEnabled
               ? <Volume2 className="w-4 h-4 text-slate-500" />
@@ -39,7 +40,7 @@ export default function QuizHeader({ score, total, streak, soundEnabled, onToggl
       </div>
 
       <p className="text-center text-sm text-slate-500">
-        Question {currentIndex + 1} of {total}
+        {t('question', lang)} {currentIndex + 1} {t('of', lang)} {total}
       </p>
     </>
   );

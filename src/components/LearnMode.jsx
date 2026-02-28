@@ -3,8 +3,9 @@ import { ArrowLeft, Search, Grid3X3, BookOpen, Volume2, ChevronLeft, ChevronRigh
 import { WORDS, CATEGORIES } from '../data/words';
 import { getImageUrl } from '../utils/images';
 import { speakWord } from '../utils/sound';
+import { t } from '../utils/i18n';
 
-export default function LearnMode({ stats, onBack }) {
+export default function LearnMode({ stats, lang = 'en', onBack }) {
   const [view, setView] = useState('grid'); // 'grid' | 'detail'
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -43,23 +44,23 @@ export default function LearnMode({ stats, onBack }) {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to menu">
+          <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
             <ArrowLeft className="w-5 h-5 text-slate-600" />
           </button>
-          <h2 className="text-xl font-bold text-slate-800">Learn Words</h2>
+          <h2 className="text-xl font-bold text-slate-800">{t('learnWords', lang)}</h2>
         </div>
         <div className="flex gap-2">
           <button
             onClick={() => setView('grid')}
             className={`p-2 rounded-lg transition-colors ${view === 'grid' ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:bg-slate-100'}`}
-            aria-label="Grid view"
+            aria-label={t('gridView', lang)}
           >
             <Grid3X3 className="w-5 h-5" />
           </button>
           <button
             onClick={() => setView('detail')}
             className={`p-2 rounded-lg transition-colors ${view === 'detail' ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:bg-slate-100'}`}
-            aria-label="Detail view"
+            aria-label={t('detailView', lang)}
           >
             <BookOpen className="w-5 h-5" />
           </button>
@@ -68,14 +69,14 @@ export default function LearnMode({ stats, onBack }) {
 
       {/* Search */}
       <div className="relative">
-        <label htmlFor="learn-search" className="sr-only">Search words</label>
+        <label htmlFor="learn-search" className="sr-only">{t('searchLabel', lang)}</label>
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
         <input
           id="learn-search"
           type="text"
           value={search}
           onChange={e => setSearch(e.target.value)}
-          placeholder="Search words..."
+          placeholder={t('searchPlaceholder', lang)}
           className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-slate-200
                      text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2
                      focus:ring-blue-400 transition-all"
@@ -90,7 +91,7 @@ export default function LearnMode({ stats, onBack }) {
             !selectedCategory ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
           }`}
         >
-          All
+          {t('all', lang)}
         </button>
         {CATEGORIES.map(cat => (
           <button
@@ -145,7 +146,7 @@ export default function LearnMode({ stats, onBack }) {
               onClick={() => { setDetailIndex(i => Math.max(0, i - 1)); setImgLoaded(false); }}
               disabled={detailIndex === 0}
               className="p-2 rounded-lg hover:bg-slate-100 disabled:opacity-30 transition-colors"
-              aria-label="Previous word"
+              aria-label={t('previousWord', lang)}
             >
               <ChevronLeft className="w-5 h-5 text-slate-600" />
             </button>
@@ -154,7 +155,7 @@ export default function LearnMode({ stats, onBack }) {
               onClick={() => { setDetailIndex(i => Math.min(filtered.length - 1, i + 1)); setImgLoaded(false); }}
               disabled={detailIndex === filtered.length - 1}
               className="p-2 rounded-lg hover:bg-slate-100 disabled:opacity-30 transition-colors"
-              aria-label="Next word"
+              aria-label={t('nextWord', lang)}
             >
               <ChevronRight className="w-5 h-5 text-slate-600" />
             </button>
@@ -169,6 +170,7 @@ export default function LearnMode({ stats, onBack }) {
                 alt={currentWord.word}
                 className={`w-full h-full object-cover transition-opacity ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                 onLoad={() => setImgLoaded(true)}
+                loading="lazy"
                 width={512}
                 height={512}
               />
@@ -182,7 +184,7 @@ export default function LearnMode({ stats, onBack }) {
                 <button
                   onClick={() => speakWord(currentWord.word)}
                   className="p-2.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
-                  aria-label="Pronounce word"
+                  aria-label={t('pronounceWord', lang)}
                 >
                   <Volume2 className="w-5 h-5 text-blue-600" />
                 </button>
@@ -202,7 +204,7 @@ export default function LearnMode({ stats, onBack }) {
 
       {filtered.length === 0 && (
         <div className="text-center py-12 text-slate-400">
-          <p>No words found</p>
+          <p>{t('noWordsFound', lang)}</p>
         </div>
       )}
     </div>

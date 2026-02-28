@@ -4,8 +4,9 @@ import { BADGES } from '../data/badges';
 import { getWordById } from '../data/words';
 import { getImageUrl } from '../utils/images';
 import { playSound } from '../utils/sound';
+import { t } from '../utils/i18n';
 
-export default function ResultScreen({ results, stats, level, mode, onPlayAgain, onChangeMode, onMenu }) {
+export default function ResultScreen({ results, stats, lang = 'en', level, mode, onPlayAgain, onChangeMode, onMenu }) {
   const { score, total, answers = [] } = results;
   const isPerfect = score === total && total > 0;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
@@ -40,8 +41,15 @@ export default function ResultScreen({ results, stats, level, mode, onPlayAgain,
     } catch {}
   };
 
+  const message = percentage >= 90
+    ? t('amazing', lang)
+    : percentage >= 70
+    ? t('greatJob', lang)
+    : percentage >= 50
+    ? t('goodEffort', lang)
+    : t('keepPracticing', lang);
+
   const emoji = percentage >= 90 ? '🎉' : percentage >= 70 ? '👏' : percentage >= 50 ? '💪' : '📚';
-  const message = percentage >= 90 ? 'Amazing!' : percentage >= 70 ? 'Great job!' : percentage >= 50 ? 'Good effort!' : 'Keep practicing!';
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -75,7 +83,7 @@ export default function ResultScreen({ results, stats, level, mode, onPlayAgain,
       {/* New badges */}
       {newBadges.length > 0 && (
         <div className="glass rounded-2xl p-4 space-y-3">
-          <h3 className="text-sm font-semibold text-slate-600">Badges Earned</h3>
+          <h3 className="text-sm font-semibold text-slate-600">{t('badgesEarned', lang)}</h3>
           <div className="flex gap-3 justify-center">
             {newBadges.map((badge, i) => (
               <div
@@ -94,7 +102,7 @@ export default function ResultScreen({ results, stats, level, mode, onPlayAgain,
       {/* Answer review */}
       {answers.length > 0 && (
         <div className="glass rounded-2xl p-4 space-y-3">
-          <h3 className="text-sm font-semibold text-slate-600">Review</h3>
+          <h3 className="text-sm font-semibold text-slate-600">{t('review', lang)}</h3>
           <div className="space-y-2 max-h-60 overflow-y-auto">
             {answers.map((answer, i) => {
               const word = getWordById(answer.wordId);
@@ -117,7 +125,7 @@ export default function ResultScreen({ results, stats, level, mode, onPlayAgain,
                   <span className="font-semibold text-sm text-slate-700">{word.word}</span>
                   {!answer.correct && answer.selected && (
                     <span className="text-xs text-slate-500 ml-auto">
-                      You picked: {getWordById(answer.selected)?.word}
+                      {t('youPicked', lang, { word: getWordById(answer.selected)?.word })}
                     </span>
                   )}
                 </div>
@@ -134,7 +142,7 @@ export default function ResultScreen({ results, stats, level, mode, onPlayAgain,
           className="w-full py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold
                      hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
         >
-          <Play className="w-5 h-5" /> Play Again
+          <Play className="w-5 h-5" /> {t('playAgain', lang)}
         </button>
 
         <div className="grid grid-cols-2 gap-3">
@@ -143,14 +151,14 @@ export default function ResultScreen({ results, stats, level, mode, onPlayAgain,
             className="py-2.5 px-4 glass rounded-xl font-semibold text-slate-600 text-sm
                        hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
           >
-            <Share2 className="w-4 h-4" /> Share
+            <Share2 className="w-4 h-4" /> {t('share', lang)}
           </button>
           <button
             onClick={onChangeMode}
             className="py-2.5 px-4 glass rounded-xl font-semibold text-slate-600 text-sm
                        hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
           >
-            <RotateCcw className="w-4 h-4" /> Change Mode
+            <RotateCcw className="w-4 h-4" /> {t('changeMode', lang)}
           </button>
         </div>
 
@@ -159,7 +167,7 @@ export default function ResultScreen({ results, stats, level, mode, onPlayAgain,
           className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-500 text-sm
                      font-semibold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Menu
+          <ArrowLeft className="w-4 h-4" /> {t('backToMenuBtn', lang)}
         </button>
       </div>
     </div>

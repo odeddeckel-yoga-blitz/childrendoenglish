@@ -23,7 +23,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', showI
           <button
             onClick={onToggleSound}
             className="p-2.5 rounded-xl bg-white/50 hover:bg-white/80 transition-colors"
-            aria-label={soundEnabled ? 'Mute sound' : 'Enable sound'}
+            aria-label={soundEnabled ? t('muteSound', lang) : t('enableSound', lang)}
           >
             {soundEnabled
               ? <Volume2 className="w-5 h-5 text-slate-600" />
@@ -33,7 +33,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', showI
           <button
             onClick={onToggleDark}
             className="p-2.5 rounded-xl bg-white/50 hover:bg-white/80 transition-colors"
-            aria-label={darkMode ? 'Light mode' : 'Dark mode'}
+            aria-label={darkMode ? t('lightMode', lang) : t('darkModeLabel', lang)}
           >
             {darkMode
               ? <Sun className="w-5 h-5 text-amber-500" />
@@ -64,7 +64,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', showI
         </div>
         {stats.currentStreak > 0 && (
           <p className="text-xs text-amber-600 font-medium">
-            🔥 {stats.currentStreak} day streak!
+            🔥 {t('dayStreakMenu', lang, { count: stats.currentStreak })}
           </p>
         )}
       </div>
@@ -203,13 +203,13 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', showI
             <Download className="w-5 h-5 text-blue-600" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-slate-800">Install App</p>
-            <p className="text-xs text-slate-500">Add to your home screen for quick access</p>
+            <p className="text-sm font-semibold text-slate-800">{t('installApp', lang)}</p>
+            <p className="text-xs text-slate-500">{t('installDesc', lang)}</p>
           </div>
           <button onClick={onInstall} className="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all">
-            Install
+            {t('install', lang)}
           </button>
-          <button onClick={onDismissInstall} className="p-1 rounded-lg hover:bg-slate-200 transition-colors" aria-label="Dismiss install prompt">
+          <button onClick={onDismissInstall} className="p-1 rounded-lg hover:bg-slate-200 transition-colors" aria-label={t('dismissInstall', lang)}>
             <X className="w-4 h-4 text-slate-400" />
           </button>
         </div>
