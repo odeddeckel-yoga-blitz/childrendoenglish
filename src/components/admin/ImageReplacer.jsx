@@ -79,7 +79,7 @@ export default function ImageReplacer({ word, password, onClose, onReplaced }) {
         message: `Committed! SHA: ${data.commitSha?.slice(0, 7)}. Site will redeploy shortly.`,
       });
 
-      setTimeout(() => onReplaced(word.id), 2000);
+      setTimeout(() => onReplaced(word.id, candidate.imageBase64), 2000);
     } catch (err) {
       setStatus({ type: 'error', message: err.message });
     } finally {

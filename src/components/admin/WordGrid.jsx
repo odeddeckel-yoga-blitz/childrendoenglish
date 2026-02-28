@@ -17,6 +17,7 @@ export default function WordGrid({ password, onBack }) {
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedWord, setSelectedWord] = useState(null);
   const [brokenImages, setBrokenImages] = useState(new Set());
+  const [imageOverrides, setImageOverrides] = useState({});
 
   const filtered = WORDS.filter(w => {
     const matchesSearch = !search || w.word.toLowerCase().includes(search.toLowerCase());
@@ -29,12 +30,15 @@ export default function WordGrid({ password, onBack }) {
     setBrokenImages(prev => new Set([...prev, wordId]));
   }, []);
 
-  const handleImageReplaced = useCallback((wordId) => {
+  const handleImageReplaced = useCallback((wordId, imageBase64) => {
     setBrokenImages(prev => {
       const next = new Set(prev);
       next.delete(wordId);
       return next;
     });
+    if (imageBase64) {
+      setImageOverrides(prev => ({ ...prev, [wordId]: `data:image/webp;base64,${imageBase64}` }));
+    }
     setSelectedWord(null);
   }, []);
 
@@ -119,7 +123,7 @@ export default function WordGrid({ password, onBack }) {
           >
             <div className={`aspect-square bg-slate-100 relative ${brokenImages.has(word.id) ? 'ring-2 ring-red-500' : ''}`}>
               <img
-                src={getImageUrl(word)}
+                src={imageOverrides[word.id] || getImageUrl(word)}
                 alt={word.word}
                 className="w-full h-full object-cover"
                 loading="lazy"
