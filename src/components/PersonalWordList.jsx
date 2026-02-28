@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ArrowLeft, Play, AlertCircle } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { ArrowLeft, Play, AlertCircle, Share2, Check } from 'lucide-react';
 import { WORDS, getWordById } from '../data/words';
 
 export default function PersonalWordList({ onStartQuiz, onBack }) {
@@ -7,6 +7,23 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
   const [matched, setMatched] = useState([]);
   const [unmatched, setUnmatched] = useState([]);
   const [parsed, setParsed] = useState(false);
+  const [copiedMode, setCopiedMode] = useState(null);
+
+  const handleShare = useCallback(async (mode) => {
+    const ids = matched.map(w => w.id).join(',');
+    const url = `${window.location.origin}${window.location.pathname}#quiz/${mode}/${ids}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'English Quiz', url });
+        return;
+      } catch {}
+    }
+
+    await navigator.clipboard.writeText(url);
+    setCopiedMode(mode);
+    setTimeout(() => setCopiedMode(null), 2000);
+  }, [matched]);
 
   const handleParse = () => {
     const words = input
@@ -113,20 +130,38 @@ export default function PersonalWordList({ onStartQuiz, onBack }) {
           {/* Start quiz */}
           {canQuiz ? (
             <div className="space-y-3">
-              <button
-                onClick={() => onStartQuiz(matched, 'image')}
-                className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold
-                           hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
-              >
-                <Play className="w-5 h-5" /> Image Quiz ({matched.length} words)
-              </button>
-              <button
-                onClick={() => onStartQuiz(matched, 'word')}
-                className="w-full py-3 glass rounded-xl font-semibold text-blue-600 text-sm
-                           hover:shadow-md active:scale-95 transition-all"
-              >
-                Word Quiz
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => onStartQuiz(matched, 'image')}
+                  className="flex-1 py-3 bg-blue-600 text-white rounded-xl font-semibold
+                             hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+                >
+                  <Play className="w-5 h-5" /> Image Quiz ({matched.length} words)
+                </button>
+                <button
+                  onClick={() => handleShare('image')}
+                  className="px-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 active:scale-95 transition-all"
+                  title="Share Image Quiz"
+                >
+                  {copiedMode === 'image' ? <Check className="w-5 h-5" /> : <Share2 className="w-5 h-5" />}
+                </button>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => onStartQuiz(matched, 'word')}
+                  className="flex-1 py-3 glass rounded-xl font-semibold text-blue-600 text-sm
+                             hover:shadow-md active:scale-95 transition-all"
+                >
+                  Word Quiz
+                </button>
+                <button
+                  onClick={() => handleShare('word')}
+                  className="px-3 glass rounded-xl text-blue-600 hover:shadow-md active:scale-95 transition-all"
+                  title="Share Word Quiz"
+                >
+                  {copiedMode === 'word' ? <Check className="w-5 h-5" /> : <Share2 className="w-5 h-5" />}
+                </button>
+              </div>
             </div>
           ) : parsed && matched.length > 0 && (
             <p className="text-sm text-amber-600 text-center">

@@ -4,7 +4,7 @@ import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
 import Onboarding from './components/Onboarding';
 import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, updateStreak, updateDailyGoal } from './utils/storage';
-import { WORDS, getWordsByLevel, getDistractors } from './data/words';
+import { WORDS, getWordsByLevel, getDistractors, getWordById } from './data/words';
 import { BADGES } from './data/badges';
 import { selectQuizWords } from './utils/spaced-repetition';
 import { fisherYatesShuffle } from './utils/shuffle';
@@ -54,17 +54,29 @@ export default function App() {
   // Init TTS
   useEffect(() => { initTTS(); }, []);
 
-  // Detect #admin hash route
+  // Detect hash routes: #admin, #quiz/{mode}/{ids}
   useEffect(() => {
     const checkHash = () => {
-      if (window.location.hash === '#admin') {
+      const hash = window.location.hash;
+      if (hash === '#admin') {
         setGameState('admin');
+        return;
+      }
+      const quizMatch = hash.match(/^#quiz\/(image|word)\/(.+)$/);
+      if (quizMatch) {
+        const mode = quizMatch[1];
+        const ids = quizMatch[2].split(',');
+        const words = ids.map(id => getWordById(id)).filter(Boolean);
+        window.location.hash = '';
+        if (words.length >= 4) {
+          startQuiz(null, mode, words);
+        }
       }
     };
     checkHash();
     window.addEventListener('hashchange', checkHash);
     return () => window.removeEventListener('hashchange', checkHash);
-  }, []);
+  }, [startQuiz]);
 
   // Persist stats
   useEffect(() => { saveStats(stats); }, [stats]);
