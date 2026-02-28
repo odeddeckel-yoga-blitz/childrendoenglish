@@ -25,6 +25,7 @@ const ProgressDashboard = lazy(() => import('./components/ProgressDashboard'));
 const AssessmentFlow = lazy(() => import('./components/AssessmentFlow'));
 const PersonalWordList = lazy(() => import('./components/PersonalWordList'));
 const UpdatePrompt = lazy(() => import('./components/UpdatePrompt'));
+const AdminPanel = lazy(() => import('./components/admin/AdminPanel'));
 
 export default function App() {
   const [stats, setStats] = useState(() => loadStats());
@@ -52,6 +53,18 @@ export default function App() {
 
   // Init TTS
   useEffect(() => { initTTS(); }, []);
+
+  // Detect #admin hash route
+  useEffect(() => {
+    const checkHash = () => {
+      if (window.location.hash === '#admin') {
+        setGameState('admin');
+      }
+    };
+    checkHash();
+    window.addEventListener('hashchange', checkHash);
+    return () => window.removeEventListener('hashchange', checkHash);
+  }, []);
 
   // Persist stats
   useEffect(() => { saveStats(stats); }, [stats]);
@@ -358,6 +371,16 @@ export default function App() {
           />
         );
 
+      case 'admin':
+        return (
+          <AdminPanel
+            onExit={() => {
+              window.location.hash = '';
+              navigate('menu', 'back');
+            }}
+          />
+        );
+
       default:
         return null;
     }
@@ -365,7 +388,7 @@ export default function App() {
 
   return (
     <div className="app-bg min-h-screen pb-safe">
-      <div className="max-w-lg mx-auto px-4 py-6">
+      <div className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg'} mx-auto px-4 py-6`}>
         <Suspense fallback={
           <div className="flex items-center justify-center min-h-[60vh]">
             <div className="w-8 h-8 border-3 border-blue-600 border-t-transparent rounded-full animate-spin" />
