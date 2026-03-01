@@ -205,7 +205,7 @@ const translations = {
     shareQuizTitle: 'English Quiz',
 
     // Cookie consent
-    cookieConsent: 'We use analytics to improve the app. No personal data is collected.',
+    cookieConsent: 'We use Google Analytics to understand app usage. Analytics load only after your consent.',
     accept: 'Accept',
     decline: 'Decline',
 
@@ -250,6 +250,56 @@ const translations = {
 
     // Edit player
     editPlayer: 'Edit player',
+
+    // Privacy policy
+    privacyTitle: 'Privacy Policy',
+    privacyUpdated: 'Last updated: February 28, 2026',
+    privacyDataTitle: 'What data we collect',
+    privacyDataDesc: 'Children Do English does not collect any personal information. We do not ask for names, email addresses, or any other identifying details.',
+    privacyCookieTitle: 'Cookies & tracking',
+    privacyCookieDesc: 'We use Google Analytics to understand how the app is used (page views, feature usage, basic device information). Google Analytics uses cookies and may collect anonymized data. Analytics are only loaded after you give consent via the cookie banner. We do not use any advertising services.',
+    privacyStorageTitle: 'What is stored on your device',
+    privacyStorageDesc: 'Your learning progress (quiz scores, word progress, streak, badges, and preferences like dark mode and sound) is saved in your browser\'s local storage. This data never leaves your device and is not sent to any server.',
+    privacyThirdPartyTitle: 'Third-party services',
+    privacyThirdPartyDesc: 'The app uses Google Analytics for usage statistics (loaded only after consent). The browser\'s built-in speech synthesis may connect to your device\'s speech engine for word pronunciation. All word data and images are bundled with the app.',
+    privacyChildrenTitle: 'Children\'s privacy',
+    privacyChildrenDesc: 'This app is designed for children ages 6-12. Because we do not collect or transmit any personal data, there is no risk of children\'s information being shared or misused.',
+    privacyDeleteTitle: 'Deleting your data',
+    privacyDeleteDesc: 'You can clear all saved progress by clearing your browser\'s site data for this website, or by using your browser\'s "Clear browsing data" feature.',
+    privacyContactTitle: 'Contact',
+    privacyContactDesc: 'Children Do English is made by Oded Deckelbaum. If you have questions about this privacy policy or the app, email',
+
+    // Category names
+    cat_animals: 'Animals',
+    cat_food: 'Food',
+    cat_home: 'Home',
+    cat_transport: 'Transport',
+    cat_nature: 'Nature',
+    cat_colors: 'Colors',
+    cat_numbers: 'Numbers',
+    cat_body: 'Body',
+    cat_clothing: 'Clothing',
+    cat_school: 'School',
+    cat_sports: 'Sports',
+    cat_weather: 'Weather',
+    cat_family: 'Family',
+    cat_feelings: 'Feelings',
+    cat_everyday: 'Everyday',
+
+    // Quiz modes
+    mode_image: 'Image Quiz',
+    mode_word: 'Word Quiz',
+    mode_audio: 'Audio Quiz',
+    mode_listen: 'Listen & Match',
+
+    // Aria labels
+    skipOnboarding: 'Skip onboarding',
+    previousStep: 'Previous step',
+    nextStep: 'Next step',
+    quizProgress: 'Quiz progress',
+    selectAvatarLabel: 'Select {{avatar}} avatar',
+    noPlayersFound: 'No players found',
+    dailyGoalProgress: 'Daily goal progress',
 
     // Badge names
     badge_first_word: 'First Word',
@@ -473,7 +523,7 @@ const translations = {
     shareQuizTitle: 'חידון אנגלית',
 
     // Cookie consent
-    cookieConsent: 'אנחנו משתמשים בנתונים סטטיסטיים כדי לשפר את האפליקציה. לא נאסף מידע אישי.',
+    cookieConsent: 'אנחנו משתמשים ב-Google Analytics כדי להבין שימוש באפליקציה. ניתוח נטען רק לאחר הסכמתכם.',
     accept: 'אישור',
     decline: 'דחייה',
 
@@ -518,6 +568,56 @@ const translations = {
 
     // Edit player
     editPlayer: 'עריכת שחקן',
+
+    // Privacy policy
+    privacyTitle: 'מדיניות פרטיות',
+    privacyUpdated: 'עודכן לאחרונה: 28 בפברואר 2026',
+    privacyDataTitle: 'איזה מידע אנחנו אוספים',
+    privacyDataDesc: 'ילדים עושים אנגלית לא אוספת שום מידע אישי. אנחנו לא מבקשים שמות, כתובות מייל או כל פרט מזהה אחר.',
+    privacyCookieTitle: 'עוגיות ומעקב',
+    privacyCookieDesc: 'אנחנו משתמשים ב-Google Analytics כדי להבין איך האפליקציה משמשת (צפיות בדפים, שימוש בפיצ\'רים, מידע בסיסי על המכשיר). Google Analytics משתמש בעוגיות ועשוי לאסוף מידע אנונימי. ניתוח נטען רק לאחר הסכמתכם דרך באנר העוגיות. אנחנו לא משתמשים בשירותי פרסום.',
+    privacyStorageTitle: 'מה נשמר במכשיר שלכם',
+    privacyStorageDesc: 'התקדמות הלמידה שלכם (ציוני חידונים, התקדמות במילים, רצף, תגים והעדפות כמו מצב כהה וצליל) נשמרת באחסון המקומי של הדפדפן. מידע זה לא עוזב את המכשיר שלכם ולא נשלח לשום שרת.',
+    privacyThirdPartyTitle: 'שירותי צד שלישי',
+    privacyThirdPartyDesc: 'האפליקציה משתמשת ב-Google Analytics לסטטיסטיקות שימוש (נטען רק לאחר הסכמה). סינתזת הדיבור המובנית בדפדפן עשויה להתחבר למנוע הדיבור של המכשיר שלכם להגייה. כל נתוני המילים והתמונות מצורפים לאפליקציה.',
+    privacyChildrenTitle: 'פרטיות ילדים',
+    privacyChildrenDesc: 'אפליקציה זו מיועדת לילדים בגילאי 6-12. מכיוון שאנחנו לא אוספים או מעבירים מידע אישי, אין סיכון שמידע של ילדים ישותף או ינוצל לרעה.',
+    privacyDeleteTitle: 'מחיקת המידע שלכם',
+    privacyDeleteDesc: 'תוכלו למחוק את כל ההתקדמות השמורה על ידי ניקוי נתוני האתר של הדפדפן שלכם, או באמצעות תכונת "נקה נתוני גלישה".',
+    privacyContactTitle: 'יצירת קשר',
+    privacyContactDesc: 'ילדים עושים אנגלית נוצרה על ידי עודד דקלבאום. אם יש לכם שאלות לגבי מדיניות פרטיות זו או האפליקציה, שלחו מייל ל',
+
+    // Category names
+    cat_animals: 'חיות',
+    cat_food: 'אוכל',
+    cat_home: 'בית',
+    cat_transport: 'תחבורה',
+    cat_nature: 'טבע',
+    cat_colors: 'צבעים',
+    cat_numbers: 'מספרים',
+    cat_body: 'גוף',
+    cat_clothing: 'ביגוד',
+    cat_school: 'בית ספר',
+    cat_sports: 'ספורט',
+    cat_weather: 'מזג אוויר',
+    cat_family: 'משפחה',
+    cat_feelings: 'רגשות',
+    cat_everyday: 'יומיומי',
+
+    // Quiz modes
+    mode_image: 'חידון תמונות',
+    mode_word: 'חידון מילים',
+    mode_audio: 'חידון שמיעה',
+    mode_listen: 'האזן והתאם',
+
+    // Aria labels
+    skipOnboarding: 'דלגו על הדרכה',
+    previousStep: 'שלב קודם',
+    nextStep: 'שלב הבא',
+    quizProgress: 'התקדמות החידון',
+    selectAvatarLabel: 'בחרו סמל {{avatar}}',
+    noPlayersFound: 'לא נמצאו שחקנים',
+    dailyGoalProgress: 'התקדמות יעד יומי',
 
     // Badge names
     badge_first_word: 'מילה ראשונה',

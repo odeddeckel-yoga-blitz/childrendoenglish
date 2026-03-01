@@ -17,6 +17,7 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
 
   const handleLevelSelect = useCallback((level) => {
     setSelectedLevel(level);
+    analytics.quizFunnelLevel(level);
     navigate('modeSelect');
   }, [navigate]);
 
@@ -55,6 +56,7 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
 
   const handleModeSelect = useCallback((mode) => {
     setSelectedMode(mode);
+    analytics.quizFunnelMode(mode);
     startQuiz(selectedLevel, mode);
   }, [selectedLevel, startQuiz]);
 

@@ -89,8 +89,8 @@ export default function ProgressDashboard({ stats, lang = 'en', onBack, onAssess
             {recentHistory.map((quiz, i) => (
               <div key={i} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
                 <div>
-                  <span className="text-sm font-semibold text-slate-700 capitalize">{quiz.mode}</span>
-                  <span className="text-xs text-slate-500 ml-2 capitalize">{quiz.level}</span>
+                  <span className="text-sm font-semibold text-slate-700">{t(`mode_${quiz.mode}`, lang)}</span>
+                  <span className="text-xs text-slate-500 ml-2">{t(quiz.level, lang)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className={`text-sm font-bold ${quiz.score >= 7 ? 'text-emerald-600' : 'text-amber-600'}`}>

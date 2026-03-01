@@ -31,7 +31,7 @@ export const spacedRepetitionSort = (words, wordProgress) => {
  * @returns {Object} New wordProgress object (immutable update)
  */
 export const updateWordSR = (wordProgress, wordId, correct) => {
-  const card = wordProgress[wordId] || { lastSeen: 0, interval: 1, easeFactor: 2.5, correct: 0, wrong: 0 };
+  const card = wordProgress[wordId] || { lastSeen: 0, interval: 1, correct: 0, wrong: 0 };
 
   if (correct) {
     const currentIdx = SR_INTERVALS.indexOf(card.interval);

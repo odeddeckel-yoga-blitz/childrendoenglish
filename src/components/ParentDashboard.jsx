@@ -1,9 +1,15 @@
+import { useMemo } from 'react';
 import { ArrowLeft, BookOpen, Trophy, Flame, Target } from 'lucide-react';
 import { loadStats } from '../utils/storage';
 import { WORDS } from '../data/words';
 import { t } from '../utils/i18n';
 
 export default function ParentDashboard({ players = [], lang = 'en', onBack }) {
+  const playerStats = useMemo(
+    () => players.map(p => ({ ...p, stats: loadStats(p.id) })),
+    [players]
+  );
+
   return (
     <div className="animate-fade-in space-y-6">
       {/* Header */}
@@ -16,8 +22,7 @@ export default function ParentDashboard({ players = [], lang = 'en', onBack }) {
 
       {/* Player summary cards */}
       <div className="space-y-4">
-        {players.map(player => {
-          const stats = loadStats(player.id);
+        {playerStats.map(({ stats, ...player }) => {
           const wordsLearned = Object.keys(stats.wordProgress || {}).length;
           const wordsMastered = Object.values(stats.wordProgress || {}).filter(w => w.interval >= 14).length;
           const totalWords = WORDS.length;
@@ -79,7 +84,7 @@ export default function ParentDashboard({ players = [], lang = 'en', onBack }) {
 
       {players.length === 0 && (
         <div className="text-center py-12 text-slate-400">
-          <p>No players found</p>
+          <p>{t('noPlayersFound', lang)}</p>
         </div>
       )}
     </div>

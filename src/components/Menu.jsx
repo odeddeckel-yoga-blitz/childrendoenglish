@@ -110,7 +110,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               : 0} / 10 {t('words', lang)}
           </span>
         </div>
-        <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={Math.round(dailyProgress)} aria-valuemin={0} aria-valuemax={100} aria-label="Daily goal progress">
+        <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={Math.round(dailyProgress)} aria-valuemin={0} aria-valuemax={100} aria-label={t('dailyGoalProgress', lang)}>
           <div
             className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
             style={{ width: `${dailyProgress}%` }}

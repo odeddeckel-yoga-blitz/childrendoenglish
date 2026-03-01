@@ -10,12 +10,14 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "lint": "eslint src/",
+    "format": "prettier --write src/",
     "build-data": "node scripts/build-word-data.js",
     "optimize-images": "node scripts/optimize-images.js"
   },
   "dependencies": {
     "@sentry/react": "^10.40.0",
-    "easy-speech": "^2.3.0",
+
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -25,13 +27,19 @@
     "serialize-javascript": "^7.0.3"
   },
   "devDependencies": {
+    "@eslint/js": "^9.0.0",
     "@playwright/test": "^1.58.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
+    "eslint": "^9.0.0",
+    "eslint-plugin-react": "^7.37.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.0.0",
     "jsdom": "^28.1.0",
     "postcss": "^8.4.49",
+    "prettier": "^3.4.0",
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",
     "vite": "^6.0.5",

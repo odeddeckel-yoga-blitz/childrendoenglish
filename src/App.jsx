@@ -36,6 +36,27 @@ const ProfilePicker = lazy(() => import('./components/ProfilePicker'));
 const LearningPath = lazy(() => import('./components/LearningPath'));
 const ParentDashboard = lazy(() => import('./components/ParentDashboard'));
 
+// State-to-path mapping for browser history (top-level screens only)
+const STATE_TO_PATH = {
+  menu: '/',
+  levelSelect: '/play',
+  learning: '/learn',
+  flashcards: '/flashcards',
+  badges: '/badges',
+  progress: '/progress',
+  learningPath: '/path',
+  parentDashboard: '/parent',
+  privacy: '/privacy',
+  playerSelect: '/players',
+  playerManage: '/manage',
+  playerCreate: '/new-player',
+  personalList: '/my-words',
+};
+
+const PATH_TO_STATE = Object.fromEntries(
+  Object.entries(STATE_TO_PATH).map(([state, path]) => [path, state])
+);
+
 function SuspenseFallback() {
   const [showRetry, setShowRetry] = useState(false);
   useEffect(() => {
@@ -92,7 +113,6 @@ export default function App() {
   const [showProfilePicker, setShowProfilePicker] = useState(false);
   const [showConsent, setShowConsent] = useState(() => needsConsentPrompt());
   const [learnWords, setLearnWords] = useState(null);
-  const transitionDir = useRef('forward');
   const mainRef = useRef(null);
 
   // Derived: active player from registry
@@ -166,8 +186,16 @@ export default function App() {
   }, [stats, playerRegistry?.activePlayerId]);
 
   const navigate = useCallback((newState, direction = 'forward') => {
-    transitionDir.current = direction;
     setGameState(newState);
+    // Update browser history for mapped states
+    const path = STATE_TO_PATH[newState];
+    if (path) {
+      if (direction === 'back') {
+        history.replaceState({ gameState: newState }, '', path);
+      } else {
+        history.pushState({ gameState: newState }, '', path);
+      }
+    }
     // Track feature usage for key screens
     const features = ['learning', 'flashcards', 'badges', 'progress', 'personalList', 'learningPath', 'parentDashboard'];
     if (features.includes(newState)) analytics.featureUse(newState);
@@ -302,6 +330,31 @@ export default function App() {
     return () => window.removeEventListener('hashchange', checkHash);
   }, [quizFlow.startQuiz]);
 
+  // Browser history: popstate listener + initial state
+  useEffect(() => {
+    // Set initial URL to match current state
+    const initialPath = STATE_TO_PATH[gameState];
+    if (initialPath && window.location.pathname !== initialPath) {
+      history.replaceState({ gameState }, '', initialPath);
+    }
+
+    const handlePopState = (e) => {
+      const state = e.state?.gameState;
+      if (state) {
+        setGameState(state);
+        return;
+      }
+      // Derive from URL path
+      const mapped = PATH_TO_STATE[window.location.pathname];
+      if (mapped) {
+        setGameState(mapped);
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleAssessmentComplete = useCallback((level) => {
     setStats(prev => {
       const unlockedLevels = ['beginner'];
@@ -309,6 +362,7 @@ export default function App() {
       if (level === 'advanced') unlockedLevels.push('advanced');
       return { ...prev, assessmentLevel: level, unlockedLevels };
     });
+    analytics.assessmentComplete(level);
     navigate('menu');
   }, [navigate]);
 
@@ -545,7 +599,7 @@ export default function App() {
 
       case 'privacy':
         return (
-          <PrivacyPolicy onBack={() => navigate('menu', 'back')} />
+          <PrivacyPolicy lang={lang} onBack={() => navigate('menu', 'back')} />
         );
 
       case 'admin':

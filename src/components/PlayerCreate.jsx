@@ -57,6 +57,7 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
             <button
               key={emoji}
               onClick={() => setAvatar(emoji)}
+              aria-label={t('selectAvatarLabel', lang, { avatar: emoji })}
               className={`w-12 h-12 rounded-xl text-2xl flex items-center justify-center transition-all
                          ${avatar === emoji
                            ? 'bg-blue-100 ring-2 ring-blue-500 scale-110'

@@ -1,7 +1,8 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { ArrowLeft, Trash2, RotateCcw, Plus, Pencil, Check, X, Download, Upload } from 'lucide-react';
 import { t } from '../utils/i18n';
-import { exportAllData, importAllData } from '../utils/storage';
+import { exportAllData, importAllData, loadPlayerRegistry } from '../utils/storage';
+import useFocusTrap from '../hooks/useFocusTrap';
 
 const AVATARS = ['🦊', '🐱', '🦁', '🐶', '🦄', '🐼', '🐸', '🦋', '🌟', '🚀', '🎨', '🎵'];
 
@@ -12,6 +13,9 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
   const [editAvatar, setEditAvatar] = useState('');
   const [importMsg, setImportMsg] = useState(null); // { type: 'success'|'error', text }
   const fileInputRef = useRef(null);
+  const confirmModalRef = useRef(null);
+  const closeConfirm = useCallback(() => setConfirmAction(null), []);
+  useFocusTrap(confirmModalRef, !!confirmAction, closeConfirm);
 
   const startEdit = (player) => {
     setEditingId(player.id);
@@ -27,7 +31,22 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
   const handleConfirm = () => {
     if (!confirmAction) return;
     if (confirmAction.type === 'deleteAll') {
-      localStorage.clear();
+      // Delete all app-specific keys instead of clearing everything
+      const appKeys = [
+        'childrendoenglish-players',
+        'childrendoenglish-stats',
+        'childrendoenglish-dark',
+        'childrendoenglish-sound',
+        'childrendoenglish-analytics-consent',
+        'childrendoenglish-install-dismissed',
+        'childrendoenglish-notif-enabled',
+        'childrendoenglish-last-reminder',
+      ];
+      const registry = loadPlayerRegistry();
+      if (registry) {
+        registry.players.forEach(p => appKeys.push(`childrendoenglish-player-${p.id}`));
+      }
+      appKeys.forEach(key => localStorage.removeItem(key));
       window.location.reload();
       return;
     }
@@ -222,7 +241,7 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
       {/* Confirmation modal */}
       {confirmAction && (confirmPlayer || confirmAction.type === 'deleteAll') && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" onClick={() => setConfirmAction(null)}>
-          <div className="glass rounded-2xl p-6 max-w-sm w-full space-y-4 text-center" onClick={e => e.stopPropagation()}>
+          <div ref={confirmModalRef} role="dialog" aria-modal="true" className="glass rounded-2xl p-6 max-w-sm w-full space-y-4 text-center" onClick={e => e.stopPropagation()}>
             {confirmAction.type === 'deleteAll' ? (
               <>
                 <p className="text-3xl">⚠️</p>

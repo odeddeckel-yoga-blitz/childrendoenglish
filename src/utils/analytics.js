@@ -46,4 +46,8 @@ export const analytics = {
   playerCreate: () => trackEvent('player_create'),
   featureUse: (feature) => trackEvent('feature_use', { feature }),
   pwaInstall: (outcome) => trackEvent('pwa_install', { outcome }),
+  onboardingStep: (step, stepName) => trackEvent('onboarding_step', { step, step_name: stepName }),
+  quizFunnelLevel: (level) => trackEvent('quiz_funnel_level', { level }),
+  quizFunnelMode: (mode) => trackEvent('quiz_funnel_mode', { mode }),
+  assessmentComplete: (level) => trackEvent('assessment_complete', { level }),
 };

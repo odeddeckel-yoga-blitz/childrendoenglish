@@ -3,7 +3,7 @@ import { ArrowLeft, Search, Grid3X3, BookOpen, Volume2, ChevronLeft, ChevronRigh
 import { WORDS, CATEGORIES } from '../data/words';
 import { getImageUrl } from '../utils/images';
 import { speakWord } from '../utils/sound';
-import { t } from '../utils/i18n';
+import { t, isRTL } from '../utils/i18n';
 
 export default function LearnMode({ stats, lang = 'en', canRead = true, words: customWords, onBack }) {
   const wordPool = customWords || WORDS;
@@ -26,7 +26,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
     touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
   };
 
-  const isRTL = lang !== 'en';
+  const rtl = isRTL(lang);
 
   const goPrev = () => {
     if (detailIndex > 0) { setDetailIndex(i => i - 1); setImgLoaded(false); }
@@ -39,8 +39,8 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
     const dx = e.changedTouches[0].clientX - touchStart.current.x;
     const dy = e.changedTouches[0].clientY - touchStart.current.y;
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      if (dx > 0) isRTL ? goNext() : goPrev();
-      else isRTL ? goPrev() : goNext();
+      if (dx > 0) rtl ? goNext() : goPrev();
+      else rtl ? goPrev() : goNext();
     }
   };
 
@@ -114,7 +114,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
               selectedCategory === cat ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            {cat}
+            {t(`cat_${cat}`, lang)}
           </button>
         ))}
       </div>

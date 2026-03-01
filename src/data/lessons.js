@@ -78,14 +78,20 @@ export const LESSONS = buildLessons();
  * Get lesson status based on word progress
  * @returns 'completed' | 'in-progress' | 'available' | 'locked'
  */
-export function getLessonStatus(lesson, wordProgress, lessonIndex) {
+export function getLessonStatus(lesson, wordProgress, lessonIndex, allLessons = LESSONS) {
   const wp = wordProgress || {};
   const mastered = lesson.wordIds.filter(id => wp[id]?.interval >= 14).length;
   const seen = lesson.wordIds.filter(id => wp[id]).length;
 
   if (mastered === lesson.wordIds.length) return 'completed';
   if (seen > 0) return 'in-progress';
-  // First lesson is always available; otherwise available if previous is completed or in-progress
   if (lessonIndex === 0) return 'available';
-  return 'available'; // No strict locking — all lessons available
+
+  // Lock if previous lesson is neither completed nor in-progress
+  const prev = allLessons[lessonIndex - 1];
+  if (prev) {
+    const prevStatus = getLessonStatus(prev, wp, lessonIndex - 1, allLessons);
+    if (prevStatus !== 'completed' && prevStatus !== 'in-progress') return 'locked';
+  }
+  return 'available';
 }

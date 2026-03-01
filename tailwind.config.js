@@ -38,14 +38,6 @@ export default {
           '50%': { transform: 'scale(1.3)' },
           '100%': { transform: 'scale(1)' },
         },
-        'slide-left': {
-          '0%': { transform: 'translateX(100%)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
-        },
-        'slide-right': {
-          '0%': { transform: 'translateX(-100%)', opacity: '0' },
-          '100%': { transform: 'translateX(0)', opacity: '1' },
-        },
         'word-glow': {
           '0%, 100%': { textShadow: '0 0 4px rgba(37, 99, 235, 0.3)' },
           '50%': { textShadow: '0 0 16px rgba(37, 99, 235, 0.6)' },
@@ -63,8 +55,6 @@ export default {
         shake: 'shake 0.4s ease-in-out',
         'bounce-in': 'bounce-in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
         'score-pop': 'score-pop 0.3s ease-in-out',
-        'slide-left': 'slide-left 0.3s ease-out',
-        'slide-right': 'slide-right 0.3s ease-out',
         'word-glow': 'word-glow 2s ease-in-out infinite',
         'badge-pop': 'badge-pop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
       },

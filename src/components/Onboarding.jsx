@@ -188,7 +188,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
             onComplete();
           }}
           className="p-2 rounded-full hover:bg-slate-100 transition-colors"
-          aria-label="Skip onboarding"
+          aria-label={t('skipOnboarding', lang)}
         >
           <X className="w-5 h-5 text-slate-400" />
         </button>
@@ -205,7 +205,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
           <button
             onClick={() => { setStep(s => s - 1); setDemoAnswer(null); }}
             className="p-3 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
-            aria-label="Previous step"
+            aria-label={t('previousStep', lang)}
           >
             <ArrowLeft className="w-5 h-5 text-slate-600" />
           </button>
@@ -229,7 +229,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
               setStep(s => s + 1);
             }}
             className="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-            aria-label="Next step"
+            aria-label={t('nextStep', lang)}
           >
             <ArrowRight className="w-5 h-5" />
           </button>

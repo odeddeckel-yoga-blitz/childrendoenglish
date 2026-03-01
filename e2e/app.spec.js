@@ -450,8 +450,8 @@ test.describe('Onboarding Full Flow', () => {
     await page.locator('button:has-text("עברית")').click();
     await page.waitForTimeout(300);
 
-    // Steps 1-3: Click through intro slides via Next arrows
-    const nextBtn = page.locator('button[aria-label="Next step"]');
+    // Steps 1-3: Click through intro slides via Next arrows (Hebrew aria-label after language pick)
+    const nextBtn = page.locator('button[aria-label="שלב הבא"]');
     for (let i = 0; i < 3; i++) {
       await nextBtn.waitFor({ timeout: 3000 });
       await nextBtn.click();

@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { X, Plus, Trash2 } from 'lucide-react';
 import { t } from '../utils/i18n';
+import useFocusTrap from '../hooks/useFocusTrap';
 
 export default function ProfilePicker({ open, onClose, players, activePlayerId, lang, onSwitch, onAdd, onDelete }) {
   const [confirmDelete, setConfirmDelete] = useState(null);
   const canDelete = players.length >= 2;
+  const modalRef = useRef(null);
+  const deleteModalRef = useRef(null);
+
+  const closeDelete = useCallback(() => setConfirmDelete(null), []);
+  useFocusTrap(modalRef, open && !confirmDelete, onClose);
+  useFocusTrap(deleteModalRef, !!confirmDelete, closeDelete);
 
   if (!open) return null;
 
@@ -35,7 +42,7 @@ export default function ProfilePicker({ open, onClose, players, activePlayerId, 
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
 
       {/* Modal */}
-      <div className="relative bg-white dark:bg-slate-800 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-sm
+      <div ref={modalRef} role="dialog" aria-modal="true" className="relative bg-white dark:bg-slate-800 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-sm
                       p-5 space-y-4 animate-fade-in shadow-xl max-h-[80vh] overflow-y-auto"
         style={{ overscrollBehavior: 'contain' }}>
         {/* Header */}
@@ -101,7 +108,7 @@ export default function ProfilePicker({ open, onClose, players, activePlayerId, 
       {confirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/50" onClick={() => setConfirmDelete(null)} />
-          <div className="relative bg-white dark:bg-slate-800 rounded-2xl p-5 mx-4 max-w-xs w-full
+          <div ref={deleteModalRef} role="dialog" aria-modal="true" className="relative bg-white dark:bg-slate-800 rounded-2xl p-5 mx-4 max-w-xs w-full
                           shadow-xl animate-fade-in space-y-4 text-center">
             <span className="text-4xl">{confirmDelete.avatar}</span>
             <p className="text-slate-700 dark:text-slate-200 font-medium">

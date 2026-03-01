@@ -238,6 +238,14 @@ export const importAllData = (data) => {
   }
 };
 
+/** Format a Date as YYYY-MM-DD in local timezone */
+const formatLocalDate = (date) => {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const d = String(date.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+};
+
 /**
  * Update the user's daily streak. Increments if last active was yesterday,
  * resets to 1 if a day was missed, no-op if already active today.
@@ -245,8 +253,8 @@ export const importAllData = (data) => {
  * @returns {Stats} Updated stats with currentStreak, longestStreak, lastActiveDate
  */
 export const updateStreak = (stats) => {
-  const today = new Date().toISOString().slice(0, 10);
-  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+  const today = formatLocalDate(new Date());
+  const yesterday = formatLocalDate(new Date(Date.now() - 86400000));
 
   if (stats.lastActiveDate === today) return stats;
 
@@ -269,7 +277,7 @@ export const updateStreak = (stats) => {
  * @returns {Stats} Updated stats with dailyGoal.wordsReviewed incremented
  */
 export const updateDailyGoal = (stats, wordsCount) => {
-  const today = new Date().toISOString().slice(0, 10);
+  const today = formatLocalDate(new Date());
   const daily = stats.dailyGoal;
 
   if (daily.date === today) {
