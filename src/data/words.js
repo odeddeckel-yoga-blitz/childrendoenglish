@@ -87,7 +87,6 @@ export const WORDS = [
   // Intermediate
   { id: 'rainbow', word: 'rainbow', level: 'intermediate', partOfSpeech: 'noun', category: 'nature', definition: 'A colorful arc in the sky after rain', exampleSentence: 'We saw a beautiful rainbow after the storm.', phonetic: '/ˈreɪnˌboʊ/', hebrewTranslation: 'קשת בענן', imageUrl: '/images/rainbow.webp' },
   { id: 'mountain', word: 'mountain', level: 'intermediate', partOfSpeech: 'noun', category: 'nature', definition: 'A very high piece of land', exampleSentence: 'We climbed to the top of the mountain.', phonetic: '/ˈmaʊntən/', hebrewTranslation: 'הר', imageUrl: '/images/mountain.webp' },
-  { id: 'ocean', word: 'ocean', level: 'intermediate', partOfSpeech: 'noun', category: 'nature', definition: 'A very large body of salt water', exampleSentence: 'The ocean waves crashed on the beach.', phonetic: '/ˈoʊʃən/', hebrewTranslation: 'אוקיינוס', imageUrl: '/images/ocean.webp' },
   { id: 'butterfly', word: 'butterfly', level: 'intermediate', partOfSpeech: 'noun', category: 'nature', definition: 'An insect with large colorful wings', exampleSentence: 'A butterfly landed on the flower.', phonetic: '/ˈbʌtərˌflaɪ/', hebrewTranslation: 'פרפר', imageUrl: '/images/butterfly.webp' },
   // Advanced
   { id: 'volcano', word: 'volcano', level: 'advanced', partOfSpeech: 'noun', category: 'nature', definition: 'A mountain that can erupt with hot lava', exampleSentence: 'The volcano erupted with fire and smoke.', phonetic: '/vɒlˈkeɪnoʊ/', hebrewTranslation: 'הר געש', imageUrl: '/images/volcano.webp' },
