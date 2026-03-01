@@ -16,7 +16,7 @@ export function needsConsentPrompt() {
 }
 
 function loadGA() {
-  if (gaLoaded) return;
+  if (gaLoaded || typeof window.gtag !== 'function') return;
   gaLoaded = true;
   // gtag.js is already loaded in index.html <head> with consent denied by default.
   // Grant analytics consent so GA starts collecting data.
