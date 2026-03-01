@@ -26,6 +26,7 @@ async function setupHebrewUser(page, overrides = {}) {
     };
     localStorage.setItem('childrendoenglish-players', JSON.stringify(registry));
     localStorage.setItem('childrendoenglish-player-' + id, JSON.stringify(s));
+    localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
   }, stats);
   await page.goto('/');
   await page.waitForSelector('#root > *', { timeout: 10000 });
@@ -70,6 +71,7 @@ async function setupReturningUser(page, overrides = {}) {
     };
     localStorage.setItem('childrendoenglish-players', JSON.stringify(registry));
     localStorage.setItem('childrendoenglish-player-' + id, JSON.stringify(s));
+    localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
   }, stats);
   await page.goto('/');
   await page.waitForSelector('#root > *', { timeout: 10000 });
@@ -93,6 +95,7 @@ async function setupNewPlayer(page) {
     };
     localStorage.setItem('childrendoenglish-players', JSON.stringify(registry));
     localStorage.setItem('childrendoenglish-player-' + id, JSON.stringify(stats));
+    localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
   });
   await page.goto('/');
   await page.waitForSelector('#root > *', { timeout: 10000 });
@@ -108,7 +111,8 @@ test.describe('Onboarding', () => {
 
   test('shows onboarding after player exists but not onboarded', async ({ page }) => {
     await setupNewPlayer(page);
-    await expect(page.locator('text=Welcome')).toBeVisible();
+    // Step 0 is the language picker
+    await expect(page.locator('text=What language do you speak?')).toBeVisible();
   });
 
   test('can skip onboarding to menu', async ({ page }) => {
@@ -441,42 +445,32 @@ test.describe('Onboarding Full Flow', () => {
     // Set up a player who hasn't onboarded yet
     await setupNewPlayer(page);
 
-    // Should see onboarding
-    await expect(page.locator('text=Welcome')).toBeVisible({ timeout: 5000 });
+    // Step 0: Language picker — select Hebrew
+    await expect(page.locator('text=What language do you speak?')).toBeVisible({ timeout: 5000 });
+    await page.locator('button:has-text("עברית")').click();
+    await page.waitForTimeout(300);
 
-    // Click through onboarding steps (Next buttons or swipe indicators)
-    const nextBtn = page.locator('button:has-text("Next"), button:has-text("Continue"), button:has-text("Get Started")');
-    // Try to advance through steps
-    for (let i = 0; i < 4; i++) {
-      if ((await nextBtn.count()) > 0) {
-        await nextBtn.first().click();
-        await page.waitForTimeout(300);
-      }
-    }
-
-    // Look for language selection — click Hebrew option
-    const hebrewBtn = page.locator('button:has-text("עברית"), button:has-text("Hebrew")');
-    if ((await hebrewBtn.count()) > 0) {
-      await hebrewBtn.first().click();
+    // Steps 1-3: Click through intro slides via Next arrows
+    const nextBtn = page.locator('button[aria-label="Next step"]');
+    for (let i = 0; i < 3; i++) {
+      await nextBtn.waitFor({ timeout: 3000 });
+      await nextBtn.click();
       await page.waitForTimeout(300);
     }
 
-    // Complete/skip onboarding
-    const skipBtn = page.locator('button[aria-label="Skip onboarding"], button:has-text("Start"), button:has-text("Done"), button:has-text("Get Started")');
-    if ((await skipBtn.count()) > 0) {
-      await skipBtn.first().click();
-    }
+    // Step 4: Can you read? — click first option to complete
+    const canReadBtn = page.locator('button').filter({ hasText: /אני יכול|I can read/i }).first();
+    await canReadBtn.waitFor({ timeout: 3000 });
+    await canReadBtn.click();
 
     // Wait for menu to appear
     await page.waitForTimeout(500);
 
-    // If we selected Hebrew, verify RTL
+    // Verify Hebrew RTL applied
     const dir = await page.locator('html').getAttribute('dir');
     const lang = await page.locator('html').getAttribute('lang');
-    // If Hebrew was selectable and set, dir should be rtl
-    if (lang === 'he') {
-      expect(dir).toBe('rtl');
-    }
+    expect(lang).toBe('he');
+    expect(dir).toBe('rtl');
   });
 
   test('demo quiz question correctly shows "Great job!" feedback', async ({ page }) => {

@@ -6,7 +6,7 @@ import { exportAllData, importAllData } from '../utils/storage';
 const AVATARS = ['🦊', '🐱', '🦁', '🐶', '🦄', '🐼', '🐸', '🦋', '🌟', '🚀', '🎨', '🎵'];
 
 export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onResetPlayer, onDeletePlayer, onAddPlayer, onBack }) {
-  const [confirmAction, setConfirmAction] = useState(null); // { type: 'delete'|'reset', playerId }
+  const [confirmAction, setConfirmAction] = useState(null); // { type: 'delete'|'reset'|'deleteAll', playerId }
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState('');
   const [editAvatar, setEditAvatar] = useState('');
@@ -26,6 +26,11 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
 
   const handleConfirm = () => {
     if (!confirmAction) return;
+    if (confirmAction.type === 'deleteAll') {
+      localStorage.clear();
+      window.location.reload();
+      return;
+    }
     if (confirmAction.type === 'delete') {
       onDeletePlayer(confirmAction.playerId);
     } else {
@@ -57,13 +62,13 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
         const data = JSON.parse(evt.target.result);
         const result = importAllData(data);
         if (result.success) {
-          setImportMsg({ type: 'success', text: 'Data imported successfully!' });
+          setImportMsg({ type: 'success', text: t('importSuccess', lang) });
           setTimeout(() => window.location.reload(), 1200);
         } else {
-          setImportMsg({ type: 'error', text: result.error });
+          setImportMsg({ type: 'error', text: t(result.error, lang) });
         }
       } catch {
-        setImportMsg({ type: 'error', text: 'Invalid JSON file' });
+        setImportMsg({ type: 'error', text: t('importInvalidJson', lang) });
       }
     };
     reader.readAsText(file);
@@ -141,7 +146,7 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
                   <button
                     onClick={() => startEdit(player)}
                     className="p-2 rounded-lg hover:bg-slate-100 transition-colors"
-                    aria-label="Edit"
+                    aria-label={t('editPlayer', lang)}
                   >
                     <Pencil className="w-4 h-4 text-slate-500" />
                   </button>
@@ -205,30 +210,52 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
         </p>
       )}
 
+      {/* Delete all data */}
+      <button
+        onClick={() => setConfirmAction({ type: 'deleteAll' })}
+        className="w-full py-2.5 rounded-xl border border-rose-300 text-rose-600 text-sm font-medium
+                   hover:bg-rose-50 active:scale-95 transition-all flex items-center justify-center gap-1.5"
+      >
+        <Trash2 className="w-4 h-4" /> {t('deleteAllData', lang)}
+      </button>
+
       {/* Confirmation modal */}
-      {confirmAction && confirmPlayer && (
+      {confirmAction && (confirmPlayer || confirmAction.type === 'deleteAll') && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40" onClick={() => setConfirmAction(null)}>
           <div className="glass rounded-2xl p-6 max-w-sm w-full space-y-4 text-center" onClick={e => e.stopPropagation()}>
-            <p className="text-3xl">{confirmPlayer.avatar}</p>
-            <p className="text-slate-700 font-medium">
-              {confirmAction.type === 'delete'
-                ? t('deleteConfirm', lang, { name: confirmPlayer.name })
-                : t('resetConfirm', lang, { name: confirmPlayer.name })}
-            </p>
+            {confirmAction.type === 'deleteAll' ? (
+              <>
+                <p className="text-3xl">⚠️</p>
+                <p className="text-slate-700 font-medium">{t('deleteAllConfirm', lang)}</p>
+              </>
+            ) : (
+              <>
+                <p className="text-3xl">{confirmPlayer.avatar}</p>
+                <p className="text-slate-700 font-medium">
+                  {confirmAction.type === 'delete'
+                    ? t('deleteConfirm', lang, { name: confirmPlayer.name })
+                    : t('resetConfirm', lang, { name: confirmPlayer.name })}
+                </p>
+              </>
+            )}
             <div className="flex gap-3">
               <button
                 onClick={() => setConfirmAction(null)}
                 className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold
                            hover:bg-slate-50 active:scale-95 transition-all"
               >
-                {t('continue', lang)}
+                {t('cancel', lang)}
               </button>
               <button
                 onClick={handleConfirm}
                 className={`flex-1 py-2.5 rounded-xl text-white font-semibold active:scale-95 transition-all
-                           ${confirmAction.type === 'delete' ? 'bg-rose-500 hover:bg-rose-600' : 'bg-amber-500 hover:bg-amber-600'}`}
+                           ${confirmAction.type === 'reset' ? 'bg-amber-500 hover:bg-amber-600' : 'bg-rose-500 hover:bg-rose-600'}`}
               >
-                {confirmAction.type === 'delete' ? t('deletePlayer', lang) : t('resetProgress', lang)}
+                {confirmAction.type === 'deleteAll'
+                  ? t('deleteAllData', lang)
+                  : confirmAction.type === 'delete'
+                    ? t('deletePlayer', lang)
+                    : t('resetProgress', lang)}
               </button>
             </div>
           </div>

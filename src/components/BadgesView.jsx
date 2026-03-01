@@ -27,8 +27,8 @@ export default function BadgesView({ stats, lang = 'en', onBack }) {
               style={earned ? { animationDelay: `${i * 100}ms` } : {}}
             >
               <div className="text-4xl">{badge.icon}</div>
-              <h3 className="font-bold text-slate-800 text-sm">{badge.name}</h3>
-              <p className="text-xs text-slate-500">{badge.description}</p>
+              <h3 className="font-bold text-slate-800 text-sm">{t(badge.nameKey, lang)}</h3>
+              <p className="text-xs text-slate-500">{t(badge.descKey, lang)}</p>
               {earned && (
                 <span className="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-700
                                text-xs font-semibold rounded-full">

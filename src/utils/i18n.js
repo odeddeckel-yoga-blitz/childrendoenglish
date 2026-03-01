@@ -212,6 +212,60 @@ const translations = {
     // Notifications
     enableReminders: 'Enable streak reminders',
     disableReminders: 'Disable streak reminders',
+
+    // Error boundary
+    errorTitle: 'Something went wrong',
+    errorGeneric: 'An unexpected error occurred',
+
+    // Quiz feedback (useQuizState)
+    feedbackCorrect: 'Correct! The answer is {{word}}.',
+    feedbackWrong: 'Wrong. The correct answer is {{word}}.',
+    feedbackSkipped: 'Skipped. The answer is {{word}}.',
+
+    // Notifications text
+    streakReminderTitle: 'Keep your streak going!',
+    streakReminderBody: 'You have a {{count}}-day streak. Play today to keep it!',
+
+    // Data import/export messages
+    importSuccess: 'Data imported successfully!',
+    importInvalidJson: 'Invalid JSON file',
+    importInvalidFormat: 'Invalid data format',
+    importInvalidRegistry: 'Invalid player registry',
+
+    // Accessibility
+    correct: 'Correct',
+    wrong: 'Wrong',
+
+    // Delete data
+    deleteAllData: 'Delete All Data',
+    deleteAllConfirm: 'Delete all players and progress? This cannot be undone.',
+    cancel: 'Cancel',
+
+    // Language switcher
+    language: 'Language',
+
+    // Trust signals
+    methodologyTitle: 'Built for learning',
+    methodologyDesc: 'Spaced repetition, image-word matching, and multi-modal practice help kids build lasting vocabulary.',
+
+    // Edit player
+    editPlayer: 'Edit player',
+
+    // Badge names
+    badge_first_word: 'First Word',
+    badge_first_word_desc: 'Complete your first quiz',
+    badge_word_explorer: 'Word Explorer',
+    badge_word_explorer_desc: 'Learn 20 different words',
+    badge_perfect_quiz: 'Perfect Score',
+    badge_perfect_quiz_desc: 'Get 10/10 on any quiz',
+    badge_bookworm: 'Bookworm',
+    badge_bookworm_desc: 'Complete 10 quizzes',
+    badge_vocab_champion: 'Vocab Champion',
+    badge_vocab_champion_desc: 'Master 50 words',
+    badge_week_warrior: 'Week Warrior',
+    badge_week_warrior_desc: 'Practice 7 days in a row',
+    badge_polyglot: 'Polyglot',
+    badge_polyglot_desc: 'Learn 100 different words',
   },
   he: {
     // Menu (existing)
@@ -426,6 +480,60 @@ const translations = {
     // Notifications
     enableReminders: 'הפעלת תזכורות רצף',
     disableReminders: 'ביטול תזכורות רצף',
+
+    // Error boundary
+    errorTitle: 'משהו השתבש',
+    errorGeneric: 'אירעה שגיאה לא צפויה',
+
+    // Quiz feedback
+    feedbackCorrect: '!נכון! התשובה היא {{word}}',
+    feedbackWrong: '.לא נכון. התשובה הנכונה היא {{word}}',
+    feedbackSkipped: '.דילוג. התשובה היא {{word}}',
+
+    // Notifications text
+    streakReminderTitle: '!שמרו על הרצף',
+    streakReminderBody: '!יש לכם רצף של {{count}} ימים. שחקו היום כדי לשמור עליו',
+
+    // Data import/export messages
+    importSuccess: '!הנתונים יובאו בהצלחה',
+    importInvalidJson: 'קובץ JSON לא תקין',
+    importInvalidFormat: 'פורמט נתונים לא תקין',
+    importInvalidRegistry: 'רישום שחקנים לא תקין',
+
+    // Accessibility
+    correct: 'נכון',
+    wrong: 'שגוי',
+
+    // Delete data
+    deleteAllData: 'מחיקת כל הנתונים',
+    deleteAllConfirm: 'למחוק את כל השחקנים וההתקדמות? לא ניתן לבטל פעולה זו.',
+    cancel: 'ביטול',
+
+    // Language switcher
+    language: 'שפה',
+
+    // Trust signals
+    methodologyTitle: 'בנוי ללמידה',
+    methodologyDesc: 'חזרה מרווחת, התאמת תמונה-מילה ותרגול רב-חושי עוזרים לילדים לבנות אוצר מילים לטווח ארוך.',
+
+    // Edit player
+    editPlayer: 'עריכת שחקן',
+
+    // Badge names
+    badge_first_word: 'מילה ראשונה',
+    badge_first_word_desc: 'השלימו את החידון הראשון',
+    badge_word_explorer: 'חוקר מילים',
+    badge_word_explorer_desc: 'למדו 20 מילים שונות',
+    badge_perfect_quiz: 'ציון מושלם',
+    badge_perfect_quiz_desc: 'השיגו 10/10 בחידון',
+    badge_bookworm: 'תולעת ספרים',
+    badge_bookworm_desc: 'השלימו 10 חידונים',
+    badge_vocab_champion: 'אלוף אוצר מילים',
+    badge_vocab_champion_desc: 'שלטו ב-50 מילים',
+    badge_week_warrior: 'לוחם השבוע',
+    badge_week_warrior_desc: 'תרגלו 7 ימים ברצף',
+    badge_polyglot: 'רב-לשוני',
+    badge_polyglot_desc: 'למדו 100 מילים שונות',
   },
 };
 

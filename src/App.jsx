@@ -91,6 +91,7 @@ export default function App() {
 
   const [showProfilePicker, setShowProfilePicker] = useState(false);
   const [showConsent, setShowConsent] = useState(() => needsConsentPrompt());
+  const [learnWords, setLearnWords] = useState(null);
   const transitionDir = useRef('forward');
   const mainRef = useRef(null);
 
@@ -118,7 +119,7 @@ export default function App() {
   useEffect(() => { initTTS(); }, []);
 
   // Check streak reminder on mount
-  useEffect(() => { checkStreakReminder(stats); }, []);
+  useEffect(() => { checkStreakReminder(stats, lang); }, []);
 
   // PWA install prompt
   const deferredPrompt = useRef(null);
@@ -266,6 +267,10 @@ export default function App() {
     setStats(prev => ({ ...prev, uiLanguage: lang }));
   }, []);
 
+  const handleToggleLanguage = useCallback(() => {
+    setStats(prev => ({ ...prev, uiLanguage: prev.uiLanguage === 'he' ? 'en' : 'he' }));
+  }, []);
+
   const handleSetCanRead = useCallback((canRead) => {
     if (activePlayer) {
       updatePlayerProfile(activePlayer.id, { canRead });
@@ -369,6 +374,7 @@ export default function App() {
             onToggleDark={toggleDarkMode}
             onToggleSound={toggleSound}
             onOpenProfilePicker={() => setShowProfilePicker(true)}
+            onToggleLanguage={handleToggleLanguage}
           />
         );
 
@@ -464,7 +470,8 @@ export default function App() {
             stats={stats}
             lang={lang}
             canRead={activePlayer?.canRead ?? true}
-            onBack={() => navigate('menu', 'back')}
+            words={learnWords}
+            onBack={() => { setLearnWords(null); navigate('menu', 'back'); }}
           />
         );
 
@@ -523,7 +530,7 @@ export default function App() {
             lang={lang}
             onBack={() => navigate('menu', 'back')}
             onStartLesson={(words) => quizFlow.handleStartPersonalQuiz(words, 'image')}
-            onLearnLesson={(words) => navigate('learning')}
+            onLearnLesson={(words) => { setLearnWords(words); navigate('learning'); }}
           />
         );
 
@@ -563,7 +570,7 @@ export default function App() {
       </a>
       <main id="main-content" ref={mainRef} tabIndex={-1} className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg md:max-w-2xl'} mx-auto px-4 py-6 outline-none`}>
         <Suspense fallback={<SuspenseFallback />}>
-          <ErrorBoundary key={gameState} onReset={resetToMenu}>
+          <ErrorBoundary key={gameState} onReset={resetToMenu} lang={lang}>
             {renderState()}
           </ErrorBoundary>
         </Suspense>

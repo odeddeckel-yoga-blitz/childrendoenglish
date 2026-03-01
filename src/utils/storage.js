@@ -143,8 +143,14 @@ export const loadStats = (playerId) => {
   return getDefaultStats();
 };
 
+const MAX_QUIZ_HISTORY = 50;
+
 /** Persist stats. Defaults to active player if no id given. */
 export const saveStats = (stats, playerId) => {
+  // Trim quizHistory to prevent localStorage overflow
+  if (stats.quizHistory && stats.quizHistory.length > MAX_QUIZ_HISTORY) {
+    stats = { ...stats, quizHistory: stats.quizHistory.slice(-MAX_QUIZ_HISTORY) };
+  }
   const id = playerId || loadPlayerRegistry()?.activePlayerId;
   if (id) {
     try {
@@ -215,10 +221,10 @@ export const exportAllData = () => {
 export const importAllData = (data) => {
   try {
     if (!data || !data.registry || !data.playerStats) {
-      return { success: false, error: 'Invalid data format' };
+      return { success: false, error: 'importInvalidFormat' };
     }
     if (!data.registry.players || !Array.isArray(data.registry.players)) {
-      return { success: false, error: 'Invalid player registry' };
+      return { success: false, error: 'importInvalidRegistry' };
     }
     // Save registry
     savePlayerRegistry(data.registry);

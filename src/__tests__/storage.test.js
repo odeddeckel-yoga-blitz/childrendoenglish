@@ -192,15 +192,15 @@ describe('importAllData', () => {
   });
 
   it('rejects invalid data', () => {
-    expect(importAllData(null)).toEqual({ success: false, error: 'Invalid data format' });
-    expect(importAllData({})).toEqual({ success: false, error: 'Invalid data format' });
+    expect(importAllData(null)).toEqual({ success: false, error: 'importInvalidFormat' });
+    expect(importAllData({})).toEqual({ success: false, error: 'importInvalidFormat' });
     expect(importAllData({ registry: {}, playerStats: {} })).toEqual({
       success: false,
-      error: 'Invalid player registry',
+      error: 'importInvalidRegistry',
     });
     expect(importAllData({ registry: { players: 'not-array' }, playerStats: {} })).toEqual({
       success: false,
-      error: 'Invalid player registry',
+      error: 'importInvalidRegistry',
     });
   });
 });

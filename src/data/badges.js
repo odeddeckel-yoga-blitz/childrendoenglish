@@ -1,37 +1,37 @@
 export const BADGES = [
   {
     id: 'first_word',
-    name: 'First Word',
+    nameKey: 'badge_first_word',
+    descKey: 'badge_first_word_desc',
     icon: '🎯',
-    description: 'Complete your first quiz',
     check: (stats) => stats.totalQuizzes >= 1,
   },
   {
     id: 'word_explorer',
-    name: 'Word Explorer',
+    nameKey: 'badge_word_explorer',
+    descKey: 'badge_word_explorer_desc',
     icon: '🔍',
-    description: 'Learn 20 different words',
     check: (stats) => Object.keys(stats.wordProgress || {}).length >= 20,
   },
   {
     id: 'perfect_quiz',
-    name: 'Perfect Score',
+    nameKey: 'badge_perfect_quiz',
+    descKey: 'badge_perfect_quiz_desc',
     icon: '💯',
-    description: 'Get 10/10 on any quiz',
     check: (stats, game) => game && game.score === game.total && game.total > 0,
   },
   {
     id: 'bookworm',
-    name: 'Bookworm',
+    nameKey: 'badge_bookworm',
+    descKey: 'badge_bookworm_desc',
     icon: '📚',
-    description: 'Complete 10 quizzes',
     check: (stats) => stats.totalQuizzes >= 10,
   },
   {
     id: 'vocab_champion',
-    name: 'Vocab Champion',
+    nameKey: 'badge_vocab_champion',
+    descKey: 'badge_vocab_champion_desc',
     icon: '🏆',
-    description: 'Master 50 words',
     check: (stats) => {
       const mastered = Object.values(stats.wordProgress || {}).filter(
         w => w.interval >= 14
@@ -41,16 +41,16 @@ export const BADGES = [
   },
   {
     id: 'week_warrior',
-    name: 'Week Warrior',
+    nameKey: 'badge_week_warrior',
+    descKey: 'badge_week_warrior_desc',
     icon: '🔥',
-    description: 'Practice 7 days in a row',
     check: (stats) => stats.currentStreak >= 7,
   },
   {
     id: 'polyglot',
-    name: 'Polyglot',
+    nameKey: 'badge_polyglot',
+    descKey: 'badge_polyglot_desc',
     icon: '🌍',
-    description: 'Learn 100 different words',
     check: (stats) => Object.keys(stats.wordProgress || {}).length >= 100,
   },
 ];

@@ -1,4 +1,4 @@
-const GA_ID = 'G-YF34G1SGNE';
+const GA_ID = import.meta.env.VITE_GA_ID || 'G-YF34G1SGNE';
 
 let gaLoaded = false;
 

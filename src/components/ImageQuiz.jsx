@@ -9,7 +9,7 @@ import { t } from '../utils/i18n';
 export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit }) {
   const [imgLoaded, setImgLoaded] = useState(false);
 
-  const quiz = useQuizState({ words, mode: 'image', onComplete, speakOnCorrect: true, speakDelay: 600 });
+  const quiz = useQuizState({ words, mode: 'image', lang, onComplete, speakOnCorrect: true, speakDelay: 600 });
 
   // Reset image loaded state when question changes
   const [prevIndex, setPrevIndex] = useState(0);

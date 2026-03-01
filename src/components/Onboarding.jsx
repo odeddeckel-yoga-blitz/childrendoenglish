@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { BookOpen, Image, ArrowRight, ArrowLeft, X, CheckCircle2 } from 'lucide-react';
 import { t } from '../utils/i18n';
+import { trackEvent } from '../utils/analytics';
 
-const TOTAL_STEPS = 6; // language picker + 2 intro slides + 1 demo + 1 email + 1 can-read
+const TOTAL_STEPS = 5; // language picker + 2 intro slides + 1 demo + 1 can-read
 
 const DEMO_QUESTION = {
   image: '/images/cat.webp',
@@ -14,18 +15,15 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
   const [step, setStep] = useState(0);
   const [lang, setLang] = useState('en');
   const [demoAnswer, setDemoAnswer] = useState(null); // null | 'correct' | 'wrong'
-  const [parentEmail, setParentEmail] = useState('');
 
   const handleFinish = () => {
     onSelectLanguage?.(lang);
-    if (parentEmail.trim()) {
-      localStorage.setItem('childrendoenglish-parent-email', parentEmail.trim());
-    }
     onComplete();
   };
 
   const handleLanguagePick = (language) => {
     setLang(language);
+    trackEvent('onboarding_step', { step: 0, step_name: 'language', language });
     setStep(1);
   };
 
@@ -148,34 +146,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
       );
     }
 
-    // Step 4: Parent email (optional)
-    if (step === 4) {
-      return (
-        <>
-          <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-blue-100">
-            <span className="text-4xl">📧</span>
-          </div>
-          <h2 className="text-2xl font-bold text-slate-800">{t('parentEmailTitle', lang)}</h2>
-          <p className="text-slate-500 text-sm">{t('parentEmailDesc', lang)}</p>
-          <input
-            type="email"
-            value={parentEmail}
-            onChange={e => setParentEmail(e.target.value)}
-            placeholder={t('parentEmailPlaceholder', lang)}
-            className="w-full rounded-xl bg-white/70 border border-slate-200 p-3 text-sm text-slate-700
-                       placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
-          <button
-            onClick={() => setStep(5)}
-            className="text-sm text-slate-400 hover:text-slate-600 transition-colors"
-          >
-            {t('skipStep', lang)}
-          </button>
-        </>
-      );
-    }
-
-    // Step 5: Can you read?
+    // Step 4: Can you read?
     return (
       <>
         <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-purple-100">
@@ -204,7 +175,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
     );
   };
 
-  const isSlideStep = step >= 1 && step <= 4; // steps 1-4 have nav arrows
+  const isSlideStep = step >= 1 && step <= 3; // steps 1-3 have nav arrows
 
   return (
     <div className="animate-fade-in space-y-8 text-center">
@@ -241,7 +212,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
 
           {/* Dots */}
           <div className="flex gap-2">
-            {Array.from({ length: 4 }, (_, i) => (
+            {Array.from({ length: 3 }, (_, i) => (
               <div
                 key={i}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
@@ -252,7 +223,11 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
           </div>
 
           <button
-            onClick={() => setStep(s => s + 1)}
+            onClick={() => {
+              const stepNames = ['language', 'welcome', 'see_learn', 'demo'];
+              trackEvent('onboarding_step', { step, step_name: stepNames[step] || `step_${step}` });
+              setStep(s => s + 1);
+            }}
             className="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
             aria-label="Next step"
           >

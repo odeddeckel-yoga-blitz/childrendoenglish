@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X, Users, Map, ShieldCheck, Bell, BellOff } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X, Users, Map, ShieldCheck, Bell, BellOff, Globe } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount = 0, showInstallBanner, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount = 0, showInstallBanner, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
   const [notifEnabled, setNotifEnabled] = useState(isNotificationEnabled);
   const notifSupported = isNotificationSupported();
 
@@ -65,6 +65,15 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
                 ? <Bell className="w-5 h-5 text-blue-600" />
                 : <BellOff className="w-5 h-5 text-slate-400" />
               }
+            </button>
+          )}
+          {onToggleLanguage && (
+            <button
+              onClick={onToggleLanguage}
+              className="p-2.5 rounded-xl bg-white/50 hover:bg-white/80 transition-colors"
+              aria-label={t('language', lang)}
+            >
+              <Globe className="w-5 h-5 text-slate-600" />
             </button>
           )}
         </div>
@@ -274,6 +283,12 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           </button>
         </div>
       )}
+
+      {/* Trust / methodology */}
+      <div className="glass rounded-2xl p-4 text-center space-y-1">
+        <p className="text-sm font-semibold text-slate-700">{t('methodologyTitle', lang)}</p>
+        <p className="text-xs text-slate-500">{t('methodologyDesc', lang)}</p>
+      </div>
 
       <div className="text-center space-y-1">
         <p className="text-xs text-slate-400">{t('madeBy', lang)}</p>

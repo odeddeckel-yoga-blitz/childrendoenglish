@@ -1,3 +1,5 @@
+import { t } from './i18n';
+
 const STORAGE_KEY = 'childrendoenglish-notif-enabled';
 
 export function isNotificationSupported() {
@@ -33,7 +35,7 @@ export function disableNotifications() {
  * - User has an active streak
  * - Notifications are enabled
  */
-export function checkStreakReminder(stats) {
+export function checkStreakReminder(stats, lang = 'en') {
   if (!isNotificationEnabled()) return;
   if (!stats?.currentStreak || stats.currentStreak < 1) return;
 
@@ -49,8 +51,8 @@ export function checkStreakReminder(stats) {
 
   localStorage.setItem('childrendoenglish-last-reminder', today);
 
-  new Notification('Keep your streak going!', {
-    body: `You have a ${stats.currentStreak}-day streak. Play today to keep it!`,
+  new Notification(t('streakReminderTitle', lang), {
+    body: t('streakReminderBody', lang, { count: stats.currentStreak }),
     icon: '/icon-192.png',
     tag: 'streak-reminder',
   });

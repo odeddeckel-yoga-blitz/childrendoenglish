@@ -60,9 +60,7 @@ describe('Onboarding', () => {
     fireEvent.click(screen.getByLabelText('Next step'));
     // Step 3 -> 4: next
     fireEvent.click(screen.getByLabelText('Next step'));
-    // Step 4 -> 5: next
-    fireEvent.click(screen.getByLabelText('Next step'));
-    // Now on step 5: "Can you read?"
+    // Now on step 4: "Can you read?"
     expect(screen.getByText('Can you read English words?')).toBeInTheDocument();
   });
 });

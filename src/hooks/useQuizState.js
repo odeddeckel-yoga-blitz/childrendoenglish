@@ -3,8 +3,9 @@ import { getDistractors } from '../data/words';
 import { fisherYatesShuffle } from '../utils/shuffle';
 import { playSound, speakWord } from '../utils/sound';
 import { haptic } from '../utils/haptic';
+import { t } from '../utils/i18n';
 
-export default function useQuizState({ words, mode, onComplete, speakOnCorrect = true, speakDelay = 0 }) {
+export default function useQuizState({ words, mode, lang = 'en', onComplete, speakOnCorrect = true, speakDelay = 0 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
@@ -43,13 +44,13 @@ export default function useQuizState({ words, mode, onComplete, speakOnCorrect =
     if (correct) {
       setScore(s => s + 1);
       setStreak(s => s + 1);
-      setFeedbackMessage(`Correct! The answer is ${currentWord.word}.`);
+      setFeedbackMessage(t('feedbackCorrect', lang, { word: currentWord.word }));
       playSound('correct');
       haptic('success');
       if (speakOnCorrect) speakWord(currentWord.word);
     } else {
       setStreak(0);
-      setFeedbackMessage(`Wrong. The correct answer is ${currentWord.word}.`);
+      setFeedbackMessage(t('feedbackWrong', lang, { word: currentWord.word }));
       playSound('wrong');
       haptic('error');
       if (speakDelay > 0) {
@@ -78,7 +79,7 @@ export default function useQuizState({ words, mode, onComplete, speakOnCorrect =
     if (answered) return;
 
     setAnswered('wrong');
-    setFeedbackMessage(`Skipped. The answer is ${currentWord.word}.`);
+    setFeedbackMessage(t('feedbackSkipped', lang, { word: currentWord.word }));
     setAnswers(prev => [...prev, { wordId: currentWord.id, correct: false, selected: null }]);
     setStreak(0);
     speakWord(currentWord.word);

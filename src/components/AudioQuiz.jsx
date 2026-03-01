@@ -16,6 +16,7 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
   const quiz = useQuizState({
     words,
     mode: 'audio',
+    lang,
     onComplete,
     speakOnCorrect: false,
     speakDelay: 600,
@@ -135,14 +136,14 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
                 height={256}
               />
               {quiz.answered && isCorrect && (
-                <span className="absolute inset-0 flex items-center justify-center" aria-label="Correct">
+                <span className="absolute inset-0 flex items-center justify-center" aria-label={t('correct', lang)}>
                   <span className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg">
                     <Check className="w-6 h-6 text-white" />
                   </span>
                 </span>
               )}
               {quiz.answered && isSelected && !isCorrect && (
-                <span className="absolute inset-0 flex items-center justify-center" aria-label="Wrong">
+                <span className="absolute inset-0 flex items-center justify-center" aria-label={t('wrong', lang)}>
                   <span className="w-10 h-10 rounded-full bg-rose-500 flex items-center justify-center shadow-lg">
                     <XIcon className="w-6 h-6 text-white" />
                   </span>

@@ -171,7 +171,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, onUp
                 {!imgLoaded && <div className="absolute inset-0 skeleton-pulse bg-slate-200" />}
                 <img
                   src={getImageUrl(currentCard)}
-                  alt={currentCard.word}
+                  alt={t('tapToFlip', lang)}
                   className={`w-full h-full object-cover transition-opacity ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onLoad={() => setImgLoaded(true)}
                   loading="lazy"

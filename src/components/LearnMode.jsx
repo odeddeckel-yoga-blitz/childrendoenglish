@@ -5,7 +5,8 @@ import { getImageUrl } from '../utils/images';
 import { speakWord } from '../utils/sound';
 import { t } from '../utils/i18n';
 
-export default function LearnMode({ stats, lang = 'en', canRead = true, onBack }) {
+export default function LearnMode({ stats, lang = 'en', canRead = true, words: customWords, onBack }) {
+  const wordPool = customWords || WORDS;
   const [view, setView] = useState('grid'); // 'grid' | 'detail'
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -13,7 +14,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, onBack }
   const [imgLoaded, setImgLoaded] = useState(false);
   const touchStart = useRef({ x: 0, y: 0 });
 
-  const filtered = WORDS.filter(w => {
+  const filtered = wordPool.filter(w => {
     const matchesSearch = !search || w.word.toLowerCase().includes(search.toLowerCase());
     const matchesCat = !selectedCategory || w.category === selectedCategory;
     return matchesSearch && matchesCat;

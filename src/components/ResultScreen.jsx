@@ -93,7 +93,7 @@ export default function ResultScreen({ results, stats, lang = 'en', level, mode,
                 style={{ animationDelay: `${i * 200}ms` }}
               >
                 <div className="text-3xl">{badge.icon}</div>
-                <p className="text-xs font-semibold text-slate-600 mt-1">{badge.name}</p>
+                <p className="text-xs font-semibold text-slate-600 mt-1">{t(badge.nameKey, lang)}</p>
               </div>
             ))}
           </div>

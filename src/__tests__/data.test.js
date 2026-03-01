@@ -88,9 +88,9 @@ describe('Badges', () => {
   it('badges have required fields', () => {
     BADGES.forEach(badge => {
       expect(badge.id).toBeTruthy();
-      expect(badge.name).toBeTruthy();
+      expect(badge.nameKey).toBeTruthy();
       expect(badge.icon).toBeTruthy();
-      expect(badge.description).toBeTruthy();
+      expect(badge.descKey).toBeTruthy();
       expect(typeof badge.check).toBe('function');
     });
   });
