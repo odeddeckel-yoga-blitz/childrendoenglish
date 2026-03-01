@@ -195,6 +195,43 @@ export const saveSoundEnabled = (enabled) => {
   } catch {}
 };
 
+// --- Data Export/Import ---
+
+/** Export all player data as a JSON-serializable object */
+export const exportAllData = () => {
+  const registry = loadPlayerRegistry();
+  if (!registry) return null;
+  const playerStats = {};
+  registry.players.forEach(p => {
+    try {
+      const raw = localStorage.getItem(PLAYER_PREFIX + p.id);
+      if (raw) playerStats[p.id] = JSON.parse(raw);
+    } catch {}
+  });
+  return { schemaVersion: 2, registry, playerStats, exportedAt: new Date().toISOString() };
+};
+
+/** Import data from a previously exported JSON object. Returns { success, error? } */
+export const importAllData = (data) => {
+  try {
+    if (!data || !data.registry || !data.playerStats) {
+      return { success: false, error: 'Invalid data format' };
+    }
+    if (!data.registry.players || !Array.isArray(data.registry.players)) {
+      return { success: false, error: 'Invalid player registry' };
+    }
+    // Save registry
+    savePlayerRegistry(data.registry);
+    // Save each player's stats
+    for (const [id, stats] of Object.entries(data.playerStats)) {
+      localStorage.setItem(PLAYER_PREFIX + id, JSON.stringify(stats));
+    }
+    return { success: true };
+  } catch (e) {
+    return { success: false, error: e.message };
+  }
+};
+
 /**
  * Update the user's daily streak. Increments if last active was yesterday,
  * resets to 1 if a day was missed, no-op if already active today.

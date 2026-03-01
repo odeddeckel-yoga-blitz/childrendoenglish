@@ -12,24 +12,14 @@
   --shadow-card: 0 4px 16px rgba(37, 99, 235, 0.06);
 }
 
-/* Animated gradient background */
+/* Static gradient background */
 .app-bg {
   background: linear-gradient(135deg, #eff6ff 0%, #f8fafc 40%, #f5f3ff 70%, #fef3c7 100%);
-  background-size: 400% 400%;
-  animation: gradient-shift 20s ease infinite;
-}
-
-@keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }
 
 /* Dark mode background */
 .dark .app-bg {
   background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #1a1a2e 70%, #1e293b 100%);
-  background-size: 400% 400%;
-  animation: gradient-shift 20s ease infinite;
 }
 
 /* Glassmorphism */
@@ -146,6 +136,8 @@ html {
 }
 body {
   touch-action: manipulation;
+}
+button, [role="button"] {
   -webkit-user-select: none;
   user-select: none;
 }
@@ -189,6 +181,12 @@ input, textarea {
   margin-right: 1rem;
 }
 
+/* Focus-visible rings for keyboard navigation */
+button:focus-visible, [role="button"]:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -196,5 +194,5 @@ input, textarea {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
-  .app-bg { animation: none; background-size: 100% 100%; }
+  .app-bg { background-size: 100% 100%; }
 }

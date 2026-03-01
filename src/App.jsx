@@ -3,14 +3,11 @@ import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
 import Onboarding from './components/Onboarding';
-import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, updateStreak, updateDailyGoal, loadPlayerRegistry, savePlayerRegistry, addPlayer, removePlayer, resetPlayerProgress, updatePlayerProfile } from './utils/storage';
-import { WORDS, getWordsByLevel, getDistractors, getWordById } from './data/words';
-import { BADGES } from './data/badges';
-import { selectQuizWords, updateWordSR } from './utils/spaced-repetition';
-import { fisherYatesShuffle } from './utils/shuffle';
-import { preloadImages } from './utils/images';
-import { initTTS, playSound } from './utils/sound';
+import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, savePlayerRegistry, addPlayer, removePlayer, resetPlayerProgress, updatePlayerProfile } from './utils/storage';
+import { getWordById } from './data/words';
+import { initTTS } from './utils/sound';
 import { isRTL } from './utils/i18n';
+import useQuizFlow from './hooks/useQuizFlow';
 
 
 const LevelSelect = lazy(() => import('./components/LevelSelect'));
@@ -33,6 +30,8 @@ const PlayerCreate = lazy(() => import('./components/PlayerCreate'));
 const PlayerSelect = lazy(() => import('./components/PlayerSelect'));
 const PlayerManage = lazy(() => import('./components/PlayerManage'));
 const ProfilePicker = lazy(() => import('./components/ProfilePicker'));
+const LearningPath = lazy(() => import('./components/LearningPath'));
+const ParentDashboard = lazy(() => import('./components/ParentDashboard'));
 
 function getInitialState() {
   const registry = loadPlayerRegistry();
@@ -65,14 +64,6 @@ export default function App() {
   const [gameState, setGameState] = useState(() => initial.current.gameState);
   const [darkMode, setDarkMode] = useState(() => isDarkMode());
   const [soundEnabled, setSoundEnabled] = useState(() => isSoundEnabled());
-  const [loadingProgress, setLoadingProgress] = useState(0);
-
-  // Quiz state
-  const [selectedLevel, setSelectedLevel] = useState(null);
-  const [selectedMode, setSelectedMode] = useState(null);
-  const [quizWords, setQuizWords] = useState([]);
-  const [quizResults, setQuizResults] = useState(null);
-  const [customWords, setCustomWords] = useState(null); // for PersonalWordList quiz
 
   const [showProfilePicker, setShowProfilePicker] = useState(false);
   const transitionDir = useRef('forward');
@@ -148,6 +139,8 @@ export default function App() {
     transitionDir.current = direction;
     setGameState(newState);
   }, []);
+
+  const quizFlow = useQuizFlow({ stats, setStats, navigate });
 
   const resetToMenu = useCallback(() => {
     navigate('menu', 'back');
@@ -247,44 +240,6 @@ export default function App() {
     }
   }, [activePlayer]);
 
-  const handleLevelSelect = useCallback((level) => {
-    setSelectedLevel(level);
-    navigate('modeSelect');
-  }, [navigate]);
-
-  const startQuiz = useCallback(async (level, mode, words = null) => {
-    navigate('loading');
-    setLoadingProgress(0);
-
-    const pool = words || getWordsByLevel(level);
-    const selected = selectQuizWords(pool, stats.wordProgress, 10);
-
-    if (selected.length === 0) {
-      navigate('menu');
-      return;
-    }
-
-    // Collect all images needed (quiz words + their distractors)
-    const allWordsNeeded = new Set();
-    selected.forEach(w => {
-      allWordsNeeded.add(w);
-      getDistractors(w, 3).forEach(d => allWordsNeeded.add(d));
-    });
-
-    const { loaded, missing } = await preloadImages([...allWordsNeeded], (progress) => {
-      setLoadingProgress(progress * 100);
-    });
-
-    if (missing.length > 0) {
-      console.warn('Missing images:', missing.map(m => m.id));
-    }
-
-    setQuizWords(selected);
-    const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
-    navigate(stateMap[mode] || 'imageQuiz');
-
-  }, [navigate, stats.wordProgress]);
-
   // Detect hash routes: #admin, #quiz/{mode}/{ids}
   useEffect(() => {
     const checkHash = () => {
@@ -300,84 +255,14 @@ export default function App() {
         const words = ids.map(id => getWordById(id)).filter(Boolean);
         window.location.hash = '';
         if (words.length >= 4) {
-          startQuiz(null, mode, words);
+          quizFlow.startQuiz(null, mode, words);
         }
       }
     };
     checkHash();
     window.addEventListener('hashchange', checkHash);
     return () => window.removeEventListener('hashchange', checkHash);
-  }, [startQuiz]);
-
-  const handleModeSelect = useCallback((mode) => {
-    setSelectedMode(mode);
-    startQuiz(selectedLevel, mode);
-  }, [selectedLevel, startQuiz]);
-
-  const handleQuizComplete = useCallback((results) => {
-    const { score, total, answers, mode } = results;
-
-    // Update stats
-    setStats(prev => {
-      let updated = {
-        ...prev,
-        totalQuizzes: prev.totalQuizzes + 1,
-        quizHistory: [
-          ...prev.quizHistory,
-          { date: new Date().toISOString(), mode, level: selectedLevel, score, total },
-        ],
-      };
-
-      // Update best score
-      if (selectedLevel && score > (updated.bestScores[selectedLevel] || 0)) {
-        updated.bestScores = { ...updated.bestScores, [selectedLevel]: score };
-      }
-
-      // Unlock next level
-      if (selectedLevel && score >= 7 && total === 10) {
-        const levels = ['beginner', 'intermediate', 'advanced'];
-        const idx = levels.indexOf(selectedLevel);
-        if (idx < levels.length - 1) {
-          const nextLevel = levels[idx + 1];
-          if (!updated.unlockedLevels.includes(nextLevel)) {
-            updated.unlockedLevels = [...updated.unlockedLevels, nextLevel];
-          }
-        }
-      }
-
-      // Update word progress from answers
-      if (answers) {
-        let wp = { ...updated.wordProgress };
-        answers.forEach(({ wordId, correct }) => {
-          wp = updateWordSR(wp, wordId, correct);
-        });
-        updated.wordProgress = wp;
-      }
-
-      // Update streak and daily goal
-      updated = updateStreak(updated);
-      updated = updateDailyGoal(updated, answers?.length || total);
-
-      // Check badges
-      const game = { score, total, mode, level: selectedLevel };
-      const newBadges = [];
-      BADGES.forEach(badge => {
-        if (!updated.badges.includes(badge.id) && badge.check(updated, game)) {
-          newBadges.push(badge.id);
-        }
-      });
-      if (newBadges.length > 0) {
-        updated.badges = [...updated.badges, ...newBadges];
-        playSound('badge');
-      }
-
-      return updated;
-    });
-
-    setQuizResults(results);
-    navigate('finished');
-
-  }, [selectedLevel, navigate]);
+  }, [quizFlow.startQuiz]);
 
   const handleAssessmentComplete = useCallback((level) => {
     setStats(prev => {
@@ -388,12 +273,6 @@ export default function App() {
     });
     navigate('menu');
   }, [navigate]);
-
-  const handleStartPersonalQuiz = useCallback((words, mode) => {
-    setCustomWords(words);
-    setSelectedMode(mode);
-    startQuiz(null, mode, words);
-  }, [startQuiz]);
 
   const renderState = () => {
     switch (gameState) {
@@ -465,7 +344,7 @@ export default function App() {
           <LevelSelect
             stats={stats}
             lang={lang}
-            onSelect={handleLevelSelect}
+            onSelect={quizFlow.handleLevelSelect}
             onBack={() => navigate('menu', 'back')}
           />
         );
@@ -473,25 +352,25 @@ export default function App() {
       case 'modeSelect':
         return (
           <ModeSelect
-            level={selectedLevel}
+            level={quizFlow.selectedLevel}
             lang={lang}
             canRead={activePlayer?.canRead ?? true}
-            onSelect={handleModeSelect}
+            onSelect={quizFlow.handleModeSelect}
             onBack={() => navigate('levelSelect', 'back')}
           />
         );
 
       case 'loading':
-        return <LoadingScreen progress={loadingProgress} lang={lang} onCancel={resetToMenu} />;
+        return <LoadingScreen progress={quizFlow.loadingProgress} lang={lang} onCancel={resetToMenu} />;
 
       case 'imageQuiz':
         return (
           <ImageQuiz
-            words={quizWords}
+            words={quizFlow.quizWords}
             lang={lang}
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
-            onComplete={handleQuizComplete}
+            onComplete={quizFlow.handleQuizComplete}
             onQuit={() => navigate('menu', 'back')}
           />
         );
@@ -499,11 +378,11 @@ export default function App() {
       case 'wordQuiz':
         return (
           <WordQuiz
-            words={quizWords}
+            words={quizFlow.quizWords}
             lang={lang}
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
-            onComplete={handleQuizComplete}
+            onComplete={quizFlow.handleQuizComplete}
             onQuit={() => navigate('menu', 'back')}
           />
         );
@@ -511,11 +390,11 @@ export default function App() {
       case 'audioQuiz':
         return (
           <AudioQuiz
-            words={quizWords}
+            words={quizFlow.quizWords}
             lang={lang}
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
-            onComplete={handleQuizComplete}
+            onComplete={quizFlow.handleQuizComplete}
             onQuit={() => navigate('menu', 'back')}
           />
         );
@@ -523,11 +402,11 @@ export default function App() {
       case 'listenMatchQuiz':
         return (
           <ListenMatchQuiz
-            words={quizWords}
+            words={quizFlow.quizWords}
             lang={lang}
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
-            onComplete={handleQuizComplete}
+            onComplete={quizFlow.handleQuizComplete}
             onQuit={() => navigate('menu', 'back')}
           />
         );
@@ -535,12 +414,12 @@ export default function App() {
       case 'finished':
         return (
           <ResultScreen
-            results={quizResults}
+            results={quizFlow.quizResults}
             stats={stats}
             lang={lang}
-            level={selectedLevel}
-            mode={selectedMode}
-            onPlayAgain={() => startQuiz(selectedLevel, selectedMode, customWords)}
+            level={quizFlow.selectedLevel}
+            mode={quizFlow.selectedMode}
+            onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords)}
             onChangeMode={() => navigate('modeSelect', 'back')}
             onMenu={() => navigate('menu', 'back')}
           />
@@ -599,7 +478,27 @@ export default function App() {
         return (
           <PersonalWordList
             lang={lang}
-            onStartQuiz={handleStartPersonalQuiz}
+            onStartQuiz={quizFlow.handleStartPersonalQuiz}
+            onBack={() => navigate('menu', 'back')}
+          />
+        );
+
+      case 'learningPath':
+        return (
+          <LearningPath
+            stats={stats}
+            lang={lang}
+            onBack={() => navigate('menu', 'back')}
+            onStartLesson={(words) => quizFlow.handleStartPersonalQuiz(words, 'image')}
+            onLearnLesson={(words) => navigate('learning')}
+          />
+        );
+
+      case 'parentDashboard':
+        return (
+          <ParentDashboard
+            players={playerRegistry?.players || []}
+            lang={lang}
             onBack={() => navigate('menu', 'back')}
           />
         );

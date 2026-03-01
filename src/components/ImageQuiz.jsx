@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Check, X as XIcon } from 'lucide-react';
 import useQuizState from '../hooks/useQuizState';
 import QuizHeader from './QuizHeader';
 import QuitModal from './QuitModal';
@@ -33,7 +34,7 @@ export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSo
       />
 
       {/* Image */}
-      <div className="relative aspect-square max-w-xs mx-auto rounded-2xl overflow-hidden bg-slate-100">
+      <div className="relative aspect-square max-w-xs mx-auto rounded-2xl overflow-hidden bg-slate-100 landscape:max-w-[200px]">
         {!imgLoaded && (
           <div className="absolute inset-0 skeleton-pulse bg-slate-200 rounded-2xl" />
         )}
@@ -76,7 +77,11 @@ export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSo
               disabled={!!quiz.answered}
               className={btnClass}
             >
-              {option.word}
+              <span className="inline-flex items-center gap-1.5">
+                {quiz.answered && isCorrect && <Check className="w-4 h-4" />}
+                {quiz.answered && isSelected && !isCorrect && <XIcon className="w-4 h-4" />}
+                {option.word}
+              </span>
             </button>
           );
         })}

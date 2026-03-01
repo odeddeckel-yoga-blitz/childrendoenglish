@@ -121,27 +121,34 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, onBack }
       {/* Grid view */}
       {view === 'grid' && (
         <div className="grid grid-cols-3 gap-2">
-          {filtered.map((word, i) => (
-            <button
-              key={word.id}
-              onClick={() => { setDetailIndex(i); setView('detail'); setImgLoaded(false); }}
-              className="glass rounded-xl overflow-hidden hover:shadow-md active:scale-95 transition-all"
-            >
-              <div className="aspect-square bg-slate-100 relative">
-                <img
-                  src={getImageUrl(word)}
-                  alt={word.word}
-                  className="w-full h-full object-cover"
-                  loading="lazy"
-                  width={170}
-                  height={170}
-                />
-              </div>
-              <p className="text-xs font-semibold text-slate-700 p-2 text-center truncate">
-                {word.word}
-              </p>
-            </button>
-          ))}
+          {filtered.map((word, i) => {
+            const wp = stats?.wordProgress?.[word.id];
+            const dotColor = !wp ? null : wp.interval >= 14 ? 'bg-emerald-500' : 'bg-amber-500';
+            return (
+              <button
+                key={word.id}
+                onClick={() => { setDetailIndex(i); setView('detail'); setImgLoaded(false); }}
+                className="glass rounded-xl overflow-hidden hover:shadow-md active:scale-95 transition-all"
+              >
+                <div className="aspect-square bg-slate-100 relative">
+                  <img
+                    src={getImageUrl(word)}
+                    alt={word.word}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                    width={170}
+                    height={170}
+                  />
+                  {dotColor && (
+                    <span className={`absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full ${dotColor} ring-2 ring-white`} />
+                  )}
+                </div>
+                <p className="text-xs font-semibold text-slate-700 p-2 text-center truncate">
+                  {word.word}
+                </p>
+              </button>
+            );
+          })}
         </div>
       )}
 
@@ -190,20 +197,23 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, onBack }
                 {currentWord.category}
               </span>
             </div>
-            <div className="p-5 space-y-3">
-              <div className="flex items-center gap-2">
-                <h3 className="text-2xl font-black text-slate-800">{currentWord.word}</h3>
-                <span className="text-lg font-semibold text-blue-600" dir="rtl">
-                  {currentWord.hebrewTranslation}
-                </span>
-                <button
-                  onClick={() => speakWord(currentWord.word)}
-                  className="p-2.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors ml-auto"
-                  aria-label={t('pronounceWord', lang)}
-                >
-                  <Volume2 className="w-5 h-5 text-blue-600" />
-                </button>
-              </div>
+            {/* English box */}
+            <div className="bg-blue-50 dark:bg-blue-900/20 px-5 py-4 flex items-center justify-between">
+              <h3 className="text-2xl font-bold text-slate-800">{currentWord.word}</h3>
+              <button
+                onClick={() => speakWord(currentWord.word)}
+                className="p-2.5 rounded-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-800/40 dark:hover:bg-blue-800/60 transition-colors"
+                aria-label={t('pronounceWord', lang)}
+              >
+                <Volume2 className="w-5 h-5 text-blue-600" />
+              </button>
+            </div>
+            {/* Hebrew box */}
+            <div className="bg-slate-50 dark:bg-slate-800/50 px-5 py-4 border-y border-slate-200 dark:border-slate-700" dir="rtl">
+              <p className="text-2xl font-bold text-slate-800">{currentWord.hebrewTranslation}</p>
+            </div>
+            {/* Info box */}
+            <div className="px-5 py-4 space-y-2">
               <p className="text-sm text-slate-500 font-mono">{currentWord.phonetic}</p>
               <p className="text-slate-600">{currentWord.definition}</p>
               <p className="text-sm text-slate-500 italic">"{currentWord.exampleSentence}"</p>
@@ -213,8 +223,10 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, onBack }
       )}
 
       {filtered.length === 0 && (
-        <div className="text-center py-12 text-slate-400">
-          <p>{t('noWordsFound', lang)}</p>
+        <div className="text-center py-12 space-y-3">
+          <p className="text-5xl">🔍</p>
+          <p className="text-slate-500 font-medium">{t('noWordsFound', lang)}</p>
+          <p className="text-sm text-slate-400">{t('tryDifferentSearch', lang)}</p>
         </div>
       )}
     </div>

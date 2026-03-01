@@ -1,6 +1,7 @@
-import { useState } from 'react';
-import { ArrowLeft, Trash2, RotateCcw, Plus, Pencil, Check, X } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { ArrowLeft, Trash2, RotateCcw, Plus, Pencil, Check, X, Download, Upload } from 'lucide-react';
 import { t } from '../utils/i18n';
+import { exportAllData, importAllData } from '../utils/storage';
 
 const AVATARS = ['🦊', '🐱', '🦁', '🐶', '🦄', '🐼', '🐸', '🦋', '🌟', '🚀', '🎨', '🎵'];
 
@@ -9,6 +10,8 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
   const [editingId, setEditingId] = useState(null);
   const [editName, setEditName] = useState('');
   const [editAvatar, setEditAvatar] = useState('');
+  const [importMsg, setImportMsg] = useState(null); // { type: 'success'|'error', text }
+  const fileInputRef = useRef(null);
 
   const startEdit = (player) => {
     setEditingId(player.id);
@@ -32,6 +35,40 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
   };
 
   const confirmPlayer = confirmAction && players.find(p => p.id === confirmAction.playerId);
+
+  const handleExport = () => {
+    const data = exportAllData();
+    if (!data) return;
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `childrendoenglish-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const data = JSON.parse(evt.target.result);
+        const result = importAllData(data);
+        if (result.success) {
+          setImportMsg({ type: 'success', text: 'Data imported successfully!' });
+          setTimeout(() => window.location.reload(), 1200);
+        } else {
+          setImportMsg({ type: 'error', text: result.error });
+        }
+      } catch {
+        setImportMsg({ type: 'error', text: 'Invalid JSON file' });
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  };
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -142,6 +179,31 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
       >
         <Plus className="w-5 h-5" /> {t('addPlayer', lang)}
       </button>
+
+      {/* Export / Import */}
+      <div className="flex gap-3">
+        <button
+          onClick={handleExport}
+          className="flex-1 py-2.5 rounded-xl border border-slate-300 text-slate-600 text-sm font-medium
+                     hover:bg-slate-50 active:scale-95 transition-all flex items-center justify-center gap-1.5"
+        >
+          <Download className="w-4 h-4" /> {t('exportData', lang)}
+        </button>
+        <button
+          onClick={() => fileInputRef.current?.click()}
+          className="flex-1 py-2.5 rounded-xl border border-slate-300 text-slate-600 text-sm font-medium
+                     hover:bg-slate-50 active:scale-95 transition-all flex items-center justify-center gap-1.5"
+        >
+          <Upload className="w-4 h-4" /> {t('importData', lang)}
+        </button>
+        <input ref={fileInputRef} type="file" accept=".json" onChange={handleImport} className="hidden" />
+      </div>
+
+      {importMsg && (
+        <p className={`text-center text-sm font-medium ${importMsg.type === 'success' ? 'text-emerald-600' : 'text-rose-600'}`}>
+          {importMsg.text}
+        </p>
+      )}
 
       {/* Confirmation modal */}
       {confirmAction && confirmPlayer && (

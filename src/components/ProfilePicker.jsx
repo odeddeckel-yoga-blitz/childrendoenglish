@@ -36,7 +36,8 @@ export default function ProfilePicker({ open, onClose, players, activePlayerId, 
 
       {/* Modal */}
       <div className="relative bg-white dark:bg-slate-800 rounded-t-2xl sm:rounded-2xl w-full sm:max-w-sm
-                      p-5 space-y-4 animate-fade-in shadow-xl max-h-[80vh] overflow-y-auto">
+                      p-5 space-y-4 animate-fade-in shadow-xl max-h-[80vh] overflow-y-auto"
+        style={{ overscrollBehavior: 'contain' }}>
         {/* Header */}
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">

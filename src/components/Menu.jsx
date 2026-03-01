@@ -1,4 +1,4 @@
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X, Users } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X, Users, Map, ShieldCheck } from 'lucide-react';
 import { t } from '../utils/i18n';
 
 export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount = 0, showInstallBanner, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker }) {
@@ -167,6 +167,21 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <p className="text-slate-500 text-sm">{t('myWordListDesc', lang)}</p>
           </div>
         </button>
+
+        <button
+          onClick={() => onNavigate('learningPath')}
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-left"
+        >
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600
+                          flex items-center justify-center flex-shrink-0">
+            <Map className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h3 className="font-bold text-slate-800">{t('learningPath', lang)}</h3>
+            <p className="text-slate-500 text-sm">{t('learningPathDesc', lang)}</p>
+          </div>
+        </button>
       </div>
 
       {/* Bottom row */}
@@ -235,12 +250,21 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
       <div className="text-center space-y-1">
         <p className="text-xs text-slate-400">{t('madeBy', lang)}</p>
-        <button
-          onClick={() => onNavigate('privacy')}
-          className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
-        >
-          {t('privacyPolicy', lang)}
-        </button>
+        <div className="flex items-center justify-center gap-3">
+          <button
+            onClick={() => onNavigate('parentDashboard')}
+            className="text-xs text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1"
+          >
+            <ShieldCheck className="w-3 h-3" /> {t('parentDashboard', lang)}
+          </button>
+          <span className="text-slate-300">|</span>
+          <button
+            onClick={() => onNavigate('privacy')}
+            className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            {t('privacyPolicy', lang)}
+          </button>
+        </div>
       </div>
     </div>
   );

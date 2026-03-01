@@ -189,7 +189,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, onUp
           </div>
 
           {/* Back */}
-          <div className="flashcard-back absolute inset-0">
+          <div className="flashcard-back absolute inset-0" aria-hidden={!flipped} aria-live="polite">
             <div className="glass rounded-2xl p-6 h-full flex flex-col justify-center space-y-4">
               <div className="flex items-center justify-center gap-3">
                 <h3 className="text-3xl font-black text-slate-800">{currentCard.word}</h3>

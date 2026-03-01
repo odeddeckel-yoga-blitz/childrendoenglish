@@ -163,6 +163,33 @@ const translations = {
     listenMatchQuiz: 'Listen & Match',
     listenMatchQuizDesc: 'Hear & see a word, pick the right image',
     tapToHear: 'Tap to hear again',
+
+    // Learn Mode empty state
+    tryDifferentSearch: 'Try a different search or category',
+
+    // Onboarding i18n
+    chooseLanguage: 'What language do you speak?',
+    welcomeTitle: 'Welcome!',
+    welcomeWithName: 'Welcome, {{name}}!',
+    welcomeDesc: 'Learn new English words through fun quizzes and flashcards.',
+    seeAndLearn: 'See & Learn',
+    seeAndLearnDesc: 'Match words with pictures, hear how they sound, and track your progress.',
+    tryItOut: 'Try it out!',
+    whatWordMatches: 'What word matches this picture?',
+    demoCorrect: 'Great job!',
+    demoWrong: "Not quite — it's <strong>{{word}}</strong>! You'll get the hang of it.",
+
+    // Data export/import
+    exportData: 'Export Data',
+    importData: 'Import Data',
+
+    // Learning path
+    learningPath: 'Learning Path',
+    learningPathDesc: 'Follow themed lessons step by step',
+    lessonProgress: '{{done}} / {{total}} mastered',
+
+    // Parent dashboard
+    parentDashboard: 'Parent Dashboard',
   },
   he: {
     // Menu (existing)
@@ -172,7 +199,7 @@ const translations = {
     words: 'מילים',
     dayStreak: '!ימים ברצף',
     learnWords: 'למד מילים',
-    learnWordsDesc: 'עיינו ולמדו אוצר מילים',
+    learnWordsDesc: 'גלו ולמדו מילים חדשות',
     flashcards: 'כרטיסיות',
     flashcardsDesc: 'החליקו כדי לסקור מילים',
     playQuiz: 'שחק חידון',
@@ -281,7 +308,7 @@ const translations = {
     recentQuizzes: 'חידונים אחרונים',
     retakeAssessment: 'בצעו מבחן מחדש',
     takeAssessment: 'בצעו מבחן רמה',
-    assessmentLevelLabel: ':רמת מבחן',
+    assessmentLevelLabel: 'רמת מבחן:',
 
     // Assessment
     quickAssessment: 'מבחן מהיר',
@@ -328,6 +355,33 @@ const translations = {
     listenMatchQuiz: 'האזן והתאם',
     listenMatchQuizDesc: 'שמעו וראו מילה, בחרו את התמונה הנכונה',
     tapToHear: 'לחץ לשמוע שוב',
+
+    // Learn Mode empty state
+    tryDifferentSearch: 'נסו חיפוש או קטגוריה אחרת',
+
+    // Onboarding i18n
+    chooseLanguage: 'באיזו שפה אתם מדברים?',
+    welcomeTitle: '!ברוכים הבאים',
+    welcomeWithName: '!{{name}} ,ברוכים הבאים',
+    welcomeDesc: 'למדו מילים חדשות באנגלית דרך חידונים וכרטיסיות.',
+    seeAndLearn: 'ראו ולמדו',
+    seeAndLearnDesc: 'התאימו מילים לתמונות, שמעו איך הן נשמעות ועקבו אחרי ההתקדמות.',
+    tryItOut: '!נסו את זה',
+    whatWordMatches: 'איזו מילה מתאימה לתמונה?',
+    demoCorrect: '!כל הכבוד',
+    demoWrong: 'לא בדיוק — זה <strong>{{word}}</strong>! תתרגלו בקרוב.',
+
+    // Data export/import
+    exportData: 'ייצוא נתונים',
+    importData: 'ייבוא נתונים',
+
+    // Learning path
+    learningPath: 'מסלול למידה',
+    learningPathDesc: 'עקבו אחרי שיעורים נושאיים צעד אחר צעד',
+    lessonProgress: '{{done}} / {{total}} שולטים',
+
+    // Parent dashboard
+    parentDashboard: 'לוח הורים',
   },
 };
 

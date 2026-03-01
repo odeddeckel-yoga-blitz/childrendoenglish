@@ -116,7 +116,7 @@ export default function AssessmentFlow({ lang = 'en', onComplete, onSkip }) {
       {/* Progress */}
       <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all duration-300"
+          className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-300"
           style={{ width: `${((currentIndex) / totalQuestions) * 100}%` }}
         />
       </div>
@@ -125,7 +125,7 @@ export default function AssessmentFlow({ lang = 'en', onComplete, onSkip }) {
       </p>
 
       {/* Image */}
-      <div className="relative aspect-square max-w-xs mx-auto rounded-2xl overflow-hidden bg-slate-100">
+      <div className="relative aspect-square max-w-xs mx-auto rounded-2xl overflow-hidden bg-slate-100 landscape:max-w-[200px]">
         {!imgLoaded && <div className="absolute inset-0 skeleton-pulse bg-slate-200 rounded-2xl" />}
         <img
           src={getImageUrl(currentWord)}

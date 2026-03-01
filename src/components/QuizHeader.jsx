@@ -39,7 +39,7 @@ export default function QuizHeader({ score, total, streak, soundEnabled, onToggl
         />
       </div>
 
-      <p className="text-center text-sm text-slate-500">
+      <p className="text-center text-sm text-slate-500 landscape:hidden">
         {t('question', lang)} {currentIndex + 1} {t('of', lang)} {total}
       </p>
     </>
