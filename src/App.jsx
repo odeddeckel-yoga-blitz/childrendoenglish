@@ -32,6 +32,7 @@ const AdminPanel = lazy(() => import('./components/admin/AdminPanel'));
 const PlayerCreate = lazy(() => import('./components/PlayerCreate'));
 const PlayerSelect = lazy(() => import('./components/PlayerSelect'));
 const PlayerManage = lazy(() => import('./components/PlayerManage'));
+const ProfilePicker = lazy(() => import('./components/ProfilePicker'));
 
 function getInitialState() {
   const registry = loadPlayerRegistry();
@@ -73,6 +74,7 @@ export default function App() {
   const [quizResults, setQuizResults] = useState(null);
   const [customWords, setCustomWords] = useState(null); // for PersonalWordList quiz
 
+  const [showProfilePicker, setShowProfilePicker] = useState(false);
   const transitionDir = useRef('forward');
   const mainRef = useRef(null);
 
@@ -212,11 +214,17 @@ export default function App() {
     removePlayer(id);
     const reg = loadPlayerRegistry();
     setPlayerRegistry(reg ? { ...reg } : null);
+    if (!reg || reg.players.length === 0) {
+      // No players left → go to create
+      setShowProfilePicker(false);
+      navigate('playerCreate');
+      return;
+    }
     // If deleted was active, load new active player's stats
     if (playerRegistry?.activePlayerId === id && reg?.activePlayerId) {
       setStats(loadStats(reg.activePlayerId));
     }
-  }, [playerRegistry?.activePlayerId]);
+  }, [playerRegistry?.activePlayerId, navigate]);
 
   // --- Existing handlers ---
 
@@ -448,6 +456,7 @@ export default function App() {
             onNavigate={navigate}
             onToggleDark={toggleDarkMode}
             onToggleSound={toggleSound}
+            onOpenProfilePicker={() => setShowProfilePicker(true)}
           />
         );
 
@@ -630,6 +639,18 @@ export default function App() {
       </div>
       <Suspense fallback={null}>
         <UpdatePrompt />
+      </Suspense>
+      <Suspense fallback={null}>
+        <ProfilePicker
+          open={showProfilePicker}
+          onClose={() => setShowProfilePicker(false)}
+          players={playerRegistry?.players || []}
+          activePlayerId={playerRegistry?.activePlayerId}
+          lang={lang}
+          onSwitch={(id) => { setShowProfilePicker(false); handleSelectPlayer(id); }}
+          onAdd={() => { setShowProfilePicker(false); navigate('playerCreate'); }}
+          onDelete={handleDeletePlayer}
+        />
       </Suspense>
     </div>
   );
