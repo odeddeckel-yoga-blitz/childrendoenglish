@@ -44,8 +44,14 @@ export const initTTS = async () => {
 export const isTTSAvailable = () => ttsAvailable;
 
 // Speak a word using Web Speech API
-export const speakWord = (text) => {
-  if (!isSoundEnabled() || !ttsAvailable) return;
+export const speakWord = async (text) => {
+  if (!isSoundEnabled()) return;
+
+  // If TTS status unknown, try initializing first
+  if (ttsAvailable === null) {
+    await initTTS();
+  }
+  if (!ttsAvailable) return;
 
   try {
     window.speechSynthesis.cancel();
@@ -58,7 +64,7 @@ export const speakWord = (text) => {
     if (englishVoice) utterance.voice = englishVoice;
 
     utterance.lang = 'en-US';
-    utterance.rate = 0.85; // slightly slower for kids
+    utterance.rate = 0.7; // slower for kids
     utterance.pitch = 1.05;
     window.speechSynthesis.speak(utterance);
   } catch (e) {

@@ -89,8 +89,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         )}
       </div>
 
-      {/* Assessment prompt */}
-      {!stats.assessmentLevel && stats.totalQuizzes === 0 && (
+      {/* Assessment prompt — hidden for pre-readers */}
+      {!stats.assessmentLevel && stats.totalQuizzes === 0 && activePlayer?.canRead !== false && (
         <button
           onClick={() => onNavigate('assessment')}
           className="w-full glass rounded-2xl p-4 flex items-center gap-4

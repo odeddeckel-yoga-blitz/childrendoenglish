@@ -25,17 +25,21 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, onBack }
     touchStart.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
   };
 
+  const isRTL = lang !== 'en';
+
+  const goPrev = () => {
+    if (detailIndex > 0) { setDetailIndex(i => i - 1); setImgLoaded(false); }
+  };
+  const goNext = () => {
+    if (detailIndex < filtered.length - 1) { setDetailIndex(i => i + 1); setImgLoaded(false); }
+  };
+
   const handleTouchEnd = (e) => {
     const dx = e.changedTouches[0].clientX - touchStart.current.x;
     const dy = e.changedTouches[0].clientY - touchStart.current.y;
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
-      if (dx > 0 && detailIndex > 0) {
-        setDetailIndex(i => i - 1);
-        setImgLoaded(false);
-      } else if (dx < 0 && detailIndex < filtered.length - 1) {
-        setDetailIndex(i => i + 1);
-        setImgLoaded(false);
-      }
+      if (dx > 0) isRTL ? goNext() : goPrev();
+      else isRTL ? goPrev() : goNext();
     }
   };
 
@@ -151,27 +155,27 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, onBack }
           {/* Navigation */}
           <div className="flex items-center justify-between">
             <button
-              onClick={() => { setDetailIndex(i => Math.max(0, i - 1)); setImgLoaded(false); }}
+              onClick={goPrev}
               disabled={detailIndex === 0}
               className="p-2 rounded-lg hover:bg-slate-100 disabled:opacity-30 transition-colors"
               aria-label={t('previousWord', lang)}
             >
-              <ChevronLeft className="w-5 h-5 text-slate-600" />
+              <ChevronLeft className="w-5 h-5 text-slate-600 rtl:rotate-180" />
             </button>
             <span className="text-sm text-slate-500">{detailIndex + 1} / {filtered.length}</span>
             <button
-              onClick={() => { setDetailIndex(i => Math.min(filtered.length - 1, i + 1)); setImgLoaded(false); }}
+              onClick={goNext}
               disabled={detailIndex === filtered.length - 1}
               className="p-2 rounded-lg hover:bg-slate-100 disabled:opacity-30 transition-colors"
               aria-label={t('nextWord', lang)}
             >
-              <ChevronRight className="w-5 h-5 text-slate-600" />
+              <ChevronRight className="w-5 h-5 text-slate-600 rtl:rotate-180" />
             </button>
           </div>
 
           {/* Card */}
           <div className="glass rounded-2xl overflow-hidden">
-            <div className="aspect-square bg-slate-100 relative">
+            <div className="aspect-[4/3] bg-slate-100 relative">
               {!imgLoaded && <div className="absolute inset-0 skeleton-pulse bg-slate-200" />}
               <img
                 src={getImageUrl(currentWord)}
@@ -180,18 +184,21 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, onBack }
                 onLoad={() => setImgLoaded(true)}
                 loading="lazy"
                 width={512}
-                height={512}
+                height={384}
               />
               <span className="absolute top-3 left-3 px-2 py-1 rounded-full bg-black/40 text-white text-xs font-semibold capitalize">
                 {currentWord.category}
               </span>
             </div>
             <div className="p-5 space-y-3">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
                 <h3 className="text-2xl font-black text-slate-800">{currentWord.word}</h3>
+                <span className="text-lg font-semibold text-blue-600" dir="rtl">
+                  {currentWord.hebrewTranslation}
+                </span>
                 <button
                   onClick={() => speakWord(currentWord.word)}
-                  className="p-2.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
+                  className="p-2.5 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors ml-auto"
                   aria-label={t('pronounceWord', lang)}
                 >
                   <Volume2 className="w-5 h-5 text-blue-600" />
@@ -200,11 +207,6 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, onBack }
               <p className="text-sm text-slate-500 font-mono">{currentWord.phonetic}</p>
               <p className="text-slate-600">{currentWord.definition}</p>
               <p className="text-sm text-slate-500 italic">"{currentWord.exampleSentence}"</p>
-              <div className="pt-2 border-t border-slate-200">
-                <p className="text-lg text-right font-semibold text-blue-600" dir="rtl">
-                  {currentWord.hebrewTranslation}
-                </p>
-              </div>
             </div>
           </div>
         </div>
