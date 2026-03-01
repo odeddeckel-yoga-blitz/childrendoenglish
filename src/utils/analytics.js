@@ -18,10 +18,8 @@ export function needsConsentPrompt() {
 function loadGA() {
   if (gaLoaded) return;
   gaLoaded = true;
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-  document.head.appendChild(script);
+  // gtag.js is already loaded in index.html <head> (for Search Console verification).
+  // We only need to initialize the config here after user consent.
   window.gtag('js', new Date());
   window.gtag('config', GA_ID);
 }
