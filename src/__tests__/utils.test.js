@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { fisherYatesShuffle } from '../utils/shuffle';
 import { spacedRepetitionSort, updateWordSR, selectQuizWords, isWordMastered } from '../utils/spaced-repetition';
-import { updateStreak, updateDailyGoal } from '../utils/storage';
+import { updateStreak, updateDailyGoal, formatLocalDate } from '../utils/storage';
 
 describe('fisherYatesShuffle', () => {
   it('returns array of same length', () => {
@@ -119,21 +119,21 @@ describe('updateStreak', () => {
   });
 
   it('increments streak for consecutive days', () => {
-    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    const yesterday = formatLocalDate(new Date(Date.now() - 86400000));
     const stats = { currentStreak: 3, longestStreak: 5, lastActiveDate: yesterday };
     const result = updateStreak(stats);
     expect(result.currentStreak).toBe(4);
   });
 
   it('resets streak after gap', () => {
-    const twoDaysAgo = new Date(Date.now() - 86400000 * 2).toISOString().slice(0, 10);
+    const twoDaysAgo = formatLocalDate(new Date(Date.now() - 86400000 * 2));
     const stats = { currentStreak: 5, longestStreak: 5, lastActiveDate: twoDaysAgo };
     const result = updateStreak(stats);
     expect(result.currentStreak).toBe(1);
   });
 
   it('keeps same-day stats unchanged', () => {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = formatLocalDate(new Date());
     const stats = { currentStreak: 3, longestStreak: 5, lastActiveDate: today };
     const result = updateStreak(stats);
     expect(result.currentStreak).toBe(3);
@@ -148,7 +148,7 @@ describe('updateDailyGoal', () => {
   });
 
   it('accumulates on same day', () => {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = formatLocalDate(new Date());
     const stats = { dailyGoal: { date: today, wordsReviewed: 5 } };
     const result = updateDailyGoal(stats, 3);
     expect(result.dailyGoal.wordsReviewed).toBe(8);

@@ -16,7 +16,7 @@ export default defineConfig({
             urlPattern: /\/images\/.*\.webp$/,
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'word-images-v2',
+              cacheName: 'word-images-v3',
               expiration: {
                 maxEntries: 400,
                 maxAgeSeconds: 30 * 24 * 60 * 60,
