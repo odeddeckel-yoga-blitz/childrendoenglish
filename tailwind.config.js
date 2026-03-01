@@ -4,6 +4,9 @@ export default {
   darkMode: 'class',
   theme: {
     screens: {
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
       landscape: { raw: '(orientation: landscape)' },
     },
     extend: {

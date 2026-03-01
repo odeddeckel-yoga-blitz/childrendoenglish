@@ -16,7 +16,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack }) {
 
     if (navigator.share) {
       try {
-        await navigator.share({ title: 'English Quiz', url });
+        await navigator.share({ title: t('shareQuizTitle', lang), url });
         return;
       } catch {}
     }

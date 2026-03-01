@@ -178,6 +178,14 @@ const translations = {
     whatWordMatches: 'What word matches this picture?',
     demoCorrect: 'Great job!',
     demoWrong: "Not quite — it's <strong>{{word}}</strong>! You'll get the hang of it.",
+    demoWrongPrefix: "Not quite — it's",
+    demoWrongSuffix: "! You'll get the hang of it.",
+
+    // Parent email
+    parentEmailTitle: 'Parent Email (Optional)',
+    parentEmailDesc: 'Get progress reports and learning tips. We never share your email.',
+    parentEmailPlaceholder: 'parent@email.com',
+    skipStep: 'Skip this step',
 
     // Data export/import
     exportData: 'Export Data',
@@ -190,6 +198,20 @@ const translations = {
 
     // Parent dashboard
     parentDashboard: 'Parent Dashboard',
+
+    // Share text
+    shareText: 'I scored {{score}}/{{total}} on Children Do English!',
+    shareTextPerfect: 'I scored {{score}}/{{total}} on Children Do English! Perfect score!',
+    shareQuizTitle: 'English Quiz',
+
+    // Cookie consent
+    cookieConsent: 'We use analytics to improve the app. No personal data is collected.',
+    accept: 'Accept',
+    decline: 'Decline',
+
+    // Notifications
+    enableReminders: 'Enable streak reminders',
+    disableReminders: 'Disable streak reminders',
   },
   he: {
     // Menu (existing)
@@ -370,6 +392,14 @@ const translations = {
     whatWordMatches: 'איזו מילה מתאימה לתמונה?',
     demoCorrect: '!כל הכבוד',
     demoWrong: 'לא בדיוק — זה <strong>{{word}}</strong>! תתרגלו בקרוב.',
+    demoWrongPrefix: 'לא בדיוק — זה',
+    demoWrongSuffix: '! תתרגלו בקרוב.',
+
+    // Parent email
+    parentEmailTitle: '(אימייל הורה (אופציונלי',
+    parentEmailDesc: 'קבלו דוחות התקדמות וטיפים ללמידה. לעולם לא נשתף את האימייל שלכם.',
+    parentEmailPlaceholder: 'parent@email.com',
+    skipStep: 'דלגו על שלב זה',
 
     // Data export/import
     exportData: 'ייצוא נתונים',
@@ -382,6 +412,20 @@ const translations = {
 
     // Parent dashboard
     parentDashboard: 'לוח הורים',
+
+    // Share text
+    shareText: '!Children Do English-ב {{total}}/{{score}} השגתי',
+    shareTextPerfect: '!ניקוד מושלם !Children Do English-ב {{total}}/{{score}} השגתי',
+    shareQuizTitle: 'חידון אנגלית',
+
+    // Cookie consent
+    cookieConsent: 'אנחנו משתמשים בנתונים סטטיסטיים כדי לשפר את האפליקציה. לא נאסף מידע אישי.',
+    accept: 'אישור',
+    decline: 'דחייה',
+
+    // Notifications
+    enableReminders: 'הפעלת תזכורות רצף',
+    disableReminders: 'ביטול תזכורות רצף',
   },
 };
 

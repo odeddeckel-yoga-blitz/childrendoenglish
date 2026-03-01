@@ -8,6 +8,9 @@ import { getWordById } from './data/words';
 import { initTTS } from './utils/sound';
 import { isRTL } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
+import CookieConsent from './components/CookieConsent';
+import { needsConsentPrompt, setAnalyticsConsent, analytics } from './utils/analytics';
+import { checkStreakReminder } from './utils/notifications';
 
 
 const LevelSelect = lazy(() => import('./components/LevelSelect'));
@@ -33,6 +36,27 @@ const ProfilePicker = lazy(() => import('./components/ProfilePicker'));
 const LearningPath = lazy(() => import('./components/LearningPath'));
 const ParentDashboard = lazy(() => import('./components/ParentDashboard'));
 
+function SuspenseFallback() {
+  const [showRetry, setShowRetry] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setShowRetry(true), 10000);
+    return () => clearTimeout(timer);
+  }, []);
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
+      <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      {showRetry && (
+        <button
+          onClick={() => window.location.reload()}
+          className="text-sm text-blue-600 hover:underline"
+        >
+          Taking too long? Tap to reload
+        </button>
+      )}
+    </div>
+  );
+}
+
 function getInitialState() {
   const registry = loadPlayerRegistry();
 
@@ -47,8 +71,8 @@ function getInitialState() {
     return { gameState: 'playerSelect', registry, stats };
   }
 
-  // 1 player, not onboarded → onboarding
-  if (!stats.hasSeenOnboarding && stats.totalQuizzes === 0) {
+  // 1 player, not onboarded but has stats from data import → skip onboarding
+  if (!stats.hasSeenOnboarding && stats.totalQuizzes === 0 && Object.keys(stats.wordProgress || {}).length === 0) {
     return { gameState: 'onboarding', registry, stats };
   }
 
@@ -66,6 +90,7 @@ export default function App() {
   const [soundEnabled, setSoundEnabled] = useState(() => isSoundEnabled());
 
   const [showProfilePicker, setShowProfilePicker] = useState(false);
+  const [showConsent, setShowConsent] = useState(() => needsConsentPrompt());
   const transitionDir = useRef('forward');
   const mainRef = useRef(null);
 
@@ -91,6 +116,9 @@ export default function App() {
 
   // Init TTS
   useEffect(() => { initTTS(); }, []);
+
+  // Check streak reminder on mount
+  useEffect(() => { checkStreakReminder(stats); }, []);
 
   // PWA install prompt
   const deferredPrompt = useRef(null);
@@ -120,6 +148,7 @@ export default function App() {
     const { outcome } = await deferredPrompt.current.userChoice;
     deferredPrompt.current = null;
     setShowInstallBanner(false);
+    analytics.pwaInstall(outcome);
     if (outcome === 'dismissed') {
       localStorage.setItem('childrendoenglish-install-dismissed', '1');
     }
@@ -138,6 +167,9 @@ export default function App() {
   const navigate = useCallback((newState, direction = 'forward') => {
     transitionDir.current = direction;
     setGameState(newState);
+    // Track feature usage for key screens
+    const features = ['learning', 'flashcards', 'badges', 'progress', 'personalList', 'learningPath', 'parentDashboard'];
+    if (features.includes(newState)) analytics.featureUse(newState);
   }, []);
 
   const quizFlow = useQuizFlow({ stats, setStats, navigate });
@@ -170,7 +202,7 @@ export default function App() {
     setPlayerRegistry({ ...reg });
     const newStats = loadStats(id);
     setStats(newStats);
-    // New player goes to onboarding
+    analytics.playerCreate();
     navigate('onboarding');
   }, [navigate]);
 
@@ -226,6 +258,7 @@ export default function App() {
       const updated = { ...prev, hasSeenOnboarding: true };
       return updated;
     });
+    analytics.onboardingComplete();
     navigate('menu');
   }, [navigate]);
 
@@ -525,20 +558,26 @@ export default function App() {
 
   return (
     <div className="app-bg min-h-screen pb-safe">
-      <div ref={mainRef} tabIndex={-1} className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg'} mx-auto px-4 py-6 outline-none`}>
-        <Suspense fallback={
-          <div className="flex items-center justify-center min-h-[60vh]">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
-          </div>
-        }>
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold">
+        Skip to content
+      </a>
+      <main id="main-content" ref={mainRef} tabIndex={-1} className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg md:max-w-2xl'} mx-auto px-4 py-6 outline-none`}>
+        <Suspense fallback={<SuspenseFallback />}>
           <ErrorBoundary key={gameState} onReset={resetToMenu}>
             {renderState()}
           </ErrorBoundary>
         </Suspense>
-      </div>
+      </main>
       <Suspense fallback={null}>
         <UpdatePrompt />
       </Suspense>
+      {showConsent && (
+        <CookieConsent
+          lang={lang}
+          onAccept={() => { setAnalyticsConsent(true); setShowConsent(false); }}
+          onDecline={() => { setAnalyticsConsent(false); setShowConsent(false); }}
+        />
+      )}
       <Suspense fallback={null}>
         <ProfilePicker
           open={showProfilePicker}

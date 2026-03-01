@@ -44,6 +44,7 @@ See `.env.example` for all variables. Only needed for admin panel and data scrip
 | `GITHUB_TOKEN` | Server (API routes) | GitHub PAT for committing images |
 | `GITHUB_REPO` | Server (API routes) | GitHub repo in `owner/repo` format |
 | `PIXABAY_API_KEY` | Build script | Pixabay API key for word images |
+| `VITE_SENTRY_DSN` | Client (error tracking) | Sentry DSN for error reporting (optional) |
 
 ## Admin Panel
 
@@ -56,8 +57,9 @@ src/
   components/       # React components
     admin/          # Admin panel components
   data/             # Static word data, levels, badges
-  hooks/            # Custom React hooks (useQuizState)
-  utils/            # Pure utilities (shuffle, spaced repetition, storage, sound)
+  hooks/            # Custom React hooks (useQuizState, useQuizFlow)
+  utils/            # Utilities (shuffle, spaced repetition, storage, sound, analytics, i18n)
+  __tests__/        # Component tests (Vitest + React Testing Library)
 public/
   images/           # Word images (WebP)
 api/                # Vercel serverless functions (admin image management)
@@ -71,7 +73,7 @@ Words are defined in `src/data/words.js`. Each word object has: `id`, `word`, `p
 
 ## Tests
 
-Unit tests cover spaced repetition, shuffle, storage, and data integrity. E2E tests cover the full quiz flow, all three quiz modes, dark mode, learn mode, and flashcards.
+Unit tests cover components (Menu, LearnMode, ProfilePicker, ImageQuiz, ResultScreen, FlashcardMode), hooks (useQuizFlow, useQuizState), utilities (storage, spaced repetition, shuffle), and data integrity. E2E tests cover the full quiz flow, all quiz modes, dark mode, learn mode, and flashcards.
 
 ```bash
 npm test              # Unit tests
@@ -83,7 +85,7 @@ npm run test:e2e      # E2E tests (requires Playwright browsers)
 1. Fork the repo and create a feature branch from `main`.
 2. Run `npm install` and `npm run dev` to start the local server.
 3. Make your changes — keep components small, use Tailwind utility classes, and follow existing naming conventions.
-4. Run `npm test` to ensure all 34+ unit tests pass.
+4. Run `npm test` to ensure all unit tests pass.
 5. If adding a word: add the entry in `src/data/words.js` **and** a matching 512x512 WebP image at `public/images/{id}.webp`.
 6. Submit a PR with a clear description of what changed and why.
 

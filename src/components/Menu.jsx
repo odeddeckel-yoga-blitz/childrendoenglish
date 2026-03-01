@@ -1,7 +1,22 @@
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X, Users, Map, ShieldCheck } from 'lucide-react';
+import { useState } from 'react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X, Users, Map, ShieldCheck, Bell, BellOff } from 'lucide-react';
 import { t } from '../utils/i18n';
+import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
 
 export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount = 0, showInstallBanner, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker }) {
+  const [notifEnabled, setNotifEnabled] = useState(isNotificationEnabled);
+  const notifSupported = isNotificationSupported();
+
+  const handleToggleNotif = async () => {
+    if (notifEnabled) {
+      disableNotifications();
+      setNotifEnabled(false);
+    } else {
+      const granted = await requestNotificationPermission();
+      setNotifEnabled(granted);
+    }
+  };
+
   const dailyProgress = stats.dailyGoal?.date === new Date().toISOString().slice(0, 10)
     ? Math.min(stats.dailyGoal.wordsReviewed / 10, 1) * 100
     : 0;
@@ -40,6 +55,18 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               : <Moon className="w-5 h-5 text-slate-600" />
             }
           </button>
+          {notifSupported && (
+            <button
+              onClick={handleToggleNotif}
+              className="p-2.5 rounded-xl bg-white/50 hover:bg-white/80 transition-colors"
+              aria-label={notifEnabled ? t('disableReminders', lang) : t('enableReminders', lang)}
+            >
+              {notifEnabled
+                ? <Bell className="w-5 h-5 text-blue-600" />
+                : <BellOff className="w-5 h-5 text-slate-400" />
+              }
+            </button>
+          )}
         </div>
       </div>
 

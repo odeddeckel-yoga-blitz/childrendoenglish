@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BookOpen, Image, ArrowRight, ArrowLeft, X, CheckCircle2 } from 'lucide-react';
 import { t } from '../utils/i18n';
 
-const TOTAL_STEPS = 5; // language picker + 2 intro slides + 1 demo + 1 can-read
+const TOTAL_STEPS = 6; // language picker + 2 intro slides + 1 demo + 1 email + 1 can-read
 
 const DEMO_QUESTION = {
   image: '/images/cat.webp',
@@ -14,9 +14,13 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
   const [step, setStep] = useState(0);
   const [lang, setLang] = useState('en');
   const [demoAnswer, setDemoAnswer] = useState(null); // null | 'correct' | 'wrong'
+  const [parentEmail, setParentEmail] = useState('');
 
   const handleFinish = () => {
     onSelectLanguage?.(lang);
+    if (parentEmail.trim()) {
+      localStorage.setItem('childrendoenglish-parent-email', parentEmail.trim());
+    }
     onComplete();
   };
 
@@ -136,15 +140,42 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
             </div>
           )}
           {demoAnswer === 'wrong' && (
-            <p className="text-amber-600 text-sm font-medium"
-               dangerouslySetInnerHTML={{ __html: t('demoWrong', lang, { word: DEMO_QUESTION.correct }) }}
-            />
+            <p className="text-amber-600 text-sm font-medium">
+              {t('demoWrongPrefix', lang)} <strong>{DEMO_QUESTION.correct}</strong>{t('demoWrongSuffix', lang)}
+            </p>
           )}
         </>
       );
     }
 
-    // Step 4: Can you read?
+    // Step 4: Parent email (optional)
+    if (step === 4) {
+      return (
+        <>
+          <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-blue-100">
+            <span className="text-4xl">📧</span>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-800">{t('parentEmailTitle', lang)}</h2>
+          <p className="text-slate-500 text-sm">{t('parentEmailDesc', lang)}</p>
+          <input
+            type="email"
+            value={parentEmail}
+            onChange={e => setParentEmail(e.target.value)}
+            placeholder={t('parentEmailPlaceholder', lang)}
+            className="w-full rounded-xl bg-white/70 border border-slate-200 p-3 text-sm text-slate-700
+                       placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          />
+          <button
+            onClick={() => setStep(5)}
+            className="text-sm text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            {t('skipStep', lang)}
+          </button>
+        </>
+      );
+    }
+
+    // Step 5: Can you read?
     return (
       <>
         <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-purple-100">
@@ -173,7 +204,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
     );
   };
 
-  const isSlideStep = step >= 1 && step <= 3; // steps 1-3 have nav arrows (intro + demo)
+  const isSlideStep = step >= 1 && step <= 4; // steps 1-4 have nav arrows
 
   return (
     <div className="animate-fade-in space-y-8 text-center">
@@ -210,7 +241,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
 
           {/* Dots */}
           <div className="flex gap-2">
-            {Array.from({ length: 3 }, (_, i) => (
+            {Array.from({ length: 4 }, (_, i) => (
               <div
                 key={i}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${

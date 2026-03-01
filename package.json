@@ -14,10 +14,12 @@
     "optimize-images": "node scripts/optimize-images.js"
   },
   "dependencies": {
+    "@sentry/react": "^10.40.0",
     "easy-speech": "^2.3.0",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "web-vitals": "^5.1.0"
   },
   "overrides": {
     "serialize-javascript": "^7.0.3"

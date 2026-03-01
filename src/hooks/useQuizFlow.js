@@ -5,6 +5,7 @@ import { preloadImages } from '../utils/images';
 import { updateStreak, updateDailyGoal } from '../utils/storage';
 import { BADGES } from '../data/badges';
 import { playSound } from '../utils/sound';
+import { analytics } from '../utils/analytics';
 
 export default function useQuizFlow({ stats, setStats, navigate }) {
   const [selectedLevel, setSelectedLevel] = useState(null);
@@ -47,6 +48,7 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
     }
 
     setQuizWords(selected);
+    analytics.quizStart(mode, level);
     const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
     navigate(stateMap[mode] || 'imageQuiz');
   }, [navigate, stats.wordProgress]);
@@ -116,6 +118,7 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
     });
 
     setQuizResults(results);
+    analytics.quizComplete(mode, selectedLevel, score, total);
     navigate('finished');
   }, [selectedLevel, navigate, setStats]);
 

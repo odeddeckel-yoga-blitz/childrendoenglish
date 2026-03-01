@@ -31,7 +31,8 @@ export default function ResultScreen({ results, stats, lang = 'en', level, mode,
   }, [isPerfect]);
 
   const handleShare = async () => {
-    const text = `I scored ${score}/${total} on Children Do English! ${isPerfect ? '🎉 Perfect score!' : ''}\nhttps://childrendoenglish.com`;
+    const shareKey = isPerfect ? 'shareTextPerfect' : 'shareText';
+    const text = `${t(shareKey, lang, { score, total })} ${isPerfect ? '🎉' : ''}\nhttps://childrendoenglish.com`;
     try {
       if (navigator.share) {
         await navigator.share({ text });
