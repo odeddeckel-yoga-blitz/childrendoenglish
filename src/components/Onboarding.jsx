@@ -5,11 +5,11 @@ import { trackEvent } from '../utils/analytics';
 
 const TOTAL_STEPS = 5; // language picker + 2 intro slides + 1 demo + 1 can-read
 
-const DEMO_QUESTION = {
+const getDemoQuestion = (lang) => ({
   image: '/images/cat.webp',
-  correct: 'Cat',
-  options: ['Dog', 'Cat', 'Fish'],
-};
+  correctKey: 'demoCat',
+  optionKeys: ['demoDog', 'demoCat', 'demoFish'],
+});
 
 export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead, activePlayer }) {
   const [step, setStep] = useState(0);
@@ -27,8 +27,10 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
     setStep(1);
   };
 
-  const handleDemoAnswer = (option) => {
-    setDemoAnswer(option === DEMO_QUESTION.correct ? 'correct' : 'wrong');
+  const demoQuestion = getDemoQuestion(lang);
+
+  const handleDemoAnswer = (optionKey) => {
+    setDemoAnswer(optionKey === demoQuestion.correctKey ? 'correct' : 'wrong');
   };
 
   const handleCanRead = (canRead) => {
@@ -103,13 +105,13 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
           <h2 className="text-xl font-bold text-slate-800">{t('tryItOut', lang)}</h2>
           <p className="text-slate-500 text-sm">{t('whatWordMatches', lang)}</p>
           <img
-            src={DEMO_QUESTION.image}
-            alt="Mystery word"
+            src={demoQuestion.image}
+            alt={t('mysteryWord', lang)}
             className="w-32 h-32 mx-auto rounded-2xl object-cover shadow-md"
           />
           <div className="grid grid-cols-3 gap-2">
-            {DEMO_QUESTION.options.map((option) => {
-              const isCorrect = option === DEMO_QUESTION.correct;
+            {demoQuestion.optionKeys.map((optionKey) => {
+              const isCorrect = optionKey === demoQuestion.correctKey;
               const answered = demoAnswer !== null;
               let btnClass = 'py-2.5 px-3 rounded-xl font-semibold text-sm transition-all ';
               if (!answered) {
@@ -121,12 +123,12 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
               }
               return (
                 <button
-                  key={option}
-                  onClick={() => !answered && handleDemoAnswer(option)}
+                  key={optionKey}
+                  onClick={() => !answered && handleDemoAnswer(optionKey)}
                   className={btnClass}
                   disabled={answered}
                 >
-                  {option}
+                  {t(optionKey, lang)}
                 </button>
               );
             })}
@@ -139,7 +141,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
           )}
           {demoAnswer === 'wrong' && (
             <p className="text-amber-600 text-sm font-medium">
-              {t('demoWrongPrefix', lang)} <strong>{DEMO_QUESTION.correct}</strong>{t('demoWrongSuffix', lang)}
+              {t('demoWrongPrefix', lang)} <strong>{t(demoQuestion.correctKey, lang)}</strong>{t('demoWrongSuffix', lang)}
             </p>
           )}
         </>

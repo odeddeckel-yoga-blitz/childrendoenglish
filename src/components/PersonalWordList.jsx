@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { ArrowLeft, Play, AlertCircle, Share2, Check } from 'lucide-react';
-import { WORDS, getWordById } from '../data/words';
+import { WORDS, getWordById, getWordByName } from '../data/words';
 import { t } from '../utils/i18n';
 
 export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack }) {
@@ -35,10 +35,12 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack }) {
     const matchedWords = [];
     const unmatchedWords = [];
 
+    const seen = new Set();
     words.forEach(w => {
-      const found = WORDS.find(word => word.word.toLowerCase() === w || word.id === w);
+      const found = getWordByName(w) || getWordById(w);
       if (found) {
-        if (!matchedWords.find(m => m.id === found.id)) {
+        if (!seen.has(found.id)) {
+          seen.add(found.id);
           matchedWords.push(found);
         }
       } else {
@@ -74,7 +76,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack }) {
           id="word-list-input"
           value={input}
           onChange={e => { setInput(e.target.value); setParsed(false); }}
-          placeholder="cat, dog, apple, tree..."
+          placeholder={t('wordListPlaceholder', lang)}
           rows={5}
           className="w-full rounded-xl bg-white/70 border border-slate-200 p-3 text-sm text-slate-700
                      placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"

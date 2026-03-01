@@ -40,6 +40,11 @@ export default function PrivacyPolicy({ lang = 'en', onBack }) {
         </section>
 
         <section className="space-y-2">
+          <h3 className="font-bold text-slate-800">{t('privacyCoppaTitle', lang)}</h3>
+          <p>{t('privacyCoppaDesc', lang)}</p>
+        </section>
+
+        <section className="space-y-2">
           <h3 className="font-bold text-slate-800">{t('privacyDeleteTitle', lang)}</h3>
           <p>{t('privacyDeleteDesc', lang)}</p>
         </section>

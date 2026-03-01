@@ -316,6 +316,32 @@ const translations = {
     badge_week_warrior_desc: 'Practice 7 days in a row',
     badge_polyglot: 'Polyglot',
     badge_polyglot_desc: 'Learn 100 different words',
+
+    // Loading fallback (SuspenseFallback)
+    loadingRetry: 'Taking too long? Tap to reload',
+
+    // Update prompt
+    updateAvailable: 'New update available!',
+    updateBtn: 'Update',
+
+    // Onboarding demo
+    mysteryWord: 'Mystery word',
+    demoDog: 'Dog',
+    demoCat: 'Cat',
+    demoFish: 'Fish',
+
+    // Personal word list placeholder
+    wordListPlaceholder: 'cat, dog, apple, tree...',
+
+    // Offline indicator
+    offlineMessage: 'You are offline. Some features may not work.',
+
+    // Storage full warning
+    storageFull: 'Storage is full. Your progress may not be saved. Try clearing old browser data.',
+
+    // COPPA compliance
+    privacyCoppaTitle: 'COPPA compliance',
+    privacyCoppaDesc: 'Children Do English complies with the Children\'s Online Privacy Protection Act (COPPA). We do not knowingly collect personal information from children under 13. All learning data is stored locally on the device and is never transmitted to our servers.',
   },
   he: {
     // Menu (existing)
@@ -634,6 +660,32 @@ const translations = {
     badge_week_warrior_desc: 'תרגלו 7 ימים ברצף',
     badge_polyglot: 'רב-לשוני',
     badge_polyglot_desc: 'למדו 100 מילים שונות',
+
+    // Loading fallback
+    loadingRetry: 'לוקח יותר מדי זמן? הקישו לטעינה מחדש',
+
+    // Update prompt
+    updateAvailable: '!עדכון חדש זמין',
+    updateBtn: 'עדכון',
+
+    // Onboarding demo
+    mysteryWord: 'מילה מסתורית',
+    demoDog: 'Dog',
+    demoCat: 'Cat',
+    demoFish: 'Fish',
+
+    // Personal word list placeholder
+    wordListPlaceholder: 'cat, dog, apple, tree...',
+
+    // Offline indicator
+    offlineMessage: 'אתם במצב לא מקוון. חלק מהתכונות עלולות לא לעבוד.',
+
+    // Storage full warning
+    storageFull: 'האחסון מלא. ייתכן שההתקדמות לא תישמר. נסו לנקות נתוני דפדפן ישנים.',
+
+    // COPPA compliance
+    privacyCoppaTitle: 'עמידה בתקן COPPA',
+    privacyCoppaDesc: 'ילדים עושים אנגלית עומדת בדרישות חוק הגנת הפרטיות של ילדים באינטרנט (COPPA). אנחנו לא אוספים ביודעין מידע אישי מילדים מתחת לגיל 13. כל נתוני הלמידה נשמרים מקומית במכשיר ולעולם אינם מועברים לשרתים שלנו.',
   },
 };
 

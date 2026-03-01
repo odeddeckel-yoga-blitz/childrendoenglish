@@ -6,7 +6,7 @@ import Onboarding from './components/Onboarding';
 import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, savePlayerRegistry, addPlayer, removePlayer, resetPlayerProgress, updatePlayerProfile } from './utils/storage';
 import { getWordById } from './data/words';
 import { initTTS } from './utils/sound';
-import { isRTL } from './utils/i18n';
+import { isRTL, t } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
 import CookieConsent from './components/CookieConsent';
 import { needsConsentPrompt, setAnalyticsConsent, analytics } from './utils/analytics';
@@ -57,7 +57,7 @@ const PATH_TO_STATE = Object.fromEntries(
   Object.entries(STATE_TO_PATH).map(([state, path]) => [path, state])
 );
 
-function SuspenseFallback() {
+function SuspenseFallback({ lang = 'en' }) {
   const [showRetry, setShowRetry] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setShowRetry(true), 10000);
@@ -71,7 +71,7 @@ function SuspenseFallback() {
           onClick={() => window.location.reload()}
           className="text-sm text-blue-600 hover:underline"
         >
-          Taking too long? Tap to reload
+          {t('loadingRetry', lang)}
         </button>
       )}
     </div>
@@ -113,6 +113,8 @@ export default function App() {
   const [showProfilePicker, setShowProfilePicker] = useState(false);
   const [showConsent, setShowConsent] = useState(() => needsConsentPrompt());
   const [learnWords, setLearnWords] = useState(null);
+  const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && !navigator.onLine);
+  const [storageFull, setStorageFull] = useState(false);
   const mainRef = useRef(null);
 
   // Derived: active player from registry
@@ -137,6 +139,25 @@ export default function App() {
 
   // Init TTS
   useEffect(() => { initTTS(); }, []);
+
+  // Online/offline detection
+  useEffect(() => {
+    const goOffline = () => setIsOffline(true);
+    const goOnline = () => setIsOffline(false);
+    window.addEventListener('offline', goOffline);
+    window.addEventListener('online', goOnline);
+    return () => {
+      window.removeEventListener('offline', goOffline);
+      window.removeEventListener('online', goOnline);
+    };
+  }, []);
+
+  // Storage full detection
+  useEffect(() => {
+    const handleStorageFull = () => setStorageFull(true);
+    window.addEventListener('storagefull', handleStorageFull);
+    return () => window.removeEventListener('storagefull', handleStorageFull);
+  }, []);
 
   // Check streak reminder on mount
   useEffect(() => { checkStreakReminder(stats, lang); }, []);
@@ -622,15 +643,26 @@ export default function App() {
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold">
         Skip to content
       </a>
+      {isOffline && (
+        <div className="bg-amber-100 text-amber-800 text-center text-sm py-2 px-4 font-medium" role="alert">
+          {t('offlineMessage', lang)}
+        </div>
+      )}
+      {storageFull && (
+        <div className="bg-rose-100 text-rose-800 text-center text-sm py-2 px-4 font-medium flex items-center justify-center gap-2" role="alert">
+          {t('storageFull', lang)}
+          <button onClick={() => setStorageFull(false)} className="underline font-semibold">&times;</button>
+        </div>
+      )}
       <main id="main-content" ref={mainRef} tabIndex={-1} className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg md:max-w-2xl'} mx-auto px-4 py-6 outline-none`}>
-        <Suspense fallback={<SuspenseFallback />}>
+        <Suspense fallback={<SuspenseFallback lang={lang} />}>
           <ErrorBoundary key={gameState} onReset={resetToMenu} lang={lang}>
             {renderState()}
           </ErrorBoundary>
         </Suspense>
       </main>
       <Suspense fallback={null}>
-        <UpdatePrompt />
+        <UpdatePrompt lang={lang} />
       </Suspense>
       {showConsent && (
         <CookieConsent

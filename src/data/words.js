@@ -417,7 +417,9 @@ export const CATEGORIES = [
 export const getWordsByLevel = (level) => WORDS.filter(w => w.level === level);
 export const getWordsByCategory = (category) => WORDS.filter(w => w.category === category);
 const WORD_MAP = new Map(WORDS.map(w => [w.id, w]));
+const WORD_NAME_MAP = new Map(WORDS.map(w => [w.word.toLowerCase(), w]));
 export const getWordById = (id) => WORD_MAP.get(id);
+export const getWordByName = (name) => WORD_NAME_MAP.get(name?.toLowerCase());
 
 // Get distractor words for quiz — same category preferred, then same level, then any
 export const getDistractors = (word, count = 3) => {

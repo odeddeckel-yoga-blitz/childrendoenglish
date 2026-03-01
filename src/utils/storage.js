@@ -145,6 +145,13 @@ export const loadStats = (playerId) => {
 
 const MAX_QUIZ_HISTORY = 50;
 
+/** Emit a custom event when storage quota is exceeded */
+const emitStorageFull = () => {
+  try {
+    window.dispatchEvent(new CustomEvent('storagefull'));
+  } catch {}
+};
+
 /** Persist stats. Defaults to active player if no id given. */
 export const saveStats = (stats, playerId) => {
   // Trim quizHistory to prevent localStorage overflow
@@ -157,6 +164,7 @@ export const saveStats = (stats, playerId) => {
       localStorage.setItem(PLAYER_PREFIX + id, JSON.stringify(stats));
     } catch (e) {
       console.warn('Failed to save player stats:', e);
+      if (e?.name === 'QuotaExceededError') emitStorageFull();
     }
   } else {
     // No registry yet — save to legacy key
@@ -164,6 +172,7 @@ export const saveStats = (stats, playerId) => {
       localStorage.setItem(LEGACY_STATS_KEY, JSON.stringify(stats));
     } catch (e) {
       console.warn('Failed to save stats:', e);
+      if (e?.name === 'QuotaExceededError') emitStorageFull();
     }
   }
 };

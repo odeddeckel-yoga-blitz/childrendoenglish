@@ -46,9 +46,34 @@ async function searchWikimedia(query) {
   });
 }
 
+// Simple in-memory rate limiter (resets per cold start; best-effort for serverless)
+const rateLimitMap = new Map();
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute
+const RATE_LIMIT_MAX = 10; // max requests per window per IP
+
+function checkRateLimit(req, res) {
+  const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || 'unknown';
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (entry && now - entry.start < RATE_LIMIT_WINDOW) {
+    entry.count++;
+    if (entry.count > RATE_LIMIT_MAX) {
+      res.setHeader('Retry-After', Math.ceil((RATE_LIMIT_WINDOW - (now - entry.start)) / 1000));
+      return false;
+    }
+  } else {
+    rateLimitMap.set(ip, { start: now, count: 1 });
+  }
+  return true;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  if (!checkRateLimit(req, res)) {
+    return res.status(429).json({ error: 'Too many requests' });
   }
 
   if (!verifyAuth(req)) {

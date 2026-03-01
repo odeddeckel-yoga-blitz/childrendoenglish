@@ -1,7 +1,8 @@
 import { useRegisterSW } from 'virtual:pwa-register/react';
 import { RefreshCw, X } from 'lucide-react';
+import { t } from '../utils/i18n';
 
-export default function UpdatePrompt() {
+export default function UpdatePrompt({ lang = 'en' }) {
   const {
     needRefresh: [needRefresh, setNeedRefresh],
     updateServiceWorker,
@@ -21,7 +22,7 @@ export default function UpdatePrompt() {
                       border border-blue-200 shadow-lg max-w-md mx-auto">
         <div className="flex items-center gap-3">
           <RefreshCw className="w-5 h-5 text-blue-600 flex-shrink-0" />
-          <p className="text-sm font-medium text-slate-700">New update available!</p>
+          <p className="text-sm font-medium text-slate-700">{t('updateAvailable', lang)}</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -35,7 +36,7 @@ export default function UpdatePrompt() {
             className="px-3 py-1.5 bg-blue-600 text-white text-sm font-semibold
                        rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Update
+            {t('updateBtn', lang)}
           </button>
         </div>
       </div>

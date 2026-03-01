@@ -1,14 +1,20 @@
+import { useState } from 'react';
 import { Check, X as XIcon } from 'lucide-react';
 import { getImageUrl } from '../utils/images';
 import { t } from '../utils/i18n';
 
+const PLACEHOLDER_COLORS = ['bg-blue-200', 'bg-emerald-200', 'bg-amber-200', 'bg-purple-200'];
+
 export default function QuizOptionGrid({ quiz, loadedImages, onImageLoad, lang }) {
+  const [failedImages, setFailedImages] = useState(new Set());
+
   return (
     <div className="grid grid-cols-2 gap-3 landscape:gap-2 landscape:max-w-sm landscape:mx-auto">
-      {quiz.options.map((option) => {
+      {quiz.options.map((option, idx) => {
         const isSelected = quiz.selectedAnswer === option.id;
         const isCorrect = option.id === quiz.currentWord.id;
         const isLoaded = loadedImages.has(option.id);
+        const isFailed = failedImages.has(option.id);
 
         let borderClass = 'border-2 border-transparent ';
         if (quiz.answered) {
@@ -28,17 +34,24 @@ export default function QuizOptionGrid({ quiz, loadedImages, onImageLoad, lang }
                        } ${quiz.answered && isCorrect ? 'animate-bounce-in' : ''}
                        ${quiz.answered && isSelected && !isCorrect ? 'animate-shake' : ''}`}
           >
-            {!isLoaded && (
+            {!isLoaded && !isFailed && (
               <div className="absolute inset-0 skeleton-pulse bg-slate-200" />
             )}
-            <img
-              src={getImageUrl(option)}
-              alt={option.word}
-              className={`w-full h-full object-cover transition-opacity ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-              onLoad={() => onImageLoad(option.id)}
-              width={256}
-              height={256}
-            />
+            {isFailed ? (
+              <div className={`absolute inset-0 ${PLACEHOLDER_COLORS[idx % 4]} flex items-center justify-center`}>
+                <span className="text-2xl font-bold text-slate-700 text-center px-2">{option.word}</span>
+              </div>
+            ) : (
+              <img
+                src={getImageUrl(option)}
+                alt={option.word}
+                className={`w-full h-full object-cover transition-opacity ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                onLoad={() => onImageLoad(option.id)}
+                onError={() => setFailedImages(prev => new Set(prev).add(option.id))}
+                width={256}
+                height={256}
+              />
+            )}
             {quiz.answered && isCorrect && (
               <span className="absolute inset-0 flex items-center justify-center" aria-label={t('correct', lang)}>
                 <span className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg">
