@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Search, Grid3X3, BookOpen, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { WORDS, CATEGORIES } from '../data/words';
 import { getImageUrl } from '../utils/images';
 import { speakWord } from '../utils/sound';
 import { t } from '../utils/i18n';
 
-export default function LearnMode({ stats, lang = 'en', onBack }) {
+export default function LearnMode({ stats, lang = 'en', canRead = true, onBack }) {
   const [view, setView] = useState('grid'); // 'grid' | 'detail'
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
@@ -38,6 +38,14 @@ export default function LearnMode({ stats, lang = 'en', onBack }) {
       }
     }
   };
+
+  // Auto-TTS for pre-readers in detail view
+  useEffect(() => {
+    if (!canRead && view === 'detail' && currentWord) {
+      const timer = setTimeout(() => speakWord(currentWord.word), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [canRead, view, detailIndex, currentWord]);
 
   return (
     <div className="animate-fade-in space-y-4">

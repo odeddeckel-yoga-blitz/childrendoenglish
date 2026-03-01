@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { ArrowLeft, Volume2, RotateCcw, Check, X as XIcon } from 'lucide-react';
 import { WORDS } from '../data/words';
 import { spacedRepetitionSort, updateWordSR } from '../utils/spaced-repetition';
@@ -7,7 +7,7 @@ import { speakWord } from '../utils/sound';
 import { haptic } from '../utils/haptic';
 import { t } from '../utils/i18n';
 
-export default function FlashcardMode({ stats, lang = 'en', onUpdateStats, onBack }) {
+export default function FlashcardMode({ stats, lang = 'en', canRead = true, onUpdateStats, onBack }) {
   const sorted = spacedRepetitionSort(WORDS, stats.wordProgress || {});
   const [cards] = useState(sorted);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -22,6 +22,14 @@ export default function FlashcardMode({ stats, lang = 'en', onUpdateStats, onBac
   const swiping = useRef(false);
 
   const currentCard = cards[currentIdx];
+
+  // Auto-TTS for pre-readers when card flips to back (reveals word)
+  useEffect(() => {
+    if (!canRead && flipped && currentCard) {
+      const timer = setTimeout(() => speakWord(currentCard.word), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [canRead, flipped, currentCard]);
 
   const handleKnow = useCallback(() => {
     if (swiping.current || !currentCard) return;

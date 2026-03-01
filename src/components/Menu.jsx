@@ -1,7 +1,7 @@
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X, Users, Settings } from 'lucide-react';
 import { t } from '../utils/i18n';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', showInstallBanner, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount = 0, showInstallBanner, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound }) {
   const dailyProgress = stats.dailyGoal?.date === new Date().toISOString().slice(0, 10)
     ? Math.min(stats.dailyGoal.wordsReviewed / 10, 1) * 100
     : 0;
@@ -42,6 +42,26 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', showI
           </button>
         </div>
       </div>
+
+      {/* Active player */}
+      {activePlayer && (
+        <div className="glass rounded-2xl p-3 flex items-center gap-3">
+          <span className="text-2xl">{activePlayer.avatar}</span>
+          <span className="flex-1 text-sm font-semibold text-slate-700">
+            {t('playingAs', lang, { name: activePlayer.name })}
+          </span>
+          {playerCount >= 2 && (
+            <button
+              onClick={() => onNavigate('playerSelect')}
+              className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-semibold
+                         hover:bg-blue-100 active:scale-95 transition-all flex items-center gap-1"
+            >
+              <Users className="w-3.5 h-3.5" />
+              {t('switchPlayer', lang)}
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Daily goal progress */}
       <div className="glass rounded-2xl p-4 space-y-2">
@@ -216,6 +236,15 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', showI
       )}
 
       <div className="text-center space-y-1">
+        {activePlayer && (
+          <button
+            onClick={() => onNavigate('playerManage')}
+            className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            <Settings className="w-3 h-3" />
+            {t('managePlayers', lang)}
+          </button>
+        )}
         <p className="text-xs text-slate-400">{t('madeBy', lang)}</p>
         <button
           onClick={() => onNavigate('privacy')}

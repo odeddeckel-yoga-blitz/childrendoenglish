@@ -18,7 +18,14 @@ async function setupHebrewUser(page, overrides = {}) {
     ...overrides,
   };
   await page.addInitScript((s) => {
-    localStorage.setItem('childrendoenglish-stats', JSON.stringify(s));
+    const id = 'player_test_he';
+    const registry = {
+      schemaVersion: 2,
+      activePlayerId: id,
+      players: [{ id, name: 'Tester', avatar: '⭐', canRead: true, createdAt: new Date().toISOString() }],
+    };
+    localStorage.setItem('childrendoenglish-players', JSON.stringify(registry));
+    localStorage.setItem('childrendoenglish-player-' + id, JSON.stringify(s));
   }, stats);
   await page.goto('/');
   await page.waitForSelector('#root > *', { timeout: 10000 });
@@ -35,7 +42,7 @@ async function completeQuiz(page, numQuestions = 10) {
   }
 }
 
-// Helper: set localStorage to simulate a returning user
+// Helper: set localStorage to simulate a returning user (with player registry)
 const RETURNING_USER_STATS = {
   hasSeenOnboarding: true,
   totalQuizzes: 0,
@@ -54,8 +61,39 @@ const RETURNING_USER_STATS = {
 async function setupReturningUser(page, overrides = {}) {
   const stats = { ...RETURNING_USER_STATS, ...overrides };
   await page.addInitScript((s) => {
-    localStorage.setItem('childrendoenglish-stats', JSON.stringify(s));
+    // Set up player registry + per-player stats
+    const id = 'player_test1';
+    const registry = {
+      schemaVersion: 2,
+      activePlayerId: id,
+      players: [{ id, name: 'Tester', avatar: '⭐', canRead: true, createdAt: new Date().toISOString() }],
+    };
+    localStorage.setItem('childrendoenglish-players', JSON.stringify(registry));
+    localStorage.setItem('childrendoenglish-player-' + id, JSON.stringify(s));
   }, stats);
+  await page.goto('/');
+  await page.waitForSelector('#root > *', { timeout: 10000 });
+}
+
+// Helper: set up a player who still needs onboarding
+async function setupNewPlayer(page) {
+  await page.addInitScript(() => {
+    const id = 'player_test1';
+    const registry = {
+      schemaVersion: 2,
+      activePlayerId: id,
+      players: [{ id, name: 'Tester', avatar: '⭐', canRead: true, createdAt: new Date().toISOString() }],
+    };
+    const stats = {
+      hasSeenOnboarding: false, totalQuizzes: 0,
+      bestScores: { beginner: 0, intermediate: 0, advanced: 0 },
+      badges: [], unlockedLevels: ['beginner'], wordProgress: {},
+      dailyGoal: { date: null, wordsReviewed: 0 }, currentStreak: 0,
+      longestStreak: 0, lastActiveDate: null, uiLanguage: 'en', quizHistory: [],
+    };
+    localStorage.setItem('childrendoenglish-players', JSON.stringify(registry));
+    localStorage.setItem('childrendoenglish-player-' + id, JSON.stringify(stats));
+  });
   await page.goto('/');
   await page.waitForSelector('#root > *', { timeout: 10000 });
 }
@@ -63,13 +101,18 @@ async function setupReturningUser(page, overrides = {}) {
 // ── Onboarding ──────────────────────────────────────
 
 test.describe('Onboarding', () => {
-  test('shows onboarding for new user', async ({ page }) => {
+  test('shows player create for brand new user', async ({ page }) => {
     await page.goto('/');
+    await expect(page.getByRole('heading', { name: 'Create Player' })).toBeVisible();
+  });
+
+  test('shows onboarding after player exists but not onboarded', async ({ page }) => {
+    await setupNewPlayer(page);
     await expect(page.locator('text=Welcome')).toBeVisible();
   });
 
   test('can skip onboarding to menu', async ({ page }) => {
-    await page.goto('/');
+    await setupNewPlayer(page);
     await page.locator('button[aria-label="Skip onboarding"]').click();
     await expect(page.locator('text=Children Do English')).toBeVisible();
     await expect(page.locator('text=Play Quiz')).toBeVisible();
@@ -395,10 +438,8 @@ test.describe('Responsive', () => {
 
 test.describe('Onboarding Full Flow', () => {
   test('complete all onboarding steps and select Hebrew → Hebrew menu + RTL', async ({ page }) => {
-    await page.goto('/');
-    // Clear any existing stats
-    await page.evaluate(() => localStorage.removeItem('childrendoenglish-stats'));
-    await page.reload();
+    // Set up a player who hasn't onboarded yet
+    await setupNewPlayer(page);
 
     // Should see onboarding
     await expect(page.locator('text=Welcome')).toBeVisible({ timeout: 5000 });
@@ -439,15 +480,8 @@ test.describe('Onboarding Full Flow', () => {
   });
 
   test('demo quiz question correctly shows "Great job!" feedback', async ({ page }) => {
-    await page.goto('/');
-    await page.evaluate(() => localStorage.removeItem('childrendoenglish-stats'));
-    await page.reload();
-
-    // Skip to menu
-    const skipBtn = page.locator('button[aria-label="Skip onboarding"]');
-    if ((await skipBtn.count()) > 0) {
-      await skipBtn.click();
-    }
+    // Set up returning user to go straight to menu
+    await setupReturningUser(page);
 
     // Navigate to quiz
     await page.locator('text=Play Quiz').click();

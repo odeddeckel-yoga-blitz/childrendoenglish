@@ -3,7 +3,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
 import Onboarding from './components/Onboarding';
-import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, updateStreak, updateDailyGoal } from './utils/storage';
+import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, updateStreak, updateDailyGoal, loadPlayerRegistry, savePlayerRegistry, addPlayer, removePlayer, resetPlayerProgress, updatePlayerProfile } from './utils/storage';
 import { WORDS, getWordsByLevel, getDistractors, getWordById } from './data/words';
 import { BADGES } from './data/badges';
 import { selectQuizWords, updateWordSR } from './utils/spaced-repetition';
@@ -18,6 +18,7 @@ const ModeSelect = lazy(() => import('./components/ModeSelect'));
 const ImageQuiz = lazy(() => import('./components/ImageQuiz'));
 const WordQuiz = lazy(() => import('./components/WordQuiz'));
 const AudioQuiz = lazy(() => import('./components/AudioQuiz'));
+const ListenMatchQuiz = lazy(() => import('./components/ListenMatchQuiz'));
 const ResultScreen = lazy(() => import('./components/ResultScreen'));
 const LearnMode = lazy(() => import('./components/LearnMode'));
 const FlashcardMode = lazy(() => import('./components/FlashcardMode'));
@@ -28,13 +29,39 @@ const PersonalWordList = lazy(() => import('./components/PersonalWordList'));
 const UpdatePrompt = lazy(() => import('./components/UpdatePrompt'));
 const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
 const AdminPanel = lazy(() => import('./components/admin/AdminPanel'));
+const PlayerCreate = lazy(() => import('./components/PlayerCreate'));
+const PlayerSelect = lazy(() => import('./components/PlayerSelect'));
+const PlayerManage = lazy(() => import('./components/PlayerManage'));
+
+function getInitialState() {
+  const registry = loadPlayerRegistry();
+
+  // No registry and no legacy data → first-ever use
+  if (!registry) return { gameState: 'playerCreate', registry: null };
+
+  const activePlayer = registry.players.find(p => p.id === registry.activePlayerId);
+  const stats = loadStats(registry.activePlayerId);
+
+  // 2+ players → show player select
+  if (registry.players.length >= 2) {
+    return { gameState: 'playerSelect', registry, stats };
+  }
+
+  // 1 player, not onboarded → onboarding
+  if (!stats.hasSeenOnboarding && stats.totalQuizzes === 0) {
+    return { gameState: 'onboarding', registry, stats };
+  }
+
+  // 1 player, onboarded → menu
+  return { gameState: 'menu', registry, stats };
+}
 
 export default function App() {
-  const [stats, setStats] = useState(() => loadStats());
-  const [gameState, setGameState] = useState(() => {
-    const s = loadStats();
-    return (s.hasSeenOnboarding || s.totalQuizzes > 0) ? 'menu' : 'onboarding';
-  });
+  const initial = useRef(getInitialState());
+
+  const [playerRegistry, setPlayerRegistry] = useState(() => initial.current.registry);
+  const [stats, setStats] = useState(() => initial.current.stats || loadStats());
+  const [gameState, setGameState] = useState(() => initial.current.gameState);
   const [darkMode, setDarkMode] = useState(() => isDarkMode());
   const [soundEnabled, setSoundEnabled] = useState(() => isSoundEnabled());
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -48,6 +75,9 @@ export default function App() {
 
   const transitionDir = useRef('forward');
   const mainRef = useRef(null);
+
+  // Derived: active player from registry
+  const activePlayer = playerRegistry?.players.find(p => p.id === playerRegistry.activePlayerId) || null;
 
   // Move focus to main container on view change for screen readers
   useEffect(() => {
@@ -107,8 +137,10 @@ export default function App() {
     localStorage.setItem('childrendoenglish-install-dismissed', '1');
   };
 
-  // Persist stats
-  useEffect(() => { saveStats(stats); }, [stats]);
+  // Persist stats to active player
+  useEffect(() => {
+    saveStats(stats, playerRegistry?.activePlayerId);
+  }, [stats, playerRegistry?.activePlayerId]);
 
   const navigate = useCallback((newState, direction = 'forward') => {
     transitionDir.current = direction;
@@ -133,6 +165,61 @@ export default function App() {
     });
   }, []);
 
+  // --- Player handlers ---
+
+  const handleCreatePlayer = useCallback((name, avatar, canRead) => {
+    const id = addPlayer(name, avatar, canRead);
+    const reg = loadPlayerRegistry();
+    reg.activePlayerId = id;
+    savePlayerRegistry(reg);
+    setPlayerRegistry({ ...reg });
+    const newStats = loadStats(id);
+    setStats(newStats);
+    // New player goes to onboarding
+    navigate('onboarding');
+  }, [navigate]);
+
+  const handleSelectPlayer = useCallback((playerId) => {
+    const reg = loadPlayerRegistry();
+    if (!reg) return;
+    reg.activePlayerId = playerId;
+    savePlayerRegistry(reg);
+    setPlayerRegistry({ ...reg });
+    const playerStats = loadStats(playerId);
+    setStats(playerStats);
+    // Go to onboarding or menu based on whether they've onboarded
+    if (!playerStats.hasSeenOnboarding && playerStats.totalQuizzes === 0) {
+      navigate('onboarding');
+    } else {
+      navigate('menu');
+    }
+  }, [navigate]);
+
+  const handleUpdatePlayer = useCallback((id, updates) => {
+    updatePlayerProfile(id, updates);
+    setPlayerRegistry({ ...loadPlayerRegistry() });
+  }, []);
+
+  const handleResetPlayer = useCallback((id) => {
+    resetPlayerProgress(id);
+    // If resetting the active player, reload their stats
+    if (playerRegistry?.activePlayerId === id) {
+      setStats(loadStats(id));
+    }
+  }, [playerRegistry?.activePlayerId]);
+
+  const handleDeletePlayer = useCallback((id) => {
+    removePlayer(id);
+    const reg = loadPlayerRegistry();
+    setPlayerRegistry(reg ? { ...reg } : null);
+    // If deleted was active, load new active player's stats
+    if (playerRegistry?.activePlayerId === id && reg?.activePlayerId) {
+      setStats(loadStats(reg.activePlayerId));
+    }
+  }, [playerRegistry?.activePlayerId]);
+
+  // --- Existing handlers ---
+
   const handleOnboardingComplete = useCallback(() => {
     setStats(prev => {
       const updated = { ...prev, hasSeenOnboarding: true };
@@ -144,6 +231,13 @@ export default function App() {
   const handleLanguageSelect = useCallback((lang) => {
     setStats(prev => ({ ...prev, uiLanguage: lang }));
   }, []);
+
+  const handleSetCanRead = useCallback((canRead) => {
+    if (activePlayer) {
+      updatePlayerProfile(activePlayer.id, { canRead });
+      setPlayerRegistry({ ...loadPlayerRegistry() });
+    }
+  }, [activePlayer]);
 
   const handleLevelSelect = useCallback((level) => {
     setSelectedLevel(level);
@@ -178,7 +272,8 @@ export default function App() {
     }
 
     setQuizWords(selected);
-    navigate(mode === 'image' ? 'imageQuiz' : mode === 'word' ? 'wordQuiz' : 'audioQuiz');
+    const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
+    navigate(stateMap[mode] || 'imageQuiz');
 
   }, [navigate, stats.wordProgress]);
 
@@ -294,11 +389,47 @@ export default function App() {
 
   const renderState = () => {
     switch (gameState) {
+      case 'playerCreate':
+        return (
+          <PlayerCreate
+            lang={lang}
+            onCreatePlayer={handleCreatePlayer}
+            onBack={playerRegistry?.players.length > 0 ? () => navigate('playerSelect', 'back') : null}
+          />
+        );
+
+      case 'playerSelect':
+        return (
+          <PlayerSelect
+            players={playerRegistry?.players || []}
+            activePlayerId={playerRegistry?.activePlayerId}
+            lang={lang}
+            onSelectPlayer={handleSelectPlayer}
+            onManage={() => navigate('playerManage')}
+            onAddPlayer={() => navigate('playerCreate')}
+          />
+        );
+
+      case 'playerManage':
+        return (
+          <PlayerManage
+            players={playerRegistry?.players || []}
+            lang={lang}
+            onUpdatePlayer={handleUpdatePlayer}
+            onResetPlayer={handleResetPlayer}
+            onDeletePlayer={handleDeletePlayer}
+            onAddPlayer={() => navigate('playerCreate')}
+            onBack={() => navigate('menu', 'back')}
+          />
+        );
+
       case 'onboarding':
         return (
           <Onboarding
             onComplete={handleOnboardingComplete}
             onSelectLanguage={handleLanguageSelect}
+            onSetCanRead={handleSetCanRead}
+            activePlayer={activePlayer}
           />
         );
 
@@ -309,6 +440,8 @@ export default function App() {
             darkMode={darkMode}
             soundEnabled={soundEnabled}
             lang={lang}
+            activePlayer={activePlayer}
+            playerCount={playerRegistry?.players.length || 0}
             showInstallBanner={showInstallBanner}
             onInstall={handleInstall}
             onDismissInstall={dismissInstall}
@@ -333,6 +466,7 @@ export default function App() {
           <ModeSelect
             level={selectedLevel}
             lang={lang}
+            canRead={activePlayer?.canRead ?? true}
             onSelect={handleModeSelect}
             onBack={() => navigate('levelSelect', 'back')}
           />
@@ -377,6 +511,18 @@ export default function App() {
           />
         );
 
+      case 'listenMatchQuiz':
+        return (
+          <ListenMatchQuiz
+            words={quizWords}
+            lang={lang}
+            soundEnabled={soundEnabled}
+            onToggleSound={toggleSound}
+            onComplete={handleQuizComplete}
+            onQuit={() => navigate('menu', 'back')}
+          />
+        );
+
       case 'finished':
         return (
           <ResultScreen
@@ -396,6 +542,7 @@ export default function App() {
           <LearnMode
             stats={stats}
             lang={lang}
+            canRead={activePlayer?.canRead ?? true}
             onBack={() => navigate('menu', 'back')}
           />
         );
@@ -405,6 +552,7 @@ export default function App() {
           <FlashcardMode
             stats={stats}
             lang={lang}
+            canRead={activePlayer?.canRead ?? true}
             onUpdateStats={setStats}
             onBack={() => navigate('menu', 'back')}
           />

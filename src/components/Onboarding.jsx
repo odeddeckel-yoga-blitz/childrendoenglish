@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { BookOpen, Image, ArrowRight, ArrowLeft, X, CheckCircle2 } from 'lucide-react';
+import { t } from '../utils/i18n';
 
-const TOTAL_STEPS = 4; // 2 intro slides + 1 demo + 1 language picker
+const TOTAL_STEPS = 5; // 2 intro slides + 1 demo + 1 can-read + 1 language picker
 
 const DEMO_QUESTION = {
   image: '/images/cat.webp',
@@ -9,7 +10,7 @@ const DEMO_QUESTION = {
   options: ['Dog', 'Cat', 'Fish'],
 };
 
-export default function Onboarding({ onComplete, onSelectLanguage }) {
+export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead, activePlayer }) {
   const [step, setStep] = useState(0);
   const [demoAnswer, setDemoAnswer] = useState(null); // null | 'correct' | 'wrong'
 
@@ -22,6 +23,11 @@ export default function Onboarding({ onComplete, onSelectLanguage }) {
     setDemoAnswer(option === DEMO_QUESTION.correct ? 'correct' : 'wrong');
   };
 
+  const handleCanRead = (canRead) => {
+    onSetCanRead?.(canRead);
+    setStep(s => s + 1);
+  };
+
   const renderStep = () => {
     if (step === 0) {
       return (
@@ -29,7 +35,9 @@ export default function Onboarding({ onComplete, onSelectLanguage }) {
           <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-blue-100">
             <BookOpen className="w-10 h-10 text-blue-600" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800">Welcome!</h2>
+          <h2 className="text-2xl font-bold text-slate-800">
+            {activePlayer ? `Welcome, ${activePlayer.name}!` : 'Welcome!'}
+          </h2>
           <p className="text-slate-500">Learn new English words through fun quizzes and flashcards.</p>
         </>
       );
@@ -96,7 +104,37 @@ export default function Onboarding({ onComplete, onSelectLanguage }) {
       );
     }
 
-    // step === 3: language picker
+    if (step === 3) {
+      // "Can you read?" step
+      return (
+        <>
+          <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-purple-100">
+            <span className="text-4xl">📖</span>
+          </div>
+          <h2 className="text-2xl font-bold text-slate-800">{t('canYouRead', 'en')}</h2>
+          <div className="space-y-3">
+            <button
+              onClick={() => handleCanRead(true)}
+              className="w-full py-3 px-6 bg-emerald-500 text-white rounded-xl font-semibold
+                         hover:bg-emerald-600 active:scale-95 transition-all text-lg"
+            >
+              {t('iCanRead', 'en')}
+            </button>
+            <button
+              onClick={() => handleCanRead(false)}
+              className="w-full py-3 px-6 bg-white border-2 border-blue-200 text-blue-700
+                         rounded-xl font-semibold hover:bg-blue-50 active:scale-95
+                         transition-all text-lg"
+            >
+              {t('notYet', 'en')}
+            </button>
+            <p className="text-xs text-slate-400">{t('parentCanChange', 'en')}</p>
+          </div>
+        </>
+      );
+    }
+
+    // step === 4: language picker
     return (
       <>
         <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-blue-100">
@@ -125,14 +163,17 @@ export default function Onboarding({ onComplete, onSelectLanguage }) {
     );
   };
 
-  const isSlideStep = step < TOTAL_STEPS - 1; // steps 0-2 have nav arrows
+  const isSlideStep = step <= 2; // steps 0-2 have nav arrows (intro + demo)
 
   return (
     <div className="animate-fade-in space-y-8 text-center">
       {/* Skip button */}
       <div className="flex justify-end">
         <button
-          onClick={() => handleFinish('en')}
+          onClick={() => {
+            onSetCanRead?.(true);
+            handleFinish('en');
+          }}
           className="p-2 rounded-full hover:bg-slate-100 transition-colors"
           aria-label="Skip onboarding"
         >
@@ -160,7 +201,7 @@ export default function Onboarding({ onComplete, onSelectLanguage }) {
 
           {/* Dots */}
           <div className="flex gap-2">
-            {Array.from({ length: TOTAL_STEPS - 1 }, (_, i) => (
+            {Array.from({ length: 3 }, (_, i) => (
               <div
                 key={i}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${

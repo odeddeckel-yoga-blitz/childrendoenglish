@@ -1,7 +1,16 @@
-import { ArrowLeft, Image, Type, Volume2 } from 'lucide-react';
+import { ArrowLeft, Image, Type, Volume2, Headphones } from 'lucide-react';
 import { t } from '../utils/i18n';
 
-const modes = [
+const allModes = [
+  {
+    id: 'listen',
+    nameKey: 'listenMatchQuiz',
+    descKey: 'listenMatchQuizDesc',
+    icon: Headphones,
+    color: 'from-purple-500 to-purple-600',
+    iconBg: 'bg-purple-100',
+    iconColor: 'text-purple-600',
+  },
   {
     id: 'image',
     nameKey: 'imageQuiz',
@@ -33,7 +42,12 @@ const modes = [
 
 const levelNameKey = { beginner: 'beginner', intermediate: 'intermediate', advanced: 'advanced' };
 
-export default function ModeSelect({ level, lang = 'en', onSelect, onBack }) {
+export default function ModeSelect({ level, lang = 'en', canRead = true, onSelect, onBack }) {
+  // Filter modes based on reading ability
+  const modes = canRead
+    ? allModes // Show all 4 modes for readers
+    : allModes.filter(m => m.id !== 'image'); // Hide ImageQuiz for pre-readers (text answer buttons)
+
   return (
     <div className="animate-fade-in space-y-6">
       <div className="flex items-center gap-3">

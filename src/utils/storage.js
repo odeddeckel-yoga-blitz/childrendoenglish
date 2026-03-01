@@ -1,6 +1,8 @@
-/** @module storage — localStorage persistence for user stats and preferences */
+/** @module storage — localStorage persistence for user stats, player profiles, and preferences */
 
-const STORAGE_KEY = 'childrendoenglish-stats';
+const LEGACY_STATS_KEY = 'childrendoenglish-stats';
+const PLAYERS_KEY = 'childrendoenglish-players';
+const PLAYER_PREFIX = 'childrendoenglish-player-';
 const DARK_KEY = 'childrendoenglish-dark';
 const SOUND_KEY = 'childrendoenglish-sound';
 
@@ -21,28 +23,146 @@ const getDefaultStats = () => ({
   quizHistory: [],          // [{ date, mode, level, score, total }]
 });
 
-/** Load stats from localStorage, merging with defaults for any missing keys. */
-export const loadStats = () => {
+const generateId = () => 'player_' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+
+// --- Player Registry ---
+
+/** Load the player registry, auto-migrating from legacy single-player format if needed. */
+export const loadPlayerRegistry = () => {
   try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      return { ...getDefaultStats(), ...parsed };
+    const saved = localStorage.getItem(PLAYERS_KEY);
+    if (saved) return JSON.parse(saved);
+  } catch (e) {
+    console.warn('Failed to load player registry:', e);
+  }
+
+  // Check for legacy stats that need migration
+  try {
+    const legacy = localStorage.getItem(LEGACY_STATS_KEY);
+    if (legacy) {
+      const parsed = JSON.parse(legacy);
+      const id = generateId();
+      const registry = {
+        schemaVersion: 2,
+        activePlayerId: id,
+        players: [
+          { id, name: 'Player 1', avatar: '⭐', canRead: true, createdAt: new Date().toISOString() },
+        ],
+      };
+      // Copy old stats to new per-player key
+      localStorage.setItem(PLAYER_PREFIX + id, legacy);
+      savePlayerRegistry(registry);
+      // Keep old key as backup (don't delete)
+      return registry;
     }
+  } catch (e) {
+    console.warn('Failed to migrate legacy stats:', e);
+  }
+
+  return null; // No registry and no legacy data — first-ever use
+};
+
+export const savePlayerRegistry = (registry) => {
+  try {
+    localStorage.setItem(PLAYERS_KEY, JSON.stringify(registry));
+  } catch (e) {
+    console.warn('Failed to save player registry:', e);
+  }
+};
+
+export const addPlayer = (name, avatar, canRead) => {
+  const registry = loadPlayerRegistry() || {
+    schemaVersion: 2,
+    activePlayerId: null,
+    players: [],
+  };
+  const id = generateId();
+  const player = { id, name, avatar, canRead, createdAt: new Date().toISOString() };
+  registry.players.push(player);
+  if (!registry.activePlayerId) registry.activePlayerId = id;
+  // Initialize empty stats for new player
+  try {
+    localStorage.setItem(PLAYER_PREFIX + id, JSON.stringify(getDefaultStats()));
+  } catch (e) {
+    console.warn('Failed to init player stats:', e);
+  }
+  savePlayerRegistry(registry);
+  return id;
+};
+
+export const removePlayer = (id) => {
+  const registry = loadPlayerRegistry();
+  if (!registry) return;
+  registry.players = registry.players.filter(p => p.id !== id);
+  try { localStorage.removeItem(PLAYER_PREFIX + id); } catch {}
+  if (registry.activePlayerId === id) {
+    registry.activePlayerId = registry.players[0]?.id || null;
+  }
+  savePlayerRegistry(registry);
+};
+
+export const resetPlayerProgress = (id) => {
+  try {
+    localStorage.setItem(PLAYER_PREFIX + id, JSON.stringify(getDefaultStats()));
+  } catch (e) {
+    console.warn('Failed to reset player progress:', e);
+  }
+};
+
+export const updatePlayerProfile = (id, updates) => {
+  const registry = loadPlayerRegistry();
+  if (!registry) return;
+  const player = registry.players.find(p => p.id === id);
+  if (!player) return;
+  if (updates.name !== undefined) player.name = updates.name;
+  if (updates.avatar !== undefined) player.avatar = updates.avatar;
+  if (updates.canRead !== undefined) player.canRead = updates.canRead;
+  savePlayerRegistry(registry);
+};
+
+// --- Stats (now per-player) ---
+
+/** Load stats for a player. Defaults to active player if no id given. */
+export const loadStats = (playerId) => {
+  const id = playerId || loadPlayerRegistry()?.activePlayerId;
+  if (id) {
+    try {
+      const saved = localStorage.getItem(PLAYER_PREFIX + id);
+      if (saved) return { ...getDefaultStats(), ...JSON.parse(saved) };
+    } catch (e) {
+      console.warn('Failed to load player stats:', e);
+    }
+  }
+  // Fallback: try legacy key (pre-migration or no registry)
+  try {
+    const saved = localStorage.getItem(LEGACY_STATS_KEY);
+    if (saved) return { ...getDefaultStats(), ...JSON.parse(saved) };
   } catch (e) {
     console.warn('Failed to load stats:', e);
   }
   return getDefaultStats();
 };
 
-/** Persist stats to localStorage. Silently catches quota/write errors. */
-export const saveStats = (stats) => {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
-  } catch (e) {
-    console.warn('Failed to save stats:', e);
+/** Persist stats. Defaults to active player if no id given. */
+export const saveStats = (stats, playerId) => {
+  const id = playerId || loadPlayerRegistry()?.activePlayerId;
+  if (id) {
+    try {
+      localStorage.setItem(PLAYER_PREFIX + id, JSON.stringify(stats));
+    } catch (e) {
+      console.warn('Failed to save player stats:', e);
+    }
+  } else {
+    // No registry yet — save to legacy key
+    try {
+      localStorage.setItem(LEGACY_STATS_KEY, JSON.stringify(stats));
+    } catch (e) {
+      console.warn('Failed to save stats:', e);
+    }
   }
 };
+
+// --- Global preferences (unchanged) ---
 
 export const isDarkMode = () => {
   try {
