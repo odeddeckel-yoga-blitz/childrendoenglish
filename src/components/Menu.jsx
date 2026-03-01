@@ -70,10 +70,11 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           {onToggleLanguage && (
             <button
               onClick={onToggleLanguage}
-              className="p-2.5 rounded-xl bg-white/50 hover:bg-white/80 transition-colors"
-              aria-label={t('language', lang)}
+              className="px-2.5 py-1.5 rounded-xl bg-white/50 hover:bg-white/80 transition-colors flex items-center gap-1.5"
+              aria-label={lang === 'he' ? 'Switch to English' : 'עבור לעברית'}
             >
-              <Globe className="w-5 h-5 text-slate-600" />
+              <Globe className="w-4 h-4 text-slate-600" />
+              <span className="text-xs font-semibold text-slate-600">{lang === 'he' ? 'EN' : 'עב'}</span>
             </button>
           )}
         </div>
@@ -84,7 +85,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         <button
           onClick={onOpenProfilePicker}
           className="w-full glass rounded-2xl p-3 flex items-center gap-3
-                     hover:shadow-md active:scale-[0.98] transition-all text-left"
+                     hover:shadow-md active:scale-[0.98] transition-all text-start"
         >
           <span className="text-2xl">{activePlayer.avatar}</span>
           <span className="flex-1 text-sm font-semibold text-slate-700">
@@ -128,7 +129,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         <button
           onClick={() => onNavigate('assessment')}
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-left
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start
                      border border-blue-200 bg-blue-50/50"
         >
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600
@@ -147,7 +148,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         <button
           onClick={() => onNavigate('learning')}
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-left"
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600
                           flex items-center justify-center flex-shrink-0">
@@ -162,7 +163,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         <button
           onClick={() => onNavigate('flashcards')}
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-left"
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600
                           flex items-center justify-center flex-shrink-0">
@@ -177,7 +178,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         <button
           onClick={() => onNavigate('levelSelect')}
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-left"
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600
                           flex items-center justify-center flex-shrink-0">
@@ -192,7 +193,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         <button
           onClick={() => onNavigate('personalList')}
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-left"
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600
                           flex items-center justify-center flex-shrink-0">
@@ -207,7 +208,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         <button
           onClick={() => onNavigate('learningPath')}
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-left"
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600
                           flex items-center justify-center flex-shrink-0">
@@ -228,7 +229,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
                      hover:shadow-lg active:scale-[0.98] transition-all"
         >
           <BarChart2 className="w-5 h-5 text-blue-600" />
-          <div className="text-left">
+          <div className="text-start">
             <p className="font-semibold text-sm text-slate-800">{t('progress', lang)}</p>
             <p className="text-xs text-slate-500">{wordsLearned} {t('words', lang)}</p>
           </div>
@@ -240,7 +241,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
                      hover:shadow-lg active:scale-[0.98] transition-all"
         >
           <Award className="w-5 h-5 text-amber-600" />
-          <div className="text-left">
+          <div className="text-start">
             <p className="font-semibold text-sm text-slate-800">{t('badges', lang)}</p>
             <p className="text-xs text-slate-500">{stats.badges?.length || 0} {t('earned', lang)}</p>
           </div>

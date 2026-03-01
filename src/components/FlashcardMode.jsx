@@ -166,13 +166,13 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, onUp
         >
           {/* Front */}
           <div className="flashcard-front absolute inset-0">
-            <div className="glass rounded-2xl overflow-hidden h-full">
-              <div className="aspect-square bg-slate-100 relative">
+            <div className="glass rounded-2xl overflow-hidden h-full flex flex-col">
+              <div className="flex-1 min-h-0 bg-slate-100 relative">
                 {!imgLoaded && <div className="absolute inset-0 skeleton-pulse bg-slate-200" />}
                 <img
                   src={getImageUrl(currentCard)}
                   alt={t('tapToFlip', lang)}
-                  className={`w-full h-full object-cover transition-opacity ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                  className={`w-full h-full object-contain transition-opacity ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                   onLoad={() => setImgLoaded(true)}
                   loading="lazy"
                   width={512}
@@ -182,7 +182,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, onUp
                   {currentCard.category}
                 </span>
               </div>
-              <div className="p-4 text-center">
+              <div className="p-4 text-center flex-shrink-0">
                 <p className="text-slate-400 text-sm">{t('tapToFlip', lang)}</p>
               </div>
             </div>
