@@ -18,10 +18,9 @@ export function needsConsentPrompt() {
 function loadGA() {
   if (gaLoaded) return;
   gaLoaded = true;
-  // gtag.js is already loaded in index.html <head> (for Search Console verification).
-  // We only need to initialize the config here after user consent.
-  window.gtag('js', new Date());
-  window.gtag('config', GA_ID);
+  // gtag.js is already loaded in index.html <head> with consent denied by default.
+  // Grant analytics consent so GA starts collecting data.
+  window.gtag('consent', 'update', { analytics_storage: 'granted' });
 }
 
 // Initialize: load GA if consent was previously given
