@@ -3,7 +3,7 @@ import { BookOpen, Image, ArrowRight, ArrowLeft, X, CheckCircle2 } from 'lucide-
 import { t } from '../utils/i18n';
 import { trackEvent } from '../utils/analytics';
 
-const TOTAL_STEPS = 5; // language picker + 2 intro slides + 1 demo + 1 can-read
+const TOTAL_STEPS = 4; // language picker + 2 intro slides + 1 demo
 
 const getDemoQuestion = (lang) => ({
   image: '/images/cat.webp',
@@ -11,7 +11,7 @@ const getDemoQuestion = (lang) => ({
   optionKeys: ['demoDog', 'demoCat', 'demoFish'],
 });
 
-export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead, activePlayer }) {
+export default function Onboarding({ onComplete, onSelectLanguage, activePlayer }) {
   const [step, setStep] = useState(0);
   const [lang, setLang] = useState('en');
   const [demoAnswer, setDemoAnswer] = useState(null); // null | 'correct' | 'wrong'
@@ -31,11 +31,6 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
 
   const handleDemoAnswer = (optionKey) => {
     setDemoAnswer(optionKey === demoQuestion.correctKey ? 'correct' : 'wrong');
-  };
-
-  const handleCanRead = (canRead) => {
-    onSetCanRead?.(canRead);
-    handleFinish();
   };
 
   const renderStep = () => {
@@ -148,33 +143,8 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
       );
     }
 
-    // Step 4: Can you read?
-    return (
-      <>
-        <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-purple-100">
-          <span className="text-4xl">📖</span>
-        </div>
-        <h2 className="text-2xl font-bold text-slate-800">{t('canYouRead', lang)}</h2>
-        <div className="space-y-3">
-          <button
-            onClick={() => handleCanRead(true)}
-            className="w-full py-3 px-6 bg-emerald-500 text-white rounded-xl font-semibold
-                       hover:bg-emerald-600 active:scale-95 transition-all text-lg"
-          >
-            {t('iCanRead', lang)}
-          </button>
-          <button
-            onClick={() => handleCanRead(false)}
-            className="w-full py-3 px-6 bg-white border-2 border-blue-200 text-blue-700
-                       rounded-xl font-semibold hover:bg-blue-50 active:scale-95
-                       transition-all text-lg"
-          >
-            {t('notYet', lang)}
-          </button>
-          <p className="text-xs text-slate-400">{t('parentCanChange', lang)}</p>
-        </div>
-      </>
-    );
+    // After demo, finish onboarding (canRead already set during player creation)
+    return null;
   };
 
   const isSlideStep = step >= 1 && step <= 3; // steps 1-3 have nav arrows
@@ -185,7 +155,6 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
       <div className="flex justify-end">
         <button
           onClick={() => {
-            onSetCanRead?.(true);
             onSelectLanguage?.('en');
             onComplete();
           }}
@@ -228,7 +197,11 @@ export default function Onboarding({ onComplete, onSelectLanguage, onSetCanRead,
             onClick={() => {
               const stepNames = ['language', 'welcome', 'see_learn', 'demo'];
               trackEvent('onboarding_step', { step, step_name: stepNames[step] || `step_${step}` });
-              setStep(s => s + 1);
+              if (step === 3) {
+                handleFinish();
+              } else {
+                setStep(s => s + 1);
+              }
             }}
             className="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
             aria-label={t('nextStep', lang)}

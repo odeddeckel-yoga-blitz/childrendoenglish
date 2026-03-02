@@ -16,7 +16,6 @@ vi.mock('../utils/haptic', () => ({
 const defaultProps = {
   onComplete: vi.fn(),
   onSelectLanguage: vi.fn(),
-  onSetCanRead: vi.fn(),
   activePlayer: { id: '1', name: 'Alex', avatar: '🦊' },
 };
 
@@ -44,23 +43,23 @@ describe('Onboarding', () => {
   });
 
   it('calls onComplete when skip button clicked', () => {
-    const props = { ...defaultProps, onComplete: vi.fn(), onSelectLanguage: vi.fn(), onSetCanRead: vi.fn() };
+    const props = { ...defaultProps, onComplete: vi.fn(), onSelectLanguage: vi.fn() };
     render(<Onboarding {...props} />);
     fireEvent.click(screen.getByLabelText('Skip onboarding'));
     expect(props.onComplete).toHaveBeenCalled();
   });
 
-  it('shows "Can you read?" question on final step', () => {
-    render(<Onboarding {...defaultProps} />);
+  it('finishes onboarding after demo step', () => {
+    const props = { ...defaultProps, onComplete: vi.fn(), onSelectLanguage: vi.fn() };
+    render(<Onboarding {...props} />);
     // Step 0 -> 1: pick language
     fireEvent.click(screen.getByText('English'));
     // Step 1 -> 2: next
     fireEvent.click(screen.getByLabelText('Next step'));
     // Step 2 -> 3: next
     fireEvent.click(screen.getByLabelText('Next step'));
-    // Step 3 -> 4: next
+    // Step 3: next finishes onboarding
     fireEvent.click(screen.getByLabelText('Next step'));
-    // Now on step 4: "Can you read?"
-    expect(screen.getByText('Can you read English words?')).toBeInTheDocument();
+    expect(props.onComplete).toHaveBeenCalled();
   });
 });

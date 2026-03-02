@@ -428,7 +428,6 @@ export default function App() {
           <Onboarding
             onComplete={handleOnboardingComplete}
             onSelectLanguage={handleLanguageSelect}
-            onSetCanRead={handleSetCanRead}
             activePlayer={activePlayer}
           />
         );
