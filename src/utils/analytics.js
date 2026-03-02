@@ -1,6 +1,7 @@
 const GA_ID = import.meta.env.VITE_GA_ID || 'G-YF34G1SGNE';
 
 let gaLoaded = false;
+let gtagScriptLoaded = false;
 
 export function hasAnalyticsConsent() {
   return localStorage.getItem('childrendoenglish-analytics-consent') === 'accepted';
@@ -15,22 +16,44 @@ export function needsConsentPrompt() {
   return !localStorage.getItem('childrendoenglish-analytics-consent');
 }
 
+// Load the gtag.js script dynamically (deferred from <head> to reduce LCP)
+function ensureGtagScript() {
+  if (gtagScriptLoaded) return;
+  gtagScriptLoaded = true;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function() { window.dataLayer.push(arguments); };
+  window.gtag('consent', 'default', { analytics_storage: 'denied' });
+  window.gtag('js', new Date());
+  window.gtag('config', GA_ID);
+  const script = document.createElement('script');
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+  script.async = true;
+  document.head.appendChild(script);
+}
+
 function loadGA() {
-  if (gaLoaded || typeof window.gtag !== 'function') return;
+  if (gaLoaded) return;
+  ensureGtagScript();
   gaLoaded = true;
-  // gtag.js is already loaded in index.html <head> with consent denied by default.
-  // Grant analytics consent so GA starts collecting data.
   window.gtag('consent', 'update', { analytics_storage: 'granted' });
 }
 
-// Initialize: load GA if consent was previously given
+// Initialize: defer gtag loading until idle, grant consent if previously accepted
 export function initAnalytics() {
-  if (hasAnalyticsConsent()) loadGA();
+  const load = () => {
+    ensureGtagScript();
+    if (hasAnalyticsConsent()) loadGA();
+  };
+  if (typeof requestIdleCallback === 'function') {
+    requestIdleCallback(load);
+  } else {
+    setTimeout(load, 2000);
+  }
 }
 
 // Track custom events
 export function trackEvent(eventName, params = {}) {
-  if (!hasAnalyticsConsent() || typeof window.gtag !== 'function') return;
+  if (!gaLoaded || typeof window.gtag !== 'function') return;
   window.gtag('event', eventName, params);
 }
 
