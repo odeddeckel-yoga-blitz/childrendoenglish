@@ -10,7 +10,18 @@
     }
   },
   "rewrites": [
-    { "source": "/((?!api|assets|images|sw.js|manifest|favicon|og-image|workbox|gtag-init|sitemap|robots).*)", "destination": "/" }
+    { "source": "/play", "destination": "/" },
+    { "source": "/learn", "destination": "/" },
+    { "source": "/flashcards", "destination": "/" },
+    { "source": "/badges", "destination": "/" },
+    { "source": "/progress", "destination": "/" },
+    { "source": "/path", "destination": "/" },
+    { "source": "/parent", "destination": "/" },
+    { "source": "/privacy", "destination": "/" },
+    { "source": "/players", "destination": "/" },
+    { "source": "/manage", "destination": "/" },
+    { "source": "/new-player", "destination": "/" },
+    { "source": "/my-words", "destination": "/" }
   ],
   "headers": [
     {
