@@ -32,7 +32,11 @@ export default function UpdatePrompt({ lang = 'en' }) {
             <X className="w-4 h-4 text-slate-400" />
           </button>
           <button
-            onClick={() => updateServiceWorker(true)}
+            onClick={() => {
+              updateServiceWorker(true);
+              // Fallback: if controlling event doesn't fire, force reload after 2s
+              setTimeout(() => window.location.reload(), 2000);
+            }}
             className="px-3 py-1.5 bg-blue-600 text-white text-sm font-semibold
                        rounded-lg hover:bg-blue-700 transition-colors"
           >
