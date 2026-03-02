@@ -40,7 +40,7 @@ export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSo
         )}
         <img
           src={getImageUrl(quiz.currentWord)}
-          alt={t('whatIsThis', lang)}
+          alt={quiz.currentWord.word}
           className={`w-full h-full object-cover transition-opacity duration-300 ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImgLoaded(true)}
           width={512}

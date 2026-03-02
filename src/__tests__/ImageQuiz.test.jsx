@@ -40,7 +40,7 @@ describe('ImageQuiz', () => {
 
   it('renders an image', () => {
     render(<ImageQuiz {...defaultProps} />);
-    const img = screen.getByAltText('What is this?');
+    const img = screen.getByAltText(testWords[0].word);
     expect(img).toBeInTheDocument();
   });
 
