@@ -10,7 +10,7 @@
     }
   },
   "rewrites": [
-    { "source": "/((?!api|assets|images|sw.js|manifest|favicon|og-image|workbox|gtag-init).*)", "destination": "/" }
+    { "source": "/((?!api|assets|images|sw.js|manifest|favicon|og-image|workbox|gtag-init|sitemap|robots).*)", "destination": "/" }
   ],
   "headers": [
     {
