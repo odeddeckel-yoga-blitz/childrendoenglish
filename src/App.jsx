@@ -2,17 +2,16 @@ import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react'
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
-import Onboarding from './components/Onboarding';
 import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, savePlayerRegistry, addPlayer, removePlayer, resetPlayerProgress, updatePlayerProfile } from './utils/storage';
-import { getWordById } from './data/words';
 import { initTTS } from './utils/sound';
-import { isRTL, t } from './utils/i18n';
+import { isRTL, t, loadHebrew } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
 import CookieConsent from './components/CookieConsent';
 import { needsConsentPrompt, setAnalyticsConsent, analytics } from './utils/analytics';
 import { checkStreakReminder } from './utils/notifications';
 
 
+const Onboarding = lazy(() => import('./components/Onboarding'));
 const LevelSelect = lazy(() => import('./components/LevelSelect'));
 const ModeSelect = lazy(() => import('./components/ModeSelect'));
 const ImageQuiz = lazy(() => import('./components/ImageQuiz'));
@@ -143,7 +142,9 @@ export default function App() {
 
   // Language direction sync + meta tags
   const lang = stats.uiLanguage || 'en';
+  const [, forceUpdate] = useState(0);
   useEffect(() => {
+    if (lang === 'he') loadHebrew().then(() => forceUpdate(n => n + 1));
     document.documentElement.dir = isRTL(lang) ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
     // Update meta description for language
@@ -363,7 +364,7 @@ export default function App() {
 
   // Detect hash routes: #admin, #quiz/{mode}/{ids}
   useEffect(() => {
-    const checkHash = () => {
+    const checkHash = async () => {
       const hash = window.location.hash;
       if (hash === '#admin') {
         setGameState('admin');
@@ -373,6 +374,7 @@ export default function App() {
       if (quizMatch) {
         const mode = quizMatch[1];
         const ids = quizMatch[2].split(',');
+        const { getWordById } = await import('./data/words');
         const words = ids.map(id => getWordById(id)).filter(Boolean);
         window.location.hash = '';
         if (words.length >= 4) {

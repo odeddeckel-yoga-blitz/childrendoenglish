@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeAll } from 'vitest';
 import Menu from '../components/Menu';
+import { loadHebrew } from '../utils/i18n';
 
 const defaultStats = {
   totalQuizzes: 5,
@@ -73,7 +74,8 @@ describe('Menu', () => {
     expect(screen.getByText('Parent Dashboard')).toBeInTheDocument();
   });
 
-  it('renders in Hebrew when lang=he', () => {
+  it('renders in Hebrew when lang=he', async () => {
+    await loadHebrew();
     render(<Menu {...defaultProps} lang="he" />);
     expect(screen.getByText('ילדים עושים אנגלית')).toBeInTheDocument();
   });

@@ -1,5 +1,4 @@
 import { useState, useCallback } from 'react';
-import { getWordsByLevel, getDistractors } from '../data/words';
 import { selectQuizWords, updateWordSR } from '../utils/spaced-repetition';
 import { preloadImages } from '../utils/images';
 import { updateStreak, updateDailyGoal } from '../utils/storage';
@@ -25,6 +24,7 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
     navigate('loading');
     setLoadingProgress(0);
 
+    const { getWordsByLevel, getDistractors } = await import('../data/words');
     const pool = words || getWordsByLevel(level);
     const selected = selectQuizWords(pool, stats.wordProgress, 10);
 

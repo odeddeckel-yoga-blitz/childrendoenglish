@@ -6,27 +6,14 @@ import { initAnalytics, trackEvent } from './utils/analytics';
 
 // Lazy-load Sentry after initial render to reduce main bundle
 if (import.meta.env.PROD) {
-  requestIdleCallback?.(() => {
-    import('@sentry/react').then((Sentry) => {
-      Sentry.init({
-        dsn: import.meta.env.VITE_SENTRY_DSN || '',
-        integrations: [Sentry.browserTracingIntegration()],
-        tracesSampleRate: 0.1,
-        replaysSessionSampleRate: 0,
-        replaysOnErrorSampleRate: 0.1,
-      });
+  const initSentry = () => import('./utils/sentry').then(({ init, browserTracingIntegration }) => {
+    init({
+      dsn: import.meta.env.VITE_SENTRY_DSN || '',
+      integrations: [browserTracingIntegration()],
+      tracesSampleRate: 0.1,
     });
-  }) ?? setTimeout(() => {
-    import('@sentry/react').then((Sentry) => {
-      Sentry.init({
-        dsn: import.meta.env.VITE_SENTRY_DSN || '',
-        integrations: [Sentry.browserTracingIntegration()],
-        tracesSampleRate: 0.1,
-        replaysSessionSampleRate: 0,
-        replaysOnErrorSampleRate: 0.1,
-      });
-    });
-  }, 3000);
+  });
+  requestIdleCallback?.(initSentry) ?? setTimeout(initSentry, 3000);
 }
 
 // Initialize analytics (loads GA if consent already given)

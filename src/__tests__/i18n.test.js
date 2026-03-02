@@ -1,7 +1,8 @@
-import { describe, it, expect } from 'vitest';
-import { t, isRTL } from '../utils/i18n';
+import { describe, it, expect, beforeAll } from 'vitest';
+import { t, isRTL, loadHebrew } from '../utils/i18n';
 
 describe('i18n', () => {
+  beforeAll(() => loadHebrew());
   it('returns English string for known key', () => {
     expect(t('appName', 'en')).toBe('Children Do English');
   });

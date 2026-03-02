@@ -16,7 +16,7 @@
     "optimize-images": "node scripts/optimize-images.js"
   },
   "dependencies": {
-    "@sentry/react": "^10.40.0",
+    "@sentry/browser": "^10.41.0",
     "lucide-react": "^0.468.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
