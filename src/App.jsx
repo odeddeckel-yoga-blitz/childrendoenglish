@@ -125,17 +125,51 @@ export default function App() {
     if (mainRef.current) mainRef.current.focus();
   }, [gameState]);
 
+  // Update canonical URL when route changes
+  useEffect(() => {
+    const path = STATE_TO_PATH[gameState];
+    if (path) {
+      const canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) {
+        canonical.setAttribute('href', `https://childrendoenglish.com${path}`);
+      }
+    }
+  }, [gameState]);
+
   // Dark mode sync
   useEffect(() => {
     document.documentElement.classList.toggle('dark', darkMode);
   }, [darkMode]);
 
-  // Language direction sync
+  // Language direction sync + meta tags
   const lang = stats.uiLanguage || 'en';
   useEffect(() => {
     document.documentElement.dir = isRTL(lang) ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
+    // Update meta description for language
+    const desc = document.querySelector('meta[name="description"]');
+    if (desc) {
+      desc.setAttribute('content', lang === 'he'
+        ? 'אפליקציה חינמית ללימוד אוצר מילים באנגלית לילדים בגילאי 6-12. למדו כ-300 מילים באנגלית דרך חידוני תמונות, כרטיסיות ואתגרי שמע. ללא פרסומות, ללא צורך בהרשמה.'
+        : 'Help your kids grow their English vocabulary through fun image quizzes, flashcards, and audio challenges. Perfect for ages 6-12, with Hebrew support.');
+    }
+    // Update meta keywords for language
+    const kw = document.querySelector('meta[name="keywords"]');
+    if (kw) {
+      kw.setAttribute('content', lang === 'he'
+        ? 'לימוד אנגלית לילדים, משחקי אנגלית, אוצר מילים באנגלית, פלאש קארדס, עברית אנגלית, אפליקציה חינוכית, הגייה אנגלית, משחקים חינוכיים לילדים, אפליקציה אנגלית חינם, דוברי עברית אנגלית'
+        : 'english vocabulary, kids learning, vocabulary quiz, english for kids, learn english, flashcards, hebrew english, ESL games for children, english words for kids, learn english vocabulary online free, english learning app for kids, picture vocabulary games, vocabulary builder kids, english practice kids, educational games kids, free english learning games, english pronunciation app for kids, bilingual vocabulary app, hebrew english learning app, spaced repetition vocabulary kids, esl practice app for kids');
+    }
   }, [lang]);
+
+  // Read ?lang= URL param on mount (for hreflang SEO)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlLang = params.get('lang');
+    if (urlLang === 'he' && lang !== 'he') {
+      setStats(prev => ({ ...prev, uiLanguage: 'he' }));
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Init TTS
   useEffect(() => { initTTS(); }, []);
