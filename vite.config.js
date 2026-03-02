@@ -12,6 +12,7 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html}', 'favicon.png', 'icon-192.png', 'icon-512.png', 'og-image.png'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         clientsClaim: true,
+        navigateFallbackDenylist: [/\/images\//, /\/api\//, /\.webp$/, /\.png$/, /\.js$/, /\.css$/],
         runtimeCaching: [
           {
             urlPattern: /\/images\/.*\.webp$/,
