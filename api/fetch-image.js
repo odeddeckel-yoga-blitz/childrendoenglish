@@ -11,8 +11,8 @@ function verifyAuth(req) {
   return hash === (process.env.ADMIN_HASH || '').trim();
 }
 
-async function searchWikimedia(query) {
-  const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrnamespace=6&gsrlimit=25&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=512&format=json&origin=*`;
+async function searchWikimedia(query, offset = 0) {
+  const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrnamespace=6&gsrlimit=25&gsroffset=${offset}&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=512&format=json&origin=*`;
 
   const res = await fetch(url, { headers: { 'User-Agent': UA } });
   const data = await res.json();
@@ -37,7 +37,7 @@ async function searchWikimedia(query) {
 
   if (pages.length === 0) return [];
 
-  return pages.slice(0, 16).map(p => {
+  return pages.slice(0, 24).map(p => {
     const info = p.imageinfo[0];
     return {
       url: info.thumburl || info.url,
@@ -80,7 +80,7 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const { queries } = req.body;
+  const { queries, offset = 0 } = req.body;
   if (!Array.isArray(queries) || queries.length === 0) {
     return res.status(400).json({ error: 'queries[] required' });
   }
@@ -89,7 +89,7 @@ export default async function handler(req, res) {
   const allCandidates = [];
   for (const query of queries.slice(0, 3)) {
     try {
-      const candidates = await searchWikimedia(query);
+      const candidates = await searchWikimedia(query, offset);
       if (candidates.length) {
         allCandidates.push(...candidates.map(c => ({ ...c, query })));
       }
@@ -98,9 +98,9 @@ export default async function handler(req, res) {
     }
   }
 
-  // Download and optimize in parallel for speed
+  // Download and optimize in parallel for speed (cap at 20 per batch)
   const results = (await Promise.allSettled(
-    allCandidates.map(async (found) => {
+    allCandidates.slice(0, 20).map(async (found) => {
       const imgRes = await fetch(found.url, { headers: { 'User-Agent': UA } });
       if (!imgRes.ok) return null;
 

@@ -9,10 +9,15 @@ export default function ImageReplacer({ word, password, onClose, onReplaced }) {
   const [selected, setSelected] = useState(null);
   const [committing, setCommitting] = useState(false);
   const [status, setStatus] = useState(null);
+  const [page, setPage] = useState(0);
+  const [lastSearched, setLastSearched] = useState('');
 
   const handleSearch = async () => {
     const queryList = queries.split('\n').map(q => q.trim()).filter(Boolean);
     if (queryList.length === 0) return;
+
+    const queryKey = queryList.join('|');
+    const nextPage = queryKey === lastSearched ? page + 1 : 0;
 
     setSearching(true);
     setCandidates([]);
@@ -26,7 +31,7 @@ export default function ImageReplacer({ word, password, onClose, onReplaced }) {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${password}`,
         },
-        body: JSON.stringify({ queries: queryList }),
+        body: JSON.stringify({ queries: queryList, offset: nextPage * 25 }),
       });
 
       if (!res.ok) {
@@ -37,8 +42,10 @@ export default function ImageReplacer({ word, password, onClose, onReplaced }) {
 
       const data = await res.json();
       setCandidates(data.results || []);
+      setPage(nextPage);
+      setLastSearched(queryKey);
       if (!data.results?.length) {
-        setStatus({ type: 'error', message: 'No images found. Try different search terms.' });
+        setStatus({ type: 'error', message: 'No more images found. Try different search terms.' });
       }
     } catch (err) {
       setStatus({ type: 'error', message: err.message });
@@ -119,47 +126,50 @@ export default function ImageReplacer({ word, password, onClose, onReplaced }) {
             <p className="text-xs font-semibold text-slate-500 mb-2">Search queries (one per line, max 3)</p>
             <textarea
               value={queries}
-              onChange={e => setQueries(e.target.value)}
+              onChange={e => { setQueries(e.target.value); setPage(0); }}
               rows={3}
               className="w-full px-3 py-2 rounded-xl bg-white/70 border border-slate-200
                          text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2
                          focus:ring-blue-400 transition-all resize-none font-mono"
               placeholder="e.g. tabby cat face portrait"
             />
-            <button
-              onClick={handleSearch}
-              disabled={searching || !queries.trim()}
-              className="mt-2 flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white
-                         text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 transition-colors"
-            >
-              {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-              {searching ? 'Searching...' : 'Search Wikimedia'}
-            </button>
+            <div className="mt-2 flex items-center gap-3">
+              <button
+                onClick={handleSearch}
+                disabled={searching || !queries.trim()}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 text-white
+                           text-sm font-semibold hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              >
+                {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+                {searching ? 'Searching...' : lastSearched && lastSearched === queries.split('\n').map(q => q.trim()).filter(Boolean).join('|') ? 'Next batch' : 'Search Wikimedia'}
+              </button>
+              {page > 0 && lastSearched && (
+                <span className="text-xs text-slate-400">Page {page + 1}</span>
+              )}
+            </div>
           </div>
 
           {/* Candidates */}
           {candidates.length > 0 && (
             <div>
-              <p className="text-xs font-semibold text-slate-500 mb-2">Candidates (click to select)</p>
-              <div className="flex gap-3 overflow-x-auto pb-2">
+              <p className="text-xs font-semibold text-slate-500 mb-2">
+                {candidates.length} candidates (click to select)
+              </p>
+              <div className="grid grid-cols-4 sm:grid-cols-5 gap-2">
                 {candidates.map((c, i) => (
                   <button
                     key={i}
                     onClick={() => setSelected(i)}
-                    className={`flex-shrink-0 rounded-xl overflow-hidden transition-all ${
+                    className={`rounded-xl overflow-hidden transition-all ${
                       selected === i ? 'ring-3 ring-blue-600 scale-105' : 'ring-1 ring-slate-200 hover:ring-blue-300'
                     }`}
                   >
-                    <div className="w-36 h-36 bg-slate-100">
+                    <div className="aspect-square bg-slate-100">
                       <img
                         src={`data:image/webp;base64,${c.imageBase64}`}
                         alt={c.query}
                         className="w-full h-full object-cover"
                       />
-                    </div>
-                    <div className="p-2 text-left">
-                      <p className="text-[10px] text-slate-500 truncate">{c.query}</p>
-                      <p className="text-[10px] text-slate-400">{c.sizeKB} KB</p>
                     </div>
                   </button>
                 ))}
