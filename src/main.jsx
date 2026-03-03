@@ -13,7 +13,7 @@ if (import.meta.env.PROD) {
       tracesSampleRate: 0.1,
     });
   });
-  requestIdleCallback?.(initSentry) ?? setTimeout(initSentry, 3000);
+  (typeof requestIdleCallback === 'function' ? requestIdleCallback : (fn) => setTimeout(fn, 3000))(initSentry);
 }
 
 // Initialize analytics (loads GA if consent already given)
