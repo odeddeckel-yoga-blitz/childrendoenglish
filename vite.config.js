@@ -1,10 +1,12 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
+import asyncCss from './vite-plugin-async-css.js';
 
 export default defineConfig({
   plugins: [
     react(),
+    asyncCss(),
     VitePWA({
       registerType: 'prompt',
       includeAssets: ['favicon.png', 'icon-192.png', 'icon-512.png', 'og-image.png'],
