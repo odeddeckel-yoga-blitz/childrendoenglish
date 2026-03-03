@@ -52,71 +52,82 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
     }
   }, [canRead, view, detailIndex, currentWord]);
 
+  // Scroll to last viewed word when returning to grid
+  useEffect(() => {
+    if (view === 'grid') {
+      const el = document.querySelector(`[data-word-index="${detailIndex}"]`);
+      if (el) el.scrollIntoView?.({ block: 'center' });
+    }
+  }, [view]);
+
   return (
     <div className="animate-fade-in space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
-            <ArrowLeft className="w-5 h-5 text-slate-600" />
-          </button>
-          <h2 className="text-xl font-bold text-slate-800">{t('learnWords', lang)}</h2>
+      {/* Sticky header + search + pills */}
+      <div className="sticky top-0 z-10 bg-gradient-to-b from-slate-50 to-slate-50/95 backdrop-blur-sm pb-2 space-y-4">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
+              <ArrowLeft className="w-5 h-5 text-slate-600" />
+            </button>
+            <h2 className="text-xl font-bold text-slate-800">{t('learnWords', lang)}</h2>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setView('grid')}
+              className={`p-2 rounded-lg transition-colors ${view === 'grid' ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:bg-slate-100'}`}
+              aria-label={t('gridView', lang)}
+            >
+              <Grid3X3 className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setView('detail')}
+              className={`p-2 rounded-lg transition-colors ${view === 'detail' ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:bg-slate-100'}`}
+              aria-label={t('detailView', lang)}
+            >
+              <BookOpen className="w-5 h-5" />
+            </button>
+          </div>
         </div>
-        <div className="flex gap-2">
-          <button
-            onClick={() => setView('grid')}
-            className={`p-2 rounded-lg transition-colors ${view === 'grid' ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:bg-slate-100'}`}
-            aria-label={t('gridView', lang)}
-          >
-            <Grid3X3 className="w-5 h-5" />
-          </button>
-          <button
-            onClick={() => setView('detail')}
-            className={`p-2 rounded-lg transition-colors ${view === 'detail' ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:bg-slate-100'}`}
-            aria-label={t('detailView', lang)}
-          >
-            <BookOpen className="w-5 h-5" />
-          </button>
+
+        {/* Search */}
+        <div className="relative">
+          <label htmlFor="learn-search" className="sr-only">{t('searchLabel', lang)}</label>
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+          <input
+            id="learn-search"
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder={t('searchPlaceholder', lang)}
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-slate-200
+                       text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2
+                       focus:ring-blue-400 transition-all"
+          />
         </div>
-      </div>
 
-      {/* Search */}
-      <div className="relative">
-        <label htmlFor="learn-search" className="sr-only">{t('searchLabel', lang)}</label>
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-        <input
-          id="learn-search"
-          type="text"
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder={t('searchPlaceholder', lang)}
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-slate-200
-                     text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2
-                     focus:ring-blue-400 transition-all"
-        />
-      </div>
-
-      {/* Category pills */}
-      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
-        <button
-          onClick={() => setSelectedCategory(null)}
-          className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
-            !selectedCategory ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-          }`}
-        >
-          {t('all', lang)}
-        </button>
-        {CATEGORIES.map(cat => (
+        {/* Category pills */}
+        <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
           <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap capitalize transition-colors ${
-              selectedCategory === cat ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            onClick={() => setSelectedCategory(null)}
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-colors ${
+              !selectedCategory ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            {t(`cat_${cat}`, lang)}
+            {t('all', lang)}
           </button>
-        ))}
+          {CATEGORIES.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap capitalize transition-colors ${
+                selectedCategory === cat ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              }`}
+            >
+              {t(`cat_${cat}`, lang)}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Grid view */}
@@ -128,6 +139,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
             return (
               <button
                 key={word.id}
+                data-word-index={i}
                 onClick={() => { setDetailIndex(i); setView('detail'); setImgLoaded(false); }}
                 className="glass rounded-xl overflow-hidden hover:shadow-md active:scale-95 transition-all"
               >
@@ -170,7 +182,16 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
             >
               <ChevronLeft className="w-5 h-5 text-slate-600 rtl:rotate-180" />
             </button>
-            <span className="text-sm text-slate-500">{detailIndex + 1} / {filtered.length}</span>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setView('grid')}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-100 text-blue-700 text-sm font-semibold hover:bg-blue-200 active:scale-95 transition-all"
+              >
+                <Grid3X3 className="w-4 h-4" />
+                {t('backToList', lang)}
+              </button>
+              <span className="text-sm text-slate-500">{detailIndex + 1} / {filtered.length}</span>
+            </div>
             <button
               onClick={goNext}
               disabled={detailIndex === filtered.length - 1}

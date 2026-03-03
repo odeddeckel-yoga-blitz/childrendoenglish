@@ -91,6 +91,7 @@ const translations = {
     noWordsFound: 'No words found',
     previousWord: 'Previous word',
     nextWord: 'Next word',
+    backToList: 'Back to list',
 
     // Flashcards
     tapToFlip: 'Tap to flip',

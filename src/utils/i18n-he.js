@@ -89,6 +89,7 @@ export default {
   noWordsFound: 'לא נמצאו מילים',
   previousWord: 'מילה קודמת',
   nextWord: 'מילה הבאה',
+  backToList: 'חזרה לרשימה',
 
   // Flashcards
   tapToFlip: 'הקישו כדי להפוך',

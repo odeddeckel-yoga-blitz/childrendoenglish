@@ -465,6 +465,7 @@ export default function App() {
             onComplete={handleOnboardingComplete}
             onSelectLanguage={handleLanguageSelect}
             activePlayer={activePlayer}
+            lang={lang}
           />
         );
 

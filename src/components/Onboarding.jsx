@@ -11,9 +11,9 @@ const getDemoQuestion = (lang) => ({
   optionKeys: ['demoDog', 'demoCat', 'demoFish'],
 });
 
-export default function Onboarding({ onComplete, onSelectLanguage, activePlayer }) {
+export default function Onboarding({ onComplete, onSelectLanguage, activePlayer, lang: initialLang = 'en' }) {
   const [step, setStep] = useState(0);
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState(initialLang || 'en');
   const [demoAnswer, setDemoAnswer] = useState(null); // null | 'correct' | 'wrong'
 
   const handleFinish = () => {
