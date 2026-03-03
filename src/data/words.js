@@ -194,36 +194,19 @@ export const WORDS = [
   // Beginner
   { id: 'cloud', word: 'cloud', level: 'beginner', partOfSpeech: 'noun', category: 'weather', definition: 'A white or gray thing floating in the sky', exampleSentence: 'The cloud looks like a bunny.', phonetic: '/klaʊd/', hebrewTranslation: 'ענן', imageUrl: '/images/cloud.webp' },
   { id: 'snow', word: 'snow', level: 'beginner', partOfSpeech: 'noun', category: 'weather', definition: 'Soft white flakes that fall from the sky when it is cold', exampleSentence: 'The children played in the snow.', phonetic: '/snoʊ/', hebrewTranslation: 'שלג', imageUrl: '/images/snow.webp' },
-  { id: 'wind', word: 'wind', level: 'beginner', partOfSpeech: 'noun', category: 'weather', definition: 'Air that moves and blows things around', exampleSentence: 'The wind blew the leaves off the tree.', phonetic: '/wɪnd/', hebrewTranslation: 'רוח', imageUrl: '/images/wind.webp' },
   { id: 'ice', word: 'ice', level: 'beginner', partOfSpeech: 'noun', category: 'weather', definition: 'Frozen water that is very cold and hard', exampleSentence: 'Be careful, there is ice on the road.', phonetic: '/aɪs/', hebrewTranslation: 'קרח', imageUrl: '/images/ice.webp' },
   // Intermediate
   { id: 'storm', word: 'storm', level: 'intermediate', partOfSpeech: 'noun', category: 'weather', definition: 'Very bad weather with strong wind and rain', exampleSentence: 'We stayed inside during the storm.', phonetic: '/stɔːrm/', hebrewTranslation: 'סערה', imageUrl: '/images/storm.webp' },
   { id: 'fog', word: 'fog', level: 'intermediate', partOfSpeech: 'noun', category: 'weather', definition: 'A thick cloud near the ground that makes it hard to see', exampleSentence: 'The morning fog covered the valley.', phonetic: '/fɒɡ/', hebrewTranslation: 'ערפל', imageUrl: '/images/fog.webp' },
   { id: 'hail', word: 'hail', level: 'intermediate', partOfSpeech: 'noun', category: 'weather', definition: 'Small balls of ice that fall from the sky', exampleSentence: 'The hail made a loud noise on the roof.', phonetic: '/heɪl/', hebrewTranslation: 'ברד', imageUrl: '/images/hail.webp' },
-  { id: 'thunder', word: 'thunder', level: 'intermediate', partOfSpeech: 'noun', category: 'weather', definition: 'The loud sound you hear during a storm', exampleSentence: 'The thunder was so loud it shook the house.', phonetic: '/ˈθʌndər/', hebrewTranslation: 'רעם', imageUrl: '/images/thunder.webp' },
   // Advanced
   { id: 'hurricane', word: 'hurricane', level: 'advanced', partOfSpeech: 'noun', category: 'weather', definition: 'A very powerful storm with extremely strong winds', exampleSentence: 'The hurricane knocked down many trees.', phonetic: '/ˈhʌrɪˌkeɪn/', hebrewTranslation: 'הוריקן', imageUrl: '/images/hurricane.webp' },
   { id: 'tornado', word: 'tornado', level: 'advanced', partOfSpeech: 'noun', category: 'weather', definition: 'A spinning column of wind that touches the ground', exampleSentence: 'The tornado moved across the field.', phonetic: '/tɔːrˈneɪdoʊ/', hebrewTranslation: 'טורנדו', imageUrl: '/images/tornado.webp' },
-  { id: 'blizzard', word: 'blizzard', level: 'advanced', partOfSpeech: 'noun', category: 'weather', definition: 'A very bad snowstorm with strong wind', exampleSentence: 'School was closed because of the blizzard.', phonetic: '/ˈblɪzərd/', hebrewTranslation: 'סופת שלגים', imageUrl: '/images/blizzard.webp' },
   { id: 'frost', word: 'frost', level: 'advanced', partOfSpeech: 'noun', category: 'weather', definition: 'A thin layer of ice that forms on cold surfaces', exampleSentence: 'There was frost on the windows this morning.', phonetic: '/frɒst/', hebrewTranslation: 'כפור', imageUrl: '/images/frost.webp' },
 
   // === FAMILY ===
   // Beginner
-  { id: 'mom', word: 'mom', level: 'beginner', partOfSpeech: 'noun', category: 'family', definition: 'Your mother, the woman who takes care of you', exampleSentence: 'Mom made breakfast for everyone.', phonetic: '/mɒm/', hebrewTranslation: 'אמא', imageUrl: '/images/mom.webp' },
-  { id: 'dad', word: 'dad', level: 'beginner', partOfSpeech: 'noun', category: 'family', definition: 'Your father, the man who takes care of you', exampleSentence: 'Dad reads me a story every night.', phonetic: '/dæd/', hebrewTranslation: 'אבא', imageUrl: '/images/dad.webp' },
   { id: 'baby', word: 'baby', level: 'beginner', partOfSpeech: 'noun', category: 'family', definition: 'A very young child', exampleSentence: 'The baby smiled and laughed.', phonetic: '/ˈbeɪbi/', hebrewTranslation: 'תינוק', imageUrl: '/images/baby.webp' },
-  { id: 'sister', word: 'sister', level: 'beginner', partOfSpeech: 'noun', category: 'family', definition: 'A girl who has the same parents as you', exampleSentence: 'My sister and I play together.', phonetic: '/ˈsɪstər/', hebrewTranslation: 'אחות', imageUrl: '/images/sister.webp' },
-  { id: 'friend', word: 'friend', level: 'beginner', partOfSpeech: 'noun', category: 'family', definition: 'A person you like and enjoy being with', exampleSentence: 'She is my best friend.', phonetic: '/frɛnd/', hebrewTranslation: 'חבר', imageUrl: '/images/friend.webp' },
-  // Intermediate
-  { id: 'brother', word: 'brother', level: 'intermediate', partOfSpeech: 'noun', category: 'family', definition: 'A boy who has the same parents as you', exampleSentence: 'My brother is older than me.', phonetic: '/ˈbrʌðər/', hebrewTranslation: 'אח', imageUrl: '/images/brother.webp' },
-  { id: 'grandma', word: 'grandma', level: 'intermediate', partOfSpeech: 'noun', category: 'family', definition: 'Your mother\'s or father\'s mother', exampleSentence: 'Grandma baked cookies for us.', phonetic: '/ˈɡrænˌmɑː/', hebrewTranslation: 'סבתא', imageUrl: '/images/grandma.webp' },
-  { id: 'grandpa', word: 'grandpa', level: 'intermediate', partOfSpeech: 'noun', category: 'family', definition: 'Your mother\'s or father\'s father', exampleSentence: 'Grandpa told us a funny story.', phonetic: '/ˈɡrænˌpɑː/', hebrewTranslation: 'סבא', imageUrl: '/images/grandpa.webp' },
-  { id: 'uncle', word: 'uncle', level: 'intermediate', partOfSpeech: 'noun', category: 'family', definition: 'Your parent\'s brother', exampleSentence: 'Uncle David took us to the zoo.', phonetic: '/ˈʌŋkəl/', hebrewTranslation: 'דוד', imageUrl: '/images/uncle.webp' },
-  // Advanced
-  { id: 'aunt', word: 'aunt', level: 'advanced', partOfSpeech: 'noun', category: 'family', definition: 'Your parent\'s sister', exampleSentence: 'Aunt Sarah brought us a gift.', phonetic: '/ænt/', hebrewTranslation: 'דודה', imageUrl: '/images/aunt.webp' },
-  { id: 'cousin', word: 'cousin', level: 'advanced', partOfSpeech: 'noun', category: 'family', definition: 'The child of your uncle or aunt', exampleSentence: 'My cousin came to visit for the weekend.', phonetic: '/ˈkʌzən/', hebrewTranslation: 'בן דוד', imageUrl: '/images/cousin.webp' },
-  { id: 'nephew', word: 'nephew', level: 'advanced', partOfSpeech: 'noun', category: 'family', definition: 'Your brother\'s or sister\'s son', exampleSentence: 'My nephew just started first grade.', phonetic: '/ˈnɛfjuː/', hebrewTranslation: 'אחיין', imageUrl: '/images/nephew.webp' },
-  { id: 'niece', word: 'niece', level: 'advanced', partOfSpeech: 'noun', category: 'family', definition: 'Your brother\'s or sister\'s daughter', exampleSentence: 'My niece loves to draw pictures.', phonetic: '/niːs/', hebrewTranslation: 'אחיינית', imageUrl: '/images/niece.webp' },
 
   // === FEELINGS ===
   // Beginner
@@ -363,7 +346,7 @@ export const WORDS = [
   { id: 'badminton', word: 'badminton', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'A sport where you hit a birdie over a net with a racket', exampleSentence: 'We played badminton in the backyard.', phonetic: '/ˈbædmɪntən/', hebrewTranslation: 'בדמינטון', imageUrl: '/images/badminton.webp' },
   { id: 'skiing', word: 'skiing', level: 'intermediate', partOfSpeech: 'noun', category: 'sports', definition: 'Sliding down snowy mountains on long boards', exampleSentence: 'We went skiing in the mountains.', phonetic: '/ˈskiːɪŋ/', hebrewTranslation: 'סקי', imageUrl: '/images/skiing.webp' },
 
-  // WEATHER +8
+  // WEATHER +5
   { id: 'sunny', word: 'sunny', level: 'beginner', partOfSpeech: 'adjective', category: 'weather', definition: 'When the sun is shining and the sky is clear', exampleSentence: 'It is a sunny day today.', phonetic: '/ˈsʌni/', hebrewTranslation: 'שמשי', imageUrl: '/images/sunny.webp' },
   { id: 'cloudy', word: 'cloudy', level: 'beginner', partOfSpeech: 'adjective', category: 'weather', definition: 'When the sky is full of clouds', exampleSentence: 'It was cloudy all morning.', phonetic: '/ˈklaʊdi/', hebrewTranslation: 'מעונן', imageUrl: '/images/cloudy.webp' },
   { id: 'windy', word: 'windy', level: 'beginner', partOfSpeech: 'adjective', category: 'weather', definition: 'When there is a lot of wind blowing', exampleSentence: 'It is too windy to fly a kite safely.', phonetic: '/ˈwɪndi/', hebrewTranslation: 'סוער', imageUrl: '/images/windy.webp' },
