@@ -31,7 +31,7 @@ const SRC_DIR = path.resolve(import.meta.dirname, '..');
 const EXTENSIONS = ['.js', '.jsx', '.ts', '.tsx'];
 
 // Directories to skip
-const SKIP_DIRS = ['__tests__', '__mocks__', 'node_modules', '.git', 'dist', 'build'];
+const SKIP_DIRS = ['__tests__', '__mocks__', 'node_modules', '.git', 'dist', 'build', '.next'];
 
 // Browser APIs that may not exist in Safari/WebKit.
 // A bare reference to any of these crashes the ES module on iOS.
@@ -92,8 +92,9 @@ function findUnsafeReferences(files, api) {
     lines.forEach((line, i) => {
       const trimmed = line.trim();
 
-      // Skip comments
+      // Skip comments (JS and JSX)
       if (trimmed.startsWith('//') || trimmed.startsWith('*') || trimmed.startsWith('/*')) return;
+      if (trimmed.startsWith('{/*')) return;
 
       // Track typeof guard blocks: if (typeof api ...) { ... }
       if (line.includes(`typeof ${api}`)) { insideTypeofGuard = true; return; }
@@ -118,6 +119,11 @@ function findUnsafeReferences(files, api) {
         `import`,               // import statement
       ];
       if (safe.some(p => line.includes(p))) return;
+
+      // Strip all quoted strings — word inside "..." or '...' is safe (JSX attrs, etc.)
+      const stripped = line.replace(/"[^"]*"|'[^']*'|`[^`]*`/g, '');
+      const wordBoundary = new RegExp(`(?<![a-zA-Z_$])${api}(?![a-zA-Z_$0-9])`);
+      if (!wordBoundary.test(stripped)) return;
 
       violations.push(`${path.relative(SRC_DIR, file)}:${i + 1}: ${trimmed}`);
     });
