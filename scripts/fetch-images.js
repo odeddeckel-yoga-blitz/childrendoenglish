@@ -247,6 +247,66 @@ const WORDS = {
   envelope: ['envelope letter mail', 'Briefumschlag envelope', 'envelope white sealed'],
   candle: ['candle flame burning', 'Kerze candle', 'candle light wax'],
   calendar: ['calendar wall monthly', 'Kalender calendar', 'calendar desk planner'],
+
+  // === NEW WORDS ===
+
+  // BODY
+  chest: ['human chest torso', 'Brust chest anatomy', 'chest body front'],
+  hip: ['human hip anatomy', 'Hüfte hip joint', 'hip body side'],
+  cheek: ['child cheek face', 'Wange cheek face', 'cheek smile close'],
+  belly: ['belly tummy child', 'Bauch belly', 'baby belly cute'],
+
+  // SCHOOL
+  chalk: ['chalk blackboard writing', 'Kreide chalk sticks', 'colored chalk school'],
+  classroom: ['classroom school desks', 'Klassenzimmer classroom', 'school classroom children'],
+  crayons: ['crayons colorful wax box', 'Wachsmalkreide crayons', 'crayon box children'],
+  marker: ['marker pen colored felt tip', 'Filzstift marker', 'markers colorful school'],
+
+  // CLOTHING
+  vest: ['vest waistcoat clothing', 'Weste vest', 'vest sleeveless jacket'],
+  mittens: ['mittens winter warm', 'Fäustlinge mittens', 'knitted mittens colorful'],
+  overalls: ['overalls denim blue', 'Latzhose overalls', 'child overalls jeans'],
+  apron: ['apron kitchen cooking', 'Schürze apron', 'chef apron baking'],
+  sandals: ['sandals summer shoes', 'Sandalen sandals', 'leather sandals pair'],
+
+  // SPORTS
+  bowling: ['bowling pins lane', 'Bowling sport', 'bowling ball pins'],
+  wrestling: ['wrestling sport match', 'Ringen wrestling', 'wrestling Olympic sport'],
+
+  // FOOD
+  corn: ['corn cob yellow', 'Mais corn', 'corn on the cob fresh'],
+  tomato: ['tomato red ripe', 'Tomate tomato', 'fresh tomato single'],
+  honey: ['honey jar golden', 'Honig honey', 'honey dripping spoon'],
+
+  // TRANSPORT
+  wagon: ['red wagon toy children', 'Bollerwagen wagon', 'little red wagon child'],
+  ferry: ['ferry boat water', 'Fähre ferry', 'passenger ferry harbor'],
+  firetruck: ['fire truck engine red', 'Feuerwehrauto fire truck', 'firetruck emergency vehicle'],
+
+  // NUMBERS
+  pair: ['pair shoes two', 'Paar pair socks', 'matching pair items two'],
+
+  // ANIMALS
+  sheep: ['sheep wool farm', 'Schaf sheep', 'sheep lamb grazing'],
+  monkey: ['monkey primate playing', 'Affe monkey', 'monkey tree climbing'],
+  eagle: ['eagle bird flying', 'Adler eagle', 'bald eagle soaring'],
+
+  // NATURE
+  mushroom: ['mushroom forest toadstool', 'Pilz mushroom', 'red mushroom amanita'],
+  cave: ['cave entrance natural', 'Höhle cave', 'cave rock formation'],
+  pebble: ['pebble stone smooth', 'Kieselstein pebble', 'pebbles beach stones'],
+
+  // HOME
+  fence: ['fence garden wooden', 'Zaun fence', 'white picket fence'],
+  attic: ['attic room roof', 'Dachboden attic', 'attic interior house'],
+  drawer: ['drawer furniture wooden', 'Schublade drawer', 'chest of drawers open'],
+
+  // EVERYDAY
+  basket: ['wicker basket woven', 'Korb basket', 'basket fruit carrying'],
+  sticker: ['stickers colorful collection', 'Aufkleber sticker', 'sticker sheet children'],
+  ribbon: ['ribbon bow colorful', 'Band Schleife ribbon', 'satin ribbon gift'],
+  magnet: ['magnet horseshoe red', 'Magnet magnetism', 'magnet fridge kitchen'],
+  whisper: ['child whispering ear secret', 'Flüstern whispering', 'children whispering secret'],
 };
 
 async function searchWikimedia(query) {

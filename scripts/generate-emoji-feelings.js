@@ -28,6 +28,8 @@ const feelingEmojis = {
   grateful:     '1f64f',       // 🙏
   embarrassed:  '1f633',       // 😳
   frustrated:   '1f624',       // 😤
+  curious:      '1f9d0',       // 🧐
+  worried:      '1f61f',       // 😟
 };
 
 const TWEMOJI_BASE = 'https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72';

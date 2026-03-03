@@ -34,6 +34,7 @@ const NUMBERS = {
   hundred:  { digit: '100',       bg: '#FEFCBF', fg: '#744210' },
   thousand: { digit: '1,000',     bg: '#B2F5EA', fg: '#234E52' },
   million:  { digit: '1,000,000', bg: '#FED7D7', fg: '#742A2A' },
+  dozen:    { digit: '12',        bg: '#E8EAF6', fg: '#283593' },
 };
 
 function createNumberSvg({ digit, bg, fg }) {

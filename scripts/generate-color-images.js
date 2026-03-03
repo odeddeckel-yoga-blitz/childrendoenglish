@@ -34,6 +34,9 @@ const COLORS = {
   navy:      '#001F5B',
   peach:     '#FFCBA4',
   violet:    '#7F00FF',
+  teal:      '#008080',
+  coral:     '#FF7F50',
+  ivory:     '#FFFFF0',
 };
 
 function hexToRgb(hex) {
