@@ -281,7 +281,7 @@ export default {
   cat_clothing: 'ביגוד',
   cat_school: 'בית ספר',
   cat_sports: 'ספורט',
-  cat_weather: 'מזג אוויר',
+
   cat_feelings: 'רגשות',
   cat_everyday: 'יומיומי',
 

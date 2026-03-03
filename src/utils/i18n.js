@@ -283,7 +283,7 @@ const translations = {
     cat_clothing: 'Clothing',
     cat_school: 'School',
     cat_sports: 'Sports',
-    cat_weather: 'Weather',
+
     cat_feelings: 'Feelings',
     cat_everyday: 'Everyday',
 

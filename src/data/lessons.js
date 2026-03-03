@@ -12,7 +12,7 @@ const CATEGORY_EMOJI = {
   clothing: '👕',
   school: '📚',
   sports: '⚽',
-  weather: '🌤️',
+
   feelings: '😊',
   everyday: '🔑',
 };
@@ -29,7 +29,7 @@ const CATEGORY_TITLES = {
   clothing: { en: 'Clothing', he: 'בגדים' },
   school: { en: 'School', he: 'בית ספר' },
   sports: { en: 'Sports', he: 'ספורט' },
-  weather: { en: 'Weather', he: 'מזג אוויר' },
+
   feelings: { en: 'Feelings', he: 'רגשות' },
   everyday: { en: 'Everyday', he: 'יומיומי' },
 };

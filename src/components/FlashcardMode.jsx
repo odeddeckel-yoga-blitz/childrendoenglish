@@ -157,10 +157,12 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, onUp
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <button
-          type="button"
+        <div
+          role="button"
+          tabIndex={0}
           className={`flashcard-inner relative w-full cursor-pointer text-left ${flipped ? 'flipped' : ''}`}
           onClick={() => setFlipped(f => !f)}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFlipped(f => !f); } }}
           style={{ minHeight: '380px' }}
           aria-label={flipped ? t('flipToFront', lang) : t('flipToBack', lang)}
         >
@@ -211,7 +213,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, onUp
               </div>
             </div>
           </div>
-        </button>
+        </div>
 
         {/* Swipe overlay */}
         {swipeOverlay && (
