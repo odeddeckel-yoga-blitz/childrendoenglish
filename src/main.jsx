@@ -10,7 +10,7 @@ if (import.meta.env.PROD) {
     init({
       dsn: import.meta.env.VITE_SENTRY_DSN || '',
       integrations: [browserTracingIntegration()],
-      tracesSampleRate: 0.1,
+      tracesSampleRate: 0.5,
     });
   });
   (typeof requestIdleCallback === 'function' ? requestIdleCallback : (fn) => setTimeout(fn, 3000))(initSentry);

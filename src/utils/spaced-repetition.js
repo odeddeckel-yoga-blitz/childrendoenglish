@@ -135,3 +135,20 @@ export const isWordMastered = (wordProgress, wordId) => {
   const card = wordProgress[wordId];
   return card && card.interval >= 14;
 };
+
+/**
+ * Get all words that are due for review based on spaced repetition intervals.
+ * Only returns words the user has seen at least once (have an entry in wordProgress).
+ * A word is due when Date.now() - lastSeen >= interval * DAY.
+ * @param {Array<{id: string}>} allWords - All available word objects
+ * @param {Object<string, {lastSeen: number, interval: number}>} wordProgress - Per-word SR state
+ * @returns {Array<{id: string}>} Words that are due for review
+ */
+export const getDueWords = (allWords, wordProgress) => {
+  const now = Date.now();
+  return allWords.filter(word => {
+    const card = wordProgress[word.id];
+    if (!card) return false; // never seen — not a review candidate
+    return (now - card.lastSeen) / DAY >= card.interval;
+  });
+};

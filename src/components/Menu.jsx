@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X, Users, Map, ShieldCheck, Bell, BellOff, Globe } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X, Users, Map, ShieldCheck, Bell, BellOff, Globe, RotateCcw } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount = 0, showInstallBanner, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount = 0, showInstallBanner, dueCount = 0, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
   const [notifEnabled, setNotifEnabled] = useState(isNotificationEnabled);
   const notifSupported = isNotificationSupported();
 
@@ -137,7 +137,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <TrendingUp className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">{t('findYourLevel', lang)}</h3>
+            <p className="font-bold text-slate-800">{t('findYourLevel', lang)}</p>
             <p className="text-slate-500 text-sm">{t('findYourLevelDesc', lang)}</p>
           </div>
         </button>
@@ -145,6 +145,30 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
       {/* Main actions */}
       <div className="space-y-3">
+        <button
+          onClick={() => dueCount > 0 && onNavigate('dailyReview')}
+          disabled={dueCount === 0}
+          className={`w-full glass rounded-2xl p-4 flex items-center gap-4
+                     transition-all text-start ${dueCount > 0 ? 'hover:shadow-lg active:scale-[0.98] border border-orange-200 bg-orange-50/50' : 'opacity-60 cursor-default'}`}
+        >
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${dueCount > 0 ? 'bg-gradient-to-br from-orange-500 to-orange-600' : 'bg-gradient-to-br from-slate-400 to-slate-500'}`}>
+            <RotateCcw className="w-6 h-6 text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="font-bold text-slate-800">{t('dailyReview', lang)}</p>
+            <p className="text-slate-500 text-sm">{t('dailyReviewDesc', lang)}</p>
+          </div>
+          {dueCount > 0 ? (
+            <span className="px-2.5 py-1 rounded-full bg-orange-500 text-white text-xs font-bold flex-shrink-0">
+              {t('wordsDue', lang, { count: dueCount })}
+            </span>
+          ) : (
+            <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold flex-shrink-0">
+              {t('allCaughtUp', lang)}
+            </span>
+          )}
+        </button>
+
         <button
           onClick={() => onNavigate('learning')}
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
@@ -155,7 +179,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <BookOpen className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">{t('learnWords', lang)}</h3>
+            <p className="font-bold text-slate-800">{t('learnWords', lang)}</p>
             <p className="text-slate-500 text-sm">{t('learnWordsDesc', lang)}</p>
           </div>
         </button>
@@ -170,7 +194,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <Layers className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">{t('flashcards', lang)}</h3>
+            <p className="font-bold text-slate-800">{t('flashcards', lang)}</p>
             <p className="text-slate-500 text-sm">{t('flashcardsDesc', lang)}</p>
           </div>
         </button>
@@ -185,7 +209,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <Play className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">{t('playQuiz', lang)}</h3>
+            <p className="font-bold text-slate-800">{t('playQuiz', lang)}</p>
             <p className="text-slate-500 text-sm">{t('playQuizDesc', lang)}</p>
           </div>
         </button>
@@ -200,7 +224,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <ListChecks className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">{t('myWordList', lang)}</h3>
+            <p className="font-bold text-slate-800">{t('myWordList', lang)}</p>
             <p className="text-slate-500 text-sm">{t('myWordListDesc', lang)}</p>
           </div>
         </button>
@@ -215,7 +239,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <Map className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h3 className="font-bold text-slate-800">{t('learningPath', lang)}</h3>
+            <p className="font-bold text-slate-800">{t('learningPath', lang)}</p>
             <p className="text-slate-500 text-sm">{t('learningPathDesc', lang)}</p>
           </div>
         </button>

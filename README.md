@@ -1,106 +1,72 @@
 # Children Do English
 
-English vocabulary learning app for kids ages 6-12. Progressive Web App with offline support, spaced repetition, and multi-player profiles.
-
-**Live:** [childrendoenglish.com](https://childrendoenglish.com)
+Free English vocabulary PWA for kids ages 6-12. Learn 268 words across 14 categories via image quizzes, flashcards, audio challenges, and spaced repetition. The UI is available in English and Hebrew.
 
 ## Tech Stack
 
-- **React 18** + **Vite 6** — UI framework and build tool
-- **Tailwind CSS 3.4** — Utility-first styling
-- **vite-plugin-pwa** — Service worker and offline caching
-- **Web Speech API** — Text-to-speech pronunciation
-- **Google Analytics** — Usage analytics (consent-gated)
-- **Sentry** — Error tracking
-- **Vitest** — Unit tests
-- **Playwright** — E2E tests
+- React 18
+- Vite 6
+- Tailwind CSS
+- Workbox PWA (via vite-plugin-pwa)
+- Vitest + Playwright
 
 ## Getting Started
 
 ```bash
+git clone https://github.com/<your-username>/childrendoenglish.git
+cd childrendoenglish
 npm install
-npm run dev        # Start dev server at localhost:5173
-npm run build      # Production build to dist/
-npm run preview    # Preview production build
+npm run dev
 ```
 
-No environment variables are required for local development.
+The dev server starts at [http://localhost:5173](http://localhost:5173).
 
 ## Scripts
 
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start Vite dev server |
-| `npm run build` | Production build |
-| `npm run preview` | Preview production build |
-| `npm test` | Run unit tests (Vitest) |
-| `npm run test:watch` | Run tests in watch mode |
-| `npm run test:e2e` | Run Playwright E2E tests |
-| `npm run lint` | Run ESLint |
-| `npm run format` | Run Prettier |
-| `npm run build-data` | Fetch word images from Pixabay |
-| `npm run optimize-images` | Optimize images with Sharp |
+| Script | Command | Description |
+| --- | --- | --- |
+| dev | `npm run dev` | Start Vite dev server |
+| build | `npm run build` | Production build + generate SEO pages |
+| test | `npm run test` | Run unit tests with Vitest |
+| test:e2e | `npm run test:e2e` | Run end-to-end tests with Playwright |
+| lint | `npm run lint` | Lint source files with ESLint |
+| format | `npm run format` | Format source files with Prettier |
 
-## Architecture
+## Project Structure
 
 ```
-src/
-  App.jsx                  # State machine (~20 states) + routing
-  components/              # 30+ React components (lazy-loaded)
-    admin/                 # Admin panel components
-  data/
-    words.js               # 300 curated words across 15 categories
-    lessons.js             # Auto-generated learning path lessons
-    badges.js              # Achievement badge definitions
-    levels.js              # Difficulty level config
-  hooks/
-    useQuizFlow.js         # Quiz lifecycle (level -> mode -> load -> play -> results)
-    useQuizState.js        # Per-question state (options, answer, feedback)
-    useFocusTrap.js        # Keyboard focus trap for modals
-  utils/
-    storage.js             # localStorage persistence (multi-player)
-    i18n.js                # English + Hebrew translations (~100 keys)
-    spaced-repetition.js   # SM-2 inspired interval algorithm
-    analytics.js           # Google Analytics wrapper (consent-gated)
-    sound.js               # Web Audio API + TTS
-    images.js              # Image URL helpers + preloading
-  __tests__/               # Unit tests (Vitest + React Testing Library)
-public/
-  images/                  # Word images (512x512 WebP)
-api/                       # Vercel serverless functions (admin image management)
-scripts/                   # Build-time scripts (image fetch, optimization)
-e2e/                       # Playwright E2E tests
+childrendoenglish/
+├── api/                  # Vercel serverless functions
+├── e2e/                  # Playwright end-to-end tests
+├── public/               # Static assets (icons, images, robots.txt)
+├── scripts/              # Build-time scripts (image optimization, SEO pages)
+├── src/
+│   ├── __tests__/        # Vitest unit tests
+│   ├── components/       # React components
+│   │   ├── admin/        # Admin panel components
+│   │   ├── WordQuiz.jsx
+│   │   ├── ImageQuiz.jsx
+│   │   ├── AudioQuiz.jsx
+│   │   ├── FlashcardMode.jsx
+│   │   ├── LearnMode.jsx
+│   │   └── ...
+│   ├── data/             # Word lists, levels, badges, lessons
+│   ├── hooks/            # Custom React hooks
+│   ├── utils/            # Helpers (i18n, storage, analytics, spaced repetition)
+│   ├── App.jsx
+│   └── main.jsx
+├── index.html
+├── vite.config.js
+├── tailwind.config.js
+├── eslint.config.js
+├── playwright.config.js
+└── vercel.json
 ```
-
-**Key patterns:**
-- State machine in `App.jsx` drives all navigation via `navigate(state, direction)`
-- Multi-player: registry in `childrendoenglish-players`, per-player stats in `childrendoenglish-player-{id}`
-- Browser history: `pushState`/`popstate` for top-level screens, hash routing for `#admin` and `#quiz/...`
-- Pre-reader mode: `canRead` flag per player hides text-based quizzes, adds Listen & Match mode
-- Learning path with lesson locking: lessons unlock sequentially as previous lessons are started
-
-## Environment Variables
-
-| Variable | Used By | Description |
-|----------|---------|-------------|
-| `VITE_GA_ID` | Client | Google Analytics ID (defaults to `G-YF34G1SGNE`) |
-| `VITE_ADMIN_HASH` | Client | SHA-256 hash of admin password |
-| `ADMIN_HASH` | Server | Same hash, server-side verification |
-| `GITHUB_TOKEN` | Server | GitHub PAT for committing images |
-| `GITHUB_REPO` | Server | GitHub repo in `owner/repo` format |
-| `PIXABAY_API_KEY` | Build script | Pixabay API key for word images |
-| `VITE_SENTRY_DSN` | Client | Sentry DSN for error reporting (optional) |
 
 ## Deployment
 
-Deployed on **Vercel** with automatic deploys from `main`. Domain: `childrendoenglish.com`.
-
-Admin panel: access via `/#admin` in the browser (password-protected).
-
-## Adding Words
-
-Words are defined in `src/data/words.js`. Each word object has: `id`, `word`, `phonetic`, `definition`, `exampleSentence`, `hebrewTranslation`, `category`, and `level`. Add a matching WebP image at `public/images/{id}.webp` (512x512).
+The project auto-deploys to [Vercel](https://vercel.com) from the `main` branch.
 
 ## License
 
-Private project.
+MIT

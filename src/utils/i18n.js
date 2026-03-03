@@ -284,7 +284,6 @@ const translations = {
     cat_school: 'School',
     cat_sports: 'Sports',
     cat_weather: 'Weather',
-    cat_family: 'Family',
     cat_feelings: 'Feelings',
     cat_everyday: 'Everyday',
 
@@ -344,6 +343,14 @@ const translations = {
     // COPPA compliance
     privacyCoppaTitle: 'COPPA compliance',
     privacyCoppaDesc: 'Children Do English complies with the Children\'s Online Privacy Protection Act (COPPA). We do not knowingly collect personal information from children under 13. All learning data is stored locally on the device and is never transmitted to our servers.',
+
+    // Daily Review
+    dailyReview: 'Daily Review',
+    dailyReviewDesc: 'Review words you\'ve learned',
+    wordsDue: '{{count}} words due',
+    allCaughtUp: 'All caught up!',
+    reviewComplete: 'Review Complete!',
+    wordsReviewed: 'Words reviewed',
   },
 };
 

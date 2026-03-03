@@ -4,6 +4,7 @@ import { fisherYatesShuffle } from '../utils/shuffle';
 import { playSound, speakWord } from '../utils/sound';
 import { haptic } from '../utils/haptic';
 import { t } from '../utils/i18n';
+import { analytics } from '../utils/analytics';
 
 export default function useQuizState({ words, mode, lang = 'en', onComplete, speakOnCorrect = true, speakDelay = 0 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -40,6 +41,7 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, spe
     setSelectedAnswer(option.id);
     setAnswered(correct ? 'correct' : 'wrong');
     setAnswers(prev => [...prev, { wordId: currentWord.id, correct, selected: option.id }]);
+    analytics.quizAnswer(currentWord.id, correct, mode);
 
     if (correct) {
       setScore(s => s + 1);

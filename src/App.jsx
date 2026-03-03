@@ -2,13 +2,15 @@ import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react'
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
-import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, savePlayerRegistry, addPlayer, removePlayer, resetPlayerProgress, updatePlayerProfile } from './utils/storage';
+import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, savePlayerRegistry, addPlayer, removePlayer, resetPlayerProgress, updatePlayerProfile, updateStreak, updateDailyGoal } from './utils/storage';
 import { initTTS } from './utils/sound';
 import { isRTL, t, loadHebrew } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
 import CookieConsent from './components/CookieConsent';
 import { needsConsentPrompt, setAnalyticsConsent, analytics } from './utils/analytics';
 import { checkStreakReminder } from './utils/notifications';
+import { getDueWords, updateWordSR } from './utils/spaced-repetition';
+import { WORDS } from './data/words';
 
 
 const Onboarding = lazy(() => import('./components/Onboarding'));
@@ -34,6 +36,7 @@ const PlayerManage = lazy(() => import('./components/PlayerManage'));
 const ProfilePicker = lazy(() => import('./components/ProfilePicker'));
 const LearningPath = lazy(() => import('./components/LearningPath'));
 const ParentDashboard = lazy(() => import('./components/ParentDashboard'));
+const DailyReview = lazy(() => import('./components/DailyReview'));
 
 // State-to-path mapping for browser history (top-level screens only)
 const STATE_TO_PATH = {
@@ -50,6 +53,7 @@ const STATE_TO_PATH = {
   playerManage: '/manage',
   playerCreate: '/new-player',
   personalList: '/my-words',
+  dailyReview: '/daily-review',
 };
 
 const PATH_TO_STATE = Object.fromEntries(
@@ -252,8 +256,10 @@ export default function App() {
         history.pushState({ gameState: newState }, '', path);
       }
     }
+    // Track screen views for all navigation
+    analytics.screenView(newState);
     // Track feature usage for key screens
-    const features = ['learning', 'flashcards', 'badges', 'progress', 'personalList', 'learningPath', 'parentDashboard'];
+    const features = ['learning', 'flashcards', 'badges', 'progress', 'personalList', 'learningPath', 'parentDashboard', 'dailyReview'];
     if (features.includes(newState)) analytics.featureUse(newState);
   }, []);
 
@@ -479,6 +485,7 @@ export default function App() {
             activePlayer={activePlayer}
             playerCount={playerRegistry?.players.length || 0}
             showInstallBanner={showInstallBanner}
+            dueCount={getDueWords(WORDS, stats.wordProgress || {}).length}
             onInstall={handleInstall}
             onDismissInstall={dismissInstall}
             onNavigate={navigate}
@@ -642,6 +649,25 @@ export default function App() {
             onBack={() => navigate('menu', 'back')}
             onStartLesson={(words) => quizFlow.handleStartPersonalQuiz(words, 'image')}
             onLearnLesson={(words) => { setLearnWords(words); navigate('learning'); }}
+          />
+        );
+
+      case 'dailyReview':
+        return (
+          <DailyReview
+            words={getDueWords(WORDS, stats.wordProgress || {})}
+            stats={stats}
+            lang={lang}
+            canRead={activePlayer?.canRead ?? true}
+            onComplete={(results) => {
+              setStats(prev => {
+                let updated = { ...prev, wordProgress: results.wordProgress };
+                updated = updateStreak(updated);
+                updated = updateDailyGoal(updated, results.answers?.length || results.total);
+                return updated;
+              });
+            }}
+            onBack={() => navigate('menu', 'back')}
           />
         );
 

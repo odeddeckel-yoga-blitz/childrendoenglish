@@ -1,4 +1,6 @@
 import '@testing-library/jest-dom';
+import * as matchers from 'vitest-axe/matchers';
+expect.extend(matchers);
 
 // Mock localStorage for tests that need it
 const localStorageMock = (() => {

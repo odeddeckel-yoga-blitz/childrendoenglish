@@ -13,7 +13,6 @@ const CATEGORY_EMOJI = {
   school: '📚',
   sports: '⚽',
   weather: '🌤️',
-  family: '👨‍👩‍👧',
   feelings: '😊',
   everyday: '🔑',
 };
@@ -31,7 +30,6 @@ const CATEGORY_TITLES = {
   school: { en: 'School', he: 'בית ספר' },
   sports: { en: 'Sports', he: 'ספורט' },
   weather: { en: 'Weather', he: 'מזג אוויר' },
-  family: { en: 'Family', he: 'משפחה' },
   feelings: { en: 'Feelings', he: 'רגשות' },
   everyday: { en: 'Everyday', he: 'יומיומי' },
 };

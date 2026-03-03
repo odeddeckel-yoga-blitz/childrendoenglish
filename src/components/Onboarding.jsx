@@ -11,9 +11,13 @@ const getDemoQuestion = (lang) => ({
   optionKeys: ['demoDog', 'demoCat', 'demoFish'],
 });
 
-export default function Onboarding({ onComplete, onSelectLanguage, activePlayer, lang: initialLang = 'en' }) {
+const detectLang = () => {
+  try { return navigator.language?.startsWith('he') ? 'he' : 'en'; } catch { return 'en'; }
+};
+
+export default function Onboarding({ onComplete, onSelectLanguage, activePlayer, lang: initialLang }) {
   const [step, setStep] = useState(0);
-  const [lang, setLang] = useState(initialLang || 'en');
+  const [lang, setLang] = useState(initialLang || detectLang());
   const [demoAnswer, setDemoAnswer] = useState(null); // null | 'correct' | 'wrong'
 
   const handleFinish = () => {

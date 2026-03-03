@@ -44,11 +44,19 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
       setLoadingProgress(progress * 100);
     });
 
+    // Filter out quiz words whose images failed to load
+    const missingIds = new Set(missing.map(m => m.id));
+    const validWords = selected.filter(w => !missingIds.has(w.id));
     if (missing.length > 0) {
-      console.warn('Missing images:', missing.map(m => m.id));
+      console.warn('Skipping words with missing images:', [...missingIds]);
     }
 
-    setQuizWords(selected);
+    if (validWords.length === 0) {
+      navigate('menu');
+      return;
+    }
+
+    setQuizWords(validWords);
     analytics.quizStart(mode, level);
     const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
     navigate(stateMap[mode] || 'imageQuiz');

@@ -16,9 +16,9 @@ describe('LearnMode', () => {
   });
 
   it('renders grid of word cards', () => {
-    render(<LearnMode {...defaultProps} />);
-    // Should render multiple word images
-    const images = screen.getAllByRole('img');
+    const { container } = render(<LearnMode {...defaultProps} />);
+    // Should render multiple word images (alt="" makes them presentational)
+    const images = container.querySelectorAll('img');
     expect(images.length).toBeGreaterThan(0);
   });
 

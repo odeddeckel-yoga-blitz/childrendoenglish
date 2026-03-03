@@ -282,7 +282,6 @@ export default {
   cat_school: 'בית ספר',
   cat_sports: 'ספורט',
   cat_weather: 'מזג אוויר',
-  cat_family: 'משפחה',
   cat_feelings: 'רגשות',
   cat_everyday: 'יומיומי',
 
@@ -342,4 +341,12 @@ export default {
   // COPPA compliance
   privacyCoppaTitle: 'עמידה בתקן COPPA',
   privacyCoppaDesc: 'ילדים עושים אנגלית עומדת בדרישות חוק הגנת הפרטיות של ילדים באינטרנט (COPPA). אנחנו לא אוספים ביודעין מידע אישי מילדים מתחת לגיל 13. כל נתוני הלמידה נשמרים מקומית במכשיר ולעולם אינם מועברים לשרתים שלנו.',
+
+  // Daily Review
+  dailyReview: 'חזרה יומית',
+  dailyReviewDesc: 'חזרו על מילים שלמדתם',
+  wordsDue: '{{count}} מילים לחזרה',
+  allCaughtUp: 'הכל מעודכן!',
+  reviewComplete: 'החזרה הושלמה!',
+  wordsReviewed: 'מילים שנחזרו',
 };

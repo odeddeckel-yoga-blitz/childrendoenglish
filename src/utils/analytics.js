@@ -57,11 +57,18 @@ export function trackEvent(eventName, params = {}) {
   window.gtag('event', eventName, params);
 }
 
+// Track screen views (SPA navigation)
+export function trackScreenView(screenName) {
+  trackEvent('screen_view', { screen_name: screenName });
+}
+
 // Pre-defined events
 export const analytics = {
+  screenView: (screen) => trackScreenView(screen),
   quizStart: (mode, level) => trackEvent('quiz_start', { mode, level }),
   quizComplete: (mode, level, score, total) => trackEvent('quiz_complete', { mode, level, score, total, percentage: Math.round((score / total) * 100) }),
   quizQuit: (mode, level, questionIndex) => trackEvent('quiz_quit', { mode, level, question_index: questionIndex }),
+  quizAnswer: (wordId, correct, mode) => trackEvent('quiz_answer', { word_id: wordId, correct, mode }),
   onboardingComplete: () => trackEvent('onboarding_complete'),
   playerCreate: () => trackEvent('player_create'),
   featureUse: (feature) => trackEvent('feature_use', { feature }),

@@ -146,7 +146,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
                 <div className="aspect-square bg-slate-100 relative">
                   <img
                     src={getImageUrl(word)}
-                    alt={word.word}
+                    alt=""
                     className="w-full h-full object-cover"
                     loading="lazy"
                     width={170}
@@ -208,7 +208,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
               {!imgLoaded && <div className="absolute inset-0 skeleton-pulse bg-slate-200" />}
               <img
                 src={getImageUrl(currentWord)}
-                alt={currentWord.word}
+                alt={currentWord.definition}
                 className={`w-full h-full object-cover transition-opacity ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                 onLoad={() => setImgLoaded(true)}
                 loading="lazy"

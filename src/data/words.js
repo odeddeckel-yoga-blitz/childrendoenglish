@@ -204,10 +204,6 @@ export const WORDS = [
   { id: 'tornado', word: 'tornado', level: 'advanced', partOfSpeech: 'noun', category: 'weather', definition: 'A spinning column of wind that touches the ground', exampleSentence: 'The tornado moved across the field.', phonetic: '/tɔːrˈneɪdoʊ/', hebrewTranslation: 'טורנדו', imageUrl: '/images/tornado.webp' },
   { id: 'frost', word: 'frost', level: 'advanced', partOfSpeech: 'noun', category: 'weather', definition: 'A thin layer of ice that forms on cold surfaces', exampleSentence: 'There was frost on the windows this morning.', phonetic: '/frɒst/', hebrewTranslation: 'כפור', imageUrl: '/images/frost.webp' },
 
-  // === FAMILY ===
-  // Beginner
-  { id: 'baby', word: 'baby', level: 'beginner', partOfSpeech: 'noun', category: 'family', definition: 'A very young child', exampleSentence: 'The baby smiled and laughed.', phonetic: '/ˈbeɪbi/', hebrewTranslation: 'תינוק', imageUrl: '/images/baby.webp' },
-
   // === FEELINGS ===
   // Beginner
   { id: 'happy', word: 'happy', level: 'beginner', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling good and full of joy', exampleSentence: 'She was happy to see her friends.', phonetic: '/ˈhæpi/', hebrewTranslation: 'שמח', imageUrl: '/images/happy.webp' },
@@ -340,12 +336,7 @@ export const WORDS = [
   { id: 'badminton', word: 'badminton', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'A sport where you hit a birdie over a net with a racket', exampleSentence: 'We played badminton in the backyard.', phonetic: '/ˈbædmɪntən/', hebrewTranslation: 'בדמינטון', imageUrl: '/images/badminton.webp' },
   { id: 'skiing', word: 'skiing', level: 'intermediate', partOfSpeech: 'noun', category: 'sports', definition: 'Sliding down snowy mountains on long boards', exampleSentence: 'We went skiing in the mountains.', phonetic: '/ˈskiːɪŋ/', hebrewTranslation: 'סקי', imageUrl: '/images/skiing.webp' },
 
-  // WEATHER +3
-  { id: 'sunny', word: 'sunny', level: 'beginner', partOfSpeech: 'adjective', category: 'weather', definition: 'When the sun is shining and the sky is clear', exampleSentence: 'It is a sunny day today.', phonetic: '/ˈsʌni/', hebrewTranslation: 'שמשי', imageUrl: '/images/sunny.webp' },
-  { id: 'cloudy', word: 'cloudy', level: 'beginner', partOfSpeech: 'adjective', category: 'weather', definition: 'When the sky is full of clouds', exampleSentence: 'It was cloudy all morning.', phonetic: '/ˈklaʊdi/', hebrewTranslation: 'מעונן', imageUrl: '/images/cloudy.webp' },
-  { id: 'windy', word: 'windy', level: 'beginner', partOfSpeech: 'adjective', category: 'weather', definition: 'When there is a lot of wind blowing', exampleSentence: 'It is too windy to fly a kite safely.', phonetic: '/ˈwɪndi/', hebrewTranslation: 'סוער', imageUrl: '/images/windy.webp' },
-  { id: 'rainy', word: 'rainy', level: 'beginner', partOfSpeech: 'adjective', category: 'weather', definition: 'When rain is falling from the sky', exampleSentence: 'Bring an umbrella on rainy days.', phonetic: '/ˈreɪni/', hebrewTranslation: 'גשום', imageUrl: '/images/rainy.webp' },
-  { id: 'drizzle', word: 'drizzle', level: 'intermediate', partOfSpeech: 'noun', category: 'weather', definition: 'Very light rain', exampleSentence: 'A light drizzle started falling.', phonetic: '/ˈdrɪzəl/', hebrewTranslation: 'טפטוף', imageUrl: '/images/drizzle.webp' },
+  // WEATHER
   { id: 'avalanche', word: 'avalanche', level: 'advanced', partOfSpeech: 'noun', category: 'weather', definition: 'A large mass of snow falling down a mountain', exampleSentence: 'The loud noise caused an avalanche.', phonetic: '/ˈævəlæntʃ/', hebrewTranslation: 'מפולת שלג', imageUrl: '/images/avalanche.webp' },
 
 
@@ -378,7 +369,7 @@ export const WORDS = [
 export const CATEGORIES = [
   'animals', 'food', 'home', 'transport', 'nature',
   'colors', 'numbers', 'body', 'clothing', 'school',
-  'sports', 'weather', 'family', 'feelings', 'everyday',
+  'sports', 'weather', 'feelings', 'everyday',
 ];
 
 export const getWordsByLevel = (level) => WORDS.filter(w => w.level === level);
