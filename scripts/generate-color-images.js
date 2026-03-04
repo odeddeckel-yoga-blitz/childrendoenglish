@@ -37,6 +37,9 @@ const COLORS = {
   teal:      '#008080',
   coral:     '#FF7F50',
   ivory:     '#FFFFF0',
+  lime:      '#32CD32',
+  indigo:    '#4B0082',
+  amber:     '#FFBF00',
 };
 
 function hexToRgb(hex) {

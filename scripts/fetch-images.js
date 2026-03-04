@@ -307,6 +307,49 @@ const WORDS = {
   ribbon: ['ribbon bow colorful', 'Band Schleife ribbon', 'satin ribbon gift'],
   magnet: ['magnet horseshoe red', 'Magnet magnetism', 'magnet fridge kitchen'],
   whisper: ['child whispering ear secret', 'Flüstern whispering', 'children whispering secret'],
+
+  // NEW BATCH 3
+  // BODY
+  face: ['child face portrait smiling', 'Gesicht face close', 'human face portrait'],
+  leg: ['human leg anatomy', 'Bein leg', 'child leg running'],
+  tummy: ['child belly button navel', 'stomach body anatomy diagram', 'human abdomen front'],
+  lips: ['lips mouth close', 'Lippen lips', 'human lips face'],
+  teeth: ['child smile teeth', 'Zähne teeth smile', 'white teeth smiling'],
+  hair: ['child hair portrait', 'Haar hair', 'human hair close long'],
+  tongue: ['tongue mouth sticking out', 'Zunge tongue', 'child tongue out'],
+  toe: ['toe foot close', 'Zeh toe', 'toes foot human'],
+  palm: ['palm hand open', 'Handfläche palm', 'open palm hand human'],
+
+  // SCHOOL
+  textbook: ['textbook open school', 'Lehrbuch textbook', 'school textbook book'],
+  stapler: ['stapler office desk', 'Heftgerät stapler', 'red stapler'],
+  paintbrush: ['paintbrush art paint', 'Pinsel paintbrush', 'paintbrush colors art'],
+  glue: ['glue stick school', 'Kleber glue', 'glue bottle craft'],
+
+  // CLOTHING
+  bowtie: ['bowtie bow tie formal', 'Fliege bowtie', 'red bow tie'],
+  slippers: ['slippers house shoes', 'Hausschuhe slippers', 'cozy slippers pair'],
+  bandana: ['bandana headscarf colorful', 'Bandana Tuch', 'red bandana'],
+
+  // SPORTS
+  hiking: ['hiking trail mountains', 'Wandern hiking', 'hiker mountain trail'],
+  jumping: ['child jumping happy', 'Springen jumping', 'kids jumping trampoline'],
+  fencing: ['fencing sport sword', 'Fechten fencing', 'fencing match Olympic'],
+
+  // NATURE
+  meadow: ['meadow wildflowers green', 'Wiese meadow flowers', 'meadow grass field'],
+
+  // HOME
+  rug: ['rug carpet floor colorful', 'Teppich rug', 'area rug home decor'],
+
+  // TRANSPORT
+  van: ['van vehicle driving', 'Transporter van', 'minivan family car'],
+  kayak: ['kayak river paddling', 'Kajak kayak', 'kayak water sport'],
+
+  // EVERYDAY
+  broom: ['broom sweeping floor', 'Besen broom', 'broom cleaning tool'],
+  stamp: ['postage stamp mail', 'Briefmarke stamp', 'stamp collection post'],
+  puzzle: ['jigsaw puzzle pieces', 'Puzzle Puzzlestück', 'colorful puzzle children'],
 };
 
 async function searchWikimedia(query) {
