@@ -47,7 +47,15 @@ export default function QuizOptionGrid({ quiz, loadedImages, onImageLoad, lang }
                 alt={option.word}
                 className={`w-full h-full object-cover transition-opacity ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
                 onLoad={() => onImageLoad(option.id)}
-                onError={() => setFailedImages(prev => new Set(prev).add(option.id))}
+                onError={(e) => {
+                  // Retry once with cache-bust before falling back
+                  if (!e.target.dataset.retried) {
+                    e.target.dataset.retried = '1';
+                    e.target.src = getImageUrl(option) + '?r=' + Date.now();
+                  } else {
+                    setFailedImages(prev => new Set(prev).add(option.id));
+                  }
+                }}
                 width={256}
                 height={256}
               />

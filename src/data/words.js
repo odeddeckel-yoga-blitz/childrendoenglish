@@ -1,4 +1,4 @@
-// 320 curated words across 13 categories, 3 difficulty levels
+// 303 curated words across 13 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -407,45 +407,31 @@ export const WORDS = [
   { id: 'kite', word: 'kite', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A toy that flies in the wind on a string', exampleSentence: 'We flew a kite at the beach.', phonetic: '/kaɪt/', hebrewTranslation: 'עפיפון', imageUrl: '/images/kite.webp' },
   { id: 'doll', word: 'doll', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A small toy that looks like a person', exampleSentence: 'She dressed up her doll.', phonetic: '/dɒl/', hebrewTranslation: 'בובה', imageUrl: '/images/doll.webp' },
   { id: 'teddy', word: 'teddy bear', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A soft stuffed toy bear you can hug', exampleSentence: 'He sleeps with his teddy bear.', phonetic: '/ˈtɛdi bɛər/', hebrewTranslation: 'דובי', imageUrl: '/images/teddy.webp' },
-  { id: 'blocks', word: 'blocks', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'Small wooden or plastic pieces you stack to build things', exampleSentence: 'She built a tower with blocks.', phonetic: '/blɒks/', hebrewTranslation: 'קוביות', imageUrl: '/images/blocks.webp' },
   { id: 'balloon', word: 'balloon', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A rubber bag you blow up with air', exampleSentence: 'The red balloon floated into the sky.', phonetic: '/bəˈluːn/', hebrewTranslation: 'בלון', imageUrl: '/images/balloon.webp' },
-  { id: 'swing', word: 'swing', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A seat hanging from chains that you sit on and move back and forth', exampleSentence: 'She loves playing on the swing.', phonetic: '/swɪŋ/', hebrewTranslation: 'נדנדה', imageUrl: '/images/swing.webp' },
   { id: 'slide', word: 'slide', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A smooth slope you sit on and slide down', exampleSentence: 'He went down the slide at the park.', phonetic: '/slaɪd/', hebrewTranslation: 'מגלשה', imageUrl: '/images/slide.webp' },
   // Intermediate
   { id: 'puzzle', word: 'puzzle', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A game where you fit pieces together to make a picture', exampleSentence: 'She finished the jigsaw puzzle.', phonetic: '/ˈpʌzəl/', hebrewTranslation: 'פאזל', imageUrl: '/images/puzzle.webp' },
   { id: 'robot', word: 'robot', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A toy machine that can move and make sounds', exampleSentence: 'His toy robot walks and talks.', phonetic: '/ˈroʊbɒt/', hebrewTranslation: 'רובוט', imageUrl: '/images/robot.webp' },
-  { id: 'marble', word: 'marble', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A small round glass ball used in games', exampleSentence: 'He rolled a marble across the floor.', phonetic: '/ˈmɑːrbəl/', hebrewTranslation: 'גולה', imageUrl: '/images/marble.webp' },
   { id: 'yoyo', word: 'yo-yo', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A round toy that goes up and down on a string', exampleSentence: 'She did tricks with her yo-yo.', phonetic: '/ˈjoʊjoʊ/', hebrewTranslation: 'יו-יו', imageUrl: '/images/yoyo.webp' },
-  { id: 'sled', word: 'sled', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A flat board used to slide down snowy hills', exampleSentence: 'They rode the sled down the hill.', phonetic: '/slɛd/', hebrewTranslation: 'מזחלת', imageUrl: '/images/sled.webp' },
   // Advanced
   { id: 'sandbox', word: 'sandbox', level: 'advanced', partOfSpeech: 'noun', category: 'toys', definition: 'A box filled with sand for kids to play in', exampleSentence: 'The children built castles in the sandbox.', phonetic: '/ˈsændbɒks/', hebrewTranslation: 'ארגז חול', imageUrl: '/images/sandbox.webp' },
   { id: 'dollhouse', word: 'dollhouse', level: 'advanced', partOfSpeech: 'noun', category: 'toys', definition: 'A tiny house with small furniture for dolls', exampleSentence: 'She arranged the rooms in her dollhouse.', phonetic: '/ˈdɒlhaʊs/', hebrewTranslation: 'בית בובות', imageUrl: '/images/dollhouse.webp' },
-  { id: 'pinwheel', word: 'pinwheel', level: 'advanced', partOfSpeech: 'noun', category: 'toys', definition: 'A toy with colorful blades that spin in the wind', exampleSentence: 'The pinwheel spun fast in the breeze.', phonetic: '/ˈpɪnwiːl/', hebrewTranslation: 'שבשבת', imageUrl: '/images/pinwheel.webp' },
   { id: 'tricycle', word: 'tricycle', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A small bike with three wheels for young children', exampleSentence: 'She rode her tricycle around the yard.', phonetic: '/ˈtraɪsɪkəl/', hebrewTranslation: 'תלת אופן', imageUrl: '/images/tricycle.webp' },
   { id: 'frisbee', word: 'frisbee', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A flat round disc you throw and catch', exampleSentence: 'They played frisbee at the park.', phonetic: '/ˈfrɪzbiː/', hebrewTranslation: 'פריזבי', imageUrl: '/images/frisbee.webp' },
   { id: 'bubbles', word: 'bubbles', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'Round balls of soap and air that float away', exampleSentence: 'She blew bubbles in the garden.', phonetic: '/ˈbʌbəlz/', hebrewTranslation: 'בועות', imageUrl: '/images/bubbles.webp' },
   { id: 'dice', word: 'dice', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'Small cubes with dots on each side used in games', exampleSentence: 'He rolled the dice and got a six.', phonetic: '/daɪs/', hebrewTranslation: 'קוביות משחק', imageUrl: '/images/dice.webp' },
-  { id: 'puppet', word: 'puppet', level: 'advanced', partOfSpeech: 'noun', category: 'toys', definition: 'A toy figure you move with your hands or strings', exampleSentence: 'She put on a puppet show for her friends.', phonetic: '/ˈpʌpɪt/', hebrewTranslation: 'בובת יד', imageUrl: '/images/puppet.webp' },
 
   // +26 NEW WORDS
   // SCHOOL +3
   { id: 'folder', word: 'folder', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A cover used to keep papers organized', exampleSentence: 'She put her homework in a blue folder.', phonetic: '/ˈfoʊldər/', hebrewTranslation: 'תיקייה', imageUrl: '/images/folder.webp' },
   { id: 'locker', word: 'locker', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A small cupboard at school where you keep your things', exampleSentence: 'He put his bag in his locker.', phonetic: '/ˈlɒkər/', hebrewTranslation: 'לוקר', imageUrl: '/images/locker.webp' },
-  { id: 'poster', word: 'poster', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A large printed picture or sign on the wall', exampleSentence: 'She hung a poster of animals on the wall.', phonetic: '/ˈpoʊstər/', hebrewTranslation: 'כרזה', imageUrl: '/images/poster.webp' },
 
   // CLOTHING +3
-  { id: 'poncho', word: 'poncho', level: 'advanced', partOfSpeech: 'noun', category: 'clothing', definition: 'A big piece of cloth with a hole for your head worn like a cape', exampleSentence: 'She wore a colorful poncho in the rain.', phonetic: '/ˈpɒntʃoʊ/', hebrewTranslation: 'פונצ\'ו', imageUrl: '/images/poncho.webp' },
-  { id: 'beret', word: 'beret', level: 'advanced', partOfSpeech: 'noun', category: 'clothing', definition: 'A soft round flat hat', exampleSentence: 'The artist wore a red beret.', phonetic: '/bəˈreɪ/', hebrewTranslation: 'כומתה', imageUrl: '/images/beret.webp' },
-  { id: 'bracelet', word: 'bracelet', level: 'intermediate', partOfSpeech: 'noun', category: 'clothing', definition: 'A band or chain worn around your wrist', exampleSentence: 'She made a friendship bracelet.', phonetic: '/ˈbreɪslɪt/', hebrewTranslation: 'צמיד', imageUrl: '/images/bracelet.webp' },
 
   // SPORTS +3
-  { id: 'yoga', word: 'yoga', level: 'intermediate', partOfSpeech: 'noun', category: 'sports', definition: 'An exercise where you stretch and hold poses', exampleSentence: 'Mom does yoga every morning.', phonetic: '/ˈjoʊɡə/', hebrewTranslation: 'יוגה', imageUrl: '/images/yoga.webp' },
   { id: 'climbing', word: 'climbing', level: 'intermediate', partOfSpeech: 'noun', category: 'sports', definition: 'Going up something high using your hands and feet', exampleSentence: 'He went rock climbing at the gym.', phonetic: '/ˈklaɪmɪŋ/', hebrewTranslation: 'טיפוס', imageUrl: '/images/climbing.webp' },
-  { id: 'diving', word: 'diving', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'Jumping into water head first', exampleSentence: 'She practiced diving at the pool.', phonetic: '/ˈdaɪvɪŋ/', hebrewTranslation: 'צלילה', imageUrl: '/images/diving.webp' },
 
   // FEELINGS +2
-  { id: 'cheerful', word: 'cheerful', level: 'intermediate', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling bright and full of good energy', exampleSentence: 'She gave a cheerful wave to her friends.', phonetic: '/ˈtʃɪərfʊl/', hebrewTranslation: 'עליז', imageUrl: '/images/cheerful.webp' },
-  { id: 'grumpy', word: 'grumpy', level: 'intermediate', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling cranky and easily annoyed', exampleSentence: 'He was grumpy because he missed his nap.', phonetic: '/ˈɡrʌmpi/', hebrewTranslation: 'רגזן', imageUrl: '/images/grumpy.webp' },
 
   // FOOD +2
   { id: 'pretzel', word: 'pretzel', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'A salty baked snack twisted into a knot shape', exampleSentence: 'He ate a warm pretzel at the fair.', phonetic: '/ˈprɛtsəl/', hebrewTranslation: 'בייגלה', imageUrl: '/images/pretzel.webp' },
@@ -460,16 +446,13 @@ export const WORDS = [
   { id: 'owl', word: 'owl', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A bird with big eyes that comes out at night', exampleSentence: 'The owl hooted from the tree.', phonetic: '/aʊl/', hebrewTranslation: 'ינשוף', imageUrl: '/images/owl.webp' },
 
   // HOME +1
-  { id: 'garage', word: 'garage', level: 'intermediate', partOfSpeech: 'noun', category: 'home', definition: 'A building where you park and keep your car', exampleSentence: 'Dad parked the car in the garage.', phonetic: '/ɡəˈrɑːʒ/', hebrewTranslation: 'מוסך', imageUrl: '/images/garage.webp' },
 
   // NATURE +1
-  { id: 'pond', word: 'pond', level: 'beginner', partOfSpeech: 'noun', category: 'nature', definition: 'A small area of still water', exampleSentence: 'The ducks swam in the pond.', phonetic: '/pɒnd/', hebrewTranslation: 'בריכה', imageUrl: '/images/pond.webp' },
 
   // NUMBERS +1
   { id: 'sixty', word: 'sixty', level: 'intermediate', partOfSpeech: 'noun', category: 'numbers', definition: 'Six groups of ten, written as 60', exampleSentence: 'There are sixty seconds in a minute.', phonetic: '/ˈsɪksti/', hebrewTranslation: 'שישים', imageUrl: '/images/sixty.webp' },
 
   // TRANSPORT +1
-  { id: 'raft', word: 'raft', level: 'intermediate', partOfSpeech: 'noun', category: 'transport', definition: 'A flat floating platform made of wood or rubber', exampleSentence: 'They floated down the river on a raft.', phonetic: '/ræft/', hebrewTranslation: 'רפסודה', imageUrl: '/images/raft.webp' },
 ];
 
 export const CATEGORIES = [

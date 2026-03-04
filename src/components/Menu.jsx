@@ -84,6 +84,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       {activePlayer && (
         <button
           onClick={onOpenProfilePicker}
+          aria-label={t('switchPlayer', lang)}
           className="w-full glass rounded-2xl p-3 flex items-center gap-3
                      hover:shadow-md active:scale-[0.98] transition-all text-start"
         >
@@ -103,7 +104,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-amber-500" />
-            <span className="text-sm font-semibold text-slate-700">{t('dailyGoal', lang)}</span>
+            <h2 className="text-sm font-semibold text-slate-700">{t('dailyGoal', lang)}</h2>
           </div>
           <span className="text-xs text-slate-500">
             {stats.dailyGoal?.date === new Date().toISOString().slice(0, 10)
