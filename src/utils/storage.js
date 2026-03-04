@@ -94,7 +94,7 @@ export const removePlayer = (id) => {
   const registry = loadPlayerRegistry();
   if (!registry) return;
   registry.players = registry.players.filter(p => p.id !== id);
-  try { localStorage.removeItem(PLAYER_PREFIX + id); } catch {}
+  try { localStorage.removeItem(PLAYER_PREFIX + id); } catch { /* ignore */ }
   if (registry.activePlayerId === id) {
     registry.activePlayerId = registry.players[0]?.id || null;
   }
@@ -149,7 +149,7 @@ const MAX_QUIZ_HISTORY = 50;
 const emitStorageFull = () => {
   try {
     window.dispatchEvent(new CustomEvent('storagefull'));
-  } catch {}
+  } catch { /* ignore */ }
 };
 
 /** Persist stats. Defaults to active player if no id given. */
@@ -192,7 +192,7 @@ export const isDarkMode = () => {
 export const saveDarkMode = (dark) => {
   try {
     localStorage.setItem(DARK_KEY, String(dark));
-  } catch {}
+  } catch { /* ignore */ }
 };
 
 export const isSoundEnabled = () => {
@@ -207,7 +207,7 @@ export const isSoundEnabled = () => {
 export const saveSoundEnabled = (enabled) => {
   try {
     localStorage.setItem(SOUND_KEY, String(enabled));
-  } catch {}
+  } catch { /* ignore */ }
 };
 
 // --- Data Export/Import ---
@@ -221,7 +221,7 @@ export const exportAllData = () => {
     try {
       const raw = localStorage.getItem(PLAYER_PREFIX + p.id);
       if (raw) playerStats[p.id] = JSON.parse(raw);
-    } catch {}
+    } catch { /* ignore */ }
   });
   return { schemaVersion: 2, registry, playerStats, exportedAt: new Date().toISOString() };
 };

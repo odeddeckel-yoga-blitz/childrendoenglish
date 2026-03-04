@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { ArrowLeft, Search, Grid3X3, BookOpen, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { WORDS, CATEGORIES } from '../data/words';
 import { getImageUrl } from '../utils/images';
@@ -14,11 +14,14 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
   const [imgLoaded, setImgLoaded] = useState(false);
   const touchStart = useRef({ x: 0, y: 0 });
 
-  const filtered = wordPool.filter(w => {
+  const filtered = useMemo(() => wordPool.filter(w => {
     const matchesSearch = !search || w.word.toLowerCase().includes(search.toLowerCase());
     const matchesCat = !selectedCategory || w.category === selectedCategory;
     return matchesSearch && matchesCat;
-  });
+  }), [wordPool, search, selectedCategory]);
+
+  // Reset detail index when filters change
+  useEffect(() => { setDetailIndex(0); }, [search, selectedCategory]);
 
   const currentWord = filtered[detailIndex];
 
@@ -241,6 +244,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
               <p className="text-sm text-slate-500 italic">"{currentWord.exampleSentence}"</p>
             </div>
           </div>
+          <p className="text-center text-xs text-slate-400">{rtl ? '← ' : ''}Swipe to browse words{rtl ? '' : ' →'}</p>
         </div>
       )}
 
