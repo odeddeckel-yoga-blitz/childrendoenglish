@@ -37,6 +37,7 @@ const NUMBERS = {
   dozen:    { digit: '12',        bg: '#E8EAF6', fg: '#283593' },
   forty:    { digit: '40',        bg: '#C8E6C9', fg: '#2E7D32' },
   ninety:   { digit: '90',        bg: '#F3E5F5', fg: '#6A1B9A' },
+  sixty:    { digit: '60',        bg: '#FFF3E0', fg: '#E65100' },
 };
 
 function createNumberSvg({ digit, bg, fg }) {

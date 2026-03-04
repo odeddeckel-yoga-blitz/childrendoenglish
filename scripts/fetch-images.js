@@ -365,6 +365,29 @@ const WORDS = {
   sandbox: ['sandbox playground children', 'Sandkasten sandbox', 'sandbox sand play'],
   dollhouse: ['dollhouse miniature', 'Puppenhaus dollhouse', 'dollhouse toy furniture'],
   pinwheel: ['pinwheel toy colorful wind', 'Windrad pinwheel', 'pinwheel spinning colorful'],
+
+  // NEW BATCH 4
+  tricycle: ['tricycle children ride', 'Dreirad tricycle', 'child tricycle red'],
+  frisbee: ['frisbee flying disc', 'Frisbee sport disc', 'frisbee throw catch'],
+  bubbles: ['soap bubbles child blowing', 'Seifenblasen bubbles', 'bubbles floating air'],
+  dice: ['dice game board', 'Würfel dice', 'dice pair game'],
+  puppet: ['puppet marionette hand', 'Handpuppe puppet', 'puppet show children'],
+  folder: ['folder documents office', 'Aktenordner folder', 'school folder colored'],
+  locker: ['school locker hallway', 'Schließfach locker', 'locker metal school'],
+  poster: ['poster wall colorful', 'Plakat poster', 'poster children educational'],
+  poncho: ['poncho clothing rain', 'Poncho Kleidung', 'colorful poncho wearing'],
+  beret: ['beret hat felt', 'Baskenmütze beret', 'red beret hat'],
+  bracelet: ['bracelet wrist jewelry', 'Armband bracelet', 'friendship bracelet colorful'],
+  yoga: ['yoga pose stretch', 'Yoga Übung', 'yoga meditation exercise'],
+  climbing: ['rock climbing sport', 'Klettern climbing', 'climbing wall indoor'],
+  diving: ['diving pool swimmer', 'Turmspringen diving', 'diving water splash'],
+  pretzel: ['pretzel baked snack', 'Brezel pretzel', 'soft pretzel salt'],
+  muffin: ['blueberry muffin baked', 'Muffin Kuchen', 'muffin chocolate chip'],
+  fox: ['red fox animal wild', 'Rotfuchs fox', 'fox forest animal'],
+  owl: ['owl bird night', 'Eule owl', 'barn owl portrait'],
+  garage: ['garage car house', 'Garage Autohaus', 'garage door home'],
+  pond: ['pond ducks water', 'Teich pond', 'pond water garden'],
+  raft: ['raft river floating', 'Floß raft', 'white water rafting'],
 };
 
 async function searchWikimedia(query) {
