@@ -12,6 +12,10 @@
     <link rel="alternate" hreflang="he" href="https://childrendoenglish.com/?lang=he" />
     <link rel="alternate" hreflang="x-default" href="https://childrendoenglish.com/" />
 
+    <!-- Preload critical assets -->
+    <link rel="preload" href="/favicon.png" as="image" type="image/png" />
+    <link rel="preload" href="/og-image.png" as="image" type="image/png" />
+
     <!-- PWA -->
     <meta name="theme-color" content="#2563eb" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -22,6 +26,7 @@
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Children Do English" />
     <meta property="og:url" content="https://childrendoenglish.com/" />
     <meta property="og:title" content="Children Do English - Fun Vocabulary Learning for Kids" />
     <meta property="og:description" content="Free English vocabulary app for kids ages 6-12. Learn over 300 words through image quizzes, flashcards, and audio challenges. No ads, no account needed." />
@@ -60,34 +65,7 @@
         "educationalRole": "student",
         "suggestedMinAge": 6,
         "suggestedMaxAge": 12
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "3",
-        "bestRating": "5",
-        "worstRating": "1"
-      },
-      "review": [
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "Sarah M." },
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "reviewBody": "My kids love the picture quizzes! They ask to play every day after school."
-        },
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "Yael K." },
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "reviewBody": "Finally a vocabulary app that works in Hebrew too. Perfect for our bilingual family."
-        },
-        {
-          "@type": "Review",
-          "author": { "@type": "Person", "name": "David R." },
-          "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" },
-          "reviewBody": "Simple, free, no ads — exactly what I was looking for. My 7-year-old learned 50 new words in two weeks."
-        }
-      ]
+      }
     }
     </script>
     <script type="application/ld+json">
@@ -186,6 +164,15 @@
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://childrendoenglish.com/" }
       ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Children Do English",
+      "url": "https://childrendoenglish.com",
+      "logo": "https://childrendoenglish.com/favicon.png"
     }
     </script>
   </head>

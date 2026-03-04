@@ -39,7 +39,7 @@ export default function ResultScreen({ results, stats, lang = 'en', level, mode,
       } else {
         await navigator.clipboard.writeText(text);
       }
-    } catch {}
+    } catch { /* user cancelled share */ }
   };
 
   const message = percentage >= 90

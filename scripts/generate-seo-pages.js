@@ -24,10 +24,9 @@ const CATEGORY_NAMES = {
   clothing: 'Clothing',
   school: 'School',
   sports: 'Sports & Activities',
-  weather: 'Weather',
-  family: 'Family',
   feelings: 'Feelings & Emotions',
   everyday: 'Everyday Objects',
+  toys: 'Toys & Games',
 };
 
 function escapeHtml(str) {
@@ -100,10 +99,13 @@ function buildCategoryPage(slug, displayName, words) {
   <meta name="description" content="${escapeHtml(description)}" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="${url}" />
+  <link rel="alternate" hreflang="en" href="${url}" />
+  <link rel="alternate" hreflang="x-default" href="${url}" />
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
   <meta property="og:url" content="${url}" />
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
