@@ -286,6 +286,7 @@ const translations = {
 
     cat_feelings: 'Feelings',
     cat_everyday: 'Everyday',
+    cat_toys: 'Toys',
 
     // Quiz modes
     mode_image: 'Image Quiz',

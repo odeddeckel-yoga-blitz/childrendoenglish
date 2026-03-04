@@ -15,6 +15,7 @@ const CATEGORY_EMOJI = {
 
   feelings: '😊',
   everyday: '🔑',
+  toys: '🧸',
 };
 
 const CATEGORY_TITLES = {
@@ -32,6 +33,7 @@ const CATEGORY_TITLES = {
 
   feelings: { en: 'Feelings', he: 'רגשות' },
   everyday: { en: 'Everyday', he: 'יומיומי' },
+  toys: { en: 'Toys', he: 'צעצועים' },
 };
 
 // Build lessons automatically: group words by category + level, split into lessons of 6-10 words

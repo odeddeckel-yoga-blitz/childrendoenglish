@@ -350,6 +350,21 @@ const WORDS = {
   broom: ['broom sweeping floor', 'Besen broom', 'broom cleaning tool'],
   stamp: ['postage stamp mail', 'Briefmarke stamp', 'stamp collection post'],
   puzzle: ['jigsaw puzzle pieces', 'Puzzle Puzzlestück', 'colorful puzzle children'],
+
+  // TOYS
+  doll: ['doll toy girl', 'Puppe doll', 'rag doll toy'],
+  teddy: ['teddy bear stuffed toy', 'Teddybär teddy bear', 'plush teddy bear brown'],
+  blocks: ['building blocks toy colorful', 'Bauklötze blocks', 'wooden blocks children'],
+  balloon: ['balloon colorful flying', 'Luftballon balloon', 'red balloon sky'],
+  swing: ['playground swing child', 'Schaukel swing', 'swing set playground'],
+  slide: ['playground slide children', 'Rutsche slide', 'slide playground park'],
+  robot: ['toy robot colorful', 'Roboter toy', 'robot toy children'],
+  marble: ['glass marble toy colorful', 'Murmel marble', 'marbles glass toy'],
+  yoyo: ['yo-yo toy string', 'Jo-Jo yoyo', 'yoyo trick toy'],
+  sled: ['sled snow winter', 'Schlitten sled', 'sledding snow hill'],
+  sandbox: ['sandbox playground children', 'Sandkasten sandbox', 'sandbox sand play'],
+  dollhouse: ['dollhouse miniature', 'Puppenhaus dollhouse', 'dollhouse toy furniture'],
+  pinwheel: ['pinwheel toy colorful wind', 'Windrad pinwheel', 'pinwheel spinning colorful'],
 };
 
 async function searchWikimedia(query) {

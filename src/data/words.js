@@ -1,4 +1,4 @@
-// 300 curated words across 13 categories, 3 difficulty levels
+// 313 curated words across 14 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -363,7 +363,6 @@ export const WORDS = [
   { id: 'thermometer', word: 'thermometer', level: 'advanced', partOfSpeech: 'noun', category: 'everyday', definition: 'A device that measures temperature', exampleSentence: 'The thermometer showed it was very cold outside.', phonetic: '/θərˈmɒmɪtər/', hebrewTranslation: 'מדחום', imageUrl: '/images/thermometer.webp' },
   { id: 'magnifier', word: 'magnifying glass', level: 'advanced', partOfSpeech: 'noun', category: 'everyday', definition: 'A lens that makes small things look bigger', exampleSentence: 'He used a magnifying glass to read the tiny letters.', phonetic: '/ˈmæɡnɪfaɪɪŋ ɡlæs/', hebrewTranslation: 'זכוכית מגדלת', imageUrl: '/images/magnifier.webp' },
   { id: 'drum', word: 'drum', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'A musical instrument you hit with sticks', exampleSentence: 'He played the drum in the school band.', phonetic: '/drʌm/', hebrewTranslation: 'תוף', imageUrl: '/images/drum.webp' },
-  { id: 'kite', word: 'kite', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'A toy that flies in the wind on a string', exampleSentence: 'We flew a kite at the beach.', phonetic: '/kaɪt/', hebrewTranslation: 'עפיפון', imageUrl: '/images/kite.webp' },
   { id: 'crown', word: 'crown', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A golden circle worn on the head by a king or queen', exampleSentence: 'The queen wore a beautiful crown.', phonetic: '/kraʊn/', hebrewTranslation: 'כתר', imageUrl: '/images/crown.webp' },
   { id: 'guitar', word: 'guitar', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A musical instrument with strings that you strum', exampleSentence: 'She learned to play the guitar.', phonetic: '/ɡɪˈtɑːr/', hebrewTranslation: 'גיטרה', imageUrl: '/images/guitar.webp' },
   { id: 'piano', word: 'piano', level: 'advanced', partOfSpeech: 'noun', category: 'everyday', definition: 'A large musical instrument with black and white keys', exampleSentence: 'She practiced piano every afternoon.', phonetic: '/piˈænoʊ/', hebrewTranslation: 'פסנתר', imageUrl: '/images/piano.webp' },
@@ -422,13 +421,31 @@ export const WORDS = [
   { id: 'magnet', word: 'magnet', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A piece of metal that attracts other metal things', exampleSentence: 'The magnet stuck to the fridge.', phonetic: '/ˈmæɡnɪt/', hebrewTranslation: 'מגנט', imageUrl: '/images/magnet.webp' },
   { id: 'broom', word: 'broom', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'A long stick with bristles used for sweeping floors', exampleSentence: 'She swept the floor with a broom.', phonetic: '/bruːm/', hebrewTranslation: 'מטאטא', imageUrl: '/images/broom.webp' },
   { id: 'stamp', word: 'stamp', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A small sticker you put on a letter before mailing it', exampleSentence: 'He put a stamp on the envelope.', phonetic: '/stæmp/', hebrewTranslation: 'בול', imageUrl: '/images/stamp.webp' },
-  { id: 'puzzle', word: 'puzzle', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A game where you fit pieces together to make a picture', exampleSentence: 'She finished the jigsaw puzzle.', phonetic: '/ˈpʌzəl/', hebrewTranslation: 'פאזל', imageUrl: '/images/puzzle.webp' },
+  // === TOYS ===
+  // Beginner
+  { id: 'kite', word: 'kite', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A toy that flies in the wind on a string', exampleSentence: 'We flew a kite at the beach.', phonetic: '/kaɪt/', hebrewTranslation: 'עפיפון', imageUrl: '/images/kite.webp' },
+  { id: 'doll', word: 'doll', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A small toy that looks like a person', exampleSentence: 'She dressed up her doll.', phonetic: '/dɒl/', hebrewTranslation: 'בובה', imageUrl: '/images/doll.webp' },
+  { id: 'teddy', word: 'teddy bear', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A soft stuffed toy bear you can hug', exampleSentence: 'He sleeps with his teddy bear.', phonetic: '/ˈtɛdi bɛər/', hebrewTranslation: 'דובי', imageUrl: '/images/teddy.webp' },
+  { id: 'blocks', word: 'blocks', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'Small wooden or plastic pieces you stack to build things', exampleSentence: 'She built a tower with blocks.', phonetic: '/blɒks/', hebrewTranslation: 'קוביות', imageUrl: '/images/blocks.webp' },
+  { id: 'balloon', word: 'balloon', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A rubber bag you blow up with air', exampleSentence: 'The red balloon floated into the sky.', phonetic: '/bəˈluːn/', hebrewTranslation: 'בלון', imageUrl: '/images/balloon.webp' },
+  { id: 'swing', word: 'swing', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A seat hanging from chains that you sit on and move back and forth', exampleSentence: 'She loves playing on the swing.', phonetic: '/swɪŋ/', hebrewTranslation: 'נדנדה', imageUrl: '/images/swing.webp' },
+  { id: 'slide', word: 'slide', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A smooth slope you sit on and slide down', exampleSentence: 'He went down the slide at the park.', phonetic: '/slaɪd/', hebrewTranslation: 'מגלשה', imageUrl: '/images/slide.webp' },
+  // Intermediate
+  { id: 'puzzle', word: 'puzzle', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A game where you fit pieces together to make a picture', exampleSentence: 'She finished the jigsaw puzzle.', phonetic: '/ˈpʌzəl/', hebrewTranslation: 'פאזל', imageUrl: '/images/puzzle.webp' },
+  { id: 'robot', word: 'robot', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A toy machine that can move and make sounds', exampleSentence: 'His toy robot walks and talks.', phonetic: '/ˈroʊbɒt/', hebrewTranslation: 'רובוט', imageUrl: '/images/robot.webp' },
+  { id: 'marble', word: 'marble', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A small round glass ball used in games', exampleSentence: 'He rolled a marble across the floor.', phonetic: '/ˈmɑːrbəl/', hebrewTranslation: 'גולה', imageUrl: '/images/marble.webp' },
+  { id: 'yoyo', word: 'yo-yo', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A round toy that goes up and down on a string', exampleSentence: 'She did tricks with her yo-yo.', phonetic: '/ˈjoʊjoʊ/', hebrewTranslation: 'יו-יו', imageUrl: '/images/yoyo.webp' },
+  { id: 'sled', word: 'sled', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A flat board used to slide down snowy hills', exampleSentence: 'They rode the sled down the hill.', phonetic: '/slɛd/', hebrewTranslation: 'מזחלת', imageUrl: '/images/sled.webp' },
+  // Advanced
+  { id: 'sandbox', word: 'sandbox', level: 'advanced', partOfSpeech: 'noun', category: 'toys', definition: 'A box filled with sand for kids to play in', exampleSentence: 'The children built castles in the sandbox.', phonetic: '/ˈsændbɒks/', hebrewTranslation: 'ארגז חול', imageUrl: '/images/sandbox.webp' },
+  { id: 'dollhouse', word: 'dollhouse', level: 'advanced', partOfSpeech: 'noun', category: 'toys', definition: 'A tiny house with small furniture for dolls', exampleSentence: 'She arranged the rooms in her dollhouse.', phonetic: '/ˈdɒlhaʊs/', hebrewTranslation: 'בית בובות', imageUrl: '/images/dollhouse.webp' },
+  { id: 'pinwheel', word: 'pinwheel', level: 'advanced', partOfSpeech: 'noun', category: 'toys', definition: 'A toy with colorful blades that spin in the wind', exampleSentence: 'The pinwheel spun fast in the breeze.', phonetic: '/ˈpɪnwiːl/', hebrewTranslation: 'שבשבת', imageUrl: '/images/pinwheel.webp' },
 ];
 
 export const CATEGORIES = [
   'animals', 'food', 'home', 'transport', 'nature',
   'colors', 'numbers', 'body', 'clothing', 'school',
-  'sports', 'feelings', 'everyday',
+  'sports', 'feelings', 'everyday', 'toys',
 ];
 
 export const getWordsByLevel = (level) => WORDS.filter(w => w.level === level);

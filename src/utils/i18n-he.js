@@ -284,6 +284,7 @@ export default {
 
   cat_feelings: 'רגשות',
   cat_everyday: 'יומיומי',
+  cat_toys: 'צעצועים',
 
   // Quiz modes
   mode_image: 'חידון תמונות',
