@@ -162,7 +162,11 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, onUp
           tabIndex={0}
           className={`flashcard-inner relative w-full cursor-pointer text-left ${flipped ? 'flipped' : ''}`}
           onClick={() => setFlipped(f => !f)}
-          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFlipped(f => !f); } }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFlipped(f => !f); }
+            else if (e.key === 'ArrowRight') { e.preventDefault(); handleKnow(); }
+            else if (e.key === 'ArrowLeft') { e.preventDefault(); handleLearning(); }
+          }}
           style={{ minHeight: '380px' }}
           aria-label={flipped ? t('flipToFront', lang) : t('flipToBack', lang)}
         >

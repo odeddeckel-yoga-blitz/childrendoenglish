@@ -144,7 +144,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       )}
 
       {/* Main actions */}
-      <div className="space-y-3">
+      <nav aria-label="Main menu" className="space-y-3">
         <button
           onClick={() => dueCount > 0 && onNavigate('dailyReview')}
           disabled={dueCount === 0}
@@ -243,7 +243,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <p className="text-slate-500 text-sm">{t('learningPathDesc', lang)}</p>
           </div>
         </button>
-      </div>
+      </nav>
 
       {/* Bottom row */}
       <div className="grid grid-cols-2 gap-3">
