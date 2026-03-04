@@ -75,7 +75,7 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, spe
         setCurrentIndex(i => i + 1);
       }
     }, 1200);
-  }, [answered, currentWord, currentIndex, total, score, answers, onComplete, mode, speakOnCorrect, speakDelay]);
+  }, [answered, currentWord, currentIndex, total, score, answers, onComplete, mode, lang, speakOnCorrect, speakDelay]);
 
   const handleSkip = useCallback(() => {
     if (answered) return;
@@ -98,7 +98,7 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, spe
         setCurrentIndex(i => i + 1);
       }
     }, 1200);
-  }, [answered, currentWord, currentIndex, total, score, answers, onComplete, mode]);
+  }, [answered, currentWord, currentIndex, total, score, answers, onComplete, mode, lang]);
 
   const handleQuit = useCallback(() => {
     clearTimeout(feedbackTimeout.current);

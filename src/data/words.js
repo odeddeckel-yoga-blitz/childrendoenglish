@@ -1,4 +1,4 @@
-// 320 curated words across 14 categories, 3 difficulty levels
+// 320 curated words across 13 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -137,15 +137,15 @@ export const WORDS = [
   { id: 'forty', word: 'forty', level: 'advanced', partOfSpeech: 'noun', category: 'numbers', definition: 'Four groups of ten, written as 40', exampleSentence: 'There are forty chairs in the hall.', phonetic: '/ˈfɔːrti/', hebrewTranslation: 'ארבעים', imageUrl: '/images/forty.webp' },
   { id: 'ninety', word: 'ninety', level: 'advanced', partOfSpeech: 'noun', category: 'numbers', definition: 'Nine groups of ten, written as 90', exampleSentence: 'My grandpa is almost ninety years old.', phonetic: '/ˈnaɪnti/', hebrewTranslation: 'תשעים', imageUrl: '/images/ninety.webp' },
 
-  // === BODY ===
+  // === BODY (merged into everyday) ===
   // Beginner
-  { id: 'hand', word: 'hand', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The part of your body at the end of your arm', exampleSentence: 'She waved her hand to say hello.', phonetic: '/hænd/', hebrewTranslation: 'יד', imageUrl: '/images/hand.webp' },
-  { id: 'foot', word: 'foot', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The part of your body you stand on', exampleSentence: 'He hurt his foot while running.', phonetic: '/fʊt/', hebrewTranslation: 'כף רגל', imageUrl: '/images/foot.webp' },
-  { id: 'eye', word: 'eye', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The part of your face you see with', exampleSentence: 'She has brown eyes.', phonetic: '/aɪ/', hebrewTranslation: 'עין', imageUrl: '/images/eye.webp' },
-  { id: 'ear', word: 'ear', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The part of your head you hear with', exampleSentence: 'The rabbit has long ears.', phonetic: '/ɪər/', hebrewTranslation: 'אוזן', imageUrl: '/images/ear.webp' },
+  { id: 'hand', word: 'hand', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'The part of your body at the end of your arm', exampleSentence: 'She waved her hand to say hello.', phonetic: '/hænd/', hebrewTranslation: 'יד', imageUrl: '/images/hand.webp' },
+  { id: 'foot', word: 'foot', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'The part of your body you stand on', exampleSentence: 'He hurt his foot while running.', phonetic: '/fʊt/', hebrewTranslation: 'כף רגל', imageUrl: '/images/foot.webp' },
+  { id: 'eye', word: 'eye', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'The part of your face you see with', exampleSentence: 'She has brown eyes.', phonetic: '/aɪ/', hebrewTranslation: 'עין', imageUrl: '/images/eye.webp' },
+  { id: 'ear', word: 'ear', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'The part of your head you hear with', exampleSentence: 'The rabbit has long ears.', phonetic: '/ɪər/', hebrewTranslation: 'אוזן', imageUrl: '/images/ear.webp' },
   // Intermediate
-  { id: 'finger', word: 'finger', level: 'intermediate', partOfSpeech: 'noun', category: 'body', definition: 'One of the five thin parts at the end of your hand', exampleSentence: 'She pointed her finger at the map.', phonetic: '/ˈfɪŋɡər/', hebrewTranslation: 'אצבע', imageUrl: '/images/finger.webp' },
-  { id: 'tooth', word: 'tooth', level: 'intermediate', partOfSpeech: 'noun', category: 'body', definition: 'A hard white thing in your mouth for chewing', exampleSentence: 'She lost her first baby tooth.', phonetic: '/tuːθ/', hebrewTranslation: 'שן', imageUrl: '/images/tooth.webp' },
+  { id: 'finger', word: 'finger', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'One of the five thin parts at the end of your hand', exampleSentence: 'She pointed her finger at the map.', phonetic: '/ˈfɪŋɡər/', hebrewTranslation: 'אצבע', imageUrl: '/images/finger.webp' },
+  { id: 'tooth', word: 'tooth', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A hard white thing in your mouth for chewing', exampleSentence: 'She lost her first baby tooth.', phonetic: '/tuːθ/', hebrewTranslation: 'שן', imageUrl: '/images/tooth.webp' },
   // Advanced
 
   // === CLOTHING ===
@@ -299,7 +299,7 @@ export const WORDS = [
   { id: 'million', word: 'million', level: 'advanced', partOfSpeech: 'noun', category: 'numbers', definition: 'The number 1,000,000', exampleSentence: 'There are millions of stars in the sky.', phonetic: '/ˈmɪljən/', hebrewTranslation: 'מיליון', imageUrl: '/images/million.webp' },
 
   // BODY +4
-  { id: 'thumb', word: 'thumb', level: 'intermediate', partOfSpeech: 'noun', category: 'body', definition: 'The short thick finger on the side of your hand', exampleSentence: 'She gave a thumbs up.', phonetic: '/θʌm/', hebrewTranslation: 'אגודל', imageUrl: '/images/thumb.webp' },
+  { id: 'thumb', word: 'thumb', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'The short thick finger on the side of your hand', exampleSentence: 'She gave a thumbs up.', phonetic: '/θʌm/', hebrewTranslation: 'אגודל', imageUrl: '/images/thumb.webp' },
 
   // CLOTHING +8
   { id: 'helmet', word: 'helmet', level: 'intermediate', partOfSpeech: 'noun', category: 'clothing', definition: 'A hard hat that protects your head', exampleSentence: 'Always wear a helmet when you ride a bike.', phonetic: '/ˈhɛlmɪt/', hebrewTranslation: 'קסדה', imageUrl: '/images/helmet.webp' },
@@ -474,7 +474,7 @@ export const WORDS = [
 
 export const CATEGORIES = [
   'animals', 'food', 'home', 'transport', 'nature',
-  'colors', 'numbers', 'body', 'clothing', 'school',
+  'colors', 'numbers', 'clothing', 'school',
   'sports', 'feelings', 'everyday', 'toys',
 ];
 

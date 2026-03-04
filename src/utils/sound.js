@@ -1,7 +1,6 @@
 import { isSoundEnabled } from './storage';
 
 let audioCtx = null;
-let ttsReady = false;
 let ttsAvailable = null; // null = unknown, true/false after check
 
 // Initialize TTS
@@ -16,7 +15,6 @@ export const initTTS = async () => {
     const voices = window.speechSynthesis.getVoices();
     if (voices.length > 0) {
       ttsAvailable = true;
-      ttsReady = true;
       return true;
     }
 
@@ -24,14 +22,12 @@ export const initTTS = async () => {
     return new Promise((resolve) => {
       const timeout = setTimeout(() => {
         ttsAvailable = window.speechSynthesis.getVoices().length > 0;
-        ttsReady = ttsAvailable;
         resolve(ttsAvailable);
       }, 1000);
 
       window.speechSynthesis.onvoiceschanged = () => {
         clearTimeout(timeout);
         ttsAvailable = window.speechSynthesis.getVoices().length > 0;
-        ttsReady = ttsAvailable;
         resolve(ttsAvailable);
       };
     });
@@ -144,7 +140,7 @@ export const playSound = (type) => {
         osc.stop(now + i * 0.12 + 0.45);
       });
     }
-  } catch (e) {
+  } catch {
     // Silent fallback
   }
 };

@@ -277,7 +277,6 @@ export default {
   cat_nature: 'טבע',
   cat_colors: 'צבעים',
   cat_numbers: 'מספרים',
-  cat_body: 'גוף',
   cat_clothing: 'ביגוד',
   cat_school: 'בית ספר',
   cat_sports: 'ספורט',

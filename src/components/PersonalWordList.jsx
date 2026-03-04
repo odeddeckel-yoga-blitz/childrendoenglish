@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { ArrowLeft, Play, AlertCircle, Share2, Check } from 'lucide-react';
-import { WORDS, getWordById, getWordByName } from '../data/words';
+import { getWordById, getWordByName } from '../data/words';
 import { t } from '../utils/i18n';
 
 export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack }) {
@@ -24,7 +24,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack }) {
     await navigator.clipboard.writeText(url);
     setCopiedMode(mode);
     setTimeout(() => setCopiedMode(null), 2000);
-  }, [matched]);
+  }, [matched, lang]);
 
   const handleParse = () => {
     const words = input

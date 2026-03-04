@@ -9,7 +9,7 @@ import useQuizFlow from './hooks/useQuizFlow';
 import CookieConsent from './components/CookieConsent';
 import { needsConsentPrompt, setAnalyticsConsent, analytics } from './utils/analytics';
 import { checkStreakReminder } from './utils/notifications';
-import { getDueWords, updateWordSR } from './utils/spaced-repetition';
+import { getDueWords } from './utils/spaced-repetition';
 import { WORDS } from './data/words';
 
 
@@ -87,7 +87,6 @@ function getInitialState() {
   // No registry and no legacy data → first-ever use
   if (!registry) return { gameState: 'playerCreate', registry: null };
 
-  const activePlayer = registry.players.find(p => p.id === registry.activePlayerId);
   const stats = loadStats(registry.activePlayerId);
 
   // 2+ players → show player select
@@ -199,7 +198,7 @@ export default function App() {
   }, []);
 
   // Check streak reminder on mount
-  useEffect(() => { checkStreakReminder(stats, lang); }, []);
+  useEffect(() => { checkStreakReminder(stats, lang); }, [stats, lang]);
 
   // PWA install prompt
   const deferredPrompt = useRef(null);
@@ -361,13 +360,6 @@ export default function App() {
     setStats(prev => ({ ...prev, uiLanguage: prev.uiLanguage === 'he' ? 'en' : 'he' }));
   }, []);
 
-  const handleSetCanRead = useCallback((canRead) => {
-    if (activePlayer) {
-      updatePlayerProfile(activePlayer.id, { canRead });
-      setPlayerRegistry({ ...loadPlayerRegistry() });
-    }
-  }, [activePlayer]);
-
   // Detect hash routes: #admin, #quiz/{mode}/{ids}
   useEffect(() => {
     const checkHash = async () => {
@@ -391,7 +383,7 @@ export default function App() {
     checkHash();
     window.addEventListener('hashchange', checkHash);
     return () => window.removeEventListener('hashchange', checkHash);
-  }, [quizFlow.startQuiz]);
+  }, [quizFlow]);
 
   // Browser history: popstate listener + initial state
   useEffect(() => {

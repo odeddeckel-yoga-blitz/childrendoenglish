@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { ArrowLeft, Search, Grid3X3, BookOpen, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { WORDS, CATEGORIES } from '../data/words';
 import { getImageUrl } from '../utils/images';
@@ -61,7 +61,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
       const el = document.querySelector(`[data-word-index="${detailIndex}"]`);
       if (el) el.scrollIntoView?.({ block: 'center' });
     }
-  }, [view]);
+  }, [view, detailIndex]);
 
   return (
     <div className="animate-fade-in space-y-4">

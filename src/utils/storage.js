@@ -40,7 +40,7 @@ export const loadPlayerRegistry = () => {
   try {
     const legacy = localStorage.getItem(LEGACY_STATS_KEY);
     if (legacy) {
-      const parsed = JSON.parse(legacy);
+      JSON.parse(legacy); // validate JSON before migrating
       const id = generateId();
       const registry = {
         schemaVersion: 2,

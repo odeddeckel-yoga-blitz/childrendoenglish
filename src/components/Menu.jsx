@@ -3,7 +3,7 @@ import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, 
 import { t } from '../utils/i18n';
 import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount = 0, showInstallBanner, dueCount = 0, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, dueCount = 0, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
   const [notifEnabled, setNotifEnabled] = useState(isNotificationEnabled);
   const notifSupported = isNotificationSupported();
 

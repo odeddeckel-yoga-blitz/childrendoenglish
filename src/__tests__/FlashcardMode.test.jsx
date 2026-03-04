@@ -24,11 +24,6 @@ vi.mock('../utils/spaced-repetition', async (importOriginal) => {
   };
 });
 
-// Use real words for testing
-import { WORDS } from '../data/words';
-
-const testWords = WORDS.slice(0, 5);
-
 const defaultProps = {
   stats: { wordProgress: {} },
   lang: 'en',

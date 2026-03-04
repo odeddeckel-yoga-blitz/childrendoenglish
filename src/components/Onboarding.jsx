@@ -3,9 +3,7 @@ import { BookOpen, Image, ArrowRight, ArrowLeft, X, CheckCircle2 } from 'lucide-
 import { t, loadHebrew } from '../utils/i18n';
 import { trackEvent } from '../utils/analytics';
 
-const TOTAL_STEPS = 4; // language picker + 2 intro slides + 1 demo
-
-const getDemoQuestion = (lang) => ({
+const getDemoQuestion = (_lang) => ({
   image: '/images/cat.webp',
   correctKey: 'demoCat',
   optionKeys: ['demoDog', 'demoCat', 'demoFish'],

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { fisherYatesShuffle } from '../utils/shuffle';
 import { spacedRepetitionSort, updateWordSR, selectQuizWords, isWordMastered } from '../utils/spaced-repetition';
 import { updateStreak, updateDailyGoal, formatLocalDate } from '../utils/storage';

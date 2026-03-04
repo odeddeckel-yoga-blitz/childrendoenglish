@@ -6,7 +6,7 @@ import QuitModal from './QuitModal';
 import { getImageUrl } from '../utils/images';
 import { t } from '../utils/i18n';
 
-export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit }) {
+export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit: _onQuit }) {
   const [imgLoaded, setImgLoaded] = useState(false);
 
   const quiz = useQuizState({ words, mode: 'image', lang, onComplete, speakOnCorrect: true, speakDelay: 600 });

@@ -279,7 +279,6 @@ const translations = {
     cat_nature: 'Nature',
     cat_colors: 'Colors',
     cat_numbers: 'Numbers',
-    cat_body: 'Body',
     cat_clothing: 'Clothing',
     cat_school: 'School',
     cat_sports: 'Sports',

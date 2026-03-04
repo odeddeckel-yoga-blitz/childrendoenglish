@@ -20,7 +20,6 @@ const CATEGORY_NAMES = {
   nature: 'Nature',
   colors: 'Colors',
   numbers: 'Numbers',
-  body: 'Body Parts',
   clothing: 'Clothing',
   school: 'School',
   sports: 'Sports & Activities',
@@ -211,9 +210,134 @@ for (const slug of CATEGORIES) {
   console.log(`  ✓ /vocabulary/${slug}/ (${words.length} words)`);
 }
 
-// --- Generate vocabulary index redirect ---
-// /vocabulary/ itself redirects to the home page vocabulary section
+// --- Generate vocabulary index page ---
 mkdirSync(join(distDir, 'vocabulary'), { recursive: true });
+
+const vocabIndexUrl = `${SITE}/vocabulary/`;
+const vocabIndexTitle = 'English Vocabulary for Kids - All Categories | Children Do English';
+const vocabIndexDesc = `Browse ${WORDS.length} English vocabulary words across ${CATEGORIES.length} categories. Free definitions, example sentences, phonetics, and Hebrew translations for kids ages 6-12.`;
+
+const vocabIndexBreadcrumb = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name: 'Vocabulary', item: vocabIndexUrl },
+  ],
+});
+
+const vocabIndexItemList = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'English Vocabulary Categories for Kids',
+  description: vocabIndexDesc,
+  numberOfItems: CATEGORIES.length,
+  itemListElement: CATEGORIES.map((slug, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: CATEGORY_NAMES[slug] || slug,
+    url: `${SITE}/vocabulary/${slug}/`,
+  })),
+});
+
+const categoryCards = CATEGORIES.map((slug) => {
+  const name = CATEGORY_NAMES[slug] || slug;
+  const words = getWordsByCategory(slug);
+  const sampleWords = words.slice(0, 5).map((w) => w.word).join(', ');
+  return `
+      <a href="/vocabulary/${slug}/" class="cat-card">
+        <h2>${escapeHtml(name)}</h2>
+        <p class="word-count">${words.length} words</p>
+        <p class="sample">${escapeHtml(sampleWords)}${words.length > 5 ? '...' : ''}</p>
+      </a>`;
+}).join('\n');
+
+const vocabIndexHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(vocabIndexTitle)}</title>
+  <meta name="description" content="${escapeHtml(vocabIndexDesc)}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${vocabIndexUrl}" />
+  <link rel="alternate" hreflang="en" href="${vocabIndexUrl}" />
+  <link rel="alternate" hreflang="x-default" href="${vocabIndexUrl}" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${vocabIndexUrl}" />
+  <meta property="og:title" content="${escapeHtml(vocabIndexTitle)}" />
+  <meta property="og:description" content="${escapeHtml(vocabIndexDesc)}" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(vocabIndexTitle)}" />
+  <meta name="twitter:description" content="${escapeHtml(vocabIndexDesc)}" />
+  <meta name="twitter:image" content="${SITE}/og-image.png" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">${vocabIndexBreadcrumb}</script>
+  <script type="application/ld+json">${vocabIndexItemList}</script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
+    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
+    .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    .header p { opacity: 0.9; font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
+    .intro { margin-bottom: 1.5rem; color: #475569; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .cat-card { display: block; background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
+    .cat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); transform: translateY(-2px); }
+    .cat-card h2 { font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.25rem; }
+    .cat-card .word-count { font-size: 0.8rem; color: #2563eb; font-weight: 600; margin-bottom: 0.5rem; }
+    .cat-card .sample { font-size: 0.85rem; color: #64748b; }
+    .cta { text-align: center; margin: 2rem 0; }
+    .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
+    .cta a:hover { background: #1d4ed8; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>English Vocabulary for Kids</h1>
+    <p>${WORDS.length} words across ${CATEGORIES.length} categories</p>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="/">Home</a> &rsaquo; Vocabulary
+  </div>
+
+  <div class="container">
+    <p class="intro">${escapeHtml(vocabIndexDesc)}</p>
+
+    <div class="grid">
+      ${categoryCards}
+    </div>
+
+    <div class="cta">
+      <a href="/">Start Learning in the App &rarr;</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English
+  </div>
+</body>
+</html>`;
+
+writeFileSync(join(distDir, 'vocabulary', 'index.html'), vocabIndexHtml, 'utf-8');
+console.log(`  ✓ /vocabulary/ (index page, ${CATEGORIES.length} categories)`);
 
 // --- Overwrite sitemap.xml ---
 
@@ -244,6 +368,13 @@ const spaEntries = spaRoutes
   )
   .join('\n');
 
+const vocabIndexEntry = `  <url>
+    <loc>${SITE}/vocabulary/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>`;
+
 const vocabEntries = CATEGORIES.map(
   (slug) => `  <url>
     <loc>${SITE}/vocabulary/${slug}/</loc>
@@ -256,11 +387,13 @@ const vocabEntries = CATEGORIES.map(
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${spaEntries}
+${vocabIndexEntry}
 ${vocabEntries}
 </urlset>
 `;
 
 writeFileSync(join(distDir, 'sitemap.xml'), sitemap, 'utf-8');
 
-console.log(`\nGenerated ${generated} category pages`);
-console.log(`Sitemap: ${spaRoutes.length + CATEGORIES.length} URLs`);
+const totalUrls = spaRoutes.length + 1 + CATEGORIES.length;
+console.log(`\nGenerated ${generated} category pages + vocabulary index`);
+console.log(`Sitemap: ${totalUrls} URLs`);

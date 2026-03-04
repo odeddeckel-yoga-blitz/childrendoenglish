@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { WORDS, getDistractors } from '../data/words';
 import { fisherYatesShuffle } from '../utils/shuffle';
 import { getImageUrl } from '../utils/images';
-import { playSound, speakWord } from '../utils/sound';
+import { playSound } from '../utils/sound';
 import { haptic } from '../utils/haptic';
 import { t } from '../utils/i18n';
 

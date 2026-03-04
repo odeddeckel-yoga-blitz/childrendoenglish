@@ -2,11 +2,9 @@ import { useMemo } from 'react';
 import { Play, ArrowLeft, Share2, RotateCcw, Check, X as XIcon } from 'lucide-react';
 import { BADGES } from '../data/badges';
 import { getWordById } from '../data/words';
-import { getImageUrl } from '../utils/images';
-import { playSound } from '../utils/sound';
 import { t } from '../utils/i18n';
 
-export default function ResultScreen({ results, stats, lang = 'en', level, mode, onPlayAgain, onChangeMode, onMenu }) {
+export default function ResultScreen({ results, stats, lang = 'en', level: _level, mode: _mode, onPlayAgain, onChangeMode, onMenu }) {
   const { score, total, answers = [] } = results;
   const isPerfect = score === total && total > 0;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;

@@ -10,7 +10,7 @@ import { t } from '../utils/i18n';
 
 const MAX_REVIEW = 10;
 
-export default function DailyReview({ words, stats, lang = 'en', canRead = true, onComplete, onBack }) {
+export default function DailyReview({ words, stats, lang = 'en', canRead: _canRead = true, onComplete, onBack }) {
   // Take at most MAX_REVIEW words
   const reviewWords = useRef(words.slice(0, MAX_REVIEW));
   const total = reviewWords.current.length;

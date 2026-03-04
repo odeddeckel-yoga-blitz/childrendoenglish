@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { ArrowLeft, Volume2, RotateCcw, Check, X as XIcon } from 'lucide-react';
+import { ArrowLeft, Volume2, Check, X as XIcon } from 'lucide-react';
 import { WORDS } from '../data/words';
 import { spacedRepetitionSort, updateWordSR } from '../utils/spaced-repetition';
 import { getImageUrl } from '../utils/images';

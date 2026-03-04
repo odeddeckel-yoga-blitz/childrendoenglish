@@ -7,7 +7,7 @@ import QuizOptionGrid from './QuizOptionGrid';
 import { speakWord, isTTSAvailable } from '../utils/sound';
 import { t } from '../utils/i18n';
 
-export default function ListenMatchQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit }) {
+export default function ListenMatchQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit: _onQuit }) {
   const [loadedImages, setLoadedImages] = useState(new Set());
 
   const ttsOk = isTTSAvailable();

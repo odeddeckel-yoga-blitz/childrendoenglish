@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import ResultScreen from '../components/ResultScreen';
-import { BADGES } from '../data/badges';
 
 // Mock sound module
 vi.mock('../utils/sound', () => ({

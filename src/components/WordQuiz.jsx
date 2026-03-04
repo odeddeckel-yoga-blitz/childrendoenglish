@@ -7,7 +7,7 @@ import QuizOptionGrid from './QuizOptionGrid';
 import { speakWord } from '../utils/sound';
 import { t } from '../utils/i18n';
 
-export default function WordQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit }) {
+export default function WordQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit: _onQuit }) {
   const [loadedImages, setLoadedImages] = useState(new Set());
 
   const quiz = useQuizState({ words, mode: 'word', lang, onComplete, speakOnCorrect: true });
