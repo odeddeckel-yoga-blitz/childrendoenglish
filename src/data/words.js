@@ -1,4 +1,4 @@
-// 313 curated words across 14 categories, 3 difficulty levels
+// 294 curated words across 14 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -58,7 +58,6 @@ export const WORDS = [
   { id: 'fireplace', word: 'fireplace', level: 'advanced', partOfSpeech: 'noun', category: 'home', definition: 'A place in the wall where you make a fire', exampleSentence: 'We sat by the warm fireplace.', phonetic: '/ˈfaɪərˌpleɪs/', hebrewTranslation: 'אח', imageUrl: '/images/fireplace.webp' },
   { id: 'curtain', word: 'curtain', level: 'advanced', partOfSpeech: 'noun', category: 'home', definition: 'Fabric that hangs over a window', exampleSentence: 'She opened the curtain to let in sunlight.', phonetic: '/ˈkɜːrtən/', hebrewTranslation: 'וילון', imageUrl: '/images/curtain.webp' },
   { id: 'staircase', word: 'staircase', level: 'advanced', partOfSpeech: 'noun', category: 'home', definition: 'Steps that go up to the next floor', exampleSentence: 'He walked up the staircase to his room.', phonetic: '/ˈstɛərˌkeɪs/', hebrewTranslation: 'מדרגות', imageUrl: '/images/staircase.webp' },
-  { id: 'rug', word: 'rug', level: 'intermediate', partOfSpeech: 'noun', category: 'home', definition: 'A soft piece of fabric that covers part of the floor', exampleSentence: 'The cat slept on the soft rug.', phonetic: '/rʌɡ/', hebrewTranslation: 'שטיח', imageUrl: '/images/rug.webp' },
 
   // === TRANSPORT ===
   // Beginner
@@ -148,16 +147,6 @@ export const WORDS = [
   { id: 'finger', word: 'finger', level: 'intermediate', partOfSpeech: 'noun', category: 'body', definition: 'One of the five thin parts at the end of your hand', exampleSentence: 'She pointed her finger at the map.', phonetic: '/ˈfɪŋɡər/', hebrewTranslation: 'אצבע', imageUrl: '/images/finger.webp' },
   { id: 'tooth', word: 'tooth', level: 'intermediate', partOfSpeech: 'noun', category: 'body', definition: 'A hard white thing in your mouth for chewing', exampleSentence: 'She lost her first baby tooth.', phonetic: '/tuːθ/', hebrewTranslation: 'שן', imageUrl: '/images/tooth.webp' },
   // Advanced
-  { id: 'back', word: 'back', level: 'advanced', partOfSpeech: 'noun', category: 'body', definition: 'The part of your body behind you from shoulders to waist', exampleSentence: 'He carried a backpack on his back.', phonetic: '/bæk/', hebrewTranslation: 'גב', imageUrl: '/images/back.webp' },
-  { id: 'face', word: 'face', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The front part of your head with eyes, nose and mouth', exampleSentence: 'She washed her face with water.', phonetic: '/feɪs/', hebrewTranslation: 'פנים', imageUrl: '/images/face.webp' },
-  { id: 'leg', word: 'leg', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The long part of your body you walk with', exampleSentence: 'He kicked the ball with his leg.', phonetic: '/lɛɡ/', hebrewTranslation: 'רגל', imageUrl: '/images/leg.webp' },
-  { id: 'tummy', word: 'tummy', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The soft round part in the middle of your body', exampleSentence: 'My tummy feels full after lunch.', phonetic: '/ˈtʌmi/', hebrewTranslation: 'בטן', imageUrl: '/images/tummy.webp' },
-  { id: 'lips', word: 'lips', level: 'intermediate', partOfSpeech: 'noun', category: 'body', definition: 'The soft red parts around your mouth', exampleSentence: 'She put lip balm on her lips.', phonetic: '/lɪps/', hebrewTranslation: 'שפתיים', imageUrl: '/images/lips.webp' },
-  { id: 'teeth', word: 'teeth', level: 'intermediate', partOfSpeech: 'noun', category: 'body', definition: 'The hard white things in your mouth you chew with', exampleSentence: 'Brush your teeth before bed.', phonetic: '/tiːθ/', hebrewTranslation: 'שיניים', imageUrl: '/images/teeth.webp' },
-  { id: 'hair', word: 'hair', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The thin strands that grow on top of your head', exampleSentence: 'She brushed her long hair.', phonetic: '/hɛər/', hebrewTranslation: 'שיער', imageUrl: '/images/hair.webp' },
-  { id: 'tongue', word: 'tongue', level: 'intermediate', partOfSpeech: 'noun', category: 'body', definition: 'The soft pink part inside your mouth you taste with', exampleSentence: 'The dog stuck out its tongue.', phonetic: '/tʌŋ/', hebrewTranslation: 'לשון', imageUrl: '/images/tongue.webp' },
-  { id: 'toe', word: 'toe', level: 'intermediate', partOfSpeech: 'noun', category: 'body', definition: 'One of the five small parts at the end of your foot', exampleSentence: 'She wiggled her toes in the sand.', phonetic: '/toʊ/', hebrewTranslation: 'בוהן (רגל)', imageUrl: '/images/toe.webp' },
-  { id: 'palm', word: 'palm', level: 'advanced', partOfSpeech: 'noun', category: 'body', definition: 'The flat inside part of your hand', exampleSentence: 'He held a coin in his palm.', phonetic: '/pɑːm/', hebrewTranslation: 'כף יד', imageUrl: '/images/palm.webp' },
 
   // === CLOTHING ===
   // Beginner
@@ -174,9 +163,6 @@ export const WORDS = [
   { id: 'umbrella', word: 'umbrella', level: 'advanced', partOfSpeech: 'noun', category: 'clothing', definition: 'Something you hold over your head when it rains', exampleSentence: 'Take an umbrella in case it rains.', phonetic: '/ʌmˈbrɛlə/', hebrewTranslation: 'מטריה', imageUrl: '/images/umbrella.webp' },
   { id: 'backpack', word: 'backpack', level: 'advanced', partOfSpeech: 'noun', category: 'clothing', definition: 'A bag you carry on your back', exampleSentence: 'She packed her lunch in her backpack.', phonetic: '/ˈbækˌpæk/', hebrewTranslation: 'תיק גב', imageUrl: '/images/backpack.webp' },
   { id: 'sunglasses', word: 'sunglasses', level: 'advanced', partOfSpeech: 'noun', category: 'clothing', definition: 'Dark glasses that protect your eyes from the sun', exampleSentence: 'He wore sunglasses at the beach.', phonetic: '/ˈsʌnˌɡlæsɪz/', hebrewTranslation: 'משקפי שמש', imageUrl: '/images/sunglasses.webp' },
-  { id: 'bowtie', word: 'bowtie', level: 'advanced', partOfSpeech: 'noun', category: 'clothing', definition: 'A small bow-shaped tie worn around the neck', exampleSentence: 'He wore a red bowtie to the party.', phonetic: '/ˈboʊˌtaɪ/', hebrewTranslation: 'עניבת פרפר', imageUrl: '/images/bowtie.webp' },
-  { id: 'slippers', word: 'slippers', level: 'intermediate', partOfSpeech: 'noun', category: 'clothing', definition: 'Soft cozy shoes you wear inside the house', exampleSentence: 'She put on her warm slippers after school.', phonetic: '/ˈslɪpərz/', hebrewTranslation: 'נעלי בית', imageUrl: '/images/slippers.webp' },
-  { id: 'bandana', word: 'bandana', level: 'advanced', partOfSpeech: 'noun', category: 'clothing', definition: 'A colorful cloth you tie around your head or neck', exampleSentence: 'The cowboy wore a red bandana.', phonetic: '/bænˈdænə/', hebrewTranslation: 'בנדנה', imageUrl: '/images/bandana.webp' },
 
   // === SCHOOL ===
   // Beginner
@@ -193,10 +179,8 @@ export const WORDS = [
   { id: 'calculator', word: 'calculator', level: 'advanced', partOfSpeech: 'noun', category: 'school', definition: 'A small machine that does math for you', exampleSentence: 'She used a calculator to add the numbers.', phonetic: '/ˈkælkjəˌleɪtər/', hebrewTranslation: 'מחשבון', imageUrl: '/images/calculator.webp' },
   { id: 'globe', word: 'globe', level: 'advanced', partOfSpeech: 'noun', category: 'school', definition: 'A round model of the Earth', exampleSentence: 'He spun the globe and pointed to a country.', phonetic: '/ɡloʊb/', hebrewTranslation: 'גלובוס', imageUrl: '/images/globe.webp' },
   { id: 'microscope', word: 'microscope', level: 'advanced', partOfSpeech: 'noun', category: 'school', definition: 'A tool that makes tiny things look bigger', exampleSentence: 'We looked at a leaf under the microscope.', phonetic: '/ˈmaɪkrəˌskoʊp/', hebrewTranslation: 'מיקרוסקופ', imageUrl: '/images/microscope.webp' },
-  { id: 'textbook', word: 'textbook', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A big book you use to learn in class', exampleSentence: 'Open your textbook to page ten.', phonetic: '/ˈtɛkstˌbʊk/', hebrewTranslation: 'ספר לימוד', imageUrl: '/images/textbook.webp' },
   { id: 'stapler', word: 'stapler', level: 'advanced', partOfSpeech: 'noun', category: 'school', definition: 'A tool that pushes metal clips to hold papers together', exampleSentence: 'She used a stapler to attach the pages.', phonetic: '/ˈsteɪplər/', hebrewTranslation: 'מהדק', imageUrl: '/images/stapler.webp' },
   { id: 'paintbrush', word: 'paintbrush', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A brush used to paint pictures', exampleSentence: 'He dipped the paintbrush in red paint.', phonetic: '/ˈpeɪntˌbrʌʃ/', hebrewTranslation: 'מכחול', imageUrl: '/images/paintbrush.webp' },
-  { id: 'glue', word: 'glue', level: 'beginner', partOfSpeech: 'noun', category: 'school', definition: 'A sticky liquid used to stick things together', exampleSentence: 'She used glue to stick the paper.', phonetic: '/ɡluː/', hebrewTranslation: 'דבק', imageUrl: '/images/glue.webp' },
 
   // === SPORTS ===
   // Beginner
@@ -215,9 +199,6 @@ export const WORDS = [
   { id: 'gymnastics', word: 'gymnastics', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'A sport with jumping, flipping, and balancing', exampleSentence: 'She does gymnastics after school.', phonetic: '/dʒɪmˈnæstɪks/', hebrewTranslation: 'התעמלות', imageUrl: '/images/gymnastics.webp' },
   { id: 'surfing', word: 'surfing', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'Riding waves in the ocean on a board', exampleSentence: 'He learned surfing on his vacation.', phonetic: '/ˈsɜːrfɪŋ/', hebrewTranslation: 'גלישה', imageUrl: '/images/surfing.webp' },
   { id: 'archery', word: 'archery', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'A sport where you shoot arrows at a target', exampleSentence: 'She practiced archery every afternoon.', phonetic: '/ˈɑːrtʃəri/', hebrewTranslation: 'קשתות', imageUrl: '/images/archery.webp' },
-  { id: 'hiking', word: 'hiking', level: 'intermediate', partOfSpeech: 'noun', category: 'sports', definition: 'Walking on trails in nature for fun', exampleSentence: 'We went hiking in the mountains.', phonetic: '/ˈhaɪkɪŋ/', hebrewTranslation: 'טיול רגלי', imageUrl: '/images/hiking.webp' },
-  { id: 'jumping', word: 'jumping', level: 'beginner', partOfSpeech: 'noun', category: 'sports', definition: 'Pushing yourself off the ground into the air', exampleSentence: 'The kids love jumping on the trampoline.', phonetic: '/ˈdʒʌmpɪŋ/', hebrewTranslation: 'קפיצה', imageUrl: '/images/jumping.webp' },
-  { id: 'fencing', word: 'fencing', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'A sport where two people fight with thin swords', exampleSentence: 'She wore a mask and suit for fencing.', phonetic: '/ˈfɛnsɪŋ/', hebrewTranslation: 'סייף', imageUrl: '/images/fencing.webp' },
 
   // === FEELINGS ===
   // Beginner
