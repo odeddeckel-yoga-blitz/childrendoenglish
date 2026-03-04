@@ -51,7 +51,7 @@ export default function PrivacyPolicy({ lang = 'en', onBack }) {
 
         <section className="space-y-2">
           <h3 className="font-bold text-slate-800">{t('privacyContactTitle', lang)}</h3>
-          <p>{t('privacyContactDesc', lang)} <a href="mailto:odeddeckel@gmail.com" className="text-blue-600 underline">odeddeckel@gmail.com</a>.</p>
+          <p>{t('privacyContactDesc', lang)} <a href="mailto:info@childrendoenglish.com" className="text-blue-600 underline">info@childrendoenglish.com</a>.</p>
         </section>
       </div>
     </div>
