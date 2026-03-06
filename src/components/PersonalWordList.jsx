@@ -136,7 +136,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack, ini
       </div>
 
       {/* Word input with chips */}
-      <div className="glass rounded-2xl p-4 space-y-3">
+      <div className="glass rounded-2xl p-4 space-y-3 relative z-10">
         <label htmlFor="word-input" className="text-sm text-slate-600 block">
           {t('enterWords', lang)}
         </label>
