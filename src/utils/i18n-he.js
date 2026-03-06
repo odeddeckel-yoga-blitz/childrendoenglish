@@ -130,6 +130,7 @@ export default {
   notInWordBank: 'עדיין לא בבנק המילים',
   needMinWords: 'נדרשות לפחות 4 מילים תואמות כדי להתחיל חידון.',
   noWordsInBank: 'אף מילה לא נמצאה בבנק המילים. נסו מילים כמו: cat, dog, apple, house, car.',
+  clearAll: 'נקו הכל',
   imageQuizCount: 'חידון תמונות ({{count}} מילים)',
   linkCopied: 'הקישור הועתק',
   shareImageQuiz: 'שתפו חידון תמונות',

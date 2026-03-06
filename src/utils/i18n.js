@@ -132,6 +132,7 @@ const translations = {
     notInWordBank: 'Not in word bank yet',
     needMinWords: 'Need at least 4 matching words to start a quiz.',
     noWordsInBank: 'None of those words are in our word bank. Try words like: cat, dog, apple, house, car.',
+    clearAll: 'Clear all',
     imageQuizCount: 'Image Quiz ({{count}} words)',
     linkCopied: 'Link copied',
     shareImageQuiz: 'Share image quiz',
