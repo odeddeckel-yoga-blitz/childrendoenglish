@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { BookOpen, Image, ArrowRight, ArrowLeft, X, CheckCircle2 } from 'lucide-react';
 import { t, loadHebrew } from '../utils/i18n';
 import { trackEvent } from '../utils/analytics';
+import { getWordByName } from '../data/words';
 
 const getDemoQuestion = (_lang) => ({
-  image: '/images/cat.webp',
+  image: getWordByName('cat')?.imageUrl || '/images/cat.webp',
   correctKey: 'demoCat',
   optionKeys: ['demoDog', 'demoCat', 'demoFish'],
 });

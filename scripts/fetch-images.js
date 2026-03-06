@@ -138,7 +138,7 @@ const WORDS = {
   yellow: ['yellow color swatch', 'yellow paint texture', 'yellow background solid'],
   black: ['black color swatch', 'black background solid', 'black texture dark'],
   white: ['white color swatch background', 'white paint texture', 'white marble texture'],
-  orange: ['orange color swatch', 'orange paint texture', 'orange background solid'],
+  orange_color: ['orange paint color swatch', 'orange Farbe color', 'orange solid color background'],
   purple: ['purple color swatch', 'purple paint texture', 'violet purple background'],
   pink: ['pink color swatch', 'pink paint texture', 'pink background solid'],
   brown: ['brown color swatch', 'brown paint texture', 'brown background solid'],
@@ -420,6 +420,38 @@ const WORDS = {
   garage: ['garage car house', 'Garage Autohaus', 'garage door home'],
   pond: ['pond ducks water', 'Teich pond', 'pond water garden'],
   raft: ['raft river floating', 'Floß raft', 'white water rafting'],
+
+  // === ACTIONS (verbs) ===
+  run: ['child running outdoor race', 'Kind rennt laufen', 'person running jogging'],
+  jump: ['child jumping trampoline happy', 'Kind springt hüpft', 'person jumping action'],
+  eat: ['child eating food meal', 'Kind isst Essen', 'person eating lunch dinner'],
+  drink: ['child drinking water glass', 'Kind trinkt Wasser', 'drinking water glass juice'],
+  sleep: ['child sleeping bed pillow', 'Kind schläft Bett', 'person sleeping rest'],
+  swim: ['person swimming pool water', 'Schwimmer Pool Wasser', 'child swimming action'],
+  read_verb: ['child reading book sitting', 'Kind liest Buch', 'person reading book library'],
+  write: ['Schreiben writing pencil notebook', 'handwriting pen paper', 'student writing desk school'],
+  sing: ['child singing microphone music', 'Kind singt Lied', 'person singing happy'],
+  dance: ['children dancing music happy', 'Kind tanzt Tanz', 'dancing ballet movement'],
+  cook_verb: ['cooking kitchen pot stove', 'Kochen Küche Topf', 'person cooking food'],
+  climb_verb: ['child climbing tree outdoor', 'Kind klettert Baum', 'climbing tree action'],
+  draw_verb: ['child drawing picture pencil art', 'Kind zeichnet malt Bild', 'drawing sketching paper'],
+  paint_verb: ['child painting art easel brush', 'Kind malt Farbe Pinsel', 'painting colors canvas'],
+  throw: ['child throwing ball outdoor', 'Kind wirft Ball', 'throwing ball sport action'],
+  catch_verb: ['child catching ball hands', 'Kind fängt Ball', 'catching ball sport glove'],
+  build: ['child building blocks tower lego', 'Kind baut Bauklötze', 'building construction blocks'],
+  dig: ['child digging sand beach shovel', 'Kind gräbt Sand Schaufel', 'digging garden shovel'],
+
+  // NEW WORDS
+  stickers: ['stickers colorful collection sheet', 'Aufkleber stickers Sammlung', 'sticker sheet children fun'],
+  costume: ['child costume dress up halloween', 'Kostüm Verkleidung Kind', 'costume party children'],
+  pajamas: ['pajamas sleepwear children', 'Pyjama Schlafanzug Kind', 'pajamas bedtime clothes'],
+  zipper: ['zipper close up jacket', 'Reißverschluss Zipper', 'zipper metal fastener'],
+  pocket: ['pocket jeans clothing', 'Tasche Hosentasche', 'pocket pants clothing'],
+  collar: ['shirt collar close up', 'Kragen Hemdkragen', 'collar dress shirt'],
+  uniform: ['school uniform children', 'Schuluniform Uniform', 'uniform student clothing'],
+  roof: ['house roof top tiles', 'Dach Hausdach', 'roof building red tiles'],
+  stairs: ['stairs steps indoor house', 'Treppe Stufen innen', 'stairway steps home'],
+  basement: ['basement room underground cellar', 'Keller basement Raum', 'basement house cellar'],
 };
 
 async function searchWikimedia(query) {
