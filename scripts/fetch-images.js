@@ -427,24 +427,11 @@ const WORDS = {
   write: ['Schreiben writing pencil notebook', 'handwriting pen paper', 'student writing desk school'],
   cook_verb: ['cooking kitchen pot stove', 'Kochen Küche Topf', 'person cooking food'],
   climb_verb: ['child climbing tree outdoor', 'Kind klettert Baum', 'climbing tree action'],
-  draw_verb: ['child drawing picture pencil art', 'Kind zeichnet malt Bild', 'drawing sketching paper'],
   paint_verb: ['child painting art easel brush', 'Kind malt Farbe Pinsel', 'painting colors canvas'],
-  throw: ['child throwing ball outdoor', 'Kind wirft Ball', 'throwing ball sport action'],
-  catch_verb: ['child catching ball hands', 'Kind fängt Ball', 'catching ball sport glove'],
-  build: ['child building blocks tower lego', 'Kind baut Bauklötze', 'building construction blocks'],
-  dig: ['child digging sand beach shovel', 'Kind gräbt Sand Schaufel', 'digging garden shovel'],
 
   // NEW WORDS
-  stickers: ['stickers colorful collection sheet', 'Aufkleber stickers Sammlung', 'sticker sheet children fun'],
-  costume: ['child costume dress up halloween', 'Kostüm Verkleidung Kind', 'costume party children'],
-  pajamas: ['pajamas sleepwear children', 'Pyjama Schlafanzug Kind', 'pajamas bedtime clothes'],
   zipper: ['zipper close up jacket', 'Reißverschluss Zipper', 'zipper metal fastener'],
-  pocket: ['pocket jeans clothing', 'Tasche Hosentasche', 'pocket pants clothing'],
-  collar: ['shirt collar close up', 'Kragen Hemdkragen', 'collar dress shirt'],
-  uniform: ['school uniform children', 'Schuluniform Uniform', 'uniform student clothing'],
-  roof: ['house roof top tiles', 'Dach Hausdach', 'roof building red tiles'],
   stairs: ['stairs steps indoor house', 'Treppe Stufen innen', 'stairway steps home'],
-  basement: ['basement room underground cellar', 'Keller basement Raum', 'basement house cellar'],
 };
 
 async function searchWikimedia(query) {
