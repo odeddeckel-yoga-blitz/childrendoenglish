@@ -26,6 +26,8 @@ const CATEGORY_NAMES = {
   feelings: 'Feelings & Emotions',
   everyday: 'Everyday Objects',
   toys: 'Toys & Games',
+  actions: 'Actions & Verbs',
+  body: 'Body Parts',
 };
 
 function escapeHtml(str) {
@@ -103,6 +105,7 @@ function buildCategoryPage(slug, displayName, words) {
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <!-- Open Graph -->
+  <meta property="og:locale" content="en_US" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Children Do English" />
   <meta property="og:url" content="${url}" />
@@ -266,6 +269,7 @@ const vocabIndexHtml = `<!DOCTYPE html>
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <!-- Open Graph -->
+  <meta property="og:locale" content="en_US" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Children Do English" />
   <meta property="og:url" content="${vocabIndexUrl}" />
