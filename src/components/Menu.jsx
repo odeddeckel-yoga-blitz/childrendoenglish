@@ -175,9 +175,12 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
                      hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600
-                          flex items-center justify-center flex-shrink-0">
-            <BookOpen className="w-6 h-6 text-white" />
+          <div className="relative flex-shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600
+                            flex items-center justify-center">
+              <BookOpen className="w-6 h-6 text-white" />
+            </div>
+            <span className="absolute -top-1.5 -start-1.5 w-5 h-5 rounded-full bg-white text-emerald-600 flex items-center justify-center text-[10px] font-black shadow-sm ring-1 ring-emerald-200">1</span>
           </div>
           <div>
             <p className="font-bold text-slate-800">{t('learnWords', lang)}</p>
@@ -190,9 +193,12 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
                      hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600
-                          flex items-center justify-center flex-shrink-0">
-            <Layers className="w-6 h-6 text-white" />
+          <div className="relative flex-shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600
+                            flex items-center justify-center">
+              <Layers className="w-6 h-6 text-white" />
+            </div>
+            <span className="absolute -top-1.5 -start-1.5 w-5 h-5 rounded-full bg-white text-amber-600 flex items-center justify-center text-[10px] font-black shadow-sm ring-1 ring-amber-200">2</span>
           </div>
           <div>
             <p className="font-bold text-slate-800">{t('flashcards', lang)}</p>
@@ -205,9 +211,12 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
                      hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600
-                          flex items-center justify-center flex-shrink-0">
-            <Play className="w-6 h-6 text-white" />
+          <div className="relative flex-shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600
+                            flex items-center justify-center">
+              <Play className="w-6 h-6 text-white" />
+            </div>
+            <span className="absolute -top-1.5 -start-1.5 w-5 h-5 rounded-full bg-white text-blue-600 flex items-center justify-center text-[10px] font-black shadow-sm ring-1 ring-blue-200">3</span>
           </div>
           <div>
             <p className="font-bold text-slate-800">{t('playQuiz', lang)}</p>
