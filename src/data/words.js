@@ -1,4 +1,4 @@
-// 369 curated words across 15 categories, 3 difficulty levels
+// 362 curated words across 15 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -494,16 +494,9 @@ export const WORDS = [
   // === ACTIONS (verbs) ===
   // Beginner
   { id: 'run', word: 'run', level: 'beginner', partOfSpeech: 'verb', category: 'actions', definition: 'To move your legs fast to go quickly', exampleSentence: 'She likes to run in the park.', phonetic: '/rʌn/', hebrewTranslation: 'לרוץ', imageUrl: '/images/run.webp' },
-  { id: 'jump', word: 'jump', level: 'beginner', partOfSpeech: 'verb', category: 'actions', definition: 'To push yourself up into the air', exampleSentence: 'He can jump very high.', phonetic: '/dʒʌmp/', hebrewTranslation: 'לקפוץ', imageUrl: '/images/jump.webp' },
-  { id: 'eat', word: 'eat', level: 'beginner', partOfSpeech: 'verb', category: 'actions', definition: 'To put food in your mouth and swallow it', exampleSentence: 'We eat dinner at six.', phonetic: '/iːt/', hebrewTranslation: 'לאכול', imageUrl: '/images/eat.webp' },
-  { id: 'drink', word: 'drink', level: 'beginner', partOfSpeech: 'verb', category: 'actions', definition: 'To swallow a liquid like water or juice', exampleSentence: 'She drinks water every day.', phonetic: '/drɪŋk/', hebrewTranslation: 'לשתות', imageUrl: '/images/drink.webp' },
-  { id: 'sleep', word: 'sleep', level: 'beginner', partOfSpeech: 'verb', category: 'actions', definition: 'To close your eyes and rest at night', exampleSentence: 'I sleep in my cozy bed.', phonetic: '/sliːp/', hebrewTranslation: 'לישון', imageUrl: '/images/sleep.webp' },
-  { id: 'swim', word: 'swim', level: 'beginner', partOfSpeech: 'verb', category: 'actions', definition: 'To move through water using your arms and legs', exampleSentence: 'The children swim in the lake.', phonetic: '/swɪm/', hebrewTranslation: 'לשחות', imageUrl: '/images/swim.webp' },
   // Intermediate
   { id: 'read_verb', word: 'read', level: 'intermediate', partOfSpeech: 'verb', category: 'actions', definition: 'To look at words and understand them', exampleSentence: 'She loves to read books.', phonetic: '/riːd/', hebrewTranslation: 'לקרוא', imageUrl: '/images/read_verb.webp' },
   { id: 'write', word: 'write', level: 'intermediate', partOfSpeech: 'verb', category: 'actions', definition: 'To make words on paper with a pen or pencil', exampleSentence: 'He writes in his notebook every day.', phonetic: '/raɪt/', hebrewTranslation: 'לכתוב', imageUrl: '/images/write.webp' },
-  { id: 'sing', word: 'sing', level: 'intermediate', partOfSpeech: 'verb', category: 'actions', definition: 'To make music with your voice', exampleSentence: 'She sings a happy song.', phonetic: '/sɪŋ/', hebrewTranslation: 'לשיר', imageUrl: '/images/sing.webp' },
-  { id: 'dance', word: 'dance', level: 'intermediate', partOfSpeech: 'verb', category: 'actions', definition: 'To move your body to music', exampleSentence: 'They love to dance at parties.', phonetic: '/dæns/', hebrewTranslation: 'לרקוד', imageUrl: '/images/dance.webp' },
   { id: 'cook_verb', word: 'cook', level: 'intermediate', partOfSpeech: 'verb', category: 'actions', definition: 'To make food by heating it', exampleSentence: 'Mom cooks dinner in the kitchen.', phonetic: '/kʊk/', hebrewTranslation: 'לבשל', imageUrl: '/images/cook_verb.webp' },
   { id: 'climb_verb', word: 'climb', level: 'intermediate', partOfSpeech: 'verb', category: 'actions', definition: 'To go up something using your hands and feet', exampleSentence: 'He climbs the tall tree.', phonetic: '/klaɪm/', hebrewTranslation: 'לטפס', imageUrl: '/images/climb_verb.webp' },
   // Advanced

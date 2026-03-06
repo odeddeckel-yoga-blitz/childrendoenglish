@@ -423,15 +423,8 @@ const WORDS = {
 
   // === ACTIONS (verbs) ===
   run: ['child running outdoor race', 'Kind rennt laufen', 'person running jogging'],
-  jump: ['child jumping trampoline happy', 'Kind springt hüpft', 'person jumping action'],
-  eat: ['child eating food meal', 'Kind isst Essen', 'person eating lunch dinner'],
-  drink: ['child drinking water glass', 'Kind trinkt Wasser', 'drinking water glass juice'],
-  sleep: ['child sleeping bed pillow', 'Kind schläft Bett', 'person sleeping rest'],
-  swim: ['person swimming pool water', 'Schwimmer Pool Wasser', 'child swimming action'],
   read_verb: ['child reading book sitting', 'Kind liest Buch', 'person reading book library'],
   write: ['Schreiben writing pencil notebook', 'handwriting pen paper', 'student writing desk school'],
-  sing: ['child singing microphone music', 'Kind singt Lied', 'person singing happy'],
-  dance: ['children dancing music happy', 'Kind tanzt Tanz', 'dancing ballet movement'],
   cook_verb: ['cooking kitchen pot stove', 'Kochen Küche Topf', 'person cooking food'],
   climb_verb: ['child climbing tree outdoor', 'Kind klettert Baum', 'climbing tree action'],
   draw_verb: ['child drawing picture pencil art', 'Kind zeichnet malt Bild', 'drawing sketching paper'],
