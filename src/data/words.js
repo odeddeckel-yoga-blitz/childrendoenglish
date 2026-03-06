@@ -1,4 +1,4 @@
-// 303 curated words across 13 categories, 3 difficulty levels
+// 321 curated words across 13 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -20,6 +20,27 @@ export const WORDS = [
   { id: 'parrot', word: 'parrot', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'A colorful bird that can copy words people say', exampleSentence: 'The parrot said hello to everyone.', phonetic: '/ˈpærət/', hebrewTranslation: 'תוכי', imageUrl: '/images/parrot.webp' },
   { id: 'flamingo', word: 'flamingo', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'A tall pink bird with long legs', exampleSentence: 'The flamingo stood on one leg.', phonetic: '/fləˈmɪŋɡoʊ/', hebrewTranslation: 'פלמינגו', imageUrl: '/images/flamingo.webp' },
   { id: 'cheetah', word: 'cheetah', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'The fastest animal on land with spotted fur', exampleSentence: 'The cheetah ran faster than any other animal.', phonetic: '/ˈtʃiːtə/', hebrewTranslation: 'צ\'יטה', imageUrl: '/images/cheetah.webp' },
+  // Beginner (new)
+  { id: 'duck', word: 'duck', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A bird that swims and says quack', exampleSentence: 'The duck swam across the pond.', phonetic: '/dʌk/', hebrewTranslation: 'ברווז', imageUrl: '/images/duck.webp' },
+  { id: 'pig', word: 'pig', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A pink farm animal with a curly tail', exampleSentence: 'The pig rolled in the mud.', phonetic: '/pɪɡ/', hebrewTranslation: 'חזיר', imageUrl: '/images/pig.webp' },
+  { id: 'hen', word: 'hen', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A farm bird that lays eggs', exampleSentence: 'The hen sat on her eggs.', phonetic: '/hɛn/', hebrewTranslation: 'תרנגולת', imageUrl: '/images/hen.webp' },
+  { id: 'ant', word: 'ant', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A tiny insect that lives in big groups', exampleSentence: 'The ant carried a crumb of bread.', phonetic: '/ænt/', hebrewTranslation: 'נמלה', imageUrl: '/images/ant.webp' },
+  { id: 'bee', word: 'bee', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A small flying insect that makes honey', exampleSentence: 'The bee flew from flower to flower.', phonetic: '/biː/', hebrewTranslation: 'דבורה', imageUrl: '/images/bee.webp' },
+  { id: 'mouse', word: 'mouse', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A very small animal with a long tail', exampleSentence: 'A little mouse ran across the floor.', phonetic: '/maʊs/', hebrewTranslation: 'עכבר', imageUrl: '/images/mouse.webp' },
+  // Intermediate (new)
+  { id: 'snake', word: 'snake', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A long animal with no legs that slithers on the ground', exampleSentence: 'The snake slid through the grass.', phonetic: '/sneɪk/', hebrewTranslation: 'נחש', imageUrl: '/images/snake.webp' },
+  { id: 'tiger', word: 'tiger', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A big wild cat with orange and black stripes', exampleSentence: 'The tiger rested under a tree.', phonetic: '/ˈtaɪɡər/', hebrewTranslation: 'נמר', imageUrl: '/images/tiger.webp' },
+  { id: 'zebra', word: 'zebra', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A horse-like animal with black and white stripes', exampleSentence: 'The zebra ran across the savanna.', phonetic: '/ˈziːbrə/', hebrewTranslation: 'זברה', imageUrl: '/images/zebra.webp' },
+  { id: 'deer', word: 'deer', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A gentle forest animal with big antlers', exampleSentence: 'A deer stood quietly in the woods.', phonetic: '/dɪr/', hebrewTranslation: 'אייל', imageUrl: '/images/deer.webp' },
+  { id: 'goat', word: 'goat', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A farm animal with horns that climbs well', exampleSentence: 'The goat climbed up the rocky hill.', phonetic: '/ɡoʊt/', hebrewTranslation: 'עז', imageUrl: '/images/goat.webp' },
+  { id: 'shark', word: 'shark', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A large fish with sharp teeth', exampleSentence: 'The shark swam near the coral reef.', phonetic: '/ʃɑːrk/', hebrewTranslation: 'כריש', imageUrl: '/images/shark.webp' },
+  // Advanced (new)
+  { id: 'crocodile', word: 'crocodile', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'A large reptile with a long snout and strong jaws', exampleSentence: 'The crocodile lay still by the river.', phonetic: '/ˈkrɒkədaɪl/', hebrewTranslation: 'תנין', imageUrl: '/images/crocodile.webp' },
+  { id: 'kangaroo', word: 'kangaroo', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'An animal from Australia that hops and carries babies in a pouch', exampleSentence: 'The kangaroo hopped across the field.', phonetic: '/ˌkæŋɡəˈruː/', hebrewTranslation: 'קנגורו', imageUrl: '/images/kangaroo.webp' },
+  { id: 'hippo', word: 'hippo', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'A huge animal that spends most of its time in water', exampleSentence: 'The hippo opened its enormous mouth.', phonetic: '/ˈhɪpoʊ/', hebrewTranslation: 'היפופוטם', imageUrl: '/images/hippo.webp' },
+  { id: 'butterfly', word: 'butterfly', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'A beautiful insect with colorful wings', exampleSentence: 'The butterfly landed on a flower.', phonetic: '/ˈbʌtərflaɪ/', hebrewTranslation: 'פרפר', imageUrl: '/images/butterfly.webp' },
+  { id: 'camel', word: 'camel', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'A large desert animal with one or two humps', exampleSentence: 'The camel walked slowly through the desert.', phonetic: '/ˈkæməl/', hebrewTranslation: 'גמל', imageUrl: '/images/camel.webp' },
+  { id: 'panda', word: 'panda', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'A black and white bear that eats bamboo', exampleSentence: 'The panda chewed on a stick of bamboo.', phonetic: '/ˈpændə/', hebrewTranslation: 'פנדה', imageUrl: '/images/panda.webp' },
 
   // === FOOD ===
   // Beginner
