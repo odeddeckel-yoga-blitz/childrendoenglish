@@ -182,7 +182,9 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
             className="p-3 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
             aria-label={t('previousStep', lang)}
           >
-            <ArrowLeft className="w-5 h-5 text-slate-600" />
+            {lang === 'he'
+              ? <ArrowRight className="w-5 h-5 text-slate-600" />
+              : <ArrowLeft className="w-5 h-5 text-slate-600" />}
           </button>
 
           {/* Dots */}
@@ -210,7 +212,9 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
             className="p-3 rounded-full bg-blue-600 text-white hover:bg-blue-700 transition-colors"
             aria-label={t('nextStep', lang)}
           >
-            <ArrowRight className="w-5 h-5" />
+            {lang === 'he'
+              ? <ArrowLeft className="w-5 h-5" />
+              : <ArrowRight className="w-5 h-5" />}
           </button>
         </div>
       )}
