@@ -115,6 +115,7 @@ export default function App() {
   const [showProfilePicker, setShowProfilePicker] = useState(false);
   const [showConsent, setShowConsent] = useState(() => needsConsentPrompt());
   const [learnWords, setLearnWords] = useState(null);
+  const [sharedWords, setSharedWords] = useState(null);
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && !navigator.onLine);
   const [storageFull, setStorageFull] = useState(false);
   const mainRef = useRef(null);
@@ -360,7 +361,7 @@ export default function App() {
     setStats(prev => ({ ...prev, uiLanguage: prev.uiLanguage === 'he' ? 'en' : 'he' }));
   }, []);
 
-  // Detect hash routes: #admin, #quiz/{mode}/{ids}
+  // Detect hash routes: #admin, #quiz/{mode}/{ids}, #words/{ids}
   useEffect(() => {
     const checkHash = async () => {
       const hash = window.location.hash;
@@ -377,6 +378,18 @@ export default function App() {
         window.location.hash = '';
         if (words.length >= 4) {
           quizFlow.startQuiz(null, mode, words);
+        }
+        return;
+      }
+      const wordsMatch = hash.match(/^#words\/(.+)$/);
+      if (wordsMatch) {
+        const ids = wordsMatch[1].split(',');
+        const { getWordById } = await import('./data/words');
+        const words = ids.map(id => getWordById(id)).filter(Boolean);
+        window.location.hash = '';
+        if (words.length > 0) {
+          setSharedWords(words);
+          setGameState('personalList');
         }
       }
     };
@@ -629,7 +642,8 @@ export default function App() {
           <PersonalWordList
             lang={lang}
             onStartQuiz={quizFlow.handleStartPersonalQuiz}
-            onBack={() => navigate('menu', 'back')}
+            onBack={() => { setSharedWords(null); navigate('menu', 'back'); }}
+            initialWords={sharedWords}
           />
         );
 

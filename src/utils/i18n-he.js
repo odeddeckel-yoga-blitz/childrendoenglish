@@ -135,6 +135,7 @@ export default {
   linkCopied: 'הקישור הועתק',
   shareImageQuiz: 'שתפו חידון תמונות',
   shareWordQuiz: 'שתפו חידון מילים',
+  shareWordList: 'שתפו רשימת מילים',
 
   // Loading
   loading: 'טוען',

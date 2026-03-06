@@ -137,6 +137,7 @@ const translations = {
     linkCopied: 'Link copied',
     shareImageQuiz: 'Share image quiz',
     shareWordQuiz: 'Share word quiz',
+    shareWordList: 'Share word list',
 
     // Loading
     loading: 'Loading',

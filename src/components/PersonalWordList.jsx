@@ -1,10 +1,10 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { ArrowLeft, Play, Share2, Check, X } from 'lucide-react';
+import { ArrowLeft, Play, Share2, Check, X, Link } from 'lucide-react';
 import { WORDS, getWordByName } from '../data/words';
 import { t } from '../utils/i18n';
 
-export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack }) {
-  const [words, setWords] = useState([]);
+export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack, initialWords }) {
+  const [words, setWords] = useState(() => initialWords || []);
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [highlightIndex, setHighlightIndex] = useState(-1);
@@ -96,6 +96,22 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack }) {
     setTimeout(() => setCopiedMode(null), 2000);
   }, [words, lang]);
 
+  const handleShareList = useCallback(async () => {
+    const ids = words.map(w => w.id).join(',');
+    const url = `${window.location.origin}${window.location.pathname}#words/${ids}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: t('shareWordList', lang), text: words.map(w => w.word).join(', '), url });
+        return;
+      } catch { /* user cancelled share */ }
+    }
+
+    await navigator.clipboard.writeText(url);
+    setCopiedMode('list');
+    setTimeout(() => setCopiedMode(null), 2000);
+  }, [words, lang]);
+
   const canQuiz = words.length >= 4;
 
   return (
@@ -105,7 +121,18 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack }) {
         <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
           <ArrowLeft className="w-5 h-5 text-slate-600" />
         </button>
-        <h2 className="text-xl font-bold text-slate-800">{t('myWordList', lang)}</h2>
+        <h2 className="flex-1 text-xl font-bold text-slate-800">{t('myWordList', lang)}</h2>
+        {words.length > 0 && (
+          <button
+            onClick={handleShareList}
+            className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors flex items-center gap-1.5"
+            aria-label={copiedMode === 'list' ? t('linkCopied', lang) : t('shareWordList', lang)}
+          >
+            {copiedMode === 'list'
+              ? <Check className="w-5 h-5 text-emerald-600" />
+              : <Link className="w-5 h-5 text-slate-500" />}
+          </button>
+        )}
       </div>
 
       {/* Word input with chips */}
