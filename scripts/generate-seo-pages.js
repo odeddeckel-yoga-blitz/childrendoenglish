@@ -74,6 +74,7 @@ function buildCategoryPage(slug, displayName, words) {
     .map(
       (w) => `
       <div class="card">
+        <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="card-img" loading="lazy" width="128" height="128" />
         <div class="card-word">${escapeHtml(w.word)}</div>
         <div class="card-phonetic">${escapeHtml(w.phonetic)}</div>
         <div class="card-pos">${escapeHtml(w.partOfSpeech)}</div>
@@ -137,7 +138,8 @@ function buildCategoryPage(slug, displayName, words) {
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1.5rem; color: #475569; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-    .card { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .card { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
+    .card-img { width: 128px; height: 128px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 0.75rem; display: block; }
     .card-word { font-size: 1.35rem; font-weight: 700; color: #1e293b; }
     .card-phonetic { font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.25rem; }
     .card-pos { font-size: 0.75rem; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
@@ -147,6 +149,7 @@ function buildCategoryPage(slug, displayName, words) {
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
     .cta a:hover { background: #1d4ed8; }
+    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; }
     .categories { margin-top: 2rem; }
     .categories h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
     .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -174,6 +177,7 @@ function buildCategoryPage(slug, displayName, words) {
 
     <div class="cta">
       <a href="/">Practice These Words in the App &rarr;</a>
+      <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
 
     <div class="categories">
@@ -185,7 +189,7 @@ function buildCategoryPage(slug, displayName, words) {
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -335,7 +339,7 @@ const vocabIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -388,16 +392,171 @@ const vocabEntries = CATEGORIES.map(
   </url>`
 ).join('\n');
 
+// --- Generate About page ---
+
+const aboutUrl = `${SITE}/about/`;
+const aboutTitle = 'About Children Do English | Free English Vocabulary App for Kids';
+const aboutDesc = 'Children Do English is a free, ad-free vocabulary learning app for kids ages 6-12, built by Oded Deckelbaum. Learn about our teaching methodology and mission.';
+
+const aboutBreadcrumb = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name: 'About', item: aboutUrl },
+  ],
+});
+
+const aboutPersonSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Oded Deckelbaum',
+  jobTitle: 'Creator of Children Do English',
+  url: `${SITE}/about/`,
+});
+
+const aboutHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(aboutTitle)}</title>
+  <meta name="description" content="${escapeHtml(aboutDesc)}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${aboutUrl}" />
+  <link rel="alternate" hreflang="en" href="${aboutUrl}" />
+  <link rel="alternate" hreflang="x-default" href="${aboutUrl}" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${aboutUrl}" />
+  <meta property="og:title" content="${escapeHtml(aboutTitle)}" />
+  <meta property="og:description" content="${escapeHtml(aboutDesc)}" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(aboutTitle)}" />
+  <meta name="twitter:description" content="${escapeHtml(aboutDesc)}" />
+  <meta name="twitter:image" content="${SITE}/og-image.png" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">${aboutBreadcrumb}</script>
+  <script type="application/ld+json">${aboutPersonSchema}</script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; }
+    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
+    .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    .header p { opacity: 0.9; font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 720px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
+    .section { background: #fff; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .section h2 { font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem; }
+    .section p { margin-bottom: 0.75rem; color: #475569; }
+    .section ul { margin: 0.5rem 0 0.75rem 1.25rem; color: #475569; }
+    .section li { margin-bottom: 0.35rem; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+    .stat { background: #f0f9ff; border-radius: 0.5rem; padding: 1rem; text-align: center; }
+    .stat-num { font-size: 1.5rem; font-weight: 800; color: #2563eb; }
+    .stat-label { font-size: 0.8rem; color: #64748b; margin-top: 0.25rem; }
+    .cta { text-align: center; margin: 2rem 0; }
+    .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
+    .cta a:hover { background: #1d4ed8; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>About Children Do English</h1>
+    <p>Free vocabulary learning for kids ages 6-12</p>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="/">Home</a> &rsaquo; About
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <h2>Our Mission</h2>
+      <p>Children Do English helps kids build a strong English vocabulary through fun, interactive learning. We believe every child deserves access to quality educational tools &mdash; completely free, with no ads, no tracking, and no account required.</p>
+    </div>
+
+    <div class="section">
+      <h2>How It Works</h2>
+      <p>Our app uses proven learning techniques to help children retain new words:</p>
+      <ul>
+        <li><strong>Spaced repetition</strong> &mdash; Words come back for review right before kids forget them</li>
+        <li><strong>Multi-modal learning</strong> &mdash; Image quizzes, audio challenges, flashcards, and word quizzes engage different senses</li>
+        <li><strong>Progressive difficulty</strong> &mdash; Three levels (beginner, intermediate, advanced) let kids grow at their own pace</li>
+        <li><strong>Instant feedback</strong> &mdash; Every answer gets immediate, encouraging feedback</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>What's Inside</h2>
+      <div class="stats">
+        <div class="stat"><div class="stat-num">${WORDS.length}</div><div class="stat-label">Words</div></div>
+        <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">Categories</div></div>
+        <div class="stat"><div class="stat-num">4</div><div class="stat-label">Quiz Modes</div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Difficulty Levels</div></div>
+      </div>
+      <p>Every word includes a definition, example sentence, phonetic pronunciation, and Hebrew translation &mdash; making it perfect for bilingual Hebrew-English learners.</p>
+    </div>
+
+    <div class="section">
+      <h2>Privacy First</h2>
+      <p>Children Do English is designed with kids' safety in mind. All learning data is stored locally on the device and never sent to any server. We comply with COPPA and collect no personal information. <a href="/privacy">Read our full privacy policy &rarr;</a></p>
+    </div>
+
+    <div class="section">
+      <h2>About the Creator</h2>
+      <p>Children Do English is built by <strong>Oded Deckelbaum</strong>, a software developer and parent who wanted to create a better way for kids to learn English vocabulary. The app is open and free because education should be accessible to everyone.</p>
+    </div>
+
+    <div class="cta">
+      <a href="/">Start Learning &rarr;</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/privacy" style="color:#94a3b8">Privacy Policy</a>
+  </div>
+</body>
+</html>`;
+
+mkdirSync(join(distDir, 'about'), { recursive: true });
+writeFileSync(join(distDir, 'about', 'index.html'), aboutHtml, 'utf-8');
+console.log('  \u2713 /about/ (about page)');
+
+// --- Overwrite sitemap.xml ---
+
+const aboutEntry = `  <url>
+    <loc>${SITE}/about/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>`;
+
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${spaEntries}
 ${vocabIndexEntry}
 ${vocabEntries}
+${aboutEntry}
 </urlset>
 `;
 
 writeFileSync(join(distDir, 'sitemap.xml'), sitemap, 'utf-8');
 
-const totalUrls = spaRoutes.length + 1 + CATEGORIES.length;
-console.log(`\nGenerated ${generated} category pages + vocabulary index`);
+const totalUrls = spaRoutes.length + 1 + CATEGORIES.length + 1;
+console.log(`\nGenerated ${generated} category pages + vocabulary index + about page`);
 console.log(`Sitemap: ${totalUrls} URLs`);
