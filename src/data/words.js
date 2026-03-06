@@ -1,4 +1,4 @@
-// 336 curated words across 13 categories, 3 difficulty levels
+// 334 curated words across 13 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -128,7 +128,6 @@ export const WORDS = [
   // Intermediate
   { id: 'rainbow', word: 'rainbow', level: 'intermediate', partOfSpeech: 'noun', category: 'nature', definition: 'A colorful arc in the sky after rain', exampleSentence: 'We saw a beautiful rainbow after the storm.', phonetic: '/ˈreɪnˌboʊ/', hebrewTranslation: 'קשת בענן', imageUrl: '/images/rainbow.webp' },
   { id: 'mountain', word: 'mountain', level: 'intermediate', partOfSpeech: 'noun', category: 'nature', definition: 'A very high piece of land', exampleSentence: 'We climbed to the top of the mountain.', phonetic: '/ˈmaʊntən/', hebrewTranslation: 'הר', imageUrl: '/images/mountain.webp' },
-  { id: 'butterfly', word: 'butterfly', level: 'intermediate', partOfSpeech: 'noun', category: 'nature', definition: 'An insect with large colorful wings', exampleSentence: 'A butterfly landed on the flower.', phonetic: '/ˈbʌtərˌflaɪ/', hebrewTranslation: 'פרפר', imageUrl: '/images/butterfly.webp' },
   // Advanced
   { id: 'volcano', word: 'volcano', level: 'advanced', partOfSpeech: 'noun', category: 'nature', definition: 'A mountain that can erupt with hot lava', exampleSentence: 'The volcano erupted with fire and smoke.', phonetic: '/vɒlˈkeɪnoʊ/', hebrewTranslation: 'הר געש', imageUrl: '/images/volcano.webp' },
   { id: 'waterfall', word: 'waterfall', level: 'advanced', partOfSpeech: 'noun', category: 'nature', definition: 'Water that falls down from a high place', exampleSentence: 'The waterfall splashed into the river below.', phonetic: '/ˈwɔːtərˌfɔːl/', hebrewTranslation: 'מפל', imageUrl: '/images/waterfall.webp' },
@@ -145,7 +144,7 @@ export const WORDS = [
   { id: 'black', word: 'black', level: 'beginner', partOfSpeech: 'adjective', category: 'colors', definition: 'The darkest color, like the night sky', exampleSentence: 'The cat has black fur.', phonetic: '/blæk/', hebrewTranslation: 'שחור', imageUrl: '/images/black.webp' },
   { id: 'white', word: 'white', level: 'beginner', partOfSpeech: 'adjective', category: 'colors', definition: 'The color of snow and milk', exampleSentence: 'The rabbit has soft white fur.', phonetic: '/waɪt/', hebrewTranslation: 'לבן', imageUrl: '/images/white.webp' },
   // Intermediate
-  { id: 'orange', word: 'orange', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'A warm color between red and yellow', exampleSentence: 'The leaves turned orange in autumn.', phonetic: '/ˈɒrɪndʒ/', hebrewTranslation: 'כתום', imageUrl: '/images/orange.webp' },
+  { id: 'orange_color', word: 'orange', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'A warm color between red and yellow', exampleSentence: 'The leaves turned orange in autumn.', phonetic: '/ˈɒrɪndʒ/', hebrewTranslation: 'כתום', imageUrl: '/images/orange_color.webp' },
   { id: 'purple', word: 'purple', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'A color made by mixing red and blue', exampleSentence: 'She painted the wall purple.', phonetic: '/ˈpɜːrpəl/', hebrewTranslation: 'סגול', imageUrl: '/images/purple.webp' },
   { id: 'pink', word: 'pink', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'A light red color', exampleSentence: 'The flowers in the garden are pink.', phonetic: '/pɪŋk/', hebrewTranslation: 'ורוד', imageUrl: '/images/pink.webp' },
   { id: 'brown', word: 'brown', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'The color of chocolate and tree bark', exampleSentence: 'The bear has brown fur.', phonetic: '/braʊn/', hebrewTranslation: 'חום', imageUrl: '/images/brown.webp' },
@@ -430,7 +429,6 @@ export const WORDS = [
   { id: 'eagle', word: 'eagle', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A large bird with sharp eyes that hunts from the sky', exampleSentence: 'The eagle soared high above the mountains.', phonetic: '/ˈiːɡəl/', hebrewTranslation: 'נשר', imageUrl: '/images/eagle.webp' },
 
   // NATURE +3
-  { id: 'mushroom', word: 'mushroom', level: 'beginner', partOfSpeech: 'noun', category: 'nature', definition: 'A small plant with a round top that grows in damp places', exampleSentence: 'We found a mushroom growing near the tree.', phonetic: '/ˈmʌʃruːm/', hebrewTranslation: 'פטרייה', imageUrl: '/images/mushroom.webp' },
   { id: 'cave', word: 'cave', level: 'intermediate', partOfSpeech: 'noun', category: 'nature', definition: 'A large hole in the side of a mountain or underground', exampleSentence: 'The bear slept in the cave all winter.', phonetic: '/keɪv/', hebrewTranslation: 'מערה', imageUrl: '/images/cave.webp' },
 
   // HOME +3 (chimney already exists)
