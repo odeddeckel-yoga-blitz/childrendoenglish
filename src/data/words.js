@@ -1,4 +1,4 @@
-// 321 curated words across 13 categories, 3 difficulty levels
+// 336 curated words across 13 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -61,6 +61,24 @@ export const WORDS = [
   { id: 'pineapple', word: 'pineapple', level: 'advanced', partOfSpeech: 'noun', category: 'food', definition: 'A tropical fruit with spiky leaves on top', exampleSentence: 'The pineapple tasted sweet and juicy.', phonetic: '/ˈpaɪnˌæpəl/', hebrewTranslation: 'אננס', imageUrl: '/images/pineapple.webp' },
   { id: 'strawberry', word: 'strawberry', level: 'advanced', partOfSpeech: 'noun', category: 'food', definition: 'A small red fruit with tiny seeds on the outside', exampleSentence: 'I picked a ripe strawberry from the garden.', phonetic: '/ˈstrɔːˌbɛri/', hebrewTranslation: 'תות', imageUrl: '/images/strawberry.webp' },
   { id: 'chocolate', word: 'chocolate', level: 'advanced', partOfSpeech: 'noun', category: 'food', definition: 'A sweet brown food made from cocoa beans', exampleSentence: 'She loves eating chocolate cake.', phonetic: '/ˈtʃɒklət/', hebrewTranslation: 'שוקולד', imageUrl: '/images/chocolate.webp' },
+  // Beginner (new)
+  { id: 'orange', word: 'orange', level: 'beginner', partOfSpeech: 'noun', category: 'food', definition: 'A round orange fruit full of juice', exampleSentence: 'I peeled an orange for a snack.', phonetic: '/ˈɒrɪndʒ/', hebrewTranslation: 'תפוז', imageUrl: '/images/orange.webp' },
+  { id: 'cake', word: 'cake', level: 'beginner', partOfSpeech: 'noun', category: 'food', definition: 'A sweet baked treat for celebrations', exampleSentence: 'We had cake at the birthday party.', phonetic: '/keɪk/', hebrewTranslation: 'עוגה', imageUrl: '/images/cake.webp' },
+  { id: 'soup', word: 'soup', level: 'beginner', partOfSpeech: 'noun', category: 'food', definition: 'A warm liquid food you eat with a spoon', exampleSentence: 'Mom made chicken soup for dinner.', phonetic: '/suːp/', hebrewTranslation: 'מרק', imageUrl: '/images/soup.webp' },
+  { id: 'juice', word: 'juice', level: 'beginner', partOfSpeech: 'noun', category: 'food', definition: 'A drink made from fruit', exampleSentence: 'I drank a glass of orange juice.', phonetic: '/dʒuːs/', hebrewTranslation: 'מיץ', imageUrl: '/images/juice.webp' },
+  { id: 'potato', word: 'potato', level: 'beginner', partOfSpeech: 'noun', category: 'food', definition: 'A brown vegetable that grows underground', exampleSentence: 'We had baked potato for dinner.', phonetic: '/pəˈteɪtoʊ/', hebrewTranslation: 'תפוח אדמה', imageUrl: '/images/potato.webp' },
+  // Intermediate (new)
+  { id: 'salad', word: 'salad', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'A dish of mixed raw vegetables', exampleSentence: 'She made a fresh salad for lunch.', phonetic: '/ˈsæləd/', hebrewTranslation: 'סלט', imageUrl: '/images/salad.webp' },
+  { id: 'spaghetti', word: 'spaghetti', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'Long thin strings of pasta', exampleSentence: 'We had spaghetti with tomato sauce.', phonetic: '/spəˈɡɛti/', hebrewTranslation: 'ספגטי', imageUrl: '/images/spaghetti.webp' },
+  { id: 'cucumber', word: 'cucumber', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'A long green vegetable that is crunchy and fresh', exampleSentence: 'She sliced a cucumber for the salad.', phonetic: '/ˈkjuːkʌmbər/', hebrewTranslation: 'מלפפון', imageUrl: '/images/cucumber.webp' },
+  { id: 'icecream', word: 'ice cream', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'A cold sweet frozen treat', exampleSentence: 'We had ice cream on a hot day.', phonetic: '/ˌaɪs ˈkriːm/', hebrewTranslation: 'גלידה', imageUrl: '/images/icecream.webp' },
+  { id: 'popcorn', word: 'popcorn', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'Corn seeds that pop into fluffy white snacks', exampleSentence: 'We ate popcorn while watching the movie.', phonetic: '/ˈpɒpkɔːrn/', hebrewTranslation: 'פופקורן', imageUrl: '/images/popcorn.webp' },
+  // Advanced (new)
+  { id: 'mushroom', word: 'mushroom', level: 'advanced', partOfSpeech: 'noun', category: 'food', definition: 'A small plant with a cap that grows in the shade', exampleSentence: 'We found a mushroom in the forest.', phonetic: '/ˈmʌʃruːm/', hebrewTranslation: 'פטריה', imageUrl: '/images/mushroom.webp' },
+  { id: 'lemon', word: 'lemon', level: 'advanced', partOfSpeech: 'noun', category: 'food', definition: 'A sour yellow fruit', exampleSentence: 'She squeezed a lemon into her water.', phonetic: '/ˈlɛmən/', hebrewTranslation: 'לימון', imageUrl: '/images/lemon.webp' },
+  { id: 'cherry', word: 'cherry', level: 'advanced', partOfSpeech: 'noun', category: 'food', definition: 'A small round red fruit with a pit inside', exampleSentence: 'The cherry was sweet and juicy.', phonetic: '/ˈtʃɛri/', hebrewTranslation: 'דובדבן', imageUrl: '/images/cherry.webp' },
+  { id: 'pepper', word: 'pepper', level: 'advanced', partOfSpeech: 'noun', category: 'food', definition: 'A colorful vegetable that can be sweet or spicy', exampleSentence: 'She cut a red pepper for the stir-fry.', phonetic: '/ˈpɛpər/', hebrewTranslation: 'פלפל', imageUrl: '/images/pepper.webp' },
+  { id: 'noodles', word: 'noodles', level: 'advanced', partOfSpeech: 'noun', category: 'food', definition: 'Long thin strips of food made from dough', exampleSentence: 'We slurped noodles from our bowls.', phonetic: '/ˈnuːdəlz/', hebrewTranslation: 'אטריות', imageUrl: '/images/noodles.webp' },
 
   // === HOME ===
   // Beginner
