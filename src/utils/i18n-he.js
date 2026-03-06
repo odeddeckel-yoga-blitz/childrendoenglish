@@ -1,10 +1,10 @@
 export default {
   // Menu (existing)
   appName: 'ילדים עושים אנגלית',
-  tagline: '!בנו את אוצר המילים שלכם',
+  tagline: 'בנו את אוצר המילים שלכם!',
   dailyGoal: 'יעד יומי',
   words: 'מילים',
-  dayStreak: '!ימים ברצף',
+  dayStreak: 'ימים ברצף!',
   learnWords: 'למד מילים',
   learnWordsDesc: 'גלו ולמדו מילים חדשות',
   flashcards: 'כרטיסיות',
@@ -39,7 +39,7 @@ export default {
   lightMode: 'מצב בהיר',
   darkModeLabel: 'מצב כהה',
   dismissInstall: 'סגירת הודעת התקנה',
-  dayStreakMenu: '!{{count}} ימים ברצף',
+  dayStreakMenu: '{{count}} ימים ברצף!',
 
   // Level/Mode
   beginner: 'מתחילים',
@@ -61,7 +61,7 @@ export default {
   progressSaved: 'ההתקדמות שלכם תישמר.',
   continue: 'המשך',
   endQuizBtn: 'סיים חידון',
-  whatIsThis: '?מה זה',
+  whatIsThis: 'מה זה?',
   hearAgain: 'הקישו כדי לשמוע שוב',
   audioUnavailable: 'שמע לא זמין במכשיר זה. מציגים מילים במקום.',
   quitQuiz: 'צאו מהחידון',
@@ -70,10 +70,10 @@ export default {
   pronounceWord: 'הגייה',
 
   // Results
-  amazing: '!מדהים',
-  greatJob: '!עבודה מצוינת',
-  goodEffort: '!מאמץ טוב',
-  keepPracticing: '!המשיכו לתרגל',
+  amazing: 'מדהים!',
+  greatJob: 'עבודה מצוינת!',
+  goodEffort: 'מאמץ טוב!',
+  keepPracticing: 'המשיכו לתרגל!',
   badgesEarned: 'תגים שהושגו',
   review: 'סקירה',
   share: 'שיתוף',
@@ -96,15 +96,15 @@ export default {
   stillLearning: 'עדיין לומד',
   knowIt: 'יודע',
   swipeHint: 'החליקו ימינה = יודע, החליקו שמאלה = עדיין לומד',
-  sessionComplete: '!הסבב הושלם',
-  noCardsToReview: '!אין כרטיסים לסקירה',
+  sessionComplete: 'הסבב הושלם!',
+  noCardsToReview: 'אין כרטיסים לסקירה!',
   flipToFront: 'הפוך כרטיס לצד הקדמי',
   flipToBack: 'הפוך כרטיס כדי לראות תשובה',
   flashcardProgress: 'התקדמות כרטיסיות',
 
   // Badges
   badgesTitle: 'תגים',
-  earnedBadge: '!הושג',
+  earnedBadge: 'הושג!',
 
   // Progress
   dayStreakLabel: 'ימים ברצף',
@@ -123,7 +123,7 @@ export default {
   skip: 'דלגו',
 
   // Personal List
-  enterWords: ':הכניסו או הדביקו רשימת מילים (מילה בכל שורה או מופרדות בפסיקים)',
+  enterWords: 'הכניסו או הדביקו רשימת מילים (מילה בכל שורה או מופרדות בפסיקים):',
   findWords: 'מצאו מילים',
   foundWords: 'נמצאה {{count}} מילה',
   foundWordsPlural: 'נמצאו {{count}} מילים',
@@ -169,20 +169,20 @@ export default {
 
   // Onboarding i18n
   chooseLanguage: 'באיזו שפה אתם מדברים?',
-  welcomeTitle: '!ברוכים הבאים',
-  welcomeWithName: '!{{name}} ,ברוכים הבאים',
+  welcomeTitle: 'ברוכים הבאים!',
+  welcomeWithName: 'ברוכים הבאים, {{name}}!',
   welcomeDesc: 'למדו מילים חדשות באנגלית דרך חידונים וכרטיסיות.',
   seeAndLearn: 'ראו ולמדו',
   seeAndLearnDesc: 'התאימו מילים לתמונות, שמעו איך הן נשמעות ועקבו אחרי ההתקדמות.',
-  tryItOut: '!נסו את זה',
+  tryItOut: 'נסו את זה!',
   whatWordMatches: 'איזו מילה מתאימה לתמונה?',
-  demoCorrect: '!כל הכבוד',
+  demoCorrect: 'כל הכבוד!',
   demoWrong: 'לא בדיוק — זה <strong>{{word}}</strong>! תתרגלו בקרוב.',
   demoWrongPrefix: 'לא בדיוק — זה',
   demoWrongSuffix: '! תתרגלו בקרוב.',
 
   // Parent email
-  parentEmailTitle: '(אימייל הורה (אופציונלי',
+  parentEmailTitle: 'אימייל הורה (אופציונלי)',
   parentEmailDesc: 'קבלו דוחות התקדמות וטיפים ללמידה. לעולם לא נשתף את האימייל שלכם.',
   parentEmailPlaceholder: 'parent@email.com',
   skipStep: 'דלגו על שלב זה',
@@ -200,8 +200,8 @@ export default {
   parentDashboard: 'לוח הורים',
 
   // Share text
-  shareText: '!Children Do English-ב {{total}}/{{score}} השגתי',
-  shareTextPerfect: '!ניקוד מושלם !Children Do English-ב {{total}}/{{score}} השגתי',
+  shareText: 'השגתי {{score}}/{{total}} ב-Children Do English!',
+  shareTextPerfect: 'השגתי {{score}}/{{total}} ב-Children Do English! ניקוד מושלם!',
   shareQuizTitle: 'חידון אנגלית',
 
   // Cookie consent
@@ -218,16 +218,16 @@ export default {
   errorGeneric: 'אירעה שגיאה לא צפויה',
 
   // Quiz feedback
-  feedbackCorrect: '!נכון! התשובה היא {{word}}',
+  feedbackCorrect: 'נכון! התשובה היא {{word}}',
   feedbackWrong: '.לא נכון. התשובה הנכונה היא {{word}}',
   feedbackSkipped: '.דילוג. התשובה היא {{word}}',
 
   // Notifications text
-  streakReminderTitle: '!שמרו על הרצף',
-  streakReminderBody: '!יש לכם רצף של {{count}} ימים. שחקו היום כדי לשמור עליו',
+  streakReminderTitle: 'שמרו על הרצף!',
+  streakReminderBody: 'יש לכם רצף של {{count}} ימים. שחקו היום כדי לשמור עליו!',
 
   // Data import/export messages
-  importSuccess: '!הנתונים יובאו בהצלחה',
+  importSuccess: 'הנתונים יובאו בהצלחה!',
   importInvalidJson: 'קובץ JSON לא תקין',
   importInvalidFormat: 'פורמט נתונים לא תקין',
   importInvalidRegistry: 'רישום שחקנים לא תקין',
@@ -320,7 +320,7 @@ export default {
   loadingRetry: 'לוקח יותר מדי זמן? הקישו לטעינה מחדש',
 
   // Update prompt
-  updateAvailable: '!עדכון חדש זמין',
+  updateAvailable: 'עדכון חדש זמין!',
   updateBtn: 'עדכון',
 
   // Onboarding demo
