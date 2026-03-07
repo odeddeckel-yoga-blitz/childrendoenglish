@@ -13,6 +13,7 @@ const translations = {
     flashcardsDesc: 'Swipe to review words',
     playQuiz: 'Play Quiz',
     playQuizDesc: 'Test your vocabulary',
+    startHere: 'Start here!',
     myWordList: 'My Word List',
     myWordListDesc: 'Practice custom words',
     progress: 'Progress',

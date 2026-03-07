@@ -11,6 +11,7 @@ export default {
   flashcardsDesc: 'החליקו כדי לסקור מילים',
   playQuiz: 'שחק חידון',
   playQuizDesc: 'בדקו את אוצר המילים שלכם',
+  startHere: 'התחילו כאן!',
   myWordList: 'רשימת המילים שלי',
   myWordListDesc: 'תרגלו מילים מותאמות אישית',
   progress: 'התקדמות',
@@ -132,7 +133,7 @@ export default {
   // Loading
   loading: 'טוען',
   preparingQuiz: '...מכינים את החידון',
-  takingLonger: '.לוקח יותר מהצפוי. בדקו את החיבור שלכם',
+  takingLonger: 'לוקח יותר מהצפוי. בדקו את החיבור שלכם.',
   retry: 'נסו שוב',
   loadingQuiz: 'טוען חידון',
 
@@ -213,8 +214,8 @@ export default {
 
   // Quiz feedback
   feedbackCorrect: 'נכון! התשובה היא {{word}}',
-  feedbackWrong: '.לא נכון. התשובה הנכונה היא {{word}}',
-  feedbackSkipped: '.דילוג. התשובה היא {{word}}',
+  feedbackWrong: 'לא נכון. התשובה הנכונה היא {{word}}.',
+  feedbackSkipped: 'דילוג. התשובה היא {{word}}.',
 
   // Notifications text
   streakReminderTitle: 'שמרו על הרצף!',

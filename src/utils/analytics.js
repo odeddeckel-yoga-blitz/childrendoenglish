@@ -38,12 +38,11 @@ function loadGA() {
   window.gtag('consent', 'update', { analytics_storage: 'granted' });
 }
 
-// Initialize: defer gtag loading until idle, grant consent if previously accepted
+// Initialize: only load gtag script if consent was previously given.
+// If no consent yet, do nothing — the script will be loaded when the user accepts.
 export function initAnalytics() {
-  const load = () => {
-    ensureGtagScript();
-    if (hasAnalyticsConsent()) loadGA();
-  };
+  if (!hasAnalyticsConsent()) return;
+  const load = () => loadGA();
   if (typeof requestIdleCallback === 'function') {
     requestIdleCallback(load);
   } else {

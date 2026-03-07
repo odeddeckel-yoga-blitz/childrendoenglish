@@ -23,6 +23,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
   const wordsMastered = Object.values(stats.wordProgress || {}).filter(w => w.interval >= 14).length;
+  const isNewUser = stats.totalQuizzes === 0 && wordsLearned === 0;
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -129,34 +130,11 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
       {/* Main actions */}
       <nav aria-label="Main menu" className="space-y-3">
-        <button
-          onClick={() => dueCount > 0 && onNavigate('dailyReview')}
-          disabled={dueCount === 0}
-          className={`w-full glass rounded-2xl p-4 flex items-center gap-4
-                     transition-all text-start ${dueCount > 0 ? 'hover:shadow-lg active:scale-[0.98] border border-orange-200 bg-orange-50/50' : 'opacity-60 cursor-default'}`}
-        >
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${dueCount > 0 ? 'bg-gradient-to-br from-orange-500 to-orange-600' : 'bg-gradient-to-br from-slate-400 to-slate-500'}`}>
-            <RotateCcw className="w-6 h-6 text-white" />
-          </div>
-          <div className="flex-1">
-            <p className="font-bold text-slate-800">{t('dailyReview', lang)}</p>
-            <p className="text-slate-500 text-sm">{t('dailyReviewDesc', lang)}</p>
-          </div>
-          {dueCount > 0 ? (
-            <span className="px-2.5 py-1 rounded-full bg-orange-500 text-white text-xs font-bold flex-shrink-0">
-              {t('wordsDue', lang, { count: dueCount })}
-            </span>
-          ) : (
-            <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold flex-shrink-0">
-              {t('allCaughtUp', lang)}
-            </span>
-          )}
-        </button>
-
+        {/* Learn Words — always available, best starting point */}
         <button
           onClick={() => onNavigate('learning')}
-          className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
+          className={`w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start${isNewUser ? ' ring-2 ring-emerald-400 ring-offset-2' : ''}`}
         >
           <div className="relative flex-shrink-0">
             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600
@@ -165,10 +143,15 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             </div>
             <span className="absolute -top-1.5 -start-1.5 w-5 h-5 rounded-full bg-white text-emerald-600 flex items-center justify-center text-[10px] font-black shadow-sm ring-1 ring-emerald-200">1</span>
           </div>
-          <div>
+          <div className="flex-1">
             <p className="font-bold text-slate-800">{t('learnWords', lang)}</p>
             <p className="text-slate-500 text-sm">{t('learnWordsDesc', lang)}</p>
           </div>
+          {isNewUser && (
+            <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold flex-shrink-0">
+              {t('startHere', lang)}
+            </span>
+          )}
         </button>
 
         <button
@@ -205,6 +188,31 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <p className="font-bold text-slate-800">{t('playQuiz', lang)}</p>
             <p className="text-slate-500 text-sm">{t('playQuizDesc', lang)}</p>
           </div>
+        </button>
+
+        {/* Daily Review — shown after Learn/Flashcards/Quiz since it's empty for new users */}
+        <button
+          onClick={() => dueCount > 0 && onNavigate('dailyReview')}
+          disabled={dueCount === 0}
+          className={`w-full glass rounded-2xl p-4 flex items-center gap-4
+                     transition-all text-start ${dueCount > 0 ? 'hover:shadow-lg active:scale-[0.98] border border-orange-200 bg-orange-50/50' : 'opacity-60 cursor-default'}`}
+        >
+          <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${dueCount > 0 ? 'bg-gradient-to-br from-orange-500 to-orange-600' : 'bg-gradient-to-br from-slate-400 to-slate-500'}`}>
+            <RotateCcw className="w-6 h-6 text-white" />
+          </div>
+          <div className="flex-1">
+            <p className="font-bold text-slate-800">{t('dailyReview', lang)}</p>
+            <p className="text-slate-500 text-sm">{t('dailyReviewDesc', lang)}</p>
+          </div>
+          {dueCount > 0 ? (
+            <span className="px-2.5 py-1 rounded-full bg-orange-500 text-white text-xs font-bold flex-shrink-0">
+              {t('wordsDue', lang, { count: dueCount })}
+            </span>
+          ) : (
+            <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold flex-shrink-0">
+              {t('allCaughtUp', lang)}
+            </span>
+          )}
         </button>
 
         <button

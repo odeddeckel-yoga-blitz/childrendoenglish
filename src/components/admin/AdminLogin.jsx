@@ -12,17 +12,21 @@ export default function AdminLogin({ onAuth }) {
     setChecking(true);
 
     try {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(password);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+      const res = await fetch('/api/fetch-image', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${password}`,
+        },
+        body: JSON.stringify({ queries: [] }),
+      });
 
-      if (hashHex === (import.meta.env.VITE_ADMIN_HASH || '').trim()) {
-        onAuth(password);
-      } else {
+      if (res.status === 401) {
         setError('Wrong password');
         setPassword('');
+      } else {
+        // Any non-401 response (including 400 for empty queries) means auth passed
+        onAuth(password);
       }
     } catch {
       setError('Authentication failed');

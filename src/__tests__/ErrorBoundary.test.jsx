@@ -33,7 +33,8 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     );
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-    expect(screen.getByText('Test error')).toBeInTheDocument();
+    // Raw error.message should NOT be shown to users (only generic text)
+    expect(screen.queryByText('Test error')).not.toBeInTheDocument();
   });
 
   it('renders the back to menu button and calls onReset', () => {

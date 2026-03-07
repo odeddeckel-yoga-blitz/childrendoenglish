@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react'
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
+import Confetti from './components/Confetti';
 import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, savePlayerRegistry, addPlayer, removePlayer, resetPlayerProgress, updatePlayerProfile, updateStreak, updateDailyGoal } from './utils/storage';
 import { initTTS } from './utils/sound';
 import { isRTL, t, loadHebrew } from './utils/i18n';
@@ -118,10 +119,24 @@ export default function App() {
   const [sharedWords, setSharedWords] = useState(null);
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && !navigator.onLine);
   const [storageFull, setStorageFull] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
   const mainRef = useRef(null);
+  const prevBadgeCount = useRef(stats.badges?.length || 0);
 
   // Derived: active player from registry
   const activePlayer = playerRegistry?.players.find(p => p.id === playerRegistry.activePlayerId) || null;
+
+  // Show confetti when new badges are earned
+  useEffect(() => {
+    const currentCount = stats.badges?.length || 0;
+    if (currentCount > prevBadgeCount.current) {
+      setShowConfetti(true);
+      const timer = setTimeout(() => setShowConfetti(false), 3500);
+      prevBadgeCount.current = currentCount;
+      return () => clearTimeout(timer);
+    }
+    prevBadgeCount.current = currentCount;
+  }, [stats.badges]);
 
   // Move focus to main container on view change for screen readers
   useEffect(() => {
@@ -689,6 +704,7 @@ export default function App() {
 
   return (
     <div className="app-bg min-h-screen pb-safe">
+      <Confetti active={showConfetti} />
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold">
         Skip to content
       </a>

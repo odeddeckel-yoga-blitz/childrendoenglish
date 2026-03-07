@@ -30,7 +30,7 @@ export default class ErrorBoundary extends React.Component {
             </div>
             <h2 className="text-xl font-bold text-slate-800">{t('errorTitle', lang)}</h2>
             <p className="text-slate-500 text-sm">
-              {this.state.error?.message || t('errorGeneric', lang)}
+              {t('errorGeneric', lang)}
             </p>
             <button
               onClick={() => {
