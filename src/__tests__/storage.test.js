@@ -112,7 +112,6 @@ describe('loadStats', () => {
       lastActiveDate: null,
       hasSeenOnboarding: false,
       uiLanguage: 'en',
-      assessmentLevel: null,
       quizHistory: [],
     });
   });
@@ -134,7 +133,6 @@ describe('saveStats + loadStats roundtrip', () => {
       lastActiveDate: '2025-06-01',
       hasSeenOnboarding: true,
       uiLanguage: 'he',
-      assessmentLevel: 'intermediate',
       quizHistory: [{ date: '2025-06-01', mode: 'quiz', level: 'beginner', score: 10, total: 10 }],
     };
 

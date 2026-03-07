@@ -21,8 +21,6 @@ export default {
   mastered: 'שולטים',
   privacyPolicy: 'מדיניות פרטיות',
   madeBy: 'נוצר על ידי עודד דקלבאום',
-  findYourLevel: 'מצאו את הרמה שלכם',
-  findYourLevelDesc: 'מבחן מהיר להתאמת הרמה',
   chooseLevel: 'בחרו רמה',
   chooseMode: 'בחרו מצב',
   backToMenu: 'חזרה לתפריט',
@@ -114,12 +112,6 @@ export default {
   accuracy: 'דיוק',
   vocabularyMastery: 'שליטה באוצר מילים',
   recentQuizzes: 'חידונים אחרונים',
-  retakeAssessment: 'בצעו מבחן מחדש',
-  takeAssessment: 'בצעו מבחן רמה',
-  assessmentLevelLabel: 'רמת מבחן:',
-
-  // Assessment
-  quickAssessment: 'מבחן מהיר',
   skip: 'דלגו',
 
   // Personal List

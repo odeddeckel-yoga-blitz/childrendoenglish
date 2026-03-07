@@ -869,7 +869,7 @@ const GUIDES = [
         h2: 'Tips for Different Ages',
         content: `<h3>Ages 6-8 (Beginner)</h3>
 <ul>
-  <li>Focus on concrete, everyday words: animals, food, colors, body parts</li>
+  <li>Focus on concrete, everyday words: <a href="/vocabulary/animals/">animals</a>, <a href="/vocabulary/food/">food</a>, <a href="/vocabulary/colors/">colors</a>, <a href="/vocabulary/body/">body parts</a></li>
   <li>Use lots of pictures &mdash; kids this age are highly visual</li>
   <li>Keep sessions short (5 minutes max)</li>
   <li>Celebrate every small win to build confidence</li>
@@ -877,7 +877,7 @@ const GUIDES = [
 
 <h3>Ages 8-10 (Intermediate)</h3>
 <ul>
-  <li>Introduce more abstract words: feelings, actions, descriptions</li>
+  <li>Introduce more abstract words: <a href="/vocabulary/feelings/">feelings</a>, <a href="/vocabulary/actions/">actions</a>, descriptions</li>
   <li>Start with phonetic pronunciation to build reading skills</li>
   <li>Encourage kids to use new words in sentences</li>
 </ul>
@@ -991,7 +991,7 @@ const GUIDES = [
         content: `<p>Flashcards are versatile and work for all ages. Beyond simple review, try these variations:</p>
 <ul>
   <li><strong>Speed round</strong> &mdash; How many cards can you get right in 60 seconds?</li>
-  <li><strong>Category sort</strong> &mdash; Mix flashcards from different categories and sort them (animals, food, etc.)</li>
+  <li><strong>Category sort</strong> &mdash; Mix flashcards from different categories and sort them (<a href="/vocabulary/animals/">animals</a>, <a href="/vocabulary/food/">food</a>, <a href="/vocabulary/clothing/">clothing</a>, etc.)</li>
   <li><strong>Memory match</strong> &mdash; Place cards face-down and flip pairs (word + picture)</li>
   <li><strong>Printable sets</strong> &mdash; <a href="/printable-flashcards/">Download and print free flashcards</a> for offline practice</li>
 </ul>`,
@@ -1001,7 +1001,7 @@ const GUIDES = [
         content: `<p>The most effective approach combines multiple activities into a short daily routine:</p>
 <ol>
   <li><strong>Review (2 min):</strong> Go through daily review words in <a href="/">the app</a></li>
-  <li><strong>Learn (3 min):</strong> Explore a new category and learn 3-5 new words</li>
+  <li><strong>Learn (3 min):</strong> <a href="/vocabulary/">Explore a new category</a> and learn 3-5 new words</li>
   <li><strong>Practice (5 min):</strong> Take a quick quiz to test what you learned</li>
 </ol>
 <p>That's just 10 minutes a day. Over a month, your child will encounter over 100 new words with built-in reinforcement.</p>`,

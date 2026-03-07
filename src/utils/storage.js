@@ -19,7 +19,6 @@ const getDefaultStats = () => ({
   lastActiveDate: null,
   hasSeenOnboarding: false,
   uiLanguage: 'en',        // 'en' | 'he'
-  assessmentLevel: null,    // result from placement quiz
   quizHistory: [],          // [{ date, mode, level, score, total }]
 });
 

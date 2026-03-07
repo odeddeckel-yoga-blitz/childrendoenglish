@@ -23,8 +23,6 @@ const translations = {
     mastered: 'Mastered',
     privacyPolicy: 'Privacy Policy',
     madeBy: 'Made by Oded Deckelbaum',
-    findYourLevel: 'Find Your Level',
-    findYourLevelDesc: 'Quick assessment to match your skill',
     chooseLevel: 'Choose Level',
     chooseMode: 'Choose Mode',
     backToMenu: 'Back to menu',
@@ -116,12 +114,6 @@ const translations = {
     accuracy: 'Accuracy',
     vocabularyMastery: 'Vocabulary Mastery',
     recentQuizzes: 'Recent Quizzes',
-    retakeAssessment: 'Retake Assessment',
-    takeAssessment: 'Take Assessment',
-    assessmentLevelLabel: 'Assessment level:',
-
-    // Assessment
-    quickAssessment: 'Quick Assessment',
     skip: 'Skip',
 
     // Personal List

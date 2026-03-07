@@ -76,5 +76,4 @@ export const analytics = {
   onboardingStep: (step, stepName) => trackEvent('onboarding_step', { step, step_name: stepName }),
   quizFunnelLevel: (level) => trackEvent('quiz_funnel_level', { level }),
   quizFunnelMode: (mode) => trackEvent('quiz_funnel_mode', { mode }),
-  assessmentComplete: (level) => trackEvent('assessment_complete', { level }),
 };

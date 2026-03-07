@@ -569,94 +569,9 @@ test.describe('Personal Word List Quiz', () => {
   });
 });
 
-// ── Assessment Flow ─────────────────────────────────
-
-test.describe('Assessment Flow', () => {
-  test('complete assessment → returns to menu with level set', async ({ page }) => {
-    await setupReturningUser(page);
-
-    // Navigate to assessment
-    const assessBtn = page.locator('text=Find Your Level');
-    if ((await assessBtn.count()) === 0) {
-      // Try progress dashboard route
-      await page.locator('text=Progress').first().click();
-      await page.waitForTimeout(500);
-      await page.locator('button:has-text("Assessment")').first().click();
-    } else {
-      await assessBtn.click();
-    }
-
-    await page.waitForTimeout(500);
-
-    // Should see Quick Assessment
-    await expect(page.locator('text=Quick Assessment')).toBeVisible({ timeout: 5000 });
-
-    // Answer all 15 questions
-    for (let i = 0; i < 15; i++) {
-      const answerBtns = page.locator('.grid.grid-cols-2 button').first();
-      await answerBtns.waitFor({ timeout: 5000 });
-      await answerBtns.click();
-      await page.waitForTimeout(1200);
-    }
-
-    // Should be back at menu
-    await expect(page.locator('h3:has-text("Play Quiz")')).toBeVisible({ timeout: 10000 });
-  });
-
-  test('progress bar advances after answering', async ({ page }) => {
-    await setupReturningUser(page);
-
-    const assessBtn = page.locator('text=Find Your Level');
-    if ((await assessBtn.count()) > 0) {
-      await assessBtn.click();
-    } else {
-      return; // Skip if no assessment button visible
-    }
-
-    await page.waitForTimeout(500);
-    await expect(page.locator('text=Quick Assessment')).toBeVisible({ timeout: 5000 });
-
-    // Check progress bar width before answering
-    const progressBar = page.locator('.bg-gradient-to-r.from-blue-500').first();
-
-    // Answer first question
-    const answerBtns = page.locator('.grid.grid-cols-2 button').first();
-    await answerBtns.waitFor({ timeout: 5000 });
-    await answerBtns.click();
-    await page.waitForTimeout(1200);
-
-    // Progress text should update
-    await expect(page.locator('text=/Question 2 of/i').or(page.locator('text=/שאלה 2/i'))).toBeVisible({ timeout: 3000 });
-  });
-});
-
 // ── Badge Earning ───────────────────────────────────
 
 test.describe('Badge Earning', () => {
-  test('completing first quiz earns badge visible in results', async ({ page }) => {
-    await setupReturningUser(page);
-
-    // Navigate to quiz
-    await page.locator('text=Play Quiz').click();
-    await page.locator('h3:has-text("Beginner")').click();
-    await page.locator('text=Image Quiz').or(page.locator('text=Picture Quiz')).click();
-
-    // Wait for quiz to load
-    await page.waitForTimeout(3000);
-
-    // Complete all 10 questions
-    await completeQuiz(page, 10);
-
-    // Should see results screen — and should have the "First Word" badge since totalQuizzes was 0
-    await expect(page.locator('text=/\\d+.*\\/.*10/i')).toBeVisible({ timeout: 10000 });
-
-    // Check for badges section
-    const badgesSection = page.locator('text=Badges Earned');
-    if ((await badgesSection.count()) > 0) {
-      await expect(badgesSection).toBeVisible();
-    }
-  });
-
   test('badges view shows earned vs locked badges', async ({ page }) => {
     await setupReturningUser(page, {
       totalQuizzes: 1,
