@@ -1,4 +1,22 @@
 User-agent: *
 Allow: /
+Allow: /vocabulary/
+Allow: /printable-flashcards/
+Allow: /guides/
+Allow: /about/
+
+# Block SPA app screens (no static content)
+Disallow: /play
+Disallow: /learn
+Disallow: /flashcards
+Disallow: /badges
+Disallow: /progress
+Disallow: /path
+Disallow: /parent
+Disallow: /players
+Disallow: /manage
+Disallow: /new-player
+Disallow: /my-words
+Disallow: /daily-review
 
 Sitemap: https://childrendoenglish.com/sitemap.xml

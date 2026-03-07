@@ -128,13 +128,24 @@ export default function App() {
     if (mainRef.current) mainRef.current.focus();
   }, [gameState]);
 
-  // Update canonical URL when route changes
+  // SPA app screens canonicalize to homepage + noindex to prevent wasting crawl budget
   useEffect(() => {
     const path = STATE_TO_PATH[gameState];
     if (path) {
       const canonical = document.querySelector('link[rel="canonical"]');
       if (canonical) {
-        canonical.setAttribute('href', `https://childrendoenglish.com${path}`);
+        canonical.setAttribute('href', 'https://childrendoenglish.com/');
+      }
+      let robots = document.querySelector('meta[name="robots"]');
+      if (path === '/') {
+        if (robots) robots.setAttribute('content', 'index, follow');
+      } else {
+        if (!robots) {
+          robots = document.createElement('meta');
+          robots.name = 'robots';
+          document.head.appendChild(robots);
+        }
+        robots.setAttribute('content', 'noindex, nofollow');
       }
     }
   }, [gameState]);

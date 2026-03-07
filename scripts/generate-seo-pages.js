@@ -356,30 +356,13 @@ console.log(`  ✓ /vocabulary/ (index page, ${CATEGORIES.length} categories)`);
 
 const today = new Date().toISOString().split('T')[0];
 
-const spaRoutes = [
-  { path: '/', priority: '1.0', freq: 'weekly' },
-  { path: '/play', priority: '0.8', freq: 'monthly' },
-  { path: '/learn', priority: '0.8', freq: 'monthly' },
-  { path: '/flashcards', priority: '0.7', freq: 'monthly' },
-  { path: '/badges', priority: '0.5', freq: 'monthly' },
-  { path: '/progress', priority: '0.6', freq: 'monthly' },
-  { path: '/path', priority: '0.7', freq: 'monthly' },
-  { path: '/parent', priority: '0.6', freq: 'monthly' },
-  { path: '/privacy', priority: '0.3', freq: 'yearly' },
-  { path: '/players', priority: '0.5', freq: 'monthly' },
-  { path: '/my-words', priority: '0.6', freq: 'monthly' },
-];
-
-const spaEntries = spaRoutes
-  .map(
-    (r) => `  <url>
-    <loc>${SITE}${r.path}</loc>
+// Only the homepage goes in the sitemap — SPA app screens are blocked in robots.txt
+const spaEntries = `  <url>
+    <loc>${SITE}/</loc>
     <lastmod>${today}</lastmod>
-    <changefreq>${r.freq}</changefreq>
-    <priority>${r.priority}</priority>
-  </url>`
-  )
-  .join('\n');
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>`;
 
 const vocabIndexEntry = `  <url>
     <loc>${SITE}/vocabulary/</loc>
@@ -1301,6 +1284,6 @@ ${guideEntries}
 
 writeFileSync(join(distDir, 'sitemap.xml'), sitemap, 'utf-8');
 
-const totalUrls = spaRoutes.length + 1 + CATEGORIES.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length;
+const totalUrls = 1 + 1 + CATEGORIES.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length;
 console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about`);
 console.log(`Sitemap: ${totalUrls} URLs`);
