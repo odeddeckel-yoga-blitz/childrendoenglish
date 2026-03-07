@@ -26,8 +26,6 @@ const CATEGORY_NAMES = {
   feelings: 'Feelings & Emotions',
   everyday: 'Everyday Objects',
   toys: 'Toys & Games',
-  actions: 'Actions & Verbs',
-  body: 'Body Parts',
 };
 
 function escapeHtml(str) {
@@ -869,7 +867,7 @@ const GUIDES = [
         h2: 'Tips for Different Ages',
         content: `<h3>Ages 6-8 (Beginner)</h3>
 <ul>
-  <li>Focus on concrete, everyday words: <a href="/vocabulary/animals/">animals</a>, <a href="/vocabulary/food/">food</a>, <a href="/vocabulary/colors/">colors</a>, <a href="/vocabulary/body/">body parts</a></li>
+  <li>Focus on concrete, everyday words: <a href="/vocabulary/animals/">animals</a>, <a href="/vocabulary/food/">food</a>, <a href="/vocabulary/colors/">colors</a>, <a href="/vocabulary/everyday/">everyday objects</a></li>
   <li>Use lots of pictures &mdash; kids this age are highly visual</li>
   <li>Keep sessions short (5 minutes max)</li>
   <li>Celebrate every small win to build confidence</li>
@@ -877,7 +875,7 @@ const GUIDES = [
 
 <h3>Ages 8-10 (Intermediate)</h3>
 <ul>
-  <li>Introduce more abstract words: <a href="/vocabulary/feelings/">feelings</a>, <a href="/vocabulary/actions/">actions</a>, descriptions</li>
+  <li>Introduce more abstract words: <a href="/vocabulary/feelings/">feelings</a>, <a href="/vocabulary/sports/">sports</a>, descriptions</li>
   <li>Start with phonetic pronunciation to build reading skills</li>
   <li>Encourage kids to use new words in sentences</li>
 </ul>

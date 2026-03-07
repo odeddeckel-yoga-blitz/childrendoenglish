@@ -45,8 +45,6 @@ const CATEGORY_NAMES = {
   feelings: 'Feelings & Emotions',
   everyday: 'Everyday Objects',
   toys: 'Toys & Games',
-  actions: 'Actions & Verbs',
-  body: 'Body Parts',
 };
 
 // OG image dimensions

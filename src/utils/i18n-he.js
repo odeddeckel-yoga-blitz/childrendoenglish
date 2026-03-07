@@ -278,8 +278,6 @@ export default {
   cat_feelings: 'רגשות',
   cat_everyday: 'יומיומי',
   cat_toys: 'צעצועים',
-  cat_actions: 'פעולות',
-  cat_body: 'גוף',
 
   // Quiz modes
   mode_image: 'חידון תמונות',

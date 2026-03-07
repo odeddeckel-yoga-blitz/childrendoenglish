@@ -1,4 +1,4 @@
-// 342 curated words across 15 categories, 3 difficulty levels
+// 342 curated words across 13 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -177,12 +177,12 @@ export const WORDS = [
 
   // === BODY ===
   // Beginner
-  { id: 'hand', word: 'hand', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The part of your body at the end of your arm', exampleSentence: 'She waved her hand to say hello.', phonetic: '/hænd/', hebrewTranslation: 'יד', imageUrl: '/images/hand.webp' },
-  { id: 'foot', word: 'foot', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The part of your body you stand on', exampleSentence: 'He hurt his foot while running.', phonetic: '/fʊt/', hebrewTranslation: 'כף רגל', imageUrl: '/images/foot.webp' },
-  { id: 'eye', word: 'eye', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The part of your face you see with', exampleSentence: 'She has brown eyes.', phonetic: '/aɪ/', hebrewTranslation: 'עין', imageUrl: '/images/eye.webp' },
-  { id: 'ear', word: 'ear', level: 'beginner', partOfSpeech: 'noun', category: 'body', definition: 'The part of your head you hear with', exampleSentence: 'The rabbit has long ears.', phonetic: '/ɪər/', hebrewTranslation: 'אוזן', imageUrl: '/images/ear.webp' },
+  { id: 'hand', word: 'hand', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'The part of your body at the end of your arm', exampleSentence: 'She waved her hand to say hello.', phonetic: '/hænd/', hebrewTranslation: 'יד', imageUrl: '/images/hand.webp' },
+  { id: 'foot', word: 'foot', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'The part of your body you stand on', exampleSentence: 'He hurt his foot while running.', phonetic: '/fʊt/', hebrewTranslation: 'כף רגל', imageUrl: '/images/foot.webp' },
+  { id: 'eye', word: 'eye', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'The part of your face you see with', exampleSentence: 'She has brown eyes.', phonetic: '/aɪ/', hebrewTranslation: 'עין', imageUrl: '/images/eye.webp' },
+  { id: 'ear', word: 'ear', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'The part of your head you hear with', exampleSentence: 'The rabbit has long ears.', phonetic: '/ɪər/', hebrewTranslation: 'אוזן', imageUrl: '/images/ear.webp' },
   // Intermediate
-  { id: 'finger', word: 'finger', level: 'intermediate', partOfSpeech: 'noun', category: 'body', definition: 'One of the five thin parts at the end of your hand', exampleSentence: 'She pointed her finger at the map.', phonetic: '/ˈfɪŋɡər/', hebrewTranslation: 'אצבע', imageUrl: '/images/finger.webp' },
+  { id: 'finger', word: 'finger', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'One of the five thin parts at the end of your hand', exampleSentence: 'She pointed her finger at the map.', phonetic: '/ˈfɪŋɡər/', hebrewTranslation: 'אצבע', imageUrl: '/images/finger.webp' },
   { id: 'tooth', word: 'tooth', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A hard white thing in your mouth for chewing', exampleSentence: 'She lost her first baby tooth.', phonetic: '/tuːθ/', hebrewTranslation: 'שן', imageUrl: '/images/tooth.webp' },
   // Advanced
 
@@ -493,14 +493,14 @@ export const WORDS = [
 
   // === ACTIONS (verbs) ===
   // Beginner
-  { id: 'run', word: 'run', level: 'beginner', partOfSpeech: 'verb', category: 'actions', definition: 'To move your legs fast to go quickly', exampleSentence: 'She likes to run in the park.', phonetic: '/rʌn/', hebrewTranslation: 'לרוץ', imageUrl: '/images/run.webp' },
+  { id: 'run', word: 'run', level: 'beginner', partOfSpeech: 'verb', category: 'everyday', definition: 'To move your legs fast to go quickly', exampleSentence: 'She likes to run in the park.', phonetic: '/rʌn/', hebrewTranslation: 'לרוץ', imageUrl: '/images/run.webp' },
   // Intermediate
-  { id: 'read_verb', word: 'read', level: 'intermediate', partOfSpeech: 'verb', category: 'actions', definition: 'To look at words and understand them', exampleSentence: 'She loves to read books.', phonetic: '/riːd/', hebrewTranslation: 'לקרוא', imageUrl: '/images/read_verb.webp' },
-  { id: 'write', word: 'write', level: 'intermediate', partOfSpeech: 'verb', category: 'actions', definition: 'To make words on paper with a pen or pencil', exampleSentence: 'He writes in his notebook every day.', phonetic: '/raɪt/', hebrewTranslation: 'לכתוב', imageUrl: '/images/write.webp' },
-  { id: 'cook_verb', word: 'cook', level: 'intermediate', partOfSpeech: 'verb', category: 'actions', definition: 'To make food by heating it', exampleSentence: 'Mom cooks dinner in the kitchen.', phonetic: '/kʊk/', hebrewTranslation: 'לבשל', imageUrl: '/images/cook_verb.webp' },
-  { id: 'climb_verb', word: 'climb', level: 'intermediate', partOfSpeech: 'verb', category: 'actions', definition: 'To go up something using your hands and feet', exampleSentence: 'He climbs the tall tree.', phonetic: '/klaɪm/', hebrewTranslation: 'לטפס', imageUrl: '/images/climb_verb.webp' },
+  { id: 'read_verb', word: 'read', level: 'intermediate', partOfSpeech: 'verb', category: 'everyday', definition: 'To look at words and understand them', exampleSentence: 'She loves to read books.', phonetic: '/riːd/', hebrewTranslation: 'לקרוא', imageUrl: '/images/read_verb.webp' },
+  { id: 'write', word: 'write', level: 'intermediate', partOfSpeech: 'verb', category: 'everyday', definition: 'To make words on paper with a pen or pencil', exampleSentence: 'He writes in his notebook every day.', phonetic: '/raɪt/', hebrewTranslation: 'לכתוב', imageUrl: '/images/write.webp' },
+  { id: 'cook_verb', word: 'cook', level: 'intermediate', partOfSpeech: 'verb', category: 'everyday', definition: 'To make food by heating it', exampleSentence: 'Mom cooks dinner in the kitchen.', phonetic: '/kʊk/', hebrewTranslation: 'לבשל', imageUrl: '/images/cook_verb.webp' },
+  { id: 'climb_verb', word: 'climb', level: 'intermediate', partOfSpeech: 'verb', category: 'everyday', definition: 'To go up something using your hands and feet', exampleSentence: 'He climbs the tall tree.', phonetic: '/klaɪm/', hebrewTranslation: 'לטפס', imageUrl: '/images/climb_verb.webp' },
   // Advanced
-  { id: 'paint_verb', word: 'paint', level: 'advanced', partOfSpeech: 'verb', category: 'actions', definition: 'To make a picture using colors and a brush', exampleSentence: 'He paints a beautiful sunset.', phonetic: '/peɪnt/', hebrewTranslation: 'לצבוע', imageUrl: '/images/paint_verb.webp' },
+  { id: 'paint_verb', word: 'paint', level: 'advanced', partOfSpeech: 'verb', category: 'everyday', definition: 'To make a picture using colors and a brush', exampleSentence: 'He paints a beautiful sunset.', phonetic: '/peɪnt/', hebrewTranslation: 'לצבוע', imageUrl: '/images/paint_verb.webp' },
 
   // CLOTHING (new)
   { id: 'zipper', word: 'zipper', level: 'beginner', partOfSpeech: 'noun', category: 'clothing', definition: 'A metal or plastic fastener that opens and closes', exampleSentence: 'He pulled up the zipper on his jacket.', phonetic: '/ˈzɪpər/', hebrewTranslation: 'רוכסן', imageUrl: '/images/zipper.webp' },
@@ -513,7 +513,6 @@ export const CATEGORIES = [
   'animals', 'food', 'home', 'transport', 'nature',
   'colors', 'numbers', 'clothing', 'school',
   'sports', 'feelings', 'everyday', 'toys',
-  'actions', 'body',
 ];
 
 export const getWordsByLevel = (level) => WORDS.filter(w => w.level === level);
