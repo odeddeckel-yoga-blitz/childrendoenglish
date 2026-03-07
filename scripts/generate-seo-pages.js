@@ -999,6 +999,248 @@ const GUIDES = [
       },
     ],
   },
+  {
+    slug: 'learn-english-words-with-pictures',
+    title: 'Learn English Words with Pictures — Visual Vocabulary for Kids',
+    description: 'Help your child learn English words with pictures. Discover why visual vocabulary works for kids ages 6-12 and get free illustrated flashcards and quizzes.',
+    h1: 'Learn English Words with Pictures',
+    sections: [
+      {
+        h2: 'Why Pictures Help Kids Learn Words Faster',
+        content: `<p>When a child sees a picture alongside a new word, their brain encodes the information through two channels at once &mdash; visual and verbal. This is called <strong>dual-coding theory</strong>, and decades of research show it dramatically improves retention.</p>
+<p>Studies consistently find that learners who pair words with images retain <strong>up to 65% more vocabulary</strong> compared to text-only methods. For kids ages 6-12, the effect is even stronger because children are naturally visual learners &mdash; their brains are wired to process images quickly and attach meaning to what they see.</p>
+<p>Picture-based learning also removes the translation bottleneck. Instead of going from English &rarr; native language &rarr; meaning, kids go from English + picture &rarr; meaning directly. This builds faster, more natural recall.</p>`,
+      },
+      {
+        h2: 'The Best Picture Categories to Start With',
+        content: `<p>Not all words are equally easy to illustrate. The best categories for picture-based learning are those with high <strong>visual concreteness</strong> &mdash; words that represent things kids can see and point to.</p>
+<p>Start with these categories, ranked from most to least visually concrete:</p>
+<ol>
+  <li><strong><a href="/vocabulary/animals/">Animals</a></strong> &mdash; Highly visual, kids already love them</li>
+  <li><strong><a href="/vocabulary/food/">Food</a></strong> &mdash; Everyday items kids recognize instantly</li>
+  <li><strong><a href="/vocabulary/colors/">Colors</a></strong> &mdash; Abstract concept made concrete through images</li>
+  <li><strong><a href="/vocabulary/toys/">Toys</a></strong> &mdash; High-interest items kids are motivated to learn</li>
+  <li><strong><a href="/vocabulary/transport/">Transport</a></strong> &mdash; Vehicles are visually distinct and exciting</li>
+  <li><strong><a href="/vocabulary/clothing/">Clothing</a></strong> &mdash; Practical, everyday vocabulary kids can point to</li>
+</ol>
+<p>Once your child masters concrete categories, move to more abstract ones like <a href="/vocabulary/feelings/">feelings</a> and <a href="/vocabulary/sports/">sports</a>, which still benefit from picture support.</p>`,
+      },
+      {
+        h2: 'How to Use Picture Flashcards at Home',
+        content: `<p>Flashcards with pictures are one of the simplest and most effective tools for building vocabulary. Here are tips to get the most out of them:</p>
+<ul>
+  <li><strong>Start small</strong> &mdash; Introduce 5 new picture cards per session, not 20</li>
+  <li><strong>Say it aloud</strong> &mdash; Always have your child say the word while looking at the picture</li>
+  <li><strong>Cover and recall</strong> &mdash; Cover the word, show only the picture, and ask "What's this?"</li>
+  <li><strong>Sort by category</strong> &mdash; Mix cards from different categories and ask kids to sort them</li>
+  <li><strong>Play memory match</strong> &mdash; Lay cards face down, flip two at a time to match picture + word</li>
+</ul>
+<p>You can <a href="/printable-flashcards/">download and print free flashcards</a> with pictures, phonetics, and Hebrew translations for every category.</p>`,
+      },
+      {
+        h2: 'Picture Quizzes: From Passive to Active Learning',
+        content: `<p>Looking at picture flashcards is passive learning. To move vocabulary into long-term memory, kids need to <strong>actively retrieve</strong> the word. That's where picture quizzes come in.</p>
+<p><a href="/">Children Do English</a> offers four quiz modes that use pictures:</p>
+<ul>
+  <li><strong>Image Quiz</strong> &mdash; See a picture, pick the correct English word from four options</li>
+  <li><strong>Word Quiz</strong> &mdash; See an English word, pick the matching picture</li>
+  <li><strong>Audio Quiz</strong> &mdash; Hear a word, pick the matching picture</li>
+  <li><strong>Flashcard Review</strong> &mdash; See the picture, try to recall the word before flipping</li>
+</ul>
+<p>Each mode uses pictures differently, giving the brain multiple retrieval pathways. Research shows that varied practice like this produces stronger, more flexible memories than repeating one method.</p>`,
+      },
+      {
+        h2: 'Combining Pictures with Audio and Definitions',
+        content: `<p>Pictures alone are powerful, but combining them with other senses creates even stronger memories. This is called <strong>multi-modal stacking</strong>.</p>
+<p>The ideal learning sequence for a new word:</p>
+<ol>
+  <li><strong>See the picture</strong> &mdash; Create a visual anchor</li>
+  <li><strong>Hear the pronunciation</strong> &mdash; Connect the sound to the image</li>
+  <li><strong>Read the word</strong> &mdash; Link spelling to sound and image</li>
+  <li><strong>Read the definition</strong> &mdash; Deepen understanding with context</li>
+  <li><strong>See the Hebrew translation</strong> &mdash; Bridge to the known language (for bilingual families)</li>
+</ol>
+<p>Each layer reinforces the others. When your child hears "elephant" next week, their brain fires the picture, the sound, the spelling, and the meaning all at once &mdash; making recall almost effortless.</p>`,
+      },
+      {
+        h2: 'Free Picture Vocabulary Resources',
+        content: `<p>Ready to get started with picture-based vocabulary learning? Here are free resources:</p>
+<ul>
+  <li><strong><a href="/">Children Do English App</a></strong> &mdash; ${WORDS.length} words with pictures, audio, definitions, and quizzes. Free, no ads, works offline.</li>
+  <li><strong><a href="/vocabulary/">Browse All Categories</a></strong> &mdash; Explore ${CATEGORIES.length} vocabulary categories with pictures and pronunciation</li>
+  <li><strong><a href="/printable-flashcards/">Printable Flashcards</a></strong> &mdash; Download and print picture flashcards for offline practice</li>
+</ul>
+<p>Start with just one category today. Five minutes of picture-based practice is worth more than thirty minutes of word lists.</p>`,
+      },
+    ],
+  },
+  {
+    slug: 'english-vocabulary-games-for-kids',
+    title: 'English Vocabulary Games for Kids — Fun Ways to Learn New Words',
+    description: 'Discover the best English vocabulary games for kids ages 6-12. Free word games, quizzes, and challenges that make learning fun. No ads, works offline.',
+    h1: 'English Vocabulary Games for Kids',
+    sections: [
+      {
+        h2: 'Why Games Work Better Than Worksheets',
+        content: `<p>When kids play games, their brains release dopamine &mdash; the same chemical that makes them want to play "just one more round." This isn't just fun; it's <strong>neurologically powerful</strong>. Dopamine strengthens memory formation, meaning words learned during a game are remembered better and longer.</p>
+<p>Games provide something worksheets can't: <strong>intrinsic motivation</strong>. Kids don't play games because they're told to &mdash; they play because they want to. When vocabulary practice feels like a game, you don't have to convince your child to study. They'll ask to play.</p>
+<p>Research shows that game-based learning improves vocabulary retention by 40-60% compared to traditional methods, while also reducing the anxiety many children feel around language learning.</p>`,
+      },
+      {
+        h2: 'Image Matching Games',
+        content: `<p>The simplest and most effective vocabulary game: show a picture and ask "What's this word?"</p>
+<p>Image matching games work because they test <strong>recognition and recall</strong> simultaneously. The child sees a visual cue and must connect it to the right English word &mdash; exactly the skill they need in real life.</p>
+<p><strong>How to play at home:</strong></p>
+<ul>
+  <li><strong>Digital version</strong> &mdash; Use the Image Quiz in <a href="/">Children Do English</a>: see a picture, pick from 4 word options</li>
+  <li><strong>Printable version</strong> &mdash; Spread out printed flashcards, call out a word, and race to find the matching picture</li>
+  <li><strong>Around-the-house version</strong> &mdash; Point to real objects and ask for the English word</li>
+</ul>
+<p>Start with high-interest categories like <a href="/vocabulary/animals/">animals</a> and <a href="/vocabulary/food/">food</a> &mdash; kids learn faster when they care about the subject.</p>`,
+      },
+      {
+        h2: 'Audio Challenge Games',
+        content: `<p>Audio games add a crucial dimension: <strong>listening skills</strong>. Kids hear a word pronounced correctly and must identify it &mdash; building the connection between sound and meaning.</p>
+<p><strong>Game ideas:</strong></p>
+<ul>
+  <li><strong>Audio Quiz</strong> &mdash; Hear a word, pick the matching picture from four options. Great for building listening comprehension.</li>
+  <li><strong>Repeat Race</strong> &mdash; Play an audio clip, both parent and child repeat it. Who can pronounce it more clearly?</li>
+  <li><strong>Sound Detective</strong> &mdash; Play the audio without showing any options. Can the child spell or draw the word they heard?</li>
+</ul>
+<p>Audio challenges are especially valuable for children who are visual learners &mdash; it forces the brain to build a different (auditory) pathway to the same vocabulary, making recall more robust.</p>`,
+      },
+      {
+        h2: 'Streak and Badge Challenges',
+        content: `<p>Consistency is more important than intensity when learning vocabulary. <strong>Streaks and badges</strong> turn consistency into a game.</p>
+<p><strong>How streak challenges work:</strong></p>
+<ul>
+  <li>Practice every day to build a streak (1 day, 3 days, 7 days, 30 days&hellip;)</li>
+  <li>Each milestone earns a badge or achievement</li>
+  <li>Missing a day resets the streak &mdash; creating gentle motivation to keep going</li>
+</ul>
+<p><strong>Family competition ideas:</strong></p>
+<ul>
+  <li><strong>Sibling streak race</strong> &mdash; Who can maintain the longest practice streak?</li>
+  <li><strong>Family word of the day</strong> &mdash; Everyone learns the same word; quiz each other at dinner</li>
+  <li><strong>Weekly vocabulary champion</strong> &mdash; Who scored highest on quizzes this week?</li>
+</ul>
+<p><a href="/">Children Do English</a> tracks streaks, badges, and progress automatically &mdash; with separate player profiles so siblings can compete on the same device.</p>`,
+      },
+      {
+        h2: 'Printable Word Games You Can Play Anywhere',
+        content: `<p>Screen-free games are perfect for car rides, waiting rooms, or quiet time. <a href="/printable-flashcards/">Download free printable flashcards</a> and try these games:</p>
+<ul>
+  <li><strong>Memory Match</strong> &mdash; Print two copies of a flashcard set. Place face down, flip pairs to match word + picture. Great for 2 players.</li>
+  <li><strong>Speed Naming</strong> &mdash; Shuffle a stack of picture flashcards. Flip one at a time and say the English word as fast as you can. Time yourself and try to beat your record.</li>
+  <li><strong>Category Race</strong> &mdash; Spread cards from 3 categories on a table. Call out a category and race to grab all the matching cards.</li>
+  <li><strong>Spelling Bee</strong> &mdash; One player shows a picture card. The other must say the word and spell it correctly.</li>
+</ul>
+<p>Printable games are especially useful for younger kids (ages 6-8) who benefit from tactile, hands-on practice.</p>`,
+      },
+      {
+        h2: 'The Best Free Vocabulary Game App for Kids',
+        content: `<p><a href="/">Children Do English</a> turns vocabulary learning into a game, with every feature designed for kids ages 6-12:</p>
+<ul>
+  <li><strong>${WORDS.length} words</strong> across ${CATEGORIES.length} categories &mdash; from animals to weather</li>
+  <li><strong>4 game modes</strong> &mdash; Image quiz, word quiz, audio challenge, and flashcard review</li>
+  <li><strong>Streaks &amp; badges</strong> &mdash; Kids earn achievements and compete with siblings</li>
+  <li><strong>Spaced repetition</strong> &mdash; Smart review system that focuses on words that need practice</li>
+  <li><strong>Hebrew translations</strong> &mdash; Built for bilingual Hebrew-English families</li>
+  <li><strong>Multiple profiles</strong> &mdash; Each child gets their own progress on the same device</li>
+  <li><strong>100% free, no ads</strong> &mdash; No paywalls, no in-app purchases, no distractions</li>
+  <li><strong>Works offline</strong> &mdash; Download once, play anywhere</li>
+</ul>
+<p>Give your child 5 minutes of vocabulary games today and watch how quickly they start asking for more.</p>`,
+      },
+    ],
+  },
+  {
+    slug: 'english-vocabulary-for-bilingual-hebrew-english-kids',
+    title: 'English Vocabulary for Bilingual Hebrew-English Kids — A Parent\'s Guide',
+    description: 'Help your bilingual Hebrew-English child build English vocabulary. 342 words with Hebrew translations, phonetics, and pictures. Free app for kids 6-12.',
+    h1: 'English Vocabulary for Bilingual Hebrew-English Kids',
+    sections: [
+      {
+        h2: 'The Bilingual Advantage',
+        content: `<p>Growing up bilingual in Hebrew and English gives children a remarkable cognitive edge. Research consistently shows that bilingual kids develop <strong>stronger executive function</strong>, better problem-solving skills, and greater mental flexibility compared to monolingual peers.</p>
+<p>For Hebrew-English children specifically, the advantages are compounded by learning two very different writing systems and language structures. Navigating between right-to-left Hebrew and left-to-right English builds <strong>visual-spatial awareness</strong> and <strong>cognitive switching</strong> abilities that benefit kids across all academic subjects.</p>
+<p>But these benefits only emerge when both languages are actively developed. Without structured English vocabulary practice, Hebrew-dominant children can fall behind in English reading and comprehension &mdash; even if they understand spoken English well.</p>`,
+      },
+      {
+        h2: 'Common Challenges Hebrew-Speaking Kids Face with English',
+        content: `<p>Hebrew and English differ in fundamental ways that can trip up young learners:</p>
+<ul>
+  <li><strong>Reading direction</strong> &mdash; Switching from right-to-left (Hebrew) to left-to-right (English) is a major cognitive shift, especially for early readers</li>
+  <li><strong>Vowel systems</strong> &mdash; Hebrew has 5 vowel sounds; English has 15+. Kids often struggle with sounds like the "a" in "cat" vs. "cake" vs. "car"</li>
+  <li><strong>Phonetic inconsistency</strong> &mdash; Hebrew spelling is mostly phonetic; English is famously irregular ("though," "through," "thought")</li>
+  <li><strong>False friends</strong> &mdash; Some words sound similar but mean different things. Hebrew "dog" (דג) means "fish" in English!</li>
+  <li><strong>The "th" sound</strong> &mdash; This sound doesn't exist in Hebrew and requires specific practice</li>
+</ul>
+<p>Understanding these challenges helps parents provide targeted support rather than generic vocabulary drill.</p>`,
+      },
+      {
+        h2: 'Using Hebrew Translations as a Bridge, Not a Crutch',
+        content: `<p>Hebrew translations are incredibly useful for initial word learning &mdash; they give kids an instant anchor for new English vocabulary. But the goal is to <strong>progressively withdraw</strong> the translation so the child thinks in English directly.</p>
+<p><strong>The bridge strategy:</strong></p>
+<ol>
+  <li><strong>Week 1:</strong> Learn new words with picture + English word + Hebrew translation. The translation provides instant understanding.</li>
+  <li><strong>Week 2:</strong> Practice with picture + English word only. The translation is available if needed but not shown by default.</li>
+  <li><strong>Week 3:</strong> Quiz mode &mdash; see the picture, produce the English word from memory. No translation at all.</li>
+  <li><strong>Week 4+:</strong> Encounter the word in different contexts (audio quiz, flashcard review) without translation support.</li>
+</ol>
+<p>This gradual approach respects the child's need for Hebrew support while building independent English vocabulary over time.</p>`,
+      },
+      {
+        h2: 'Which Categories to Start With',
+        content: `<p>For Hebrew-English bilingual kids, the smartest starting strategy is to begin with <strong>cognates and loanwords</strong> &mdash; words that sound similar in both languages. This gives kids quick wins and builds confidence.</p>
+<p><strong>High-cognate categories (easiest):</strong></p>
+<ul>
+  <li><a href="/vocabulary/food/">Food</a> &mdash; Many international food words overlap (chocolate, pizza, banana)</li>
+  <li><a href="/vocabulary/transport/">Transport</a> &mdash; Similar words (bus, taxi, helicopter)</li>
+  <li><a href="/vocabulary/sports/">Sports</a> &mdash; Shared vocabulary (football, basketball, tennis)</li>
+</ul>
+<p><strong>High-interest categories (most motivating):</strong></p>
+<ul>
+  <li><a href="/vocabulary/animals/">Animals</a> &mdash; Universal kid appeal</li>
+  <li><a href="/vocabulary/toys/">Toys</a> &mdash; Words kids want to know</li>
+  <li><a href="/vocabulary/colors/">Colors</a> &mdash; Fundamental and practical</li>
+</ul>
+<p>Browse all <a href="/vocabulary/">${CATEGORIES.length} vocabulary categories</a> to find what excites your child most.</p>`,
+      },
+      {
+        h2: 'Daily Practice Routine for Bilingual Families',
+        content: `<p>A structured 10-minute daily routine makes a huge difference for bilingual vocabulary development:</p>
+<ol>
+  <li><strong>Review (2 min):</strong> Open <a href="/">the app</a> and complete the daily review. Words due for spaced repetition appear automatically.</li>
+  <li><strong>New words (3 min):</strong> Explore one category and learn 3-5 new words. Read the English word, listen to pronunciation, check the Hebrew translation.</li>
+  <li><strong>Quiz (3 min):</strong> Take a quick image quiz or audio challenge on today's words.</li>
+  <li><strong>Bilingual chat (2 min):</strong> Use one of the new words in an English sentence at dinner. Siblings can quiz each other.</li>
+</ol>
+<p><strong>Pro tips for bilingual families:</strong></p>
+<ul>
+  <li>Designate "English time" &mdash; even 10 minutes where only English is spoken</li>
+  <li>Label objects around the house with English words</li>
+  <li>Let kids teach their new English words to Hebrew-speaking grandparents</li>
+  <li>Use <a href="/printable-flashcards/">printable flashcards</a> on the fridge as a passive reminder</li>
+</ul>`,
+      },
+      {
+        h2: 'A Free App Built for Hebrew-English Families',
+        content: `<p><a href="/">Children Do English</a> was specifically designed for bilingual Hebrew-English families. Every feature considers the needs of children navigating two languages:</p>
+<ul>
+  <li><strong>${WORDS.length} words with Hebrew translations</strong> &mdash; Every word includes an accurate Hebrew translation alongside the English definition</li>
+  <li><strong>Phonetic pronunciation</strong> &mdash; IPA-based phonetics help kids pronounce English sounds that don't exist in Hebrew</li>
+  <li><strong>Picture-based learning</strong> &mdash; Visual anchors reduce reliance on translation</li>
+  <li><strong>Audio pronunciation</strong> &mdash; Native-quality speech synthesis for every word</li>
+  <li><strong>Spaced repetition</strong> &mdash; Smart scheduling so kids review words right before they'd forget</li>
+  <li><strong>Multiple player profiles</strong> &mdash; Siblings can each have their own progress</li>
+  <li><strong>100% free, no ads</strong> &mdash; No paywalls or distractions</li>
+  <li><strong>Works offline</strong> &mdash; Practice anywhere, no internet needed</li>
+</ul>
+<p>Start building your child's English vocabulary today &mdash; with the Hebrew support they need and the gradual independence they'll develop.</p>`,
+      },
+    ],
+  },
 ];
 
 for (const guide of GUIDES) {
