@@ -1273,6 +1273,19 @@ for (const guide of GUIDES) {
     mainEntityOfPage: guideUrl,
   });
 
+  const faqSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: guide.sections.map((s) => ({
+      '@type': 'Question',
+      name: s.h2,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: s.content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
+      },
+    })),
+  });
+
   const sectionHtml = guide.sections
     .map((s) => `
     <div class="section">
@@ -1311,6 +1324,7 @@ for (const guide of GUIDES) {
 
   <script type="application/ld+json">${guideBreadcrumb}</script>
   <script type="application/ld+json">${articleSchema}</script>
+  <script type="application/ld+json">${faqSchema}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
