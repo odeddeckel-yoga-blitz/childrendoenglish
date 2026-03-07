@@ -17,7 +17,6 @@ const defaultProps = {
   },
   lang: 'en',
   onBack: vi.fn(),
-  onAssessment: vi.fn(),
 };
 
 describe('ProgressDashboard', () => {
@@ -37,16 +36,5 @@ describe('ProgressDashboard', () => {
     expect(screen.getByText('3')).toBeInTheDocument(); // currentStreak
     expect(screen.getByText('2')).toBeInTheDocument(); // wordsLearned
     expect(screen.getByText('1')).toBeInTheDocument(); // wordsMastered (cat interval >= 14)
-  });
-
-  it('renders the take assessment button', () => {
-    render(<ProgressDashboard {...defaultProps} />);
-    expect(screen.getByText('Take Assessment')).toBeInTheDocument();
-  });
-
-  it('calls onAssessment when assessment button clicked', () => {
-    render(<ProgressDashboard {...defaultProps} />);
-    fireEvent.click(screen.getByText('Take Assessment'));
-    expect(defaultProps.onAssessment).toHaveBeenCalled();
   });
 });

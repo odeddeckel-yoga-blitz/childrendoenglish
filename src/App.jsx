@@ -25,7 +25,7 @@ const LearnMode = lazy(() => import('./components/LearnMode'));
 const FlashcardMode = lazy(() => import('./components/FlashcardMode'));
 const BadgesView = lazy(() => import('./components/BadgesView'));
 const ProgressDashboard = lazy(() => import('./components/ProgressDashboard'));
-const AssessmentFlow = lazy(() => import('./components/AssessmentFlow'));
+// AssessmentFlow removed — levels unlock via quiz scores
 const PersonalWordList = lazy(() => import('./components/PersonalWordList'));
 const UpdatePrompt = lazy(() => import('./components/UpdatePrompt'));
 const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
@@ -423,16 +423,7 @@ export default function App() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleAssessmentComplete = useCallback((level) => {
-    setStats(prev => {
-      const unlockedLevels = ['beginner'];
-      if (level === 'intermediate' || level === 'advanced') unlockedLevels.push('intermediate');
-      if (level === 'advanced') unlockedLevels.push('advanced');
-      return { ...prev, assessmentLevel: level, unlockedLevels };
-    });
-    analytics.assessmentComplete(level);
-    navigate('menu');
-  }, [navigate]);
+  // Assessment removed — levels unlock via quiz scores (7+/10)
 
   const renderState = () => {
     switch (gameState) {
@@ -624,16 +615,6 @@ export default function App() {
             stats={stats}
             lang={lang}
             onBack={() => navigate('menu', 'back')}
-            onAssessment={() => navigate('assessment')}
-          />
-        );
-
-      case 'assessment':
-        return (
-          <AssessmentFlow
-            lang={lang}
-            onComplete={handleAssessmentComplete}
-            onSkip={() => navigate('menu', 'back')}
           />
         );
 

@@ -1,8 +1,8 @@
-import { ArrowLeft, Flame, BookOpen, Trophy, Target, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Flame, BookOpen, Trophy, Target } from 'lucide-react';
 import { WORDS } from '../data/words';
 import { t } from '../utils/i18n';
 
-export default function ProgressDashboard({ stats, lang = 'en', onBack, onAssessment }) {
+export default function ProgressDashboard({ stats, lang = 'en', onBack }) {
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
   const wordsMastered = Object.values(stats.wordProgress || {}).filter(w => w.interval >= 14).length;
   const totalWords = WORDS.length;
@@ -62,24 +62,6 @@ export default function ProgressDashboard({ stats, lang = 'en', onBack, onAssess
           />
         </div>
       </div>
-
-      {/* Assessment */}
-      {stats.assessmentLevel && (
-        <div className="glass rounded-2xl p-4">
-          <p className="text-sm text-slate-500">
-            {t('assessmentLevelLabel', lang)} <span className="font-semibold text-slate-700 capitalize">{stats.assessmentLevel}</span>
-          </p>
-        </div>
-      )}
-
-      <button
-        onClick={onAssessment}
-        className="w-full py-3 glass rounded-xl font-semibold text-blue-600 text-sm
-                   hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
-      >
-        <TrendingUp className="w-4 h-4" />
-        {stats.assessmentLevel ? t('retakeAssessment', lang) : t('takeAssessment', lang)}
-      </button>
 
       {/* Recent quizzes */}
       {recentHistory.length > 0 && (

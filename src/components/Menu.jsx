@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, TrendingUp, Download, X, Users, Map, ShieldCheck, Bell, BellOff, Globe, RotateCcw } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, Download, X, Users, Map, ShieldCheck, Bell, BellOff, Globe, RotateCcw } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
 
@@ -125,24 +125,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         )}
       </div>
 
-      {/* Assessment prompt — hidden for pre-readers */}
-      {!stats.assessmentLevel && stats.totalQuizzes === 0 && activePlayer?.canRead !== false && (
-        <button
-          onClick={() => onNavigate('assessment')}
-          className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-start
-                     border border-blue-200 bg-blue-50/50"
-        >
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600
-                          flex items-center justify-center flex-shrink-0">
-            <TrendingUp className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <p className="font-bold text-slate-800">{t('findYourLevel', lang)}</p>
-            <p className="text-slate-500 text-sm">{t('findYourLevelDesc', lang)}</p>
-          </div>
-        </button>
-      )}
+      {/* Assessment removed — levels unlock via quiz scores */}
 
       {/* Main actions */}
       <nav aria-label="Main menu" className="space-y-3">
