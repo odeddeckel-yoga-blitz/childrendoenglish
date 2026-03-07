@@ -1,8 +1,43 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { t, isRTL, loadHebrew } from '../utils/i18n';
+import heTranslations from '../utils/i18n-he.js';
+import rawI18n from '../utils/i18n.js?raw';
+
+// Extract all keys from the `en: { ... }` block in the i18n.js source.
+// This avoids needing to export `translations` from i18n.js.
+function extractEnKeys(source) {
+  // Find the en block: starts after `en: {` and ends at the matching closing brace.
+  const enStart = source.indexOf('en: {');
+  if (enStart === -1) throw new Error('Could not find en: { in i18n.js source');
+
+  // Walk forward from the opening brace to find the matching closing brace.
+  let depth = 0;
+  let blockStart = -1;
+  for (let i = enStart + 4; i < source.length; i++) {
+    if (source[i] === '{') {
+      if (depth === 0) blockStart = i;
+      depth++;
+    } else if (source[i] === '}') {
+      depth--;
+      if (depth === 0) {
+        const enBlock = source.slice(blockStart + 1, i);
+        // Extract property keys: unquoted identifiers or single/double-quoted strings
+        const keyPattern = /^\s*(?:'([^']+)'|"([^"]+)"|([a-zA-Z_$][a-zA-Z0-9_$]*))\s*:/gm;
+        const keys = [];
+        let match;
+        while ((match = keyPattern.exec(enBlock)) !== null) {
+          keys.push(match[1] ?? match[2] ?? match[3]);
+        }
+        return keys;
+      }
+    }
+  }
+  throw new Error('Could not find end of en block in i18n.js source');
+}
 
 describe('i18n', () => {
   beforeAll(() => loadHebrew());
+
   it('returns English string for known key', () => {
     expect(t('appName', 'en')).toBe('Children Do English');
   });
@@ -37,29 +72,22 @@ describe('i18n', () => {
   });
 
   it('all English keys have Hebrew translations', () => {
-    // Import the translations object indirectly by checking keys
-    const enKeys = Object.keys(getTranslations('en'));
-    const heKeys = Object.keys(getTranslations('he'));
+    const enKeys = extractEnKeys(rawI18n);
+    const heKeys = Object.keys(heTranslations);
     const missingInHe = enKeys.filter(k => !heKeys.includes(k));
-    expect(missingInHe).toEqual([]);
+    expect(
+      missingInHe,
+      `Keys present in English but missing in Hebrew: ${missingInHe.join(', ')}`
+    ).toEqual([]);
+  });
+
+  it('all Hebrew keys have English translations', () => {
+    const enKeys = extractEnKeys(rawI18n);
+    const heKeys = Object.keys(heTranslations);
+    const missingInEn = heKeys.filter(k => !enKeys.includes(k));
+    expect(
+      missingInEn,
+      `Keys present in Hebrew but missing in English: ${missingInEn.join(', ')}`
+    ).toEqual([]);
   });
 });
-
-// Helper to get translation keys by testing each one
-function getTranslations(lang) {
-  // We can't directly import the translations object, but we can test
-  // all known keys. This is a simplified version.
-  const knownKeys = [
-    'appName', 'tagline', 'learnWords', 'flashcards', 'playQuiz',
-    'skipThisWord', 'playAgain', 'amazing', 'greatJob', 'goodEffort',
-    'keepPracticing', 'chooseLanguage', 'welcomeTitle', 'parentDashboard',
-    'learningPath', 'exportData', 'importData', 'cookieConsent',
-    'enableReminders', 'disableReminders', 'parentEmailTitle',
-  ];
-  const result = {};
-  knownKeys.forEach(key => {
-    const val = t(key, lang);
-    if (val !== key) result[key] = val;
-  });
-  return result;
-}

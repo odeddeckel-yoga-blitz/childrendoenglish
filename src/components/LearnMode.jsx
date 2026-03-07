@@ -113,6 +113,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
         <div className="flex flex-wrap gap-2 pb-1">
           <button
             onClick={() => setSelectedCategory(null)}
+            aria-pressed={selectedCategory === null}
             className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
               !selectedCategory ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
@@ -123,6 +124,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat === selectedCategory ? null : cat)}
+              aria-pressed={selectedCategory === cat}
               className={`px-3 py-1.5 rounded-full text-xs font-semibold capitalize transition-colors ${
                 selectedCategory === cat ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
               }`}

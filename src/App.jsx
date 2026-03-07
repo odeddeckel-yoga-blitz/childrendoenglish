@@ -3,10 +3,12 @@ import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
 import Confetti from './components/Confetti';
-import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, savePlayerRegistry, addPlayer, removePlayer, resetPlayerProgress, updatePlayerProfile, updateStreak, updateDailyGoal } from './utils/storage';
+import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, updateStreak, updateDailyGoal } from './utils/storage';
 import { initTTS } from './utils/sound';
 import { isRTL, t, loadHebrew } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
+import usePlayerManagement from './hooks/usePlayerManagement';
+import useInstallPrompt from './hooks/useInstallPrompt';
 import CookieConsent from './components/CookieConsent';
 import { needsConsentPrompt, setAnalyticsConsent, analytics } from './utils/analytics';
 import { checkStreakReminder } from './utils/notifications';
@@ -107,7 +109,6 @@ function getInitialState() {
 export default function App() {
   const initial = useRef(getInitialState());
 
-  const [playerRegistry, setPlayerRegistry] = useState(() => initial.current.registry);
   const [stats, setStats] = useState(() => initial.current.stats || loadStats());
   const [gameState, setGameState] = useState(() => initial.current.gameState);
   const [darkMode, setDarkMode] = useState(() => isDarkMode());
@@ -123,8 +124,37 @@ export default function App() {
   const mainRef = useRef(null);
   const prevBadgeCount = useRef(stats.badges?.length || 0);
 
-  // Derived: active player from registry
-  const activePlayer = playerRegistry?.players.find(p => p.id === playerRegistry.activePlayerId) || null;
+  const navigate = useCallback((newState, direction = 'forward') => {
+    setGameState(newState);
+    const path = STATE_TO_PATH[newState];
+    if (path) {
+      if (direction === 'back') {
+        history.replaceState({ gameState: newState }, '', path);
+      } else {
+        history.pushState({ gameState: newState }, '', path);
+      }
+    }
+    analytics.screenView(newState);
+    const features = ['learning', 'flashcards', 'badges', 'progress', 'personalList', 'learningPath', 'parentDashboard', 'dailyReview'];
+    if (features.includes(newState)) analytics.featureUse(newState);
+  }, []);
+
+  // Extracted hooks
+  const {
+    playerRegistry, setPlayerRegistry, activePlayer,
+    handleCreatePlayer, handleSelectPlayer, handleUpdatePlayer,
+    handleResetPlayer, handleDeletePlayer,
+  } = usePlayerManagement({ navigate, setStats });
+
+  const wrappedDeletePlayer = useCallback((id) => {
+    setShowProfilePicker(false);
+    handleDeletePlayer(id);
+  }, [handleDeletePlayer]);
+
+  const { showInstallBanner, handleInstall, dismissInstall } = useInstallPrompt({
+    gameState,
+    totalQuizzes: stats.totalQuizzes,
+  });
 
   // Show confetti when new badges are earned
   useEffect(() => {
@@ -166,14 +196,12 @@ export default function App() {
     if (lang === 'he') loadHebrew().then(() => forceUpdate(n => n + 1));
     document.documentElement.dir = isRTL(lang) ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
-    // Update meta description for language
     const desc = document.querySelector('meta[name="description"]');
     if (desc) {
       desc.setAttribute('content', lang === 'he'
         ? 'אפליקציה חינמית ללימוד אוצר מילים באנגלית לילדים בגילאי 6-12. למדו כ-300 מילים באנגלית דרך חידוני תמונות, כרטיסיות ואתגרי שמע. ללא פרסומות, ללא צורך בהרשמה.'
         : 'Help your kids grow their English vocabulary through fun image quizzes, flashcards, and audio challenges. Perfect for ages 6-12, with Hebrew support.');
     }
-    // Update meta keywords for language
     const kw = document.querySelector('meta[name="keywords"]');
     if (kw) {
       kw.setAttribute('content', lang === 'he'
@@ -216,67 +244,10 @@ export default function App() {
   // Check streak reminder on mount
   useEffect(() => { checkStreakReminder(stats, lang); }, [stats, lang]);
 
-  // PWA install prompt
-  const deferredPrompt = useRef(null);
-  const [showInstallBanner, setShowInstallBanner] = useState(false);
-
-  useEffect(() => {
-    const handler = (e) => {
-      e.preventDefault();
-      deferredPrompt.current = e;
-    };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
-
-  // Show install banner on menu after first quiz if prompt is available
-  useEffect(() => {
-    if (gameState === 'menu' && stats.totalQuizzes >= 1 && deferredPrompt.current && !localStorage.getItem('childrendoenglish-install-dismissed')) {
-      setShowInstallBanner(true);
-    } else {
-      setShowInstallBanner(false);
-    }
-  }, [gameState, stats.totalQuizzes]);
-
-  const handleInstall = async () => {
-    if (!deferredPrompt.current) return;
-    deferredPrompt.current.prompt();
-    const { outcome } = await deferredPrompt.current.userChoice;
-    deferredPrompt.current = null;
-    setShowInstallBanner(false);
-    analytics.pwaInstall(outcome);
-    if (outcome === 'dismissed') {
-      localStorage.setItem('childrendoenglish-install-dismissed', '1');
-    }
-  };
-
-  const dismissInstall = () => {
-    setShowInstallBanner(false);
-    localStorage.setItem('childrendoenglish-install-dismissed', '1');
-  };
-
   // Persist stats to active player
   useEffect(() => {
     saveStats(stats, playerRegistry?.activePlayerId);
   }, [stats, playerRegistry?.activePlayerId]);
-
-  const navigate = useCallback((newState, direction = 'forward') => {
-    setGameState(newState);
-    // Update browser history for mapped states
-    const path = STATE_TO_PATH[newState];
-    if (path) {
-      if (direction === 'back') {
-        history.replaceState({ gameState: newState }, '', path);
-      } else {
-        history.pushState({ gameState: newState }, '', path);
-      }
-    }
-    // Track screen views for all navigation
-    analytics.screenView(newState);
-    // Track feature usage for key screens
-    const features = ['learning', 'flashcards', 'badges', 'progress', 'personalList', 'learningPath', 'parentDashboard', 'dailyReview'];
-    if (features.includes(newState)) analytics.featureUse(newState);
-  }, []);
 
   const quizFlow = useQuizFlow({ stats, setStats, navigate });
 
@@ -297,67 +268,6 @@ export default function App() {
       return !s;
     });
   }, []);
-
-  // --- Player handlers ---
-
-  const handleCreatePlayer = useCallback((name, avatar, canRead) => {
-    const id = addPlayer(name, avatar, canRead);
-    const reg = loadPlayerRegistry();
-    reg.activePlayerId = id;
-    savePlayerRegistry(reg);
-    setPlayerRegistry({ ...reg });
-    const newStats = loadStats(id);
-    setStats(newStats);
-    analytics.playerCreate();
-    navigate('onboarding');
-  }, [navigate]);
-
-  const handleSelectPlayer = useCallback((playerId) => {
-    const reg = loadPlayerRegistry();
-    if (!reg) return;
-    reg.activePlayerId = playerId;
-    savePlayerRegistry(reg);
-    setPlayerRegistry({ ...reg });
-    const playerStats = loadStats(playerId);
-    setStats(playerStats);
-    // Go to onboarding or menu based on whether they've onboarded
-    if (!playerStats.hasSeenOnboarding && playerStats.totalQuizzes === 0) {
-      navigate('onboarding');
-    } else {
-      navigate('menu');
-    }
-  }, [navigate]);
-
-  const handleUpdatePlayer = useCallback((id, updates) => {
-    updatePlayerProfile(id, updates);
-    setPlayerRegistry({ ...loadPlayerRegistry() });
-  }, []);
-
-  const handleResetPlayer = useCallback((id) => {
-    resetPlayerProgress(id);
-    // If resetting the active player, reload their stats
-    if (playerRegistry?.activePlayerId === id) {
-      setStats(loadStats(id));
-    }
-  }, [playerRegistry?.activePlayerId]);
-
-  const handleDeletePlayer = useCallback((id) => {
-    removePlayer(id);
-    const reg = loadPlayerRegistry();
-    setPlayerRegistry(reg ? { ...reg } : null);
-    if (!reg || reg.players.length === 0) {
-      // No players left → go to create
-      setShowProfilePicker(false);
-      navigate('playerCreate');
-      return;
-    }
-    // If deleted was active, load new active player's stats
-    if (playerRegistry?.activePlayerId === id && reg?.activePlayerId) {
-      setStats(loadStats(reg.activePlayerId));
-    }
-  }, [playerRegistry?.activePlayerId, navigate]);
-
-  // --- Existing handlers ---
 
   const handleOnboardingComplete = useCallback(() => {
     setStats(prev => {
@@ -470,7 +380,7 @@ export default function App() {
             lang={lang}
             onUpdatePlayer={handleUpdatePlayer}
             onResetPlayer={handleResetPlayer}
-            onDeletePlayer={handleDeletePlayer}
+            onDeletePlayer={wrappedDeletePlayer}
             onAddPlayer={() => navigate('playerCreate')}
             onBack={() => navigate('menu', 'back')}
           />
@@ -745,7 +655,7 @@ export default function App() {
           lang={lang}
           onSwitch={(id) => { setShowProfilePicker(false); handleSelectPlayer(id); }}
           onAdd={() => { setShowProfilePicker(false); navigate('playerCreate'); }}
-          onDelete={handleDeletePlayer}
+          onDelete={wrappedDeletePlayer}
         />
       </Suspense>
     </div>

@@ -160,7 +160,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
       <div className="flex justify-end">
         <button
           onClick={() => {
-            onSelectLanguage?.('en');
+            onSelectLanguage?.(lang);
             onComplete();
           }}
           className="p-2 rounded-full hover:bg-slate-100 transition-colors"

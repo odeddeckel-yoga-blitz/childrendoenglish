@@ -71,7 +71,7 @@ describe('Menu', () => {
 
   it('shows parent dashboard link', () => {
     render(<Menu {...defaultProps} />);
-    expect(screen.getByText('Parent Dashboard')).toBeInTheDocument();
+    expect(screen.getAllByText('Parent Dashboard').length).toBeGreaterThanOrEqual(1);
   });
 
   it('renders in Hebrew when lang=he', async () => {

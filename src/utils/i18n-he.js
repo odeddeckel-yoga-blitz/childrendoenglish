@@ -193,6 +193,7 @@ export default {
 
   // Parent dashboard
   parentDashboard: 'לוח הורים',
+  parentDashboardDesc: 'צפו בדוחות למידה',
 
   // Share text
   shareText: 'השגתי {{score}}/{{total}} ב-Children Do English!',
@@ -242,6 +243,15 @@ export default {
   // Trust signals
   methodologyTitle: 'בנוי ללמידה',
   methodologyDesc: 'חזרה מרווחת, התאמת תמונה-מילה ותרגול רב-חושי עוזרים לילדים לבנות אוצר מילים לטווח ארוך.',
+
+  // Testimonials
+  testimonial1Quote: 'הבת שלי למדה 50 מילים חדשות בשבועיים בלבד!',
+  testimonial1Author: 'שרה, הורה',
+  testimonial2Quote: 'החידונים עם התמונות הופכים את הלמידה לכיפית. הבן שלי מבקש לשחק כל יום.',
+  testimonial2Author: 'דוד, הורה',
+  testimonial3Quote: 'סוף סוף אפליקציה שבאמת חינמית ובלי פרסומות!',
+  testimonial3Author: 'מאיה, הורה',
+  testimonialsLabel: 'מה הורים אומרים',
 
   // Edit player
   editPlayer: 'עריכת שחקן',

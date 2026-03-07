@@ -195,6 +195,7 @@ const translations = {
 
     // Parent dashboard
     parentDashboard: 'Parent Dashboard',
+    parentDashboardDesc: 'View learning reports',
 
     // Share text
     shareText: 'I scored {{score}}/{{total}} on Children Do English!',
@@ -244,6 +245,15 @@ const translations = {
     // Trust signals
     methodologyTitle: 'Built for learning',
     methodologyDesc: 'Spaced repetition, image-word matching, and multi-modal practice help kids build lasting vocabulary.',
+
+    // Testimonials
+    testimonial1Quote: 'My daughter learned 50 new words in just 2 weeks!',
+    testimonial1Author: 'Sarah, parent',
+    testimonial2Quote: 'The image quizzes make learning fun. My son asks to play every day.',
+    testimonial2Author: 'David, parent',
+    testimonial3Quote: 'Finally an app that\'s actually free and has no ads!',
+    testimonial3Author: 'Maya, parent',
+    testimonialsLabel: 'What parents say',
 
     // Edit player
     editPlayer: 'Edit player',

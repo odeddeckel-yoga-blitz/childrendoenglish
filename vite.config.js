@@ -42,7 +42,7 @@ export default defineConfig({
       },
       manifest: {
         name: 'Children Do English',
-        short_name: 'English',
+        short_name: 'KidsEnglish',
         description: 'Fun English vocabulary learning for kids ages 6-12',
         theme_color: '#2563eb',
         background_color: '#eff6ff',
