@@ -1,36 +1,15 @@
-import { useMemo } from 'react';
 import { Play, ArrowLeft, Share2, RotateCcw, Check, X as XIcon } from 'lucide-react';
-import { BADGES } from '../data/badges';
 import { getWordById } from '../data/words';
 import { t } from '../utils/i18n';
 
-export default function ResultScreen({ results, stats, lang = 'en', level: _level, mode: _mode, onPlayAgain, onChangeMode, onMenu }) {
+export default function ResultScreen({ results, lang = 'en', level: _level, mode: _mode, onPlayAgain, onChangeMode, onMenu }) {
   const { score, total, answers = [] } = results;
-  const isPerfect = score === total && total > 0;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
 
-  // Find newly earned badges
-  const newBadges = useMemo(() => {
-    return BADGES.filter(b => stats.badges.includes(b.id)).slice(-3);
-  }, [stats.badges]);
-
-  // Confetti for perfect score
-  const confettiPieces = useMemo(() => {
-    if (!isPerfect) return null;
-    const colors = ['#2563eb', '#f59e0b', '#f43f5e', '#8b5cf6', '#10b981'];
-    return Array.from({ length: 30 }, (_, i) => ({
-      left: `${Math.random() * 100}%`,
-      backgroundColor: colors[i % colors.length],
-      animationDelay: `${Math.random() * 2}s`,
-      animationDuration: `${2 + Math.random() * 3}s`,
-      width: `${6 + Math.random() * 6}px`,
-      height: `${6 + Math.random() * 6}px`,
-    }));
-  }, [isPerfect]);
-
   const handleShare = async () => {
+    const isPerfect = score === total && total > 0;
     const shareKey = isPerfect ? 'shareTextPerfect' : 'shareText';
-    const text = `${t(shareKey, lang, { score, total })} ${isPerfect ? '🎉' : ''}\nhttps://childrendoenglish.com`;
+    const text = `${t(shareKey, lang, { score, total })}\nhttps://childrendoenglish.com`;
     try {
       if (navigator.share) {
         await navigator.share({ text });
@@ -40,31 +19,10 @@ export default function ResultScreen({ results, stats, lang = 'en', level: _leve
     } catch { /* user cancelled share */ }
   };
 
-  const message = percentage >= 90
-    ? t('amazing', lang)
-    : percentage >= 70
-    ? t('greatJob', lang)
-    : percentage >= 50
-    ? t('goodEffort', lang)
-    : t('keepPracticing', lang);
-
-  const emoji = percentage >= 90 ? '🎉' : percentage >= 70 ? '👏' : percentage >= 50 ? '💪' : '📚';
-
   return (
-    <div className="animate-fade-in space-y-6">
-      {/* Confetti */}
-      {confettiPieces && (
-        <div className="confetti-container">
-          {confettiPieces.map((piece, i) => (
-            <div key={i} className="confetti-piece" style={piece} />
-          ))}
-        </div>
-      )}
-
-      {/* Score card */}
-      <div className="glass rounded-3xl p-8 text-center space-y-4">
-        <div className="text-6xl">{emoji}</div>
-        <h2 className="text-2xl font-black text-slate-800">{message}</h2>
+    <div className="animate-fade-in space-y-4">
+      {/* Score */}
+      <div className="glass rounded-3xl p-6 text-center space-y-3">
         <div className="flex items-baseline justify-center gap-1">
           <span className="text-5xl font-black text-blue-600">{score}</span>
           <span className="text-2xl text-slate-400 font-bold">/ {total}</span>
@@ -79,24 +37,42 @@ export default function ResultScreen({ results, stats, lang = 'en', level: _leve
         </div>
       </div>
 
-      {/* New badges */}
-      {newBadges.length > 0 && (
-        <div className="glass rounded-2xl p-4 space-y-3">
-          <h3 className="text-sm font-semibold text-slate-600">{t('badgesEarned', lang)}</h3>
-          <div className="flex gap-3 justify-center">
-            {newBadges.map((badge, i) => (
-              <div
-                key={badge.id}
-                className="text-center animate-badge-pop"
-                style={{ animationDelay: `${i * 200}ms` }}
-              >
-                <div className="text-3xl">{badge.icon}</div>
-                <p className="text-xs font-semibold text-slate-600 mt-1">{t(badge.nameKey, lang)}</p>
-              </div>
-            ))}
-          </div>
+      {/* Action buttons — Back to Menu first */}
+      <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={onMenu}
+            className="py-3 px-4 glass rounded-xl font-semibold text-slate-600
+                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" /> {t('backToMenuBtn', lang)}
+          </button>
+          <button
+            onClick={onPlayAgain}
+            className="py-3 px-4 bg-blue-600 text-white rounded-xl font-semibold
+                       hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
+            <Play className="w-4 h-4" /> {t('playAgain', lang)}
+          </button>
         </div>
-      )}
+
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={handleShare}
+            className="py-2.5 px-4 glass rounded-xl font-semibold text-slate-500 text-sm
+                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
+            <Share2 className="w-4 h-4" /> {t('share', lang)}
+          </button>
+          <button
+            onClick={onChangeMode}
+            className="py-2.5 px-4 glass rounded-xl font-semibold text-slate-500 text-sm
+                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
+            <RotateCcw className="w-4 h-4" /> {t('changeMode', lang)}
+          </button>
+        </div>
+      </div>
 
       {/* Answer review */}
       {answers.length > 0 && (
@@ -133,42 +109,6 @@ export default function ResultScreen({ results, stats, lang = 'en', level: _leve
           </div>
         </div>
       )}
-
-      {/* Action buttons */}
-      <div className="space-y-3">
-        <button
-          onClick={onPlayAgain}
-          className="w-full py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold
-                     hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
-        >
-          <Play className="w-5 h-5" /> {t('playAgain', lang)}
-        </button>
-
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={handleShare}
-            className="py-2.5 px-4 glass rounded-xl font-semibold text-slate-600 text-sm
-                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
-          >
-            <Share2 className="w-4 h-4" /> {t('share', lang)}
-          </button>
-          <button
-            onClick={onChangeMode}
-            className="py-2.5 px-4 glass rounded-xl font-semibold text-slate-600 text-sm
-                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
-          >
-            <RotateCcw className="w-4 h-4" /> {t('changeMode', lang)}
-          </button>
-        </div>
-
-        <button
-          onClick={onMenu}
-          className="w-full py-2.5 rounded-xl border border-slate-200 text-slate-500 text-sm
-                     font-semibold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
-        >
-          <ArrowLeft className="w-4 h-4" /> {t('backToMenuBtn', lang)}
-        </button>
-      </div>
     </div>
   );
 }

@@ -2,8 +2,6 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { WORDS, getDistractors } from '../data/words';
 import { fisherYatesShuffle } from '../utils/shuffle';
 import { getImageUrl } from '../utils/images';
-import { playSound } from '../utils/sound';
-import { haptic } from '../utils/haptic';
 import { t } from '../utils/i18n';
 
 export default function AssessmentFlow({ lang = 'en', onComplete, onSkip }) {
@@ -51,14 +49,6 @@ export default function AssessmentFlow({ lang = 'en', onComplete, onSkip }) {
     setSelectedAnswer(option.id);
     setAnswered(correct ? 'correct' : 'wrong');
 
-    if (correct) {
-      playSound('correct');
-      haptic('success');
-    } else {
-      playSound('wrong');
-      haptic('error');
-    }
-
     const newResults = {
       ...results,
       correct: results.correct + (correct ? 1 : 0),
@@ -78,9 +68,9 @@ export default function AssessmentFlow({ lang = 'en', onComplete, onSkip }) {
       }
     }
 
+    // Advance immediately — no feedback delay
     feedbackTimeout.current = setTimeout(() => {
       if (currentIndex + 1 >= totalQuestions) {
-        // Determine recommended level
         const history = newResults.levelHistory;
         const advancedCorrect = history.filter(h => h.level === 'advanced' && h.correct).length;
         const intermediateCorrect = history.filter(h => h.level === 'intermediate' && h.correct).length;
@@ -93,7 +83,7 @@ export default function AssessmentFlow({ lang = 'en', onComplete, onSkip }) {
       } else {
         setCurrentIndex(i => i + 1);
       }
-    }, 1000);
+    }, 200);
   }, [answered, currentWord, currentIndex, results, currentLevel, onComplete]);
 
   useEffect(() => () => clearTimeout(feedbackTimeout.current), []);
@@ -145,9 +135,7 @@ export default function AssessmentFlow({ lang = 'en', onComplete, onSkip }) {
           let btnClass = 'glass rounded-xl py-3 px-4 font-semibold text-center transition-all ';
 
           if (answered) {
-            if (isCorrect) btnClass += 'bg-emerald-100 border-emerald-400 text-emerald-700 animate-bounce-in';
-            else if (isSelected) btnClass += 'bg-rose-100 border-rose-400 text-rose-700 animate-shake';
-            else btnClass += 'opacity-50';
+            btnClass += 'opacity-50';
           } else {
             btnClass += 'hover:shadow-md active:scale-95 text-slate-700';
           }

@@ -24,7 +24,8 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, spe
   // Generate options for current question
   useEffect(() => {
     if (!currentWord) return;
-    const distractors = getDistractors(currentWord, 3);
+    // Use pre-assigned distractors if available (from useQuizFlow preloading)
+    const distractors = currentWord._distractors || getDistractors(currentWord, 3);
     setOptions(fisherYatesShuffle([currentWord, ...distractors]));
     setAnswered(null);
     setSelectedAnswer(null);

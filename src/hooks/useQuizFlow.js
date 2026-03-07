@@ -33,20 +33,30 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
       return;
     }
 
-    // Collect all images needed (quiz words + their distractors)
+    // Pre-assign distractors so the same ones are used during preload and display
+    const wordDistractions = new Map();
     const allWordsNeeded = new Set();
     selected.forEach(w => {
+      const distractors = getDistractors(w, 3);
+      wordDistractions.set(w.id, distractors);
       allWordsNeeded.add(w);
-      getDistractors(w, 3).forEach(d => allWordsNeeded.add(d));
+      distractors.forEach(d => allWordsNeeded.add(d));
     });
 
     const { missing } = await preloadImages([...allWordsNeeded], (progress) => {
       setLoadingProgress(progress * 100);
     });
 
-    // Filter out quiz words whose images failed to load
+    // Filter out quiz words whose images (or distractors' images) failed to load
     const missingIds = new Set(missing.map(m => m.id));
-    const validWords = selected.filter(w => !missingIds.has(w.id));
+    const validWords = selected.filter(w => {
+      if (missingIds.has(w.id)) return false;
+      // Replace any distractors whose images failed
+      const distractors = wordDistractions.get(w.id).filter(d => !missingIds.has(d.id));
+      if (distractors.length < 3) return false; // not enough valid distractors
+      wordDistractions.set(w.id, distractors.slice(0, 3));
+      return true;
+    });
     if (missing.length > 0) {
       console.warn('Skipping words with missing images:', [...missingIds]);
     }
@@ -56,7 +66,13 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
       return;
     }
 
-    setQuizWords(validWords);
+    // Attach pre-assigned distractors to each word
+    const wordsWithDistractors = validWords.map(w => ({
+      ...w,
+      _distractors: wordDistractions.get(w.id),
+    }));
+
+    setQuizWords(wordsWithDistractors);
     analytics.quizStart(mode, level);
     const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
     navigate(stateMap[mode] || 'imageQuiz');

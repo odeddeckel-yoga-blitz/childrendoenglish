@@ -16,7 +16,6 @@ vi.mock('../utils/haptic', () => ({
 
 const defaultProps = {
   results: { score: 8, total: 10, answers: [] },
-  stats: { badges: [] },
   lang: 'en',
   level: 'beginner',
   mode: 'image',
@@ -34,36 +33,6 @@ describe('ResultScreen', () => {
     render(<ResultScreen {...defaultProps} />);
     expect(screen.getByText('8')).toBeInTheDocument();
     expect(screen.getByText('/ 10')).toBeInTheDocument();
-  });
-
-  it('shows "Amazing!" message for high percentage (90%+)', () => {
-    const props = {
-      ...defaultProps,
-      results: { score: 9, total: 10, answers: [] },
-    };
-    render(<ResultScreen {...props} />);
-    expect(screen.getByText('Amazing!')).toBeInTheDocument();
-  });
-
-  it('shows "Keep practicing!" message for low percentage (<50%)', () => {
-    const props = {
-      ...defaultProps,
-      results: { score: 3, total: 10, answers: [] },
-    };
-    render(<ResultScreen {...props} />);
-    expect(screen.getByText('Keep practicing!')).toBeInTheDocument();
-  });
-
-  it('renders confetti for perfect score', () => {
-    const props = {
-      ...defaultProps,
-      results: { score: 10, total: 10, answers: [] },
-    };
-    const { container } = render(<ResultScreen {...props} />);
-    const confettiContainer = container.querySelector('.confetti-container');
-    expect(confettiContainer).toBeInTheDocument();
-    const pieces = container.querySelectorAll('.confetti-piece');
-    expect(pieces.length).toBe(30);
   });
 
   it('renders action buttons (Play Again, Share, Change Mode, Back to Menu)', () => {

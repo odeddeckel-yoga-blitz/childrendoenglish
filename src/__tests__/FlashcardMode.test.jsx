@@ -64,14 +64,18 @@ describe('FlashcardMode', () => {
     expect(screen.getByText(/1 \//)).toBeInTheDocument();
   });
 
-  it('renders Know It and Still Learning buttons', () => {
+  it('hides Know It and Still Learning buttons before flip', () => {
     render(<FlashcardMode {...defaultProps} />);
-    expect(screen.getByText('Know It')).toBeInTheDocument();
-    expect(screen.getByText('Still Learning')).toBeInTheDocument();
+    expect(screen.queryByText('Know It')).not.toBeInTheDocument();
+    expect(screen.queryByText('Still Learning')).not.toBeInTheDocument();
   });
 
-  it('shows swipe hint text', () => {
+  it('shows buttons and swipe hint after flipping card', () => {
     render(<FlashcardMode {...defaultProps} />);
+    // Click the card to flip it
+    fireEvent.click(screen.getByRole('button', { name: /flip/i }));
+    expect(screen.getByText('Know It')).toBeInTheDocument();
+    expect(screen.getByText('Still Learning')).toBeInTheDocument();
     expect(screen.getByText('Swipe right = Know it, Swipe left = Still learning')).toBeInTheDocument();
   });
 

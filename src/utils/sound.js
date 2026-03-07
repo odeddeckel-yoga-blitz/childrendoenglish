@@ -11,6 +11,9 @@ export const initTTS = async () => {
   }
 
   try {
+    // Chrome requires a cancel() call to kick-start the speech engine
+    window.speechSynthesis.cancel();
+
     // Wait for voices to load
     const voices = window.speechSynthesis.getVoices();
     if (voices.length > 0) {
@@ -18,12 +21,12 @@ export const initTTS = async () => {
       return true;
     }
 
-    // Some browsers load voices asynchronously
+    // Some browsers load voices asynchronously — give them up to 3s
     return new Promise((resolve) => {
       const timeout = setTimeout(() => {
         ttsAvailable = window.speechSynthesis.getVoices().length > 0;
         resolve(ttsAvailable);
-      }, 1000);
+      }, 3000);
 
       window.speechSynthesis.onvoiceschanged = () => {
         clearTimeout(timeout);

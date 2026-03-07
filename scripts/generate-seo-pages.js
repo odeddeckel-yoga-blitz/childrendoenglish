@@ -112,7 +112,7 @@ function buildCategoryPage(slug, displayName, words) {
   <meta property="og:url" content="${url}" />
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
-  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta property="og:image" content="${SITE}/og/${slug}.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
@@ -120,7 +120,7 @@ function buildCategoryPage(slug, displayName, words) {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${escapeHtml(title)}" />
   <meta name="twitter:description" content="${escapeHtml(description)}" />
-  <meta name="twitter:image" content="${SITE}/og-image.png" />
+  <meta name="twitter:image" content="${SITE}/og/${slug}.png" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">${breadcrumbSchema}</script>
@@ -604,7 +604,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
   <meta property="og:url" content="${url}" />
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
-  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta property="og:image" content="${SITE}/og/${slug}.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
@@ -612,7 +612,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="${escapeHtml(title)}" />
   <meta name="twitter:description" content="${escapeHtml(description)}" />
-  <meta name="twitter:image" content="${SITE}/og-image.png" />
+  <meta name="twitter:image" content="${SITE}/og/${slug}.png" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">${breadcrumbSchema}</script>

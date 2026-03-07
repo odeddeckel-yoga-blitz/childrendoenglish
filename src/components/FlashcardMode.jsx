@@ -228,25 +228,28 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, onUp
         )}
       </div>
 
-      {/* Buttons */}
-      <div className="flex gap-3">
-        <button
-          onClick={handleLearning}
-          className="flex-1 py-3 rounded-xl border-2 border-amber-400 text-amber-600 font-semibold
-                     hover:bg-amber-50 active:scale-95 transition-all flex items-center justify-center gap-2"
-        >
-          <XIcon className="w-5 h-5" /> {t('stillLearning', lang)}
-        </button>
-        <button
-          onClick={handleKnow}
-          className="flex-1 py-3 rounded-xl bg-emerald-500 text-white font-semibold
-                     hover:bg-emerald-600 active:scale-95 transition-all flex items-center justify-center gap-2"
-        >
-          <Check className="w-5 h-5" /> {t('knowIt', lang)}
-        </button>
-      </div>
-
-      <p className="text-center text-xs text-slate-400">{t('swipeHint', lang)}</p>
+      {/* Buttons — only visible after flipping */}
+      {flipped && (
+        <>
+          <div className="flex gap-3">
+            <button
+              onClick={handleLearning}
+              className="flex-1 py-3 rounded-xl border-2 border-amber-400 text-amber-600 font-semibold
+                         hover:bg-amber-50 active:scale-95 transition-all flex items-center justify-center gap-2"
+            >
+              <XIcon className="w-5 h-5" /> {t('stillLearning', lang)}
+            </button>
+            <button
+              onClick={handleKnow}
+              className="flex-1 py-3 rounded-xl bg-emerald-500 text-white font-semibold
+                         hover:bg-emerald-600 active:scale-95 transition-all flex items-center justify-center gap-2"
+            >
+              <Check className="w-5 h-5" /> {t('knowIt', lang)}
+            </button>
+          </div>
+          <p className="text-center text-xs text-slate-400">{t('swipeHint', lang)}</p>
+        </>
+      )}
     </div>
   );
 }
