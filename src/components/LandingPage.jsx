@@ -101,67 +101,6 @@ function FAQItem({ index, lang }) {
   );
 }
 
-function TestimonialCarousel({ lang }) {
-  const [active, setActive] = useState(0);
-  const intervalRef = useRef(null);
-  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  const startAutoAdvance = useCallback(() => {
-    if (prefersReducedMotion) return;
-    if (intervalRef.current) clearInterval(intervalRef.current);
-    intervalRef.current = setInterval(() => setActive((i) => (i + 1) % 3), 5000);
-  }, [prefersReducedMotion]);
-
-  useEffect(() => {
-    startAutoAdvance();
-    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
-  }, [startAutoAdvance]);
-
-  const handleDotClick = (i) => {
-    setActive(i);
-    startAutoAdvance();
-  };
-
-  return (
-    <div>
-      <div className="relative">
-        {[1, 2, 3].map((i, idx) => (
-          <div
-            key={i}
-            className={`transition-opacity duration-500
-              ${idx === active
-                ? 'relative opacity-100'
-                : 'absolute inset-0 opacity-0 pointer-events-none'}`}
-          >
-            <div className="glass rounded-2xl p-6 text-center space-y-3">
-              <p className="text-slate-600 dark:text-slate-300 text-sm italic leading-relaxed">
-                &ldquo;{t(`testimonial${i}Quote`, lang)}&rdquo;
-              </p>
-              <p className="text-slate-400 text-xs font-semibold">
-                &mdash; {t(`testimonial${i}Author`, lang)}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-      <div className="flex justify-center gap-2 mt-4">
-        {[0, 1, 2].map((i) => (
-          <button
-            key={i}
-            onClick={() => handleDotClick(i)}
-            className="min-w-[44px] min-h-[44px] flex items-center justify-center"
-            aria-label={`Testimonial ${i + 1}`}
-            aria-current={i === active ? 'true' : undefined}
-          >
-            <span className={`block h-2 rounded-full transition-all duration-300
-              ${i === active ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 dark:bg-slate-600'}`} />
-          </button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 // --- Main Component ---
 
 export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart, onContinue, onPrivacy, onToggleLanguage }) {
@@ -311,15 +250,60 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
         </div>
       </section>
 
-      {/* Testimonials */}
+      {/* App Preview */}
       <section
         ref={reveal}
         className="opacity-0 translate-y-4 transition-all duration-700 space-y-4"
       >
         <h2 className="text-xl font-bold text-slate-800 dark:text-white text-center">
-          {t('testimonialsLabel', lang)}
+          {t('appPreviewTitle', lang)}
         </h2>
-        <TestimonialCarousel lang={lang} />
+        <div className="mx-auto w-60">
+          <div className="rounded-[2rem] border-[3px] border-slate-800 dark:border-slate-600 overflow-hidden shadow-2xl">
+            <div className="bg-blue-600 px-4 py-2 flex items-center justify-between">
+              <span className="text-white text-xs font-bold">Question 3 of 10</span>
+              <span className="text-white/70 text-xs">✓ 2/2</span>
+            </div>
+            <div className="p-4 space-y-3 bg-gradient-to-b from-blue-50 to-white dark:from-slate-800 dark:to-slate-900">
+              <p className="text-center text-sm font-bold text-slate-700 dark:text-slate-200">What is this?</p>
+              <img src="/images/cat.webp" alt="" className="w-24 h-24 mx-auto rounded-2xl object-cover shadow-md" loading="lazy" />
+              <div className="grid grid-cols-2 gap-2">
+                <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">Dog</div>
+                <div className="py-2 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 border-2 border-emerald-500 text-xs text-center text-emerald-700 dark:text-emerald-300 font-bold">Cat ✓</div>
+                <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">Fish</div>
+                <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">Bird</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Signals */}
+      <section
+        ref={reveal}
+        className="opacity-0 translate-y-4 transition-all duration-700 space-y-4"
+      >
+        <h2 className="text-xl font-bold text-slate-800 dark:text-white text-center">
+          {t('trustTitle', lang)}
+        </h2>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { key: 'trustNoAds', emoji: '🔒' },
+            { key: 'trustOffline', emoji: '📱' },
+            { key: 'trustProfiles', emoji: '👨‍👩‍👧‍👦' },
+            { key: 'trustHebrew', emoji: '🇮🇱' },
+          ].map(({ key, emoji }) => (
+            <div key={key} className="glass rounded-2xl p-4 text-center space-y-1">
+              <span className="text-2xl block">{emoji}</span>
+              <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">
+                {t(key, lang)}
+              </h3>
+              <p className="text-slate-500 dark:text-slate-300 text-xs">
+                {t(`${key}Desc`, lang)}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Methodology */}
@@ -421,9 +405,7 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
             {t('termsOfService', lang)}
           </a>
         </div>
-        <p className="text-slate-400 dark:text-slate-500 text-xs">
-          {t('madeBy', lang)}
-        </p>
+
       </footer>
     </div>
   );

@@ -440,4 +440,18 @@ export default {
   badgeProgressMastered: '{{done}}/{{total}} שולטים',
   badgeProgressStreak: '{{done}}/{{total}} ימים ברצף',
   badgeProgressPerfect: 'השיגו ציון מושלם בחידון כלשהו',
+
+  // Trust signals
+  trustTitle: 'בנוי למשפחות',
+  trustNoAds: 'ללא פרסומות או מעקב',
+  trustNoAdsDesc: 'אפס פרסומות, אפס איסוף נתונים. רק למידה.',
+  trustOffline: 'עובד אופליין',
+  trustOfflineDesc: 'התקינו פעם אחת, השתמשו בכל מקום — ללא צורך באינטרנט.',
+  trustProfiles: 'פרופילים מרובים',
+  trustProfilesDesc: 'כל ילד מקבל התקדמות וסטטיסטיקות משלו.',
+  trustHebrew: 'תמיכה בעברית',
+  trustHebrewDesc: 'ממשק בעברית מלא ותרגומים לכל מילה.',
+
+  // App preview
+  appPreviewTitle: 'ראו את זה בפעולה',
 };

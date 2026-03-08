@@ -442,6 +442,20 @@ const translations = {
     badgeProgressMastered: '{{done}}/{{total}} mastered',
     badgeProgressStreak: '{{done}}/{{total}} day streak',
     badgeProgressPerfect: 'Get a perfect score on any quiz',
+
+    // Trust signals
+    trustTitle: 'Built for families',
+    trustNoAds: 'No ads or tracking',
+    trustNoAdsDesc: 'Zero ads, zero data collection. Just learning.',
+    trustOffline: 'Works offline',
+    trustOfflineDesc: 'Install once, use anywhere — no internet needed.',
+    trustProfiles: 'Multiple profiles',
+    trustProfilesDesc: 'Each child gets their own progress and stats.',
+    trustHebrew: 'Hebrew support',
+    trustHebrewDesc: 'Full Hebrew interface and word translations.',
+
+    // App preview
+    appPreviewTitle: 'See it in action',
   },
 };
 
