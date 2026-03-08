@@ -14,13 +14,9 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
   const [customWords, setCustomWords] = useState(null);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
-  const handleLevelSelect = useCallback((level) => {
-    setSelectedLevel(level);
-    analytics.quizFunnelLevel(level);
-    navigate('modeSelect');
-  }, [navigate]);
-
   const startQuiz = useCallback(async (level, mode, words = null) => {
+    setSelectedLevel(level);
+    setSelectedMode(mode);
     if (level) analytics.quizFunnelLevel(level);
     if (mode) analytics.quizFunnelMode(mode);
     navigate('loading');
@@ -79,12 +75,6 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
     const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
     navigate(stateMap[mode] || 'imageQuiz');
   }, [navigate, stats.wordProgress]);
-
-  const handleModeSelect = useCallback((mode) => {
-    setSelectedMode(mode);
-    analytics.quizFunnelMode(mode);
-    startQuiz(selectedLevel, mode);
-  }, [selectedLevel, startQuiz]);
 
   const handleQuizComplete = useCallback((results) => {
     const { score, total, answers, mode } = results;
@@ -163,8 +153,6 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
     quizResults,
     customWords,
     loadingProgress,
-    handleLevelSelect,
-    handleModeSelect,
     startQuiz,
     handleQuizComplete,
     handleStartPersonalQuiz,

@@ -92,19 +92,7 @@ describe('useQuizFlow', () => {
     expect(result.current.quizResults).toBeNull();
   });
 
-  it('handleLevelSelect sets level and navigates to modeSelect', () => {
-    const { result } = renderFlow();
-
-    act(() => {
-      result.current.handleLevelSelect('beginner');
-    });
-
-    expect(result.current.selectedLevel).toBe('beginner');
-    expect(navigate).toHaveBeenCalledWith('modeSelect');
-    expect(analytics.quizFunnelLevel).toHaveBeenCalledWith('beginner');
-  });
-
-  it('startQuiz preloads images and navigates to quiz state', async () => {
+  it('startQuiz sets level/mode and navigates to quiz state', async () => {
     const { result } = renderFlow();
 
     await act(async () => {
@@ -138,12 +126,12 @@ describe('useQuizFlow', () => {
     expect(navigate).toHaveBeenCalledWith('listenMatchQuiz');
   });
 
-  it('handleQuizComplete updates stats and navigates to finished', () => {
+  it('handleQuizComplete updates stats and navigates to finished', async () => {
     const { result } = renderFlow();
 
     // Set level first
-    act(() => {
-      result.current.handleLevelSelect('beginner');
+    await act(async () => {
+      await result.current.startQuiz('beginner', 'image');
     });
 
     act(() => {
@@ -163,11 +151,11 @@ describe('useQuizFlow', () => {
     expect(analytics.quizComplete).toHaveBeenCalledWith('image', 'beginner', 8, 10);
   });
 
-  it('handleQuizComplete unlocks next level at 7/10', () => {
+  it('handleQuizComplete unlocks next level at 7/10', async () => {
     const { result } = renderFlow();
 
-    act(() => {
-      result.current.handleLevelSelect('beginner');
+    await act(async () => {
+      await result.current.startQuiz('beginner', 'image');
     });
 
     act(() => {
@@ -189,11 +177,11 @@ describe('useQuizFlow', () => {
     expect(updated.unlockedLevels).toContain('intermediate');
   });
 
-  it('handleQuizComplete does NOT unlock next level below 7/10', () => {
+  it('handleQuizComplete does NOT unlock next level below 7/10', async () => {
     const { result } = renderFlow();
 
-    act(() => {
-      result.current.handleLevelSelect('beginner');
+    await act(async () => {
+      await result.current.startQuiz('beginner', 'image');
     });
 
     act(() => {
@@ -214,11 +202,11 @@ describe('useQuizFlow', () => {
     expect(updated.unlockedLevels).not.toContain('intermediate');
   });
 
-  it('handleQuizComplete updates best score', () => {
+  it('handleQuizComplete updates best score', async () => {
     const { result } = renderFlow();
 
-    act(() => {
-      result.current.handleLevelSelect('beginner');
+    await act(async () => {
+      await result.current.startQuiz('beginner', 'image');
     });
 
     act(() => {
@@ -235,11 +223,11 @@ describe('useQuizFlow', () => {
     expect(updated.bestScores.beginner).toBe(9);
   });
 
-  it('handleQuizComplete awards first_word badge on first quiz', () => {
+  it('handleQuizComplete awards first_word badge on first quiz', async () => {
     const { result } = renderFlow();
 
-    act(() => {
-      result.current.handleLevelSelect('beginner');
+    await act(async () => {
+      await result.current.startQuiz('beginner', 'image');
     });
 
     act(() => {
@@ -257,11 +245,11 @@ describe('useQuizFlow', () => {
     expect(playSound).toHaveBeenCalledWith('badge');
   });
 
-  it('handleQuizComplete awards perfect_quiz badge on 10/10', () => {
+  it('handleQuizComplete awards perfect_quiz badge on 10/10', async () => {
     const { result } = renderFlow();
 
-    act(() => {
-      result.current.handleLevelSelect('beginner');
+    await act(async () => {
+      await result.current.startQuiz('beginner', 'image');
     });
 
     act(() => {
@@ -282,13 +270,13 @@ describe('useQuizFlow', () => {
     expect(updated.badges).toContain('perfect_quiz');
   });
 
-  it('handleQuizComplete does not duplicate existing badges', () => {
+  it('handleQuizComplete does not duplicate existing badges', async () => {
     baseStats.badges = ['first_word'];
     baseStats.totalQuizzes = 1;
     const { result } = renderFlow();
 
-    act(() => {
-      result.current.handleLevelSelect('beginner');
+    await act(async () => {
+      await result.current.startQuiz('beginner', 'image');
     });
 
     act(() => {
@@ -306,11 +294,11 @@ describe('useQuizFlow', () => {
     expect(firstWordCount).toBe(1);
   });
 
-  it('handleQuizComplete increments totalQuizzes', () => {
+  it('handleQuizComplete increments totalQuizzes', async () => {
     const { result } = renderFlow();
 
-    act(() => {
-      result.current.handleLevelSelect('beginner');
+    await act(async () => {
+      await result.current.startQuiz('beginner', 'image');
     });
 
     act(() => {
