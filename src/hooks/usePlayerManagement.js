@@ -17,7 +17,8 @@ export default function usePlayerManagement({ navigate, setStats }) {
     savePlayerRegistry(reg);
     setPlayerRegistry({ ...reg });
     const newStats = loadStats(id);
-    setStats(newStats);
+    // Preserve language preference selected before player creation
+    setStats(prev => ({ ...newStats, uiLanguage: prev.uiLanguage || newStats.uiLanguage }));
     analytics.playerCreate();
     navigate('onboarding');
   }, [navigate, setStats]);
