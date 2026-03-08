@@ -186,7 +186,6 @@ export default function LandingPage({ lang = 'en', activePlayer, onGetStarted, o
 
       {/* Footer */}
       <footer className="text-center space-y-2 pt-4 border-t border-slate-200">
-        <p className="text-slate-400 text-xs">{t('madeBy', lang)}</p>
         <button
           onClick={onPrivacy}
           className="text-blue-500 text-xs hover:underline"
