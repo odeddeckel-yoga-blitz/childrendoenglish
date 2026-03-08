@@ -199,6 +199,8 @@ export default function App() {
         ? 'לימוד אנגלית לילדים, משחקי אנגלית, אוצר מילים באנגלית, פלאש קארדס, עברית אנגלית, אפליקציה חינוכית, הגייה אנגלית, משחקים חינוכיים לילדים, אפליקציה אנגלית חינם, דוברי עברית אנגלית'
         : 'english vocabulary, kids learning, vocabulary quiz, english for kids, learn english, flashcards, hebrew english, ESL games for children, english words for kids, learn english vocabulary online free, english learning app for kids, picture vocabulary games, vocabulary builder kids, english practice kids, educational games kids, free english learning games, english pronunciation app for kids, bilingual vocabulary app, hebrew english learning app, spaced repetition vocabulary kids, esl practice app for kids');
     }
+    const ogLocale = document.querySelector('meta[property="og:locale"]');
+    if (ogLocale) ogLocale.setAttribute('content', lang === 'he' ? 'he_IL' : 'en_US');
   }, [lang]);
 
   // Read ?lang= URL param on mount (for hreflang SEO)

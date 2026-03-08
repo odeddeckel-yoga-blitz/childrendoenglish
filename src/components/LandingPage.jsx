@@ -73,6 +73,8 @@ function FAQItem({ index, lang }) {
         className="w-full flex items-center justify-between px-4 py-3 text-left
                    hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
         aria-expanded={open}
+        id={`faq-btn-${index}`}
+        aria-controls={`faq-content-${index}`}
       >
         <span className="font-semibold text-slate-700 dark:text-slate-200 text-sm">
           {t(`faq${index + 1}Q`, lang)}
@@ -86,9 +88,12 @@ function FAQItem({ index, lang }) {
         ref={contentRef}
         className="transition-[max-height] duration-300 ease-in-out overflow-hidden"
         aria-hidden={!open}
+        id={`faq-content-${index}`}
+        role="region"
+        aria-labelledby={`faq-btn-${index}`}
         style={{ maxHeight: open ? `${contentRef.current?.scrollHeight ?? 200}px` : '0px' }}
       >
-        <div className="px-4 pb-3 text-sm text-slate-500 dark:text-slate-400">
+        <div className="px-4 pb-3 text-sm text-slate-500 dark:text-slate-300">
           {t(`faq${index + 1}A`, lang)}
         </div>
       </div>
@@ -146,6 +151,7 @@ function TestimonialCarousel({ lang }) {
             onClick={() => handleDotClick(i)}
             className="min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label={`Testimonial ${i + 1}`}
+            aria-current={i === active ? 'true' : undefined}
           >
             <span className={`block h-2 rounded-full transition-all duration-300
               ${i === active ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 dark:bg-slate-600'}`} />
@@ -211,7 +217,7 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
         <h1 className="text-3xl sm:text-4xl font-black text-slate-800 dark:text-white leading-tight">
           {t('landingHeroTitle', lang)}
         </h1>
-        <p className="text-slate-500 dark:text-slate-400 text-lg max-w-md mx-auto">
+        <p className="text-slate-500 dark:text-slate-300 text-lg max-w-md mx-auto">
           {t('landingHeroDesc', lang)}
         </p>
 
@@ -262,7 +268,7 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
                 <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">
                   {t(`feature${key}Title`, lang)}
                 </h3>
-                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed mt-0.5">
+                <p className="text-slate-500 dark:text-slate-300 text-xs leading-relaxed mt-0.5">
                   {t(`feature${key}Desc`, lang)}
                 </p>
               </div>
@@ -295,7 +301,7 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
                   <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">
                     {t(`howStep${i}Title`, lang)}
                   </h3>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs mt-1">
+                  <p className="text-slate-500 dark:text-slate-300 text-xs mt-1">
                     {t(`howStep${i}Desc`, lang)}
                   </p>
                 </div>
@@ -325,7 +331,7 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
         <h2 className="text-2xl font-bold text-slate-800 dark:text-white">
           {t('landingReadyTitle', lang)}
         </h2>
-        <p className="text-slate-500 dark:text-slate-400">
+        <p className="text-slate-500 dark:text-slate-300">
           {t('landingReadyDesc', lang)}
         </p>
         <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto">
@@ -339,7 +345,7 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
             <span className="font-bold text-slate-800 dark:text-slate-100 block">
               {t('landingLangEnglish', lang)}
             </span>
-            <span className="text-slate-500 dark:text-slate-400 text-xs block">
+            <span className="text-slate-500 dark:text-slate-300 text-xs block">
               {t('landingLangEnDesc', lang)}
             </span>
           </button>
@@ -353,7 +359,7 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
             <span className="font-bold text-slate-800 dark:text-slate-100 block">
               {t('landingLangHebrew', lang)}
             </span>
-            <span className="text-slate-500 dark:text-slate-400 text-xs block">
+            <span className="text-slate-500 dark:text-slate-300 text-xs block">
               {t('landingLangHeDesc', lang)}
             </span>
           </button>

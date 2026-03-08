@@ -87,13 +87,14 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
       {answers.length > 0 && (
         <div className="glass rounded-2xl p-4 space-y-3">
           <h3 className="text-sm font-semibold text-slate-600">{t('review', lang)}</h3>
-          <div className="space-y-2 max-h-60 overflow-y-auto">
+          <div className="space-y-2 max-h-60 overflow-y-auto" role="list">
             {answers.map((answer, i) => {
               const word = getWordById(answer.wordId);
               if (!word) return null;
               return (
                 <div
                   key={i}
+                  role="listitem"
                   className={`flex items-center gap-3 p-2 rounded-xl ${
                     answer.correct ? 'bg-emerald-50' : 'bg-rose-50'
                   }`}

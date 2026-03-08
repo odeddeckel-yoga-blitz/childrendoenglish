@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BookOpen, Image, ArrowRight, ArrowLeft, X, CheckCircle2 } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { trackEvent } from '../utils/analytics';
@@ -21,6 +21,7 @@ export default function Onboarding({ onComplete, activePlayer, lang: initialLang
   };
 
   const demoQuestion = getDemoQuestion(lang);
+  useEffect(() => { const img = new window.Image(); img.src = demoQuestion.image; }, []);
 
   const handleDemoAnswer = (optionKey) => {
     setDemoAnswer(optionKey === demoQuestion.correctKey ? 'correct' : 'wrong');

@@ -94,6 +94,7 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, onStar
               key={level.id}
               onClick={() => unlocked && setSelectedLevel(level.id)}
               disabled={!unlocked}
+              aria-current={active ? 'true' : undefined}
               className={`flex-1 rounded-xl py-2.5 px-2 text-center transition-all ${
                 active
                   ? `${colors.activeBg} ${colors.activeText} shadow-md`

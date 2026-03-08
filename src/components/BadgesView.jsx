@@ -72,7 +72,7 @@ export default function BadgesView({ stats, lang = 'en', onBack }) {
                       />
                     </div>
                   )}
-                  <p className="text-[10px] text-slate-400 font-medium">
+                  <p className="text-[11px] text-slate-500 font-medium">
                     {progress.noBar
                       ? t(progress.key, lang)
                       : t(progress.key, lang, { done: progress.done, total: progress.total })}

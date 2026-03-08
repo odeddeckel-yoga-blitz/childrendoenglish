@@ -21,6 +21,8 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
   }, [navigate]);
 
   const startQuiz = useCallback(async (level, mode, words = null) => {
+    if (level) analytics.quizFunnelLevel(level);
+    if (mode) analytics.quizFunnelMode(mode);
     navigate('loading');
     setLoadingProgress(0);
 
