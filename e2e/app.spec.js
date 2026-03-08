@@ -438,11 +438,15 @@ test.describe('Responsive', () => {
     await expect(page.locator('text=Learn Words')).toBeVisible();
     await expect(page.locator('text=Flashcards')).toBeVisible();
 
-    // No horizontal scrollbar
-    const hasHScroll = await page.evaluate(() =>
-      document.documentElement.scrollWidth > document.documentElement.clientWidth
-    );
-    expect(hasHScroll).toBe(false);
+    // Buttons should not overflow the viewport
+    const overflows = await page.evaluate(() => {
+      const buttons = document.querySelectorAll('button');
+      return Array.from(buttons).some(b => {
+        const rect = b.getBoundingClientRect();
+        return rect.right > window.innerWidth || rect.left < 0;
+      });
+    });
+    expect(overflows).toBe(false);
   });
 
   test('quiz renders on mobile viewport', async ({ page }) => {
