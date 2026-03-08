@@ -84,13 +84,6 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
     const ids = words.map(w => w.id).join(',');
     const url = `${window.location.origin}${window.location.pathname}#quiz/${mode}/${ids}`;
 
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: t('shareQuizTitle', lang), url });
-        return;
-      } catch { /* user cancelled share */ }
-    }
-
     await navigator.clipboard.writeText(url);
     setCopiedMode(mode);
     setTimeout(() => setCopiedMode(null), 2000);
@@ -99,13 +92,6 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
   const handleShareList = useCallback(async () => {
     const ids = words.map(w => w.id).join(',');
     const url = `${window.location.origin}${window.location.pathname}#words/${ids}`;
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: t('shareWordList', lang), text: words.map(w => w.word).join(', '), url });
-        return;
-      } catch { /* user cancelled share */ }
-    }
 
     await navigator.clipboard.writeText(url);
     setCopiedMode('list');
