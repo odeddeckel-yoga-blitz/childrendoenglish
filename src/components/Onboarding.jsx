@@ -157,13 +157,13 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
   return (
     <div className="animate-fade-in space-y-8 text-center">
       {/* Skip button */}
-      <div className="flex justify-end">
+      <div className="flex">
         <button
           onClick={() => {
             onSelectLanguage?.(lang);
             onComplete();
           }}
-          className="p-2 rounded-full hover:bg-slate-100 transition-colors"
+          className="p-2 rounded-full hover:bg-slate-100 transition-colors ml-auto"
           aria-label={t('skipOnboarding', lang)}
         >
           <X className="w-5 h-5 text-slate-400" />
