@@ -6,16 +6,21 @@ const defaultProps = {
   stats: {
     unlockedLevels: ['beginner', 'intermediate'],
     bestScores: { beginner: 8 },
+    totalQuizzes: 0,
+    currentStreak: 0,
+    wordProgress: {},
+    badges: [],
   },
   lang: 'en',
-  onSelect: vi.fn(),
+  canRead: true,
+  onStartQuiz: vi.fn(),
   onBack: vi.fn(),
 };
 
 describe('LevelSelect', () => {
-  it('renders the choose level heading', () => {
+  it('renders the play quiz heading', () => {
     render(<LevelSelect {...defaultProps} />);
-    expect(screen.getByText('Choose Level')).toBeInTheDocument();
+    expect(screen.getByText('Play Quiz')).toBeInTheDocument();
   });
 
   it('renders back button and calls onBack', () => {
@@ -24,16 +29,24 @@ describe('LevelSelect', () => {
     expect(defaultProps.onBack).toHaveBeenCalled();
   });
 
-  it('renders three levels', () => {
+  it('renders three levels as tabs', () => {
     render(<LevelSelect {...defaultProps} />);
     expect(screen.getByText('Beginner')).toBeInTheDocument();
     expect(screen.getByText('Intermediate')).toBeInTheDocument();
     expect(screen.getByText('Advanced')).toBeInTheDocument();
   });
 
-  it('calls onSelect with level id when unlocked level clicked', () => {
+  it('renders quiz mode cards', () => {
     render(<LevelSelect {...defaultProps} />);
-    fireEvent.click(screen.getByText('Beginner'));
-    expect(defaultProps.onSelect).toHaveBeenCalledWith('beginner');
+    expect(screen.getByText('Image Quiz')).toBeInTheDocument();
+    expect(screen.getByText('Word Quiz')).toBeInTheDocument();
+    expect(screen.getByText('Audio Quiz')).toBeInTheDocument();
+    expect(screen.getByText('Listen & Match')).toBeInTheDocument();
+  });
+
+  it('calls onStartQuiz with level and mode when mode clicked', () => {
+    render(<LevelSelect {...defaultProps} />);
+    fireEvent.click(screen.getByText('Image Quiz'));
+    expect(defaultProps.onStartQuiz).toHaveBeenCalledWith('intermediate', 'image');
   });
 });

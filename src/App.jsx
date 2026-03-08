@@ -89,7 +89,10 @@ function SuspenseFallback({ lang = 'en' }) {
 function getInitialState() {
   const registry = loadPlayerRegistry();
   const stats = registry ? loadStats(registry.activePlayerId) : loadStats();
-  // Always start on landing page
+  // Skip landing for returning onboarded single-player users
+  if (registry?.players?.length === 1 && stats?.hasSeenOnboarding) {
+    return { gameState: 'menu', registry, stats };
+  }
   return { gameState: 'landing', registry, stats };
 }
 
@@ -438,19 +441,25 @@ export default function App() {
           <LevelSelect
             stats={stats}
             lang={lang}
-            onSelect={quizFlow.handleLevelSelect}
+            canRead={activePlayer?.canRead ?? true}
+            onStartQuiz={(level, mode) => {
+              quizFlow.startQuiz(level, mode);
+            }}
             onBack={() => navigate('menu', 'back')}
           />
         );
 
       case 'modeSelect':
+        // Legacy: redirect to combined levelSelect
         return (
-          <ModeSelect
-            level={quizFlow.selectedLevel}
+          <LevelSelect
+            stats={stats}
             lang={lang}
             canRead={activePlayer?.canRead ?? true}
-            onSelect={quizFlow.handleModeSelect}
-            onBack={() => navigate('levelSelect', 'back')}
+            onStartQuiz={(level, mode) => {
+              quizFlow.startQuiz(level, mode);
+            }}
+            onBack={() => navigate('menu', 'back')}
           />
         );
 
@@ -514,7 +523,7 @@ export default function App() {
             level={quizFlow.selectedLevel}
             mode={quizFlow.selectedMode}
             onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords)}
-            onChangeMode={() => navigate('modeSelect', 'back')}
+            onChangeMode={() => navigate('levelSelect', 'back')}
             onMenu={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );

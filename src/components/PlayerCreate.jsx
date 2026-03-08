@@ -105,6 +105,11 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
       >
         {t('createPlayer', lang)}
       </button>
+      {(!name.trim() || canRead === null) && (
+        <p className="text-center text-sm text-slate-400">
+          {!name.trim() ? t('playerNameHint', lang) : ''}
+        </p>
+      )}
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, Download, X, Users, Map, ShieldCheck, Bell, BellOff, Globe, RotateCcw } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
@@ -7,21 +7,6 @@ import ParentEmailCapture from './ParentEmailCapture';
 export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
   const [notifEnabled, setNotifEnabled] = useState(isNotificationEnabled);
   const notifSupported = isNotificationSupported();
-
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [testimonialVisible, setTestimonialVisible] = useState(true);
-  const TESTIMONIAL_COUNT = 3;
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTestimonialVisible(false);
-      setTimeout(() => {
-        setActiveTestimonial(prev => (prev + 1) % TESTIMONIAL_COUNT);
-        setTestimonialVisible(true);
-      }, 300);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   const handleToggleNotif = async () => {
     if (notifEnabled) {
@@ -225,8 +210,12 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               {t('wordsDue', lang, { count: dueCount })}
             </span>
           ) : (
-            <span className="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 text-xs font-semibold flex-shrink-0">
-              {t('allCaughtUp', lang)}
+            <span className={`px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 ${
+              Object.keys(stats.wordProgress || {}).length === 0
+                ? 'bg-slate-100 text-slate-500'
+                : 'bg-emerald-100 text-emerald-700'
+            }`}>
+              {Object.keys(stats.wordProgress || {}).length === 0 ? t('learnMoreToUnlock', lang) : t('allCaughtUp', lang)}
             </span>
           )}
         </button>
@@ -347,61 +336,6 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           </button>
         </div>
       )}
-
-      {/* Testimonials */}
-      {(() => {
-        const testimonialKeys = [
-          { quote: 'testimonial1Quote', author: 'testimonial1Author' },
-          { quote: 'testimonial2Quote', author: 'testimonial2Author' },
-          { quote: 'testimonial3Quote', author: 'testimonial3Author' },
-        ];
-        const current = testimonialKeys[activeTestimonial];
-        return (
-          <div className="glass rounded-2xl p-4 text-center space-y-2">
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide">
-              {t('testimonialsLabel', lang)}
-            </p>
-            <div
-              style={{
-                opacity: testimonialVisible ? 1 : 0,
-                transition: 'opacity 0.3s ease-in-out',
-              }}
-              aria-live="polite"
-            >
-              <p className="text-sm text-slate-600 italic leading-snug">
-                &ldquo;{t(current.quote, lang)}&rdquo;
-              </p>
-              <p className="text-xs text-slate-400 font-medium mt-1">
-                &mdash; {t(current.author, lang)}
-              </p>
-            </div>
-            <div className="flex items-center justify-center gap-1.5 pt-1">
-              {testimonialKeys.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => {
-                    setTestimonialVisible(false);
-                    setTimeout(() => {
-                      setActiveTestimonial(i);
-                      setTestimonialVisible(true);
-                    }, 300);
-                  }}
-                  aria-label={`Testimonial ${i + 1}`}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    i === activeTestimonial ? 'w-3 bg-blue-500' : 'w-1.5 bg-slate-300'
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        );
-      })()}
-
-      {/* Trust / methodology */}
-      <div className="glass rounded-2xl p-4 text-center space-y-1">
-        <p className="text-sm font-semibold text-slate-700">{t('methodologyTitle', lang)}</p>
-        <p className="text-xs text-slate-500">{t('methodologyDesc', lang)}</p>
-      </div>
 
       <div className="text-center space-y-1">
         <p className="text-xs text-slate-400">{t('madeBy', lang)}</p>

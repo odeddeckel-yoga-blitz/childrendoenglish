@@ -412,6 +412,15 @@ const translations = {
     landingLangHebrew: 'עברית',
     landingLangEnDesc: 'Learn vocabulary in English',
     landingLangHeDesc: 'Full Hebrew interface',
+
+    // UX improvements
+    playerNameHint: 'Enter a name to continue',
+    learnMoreToUnlock: 'Learn more words to unlock!',
+    badgeProgressQuizzes: '{{done}}/{{total}} quizzes',
+    badgeProgressWords: '{{done}}/{{total}} words learned',
+    badgeProgressMastered: '{{done}}/{{total}} mastered',
+    badgeProgressStreak: '{{done}}/{{total}} day streak',
+    badgeProgressPerfect: 'Get a perfect score on any quiz',
   },
 };
 

@@ -410,4 +410,13 @@ export default {
   landingLangHebrew: 'עברית',
   landingLangEnDesc: 'Learn vocabulary in English',
   landingLangHeDesc: 'ממשק בעברית מלא',
+
+  // UX improvements
+  playerNameHint: 'הכניסו שם כדי להמשיך',
+  learnMoreToUnlock: 'למדו עוד מילים כדי לפתוח!',
+  badgeProgressQuizzes: '{{done}}/{{total}} חידונים',
+  badgeProgressWords: '{{done}}/{{total}} מילים נלמדו',
+  badgeProgressMastered: '{{done}}/{{total}} שולטים',
+  badgeProgressStreak: '{{done}}/{{total}} ימים ברצף',
+  badgeProgressPerfect: 'השיגו ציון מושלם בחידון כלשהו',
 };

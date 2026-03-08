@@ -19,10 +19,21 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
     } catch { /* user cancelled share */ }
   };
 
+  const headline = percentage >= 90 ? t('amazing', lang)
+    : percentage >= 70 ? t('greatJob', lang)
+    : percentage >= 50 ? t('goodEffort', lang)
+    : t('keepPracticing', lang);
+
+  const headlineColor = percentage >= 90 ? 'text-emerald-600'
+    : percentage >= 70 ? 'text-blue-600'
+    : percentage >= 50 ? 'text-amber-600'
+    : 'text-rose-500';
+
   return (
     <div className="animate-fade-in space-y-4">
       {/* Score */}
       <div className="glass rounded-3xl p-6 text-center space-y-3">
+        <p className={`text-2xl font-black ${headlineColor}`}>{headline}</p>
         <div className="flex items-baseline justify-center gap-1">
           <span className="text-5xl font-black text-blue-600">{score}</span>
           <span className="text-2xl text-slate-400 font-bold">/ {total}</span>
@@ -37,37 +48,35 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
         </div>
       </div>
 
-      {/* Action buttons — Back to Menu first */}
+      {/* Action buttons — Play Again is primary */}
       <div className="space-y-3">
-        <div className="grid grid-cols-2 gap-3">
+        <button
+          onClick={onPlayAgain}
+          className="w-full py-3.5 px-4 bg-blue-600 text-white rounded-xl font-semibold
+                     hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+        >
+          <Play className="w-4 h-4" /> {t('playAgain', lang)}
+        </button>
+
+        <div className="grid grid-cols-3 gap-3">
           <button
             onClick={onMenu}
-            className="py-3 px-4 glass rounded-xl font-semibold text-slate-600
-                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
+            className="py-2.5 px-3 glass rounded-xl font-semibold text-slate-500 text-sm
+                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5"
           >
             <ArrowLeft className="w-4 h-4" /> {t('backToMenuBtn', lang)}
           </button>
           <button
-            onClick={onPlayAgain}
-            className="py-3 px-4 bg-blue-600 text-white rounded-xl font-semibold
-                       hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
-          >
-            <Play className="w-4 h-4" /> {t('playAgain', lang)}
-          </button>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3">
-          <button
             onClick={handleShare}
-            className="py-2.5 px-4 glass rounded-xl font-semibold text-slate-500 text-sm
-                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
+            className="py-2.5 px-3 glass rounded-xl font-semibold text-slate-500 text-sm
+                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5"
           >
             <Share2 className="w-4 h-4" /> {t('share', lang)}
           </button>
           <button
             onClick={onChangeMode}
-            className="py-2.5 px-4 glass rounded-xl font-semibold text-slate-500 text-sm
-                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
+            className="py-2.5 px-3 glass rounded-xl font-semibold text-slate-500 text-sm
+                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5"
           >
             <RotateCcw className="w-4 h-4" /> {t('changeMode', lang)}
           </button>
