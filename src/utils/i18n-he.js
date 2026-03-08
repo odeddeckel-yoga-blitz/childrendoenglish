@@ -400,4 +400,14 @@ export default {
 
   // Language select
   confirmLanguage: 'באיזו שפה אתם מדברים?',
+  landingStatsWords: '340+ מילים',
+  landingStatsCategories: '13 קטגוריות',
+  landingStatsModes: '4 מצבי חידון',
+  landingFeaturesHeading: 'הכל מה שהילד שלכם צריך',
+  landingReadyTitle: 'מוכנים להתחיל ללמוד?',
+  landingReadyDesc: 'בחרו שפה והתחילו מיד.',
+  landingLangEnglish: 'English',
+  landingLangHebrew: 'עברית',
+  landingLangEnDesc: 'Learn vocabulary in English',
+  landingLangHeDesc: 'ממשק בעברית מלא',
 };

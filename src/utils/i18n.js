@@ -402,6 +402,16 @@ const translations = {
 
     // Language select
     confirmLanguage: 'What language do you speak?',
+    landingStatsWords: '340+ Words',
+    landingStatsCategories: '13 Categories',
+    landingStatsModes: '4 Quiz Modes',
+    landingFeaturesHeading: 'Everything your child needs',
+    landingReadyTitle: 'Ready to start learning?',
+    landingReadyDesc: 'Choose your language and jump right in.',
+    landingLangEnglish: 'English',
+    landingLangHebrew: 'עברית',
+    landingLangEnDesc: 'Learn vocabulary in English',
+    landingLangHeDesc: 'Full Hebrew interface',
   },
 };
 

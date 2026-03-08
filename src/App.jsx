@@ -347,7 +347,15 @@ export default function App() {
           <LandingPage
             lang={lang}
             activePlayer={activePlayer}
-            onGetStarted={() => navigate('languageSelect')}
+            onLanguageStart={(selectedLang) => {
+              handleLanguageSelect(selectedLang);
+              const next = playerRegistry?.players?.length ? 'menu' : 'playerCreate';
+              if (selectedLang === 'he') {
+                loadHebrew().then(() => navigate(next));
+              } else {
+                navigate(next);
+              }
+            }}
             onContinue={() => {
               if (playerRegistry?.players.length >= 2) {
                 navigate('playerSelect');
@@ -358,43 +366,6 @@ export default function App() {
             onPrivacy={() => navigate('privacy')}
             onToggleLanguage={handleToggleLanguage}
           />
-        );
-
-      case 'languageSelect':
-        return (
-          <div className="animate-fade-in space-y-8 text-center">
-            <div className="glass rounded-3xl p-8 max-w-sm mx-auto space-y-6">
-              <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-blue-100">
-                <span className="text-4xl">🌍</span>
-              </div>
-              <h2 className="text-2xl font-bold text-slate-800">{t('confirmLanguage', lang)}</h2>
-              <div className="space-y-3">
-                <button
-                  onClick={() => {
-                    handleLanguageSelect('en');
-                    navigate(playerRegistry?.players?.length ? 'menu' : 'playerCreate');
-                  }}
-                  className="w-full py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold
-                             hover:bg-blue-700 active:scale-95 transition-all text-lg"
-                >
-                  English
-                </button>
-                <button
-                  onClick={() => {
-                    handleLanguageSelect('he');
-                    loadHebrew().then(() => {
-                      navigate(playerRegistry?.players?.length ? 'menu' : 'playerCreate');
-                    });
-                  }}
-                  className="w-full py-3 px-6 bg-white border-2 border-blue-200 text-blue-700
-                             rounded-xl font-semibold hover:bg-blue-50 active:scale-95
-                             transition-all text-lg"
-                >
-                  עברית (Hebrew)
-                </button>
-              </div>
-            </div>
-          </div>
         );
 
       case 'playerCreate':

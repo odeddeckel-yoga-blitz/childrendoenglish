@@ -12,16 +12,17 @@ vi.mock('../utils/sound', () => ({
 const defaultProps = {
   lang: 'en',
   activePlayer: null,
-  onGetStarted: vi.fn(),
+  onLanguageStart: vi.fn(),
   onContinue: vi.fn(),
   onPrivacy: vi.fn(),
+  onToggleLanguage: vi.fn(),
 };
 
 describe('LandingPage', () => {
   it('renders hero with CTA button', () => {
     render(<LandingPage {...defaultProps} />);
     expect(screen.getByText('Learn English — The Fun Way!')).toBeInTheDocument();
-    expect(screen.getAllByText("Let's Get Started")[0]).toBeInTheDocument();
+    expect(screen.getByText("Let's Get Started")).toBeInTheDocument();
   });
 
   it('shows "Welcome back" when activePlayer provided', () => {
@@ -30,10 +31,10 @@ describe('LandingPage', () => {
     expect(screen.getByText('Welcome back, Alex!')).toBeInTheDocument();
   });
 
-  it('calls onGetStarted when CTA clicked', () => {
-    const onGetStarted = vi.fn();
-    render(<LandingPage {...defaultProps} onGetStarted={onGetStarted} />);
-    fireEvent.click(screen.getAllByText("Let's Get Started")[0]);
-    expect(onGetStarted).toHaveBeenCalled();
+  it('calls onLanguageStart when language card clicked', () => {
+    const onLanguageStart = vi.fn();
+    render(<LandingPage {...defaultProps} onLanguageStart={onLanguageStart} />);
+    fireEvent.click(screen.getByText('English'));
+    expect(onLanguageStart).toHaveBeenCalledWith('en');
   });
 });
