@@ -24,6 +24,3 @@ export const LEVELS = [
     unlockScore: 7, // need 7/10 on intermediate
   },
 ];
-
-export const getLevelById = (id) => LEVELS.find(l => l.id === id);
-export const getLevelIndex = (id) => LEVELS.findIndex(l => l.id === id);

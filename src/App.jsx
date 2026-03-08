@@ -19,7 +19,6 @@ import { WORDS } from './data/words';
 
 const Onboarding = lazy(() => import('./components/Onboarding'));
 const LevelSelect = lazy(() => import('./components/LevelSelect'));
-const ModeSelect = lazy(() => import('./components/ModeSelect'));
 const ImageQuiz = lazy(() => import('./components/ImageQuiz'));
 const WordQuiz = lazy(() => import('./components/WordQuiz'));
 const AudioQuiz = lazy(() => import('./components/AudioQuiz'));

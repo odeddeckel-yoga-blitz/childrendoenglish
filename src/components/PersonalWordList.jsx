@@ -176,7 +176,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
               onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
               placeholder={words.length === 0 ? t('wordListPlaceholder', lang) : ''}
               className="w-full bg-transparent text-sm text-slate-700 placeholder-slate-400
-                         focus:outline-none py-1 px-1"
+                         focus:outline-none focus:ring-2 focus:ring-blue-400 rounded py-1 px-1"
               autoComplete="off"
               role="combobox"
               aria-expanded={showSuggestions && suggestions.length > 0}

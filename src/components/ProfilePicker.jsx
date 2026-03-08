@@ -53,7 +53,7 @@ export default function ProfilePicker({ open, onClose, players, activePlayerId, 
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
-            aria-label={t('backToMenu', lang)}
+            aria-label="Close"
           >
             <X className="w-5 h-5 text-slate-500" />
           </button>

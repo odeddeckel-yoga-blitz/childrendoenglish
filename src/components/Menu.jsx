@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, Download, X, Users, Map, ShieldCheck, Bell, BellOff, Globe, RotateCcw } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
@@ -6,6 +6,7 @@ import ParentEmailCapture from './ParentEmailCapture';
 
 export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
   const [notifEnabled, setNotifEnabled] = useState(isNotificationEnabled);
+  const showEmailCapture = useMemo(() => !localStorage.getItem('childrendoenglish-parent-email-prompted'), []);
   const notifSupported = isNotificationSupported();
 
   const handleToggleNotif = async () => {
@@ -273,7 +274,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       </nav>
 
       {/* Parent email capture — shown once until submitted or skipped */}
-      {!localStorage.getItem('childrendoenglish-parent-email-prompted') && (
+      {showEmailCapture && (
         <ParentEmailCapture lang={lang} />
       )}
 
