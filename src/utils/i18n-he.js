@@ -146,6 +146,7 @@ export default {
   addPlayer: 'הוסף שחקן',
   createPlayer: 'צור שחקן',
   playerName: 'שם השחקן',
+  playerNamePlaceholder: 'אביגיל',
   chooseAvatar: 'בחר סמל',
   deletePlayer: 'מחק שחקן',
   deleteConfirm: 'למחוק את {{name}}? כל ההתקדמות תאבד.',

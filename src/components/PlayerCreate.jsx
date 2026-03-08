@@ -45,7 +45,7 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
           className="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200
                      text-lg text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2
                      focus:ring-blue-400 transition-all"
-          placeholder="Emma"
+          placeholder={t('playerNamePlaceholder', lang)}
         />
       </div>
 

@@ -148,6 +148,7 @@ const translations = {
     addPlayer: 'Add Player',
     createPlayer: 'Create Player',
     playerName: 'Player Name',
+    playerNamePlaceholder: 'Emma',
     chooseAvatar: 'Choose Avatar',
     deletePlayer: 'Delete Player',
     deleteConfirm: 'Delete {{name}}? All progress will be lost.',
