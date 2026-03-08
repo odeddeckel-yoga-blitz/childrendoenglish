@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react'
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
+import LandingPage from './components/LandingPage';
 import Confetti from './components/Confetti';
 import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, updateStreak, updateDailyGoal } from './utils/storage';
 import { initTTS } from './utils/sound';
@@ -43,7 +44,8 @@ const DailyReview = lazy(() => import('./components/DailyReview'));
 
 // State-to-path mapping for browser history (top-level screens only)
 const STATE_TO_PATH = {
-  menu: '/',
+  landing: '/',
+  menu: '/app',
   levelSelect: '/play',
   learning: '/learn',
   flashcards: '/flashcards',
@@ -86,24 +88,9 @@ function SuspenseFallback({ lang = 'en' }) {
 
 function getInitialState() {
   const registry = loadPlayerRegistry();
-
-  // No registry and no legacy data → first-ever use
-  if (!registry) return { gameState: 'playerCreate', registry: null };
-
-  const stats = loadStats(registry.activePlayerId);
-
-  // 2+ players → show player select
-  if (registry.players.length >= 2) {
-    return { gameState: 'playerSelect', registry, stats };
-  }
-
-  // 1 player, not onboarded but has stats from data import → skip onboarding
-  if (!stats.hasSeenOnboarding && stats.totalQuizzes === 0 && Object.keys(stats.wordProgress || {}).length === 0) {
-    return { gameState: 'onboarding', registry, stats };
-  }
-
-  // 1 player, onboarded → menu
-  return { gameState: 'menu', registry, stats };
+  const stats = registry ? loadStats(registry.activePlayerId) : loadStats();
+  // Always start on landing page
+  return { gameState: 'landing', registry, stats };
 }
 
 export default function App() {
@@ -136,7 +123,7 @@ export default function App() {
       }
     }
     analytics.screenView(newState);
-    const features = ['learning', 'flashcards', 'badges', 'progress', 'personalList', 'learningPath', 'parentDashboard', 'dailyReview'];
+    const features = ['landing', 'learning', 'flashcards', 'badges', 'progress', 'personalList', 'learningPath', 'parentDashboard', 'dailyReview'];
     if (features.includes(newState)) analytics.featureUse(newState);
   }, []);
 
@@ -355,12 +342,66 @@ export default function App() {
 
   const renderState = () => {
     switch (gameState) {
+      case 'landing':
+        return (
+          <LandingPage
+            lang={lang}
+            activePlayer={activePlayer}
+            onGetStarted={() => navigate('languageSelect')}
+            onContinue={() => {
+              if (playerRegistry?.players.length >= 2) {
+                navigate('playerSelect');
+              } else {
+                navigate('menu');
+              }
+            }}
+            onPrivacy={() => navigate('privacy')}
+          />
+        );
+
+      case 'languageSelect':
+        return (
+          <div className="animate-fade-in space-y-8 text-center">
+            <div className="glass rounded-3xl p-8 max-w-sm mx-auto space-y-6">
+              <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-blue-100">
+                <span className="text-4xl">🌍</span>
+              </div>
+              <h2 className="text-2xl font-bold text-slate-800">{t('confirmLanguage', lang)}</h2>
+              <div className="space-y-3">
+                <button
+                  onClick={() => {
+                    handleLanguageSelect('en');
+                    navigate(playerRegistry?.players?.length ? 'menu' : 'playerCreate');
+                  }}
+                  className="w-full py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold
+                             hover:bg-blue-700 active:scale-95 transition-all text-lg"
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => {
+                    handleLanguageSelect('he');
+                    loadHebrew().then(() => {
+                      navigate(playerRegistry?.players?.length ? 'menu' : 'playerCreate');
+                    });
+                  }}
+                  className="w-full py-3 px-6 bg-white border-2 border-blue-200 text-blue-700
+                             rounded-xl font-semibold hover:bg-blue-50 active:scale-95
+                             transition-all text-lg"
+                >
+                  עברית (Hebrew)
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+
       case 'playerCreate':
         return (
           <PlayerCreate
             lang={lang}
             onCreatePlayer={handleCreatePlayer}
-            onBack={playerRegistry?.players.length > 0 ? () => navigate('playerSelect', 'back') : null}
+            onBack={playerRegistry?.players.length > 0 ? () => navigate('playerSelect', 'back') : () => navigate('landing', 'back')}
           />
         );
 
@@ -393,7 +434,6 @@ export default function App() {
         return (
           <Onboarding
             onComplete={handleOnboardingComplete}
-            onSelectLanguage={handleLanguageSelect}
             activePlayer={activePlayer}
             lang={lang}
           />

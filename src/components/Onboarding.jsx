@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { BookOpen, Image, ArrowRight, ArrowLeft, X, CheckCircle2 } from 'lucide-react';
-import { t, loadHebrew } from '../utils/i18n';
+import { t } from '../utils/i18n';
 import { trackEvent } from '../utils/analytics';
 import { getWordByName } from '../data/words';
 
@@ -10,26 +10,14 @@ const getDemoQuestion = (_lang) => ({
   optionKeys: ['demoDog', 'demoCat', 'demoFish'],
 });
 
-const detectLang = () => {
-  try { return navigator.language?.startsWith('he') ? 'he' : 'en'; } catch { return 'en'; }
-};
 
-export default function Onboarding({ onComplete, onSelectLanguage, activePlayer, lang: initialLang }) {
+export default function Onboarding({ onComplete, activePlayer, lang: initialLang }) {
   const [step, setStep] = useState(0);
-  const [lang, setLang] = useState(initialLang || detectLang());
+  const lang = initialLang || 'en';
   const [demoAnswer, setDemoAnswer] = useState(null); // null | 'correct' | 'wrong'
 
   const handleFinish = () => {
-    onSelectLanguage?.(lang);
     onComplete();
-  };
-
-  const handleLanguagePick = (language) => {
-    setLang(language);
-    onSelectLanguage?.(language);
-    if (language === 'he') loadHebrew().then(() => setLang('he'));
-    trackEvent('onboarding_step', { step: 0, step_name: 'language', language });
-    setStep(1);
   };
 
   const demoQuestion = getDemoQuestion(lang);
@@ -39,37 +27,8 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
   };
 
   const renderStep = () => {
-    // Step 0: Language picker (first)
+    // Step 0: Welcome
     if (step === 0) {
-      return (
-        <>
-          <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-blue-100">
-            <span className="text-4xl">🌍</span>
-          </div>
-          <h2 className="text-2xl font-bold text-slate-800">{t('chooseLanguage', lang)}</h2>
-          <div className="space-y-3">
-            <button
-              onClick={() => handleLanguagePick('en')}
-              className="w-full py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold
-                         hover:bg-blue-700 active:scale-95 transition-all text-lg"
-            >
-              English
-            </button>
-            <button
-              onClick={() => handleLanguagePick('he')}
-              className="w-full py-3 px-6 bg-white border-2 border-blue-200 text-blue-700
-                         rounded-xl font-semibold hover:bg-blue-50 active:scale-95
-                         transition-all text-lg"
-            >
-              עברית (Hebrew)
-            </button>
-          </div>
-        </>
-      );
-    }
-
-    // Step 1: Welcome
-    if (step === 1) {
       return (
         <>
           <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-blue-100">
@@ -85,8 +44,8 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
       );
     }
 
-    // Step 2: See & Learn
-    if (step === 2) {
+    // Step 1: See & Learn
+    if (step === 1) {
       return (
         <>
           <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-emerald-100">
@@ -98,8 +57,8 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
       );
     }
 
-    // Step 3: Demo quiz
-    if (step === 3) {
+    // Step 2: Demo quiz
+    if (step === 2) {
       return (
         <>
           <h2 className="text-xl font-bold text-slate-800">{t('tryItOut', lang)}</h2>
@@ -152,7 +111,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
     return null;
   };
 
-  const isSlideStep = step >= 1 && step <= 3; // steps 1-3 have nav arrows
+  const isSlideStep = step >= 0; // all steps have nav arrows
 
   return (
     <div className="animate-fade-in space-y-8 text-center">
@@ -160,7 +119,6 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
       <div className="flex">
         <button
           onClick={() => {
-            onSelectLanguage?.(lang);
             onComplete();
           }}
           className="p-2 rounded-full hover:bg-slate-100 transition-colors ml-auto"
@@ -179,7 +137,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
       {isSlideStep && (
         <div className="flex items-center justify-center gap-4">
           <button
-            onClick={() => { setStep(s => s - 1); setDemoAnswer(null); }}
+            onClick={() => { if (step > 0) setStep(s => s - 1); setDemoAnswer(null); }}
             className="p-3 rounded-full bg-slate-100 hover:bg-slate-200 transition-colors"
             aria-label={t('previousStep', lang)}
           >
@@ -194,7 +152,7 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
               <div
                 key={i}
                 className={`w-2.5 h-2.5 rounded-full transition-all ${
-                  i === step - 1 ? 'bg-blue-600 w-6' : 'bg-slate-300'
+                  i === step ? 'bg-blue-600 w-6' : 'bg-slate-300'
                 }`}
               />
             ))}
@@ -202,9 +160,9 @@ export default function Onboarding({ onComplete, onSelectLanguage, activePlayer,
 
           <button
             onClick={() => {
-              const stepNames = ['language', 'welcome', 'see_learn', 'demo'];
+              const stepNames = ['welcome', 'see_learn', 'demo'];
               trackEvent('onboarding_step', { step, step_name: stepNames[step] || `step_${step}` });
-              if (step === 3) {
+              if (step === 2) {
                 handleFinish();
               } else {
                 setStep(s => s + 1);

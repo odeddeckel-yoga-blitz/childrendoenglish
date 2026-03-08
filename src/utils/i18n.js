@@ -358,6 +358,48 @@ const translations = {
     allCaughtUp: 'All caught up!',
     reviewComplete: 'Review Complete!',
     wordsReviewed: 'Words reviewed',
+
+    // Landing page
+    landingHeroTitle: 'Learn English — The Fun Way!',
+    landingHeroDesc: 'Free vocabulary app for kids ages 6-12. No ads, no signup.',
+    getStarted: "Let's Get Started",
+    welcomeBack: 'Welcome back, {{name}}!',
+    continueBtn: 'Continue',
+
+    // Features
+    featureLearnTitle: 'Learn Words',
+    featureLearnDesc: 'Browse 340+ words with images, audio & translations',
+    featureFlashcardsTitle: 'Flashcards',
+    featureFlashcardsDesc: 'Swipe through cards with spaced repetition',
+    featureQuizTitle: 'Fun Quizzes',
+    featureQuizDesc: 'Image, word, audio & listen-match modes',
+    featureProgressTitle: 'Track Progress',
+    featureProgressDesc: 'Earn badges, keep streaks, see your growth',
+
+    // How it works
+    howItWorksTitle: 'How It Works',
+    howStep1Title: 'Pick a Topic',
+    howStep1Desc: 'Choose from 13 categories like animals, food, colors...',
+    howStep2Title: 'Practice',
+    howStep2Desc: 'Learn with flashcards, quizzes, and audio challenges',
+    howStep3Title: 'Master Words',
+    howStep3Desc: 'Track your progress and earn badges as you improve',
+
+    // FAQ
+    faqTitle: 'Frequently Asked Questions',
+    faq1Q: 'What age is this designed for?',
+    faq1A: 'Children Do English is designed for kids ages 6-12 learning English vocabulary.',
+    faq2Q: 'Is it really free?',
+    faq2A: 'Yes! Completely free with no ads, no in-app purchases, and no account required.',
+    faq3Q: 'Does it work offline?',
+    faq3A: 'Yes! Install it as an app and use it without internet.',
+    faq4Q: 'Is there Hebrew support?',
+    faq4A: 'Yes! Full Hebrew interface and translations for every word.',
+    faq5Q: 'How many words does it include?',
+    faq5A: 'Over 340 words across 13 categories, organized into 3 difficulty levels.',
+
+    // Language select
+    confirmLanguage: 'What language do you speak?',
   },
 };
 

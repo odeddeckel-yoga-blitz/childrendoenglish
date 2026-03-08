@@ -356,4 +356,46 @@ export default {
   allCaughtUp: 'הכל מעודכן!',
   reviewComplete: 'החזרה הושלמה!',
   wordsReviewed: 'מילים שנחזרו',
+
+  // Landing page
+  landingHeroTitle: 'למדו אנגלית בכיף!',
+  landingHeroDesc: 'אפליקציה חינמית לאוצר מילים לילדים בגילאי 6-12. ללא פרסומות, ללא הרשמה.',
+  getStarted: 'בואו נתחיל',
+  welcomeBack: 'ברוכים השבים, {{name}}!',
+  continueBtn: 'המשך',
+
+  // Features
+  featureLearnTitle: 'למדו מילים',
+  featureLearnDesc: 'גלו מעל 340 מילים עם תמונות, שמע ותרגומים',
+  featureFlashcardsTitle: 'כרטיסיות',
+  featureFlashcardsDesc: 'החליקו כרטיסים עם חזרה מרווחת',
+  featureQuizTitle: 'חידונים מהנים',
+  featureQuizDesc: 'מצבי תמונה, מילה, שמע והאזן-והתאם',
+  featureProgressTitle: 'עקבו אחרי ההתקדמות',
+  featureProgressDesc: 'השיגו תגים, שמרו רצפים, ראו את ההתקדמות',
+
+  // How it works
+  howItWorksTitle: 'איך זה עובד',
+  howStep1Title: 'בחרו נושא',
+  howStep1Desc: 'בחרו מתוך 13 קטגוריות כמו חיות, אוכל, צבעים...',
+  howStep2Title: 'תרגלו',
+  howStep2Desc: 'למדו עם כרטיסיות, חידונים ואתגרי שמע',
+  howStep3Title: 'שלטו במילים',
+  howStep3Desc: 'עקבו אחרי ההתקדמות והשיגו תגים ככל שתשתפרו',
+
+  // FAQ
+  faqTitle: 'שאלות נפוצות',
+  faq1Q: 'לאיזה גיל זה מיועד?',
+  faq1A: 'ילדים עושים אנגלית מיועד לילדים בגילאי 6-12 הלומדים אוצר מילים באנגלית.',
+  faq2Q: 'זה באמת חינם?',
+  faq2A: 'כן! חינם לגמרי ללא פרסומות, ללא רכישות בתוך האפליקציה וללא צורך בהרשמה.',
+  faq3Q: 'זה עובד אופליין?',
+  faq3A: 'כן! התקינו כאפליקציה והשתמשו ללא אינטרנט.',
+  faq4Q: 'יש תמיכה בעברית?',
+  faq4A: 'כן! ממשק עברית מלא ותרגומים לכל מילה.',
+  faq5Q: 'כמה מילים יש?',
+  faq5A: 'מעל 340 מילים ב-13 קטגוריות, מסודרות ב-3 רמות קושי.',
+
+  // Language select
+  confirmLanguage: 'באיזו שפה אתם מדברים?',
 };
