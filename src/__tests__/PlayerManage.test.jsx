@@ -139,8 +139,8 @@ describe('PlayerManage', () => {
     const mockObjectURL = 'blob:http://localhost/fake-url';
     const createObjectURL = vi.fn().mockReturnValue(mockObjectURL);
     const revokeObjectURL = vi.fn();
-    global.URL.createObjectURL = createObjectURL;
-    global.URL.revokeObjectURL = revokeObjectURL;
+    globalThis.URL.createObjectURL = createObjectURL;
+    globalThis.URL.revokeObjectURL = revokeObjectURL;
 
     const clickSpy = vi.fn();
     const originalCreateElement = document.createElement.bind(document);
