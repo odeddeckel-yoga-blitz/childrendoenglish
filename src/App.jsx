@@ -33,6 +33,7 @@ const ProgressDashboard = lazy(() => import('./components/ProgressDashboard'));
 const PersonalWordList = lazy(() => import('./components/PersonalWordList'));
 const UpdatePrompt = lazy(() => import('./components/UpdatePrompt'));
 const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./components/TermsOfService'));
 const AdminPanel = lazy(() => import('./components/admin/AdminPanel'));
 const PlayerCreate = lazy(() => import('./components/PlayerCreate'));
 const PlayerSelect = lazy(() => import('./components/PlayerSelect'));
@@ -58,6 +59,7 @@ const STATE_TO_PATH = {
   playerManage: '/manage',
   playerCreate: '/new-player',
   personalList: '/my-words',
+  terms: '/terms',
   dailyReview: '/daily-review',
 };
 
@@ -626,6 +628,11 @@ export default function App() {
       case 'privacy':
         return (
           <PrivacyPolicy lang={lang} onBack={() => navigate('menu', 'back')} />
+        );
+
+      case 'terms':
+        return (
+          <TermsOfService lang={lang} onBack={() => navigate('menu', 'back')} />
         );
 
       case 'admin':

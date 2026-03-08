@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { BookOpen, Layers, Play, BarChart2, ChevronDown, ArrowRight, ArrowLeft, Globe } from 'lucide-react';
+import { BookOpen, Layers, Play, BarChart2, ChevronDown, ArrowRight, ArrowLeft, Globe, Brain } from 'lucide-react';
 import { t, isRTL } from '../utils/i18n';
 
 const FEATURES = [
@@ -322,6 +322,26 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
         <TestimonialCarousel lang={lang} />
       </section>
 
+      {/* Methodology */}
+      <section
+        ref={reveal}
+        className="opacity-0 translate-y-4 transition-all duration-700 space-y-4"
+      >
+        <div className="glass rounded-2xl p-6 flex items-start gap-4">
+          <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+            <Brain className="w-5 h-5" />
+          </div>
+          <div>
+            <h2 className="font-bold text-slate-800 dark:text-slate-100 text-sm">
+              {t('methodologyTitle', lang)}
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed mt-1">
+              {t('methodologyDesc', lang)}
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Choose Language + Get Started */}
       <section
         id="language-select"
@@ -375,20 +395,32 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
           {t('faqTitle', lang)}
         </h2>
         <div className="space-y-2">
-          {Array.from({ length: 5 }, (_, i) => (
+          {Array.from({ length: 7 }, (_, i) => (
             <FAQItem key={i} index={i} lang={lang} />
           ))}
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="text-center space-y-2 pt-4 border-t border-slate-200 dark:border-slate-700">
-        <button
-          onClick={onPrivacy}
-          className="text-blue-500 text-xs hover:underline"
-        >
-          {t('privacyPolicy', lang)}
-        </button>
+      <footer className="text-center space-y-3 pt-4 border-t border-slate-200 dark:border-slate-700">
+        <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1">
+          <a href="/vocabulary/" className="text-blue-500 text-xs hover:underline">Vocabulary</a>
+          <a href="/guides/" className="text-blue-500 text-xs hover:underline">Guides</a>
+          <a href="/printable-flashcards/" className="text-blue-500 text-xs hover:underline">Printable Flashcards</a>
+          <a href="/about/" className="text-blue-500 text-xs hover:underline">About</a>
+        </nav>
+        <div className="flex justify-center gap-3">
+          <button
+            onClick={onPrivacy}
+            className="text-slate-400 text-xs hover:text-slate-600 transition-colors"
+          >
+            {t('privacyPolicy', lang)}
+          </button>
+          <span className="text-slate-300">|</span>
+          <a href="/terms" className="text-slate-400 text-xs hover:text-slate-600 transition-colors">
+            {t('termsOfService', lang)}
+          </a>
+        </div>
         <p className="text-slate-400 dark:text-slate-500 text-xs">
           {t('madeBy', lang)}
         </p>

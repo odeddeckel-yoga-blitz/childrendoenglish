@@ -210,7 +210,7 @@ const CATEGORY_NAMES_HE = {
   toys: 'צעצועים ומשחקים',
 };
 
-const HREFLANG_HE = `<link rel="alternate" hreflang="he" href="${SITE}/he/" />`;
+const HREFLANG_HE = ''; // Only add he hreflang on pages with Hebrew equivalents (homepage, /he/)
 
 function buildHebrewLandingPage() {
   const url = `${SITE}/he/`;

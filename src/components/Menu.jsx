@@ -363,6 +363,13 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           >
             {t('privacyPolicy', lang)}
           </button>
+          <span className="text-slate-300">|</span>
+          <button
+            onClick={() => onNavigate('terms')}
+            className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
+          >
+            {t('termsOfService', lang)}
+          </button>
         </div>
       </div>
     </div>

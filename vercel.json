@@ -21,7 +21,10 @@
     { "source": "/players", "destination": "/" },
     { "source": "/manage", "destination": "/" },
     { "source": "/new-player", "destination": "/" },
-    { "source": "/my-words", "destination": "/" }
+    { "source": "/my-words", "destination": "/" },
+    { "source": "/app", "destination": "/" },
+    { "source": "/daily-review", "destination": "/" },
+    { "source": "/terms", "destination": "/" }
   ],
   "headers": [
     {
@@ -58,7 +61,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=86400"
+          "value": "public, max-age=604800"
         }
       ]
     },
