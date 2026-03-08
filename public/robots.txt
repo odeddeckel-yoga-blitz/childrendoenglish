@@ -4,6 +4,7 @@ Allow: /vocabulary/
 Allow: /printable-flashcards/
 Allow: /guides/
 Allow: /about/
+Allow: /he/
 
 # Block SPA app screens (no static content)
 Disallow: /play

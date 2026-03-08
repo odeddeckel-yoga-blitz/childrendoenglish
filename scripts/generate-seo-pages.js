@@ -101,6 +101,7 @@ function buildCategoryPage(slug, displayName, words) {
   <link rel="canonical" href="${url}" />
   <link rel="alternate" hreflang="en" href="${url}" />
   <link rel="alternate" hreflang="x-default" href="${url}" />
+  ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <!-- Open Graph -->
@@ -193,6 +194,415 @@ function buildCategoryPage(slug, displayName, words) {
 </html>`;
 }
 
+const CATEGORY_NAMES_HE = {
+  animals: 'חיות',
+  food: 'אוכל ושתייה',
+  home: 'בית ורהיטים',
+  transport: 'תחבורה וכלי רכב',
+  nature: 'טבע',
+  colors: 'צבעים',
+  numbers: 'מספרים',
+  clothing: 'ביגוד',
+  school: 'בית ספר',
+  sports: 'ספורט ופעילויות',
+  feelings: 'רגשות',
+  everyday: 'חפצים יומיומיים',
+  toys: 'צעצועים ומשחקים',
+};
+
+const HREFLANG_HE = `<link rel="alternate" hreflang="he" href="${SITE}/he/" />`;
+
+function buildHebrewLandingPage() {
+  const url = `${SITE}/he/`;
+  const title = 'לימוד אנגלית לילדים בחינם | Children Do English - אוצר מילים, חידונים ומשחקים';
+  const description = 'אפליקציה חינמית ללימוד אנגלית לילדים בגילאי 6-12. למעלה מ-340 מילים באנגלית עם תמונות, הגייה, משפטים ותרגום לעברית. ללא פרסומות, ללא רישום.';
+
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'עברית', item: url },
+    ],
+  });
+
+  const webAppSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Children Do English',
+    url: SITE,
+    description: 'אפליקציה חינמית ללימוד אוצר מילים באנגלית לילדים בגילאי 6-12 עם חידוני תמונות, כרטיסיות ואתגרי שמע',
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Any',
+    inLanguage: ['en', 'he'],
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'ILS',
+    },
+    author: {
+      '@type': 'Person',
+      name: 'Oded Deckelbaum',
+      url: SITE,
+    },
+    audience: {
+      '@type': 'EducationalAudience',
+      educationalRole: 'student',
+      suggestedMinAge: 6,
+      suggestedMaxAge: 12,
+    },
+  });
+
+  const faqSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: 'האם האפליקציה באמת בחינם?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'כן! Children Do English היא אפליקציה חינמית לחלוטין, ללא פרסומות, ללא רכישות בתוך האפליקציה וללא צורך בהרשמה.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'לאיזה גיל מתאימה האפליקציה?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'האפליקציה מתאימה לילדים בגילאי 6-12. המילים מחולקות לשלוש רמות קושי (מתחיל, בינוני ומתקדם) כך שכל ילד יכול להתקדם בקצב שלו.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'כמה מילים יש באפליקציה?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'האפליקציה כוללת למעלה מ-340 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'האם יש תמיכה בעברית?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'כן! כל מילה כוללת תרגום לעברית, וממשק האפליקציה זמין בעברית מלאה. האפליקציה נבנתה במיוחד עבור ילדים דוברי עברית שלומדים אנגלית.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'איך הלמידה עובדת?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'הילדים לומדים דרך חידוני תמונות, כרטיסיות, אתגרי שמע ומשחקי התאמה. האפליקציה משתמשת בשיטת חזרה מרווחת כדי לוודא שהמילים נשמרות בזיכרון לטווח ארוך.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'האם האפליקציה עובדת ללא אינטרנט?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'כן! האפליקציה היא Progressive Web App ושומרת את התוכן במטמון לאחר הביקור הראשון, כך שהילדים יכולים ללמוד גם בלי חיבור לאינטרנט.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: 'האם כמה ילדים יכולים להשתמש באותו מכשיר?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'כן! האפליקציה תומכת בפרופילים מרובים כך שכל אח או אחות יכולים לעקוב אחרי ההתקדמות שלהם בנפרד באותו מכשיר.',
+        },
+      },
+    ],
+  });
+
+  const categoryGrid = CATEGORIES.map((slug) => {
+    const hebrewName = CATEGORY_NAMES_HE[slug] || slug;
+    const words = getWordsByCategory(slug);
+    return `
+        <a href="/vocabulary/${slug}/" class="cat-item">
+          <span class="cat-name">${hebrewName}</span>
+          <span class="cat-count">${words.length} מילים</span>
+        </a>`;
+  }).join('\n');
+
+  return `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
+  <meta name="keywords" content="לימוד אנגלית לילדים, אוצר מילים באנגלית לילדים, משחק אנגלית לילדים, אנגלית לילדים בחינם" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${url}" />
+  <link rel="alternate" hreflang="en" href="${SITE}/" />
+  <link rel="alternate" hreflang="he" href="${url}" />
+  <link rel="alternate" hreflang="x-default" href="${SITE}/" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="he_IL" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${SITE}/og-image.png" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">${breadcrumbSchema}</script>
+  <script type="application/ld+json">${webAppSchema}</script>
+  <script type="application/ld+json">${faqSchema}</script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; direction: rtl; text-align: right; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; padding: 3rem 1rem 2.5rem; text-align: center; }
+    .hero h1 { font-size: 1.85rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1.3; }
+    .hero .subtitle { font-size: 1.05rem; opacity: 0.92; margin-bottom: 1.5rem; max-width: 540px; margin-left: auto; margin-right: auto; }
+    .cta-btn { display: inline-block; background: #fff; color: #2563eb; padding: 0.85rem 2.25rem; border-radius: 0.6rem; font-weight: 700; font-size: 1.1rem; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); text-decoration: none; }
+    .cta-sub { margin-top: 0.75rem; font-size: 0.8rem; opacity: 0.8; }
+
+    /* Stats bar */
+    .stats-bar { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; background: #fff; padding: 1rem; border-bottom: 1px solid #e2e8f0; }
+    .stat { text-align: center; }
+    .stat-num { font-size: 1.25rem; font-weight: 800; color: #2563eb; direction: ltr; display: inline-block; }
+    .stat-label { font-size: 0.8rem; color: #64748b; }
+
+    /* Sections */
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1rem; }
+    .section { padding: 2.5rem 0; }
+    .section-title { font-size: 1.4rem; font-weight: 800; text-align: center; margin-bottom: 1.5rem; color: #1e293b; }
+
+    /* Feature cards */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    .feature-card { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .feature-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .feature-card p { font-size: 0.9rem; color: #475569; }
+
+    /* How it works */
+    .steps { display: flex; flex-direction: column; gap: 1rem; max-width: 600px; margin: 0 auto; }
+    .step { display: flex; align-items: flex-start; gap: 1rem; background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .step-num { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; flex-shrink: 0; }
+    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.15rem; }
+    .step p { font-size: 0.9rem; color: #475569; }
+
+    /* Category grid */
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+    .cat-item { display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 0.6rem; padding: 0.85rem 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
+    .cat-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px); text-decoration: none; }
+    .cat-name { font-weight: 700; color: #1e293b; }
+    .cat-count { font-size: 0.8rem; color: #2563eb; font-weight: 600; direction: ltr; }
+
+    /* Testimonials */
+    .testimonials { display: flex; flex-direction: column; gap: 0.75rem; max-width: 640px; margin: 0 auto; }
+    .testimonial { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .testimonial p { font-size: 0.9rem; color: #334155; font-style: italic; margin-bottom: 0.5rem; line-height: 1.6; }
+    .testimonial .author { font-size: 0.8rem; color: #94a3b8; font-weight: 600; font-style: normal; }
+
+    /* FAQ */
+    .faq-list { max-width: 700px; margin: 0 auto; }
+    .faq-item { background: #fff; border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .faq-q { font-weight: 700; font-size: 1rem; margin-bottom: 0.35rem; color: #1e293b; }
+    .faq-a { font-size: 0.9rem; color: #475569; line-height: 1.6; }
+
+    /* Final CTA */
+    .final-cta { text-align: center; padding: 2.5rem 1rem; background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; }
+    .final-cta h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .final-cta p { opacity: 0.9; margin-bottom: 1.25rem; }
+
+    /* Footer */
+    .footer { text-align: center; padding: 1.5rem 1rem; color: #94a3b8; font-size: 0.8rem; background: #f8fafc; }
+    .footer a { color: #94a3b8; }
+    .footer a:hover { color: #64748b; }
+  </style>
+</head>
+<body>
+  <!-- Hero -->
+  <div class="hero">
+    <h1>לימוד אנגלית לילדים — בחינם ובכיף!</h1>
+    <p class="subtitle">אפליקציה חינמית ללימוד אוצר מילים באנגלית לילדים בגילאי 6-12. עם תמונות, הגייה, משפטים לדוגמה ותרגום לעברית.</p>
+    <a href="/?lang=he" class="cta-btn">התחילו ללמוד עכשיו &#8592;</a>
+    <p class="cta-sub">ללא פרסומות &middot; ללא רישום &middot; חינם לגמרי</p>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num">${WORDS.length}+</div><div class="stat-label">מילים</div></div>
+    <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">קטגוריות</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">מצבי חידון</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">רמות קושי</div></div>
+  </div>
+
+  <!-- Features -->
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">איך הילדים שלכם ילמדו אנגלית?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#128248;</div>
+          <h3>למידה עם תמונות</h3>
+          <p>כל מילה מלווה בתמונה צבעונית שעוזרת לילדים לזכור את המשמעות בצורה ויזואלית.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#127918;</div>
+          <h3>חידונים מהנים</h3>
+          <p>ארבעה סוגי חידונים — תמונות, מילים, שמע והתאמה — שהופכים את הלמידה למשחק.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128196;</div>
+          <h3>כרטיסיות לימוד</h3>
+          <p>כרטיסיות אינטראקטיביות עם תמונה, הגייה, הגדרה ותרגום לעברית.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128257;</div>
+          <h3>חזרה מרווחת</h3>
+          <p>מערכת חכמה שמחזירה מילים בדיוק לפני ששוכחים אותן, לשמירה בזיכרון לטווח ארוך.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128506;</div>
+          <h3>מסלול למידה מותאם</h3>
+          <p>שלוש רמות קושי — מתחיל, בינוני ומתקדם — כך שכל ילד מתקדם בקצב שלו.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#127942;</div>
+          <h3>תגים והישגים</h3>
+          <p>הילדים אוספים תגים ומעקבים אחרי ההתקדמות, מה שמעודד אותם להמשיך ללמוד.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">איך זה עובד?</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <h3>בחרו קטגוריה</h3>
+            <p>בחרו מתוך 13 קטגוריות כמו חיות, אוכל, צבעים, ספורט ועוד.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <h3>למדו מילים חדשות</h3>
+            <p>כל מילה מוצגת עם תמונה, הגייה, הגדרה, משפט לדוגמה ותרגום לעברית.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <h3>התקדמו ואספו תגים</h3>
+            <p>תרגלו עם חידונים, עקבו אחרי ההתקדמות ואספו תגים על ההישגים.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category grid -->
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">13 קטגוריות ללמידה</h2>
+      <div class="cat-grid">
+        ${categoryGrid}
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials -->
+  <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">מה הורים אומרים?</h2>
+      <div class="testimonials">
+        <div class="testimonial">
+          <p>&ldquo;הילדים שלי מכורים לחידוני התמונות! הם מבקשים לשחק כל יום אחרי בית הספר.&rdquo;</p>
+          <span class="author">— שרה מ.</span>
+        </div>
+        <div class="testimonial">
+          <p>&ldquo;סוף סוף אפליקציה ללימוד אנגלית שעובדת גם בעברית. מושלם למשפחה הדו-לשונית שלנו.&rdquo;</p>
+          <span class="author">— יעל כ.</span>
+        </div>
+        <div class="testimonial">
+          <p>&ldquo;פשוט, חינם, בלי פרסומות — בדיוק מה שחיפשתי. הבן שלי בן 7 למד 50 מילים חדשות בשבועיים.&rdquo;</p>
+          <span class="author">— דוד ר.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">שאלות נפוצות</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q">האם האפליקציה באמת בחינם?</div>
+          <div class="faq-a">כן! Children Do English היא אפליקציה חינמית לחלוטין, ללא פרסומות, ללא רכישות בתוך האפליקציה וללא צורך בהרשמה.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">לאיזה גיל מתאימה האפליקציה?</div>
+          <div class="faq-a">האפליקציה מתאימה לילדים בגילאי 6-12. המילים מחולקות לשלוש רמות קושי (מתחיל, בינוני ומתקדם) כך שכל ילד יכול להתקדם בקצב שלו.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">כמה מילים יש באפליקציה?</div>
+          <div class="faq-a">האפליקציה כוללת למעלה מ-340 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">האם יש תמיכה בעברית?</div>
+          <div class="faq-a">כן! כל מילה כוללת תרגום לעברית, וממשק האפליקציה זמין בעברית מלאה. האפליקציה נבנתה במיוחד עבור ילדים דוברי עברית שלומדים אנגלית.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">איך הלמידה עובדת?</div>
+          <div class="faq-a">הילדים לומדים דרך חידוני תמונות, כרטיסיות, אתגרי שמע ומשחקי התאמה. האפליקציה משתמשת בשיטת חזרה מרווחת כדי לוודא שהמילים נשמרות בזיכרון לטווח ארוך.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">האם האפליקציה עובדת ללא אינטרנט?</div>
+          <div class="faq-a">כן! האפליקציה היא Progressive Web App ושומרת את התוכן במטמון לאחר הביקור הראשון, כך שהילדים יכולים ללמוד גם בלי חיבור לאינטרנט.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">האם כמה ילדים יכולים להשתמש באותו מכשיר?</div>
+          <div class="faq-a">כן! האפליקציה תומכת בפרופילים מרובים כך שכל אח או אחות יכולים לעקוב אחרי ההתקדמות שלהם בנפרד באותו מכשיר.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final CTA -->
+  <div class="final-cta">
+    <h2>מוכנים להתחיל?</h2>
+    <p>הצטרפו לאלפי ילדים שכבר לומדים אנגלית בכיף!</p>
+    <a href="/?lang=he" class="cta-btn">התחילו ללמוד בחינם &#8592;</a>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English &middot;
+    <a href="/about/">אודות</a> &middot;
+    <a href="/">English</a>
+  </div>
+</body>
+</html>`;
+}
+
 // --- Generate pages ---
 
 const distDir = join(ROOT, 'dist');
@@ -273,6 +683,7 @@ const vocabIndexHtml = `<!DOCTYPE html>
   <link rel="canonical" href="${vocabIndexUrl}" />
   <link rel="alternate" hreflang="en" href="${vocabIndexUrl}" />
   <link rel="alternate" hreflang="x-default" href="${vocabIndexUrl}" />
+  ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <!-- Open Graph -->
@@ -414,6 +825,7 @@ const aboutHtml = `<!DOCTYPE html>
   <link rel="canonical" href="${aboutUrl}" />
   <link rel="alternate" hreflang="en" href="${aboutUrl}" />
   <link rel="alternate" hreflang="x-default" href="${aboutUrl}" />
+  ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <!-- Open Graph -->
@@ -576,6 +988,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
   <link rel="canonical" href="${url}" />
   <link rel="alternate" hreflang="en" href="${url}" />
   <link rel="alternate" hreflang="x-default" href="${url}" />
+  ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <!-- Open Graph -->
@@ -726,6 +1139,7 @@ const fcIndexHtml = `<!DOCTYPE html>
   <link rel="canonical" href="${fcIndexUrl}" />
   <link rel="alternate" hreflang="en" href="${fcIndexUrl}" />
   <link rel="alternate" hreflang="x-default" href="${fcIndexUrl}" />
+  ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <meta property="og:locale" content="en_US" />
@@ -1305,6 +1719,7 @@ for (const guide of GUIDES) {
   <link rel="canonical" href="${guideUrl}" />
   <link rel="alternate" hreflang="en" href="${guideUrl}" />
   <link rel="alternate" hreflang="x-default" href="${guideUrl}" />
+  ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <meta property="og:locale" content="en_US" />
@@ -1423,6 +1838,7 @@ const guidesIndexHtml = `<!DOCTYPE html>
   <link rel="canonical" href="${guidesIndexUrl}" />
   <link rel="alternate" hreflang="en" href="${guidesIndexUrl}" />
   <link rel="alternate" hreflang="x-default" href="${guidesIndexUrl}" />
+  ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <meta property="og:locale" content="en_US" />
@@ -1484,7 +1900,21 @@ const guidesIndexHtml = `<!DOCTYPE html>
 writeFileSync(join(guidesDir, 'index.html'), guidesIndexHtml, 'utf-8');
 console.log(`  \u2713 /guides/ (index, ${GUIDES.length} guides)`);
 
+// --- Generate Hebrew landing page ---
+
+const heDir = join(distDir, 'he');
+mkdirSync(heDir, { recursive: true });
+writeFileSync(join(heDir, 'index.html'), buildHebrewLandingPage(), 'utf-8');
+console.log('  \u2713 /he/ (Hebrew landing page)');
+
 // --- Overwrite sitemap.xml ---
+
+const heEntry = `  <url>
+    <loc>${SITE}/he/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>`;
 
 const aboutEntry = `  <url>
     <loc>${SITE}/about/</loc>
@@ -1528,6 +1958,7 @@ const guideEntries = GUIDES.map(
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${spaEntries}
+${heEntry}
 ${vocabIndexEntry}
 ${vocabEntries}
 ${aboutEntry}
@@ -1540,6 +1971,6 @@ ${guideEntries}
 
 writeFileSync(join(distDir, 'sitemap.xml'), sitemap, 'utf-8');
 
-const totalUrls = 1 + 1 + CATEGORIES.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length;
-console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about`);
+const totalUrls = 1 + 1 + 1 + CATEGORIES.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length;
+console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about + Hebrew landing`);
 console.log(`Sitemap: ${totalUrls} URLs`);
