@@ -23,6 +23,7 @@ const defaultProps = {
   onInstall: vi.fn(),
   onDismissInstall: vi.fn(),
   onNavigate: vi.fn(),
+  onQuickStart: vi.fn(),
   onToggleDark: vi.fn(),
   onToggleSound: vi.fn(),
   onOpenProfilePicker: vi.fn(),
@@ -72,6 +73,16 @@ describe('Menu', () => {
   it('shows parent dashboard link', () => {
     render(<Menu {...defaultProps} />);
     expect(screen.getAllByText('Parent Dashboard').length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('calls onQuickStart for new user clicking Play Quiz', () => {
+    const onQuickStart = vi.fn();
+    const onNavigate = vi.fn();
+    const newUserStats = { ...defaultStats, totalQuizzes: 0, wordProgress: {} };
+    render(<Menu {...defaultProps} stats={newUserStats} onQuickStart={onQuickStart} onNavigate={onNavigate} />);
+    fireEvent.click(screen.getByText('Play Your First Quiz!'));
+    expect(onQuickStart).toHaveBeenCalled();
+    expect(onNavigate).not.toHaveBeenCalledWith('levelSelect');
   });
 
   it('renders in Hebrew when lang=he', async () => {

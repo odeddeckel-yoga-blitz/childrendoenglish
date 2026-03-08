@@ -14,6 +14,8 @@ const translations = {
     playQuiz: 'Play Quiz',
     playQuizDesc: 'Test your vocabulary',
     startHere: 'Start here!',
+    menuMoreFeatures: 'More features unlock after your first quiz!',
+    playFirstQuiz: 'Play Your First Quiz!',
     myWordList: 'My Word List',
     myWordListDesc: 'Practice custom words',
     progress: 'Progress',

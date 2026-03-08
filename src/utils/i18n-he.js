@@ -12,6 +12,8 @@ export default {
   playQuiz: 'שחק חידון',
   playQuizDesc: 'בדקו את אוצר המילים שלכם',
   startHere: 'התחילו כאן!',
+  menuMoreFeatures: 'עוד תכונות ייפתחו אחרי החידון הראשון!',
+  playFirstQuiz: 'שחקו את החידון הראשון!',
   myWordList: 'רשימת המילים שלי',
   myWordListDesc: 'תרגלו מילים מותאמות אישית',
   progress: 'התקדמות',

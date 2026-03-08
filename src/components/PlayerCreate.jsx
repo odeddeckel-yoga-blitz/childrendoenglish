@@ -7,11 +7,10 @@ const AVATARS = ['🦊', '🐱', '🦁', '🐶', '🦄', '🐼', '🐸', '🦋',
 export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState('🦊');
-  const [canRead, setCanRead] = useState(null); // null = not chosen yet
 
   const handleCreate = () => {
-    if (!name.trim() || canRead === null) return;
-    onCreatePlayer(name.trim(), avatar, canRead);
+    if (!name.trim()) return;
+    onCreatePlayer(name.trim(), avatar, true);
   };
 
   return (
@@ -69,45 +68,19 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
         </div>
       </div>
 
-      {/* Can read? */}
-      <div className="glass rounded-2xl p-5 space-y-3">
-        <p className="text-sm font-semibold text-slate-700">{t('canYouRead', lang)}</p>
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={() => setCanRead(true)}
-            className={`py-3 px-4 rounded-xl font-semibold text-sm transition-all
-                       ${canRead === true
-                         ? 'bg-emerald-100 border-2 border-emerald-500 text-emerald-700'
-                         : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-emerald-400'}`}
-          >
-            {t('iCanRead', lang)}
-          </button>
-          <button
-            onClick={() => setCanRead(false)}
-            className={`py-3 px-4 rounded-xl font-semibold text-sm transition-all
-                       ${canRead === false
-                         ? 'bg-blue-100 border-2 border-blue-500 text-blue-700'
-                         : 'bg-white border-2 border-slate-200 text-slate-700 hover:border-blue-400'}`}
-          >
-            {t('notYet', lang)}
-          </button>
-        </div>
-        <p className="text-xs text-slate-400 text-center">{t('parentCanChange', lang)}</p>
-      </div>
-
       {/* Create button */}
       <button
         onClick={handleCreate}
-        disabled={!name.trim() || canRead === null}
+        disabled={!name.trim()}
         className="w-full py-3.5 px-6 bg-blue-600 text-white rounded-xl font-semibold text-lg
                    hover:bg-blue-700 active:scale-95 transition-all
                    disabled:opacity-40 disabled:active:scale-100"
       >
         {t('createPlayer', lang)}
       </button>
-      {(!name.trim() || canRead === null) && (
+      {!name.trim() && (
         <p className="text-center text-sm text-slate-400">
-          {!name.trim() ? t('playerNameHint', lang) : ''}
+          {t('playerNameHint', lang)}
         </p>
       )}
     </div>

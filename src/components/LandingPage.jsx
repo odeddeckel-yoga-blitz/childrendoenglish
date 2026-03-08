@@ -26,6 +26,13 @@ function useScrollReveal() {
   }, []);
 
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      elements.current.forEach((el) => {
+        el.classList.add('opacity-100', 'translate-y-0');
+        el.classList.remove('opacity-0', 'translate-y-4');
+      });
+      return;
+    }
     if (typeof IntersectionObserver === 'undefined') {
       elements.current.forEach((el) => {
         el.classList.add('opacity-100', 'translate-y-0');
@@ -78,6 +85,7 @@ function FAQItem({ index, lang }) {
       <div
         ref={contentRef}
         className="transition-[max-height] duration-300 ease-in-out overflow-hidden"
+        aria-hidden={!open}
         style={{ maxHeight: open ? `${contentRef.current?.scrollHeight ?? 200}px` : '0px' }}
       >
         <div className="px-4 pb-3 text-sm text-slate-500 dark:text-slate-400">
@@ -90,11 +98,24 @@ function FAQItem({ index, lang }) {
 
 function TestimonialCarousel({ lang }) {
   const [active, setActive] = useState(0);
+  const intervalRef = useRef(null);
+  const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const startAutoAdvance = useCallback(() => {
+    if (prefersReducedMotion) return;
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => setActive((i) => (i + 1) % 3), 5000);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
-    const id = setInterval(() => setActive((i) => (i + 1) % 3), 5000);
-    return () => clearInterval(id);
-  }, []);
+    startAutoAdvance();
+    return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
+  }, [startAutoAdvance]);
+
+  const handleDotClick = (i) => {
+    setActive(i);
+    startAutoAdvance();
+  };
 
   return (
     <div>
@@ -122,11 +143,13 @@ function TestimonialCarousel({ lang }) {
         {[0, 1, 2].map((i) => (
           <button
             key={i}
-            onClick={() => setActive(i)}
-            className={`h-2 rounded-full transition-all duration-300
-              ${i === active ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 dark:bg-slate-600'}`}
+            onClick={() => handleDotClick(i)}
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label={`Testimonial ${i + 1}`}
-          />
+          >
+            <span className={`block h-2 rounded-full transition-all duration-300
+              ${i === active ? 'w-6 bg-blue-600' : 'w-2 bg-slate-300 dark:bg-slate-600'}`} />
+          </button>
         ))}
       </div>
     </div>
