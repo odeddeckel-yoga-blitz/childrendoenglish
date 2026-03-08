@@ -95,4 +95,22 @@ describe('FlashcardMode', () => {
     render(<FlashcardMode {...defaultProps} />);
     expect(screen.getByText('No cards to review!')).toBeInTheDocument();
   });
+
+  it('shows custom word count when words prop is provided', () => {
+    const makeWord = (id, word) => ({
+      id, word, definition: `A ${word}`, phonetic: `/${word}/`,
+      exampleSentence: `I see a ${word}.`, hebrewTranslation: word,
+      category: 'test', imageUrl: `/img/${word}.webp`,
+    });
+    const words = [makeWord('cat', 'cat'), makeWord('dog', 'dog'), makeWord('bird', 'bird')];
+    render(
+      <FlashcardMode
+        stats={{ wordProgress: {} }}
+        words={words}
+        onUpdateStats={vi.fn()}
+        onBack={vi.fn()}
+      />
+    );
+    expect(screen.getByText('1 / 3')).toBeInTheDocument();
+  });
 });

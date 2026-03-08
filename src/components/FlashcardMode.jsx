@@ -7,8 +7,8 @@ import { speakWord } from '../utils/sound';
 import { haptic } from '../utils/haptic';
 import { t } from '../utils/i18n';
 
-export default function FlashcardMode({ stats, lang = 'en', canRead = true, onUpdateStats, onBack }) {
-  const sorted = spacedRepetitionSort(WORDS, stats.wordProgress || {});
+export default function FlashcardMode({ stats, lang = 'en', canRead = true, words: customWords, onUpdateStats, onBack }) {
+  const sorted = spacedRepetitionSort(customWords || WORDS, stats.wordProgress || {});
   const [cards] = useState(sorted);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);

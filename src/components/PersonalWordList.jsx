@@ -1,9 +1,9 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { ArrowLeft, Play, Share2, Check, X, Link } from 'lucide-react';
+import { ArrowLeft, Play, Share2, Check, X, Link, BookOpen, Layers } from 'lucide-react';
 import { WORDS, getWordByName } from '../data/words';
 import { t } from '../utils/i18n';
 
-export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack, initialWords }) {
+export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, onFlashcard, onBack, initialWords }) {
   const [words, setWords] = useState(() => initialWords || []);
   const [query, setQuery] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -297,6 +297,26 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onBack, ini
               {copiedMode === 'word' ? <Check className="w-5 h-5" /> : <Share2 className="w-5 h-5" />}
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Learn & Flashcard */}
+      {words.length > 0 && (
+        <div className="space-y-3">
+          <button
+            onClick={() => onLearn(words)}
+            className="w-full py-3 bg-emerald-600 text-white rounded-xl font-semibold
+                       hover:bg-emerald-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
+            <BookOpen className="w-5 h-5" /> {t('learnTheseWords', lang)}
+          </button>
+          <button
+            onClick={() => onFlashcard(words)}
+            className="w-full py-3 bg-amber-500 text-white rounded-xl font-semibold
+                       hover:bg-amber-600 active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
+            <Layers className="w-5 h-5" /> {t('flashcardTheseWords', lang)}
+          </button>
         </div>
       )}
     </div>

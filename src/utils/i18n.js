@@ -131,6 +131,8 @@ const translations = {
     shareImageQuiz: 'Share image quiz',
     shareWordQuiz: 'Share word quiz',
     shareWordList: 'Share word list',
+    learnTheseWords: 'Learn These Words',
+    flashcardTheseWords: 'Flashcard These Words',
 
     // Loading
     loading: 'Loading',

@@ -129,6 +129,8 @@ export default {
   shareImageQuiz: 'שתפו חידון תמונות',
   shareWordQuiz: 'שתפו חידון מילים',
   shareWordList: 'שתפו רשימת מילים',
+  learnTheseWords: 'למדו מילים אלו',
+  flashcardTheseWords: 'כרטיסיות למילים אלו',
 
   // Loading
   loading: 'טוען',

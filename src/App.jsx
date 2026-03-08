@@ -118,6 +118,7 @@ export default function App() {
   const [showConsent, setShowConsent] = useState(() => needsConsentPrompt());
   const [learnWords, setLearnWords] = useState(null);
   const [sharedWords, setSharedWords] = useState(null);
+  const [focusedWords, setFocusedWords] = useState(null);
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && !navigator.onLine);
   const [storageFull, setStorageFull] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -302,6 +303,7 @@ export default function App() {
         const words = ids.map(id => getWordById(id)).filter(Boolean);
         window.location.hash = '';
         if (words.length >= 4) {
+          setFocusedWords(words);
           quizFlow.startQuiz(null, mode, words);
         }
         return;
@@ -314,6 +316,7 @@ export default function App() {
         window.location.hash = '';
         if (words.length > 0) {
           setSharedWords(words);
+          setFocusedWords(words);
           setGameState('personalList');
         }
       }
@@ -449,7 +452,7 @@ export default function App() {
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
-            onQuit={() => navigate('menu', 'back')}
+            onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );
 
@@ -461,7 +464,7 @@ export default function App() {
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
-            onQuit={() => navigate('menu', 'back')}
+            onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );
 
@@ -473,7 +476,7 @@ export default function App() {
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
-            onQuit={() => navigate('menu', 'back')}
+            onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );
 
@@ -485,7 +488,7 @@ export default function App() {
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
-            onQuit={() => navigate('menu', 'back')}
+            onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );
 
@@ -499,7 +502,7 @@ export default function App() {
             mode={quizFlow.selectedMode}
             onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords)}
             onChangeMode={() => navigate('modeSelect', 'back')}
-            onMenu={() => navigate('menu', 'back')}
+            onMenu={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );
 
@@ -510,7 +513,7 @@ export default function App() {
             lang={lang}
             canRead={activePlayer?.canRead ?? true}
             words={learnWords}
-            onBack={() => { setLearnWords(null); navigate('menu', 'back'); }}
+            onBack={() => { setLearnWords(null); focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back'); }}
           />
         );
 
@@ -520,8 +523,9 @@ export default function App() {
             stats={stats}
             lang={lang}
             canRead={activePlayer?.canRead ?? true}
+            words={focusedWords}
             onUpdateStats={setStats}
-            onBack={() => navigate('menu', 'back')}
+            onBack={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );
 
@@ -547,9 +551,11 @@ export default function App() {
         return (
           <PersonalWordList
             lang={lang}
-            onStartQuiz={quizFlow.handleStartPersonalQuiz}
-            onBack={() => { setSharedWords(null); navigate('menu', 'back'); }}
-            initialWords={sharedWords}
+            onStartQuiz={(words, mode) => { setFocusedWords(words); quizFlow.handleStartPersonalQuiz(words, mode); }}
+            onLearn={(words) => { setFocusedWords(words); setLearnWords(words); navigate('learning'); }}
+            onFlashcard={(words) => { setFocusedWords(words); navigate('flashcards'); }}
+            onBack={() => { setSharedWords(null); setFocusedWords(null); navigate('menu', 'back'); }}
+            initialWords={sharedWords || focusedWords}
           />
         );
 
