@@ -71,7 +71,7 @@ function buildCategoryPage(slug, displayName, words) {
   const wordCards = words
     .map(
       (w) => `
-      <div class="card">
+      <a href="/vocabulary/${slug}/${w.id}/" class="card">
         <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="card-img" loading="lazy" width="128" height="128" />
         <div class="card-word">${escapeHtml(w.word)}</div>
         <div class="card-phonetic">${escapeHtml(w.phonetic)}</div>
@@ -79,7 +79,7 @@ function buildCategoryPage(slug, displayName, words) {
         <div class="card-def">${escapeHtml(w.definition)}</div>
         <div class="card-ex">&ldquo;${escapeHtml(w.exampleSentence)}&rdquo;</div>
         <div class="card-he">${escapeHtml(w.hebrewTranslation)}</div>
-      </div>`
+      </a>`
     )
     .join('\n');
 
@@ -137,7 +137,8 @@ function buildCategoryPage(slug, displayName, words) {
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1.5rem; color: #475569; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
-    .card { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
+    .card { display: block; background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
+    .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); transform: translateY(-2px); }
     .card-img { width: 128px; height: 128px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 0.75rem; display: block; }
     .card-word { font-size: 1.35rem; font-weight: 700; color: #1e293b; }
     .card-phonetic { font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.25rem; }
@@ -178,6 +179,171 @@ function buildCategoryPage(slug, displayName, words) {
       <a href="/">Practice These Words in the App &rarr;</a>
       <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
+
+    <div class="categories">
+      <h2>Explore More Categories</h2>
+      <div class="cat-links">
+        ${categoryLinks}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+  </div>
+</body>
+</html>`;
+}
+
+function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
+  const url = `${SITE}/vocabulary/${categorySlug}/${word.id}/`;
+  const capitalWord = word.word.charAt(0).toUpperCase() + word.word.slice(1);
+  const title = `${capitalWord} - English Vocabulary for Kids | Children Do English`;
+  const description = `Learn the English word "${word.word}" — ${word.definition}. With pronunciation (${word.phonetic}), example sentence, and Hebrew translation (${word.hebrewTranslation}). Free for kids ages 6-12.`;
+
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Vocabulary', item: `${SITE}/vocabulary/` },
+      { '@type': 'ListItem', position: 3, name: categoryDisplayName, item: `${SITE}/vocabulary/${categorySlug}/` },
+      { '@type': 'ListItem', position: 4, name: capitalWord, item: url },
+    ],
+  });
+
+  const definedTermSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTerm',
+    name: word.word,
+    description: word.definition,
+    inDefinedTermSet: `${SITE}/vocabulary/${categorySlug}/`,
+  });
+
+  // Pick 5 related words from same category, excluding current
+  const related = categoryWords.filter((w) => w.id !== word.id).slice(0, 5);
+  const relatedCards = related
+    .map(
+      (w) => `
+      <a href="/vocabulary/${categorySlug}/${w.id}/" class="related-card">
+        <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="related-img" loading="lazy" width="80" height="80" />
+        <div class="related-word">${escapeHtml(w.word)}</div>
+      </a>`
+    )
+    .join('\n');
+
+  const categoryLinks = CATEGORIES.filter((c) => c !== categorySlug)
+    .map(
+      (c) =>
+        `<a href="/vocabulary/${c}/">${escapeHtml(CATEGORY_NAMES[c] || c)}</a>`
+    )
+    .join('\n        ');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${url}" />
+  <link rel="alternate" hreflang="en" href="${url}" />
+  <link rel="alternate" hreflang="x-default" href="${url}" />
+  ${HREFLANG_HE}
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:image" content="${SITE}/og/${categorySlug}.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${SITE}/og/${categorySlug}.png" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">${breadcrumbSchema}</script>
+  <script type="application/ld+json">${definedTermSchema}</script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
+    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
+    .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    .header p { opacity: 0.9; font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
+    .word-hero { background: #fff; border-radius: 0.75rem; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; max-width: 480px; margin: 0 auto 2rem; }
+    .word-hero img { width: 192px; height: 192px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 1rem; display: block; }
+    .word-hero .hero-word { font-size: 2rem; font-weight: 800; color: #1e293b; }
+    .word-hero .hero-phonetic { font-size: 1rem; color: #94a3b8; margin-bottom: 0.25rem; }
+    .word-hero .hero-pos { font-size: 0.8rem; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
+    .word-hero .hero-def { font-size: 1.05rem; margin-bottom: 0.5rem; }
+    .word-hero .hero-ex { font-style: italic; color: #64748b; font-size: 0.95rem; margin-bottom: 0.5rem; }
+    .word-hero .hero-he { color: #475569; direction: rtl; font-size: 1rem; }
+    .cta { text-align: center; margin: 2rem 0; }
+    .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
+    .cta a:hover { background: #1d4ed8; }
+    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; }
+    .section-title { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
+    .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; margin-bottom: 2rem; }
+    .related-card { display: block; background: #fff; border-radius: 0.75rem; padding: 0.85rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
+    .related-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); transform: translateY(-2px); }
+    .related-img { width: 80px; height: 80px; border-radius: 0.5rem; object-fit: cover; margin: 0 auto 0.5rem; display: block; }
+    .related-word { font-size: 0.95rem; font-weight: 600; color: #1e293b; }
+    .back-link { display: inline-block; margin-bottom: 1.5rem; color: #2563eb; text-decoration: none; font-size: 0.9rem; }
+    .back-link:hover { text-decoration: underline; }
+    .categories { margin-top: 2rem; }
+    .categories h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
+    .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+    .cat-links a:hover { background: #2563eb; color: #fff; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>${escapeHtml(capitalWord)}</h1>
+    <p>${escapeHtml(categoryDisplayName)} &middot; ${escapeHtml(word.level)}</p>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="/">Home</a> &rsaquo; <a href="/vocabulary/">Vocabulary</a> &rsaquo; <a href="/vocabulary/${categorySlug}/">${escapeHtml(categoryDisplayName)}</a> &rsaquo; ${escapeHtml(capitalWord)}
+  </div>
+
+  <div class="container">
+    <div class="word-hero">
+      <img src="/images/${word.id}.webp" alt="${escapeHtml(word.word)}" width="192" height="192" />
+      <div class="hero-word">${escapeHtml(word.word)}</div>
+      <div class="hero-phonetic">${escapeHtml(word.phonetic)}</div>
+      <div class="hero-pos">${escapeHtml(word.partOfSpeech)}</div>
+      <div class="hero-def">${escapeHtml(word.definition)}</div>
+      <div class="hero-ex">&ldquo;${escapeHtml(word.exampleSentence)}&rdquo;</div>
+      <div class="hero-he">${escapeHtml(word.hebrewTranslation)}</div>
+    </div>
+
+    <div class="cta">
+      <a href="/">Practice This Word in the App &rarr;</a>
+      <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
+    </div>
+
+    <h2 class="section-title">More ${escapeHtml(categoryDisplayName)} Words</h2>
+    <div class="related-grid">
+      ${relatedCards}
+    </div>
+
+    <a href="/vocabulary/${categorySlug}/" class="back-link">&larr; All ${escapeHtml(categoryDisplayName)} words</a>
 
     <div class="categories">
       <h2>Explore More Categories</h2>
@@ -625,6 +791,20 @@ for (const slug of CATEGORIES) {
   console.log(`  ✓ /vocabulary/${slug}/ (${words.length} words)`);
 }
 
+let wordPagesGenerated = 0;
+for (const slug of CATEGORIES) {
+  const displayName = CATEGORY_NAMES[slug] || slug;
+  const words = getWordsByCategory(slug);
+  for (const word of words) {
+    const wordDir = join(distDir, 'vocabulary', slug, word.id);
+    mkdirSync(wordDir, { recursive: true });
+    writeFileSync(join(wordDir, 'index.html'), buildWordPage(word, slug, displayName, words), 'utf-8');
+    wordPagesGenerated++;
+  }
+  console.log(`  ✓ /vocabulary/${slug}/ word pages (${words.length})`);
+}
+console.log(`  Total word pages: ${wordPagesGenerated}`);
+
 // --- Generate vocabulary index page ---
 mkdirSync(join(distDir, 'vocabulary'), { recursive: true });
 
@@ -789,6 +969,15 @@ const vocabEntries = CATEGORIES.map(
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>`
+).join('\n');
+
+const wordEntries = CATEGORIES.flatMap((slug) =>
+  getWordsByCategory(slug).map((w) => `  <url>
+    <loc>${SITE}/vocabulary/${slug}/${w.id}/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>`)
 ).join('\n');
 
 // --- Generate About page ---
@@ -1961,6 +2150,7 @@ ${spaEntries}
 ${heEntry}
 ${vocabIndexEntry}
 ${vocabEntries}
+${wordEntries}
 ${aboutEntry}
 ${fcIndexEntry}
 ${fcEntries}
@@ -1971,6 +2161,6 @@ ${guideEntries}
 
 writeFileSync(join(distDir, 'sitemap.xml'), sitemap, 'utf-8');
 
-const totalUrls = 1 + 1 + 1 + CATEGORIES.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length;
+const totalUrls = 1 + 1 + 1 + CATEGORIES.length + WORDS.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length;
 console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about + Hebrew landing`);
 console.log(`Sitemap: ${totalUrls} URLs`);
