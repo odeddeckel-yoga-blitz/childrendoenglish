@@ -55,7 +55,7 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
       wordDistractions.set(w.id, distractors.slice(0, 3));
       return true;
     });
-    if (missing.length > 0) {
+    if (import.meta.env.DEV && missing.length > 0) {
       console.warn('Skipping words with missing images:', [...missingIds]);
     }
 
