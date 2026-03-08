@@ -4,7 +4,7 @@ import { test, expect } from '@playwright/test';
 async function setupHebrewUser(page, overrides = {}) {
   const stats = {
     hasSeenOnboarding: true,
-    totalQuizzes: 0,
+    totalQuizzes: 1,
     bestScores: { beginner: 0, intermediate: 0, advanced: 0 },
     badges: [],
     unlockedLevels: ['beginner'],
@@ -44,9 +44,10 @@ async function completeQuiz(page, numQuestions = 10) {
 }
 
 // Helper: set localStorage to simulate a returning user (with player registry)
+// totalQuizzes: 1 so isNewUser=false and all menu buttons are visible
 const RETURNING_USER_STATS = {
   hasSeenOnboarding: true,
-  totalQuizzes: 0,
+  totalQuizzes: 1,
   bestScores: { beginner: 0, intermediate: 0, advanced: 0 },
   badges: [],
   unlockedLevels: ['beginner'],
@@ -77,7 +78,8 @@ async function setupReturningUser(page, overrides = {}) {
   await page.waitForSelector('#root > *', { timeout: 10000 });
 }
 
-// Helper: set up a player who still needs onboarding
+// Helper: set up a player who still needs onboarding (hasSeenOnboarding: false)
+// This player lands on the LandingPage with a "Continue" bar
 async function setupNewPlayer(page) {
   await page.addInitScript(() => {
     const id = 'player_test1';
@@ -101,25 +103,43 @@ async function setupNewPlayer(page) {
   await page.waitForSelector('#root > *', { timeout: 10000 });
 }
 
-// ── Onboarding ──────────────────────────────────────
+// ── Landing Page ──────────────────────────────────────
 
-test.describe('Onboarding', () => {
-  test('shows player create for brand new user', async ({ page }) => {
+test.describe('Landing Page', () => {
+  test('brand new user sees landing page with language selection', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
+    });
     await page.goto('/');
-    await expect(page.getByRole('heading', { name: 'Create Player' })).toBeVisible();
+    await page.waitForSelector('#root > *', { timeout: 10000 });
+    // Should see the landing page hero
+    await expect(page.locator('text=Learn English')).toBeVisible({ timeout: 5000 });
   });
 
-  test('shows onboarding after player exists but not onboarded', async ({ page }) => {
-    await setupNewPlayer(page);
-    // Step 0 is the language picker
-    await expect(page.locator('text=What language do you speak?')).toBeVisible();
+  test('brand new user can pick English and reach player create', async ({ page }) => {
+    await page.addInitScript(() => {
+      localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
+    });
+    await page.goto('/');
+    await page.waitForSelector('#root > *', { timeout: 10000 });
+    // Scroll to language section and pick English
+    await page.locator('#language-select button:has-text("English")').scrollIntoViewIfNeeded();
+    await page.locator('#language-select button:has-text("English")').click();
+    // Should navigate to player create
+    await expect(page.getByRole('heading', { name: 'Create Player' })).toBeVisible({ timeout: 5000 });
   });
 
-  test('can skip onboarding to menu', async ({ page }) => {
+  test('returning player not onboarded sees landing with Continue button', async ({ page }) => {
     await setupNewPlayer(page);
-    await page.locator('button[aria-label="Skip onboarding"]').click();
-    await expect(page.locator('text=Children Do English')).toBeVisible();
-    await expect(page.locator('text=Play Quiz')).toBeVisible();
+    // Should see landing page with "Welcome back" bar and Continue button
+    await expect(page.locator('text=Continue')).toBeVisible({ timeout: 5000 });
+  });
+
+  test('clicking Continue goes to menu for single player', async ({ page }) => {
+    await setupNewPlayer(page);
+    await page.locator('button:has-text("Continue")').click();
+    // New user menu shows "Play Your First Quiz!" button
+    await expect(page.locator('text=Play Your First Quiz')).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -137,8 +157,8 @@ test.describe('Menu', () => {
   test('can navigate to level select', async ({ page }) => {
     await setupReturningUser(page);
     await page.locator('text=Play Quiz').click();
-    await expect(page.locator('text=Choose Level')).toBeVisible();
-    await expect(page.locator('h3:has-text("Beginner")')).toBeVisible();
+    // LevelSelect heading is t('playQuiz') = "Play Quiz"
+    await expect(page.locator('button:has-text("Beginner")')).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -208,8 +228,7 @@ test.describe('Quiz Flow', () => {
 
     // Navigate to quiz
     await page.locator('text=Play Quiz').click();
-    await expect(page.locator('text=Choose Level')).toBeVisible();
-    await page.locator('h3:has-text("Beginner")').click();
+    await page.locator('button:has-text("Beginner")').click();
 
     // Select Image Quiz mode
     await expect(page.locator('text=Image Quiz').or(page.locator('text=Picture Quiz'))).toBeVisible();
@@ -228,7 +247,7 @@ test.describe('Quiz Flow', () => {
   test('image quiz shows image and 4 answer buttons', async ({ page }) => {
     await setupReturningUser(page);
     await page.locator('text=Play Quiz').click();
-    await page.locator('h3:has-text("Beginner")').click();
+    await page.locator('button:has-text("Beginner")').click();
     await page.locator('text=Image Quiz').or(page.locator('text=Picture Quiz')).click();
 
     // Wait for quiz to load
@@ -246,7 +265,7 @@ test.describe('Quiz Flow', () => {
   test('word quiz shows word and image options', async ({ page }) => {
     await setupReturningUser(page);
     await page.locator('text=Play Quiz').click();
-    await page.locator('h3:has-text("Beginner")').click();
+    await page.locator('button:has-text("Beginner")').click();
     await page.locator('text=Word Quiz').or(page.locator('text=Text Quiz')).click();
 
     // Wait for quiz to load
@@ -260,7 +279,7 @@ test.describe('Quiz Flow', () => {
   test('audio quiz shows speaker button', async ({ page }) => {
     await setupReturningUser(page);
     await page.locator('text=Play Quiz').click();
-    await page.locator('h3:has-text("Beginner")').click();
+    await page.locator('button:has-text("Beginner")').click();
     await page.locator('text=Audio Quiz').or(page.locator('text=Listening Quiz')).click();
 
     // Wait for quiz to load
@@ -365,16 +384,19 @@ test.describe('Personal Word List', () => {
     await setupReturningUser(page);
     await page.locator('text=My Word List').click();
 
-    await expect(page.locator('text=My Word List').or(page.locator('text=Personal')).first()).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('h2:has-text("My Word List")')).toBeVisible({ timeout: 5000 });
 
-    // Should have an input for entering words
-    const input = page.locator('input[type="text"], input[placeholder*="word" i], input[placeholder*="search" i], textarea').first();
-    if ((await input.count()) > 0) {
-      await input.fill('cat');
-      // Press enter or click add button
-      await page.keyboard.press('Enter');
-      await page.waitForTimeout(500);
-    }
+    // Type a word into the autocomplete input and select a suggestion
+    const input = page.locator('#word-input');
+    await input.fill('cat');
+    await page.waitForTimeout(500);
+    // Use dispatchEvent to trigger mousedown (matches the onMouseDown handler) before blur closes dropdown
+    const suggestion = page.locator('#word-suggestions li').first();
+    await expect(suggestion).toBeVisible({ timeout: 3000 });
+    await suggestion.dispatchEvent('mousedown');
+    await page.waitForTimeout(300);
+    // Word count should appear
+    await expect(page.locator('text=/Found \\d+ word/i')).toBeVisible({ timeout: 3000 });
   });
 });
 
@@ -427,7 +449,7 @@ test.describe('Responsive', () => {
     await page.setViewportSize({ width: 375, height: 667 });
     await setupReturningUser(page);
     await page.locator('text=Play Quiz').click();
-    await page.locator('h3:has-text("Beginner")').click();
+    await page.locator('button:has-text("Beginner")').click();
     await page.locator('text=Image Quiz').or(page.locator('text=Picture Quiz')).click();
 
     // Wait for quiz to load
@@ -442,44 +464,42 @@ test.describe('Responsive', () => {
 
 test.describe('Onboarding Full Flow', () => {
   test('complete all onboarding steps and select Hebrew → Hebrew menu + RTL', async ({ page }) => {
-    // Set up a player who hasn't onboarded yet
-    await setupNewPlayer(page);
+    // Brand new user — start from landing page
+    await page.addInitScript(() => {
+      localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
+    });
+    await page.goto('/');
+    await page.waitForSelector('#root > *', { timeout: 10000 });
 
-    // Step 0: Language picker — select Hebrew
-    await expect(page.locator('text=What language do you speak?')).toBeVisible({ timeout: 5000 });
-    await page.locator('button:has-text("עברית")').click();
-    await page.waitForTimeout(300);
+    // Pick Hebrew on the landing page language section
+    await page.locator('#language-select button:has-text("עברית")').scrollIntoViewIfNeeded();
+    await page.locator('#language-select button:has-text("עברית")').click();
 
-    // Steps 1-3: Click through intro slides via Next arrows (Hebrew aria-label after language pick)
-    const nextBtn = page.locator('button[aria-label="שלב הבא"]');
-    for (let i = 0; i < 3; i++) {
-      await nextBtn.waitFor({ timeout: 3000 });
-      await nextBtn.click();
-      await page.waitForTimeout(300);
-    }
+    // Should go to player create
+    await page.waitForTimeout(1000);
 
-    // Step 4: Can you read? — click first option to complete
-    const canReadBtn = page.locator('button').filter({ hasText: /אני יכול|I can read/i }).first();
-    await canReadBtn.waitFor({ timeout: 3000 });
-    await canReadBtn.click();
+    // Create a player
+    const nameInput = page.locator('input[type="text"]').first();
+    await nameInput.fill('Test');
+    // Click create button
+    const createBtn = page.locator('button:has-text("צור שחקן"), button:has-text("Create Player")').first();
+    await createBtn.click();
 
-    // Wait for menu to appear
-    await page.waitForTimeout(500);
-
-    // Verify Hebrew RTL applied
+    // Should go to menu — verify Hebrew RTL applied
+    await page.waitForTimeout(1000);
     const dir = await page.locator('html').getAttribute('dir');
     const lang = await page.locator('html').getAttribute('lang');
     expect(lang).toBe('he');
     expect(dir).toBe('rtl');
   });
 
-  test('demo quiz question correctly shows "Great job!" feedback', async ({ page }) => {
+  test('demo quiz question correctly shows feedback', async ({ page }) => {
     // Set up returning user to go straight to menu
     await setupReturningUser(page);
 
     // Navigate to quiz
     await page.locator('text=Play Quiz').click();
-    await page.locator('h3:has-text("Beginner")').click();
+    await page.locator('button:has-text("Beginner")').click();
     await page.locator('text=Image Quiz').or(page.locator('text=Picture Quiz')).click();
     await page.waitForTimeout(2000);
 
@@ -522,25 +542,33 @@ test.describe('Hebrew Mode', () => {
   test('Level select shows Hebrew labels', async ({ page }) => {
     await setupHebrewUser(page);
     await page.locator('text=שחק חידון').click();
-    await expect(page.locator('text=בחרו רמה')).toBeVisible({ timeout: 5000 });
-    await expect(page.locator('h3:has-text("מתחילים")')).toBeVisible();
+    // LevelSelect heading uses t('playQuiz') = 'שחק חידון' in Hebrew
+    await expect(page.locator('button:has-text("מתחילים")')).toBeVisible({ timeout: 5000 });
   });
 });
 
 // ── Personal Word List → Quiz ───────────────────────
 
 test.describe('Personal Word List Quiz', () => {
-  test('enter 5 words → Find Words → start Image Quiz', async ({ page }) => {
+  test('enter 5 words → see found count → start Image Quiz', async ({ page }) => {
     await setupReturningUser(page);
     await page.locator('text=My Word List').click();
     await page.waitForTimeout(500);
 
-    const textarea = page.locator('textarea');
-    await textarea.fill('cat, dog, apple, house, car');
-    await page.locator('button:has-text("Find Words")').click();
-    await page.waitForTimeout(500);
+    // Use the autocomplete input to add words one at a time
+    const input = page.locator('#word-input');
+    const wordsToAdd = ['cat', 'dog', 'apple', 'house', 'car'];
+    for (const word of wordsToAdd) {
+      await input.fill(word);
+      await page.waitForTimeout(400);
+      const suggestion = page.locator('#word-suggestions li').first();
+      if ((await suggestion.count()) > 0) {
+        await suggestion.click();
+        await page.waitForTimeout(200);
+      }
+    }
 
-    // Should find words
+    // Should show found words count
     await expect(page.locator('text=/Found \\d+ word/i')).toBeVisible({ timeout: 3000 });
 
     // Start Image Quiz
@@ -559,10 +587,18 @@ test.describe('Personal Word List Quiz', () => {
     await page.locator('text=My Word List').click();
     await page.waitForTimeout(500);
 
-    const textarea = page.locator('textarea');
-    await textarea.fill('cat, dog, apple');
-    await page.locator('button:has-text("Find Words")').click();
-    await page.waitForTimeout(500);
+    // Add only 3 words via autocomplete
+    const input = page.locator('#word-input');
+    const wordsToAdd = ['cat', 'dog', 'apple'];
+    for (const word of wordsToAdd) {
+      await input.fill(word);
+      await page.waitForTimeout(400);
+      const suggestion = page.locator('#word-suggestions li').first();
+      if ((await suggestion.count()) > 0) {
+        await suggestion.click();
+        await page.waitForTimeout(200);
+      }
+    }
 
     // Should show "need at least 4" message
     await expect(page.locator('text=/at least 4/i')).toBeVisible({ timeout: 3000 });
@@ -606,7 +642,7 @@ test.describe('Sharing', () => {
 
     // Navigate to quiz
     await page.locator('text=Play Quiz').click();
-    await page.locator('h3:has-text("Beginner")').click();
+    await page.locator('button:has-text("Beginner")').click();
     await page.locator('text=Image Quiz').or(page.locator('text=Picture Quiz')).click();
 
     // Wait for quiz
