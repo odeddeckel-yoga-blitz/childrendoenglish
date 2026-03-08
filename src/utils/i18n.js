@@ -36,6 +36,7 @@ const translations = {
     // Menu extras (install banner, dark mode, streak)
     installApp: 'Install App',
     installDesc: 'Add to your home screen for quick access',
+    installIOS: 'Tap Share then "Add to Home Screen"',
     install: 'Install',
     lightMode: 'Light mode',
     darkModeLabel: 'Dark mode',

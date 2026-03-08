@@ -34,6 +34,7 @@ export default {
   // Menu extras
   installApp: 'התקינו את האפליקציה',
   installDesc: 'הוסיפו למסך הבית לגישה מהירה',
+  installIOS: 'לחצו על שיתוף ואז "הוסף למסך הבית"',
   install: 'התקנה',
   lightMode: 'מצב בהיר',
   darkModeLabel: 'מצב כהה',

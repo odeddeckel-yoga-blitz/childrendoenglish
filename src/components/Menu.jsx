@@ -4,7 +4,7 @@ import { t } from '../utils/i18n';
 import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
 import ParentEmailCapture from './ParentEmailCapture';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, dueCount = 0, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
   const [notifEnabled, setNotifEnabled] = useState(isNotificationEnabled);
   const notifSupported = isNotificationSupported();
 
@@ -335,11 +335,13 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-slate-800">{t('installApp', lang)}</p>
-            <p className="text-xs text-slate-500">{t('installDesc', lang)}</p>
+            <p className="text-xs text-slate-500">{isIOS ? t('installIOS', lang) : t('installDesc', lang)}</p>
           </div>
-          <button onClick={onInstall} className="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all">
-            {t('install', lang)}
-          </button>
+          {!isIOS && (
+            <button onClick={onInstall} className="px-3 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-700 active:scale-95 transition-all">
+              {t('install', lang)}
+            </button>
+          )}
           <button onClick={onDismissInstall} className="p-1 rounded-lg hover:bg-slate-200 transition-colors" aria-label={t('dismissInstall', lang)}>
             <X className="w-4 h-4 text-slate-400" />
           </button>

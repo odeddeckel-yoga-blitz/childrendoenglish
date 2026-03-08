@@ -139,7 +139,7 @@ export default function App() {
     handleDeletePlayer(id);
   }, [handleDeletePlayer]);
 
-  const { showInstallBanner, handleInstall, dismissInstall } = useInstallPrompt({
+  const { showInstallBanner, handleInstall, dismissInstall, isIOS } = useInstallPrompt({
     gameState,
     totalQuizzes: stats.totalQuizzes,
   });
@@ -450,6 +450,7 @@ export default function App() {
             activePlayer={activePlayer}
             playerCount={playerRegistry?.players.length || 0}
             showInstallBanner={showInstallBanner}
+            isIOS={isIOS}
             dueCount={getDueWords(WORDS, stats.wordProgress || {}).length}
             onInstall={handleInstall}
             onDismissInstall={dismissInstall}
