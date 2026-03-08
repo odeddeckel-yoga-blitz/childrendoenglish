@@ -356,6 +356,7 @@ export default function App() {
               }
             }}
             onPrivacy={() => navigate('privacy')}
+            onToggleLanguage={handleToggleLanguage}
           />
         );
 

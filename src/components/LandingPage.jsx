@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, Layers, Play, BarChart2, ChevronDown, ArrowRight, ArrowLeft } from 'lucide-react';
+import { BookOpen, Layers, Play, BarChart2, ChevronDown, ArrowRight, ArrowLeft, Globe } from 'lucide-react';
 import { t, isRTL } from '../utils/i18n';
 
 const FEATURES = [
@@ -39,12 +39,25 @@ function FAQItem({ index, lang }) {
   );
 }
 
-export default function LandingPage({ lang = 'en', activePlayer, onGetStarted, onContinue, onPrivacy }) {
+export default function LandingPage({ lang = 'en', activePlayer, onGetStarted, onContinue, onPrivacy, onToggleLanguage }) {
   const rtl = isRTL(lang);
   const Arrow = rtl ? ArrowLeft : ArrowRight;
 
   return (
     <div className="animate-fade-in space-y-10 pb-8">
+      {/* Language toggle */}
+      <div className="flex justify-end">
+        <button
+          onClick={onToggleLanguage}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/60 hover:bg-white/90
+                     border border-slate-200 text-slate-600 text-sm font-medium transition-colors"
+          aria-label={t('language', lang)}
+        >
+          <Globe className="w-4 h-4" />
+          {lang === 'en' ? 'עברית' : 'English'}
+        </button>
+      </div>
+
       {/* Returning user bar */}
       {activePlayer && (
         <div className="glass rounded-2xl p-4 flex items-center justify-between gap-3">
