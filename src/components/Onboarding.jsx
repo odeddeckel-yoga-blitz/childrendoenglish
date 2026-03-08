@@ -21,7 +21,8 @@ export default function Onboarding({ onComplete, activePlayer, lang: initialLang
   };
 
   const demoQuestion = getDemoQuestion(lang);
-  useEffect(() => { const img = new window.Image(); img.src = demoQuestion.image; }, []);
+  const demoImage = demoQuestion.image;
+  useEffect(() => { const img = new window.Image(); img.src = demoImage; }, [demoImage]);
 
   const handleDemoAnswer = (optionKey) => {
     setDemoAnswer(optionKey === demoQuestion.correctKey ? 'correct' : 'wrong');

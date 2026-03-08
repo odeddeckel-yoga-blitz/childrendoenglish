@@ -133,7 +133,7 @@ export default function App() {
 
   // Extracted hooks
   const {
-    playerRegistry, setPlayerRegistry, activePlayer,
+    playerRegistry, activePlayer,
     handleCreatePlayer, handleSelectPlayer, handleUpdatePlayer,
     handleResetPlayer, handleDeletePlayer,
   } = usePlayerManagement({ navigate, setStats });

@@ -3,7 +3,7 @@ import { describe, it, expect, vi } from 'vitest';
 import ParentDashboard from '../components/ParentDashboard';
 
 vi.mock('../utils/storage', () => ({
-  loadStats: (id) => ({
+  loadStats: (_id) => ({
     wordProgress: { cat: { interval: 14 }, dog: { interval: 3 } },
     totalQuizzes: 5,
     currentStreak: 2,

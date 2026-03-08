@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { ArrowLeft, Play, Share2, Check, X, Link, BookOpen, Layers } from 'lucide-react';
 import { WORDS, getWordByName } from '../data/words';
 import { t } from '../utils/i18n';
@@ -12,7 +12,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
   const inputRef = useRef(null);
   const listRef = useRef(null);
 
-  const selectedIds = new Set(words.map(w => w.id));
+  const selectedIds = useMemo(() => new Set(words.map(w => w.id)), [words]);
 
   const suggestions = query.length >= 1
     ? WORDS.filter(w =>
@@ -87,7 +87,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
     await navigator.clipboard.writeText(url);
     setCopiedMode(mode);
     setTimeout(() => setCopiedMode(null), 2000);
-  }, [words, lang]);
+  }, [words]);
 
   const handleShareList = useCallback(async () => {
     const ids = words.map(w => w.id).join(',');
@@ -96,7 +96,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
     await navigator.clipboard.writeText(url);
     setCopiedMode('list');
     setTimeout(() => setCopiedMode(null), 2000);
-  }, [words, lang]);
+  }, [words]);
 
   const canQuiz = words.length >= 4;
 
