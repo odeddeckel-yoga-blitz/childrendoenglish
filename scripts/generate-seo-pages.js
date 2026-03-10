@@ -10,6 +10,15 @@ const { WORDS, CATEGORIES, getWordsByCategory } = await import(
   join(ROOT, 'src', 'data', 'words.js')
 );
 
+let ENRICHMENTS = {};
+try {
+  const mod = await import(join(ROOT, 'src', 'data', 'word-enrichments.js'));
+  ENRICHMENTS = mod.ENRICHMENTS;
+  console.log(`Loaded enrichments for ${Object.keys(ENRICHMENTS).length} words`);
+} catch (e) {
+  console.warn('No word-enrichments.js found, word pages will render without enrichments');
+}
+
 const SITE = 'https://childrendoenglish.com';
 
 const CATEGORY_NAMES = {
@@ -180,6 +189,8 @@ function buildCategoryPage(slug, displayName, words) {
       <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
 
+    <p style="margin-bottom:1.5rem"><a href="/vocabulary/${slug}/hebrew/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">View ${escapeHtml(displayName)} in Hebrew and English &rarr;</a></p>
+
     <div class="categories">
       <h2>Explore More Categories</h2>
       <div class="cat-links">
@@ -238,6 +249,32 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
         `<a href="/vocabulary/${c}/">${escapeHtml(CATEGORY_NAMES[c] || c)}</a>`
     )
     .join('\n        ');
+
+  // Build enrichment HTML if data exists
+  const enrichment = ENRICHMENTS[word.id];
+  let enrichmentHtml = '';
+  if (enrichment) {
+    const levelLabel = word.level === 'beginner' ? 'beginner (ages 6-8)' : word.level === 'intermediate' ? 'intermediate (ages 9-10)' : 'advanced (ages 11-12)';
+    const aboutParagraph = `<div class="about-word"><p><strong>${escapeHtml(capitalWord)}</strong> is a ${escapeHtml(word.partOfSpeech)} in the <a href="/vocabulary/${categorySlug}/" style="color:#2563eb">${escapeHtml(categoryDisplayName.toLowerCase())}</a> category. It is a ${escapeHtml(levelLabel)} word, meaning "${escapeHtml(word.definition)}" In Hebrew, ${escapeHtml(word.word)} translates to <strong>${escapeHtml(word.hebrewTranslation)}</strong>.</p></div>`;
+
+    const sentencesHtml = enrichment.sentences && enrichment.sentences.length > 0
+      ? `<div class="enrich-section"><h2>Example Sentences</h2><ul>${enrichment.sentences.map((s) => `<li>${escapeHtml(s)}</li>`).join('')}</ul></div>`
+      : '';
+
+    const funFactHtml = enrichment.funFact
+      ? `<div class="fun-fact"><strong>Did You Know?</strong> ${escapeHtml(enrichment.funFact)}</div>`
+      : '';
+
+    const collocationsHtml = enrichment.collocations && enrichment.collocations.length > 0
+      ? `<div class="enrich-section"><h2>Common Word Combinations</h2><div class="chips">${enrichment.collocations.map((c) => `<span class="chip">${escapeHtml(c)}</span>`).join('')}</div></div>`
+      : '';
+
+    const relatedHtml = enrichment.relatedWords && enrichment.relatedWords.length > 0
+      ? `<div class="enrich-section"><h2>Related Words</h2><div class="chips">${enrichment.relatedWords.map((r) => `<span class="chip">${escapeHtml(r)}</span>`).join('')}</div></div>`
+      : '';
+
+    enrichmentHtml = `${aboutParagraph}\n    ${sentencesHtml}\n    ${funFactHtml}\n    ${collocationsHtml}\n    ${relatedHtml}`;
+  }
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -304,6 +341,16 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     .related-word { font-size: 0.95rem; font-weight: 600; color: #1e293b; }
     .back-link { display: inline-block; margin-bottom: 1.5rem; color: #2563eb; text-decoration: none; font-size: 0.9rem; }
     .back-link:hover { text-decoration: underline; }
+    .enrich-section { background: #fff; border-radius: 0.75rem; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .enrich-section h2 { font-size: 1.1rem; font-weight: 700; color: #1e293b; margin-bottom: 0.6rem; }
+    .enrich-section p { color: #475569; margin-bottom: 0.5rem; }
+    .enrich-section ul { margin: 0 0 0.5rem 1.25rem; color: #475569; }
+    .enrich-section li { margin-bottom: 0.3rem; }
+    .about-word { background: #f0f9ff; border-radius: 0.75rem; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; color: #334155; }
+    .about-word p { margin-bottom: 0.5rem; }
+    .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .chip { background: #eff6ff; color: #2563eb; padding: 0.35rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; font-weight: 500; display: inline-block; }
+    .fun-fact { background: #fefce8; border-left: 4px solid #eab308; padding: 1rem 1.25rem; border-radius: 0 0.5rem 0.5rem 0; margin-bottom: 1rem; font-size: 0.95rem; color: #713f12; }
     .categories { margin-top: 2rem; }
     .categories h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
     .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
@@ -333,6 +380,8 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
       <div class="hero-he">${escapeHtml(word.hebrewTranslation)}</div>
     </div>
 
+    ${enrichmentHtml}
+
     <div class="cta">
       <a href="/?utm_source=seo&utm_medium=cta&utm_content=vocab_word">Practice This Word in the App &rarr;</a>
       <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
@@ -360,6 +409,178 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
 </html>`;
 }
 
+const AGE_BRACKETS = [
+  { slug: 'ages-6-8', label: 'Ages 6-8', level: 'beginner', ageRange: '6-8', description: 'beginner-level' },
+  { slug: 'ages-9-10', label: 'Ages 9-10', level: 'intermediate', ageRange: '9-10', description: 'intermediate-level' },
+  { slug: 'ages-11-12', label: 'Ages 11-12', level: 'advanced', ageRange: '11-12', description: 'advanced-level' },
+];
+
+function buildAgeBracketPage(bracket, allWords) {
+  const words = allWords.filter((w) => w.level === bracket.level);
+  const url = `${SITE}/vocabulary/${bracket.slug}/`;
+  const title = `English Vocabulary for Kids ${bracket.label} | Children Do English`;
+  const description = `${words.length} ${bracket.description} English vocabulary words for kids ${bracket.ageRange}. With definitions, example sentences, phonetics, and Hebrew translations. Free for kids.`;
+
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Vocabulary', item: `${SITE}/vocabulary/` },
+      { '@type': 'ListItem', position: 3, name: bracket.label, item: url },
+    ],
+  });
+
+  const definedTerms = words.map((w) => ({
+    '@type': 'DefinedTerm',
+    name: w.word,
+    description: w.definition,
+    inDefinedTermSet: url,
+  }));
+  const definedTermSetSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    name: `English Vocabulary for Kids ${bracket.label}`,
+    description,
+    url,
+    hasDefinedTerm: definedTerms,
+  });
+
+  // Group words by category
+  const wordsByCategory = {};
+  for (const w of words) {
+    if (!wordsByCategory[w.category]) wordsByCategory[w.category] = [];
+    wordsByCategory[w.category].push(w);
+  }
+
+  const categoryBlocks = CATEGORIES
+    .filter((slug) => wordsByCategory[slug] && wordsByCategory[slug].length > 0)
+    .map((slug) => {
+      const catWords = wordsByCategory[slug];
+      const catName = CATEGORY_NAMES[slug] || slug;
+      const cards = catWords
+        .map(
+          (w) => `
+          <a href="/vocabulary/${w.category}/${w.id}/" class="card">
+            <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="card-img" loading="lazy" width="128" height="128" />
+            <div class="card-word">${escapeHtml(w.word)}</div>
+            <div class="card-phonetic">${escapeHtml(w.phonetic)}</div>
+            <div class="card-pos">${escapeHtml(w.partOfSpeech)}</div>
+            <div class="card-def">${escapeHtml(w.definition)}</div>
+            <div class="card-he">${escapeHtml(w.hebrewTranslation)}</div>
+          </a>`
+        )
+        .join('\n');
+      return `
+      <h2 class="cat-heading">${escapeHtml(catName)} <span class="cat-count">(${catWords.length})</span></h2>
+      <div class="grid">${cards}</div>`;
+    })
+    .join('\n');
+
+  const otherBrackets = AGE_BRACKETS.filter((b) => b.slug !== bracket.slug)
+    .map((b) => `<a href="/vocabulary/${b.slug}/">${b.label}</a>`)
+    .join('\n        ');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${url}" />
+  <link rel="alternate" hreflang="en" href="${url}" />
+  <link rel="alternate" hreflang="x-default" href="${url}" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${SITE}/og-image.png" />
+
+  <script type="application/ld+json">${breadcrumbSchema}</script>
+  <script type="application/ld+json">${definedTermSetSchema}</script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
+    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
+    .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    .header p { opacity: 0.9; font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
+    .intro { margin-bottom: 1.5rem; color: #475569; }
+    .cat-heading { font-size: 1.2rem; font-weight: 700; color: #1e293b; margin: 1.5rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 2px solid #dbeafe; }
+    .cat-heading .cat-count { font-weight: 400; color: #64748b; font-size: 0.9rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+    .card { display: block; background: #fff; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
+    .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); transform: translateY(-2px); }
+    .card-img { width: 128px; height: 128px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 0.5rem; display: block; }
+    .card-word { font-size: 1.2rem; font-weight: 700; color: #1e293b; }
+    .card-phonetic { font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.2rem; }
+    .card-pos { font-size: 0.7rem; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; }
+    .card-def { font-size: 0.85rem; margin-bottom: 0.3rem; }
+    .card-he { color: #475569; direction: rtl; font-size: 0.9rem; }
+    .cta { text-align: center; margin: 2rem 0; }
+    .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
+    .cta a:hover { background: #1d4ed8; }
+    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; }
+    .age-links { margin-top: 2rem; }
+    .age-links h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
+    .age-links-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .age-links-row a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+    .age-links-row a:hover { background: #2563eb; color: #fff; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>English Vocabulary for Kids ${escapeHtml(bracket.label)}</h1>
+    <p>${words.length} ${bracket.description} words across ${Object.keys(wordsByCategory).length} categories</p>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="/">Home</a> &rsaquo; <a href="/vocabulary/">Vocabulary</a> &rsaquo; ${escapeHtml(bracket.label)}
+  </div>
+
+  <div class="container">
+    <p class="intro">${escapeHtml(description)}</p>
+
+    ${categoryBlocks}
+
+    <div class="cta">
+      <a href="/?utm_source=seo&utm_medium=cta&utm_content=age_bracket">Practice These Words in the App &rarr;</a>
+      <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
+    </div>
+
+    <div class="age-links">
+      <h2>Other Age Groups</h2>
+      <div class="age-links-row">
+        ${otherBrackets}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+  </div>
+</body>
+</html>`;
+}
+
 const CATEGORY_NAMES_HE = {
   animals: 'חיות',
   food: 'אוכל ושתייה',
@@ -375,6 +596,158 @@ const CATEGORY_NAMES_HE = {
   everyday: 'חפצים יומיומיים',
   toys: 'צעצועים ומשחקים',
 };
+
+function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
+  const url = `${SITE}/vocabulary/${slug}/hebrew/`;
+  const title = `${displayName} in Hebrew and English — Bilingual Vocabulary for Kids | Children Do English`;
+  const description = `Learn ${words.length} ${displayName.toLowerCase()} words in Hebrew and English side by side. With pictures, pronunciation, and definitions. Free bilingual vocabulary for kids ages 6-12.`;
+
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Vocabulary', item: `${SITE}/vocabulary/` },
+      { '@type': 'ListItem', position: 3, name: displayName, item: `${SITE}/vocabulary/${slug}/` },
+      { '@type': 'ListItem', position: 4, name: 'Hebrew & English', item: url },
+    ],
+  });
+
+  const wordRows = words
+    .map(
+      (w) => `
+      <div class="bilingual-card">
+        <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="bi-img" loading="lazy" width="96" height="96" />
+        <div class="bi-content">
+          <div class="bi-en">
+            <a href="/vocabulary/${slug}/${w.id}/" class="bi-word">${escapeHtml(w.word)}</a>
+            <div class="bi-phonetic">${escapeHtml(w.phonetic)}</div>
+            <div class="bi-def">${escapeHtml(w.definition)}</div>
+          </div>
+          <div class="bi-he">
+            <div class="bi-he-word">${escapeHtml(w.hebrewTranslation)}</div>
+          </div>
+        </div>
+      </div>`
+    )
+    .join('\n');
+
+  const otherCategoryLinks = CATEGORIES.filter((c) => c !== slug)
+    .map(
+      (c) =>
+        `<a href="/vocabulary/${c}/hebrew/">${escapeHtml(CATEGORY_NAMES[c] || c)} / ${escapeHtml(CATEGORY_NAMES_HE[c] || c)}</a>`
+    )
+    .join('\n        ');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${url}" />
+  <link rel="alternate" hreflang="en" href="${url}" />
+  <link rel="alternate" hreflang="x-default" href="${url}" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:image" content="${SITE}/og/${slug}.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${SITE}/og/${slug}.png" />
+
+  <script type="application/ld+json">${breadcrumbSchema}</script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
+    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
+    .header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+    .header p { opacity: 0.9; font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
+    .intro { margin-bottom: 1.5rem; color: #475569; }
+    .bilingual-list { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+    .bilingual-card { display: flex; gap: 1rem; background: #fff; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); align-items: center; }
+    .bi-img { width: 96px; height: 96px; border-radius: 0.6rem; object-fit: cover; flex-shrink: 0; }
+    .bi-content { display: flex; flex: 1; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .bi-en { flex: 1; min-width: 200px; }
+    .bi-word { font-size: 1.15rem; font-weight: 700; color: #1e293b; text-decoration: none; }
+    .bi-word:hover { text-decoration: underline; color: #2563eb; }
+    .bi-phonetic { font-size: 0.8rem; color: #94a3b8; }
+    .bi-def { font-size: 0.85rem; color: #475569; margin-top: 0.2rem; }
+    .bi-he { text-align: right; direction: rtl; min-width: 100px; }
+    .bi-he-word { font-size: 1.3rem; font-weight: 700; color: #1e293b; }
+    .cta { text-align: center; margin: 2rem 0; }
+    .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
+    .cta a:hover { background: #1d4ed8; }
+    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; }
+    .back-link { display: inline-block; margin-bottom: 1rem; color: #2563eb; text-decoration: none; font-size: 0.9rem; }
+    .back-link:hover { text-decoration: underline; }
+    .categories { margin-top: 2rem; }
+    .categories h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
+    .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+    .cat-links a:hover { background: #2563eb; color: #fff; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    @media (max-width: 600px) {
+      .bilingual-card { flex-direction: column; text-align: center; }
+      .bi-content { flex-direction: column; align-items: center; }
+      .bi-he { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>${escapeHtml(displayName)} in Hebrew and English</h1>
+    <p>${escapeHtml(displayName)} / ${escapeHtml(hebrewName)} &mdash; ${words.length} bilingual vocabulary words</p>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="/">Home</a> &rsaquo; <a href="/vocabulary/">Vocabulary</a> &rsaquo; <a href="/vocabulary/${slug}/">${escapeHtml(displayName)}</a> &rsaquo; Hebrew &amp; English
+  </div>
+
+  <div class="container">
+    <p class="intro">${escapeHtml(description)}</p>
+
+    <div class="bilingual-list">
+      ${wordRows}
+    </div>
+
+    <div class="cta">
+      <a href="/?utm_source=seo&utm_medium=cta&utm_content=bilingual_category">Practice These Words in the App &rarr;</a>
+      <p class="cta-sub">Free &middot; No ads &middot; Full Hebrew support &middot; Works offline</p>
+    </div>
+
+    <a href="/vocabulary/${slug}/" class="back-link">&larr; All ${escapeHtml(displayName)} words</a>
+
+    <div class="categories">
+      <h2>More Bilingual Categories</h2>
+      <div class="cat-links">
+        ${otherCategoryLinks}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+  </div>
+</body>
+</html>`;
+}
 
 const HREFLANG_HE = ''; // Only add he hreflang on pages with Hebrew equivalents (homepage, /he/)
 
@@ -1844,6 +2217,119 @@ const GUIDES = [
       },
     ],
   },
+  {
+    slug: 'best-english-learning-apps-for-kids',
+    title: 'Best English Learning Apps for Kids in 2026 — Free & Paid Compared',
+    description: 'Compare the 6 best English learning apps for kids in 2026. Side-by-side features, pricing, and age recommendations. Find the right vocabulary app for your child.',
+    h1: 'Best English Learning Apps for Kids in 2026',
+    sections: [
+      {
+        h2: 'How We Evaluated Each App',
+        content: `<p>With hundreds of language-learning apps on the market, choosing the right one for your child can feel overwhelming. We tested and compared six popular English vocabulary apps specifically designed for kids ages 6-12, evaluating them on the criteria that matter most to parents:</p>
+<ul>
+  <li><strong>Vocabulary depth</strong> &mdash; How many words are available, and how well are they taught?</li>
+  <li><strong>Learning methodology</strong> &mdash; Does the app use proven techniques like spaced repetition and multi-sensory engagement?</li>
+  <li><strong>Age appropriateness</strong> &mdash; Is the content, interface, and difficulty calibrated for young learners?</li>
+  <li><strong>Bilingual support</strong> &mdash; Can Hebrew-speaking families use the app effectively?</li>
+  <li><strong>Price and ads</strong> &mdash; Is it truly free, or are there paywalls and distractions?</li>
+  <li><strong>Offline access</strong> &mdash; Can kids learn without an internet connection?</li>
+</ul>
+<p>Here's what we found after testing each app with real kids over several weeks.</p>`,
+      },
+      {
+        h2: 'Quick Comparison Table',
+        content: `<div style="overflow-x:auto">
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.9rem">
+  <thead>
+    <tr style="background:#f1f5f9">
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0;white-space:nowrap">App</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Ages</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Price</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Words</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Hebrew</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Offline</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Ads</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="background:#eff6ff"><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Children Do English</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">6-12</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">${WORDS.length}+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Full</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Yes</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Duolingo</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">6+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free / $7-13/mo</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">2000+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Partial</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Paid only</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free tier</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Lingokids</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">2-8</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free / $15/mo</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">1000+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Khan Academy Kids</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">2-8</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">500+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Partial</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Starfall</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">4-8</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free / $35/yr</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">300+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Babbel Kids</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">6-12</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">$7-13/mo</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">1500+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Paid only</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
+  </tbody>
+</table>
+</div>`,
+      },
+      {
+        h2: 'Children Do English — Best Free Bilingual Option',
+        content: `<p><a href="/">Children Do English</a> stands out as the only completely free, ad-free English vocabulary app designed specifically for bilingual Hebrew-English families. While it focuses on vocabulary rather than full language courses, it does this one thing exceptionally well.</p>
+<p><strong>What makes it unique:</strong></p>
+<ul>
+  <li><strong>Full Hebrew integration</strong> &mdash; Every word includes Hebrew translation, and the entire interface is available in Hebrew. No other app on this list offers this level of Hebrew support.</li>
+  <li><strong>Spaced repetition built in</strong> &mdash; The app automatically schedules word reviews at optimal intervals, so kids remember what they learn long-term.</li>
+  <li><strong>Four quiz modes</strong> &mdash; Image quiz, word quiz, audio challenge, and flashcard review keep practice varied and engaging.</li>
+  <li><strong>Truly free</strong> &mdash; No premium tier, no ads, no in-app purchases. Every feature is available to every user.</li>
+  <li><strong>Works completely offline</strong> &mdash; After the first visit, the app works without internet. Perfect for car rides and areas with spotty connectivity.</li>
+  <li><strong>Multiple player profiles</strong> &mdash; Siblings can each track their own progress on the same device.</li>
+</ul>
+<p><strong>Limitations:</strong> Focused on vocabulary only (${WORDS.length} words), so kids wanting grammar lessons or conversation practice will need to supplement with another resource.</p>
+<p><strong>Best for:</strong> Hebrew-English bilingual families wanting a focused, free vocabulary tool with no distractions.</p>`,
+      },
+      {
+        h2: 'Duolingo — Most Popular, But Ad-Heavy for Kids',
+        content: `<p>Duolingo is the most downloaded language app in the world, and for good reason. Its gamified approach makes daily practice habit-forming, and the breadth of content is impressive.</p>
+<p><strong>Pros:</strong></p>
+<ul>
+  <li>Comprehensive curriculum covering vocabulary, grammar, listening, and speaking</li>
+  <li>Excellent gamification with streaks, leaderboards, and XP points</li>
+  <li>Offers Hebrew-to-English courses for Hebrew speakers</li>
+  <li>Massive word library (2000+ words across many topics)</li>
+</ul>
+<p><strong>Cons:</strong></p>
+<ul>
+  <li>Free tier shows frequent ads between lessons &mdash; disruptive for young kids</li>
+  <li>Hearts system punishes mistakes, which can frustrate sensitive learners</li>
+  <li>Interface designed for teens/adults, not young children</li>
+  <li>Offline access requires the paid Super plan ($7-13/month)</li>
+  <li>Hebrew support is limited to course selection, not full UI translation</li>
+</ul>
+<p><strong>Best for:</strong> Older kids (10+) who can handle the adult-oriented interface and want a comprehensive language course.</p>`,
+      },
+      {
+        h2: 'Lingokids, Khan Academy Kids, Starfall & Babbel Kids',
+        content: `<h3>Lingokids</h3>
+<p>Lingokids offers a beautiful, playful experience aimed at younger children (ages 2-8). The app features animated characters, songs, and mini-games that make learning feel like play. However, the free tier is very limited (3 games per day), and the full experience costs $15/month. There is no Hebrew support, and it requires an internet connection.</p>
+<p><strong>Best for:</strong> Younger children (2-6) whose parents are willing to pay for a premium experience.</p>
+
+<h3>Khan Academy Kids</h3>
+<p>Khan Academy Kids is truly free with no ads &mdash; a rare combination. It covers reading, math, social skills, and vocabulary through interactive activities. The vocabulary component is solid but not its primary focus, and the app is designed for ages 2-8, so older kids may find it too simple. No Hebrew support is available.</p>
+<p><strong>Best for:</strong> Young learners (2-7) who benefit from a broad educational app that includes some vocabulary.</p>
+
+<h3>Starfall</h3>
+<p>Starfall has been a trusted name in early literacy since 2002. It excels at phonics and early reading skills, with vocabulary woven into reading exercises. The free web version covers basic content, while the full app costs $35/year. It's designed for ages 4-8, making it too simple for older elementary students. No Hebrew or offline support.</p>
+<p><strong>Best for:</strong> Beginning readers (ages 4-7) who need phonics instruction alongside vocabulary.</p>
+
+<h3>Babbel Kids</h3>
+<p>Babbel Kids brings the popular Babbel methodology to younger learners. Lessons are structured around real-world topics with speech recognition for pronunciation practice. The content is well-designed and age-appropriate for 6-12 year olds. However, it requires a paid subscription ($7-13/month), has no Hebrew support, and offline lessons are only available to paying subscribers.</p>
+<p><strong>Best for:</strong> Families willing to invest in a structured, curriculum-based approach for kids 6-12.</p>`,
+      },
+      {
+        h2: 'Which App Should You Choose?',
+        content: `<p>The best app depends on your family's specific needs:</p>
+<ul>
+  <li><strong>Hebrew-English bilingual family on a budget?</strong> &rarr; <a href="/">Children Do English</a> is the clear winner &mdash; it's the only free app with full Hebrew support and offline access.</li>
+  <li><strong>Want a comprehensive language course for an older kid?</strong> &rarr; Duolingo offers the broadest curriculum, though expect ads on the free tier.</li>
+  <li><strong>Have a very young child (under 6)?</strong> &rarr; Khan Academy Kids (free) or Lingokids (paid) are designed for this age group.</li>
+  <li><strong>Willing to pay for premium quality?</strong> &rarr; Babbel Kids offers the most polished paid experience for elementary-age kids.</li>
+  <li><strong>Need phonics and early reading?</strong> &rarr; Starfall specializes in this area for ages 4-8.</li>
+</ul>
+<p><strong>Our recommendation for most families:</strong> Start with <a href="/">Children Do English</a> for vocabulary building &mdash; it's free, ad-free, and designed for kids. If your child outgrows the vocabulary focus or wants grammar lessons, supplement with Duolingo or Babbel Kids. Many families find that combining a vocabulary-focused app with a broader language app produces the best results.</p>
+<p>The most important factor isn't which app you choose &mdash; it's consistency. Ten minutes of daily practice on any good app will produce better results than an hour of sporadic use on the "best" one.</p>`,
+      },
+    ],
+  },
 ];
 
 for (const guide of GUIDES) {
@@ -1889,12 +2375,18 @@ for (const guide of GUIDES) {
     })),
   });
 
+  const midCta = `
+    <div class="mid-cta">
+      <a href="/?utm_source=seo&utm_medium=cta&utm_content=guide_mid">Try Children Do English Free &rarr;</a>
+      <p>${WORDS.length} words &middot; No ads &middot; Works offline</p>
+    </div>`;
+
   const sectionHtml = guide.sections
-    .map((s) => `
+    .map((s, i) => `
     <div class="section">
       <h2>${s.h2}</h2>
       ${s.content}
-    </div>`)
+    </div>${i === 1 ? midCta : ''}`)
     .join('\n');
 
   const guideHtml = `<!DOCTYPE html>
@@ -1960,6 +2452,10 @@ for (const guide of GUIDES) {
     .author-name { font-weight: 600; color: #1e293b; }
     .author-name a { color: #1e293b; text-decoration: none; }
     .author-name a:hover { text-decoration: underline; }
+    .mid-cta { text-align: center; margin: 1.5rem 0; padding: 1.25rem; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 0.75rem; border: 1px solid #bfdbfe; }
+    .mid-cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.65rem 1.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+    .mid-cta a:hover { background: #1d4ed8; }
+    .mid-cta p { margin-top: 0.4rem; font-size: 0.8rem; color: #64748b; }
     .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
   </style>
 </head>
@@ -2109,6 +2605,32 @@ mkdirSync(heDir, { recursive: true });
 writeFileSync(join(heDir, 'index.html'), buildHebrewLandingPage(), 'utf-8');
 console.log('  \u2713 /he/ (Hebrew landing page)');
 
+// --- Generate age-bracket landing pages ---
+
+for (const bracket of AGE_BRACKETS) {
+  const bracketDir = join(distDir, 'vocabulary', bracket.slug);
+  mkdirSync(bracketDir, { recursive: true });
+  writeFileSync(join(bracketDir, 'index.html'), buildAgeBracketPage(bracket, WORDS), 'utf-8');
+  const count = WORDS.filter((w) => w.level === bracket.level).length;
+  console.log(`  \u2713 /vocabulary/${bracket.slug}/ (${count} words)`);
+}
+
+// --- Generate bilingual Hebrew-English category pages ---
+
+let bilingualGenerated = 0;
+for (const slug of CATEGORIES) {
+  const displayName = CATEGORY_NAMES[slug] || slug;
+  const hebrewName = CATEGORY_NAMES_HE[slug] || slug;
+  const words = getWordsByCategory(slug);
+  if (words.length === 0) continue;
+
+  const biDir = join(distDir, 'vocabulary', slug, 'hebrew');
+  mkdirSync(biDir, { recursive: true });
+  writeFileSync(join(biDir, 'index.html'), buildBilingualCategoryPage(slug, displayName, hebrewName, words), 'utf-8');
+  bilingualGenerated++;
+  console.log(`  \u2713 /vocabulary/${slug}/hebrew/ (${words.length} words)`);
+}
+
 // --- Overwrite sitemap.xml ---
 
 const heEntry = `  <url>
@@ -2157,6 +2679,24 @@ const guideEntries = GUIDES.map(
   </url>`
 ).join('\n');
 
+const bilingualEntries = CATEGORIES.map(
+  (slug) => `  <url>
+    <loc>${SITE}/vocabulary/${slug}/hebrew/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>`
+).join('\n');
+
+const ageBracketEntries = AGE_BRACKETS.map(
+  (b) => `  <url>
+    <loc>${SITE}/vocabulary/${b.slug}/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`
+).join('\n');
+
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${spaEntries}
@@ -2169,11 +2709,13 @@ ${fcIndexEntry}
 ${fcEntries}
 ${guidesIndexEntry}
 ${guideEntries}
+${ageBracketEntries}
+${bilingualEntries}
 </urlset>
 `;
 
 writeFileSync(join(distDir, 'sitemap.xml'), sitemap, 'utf-8');
 
-const totalUrls = 1 + 1 + 1 + CATEGORIES.length + WORDS.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length;
+const totalUrls = 1 + 1 + 1 + CATEGORIES.length + WORDS.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length + AGE_BRACKETS.length + CATEGORIES.length;
 console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about + Hebrew landing`);
 console.log(`Sitemap: ${totalUrls} URLs`);
