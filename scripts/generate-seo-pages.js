@@ -176,7 +176,7 @@ function buildCategoryPage(slug, displayName, words) {
     </div>
 
     <div class="cta">
-      <a href="/">Practice These Words in the App &rarr;</a>
+      <a href="/?utm_source=seo&utm_medium=cta&utm_content=vocab_category">Practice These Words in the App &rarr;</a>
       <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
 
@@ -334,7 +334,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     </div>
 
     <div class="cta">
-      <a href="/">Practice This Word in the App &rarr;</a>
+      <a href="/?utm_source=seo&utm_medium=cta&utm_content=vocab_word">Practice This Word in the App &rarr;</a>
       <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
 
@@ -603,7 +603,7 @@ function buildHebrewLandingPage() {
   <div class="hero">
     <h1>לימוד אנגלית לילדים — בחינם ובכיף!</h1>
     <p class="subtitle">אפליקציה חינמית ללימוד אוצר מילים באנגלית לילדים בגילאי 6-12. עם תמונות, הגייה, משפטים לדוגמה ותרגום לעברית.</p>
-    <a href="/?lang=he" class="cta-btn">התחילו ללמוד עכשיו &#8592;</a>
+    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=hebrew_landing" class="cta-btn">התחילו ללמוד עכשיו &#8592;</a>
     <p class="cta-sub">ללא פרסומות &middot; ללא רישום &middot; חינם לגמרי</p>
   </div>
 
@@ -756,7 +756,7 @@ function buildHebrewLandingPage() {
   <div class="final-cta">
     <h2>מוכנים להתחיל?</h2>
     <p>הצטרפו לאלפי ילדים שכבר לומדים אנגלית בכיף!</p>
-    <a href="/?lang=he" class="cta-btn">התחילו ללמוד בחינם &#8592;</a>
+    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=hebrew_landing" class="cta-btn">התחילו ללמוד בחינם &#8592;</a>
   </div>
 
   <!-- Footer -->
@@ -930,7 +930,7 @@ const vocabIndexHtml = `<!DOCTYPE html>
     </div>
 
     <div class="cta">
-      <a href="/">Start Learning in the App &rarr;</a>
+      <a href="/?utm_source=seo&utm_medium=cta&utm_content=vocab_index">Start Learning in the App &rarr;</a>
     </div>
   </div>
 
@@ -1112,7 +1112,7 @@ const aboutHtml = `<!DOCTYPE html>
     </div>
 
     <div class="cta">
-      <a href="/">Start Learning &rarr;</a>
+      <a href="/?utm_source=seo&utm_medium=cta&utm_content=about">Start Learning &rarr;</a>
     </div>
   </div>
 
@@ -1257,7 +1257,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
     </div>
 
     <div class="cta">
-      <a href="/">Practice These Words in the App &rarr;</a>
+      <a href="/?utm_source=seo&utm_medium=cta&utm_content=flashcard_category">Practice These Words in the App &rarr;</a>
       <p style="margin-top:0.5rem;font-size:0.8rem;color:#64748b">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
 
@@ -1387,7 +1387,7 @@ const fcIndexHtml = `<!DOCTYPE html>
     </div>
 
     <div class="cta">
-      <a href="/">Practice Online in the App &rarr;</a>
+      <a href="/?utm_source=seo&utm_medium=cta&utm_content=flashcard_index">Practice Online in the App &rarr;</a>
     </div>
   </div>
 
@@ -1864,7 +1864,7 @@ for (const guide of GUIDES) {
     headline: guide.h1,
     description: guide.description,
     url: guideUrl,
-    author: { '@type': 'Person', name: 'Oded Deckelbaum' },
+    author: { '@type': 'Person', name: 'Oded Deckelbaum', url: `${SITE}/about/`, jobTitle: 'Software Developer & Educator' },
     publisher: {
       '@type': 'Organization',
       name: 'Children Do English',
@@ -1955,6 +1955,11 @@ for (const guide of GUIDES) {
     .guides-nav h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
     .guides-nav a { display: block; background: #fff; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 0.5rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .guides-nav a:hover { background: #2563eb; color: #fff; }
+    .author { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: #fff; border-radius: 0.75rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); font-size: 0.9rem; color: #475569; }
+    .author-avatar { width: 40px; height: 40px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+    .author-name { font-weight: 600; color: #1e293b; }
+    .author-name a { color: #1e293b; text-decoration: none; }
+    .author-name a:hover { text-decoration: underline; }
     .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
   </style>
 </head>
@@ -1969,10 +1974,18 @@ for (const guide of GUIDES) {
   </div>
 
   <div class="container">
+    <div class="author">
+      <div class="author-avatar">OD</div>
+      <div>
+        <div class="author-name">By <a href="/about/">Oded Deckelbaum</a></div>
+        <div>Software developer &amp; parent &middot; Creator of Children Do English</div>
+      </div>
+    </div>
+
     ${sectionHtml}
 
     <div class="cta">
-      <a href="/">Try Children Do English &mdash; Free &rarr;</a>
+      <a href="/?utm_source=seo&utm_medium=cta&utm_content=guide">Try Children Do English &mdash; Free &rarr;</a>
       <p style="margin-top:0.5rem;font-size:0.8rem;color:#64748b">No ads &middot; No account needed &middot; Works offline</p>
     </div>
 
