@@ -1,0 +1,61 @@
+# Children Do English
+
+> Free English vocabulary learning app for kids ages 6-12
+
+## Overview
+
+Children Do English is a free, ad-free, privacy-first web app that helps children build English vocabulary through interactive quizzes, flashcards, and spaced repetition. It supports bilingual Hebrew-English learning and works offline as a Progressive Web App.
+
+## Key Facts
+
+- URL: https://childrendoenglish.com
+- Price: Free (no ads, no subscriptions, no in-app purchases)
+- Target age: 6-12 years old
+- Words: 303 curated words across 13 categories
+- Languages: English interface with full Hebrew translation
+- Privacy: All data stored locally, no accounts, COPPA-compliant
+- Offline: PWA — installable and fully functional offline
+- Multi-player: Supports multiple child profiles on one device
+
+## Categories
+
+Animals, Food, Home, Transport, Nature, Colors, Numbers, Clothing, School, Sports, Feelings, Everyday, Toys
+
+## Learning Modes
+
+- Image Quiz: Match a word to the correct photo
+- Word Quiz: Choose the right definition
+- Flashcards: Study words with images, definitions, and audio
+- Listen & Match: Audio-based quiz for pre-readers
+- Daily Review: Spaced repetition review of learned words
+
+## Difficulty Levels
+
+- Beginner (ages 6-8): ~100 common everyday words
+- Intermediate (ages 9-10): ~100 more advanced words
+- Advanced (ages 11-12): ~100 challenging vocabulary words
+
+## Features
+
+- Spaced repetition algorithm (intervals: 1, 3, 7, 14, 30 days)
+- Real photographs for every word (512x512 WebP)
+- Text-to-speech pronunciation
+- Hebrew translations for all words
+- Pre-reader mode for children who can't read yet
+- Progress tracking with badges and streaks
+- Parent dashboard for monitoring progress
+- Dark mode support
+
+## Content Pages
+
+- 303 individual word pages: https://childrendoenglish.com/vocabulary/{category}/{word}/
+- 13 category pages: https://childrendoenglish.com/vocabulary/{category}/
+- 13 bilingual Hebrew-English category pages: https://childrendoenglish.com/vocabulary/{category}/hebrew/
+- 13 printable flashcard sets: https://childrendoenglish.com/printable-flashcards/{category}/
+- 3 age-bracket pages: https://childrendoenglish.com/vocabulary/ages-{range}/
+- 7 educational guides: https://childrendoenglish.com/guides/
+- About page: https://childrendoenglish.com/about/
+
+## Creator
+
+Built by Oded Deckelbaum, a software developer and parent in Israel.

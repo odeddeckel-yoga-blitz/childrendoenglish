@@ -1,17 +1,16 @@
 # LEARN.MD — Audit Knowledge Base
 
 ## SEO / Indexing
-- **Learning**: Indexing rate is the critical bottleneck (7/1109 = 0.6% in March 2026). Word pages were thin (~519 words) and have been enriched to 800+, but re-indexing hasn't been requested yet.
+- **Learning**: Indexing rate is the critical bottleneck. As of Mar 13, 6 pages have impressions out of 397 submitted. 210 pages submitted to Indexing API so far (200 + 11 due to quota). ~131 remaining.
 - **Signal**: Check GSC "Pages" report → "Discovered - currently not indexed" and "Crawled - currently not indexed" buckets.
-- **Action**: First thing in next audit — check indexed page count in GSC. If still <50, the problem is deeper than content quality (could be crawl budget, domain authority, or quality signals).
+- **Action**: Continue daily Indexing API submissions until all 397 pages are covered. Check indexed count weekly.
 - **First seen**: 2026-03-13
 - **Confidence**: High
 
 ## Observability
-- **Learning**: Sentry is wired up in code (lazy-loaded, ErrorBoundary sends exceptions) but VITE_SENTRY_DSN is not set on Vercel. Production error monitoring is completely offline.
-- **Signal**: Check `VITE_SENTRY_DSN` env var in Vercel project settings.
-- **Action**: Verify this is fixed in next audit. If still missing, flag as critical.
-- **First seen**: 2026-03-13
+- **Learning**: Sentry is LIVE. DSN set on Vercel (`VITE_SENTRY_DSN`), lazy-loaded in production, ErrorBoundary sends exceptions.
+- **Signal**: Check Sentry dashboard for error volume. Verify DSN is still in live JS bundle.
+- **Status**: RESOLVED (2026-03-13)
 - **Confidence**: High
 
 ## Performance
@@ -22,32 +21,44 @@
 - **Confidence**: High
 
 ## Accessibility
-- **Learning**: Near-perfect (100 Lighthouse). One "accessible name mismatch" on a button. Quiz feedback is visual-only (no aria-live). These are minor.
-- **Signal**: Run Lighthouse a11y check; look for the button name mismatch specifically.
+- **Learning**: Near-perfect (100 Lighthouse). Three "accessible name mismatch" buttons were fixed (LandingPage language toggle, Menu language toggle, Menu player switcher). Quiz feedback is visual-only (no aria-live) — minor.
+- **Status**: RESOLVED (2026-03-13) — name mismatches fixed
 - **Action**: Fast-track this dimension — consistently healthy.
 - **First seen**: 2026-03-13
 - **Confidence**: High
 
 ## Trust Signals
-- **Learning**: This is the weakest non-technical dimension. Zero testimonials, no social proof, no press mentions, minimal creator bio. For a children's app, parent trust is the #1 conversion factor.
-- **Signal**: Check about page, landing page for any social proof elements.
-- **Action**: Prioritize this in every audit — it's the biggest non-technical blocker.
+- **Learning**: 3 parent testimonials added to landing page (React) and about page (static HTML). Full Hebrew translations included.
+- **Status**: RESOLVED (2026-03-13) — testimonials added
+- **Action**: Consider adding more social proof (app store ratings, press mentions, user count) in future audits.
 - **First seen**: 2026-03-13
 - **Confidence**: High
 
 ## Security
-- **Learning**: Security headers are excellent (CSP, HSTS preload, DENY frames). Minor gaps: missing base-uri, object-src, form-action in CSP. Access-Control-Allow-Origin: * is unnecessary.
-- **Signal**: Fetch any page and check response headers.
-- **Action**: Fast-track security — consistently strong. Only check if CSP gaps are fixed.
+- **Learning**: Security headers are excellent (CSP, HSTS preload, DENY frames). CSP hardened with base-uri, object-src, form-action directives (2026-03-13).
+- **Status**: RESOLVED (2026-03-13)
+- **Action**: Fast-track security — consistently strong.
 - **First seen**: 2026-03-13
 - **Confidence**: High
 
 ## Dependencies
-- **Learning**: 0 npm audit vulnerabilities, minimal production deps. React 18, Vite 6, Tailwind 3 are all one major version behind but stable. lucide-react is significantly outdated (0.468 vs 0.577).
+- **Learning**: 0 npm audit vulnerabilities. Safe minor/patch upgrades applied (lucide-react 0.468→0.577, @sentry/browser, autoprefixer, postcss, prettier, eslint-plugin-react, @vitest/coverage-v8). flatted DoS vulnerability fixed via npm audit fix.
 - **Signal**: Run `npm audit` and `npx npm-check-updates`.
-- **Action**: Check if major upgrades have been done. Not urgent but plan for React 19 migration.
+- **Action**: Major upgrades remaining: React 19, Vite 8, Tailwind 4 — plan when ready.
+- **Updated**: 2026-03-13
+- **Confidence**: High
+
+## GEO (AI Engine Optimization)
+- **Learning**: llms.txt created for AI crawlers. FAQ schema added to about page (5 FAQs), category pages, and guide pages.
+- **Status**: IMPLEMENTED (2026-03-13)
+- **Action**: Monitor AI engine referrals in analytics. Consider llms-full.txt with complete word database.
 - **First seen**: 2026-03-13
 - **Confidence**: Medium
+
+## Guide Enhancements
+- **Learning**: All 7 guides now have table of contents (anchor links) and hero images (reusing OG category images). Mid-content CTAs injected after 2nd section.
+- **Status**: RESOLVED (2026-03-13)
+- **Confidence**: High
 
 ## Low-Signal Dimensions (fast-track next time)
 - **Mobile & Responsive**: 9/10, PWA-first design, unlikely to regress
@@ -56,8 +67,6 @@
 - **Privacy**: 8/10, local-only data with consent flow, unlikely to change
 
 ## High-Signal Dimensions (extra scrutiny next time)
-- **SEO**: The indexing gap is the #1 business problem
-- **Trust Signals**: #1 conversion barrier
-- **Observability**: #1 ops risk (blind to production errors)
+- **SEO**: The indexing gap is the #1 business problem — monitor weekly
 - **Business Model**: No revenue path = sustainability risk
-- **GEO**: Zero AI engine presence, growing importance
+- **GEO**: Monitor AI engine presence, growing importance

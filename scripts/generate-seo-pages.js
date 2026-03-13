@@ -1376,6 +1376,38 @@ const aboutPersonSchema = JSON.stringify({
   url: `${SITE}/about/`,
 });
 
+const aboutFaqSchema = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is Children Do English really free?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes, 100% free with no ads, no in-app purchases, and no subscription. All features are available to everyone.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What ages is Children Do English designed for?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The app is designed for children ages 6-12, with three difficulty levels (beginner, intermediate, advanced) and a pre-reader mode for younger kids who cannot read yet.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does Children Do English work offline?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes! It is a Progressive Web App (PWA) that can be installed on any device and works fully offline after the first visit.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is my child\'s data safe?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Absolutely. All learning progress is stored locally on your device and never sent to any server. The app collects no personal information and is COPPA-compliant.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Does it support Hebrew?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes, the entire app interface is available in Hebrew and English. Every word includes a Hebrew translation, making it ideal for bilingual Hebrew-English families.' },
+    },
+  ],
+});
+
 const aboutHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1410,6 +1442,7 @@ const aboutHtml = `<!DOCTYPE html>
   <!-- Structured Data -->
   <script type="application/ld+json">${aboutBreadcrumb}</script>
   <script type="application/ld+json">${aboutPersonSchema}</script>
+  <script type="application/ld+json">${aboutFaqSchema}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
