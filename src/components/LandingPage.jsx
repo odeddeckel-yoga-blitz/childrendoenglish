@@ -306,6 +306,28 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section
+        ref={reveal}
+        className="opacity-0 translate-y-4 transition-all duration-700 space-y-4"
+      >
+        <h2 className="text-xl font-bold text-slate-800 dark:text-white text-center">
+          {t('testimonialsTitle', lang)}
+        </h2>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="glass rounded-2xl p-4 border-l-[3px] border-blue-500 space-y-2">
+              <p className="text-slate-600 dark:text-slate-300 text-sm italic leading-relaxed">
+                &ldquo;{t(`testimonial${i}Quote`, lang)}&rdquo;
+              </p>
+              <p className="text-slate-800 dark:text-slate-100 text-xs font-semibold">
+                {t(`testimonial${i}Author`, lang)}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Methodology */}
       <section
         ref={reveal}

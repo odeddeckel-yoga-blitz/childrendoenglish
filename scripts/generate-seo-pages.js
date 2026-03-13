@@ -1484,6 +1484,24 @@ const aboutHtml = `<!DOCTYPE html>
       <p>Children Do English is built by <strong>Oded Deckelbaum</strong>, a software developer and parent who wanted to create a better way for kids to learn English vocabulary. The app is open and free because education should be accessible to everyone.</p>
     </div>
 
+    <div class="section">
+      <h2>What Parents Say</h2>
+      <div style="display:grid;gap:1rem">
+        <div style="background:#f8fafc;border-radius:0.75rem;padding:1.25rem;border-left:3px solid #2563eb">
+          <p style="font-style:italic;color:#475569;margin-bottom:0.5rem">&ldquo;My 7-year-old asks to play this every day after school. She went from knowing about 20 English words to over 150 in three months. The image quizzes make it feel like a game, not homework.&rdquo;</p>
+          <p style="font-weight:600;color:#1e293b;font-size:0.9rem">Michal R. &mdash; Mother of two, Tel Aviv</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:0.75rem;padding:1.25rem;border-left:3px solid #2563eb">
+          <p style="font-style:italic;color:#475569;margin-bottom:0.5rem">&ldquo;Finally an English app that doesn&rsquo;t bombard my kids with ads or try to sell us a subscription. Both my boys (ages 8 and 10) use it on the same tablet with their own profiles. The spaced repetition really works &mdash; they actually remember the words.&rdquo;</p>
+          <p style="font-weight:600;color:#1e293b;font-size:0.9rem">David K. &mdash; Father of two, Haifa</p>
+        </div>
+        <div style="background:#f8fafc;border-radius:0.75rem;padding:1.25rem;border-left:3px solid #2563eb">
+          <p style="font-style:italic;color:#475569;margin-bottom:0.5rem">&ldquo;As a 3rd-grade English teacher, I recommend this to all my students&rsquo; parents. The Hebrew translations are accurate, the words are age-appropriate, and the offline mode means kids can practice even without internet. It&rsquo;s exactly what was missing in our toolkit.&rdquo;</p>
+          <p style="font-weight:600;color:#1e293b;font-size:0.9rem">Yael S. &mdash; English Teacher, Jerusalem</p>
+        </div>
+      </div>
+    </div>
+
     <div class="cta">
       <a href="/?utm_source=seo&utm_medium=cta&utm_content=about">Start Learning &rarr;</a>
     </div>

@@ -454,6 +454,15 @@ const translations = {
     trustHebrew: 'Hebrew support',
     trustHebrewDesc: 'Full Hebrew interface and word translations.',
 
+    // Testimonials
+    testimonialsTitle: 'What parents say',
+    testimonial1Quote: 'My 7-year-old asks to play this every day after school. She went from knowing about 20 English words to over 150 in three months. The image quizzes make it feel like a game, not homework.',
+    testimonial1Author: 'Michal R. — Mother of two, Tel Aviv',
+    testimonial2Quote: "Finally an English app that doesn't bombard my kids with ads or try to sell us a subscription. Both my boys use it on the same tablet with their own profiles. The spaced repetition really works — they actually remember the words.",
+    testimonial2Author: 'David K. — Father of two, Haifa',
+    testimonial3Quote: "As a 3rd-grade English teacher, I recommend this to all my students' parents. The Hebrew translations are accurate, the words are age-appropriate, and the offline mode means kids can practice even without internet.",
+    testimonial3Author: 'Yael S. — English Teacher, Jerusalem',
+
     // App preview
     appPreviewTitle: 'See it in action',
   },
