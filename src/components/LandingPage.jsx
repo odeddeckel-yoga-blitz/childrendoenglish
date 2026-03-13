@@ -122,7 +122,7 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
                      bg-white/60 hover:bg-white/90 dark:bg-slate-800/60 dark:hover:bg-slate-800/90
                      border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300
                      text-sm font-medium transition-colors"
-          aria-label={t('language', lang)}
+          aria-label={lang === 'en' ? 'עברית' : 'English'}
         >
           <Globe className="w-4 h-4" />
           {lang === 'en' ? 'עברית' : 'English'}

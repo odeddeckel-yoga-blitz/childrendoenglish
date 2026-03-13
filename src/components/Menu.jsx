@@ -74,7 +74,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <button
               onClick={onToggleLanguage}
               className="px-2.5 py-1.5 rounded-xl bg-white/50 hover:bg-white/80 transition-colors flex items-center gap-1.5"
-              aria-label={lang === 'he' ? 'Switch to English' : 'עבור לעברית'}
+              aria-label={lang === 'he' ? 'EN — Switch to English' : 'עב — עבור לעברית'}
             >
               <Globe className="w-4 h-4 text-slate-600" />
               <span className="text-xs font-semibold text-slate-600">{lang === 'he' ? 'EN' : 'עב'}</span>
@@ -87,7 +87,6 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       {activePlayer && (
         <button
           onClick={onOpenProfilePicker}
-          aria-label={t('switchPlayer', lang)}
           className="w-full glass rounded-2xl p-3 flex items-center gap-3
                      hover:shadow-md active:scale-[0.98] transition-all text-start"
         >

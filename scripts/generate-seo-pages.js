@@ -1802,6 +1802,7 @@ const GUIDES = [
     title: 'How to Teach Kids English Vocabulary — A Parent\'s Guide',
     description: 'Practical tips and proven methods for teaching English vocabulary to children ages 6-12. Learn about spaced repetition, multi-sensory learning, and daily routines that work.',
     h1: 'How to Teach Kids English Vocabulary',
+    heroImage: '/og/school.png',
     sections: [
       {
         h2: 'Why Vocabulary Matters',
@@ -1881,6 +1882,7 @@ const GUIDES = [
   },
   {
     slug: 'spaced-repetition-for-kids',
+    heroImage: '/og/animals.png',
     title: 'Spaced Repetition for Kids — How It Helps Children Learn Vocabulary',
     description: 'Learn how spaced repetition works and why it\'s the most effective way for children to learn and remember English vocabulary. Simple explanation for parents and teachers.',
     h1: 'Spaced Repetition for Kids',
@@ -1932,6 +1934,7 @@ const GUIDES = [
   },
   {
     slug: 'english-learning-activities-for-kids',
+    heroImage: '/og/toys.png',
     title: 'Best English Learning Activities for Kids Ages 6-12',
     description: 'Fun and effective English learning activities for children. From vocabulary games to printable flashcards, discover activities that make learning English enjoyable for kids.',
     h1: 'Best English Learning Activities for Kids',
@@ -1995,6 +1998,7 @@ const GUIDES = [
   },
   {
     slug: 'learn-english-words-with-pictures',
+    heroImage: '/og/food.png',
     title: 'Learn English Words with Pictures — Visual Vocabulary for Kids',
     description: 'Help your child learn English words with pictures. Discover why visual vocabulary works for kids ages 6-12 and get free illustrated flashcards and quizzes.',
     h1: 'Learn English Words with Pictures',
@@ -2070,6 +2074,7 @@ const GUIDES = [
   },
   {
     slug: 'english-vocabulary-games-for-kids',
+    heroImage: '/og/sports.png',
     title: 'English Vocabulary Games for Kids — Fun Ways to Learn New Words',
     description: 'Discover the best English vocabulary games for kids ages 6-12. Free word games, quizzes, and challenges that make learning fun. No ads, works offline.',
     h1: 'English Vocabulary Games for Kids',
@@ -2150,6 +2155,7 @@ const GUIDES = [
   },
   {
     slug: 'english-vocabulary-for-bilingual-hebrew-english-kids',
+    heroImage: '/og/feelings.png',
     title: 'English Vocabulary for Bilingual Hebrew-English Kids — A Parent\'s Guide',
     description: 'Help your bilingual Hebrew-English child build English vocabulary. 342 words with Hebrew translations, phonetics, and pictures. Free app for kids 6-12.',
     h1: 'English Vocabulary for Bilingual Hebrew-English Kids',
@@ -2237,6 +2243,7 @@ const GUIDES = [
   },
   {
     slug: 'best-english-learning-apps-for-kids',
+    heroImage: '/og/colors.png',
     title: 'Best English Learning Apps for Kids in 2026 — Free & Paid Compared',
     description: 'Compare the 6 best English learning apps for kids in 2026. Side-by-side features, pricing, and age recommendations. Find the right vocabulary app for your child.',
     h1: 'Best English Learning Apps for Kids in 2026',
@@ -2399,10 +2406,20 @@ for (const guide of GUIDES) {
       <p>${WORDS.length} words &middot; No ads &middot; Works offline</p>
     </div>`;
 
+  // Build table of contents
+  const tocHtml = `
+    <nav class="toc" aria-label="Table of contents">
+      <h2>In This Guide</h2>
+      <ol>
+        ${guide.sections.map((s, i) => `<li><a href="#section-${i}">${s.h2}</a></li>`).join('\n        ')}
+      </ol>
+    </nav>`;
+
   const sectionHtml = guide.sections
     .map((s, i) => `
-    <div class="section">
+    <div class="section" id="section-${i}">
       <h2>${s.h2}</h2>
+      ${i === 0 && guide.heroImage ? `<img src="${guide.heroImage}" alt="${escapeHtml(guide.h1)}" class="guide-img" loading="lazy" width="720" height="280" />` : ''}
       ${s.content}
     </div>${i === 1 ? midCta : ''}`)
     .join('\n');
@@ -2465,6 +2482,13 @@ for (const guide of GUIDES) {
     .guides-nav h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
     .guides-nav a { display: block; background: #fff; padding: 0.75rem 1rem; border-radius: 0.5rem; margin-bottom: 0.5rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .guides-nav a:hover { background: #2563eb; color: #fff; }
+    .toc { background: #fff; border-radius: 0.75rem; padding: 1.25rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .toc h2 { font-size: 0.95rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem; }
+    .toc ol { margin: 0; padding-left: 1.25rem; }
+    .toc li { margin-bottom: 0.3rem; }
+    .toc a { color: #2563eb; text-decoration: none; font-size: 0.9rem; }
+    .toc a:hover { text-decoration: underline; }
+    .guide-img { width: 100%; max-height: 280px; object-fit: cover; border-radius: 0.5rem; margin: 1rem 0; }
     .author { display: flex; align-items: center; gap: 0.75rem; padding: 1rem; background: #fff; border-radius: 0.75rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); font-size: 0.9rem; color: #475569; }
     .author-avatar { width: 40px; height: 40px; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
     .author-name { font-weight: 600; color: #1e293b; }
@@ -2495,6 +2519,8 @@ for (const guide of GUIDES) {
         <div>Software developer &amp; parent &middot; Creator of Children Do English</div>
       </div>
     </div>
+
+    ${tocHtml}
 
     ${sectionHtml}
 
