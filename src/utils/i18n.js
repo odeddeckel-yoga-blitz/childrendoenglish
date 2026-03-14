@@ -254,12 +254,6 @@ const translations = {
     methodologyDesc: 'Spaced repetition, image-word matching, and multi-modal practice help kids build lasting vocabulary.',
 
     // Testimonials
-    testimonial1Quote: 'My daughter learned 50 new words in just 2 weeks!',
-    testimonial1Author: 'Sarah, parent',
-    testimonial2Quote: 'The image quizzes make learning fun. My son asks to play every day.',
-    testimonial2Author: 'David, parent',
-    testimonial3Quote: 'Finally an app that\'s actually free and has no ads!',
-    testimonial3Author: 'Maya, parent',
     testimonialsLabel: 'What parents say',
 
     // Edit player
@@ -267,15 +261,15 @@ const translations = {
 
     // Privacy policy
     privacyTitle: 'Privacy Policy',
-    privacyUpdated: 'Last updated: February 28, 2026',
+    privacyUpdated: 'Last updated: March 14, 2026',
     privacyDataTitle: 'What data we collect',
-    privacyDataDesc: 'Children Do English does not collect any personal information. We do not ask for names, email addresses, or any other identifying details.',
+    privacyDataDesc: 'Children Do English does not collect personal information. We do not ask for names or any identifying details. An optional parent email field is shown during onboarding — if provided, it is saved only in your browser\'s local storage and is never sent to any server.',
     privacyCookieTitle: 'Cookies & tracking',
     privacyCookieDesc: 'We use Google Analytics to understand how the app is used (page views, feature usage, basic device information). Google Analytics uses cookies and may collect anonymized data. Analytics are only loaded after you give consent via the cookie banner. We do not use any advertising services.',
     privacyStorageTitle: 'What is stored on your device',
     privacyStorageDesc: 'Your learning progress (quiz scores, word progress, streak, badges, and preferences like dark mode and sound) is saved in your browser\'s local storage. This data never leaves your device and is not sent to any server.',
     privacyThirdPartyTitle: 'Third-party services',
-    privacyThirdPartyDesc: 'The app uses Google Analytics for usage statistics (loaded only after consent). The browser\'s built-in speech synthesis may connect to your device\'s speech engine for word pronunciation. All word data and images are bundled with the app.',
+    privacyThirdPartyDesc: 'The app uses Google Analytics for usage statistics (loaded only after consent). We use Sentry for error monitoring in production — it may collect error reports, browser metadata, and device information to help us fix bugs and improve app stability (see sentry.io/privacy). The browser\'s built-in speech synthesis may connect to your device\'s speech engine for word pronunciation. All word data and images are bundled with the app.',
     privacyChildrenTitle: 'Children\'s privacy',
     privacyChildrenDesc: 'This app is designed for children ages 6-12. Because we do not collect or transmit any personal data, there is no risk of children\'s information being shared or misused.',
     privacyDeleteTitle: 'Deleting your data',
@@ -368,7 +362,7 @@ const translations = {
 
     // COPPA compliance
     privacyCoppaTitle: 'COPPA compliance',
-    privacyCoppaDesc: 'Children Do English complies with the Children\'s Online Privacy Protection Act (COPPA). We do not knowingly collect personal information from children under 13. All learning data is stored locally on the device and is never transmitted to our servers.',
+    privacyCoppaDesc: 'Children Do English complies with the Children\'s Online Privacy Protection Act (COPPA). We do not knowingly collect personal information from children under 13. All learning data is stored locally on the device and is never transmitted to our servers. Error monitoring via Sentry runs only in production and collects only technical diagnostic data (no names, no user content).',
 
     // Daily Review
     dailyReview: 'Daily Review',

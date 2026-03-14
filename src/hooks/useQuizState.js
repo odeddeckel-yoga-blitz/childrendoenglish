@@ -103,7 +103,8 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, spe
 
   const handleQuit = useCallback(() => {
     clearTimeout(feedbackTimeout.current);
-    onComplete({ score, total: currentIndex, mode, answers });
+    analytics.quizQuit(mode, undefined, currentIndex);
+    onComplete({ score, total: currentIndex, mode, answers, quit: true });
   }, [score, currentIndex, mode, answers, onComplete]);
 
   const openQuitConfirm = useCallback(() => setShowQuitConfirm(true), []);
