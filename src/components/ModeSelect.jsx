@@ -56,10 +56,10 @@ export default function ModeSelect({ level, lang = 'en', canRead = true, onSelec
           className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors"
           aria-label={t('backToMenu', lang)}
         >
-          <ArrowLeft className="w-5 h-5 text-slate-600" />
+          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
         <div>
-          <h2 className="text-xl font-bold text-slate-800">{t('chooseMode', lang)}</h2>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('chooseMode', lang)}</h2>
           <p className="text-sm text-slate-500">{t('levelLabel', lang, { level: t(levelNameKey[level] || level, lang) })}</p>
         </div>
       </div>
@@ -79,7 +79,7 @@ export default function ModeSelect({ level, lang = 'en', canRead = true, onSelec
                 <Icon className={`w-7 h-7 ${mode.iconColor}`} />
               </div>
               <div>
-                <h3 className="font-bold text-slate-800">{t(mode.nameKey, lang)}</h3>
+                <h3 className="font-bold text-slate-800 dark:text-slate-100">{t(mode.nameKey, lang)}</h3>
                 <p className="text-slate-500 text-sm">{t(mode.descKey, lang)}</p>
               </div>
             </button>

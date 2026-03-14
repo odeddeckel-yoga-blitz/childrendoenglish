@@ -67,7 +67,7 @@ export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSo
               btnClass += 'opacity-50';
             }
           } else {
-            btnClass += 'hover:shadow-md active:scale-95 text-slate-700';
+            btnClass += 'hover:shadow-md active:scale-95 text-slate-700 dark:text-slate-200';
           }
 
           return (

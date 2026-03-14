@@ -109,8 +109,8 @@ function buildCategoryPage(slug, displayName, words) {
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="${url}" />
   <link rel="alternate" hreflang="en" href="${url}" />
+  <link rel="alternate" hreflang="he" href="${SITE}/vocabulary/${slug}/hebrew/" />
   <link rel="alternate" hreflang="x-default" href="${url}" />
-  ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <!-- Open Graph -->
@@ -648,8 +648,9 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
   <meta name="description" content="${escapeHtml(description)}" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="${url}" />
-  <link rel="alternate" hreflang="en" href="${url}" />
-  <link rel="alternate" hreflang="x-default" href="${url}" />
+  <link rel="alternate" hreflang="en" href="${SITE}/vocabulary/${slug}/" />
+  <link rel="alternate" hreflang="he" href="${url}" />
+  <link rel="alternate" hreflang="x-default" href="${SITE}/vocabulary/${slug}/" />
   <link rel="icon" type="image/png" href="/favicon.png" />
 
   <meta property="og:locale" content="en_US" />

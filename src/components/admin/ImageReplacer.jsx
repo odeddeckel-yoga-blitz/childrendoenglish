@@ -100,7 +100,7 @@ export default function ImageReplacer({ word, password, onClose, onReplaced }) {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-slate-200">
           <div>
-            <h3 className="text-lg font-bold text-slate-800">{word.word}</h3>
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">{word.word}</h3>
             <p className="text-xs text-slate-400 capitalize">{word.category} &middot; {word.level}</p>
           </div>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-slate-100 transition-colors" aria-label="Close">
@@ -129,7 +129,7 @@ export default function ImageReplacer({ word, password, onClose, onReplaced }) {
               onChange={e => { setQueries(e.target.value); setPage(0); }}
               rows={3}
               className="w-full px-3 py-2 rounded-xl bg-white/70 border border-slate-200
-                         text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2
+                         text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2
                          focus:ring-blue-400 transition-all resize-none font-mono"
               placeholder="e.g. tabby cat face portrait"
             />

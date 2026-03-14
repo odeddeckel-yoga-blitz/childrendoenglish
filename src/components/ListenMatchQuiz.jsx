@@ -54,7 +54,7 @@ export default function ListenMatchQuiz({ words, lang = 'en', soundEnabled, onTo
 
       {/* Word display + speaker */}
       <div className="text-center py-4 space-y-3">
-        <h2 className="text-4xl font-black text-slate-800">{quiz.currentWord.word}</h2>
+        <h2 className="text-4xl font-black text-slate-800 dark:text-slate-100">{quiz.currentWord.word}</h2>
 
         {ttsOk && (
           <button

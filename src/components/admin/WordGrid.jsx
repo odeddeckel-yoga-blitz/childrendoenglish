@@ -51,9 +51,9 @@ export default function WordGrid({ password, onBack }) {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={onBack} className="p-2 rounded-xl hover:bg-slate-100 transition-colors" aria-label="Back to admin panel">
-          <ArrowLeft className="w-5 h-5 text-slate-600" />
+          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
-        <h2 className="text-xl font-bold text-slate-800">Image Manager</h2>
+        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Image Manager</h2>
         <span className="text-sm text-slate-400 ml-auto">{filtered.length} words</span>
       </div>
 
@@ -68,7 +68,7 @@ export default function WordGrid({ password, onBack }) {
           onChange={e => setSearch(e.target.value)}
           placeholder="Search words..."
           className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-slate-200
-                     text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2
+                     text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2
                      focus:ring-blue-400 transition-all"
         />
       </div>
@@ -139,7 +139,7 @@ export default function WordGrid({ password, onBack }) {
               />
               <span className={`absolute top-1 right-1 w-2.5 h-2.5 rounded-full ${LEVEL_COLORS[word.level]}`} />
             </div>
-            <p className="text-[10px] font-semibold text-slate-700 p-1.5 text-center truncate">
+            <p className="text-[10px] font-semibold text-slate-700 dark:text-slate-200 p-1.5 text-center truncate">
               {word.word}
             </p>
           </button>

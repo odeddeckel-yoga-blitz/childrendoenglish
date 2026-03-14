@@ -71,9 +71,9 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
-              <ArrowLeft className="w-5 h-5 text-slate-600" />
+              <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
             </button>
-            <h2 className="text-xl font-bold text-slate-800">{t('learnWords', lang)}</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('learnWords', lang)}</h2>
           </div>
           <div className="flex gap-2">
             <button
@@ -104,7 +104,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
             onChange={e => setSearch(e.target.value)}
             placeholder={t('searchPlaceholder', lang)}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-slate-200
-                       text-sm text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2
+                       text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2
                        focus:ring-blue-400 transition-all"
           />
         </div>
@@ -161,7 +161,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
                     <span className={`absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full ${dotColor} ring-2 ring-white`} />
                   )}
                 </div>
-                <p className="text-xs font-semibold text-slate-700 p-2 text-center truncate">
+                <p className="text-xs font-semibold text-slate-700 dark:text-slate-200 p-2 text-center truncate">
                   {word.word}
                 </p>
               </button>
@@ -185,7 +185,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
               className="p-2 rounded-lg hover:bg-slate-100 disabled:opacity-30 transition-colors"
               aria-label={t('previousWord', lang)}
             >
-              <ChevronLeft className="w-5 h-5 text-slate-600 rtl:rotate-180" />
+              <ChevronLeft className="w-5 h-5 text-slate-600 dark:text-slate-300 rtl:rotate-180" />
             </button>
             <div className="flex items-center gap-3">
               <button
@@ -203,7 +203,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
               className="p-2 rounded-lg hover:bg-slate-100 disabled:opacity-30 transition-colors"
               aria-label={t('nextWord', lang)}
             >
-              <ChevronRight className="w-5 h-5 text-slate-600 rtl:rotate-180" />
+              <ChevronRight className="w-5 h-5 text-slate-600 dark:text-slate-300 rtl:rotate-180" />
             </button>
           </div>
 
@@ -226,7 +226,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
             </div>
             {/* English box */}
             <div className="bg-blue-50 dark:bg-blue-900/20 px-5 py-4 flex items-center justify-between">
-              <h3 className="text-2xl font-bold text-slate-800">{currentWord.word}</h3>
+              <h3 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{currentWord.word}</h3>
               <button
                 onClick={() => speakWord(currentWord.word)}
                 className="p-2.5 rounded-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-800/40 dark:hover:bg-blue-800/60 transition-colors"
@@ -237,16 +237,16 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
             </div>
             {/* Hebrew box */}
             <div className="bg-slate-50 dark:bg-slate-800/50 px-5 py-4 border-y border-slate-200 dark:border-slate-700" dir="rtl">
-              <p className="text-2xl font-bold text-slate-800">{currentWord.hebrewTranslation}</p>
+              <p className="text-2xl font-bold text-slate-800 dark:text-slate-100">{currentWord.hebrewTranslation}</p>
             </div>
             {/* Info box */}
             <div className="px-5 py-4 space-y-2">
               <p className="text-sm text-slate-500 font-mono">{currentWord.phonetic}</p>
-              <p className="text-slate-600">{currentWord.definition}</p>
+              <p className="text-slate-600 dark:text-slate-300">{currentWord.definition}</p>
               <p className="text-sm text-slate-500 italic">"{currentWord.exampleSentence}"</p>
             </div>
           </div>
-          <p className="text-center text-xs text-slate-400">{rtl ? '← ' : ''}Swipe to browse words{rtl ? '' : ' →'}</p>
+          <p className="text-center text-xs text-slate-400">{rtl ? '← ' : ''}{t('swipeToBrowse', lang)}{rtl ? '' : ' →'}</p>
         </div>
       )}
 

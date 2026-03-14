@@ -461,6 +461,21 @@ const translations = {
 
     // App preview
     appPreviewTitle: 'See it in action',
+    appPreviewQuestion: 'Question 3 of 10',
+    appPreviewPrompt: 'What is this?',
+    appPreviewDog: 'Dog',
+    appPreviewCat: 'Cat',
+    appPreviewFish: 'Fish',
+    appPreviewBird: 'Bird',
+
+    // Footer links
+    footerVocabulary: 'Vocabulary',
+    footerGuides: 'Guides',
+    footerFlashcards: 'Printable Flashcards',
+    footerAbout: 'About',
+
+    // Learn mode
+    swipeToBrowse: 'Swipe to browse words',
   },
 };
 

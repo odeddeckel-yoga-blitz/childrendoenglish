@@ -32,9 +32,9 @@ export default function BadgesView({ stats, lang = 'en', onBack }) {
     <div className="animate-fade-in space-y-6">
       <div className="flex items-center gap-3">
         <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
-          <ArrowLeft className="w-5 h-5 text-slate-600" />
+          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
-        <h2 className="text-xl font-bold text-slate-800">{t('badgesTitle', lang)}</h2>
+        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('badgesTitle', lang)}</h2>
         <span className="text-sm text-slate-500 ml-auto">
           {stats.badges?.length || 0} / {BADGES.length}
         </span>
@@ -55,7 +55,7 @@ export default function BadgesView({ stats, lang = 'en', onBack }) {
               style={earned ? { animationDelay: `${i * 100}ms` } : {}}
             >
               <div className={`text-4xl ${earned ? '' : 'grayscale'}`}>{badge.icon}</div>
-              <h3 className="font-bold text-slate-800 text-sm">{t(badge.nameKey, lang)}</h3>
+              <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">{t(badge.nameKey, lang)}</h3>
               <p className="text-xs text-slate-500">{t(badge.descKey, lang)}</p>
               {earned ? (
                 <span className="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-700

@@ -459,4 +459,19 @@ export default {
 
   // App preview
   appPreviewTitle: 'ראו את זה בפעולה',
+  appPreviewQuestion: 'שאלה 3 מתוך 10',
+  appPreviewPrompt: 'מה זה?',
+  appPreviewDog: 'Dog',
+  appPreviewCat: 'Cat',
+  appPreviewFish: 'Fish',
+  appPreviewBird: 'Bird',
+
+  // Footer links
+  footerVocabulary: 'אוצר מילים',
+  footerGuides: 'מדריכים',
+  footerFlashcards: 'כרטיסיות להדפסה',
+  footerAbout: 'אודות',
+
+  // Learn mode
+  swipeToBrowse: 'החליקו כדי לדפדף במילים',
 };

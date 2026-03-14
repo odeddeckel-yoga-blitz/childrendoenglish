@@ -86,7 +86,7 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
       {/* Answer review */}
       {answers.length > 0 && (
         <div className="glass rounded-2xl p-4 space-y-3">
-          <h3 className="text-sm font-semibold text-slate-600">{t('review', lang)}</h3>
+          <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('review', lang)}</h3>
           <div className="space-y-2 max-h-60 overflow-y-auto" role="list">
             {answers.map((answer, i) => {
               const word = getWordById(answer.wordId);
@@ -107,7 +107,7 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
                       : <XIcon className="w-3.5 h-3.5 text-white" />
                     }
                   </div>
-                  <span className="font-semibold text-sm text-slate-700">{word.word}</span>
+                  <span className="font-semibold text-sm text-slate-700 dark:text-slate-200">{word.word}</span>
                   {!answer.correct && answer.selected && (
                     <span className="text-xs text-slate-500 ml-auto">
                       {t('youPicked', lang, { word: getWordById(answer.selected)?.word })}

@@ -102,7 +102,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
       <div className="animate-fade-in space-y-6 text-center">
         <div className="glass rounded-3xl p-8 space-y-4">
           <div className="text-6xl">🎴</div>
-          <h2 className="text-2xl font-bold text-slate-800">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
             {cards.length === 0 ? t('noCardsToReview', lang) : t('sessionComplete', lang)}
           </h2>
           {cards.length > 0 && (
@@ -134,7 +134,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
       {/* Header */}
       <div className="flex items-center justify-between">
         <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
-          <ArrowLeft className="w-5 h-5 text-slate-600" />
+          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
         <span className="text-sm text-slate-500">{currentIdx + 1} / {cards.length}</span>
         <div className="flex gap-3 text-sm">
@@ -198,7 +198,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
           <div className="flashcard-back absolute inset-0" aria-hidden={!flipped} aria-live="polite">
             <div className="glass rounded-2xl p-6 h-full flex flex-col justify-center space-y-4">
               <div className="flex items-center justify-center gap-3">
-                <h3 className="text-3xl font-black text-slate-800">{currentCard.word}</h3>
+                <h3 className="text-3xl font-black text-slate-800 dark:text-slate-100">{currentCard.word}</h3>
                 <button
                   onClick={(e) => { e.stopPropagation(); speakWord(currentCard.word); }}
                   className="p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
@@ -208,7 +208,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
                 </button>
               </div>
               <p className="text-center text-slate-500 font-mono text-sm">{currentCard.phonetic}</p>
-              <p className="text-center text-slate-600">{currentCard.definition}</p>
+              <p className="text-center text-slate-600 dark:text-slate-300">{currentCard.definition}</p>
               <p className="text-center text-sm text-slate-500 italic">"{currentCard.exampleSentence}"</p>
               <div className="pt-3 border-t border-slate-200">
                 <p className="text-xl text-center font-semibold text-blue-600" dir="rtl">

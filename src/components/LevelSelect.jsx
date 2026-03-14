@@ -75,9 +75,9 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, onStar
           className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors"
           aria-label={t('backToMenu', lang)}
         >
-          <ArrowLeft className="w-5 h-5 text-slate-600" />
+          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
-        <h2 className="text-xl font-bold text-slate-800">{t('playQuiz', lang)}</h2>
+        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('playQuiz', lang)}</h2>
       </div>
 
       {/* Level tabs */}
@@ -141,7 +141,7 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, onStar
                 <Icon className={`w-7 h-7 ${mode.iconColor}`} />
               </div>
               <div>
-                <h3 className="font-bold text-slate-800">{t(mode.nameKey, lang)}</h3>
+                <h3 className="font-bold text-slate-800 dark:text-slate-100">{t(mode.nameKey, lang)}</h3>
                 <p className="text-slate-500 text-sm">{t(mode.descKey, lang)}</p>
               </div>
             </button>

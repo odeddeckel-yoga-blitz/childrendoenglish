@@ -42,7 +42,7 @@ export default function AdminLogin({ onAuth }) {
           <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
             <Lock className="w-6 h-6 text-blue-600" />
           </div>
-          <h2 className="text-xl font-bold text-slate-800">Admin Access</h2>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Admin Access</h2>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -54,7 +54,7 @@ export default function AdminLogin({ onAuth }) {
             onChange={e => setPassword(e.target.value)}
             placeholder="Enter password"
             className="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200
-                       text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2
+                       text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2
                        focus:ring-blue-400 transition-all"
             autoFocus
           />

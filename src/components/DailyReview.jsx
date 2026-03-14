@@ -112,7 +112,7 @@ export default function DailyReview({ words, stats, lang = 'en', canRead: _canRe
           <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
             <Trophy className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-2xl font-black text-slate-800">{t('reviewComplete', lang)}</h2>
+          <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100">{t('reviewComplete', lang)}</h2>
         </div>
 
         <div className="glass rounded-2xl p-6 space-y-4">
@@ -135,7 +135,7 @@ export default function DailyReview({ words, stats, lang = 'en', canRead: _canRe
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${r.correct ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}`}>
                   {r.correct ? <Check className="w-3.5 h-3.5" /> : <XIcon className="w-3.5 h-3.5" />}
                 </div>
-                <span className="text-sm font-medium text-slate-700">{word?.word}</span>
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{word?.word}</span>
               </div>
             );
           })}
@@ -167,9 +167,9 @@ export default function DailyReview({ words, stats, lang = 'en', canRead: _canRe
         </button>
         <div className="flex items-center gap-2">
           <RotateCcw className="w-4 h-4 text-blue-500" />
-          <span className="text-sm font-semibold text-slate-600">{t('dailyReview', lang)}</span>
+          <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('dailyReview', lang)}</span>
         </div>
-        <span className="text-sm font-semibold text-slate-600">{score}/{total}</span>
+        <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{score}/{total}</span>
       </div>
 
       {/* Progress bar */}
@@ -218,7 +218,7 @@ export default function DailyReview({ words, stats, lang = 'en', canRead: _canRe
               btnClass += 'opacity-50';
             }
           } else {
-            btnClass += 'hover:shadow-md active:scale-95 text-slate-700';
+            btnClass += 'hover:shadow-md active:scale-95 text-slate-700 dark:text-slate-200';
           }
 
           return (

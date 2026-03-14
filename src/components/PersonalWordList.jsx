@@ -105,9 +105,9 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
-          <ArrowLeft className="w-5 h-5 text-slate-600" />
+          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
-        <h2 className="flex-1 text-xl font-bold text-slate-800">{t('myWordList', lang)}</h2>
+        <h2 className="flex-1 text-xl font-bold text-slate-800 dark:text-slate-100">{t('myWordList', lang)}</h2>
         {words.length > 0 && (
           <button
             onClick={handleShareList}
@@ -123,7 +123,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
 
       {/* Word input with chips */}
       <div className="glass rounded-2xl p-4 space-y-3 relative z-10">
-        <label htmlFor="word-input" className="text-sm text-slate-600 block">
+        <label htmlFor="word-input" className="text-sm text-slate-600 dark:text-slate-300 block">
           {t('enterWords', lang)}
         </label>
 
@@ -161,7 +161,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
               onFocus={() => query.length >= 1 && setShowSuggestions(true)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
               placeholder={words.length === 0 ? t('wordListPlaceholder', lang) : ''}
-              className="w-full bg-transparent text-sm text-slate-700 placeholder-slate-400
+              className="w-full bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400
                          focus:outline-none focus:ring-2 focus:ring-blue-400 rounded py-1 px-1"
               autoComplete="off"
               role="combobox"
@@ -197,7 +197,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
                       loading="lazy"
                     />
                     <div className="flex-1 min-w-0">
-                      <span className="font-semibold text-slate-800">{word.word}</span>
+                      <span className="font-semibold text-slate-800 dark:text-slate-100">{word.word}</span>
                       {lang === 'he' && word.hebrewTranslation && (
                         <span className="text-slate-400 ms-2">{word.hebrewTranslation}</span>
                       )}

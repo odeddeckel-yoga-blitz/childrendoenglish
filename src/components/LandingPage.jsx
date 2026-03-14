@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { BookOpen, Layers, Play, BarChart2, ChevronDown, ArrowRight, ArrowLeft, Globe, Brain } from 'lucide-react';
-import { t, isRTL } from '../utils/i18n';
+import { BookOpen, Layers, Play, BarChart2, ChevronDown, Globe, Brain } from 'lucide-react';
+import { t } from '../utils/i18n';
 
 const FEATURES = [
   { key: 'Learn', icon: BookOpen, color: 'blue' },
@@ -104,13 +104,7 @@ function FAQItem({ index, lang }) {
 // --- Main Component ---
 
 export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart, onContinue, onPrivacy, onToggleLanguage }) {
-  const rtl = isRTL(lang);
-  const Arrow = rtl ? ArrowLeft : ArrowRight;
   const reveal = useScrollReveal();
-
-  const scrollToLanguage = () => {
-    document.getElementById('language-select')?.scrollIntoView({ behavior: 'smooth' });
-  };
 
   return (
     <div className="space-y-16 pb-8">
@@ -178,15 +172,37 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
           ))}
         </div>
 
-        <button
-          onClick={scrollToLanguage}
-          className="inline-flex items-center gap-2 px-8 py-4 bg-blue-600 text-white rounded-2xl
-                     font-bold text-lg hover:bg-blue-700 active:scale-95 transition-all
-                     shadow-lg shadow-blue-200 dark:shadow-blue-900/30"
-        >
-          {t('getStarted', lang)}
-          <Arrow className="w-5 h-5" />
-        </button>
+        {/* Language selection — start immediately */}
+        <div className="grid grid-cols-2 gap-3 max-w-xs mx-auto">
+          <button
+            onClick={() => onLanguageStart('en')}
+            className="glass rounded-2xl p-4 space-y-2 text-center
+                       hover:scale-[1.03] active:scale-95 transition-transform cursor-pointer
+                       border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600"
+          >
+            <span className="text-3xl block">🇬🇧</span>
+            <span className="font-bold text-slate-800 dark:text-slate-100 text-sm block">
+              {t('landingLangEnglish', lang)}
+            </span>
+            <span className="text-slate-500 dark:text-slate-300 text-xs block">
+              {t('landingLangEnDesc', lang)}
+            </span>
+          </button>
+          <button
+            onClick={() => onLanguageStart('he')}
+            className="glass rounded-2xl p-4 space-y-2 text-center
+                       hover:scale-[1.03] active:scale-95 transition-transform cursor-pointer
+                       border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600"
+          >
+            <span className="text-3xl block">🇮🇱</span>
+            <span className="font-bold text-slate-800 dark:text-slate-100 text-sm block">
+              {t('landingLangHebrew', lang)}
+            </span>
+            <span className="text-slate-500 dark:text-slate-300 text-xs block">
+              {t('landingLangHeDesc', lang)}
+            </span>
+          </button>
+        </div>
       </section>
 
       {/* Features */}
@@ -261,17 +277,17 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
         <div className="mx-auto w-60">
           <div className="rounded-[2rem] border-[3px] border-slate-800 dark:border-slate-600 overflow-hidden shadow-2xl">
             <div className="bg-blue-600 px-4 py-2 flex items-center justify-between">
-              <span className="text-white text-xs font-bold">Question 3 of 10</span>
+              <span className="text-white text-xs font-bold">{t('appPreviewQuestion', lang)}</span>
               <span className="text-white/70 text-xs">✓ 2/2</span>
             </div>
             <div className="p-4 space-y-3 bg-gradient-to-b from-blue-50 to-white dark:from-slate-800 dark:to-slate-900">
-              <p className="text-center text-sm font-bold text-slate-700 dark:text-slate-200">What is this?</p>
+              <p className="text-center text-sm font-bold text-slate-700 dark:text-slate-200">{t('appPreviewPrompt', lang)}</p>
               <img src="/images/cat.webp" alt="" className="w-24 h-24 mx-auto rounded-2xl object-cover shadow-md" loading="lazy" />
               <div className="grid grid-cols-2 gap-2">
-                <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">Dog</div>
-                <div className="py-2 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 border-2 border-emerald-500 text-xs text-center text-emerald-700 dark:text-emerald-300 font-bold">Cat ✓</div>
-                <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">Fish</div>
-                <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">Bird</div>
+                <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">{t('appPreviewDog', lang)}</div>
+                <div className="py-2 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 border-2 border-emerald-500 text-xs text-center text-emerald-700 dark:text-emerald-300 font-bold">{t('appPreviewCat', lang)} ✓</div>
+                <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">{t('appPreviewFish', lang)}</div>
+                <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">{t('appPreviewBird', lang)}</div>
               </div>
             </div>
           </div>
@@ -348,50 +364,6 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
         </div>
       </section>
 
-      {/* Choose Language + Get Started */}
-      <section
-        id="language-select"
-        ref={reveal}
-        className="opacity-0 translate-y-4 transition-all duration-700 space-y-4 text-center"
-      >
-        <h2 className="text-2xl font-bold text-slate-800 dark:text-white">
-          {t('landingReadyTitle', lang)}
-        </h2>
-        <p className="text-slate-500 dark:text-slate-300">
-          {t('landingReadyDesc', lang)}
-        </p>
-        <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto">
-          <button
-            onClick={() => onLanguageStart('en')}
-            className="glass rounded-2xl p-6 space-y-3 text-center
-                       hover:scale-[1.03] active:scale-95 transition-transform cursor-pointer
-                       border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600"
-          >
-            <span className="text-4xl block">🇬🇧</span>
-            <span className="font-bold text-slate-800 dark:text-slate-100 block">
-              {t('landingLangEnglish', lang)}
-            </span>
-            <span className="text-slate-500 dark:text-slate-300 text-xs block">
-              {t('landingLangEnDesc', lang)}
-            </span>
-          </button>
-          <button
-            onClick={() => onLanguageStart('he')}
-            className="glass rounded-2xl p-6 space-y-3 text-center
-                       hover:scale-[1.03] active:scale-95 transition-transform cursor-pointer
-                       border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600"
-          >
-            <span className="text-4xl block">🇮🇱</span>
-            <span className="font-bold text-slate-800 dark:text-slate-100 block">
-              {t('landingLangHebrew', lang)}
-            </span>
-            <span className="text-slate-500 dark:text-slate-300 text-xs block">
-              {t('landingLangHeDesc', lang)}
-            </span>
-          </button>
-        </div>
-      </section>
-
       {/* FAQ */}
       <section
         ref={reveal}
@@ -410,10 +382,10 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
       {/* Footer */}
       <footer className="text-center space-y-3 pt-4 border-t border-slate-200 dark:border-slate-700">
         <nav className="flex flex-wrap justify-center gap-x-4 gap-y-1">
-          <a href="/vocabulary/" className="text-blue-500 text-xs hover:underline">Vocabulary</a>
-          <a href="/guides/" className="text-blue-500 text-xs hover:underline">Guides</a>
-          <a href="/printable-flashcards/" className="text-blue-500 text-xs hover:underline">Printable Flashcards</a>
-          <a href="/about/" className="text-blue-500 text-xs hover:underline">About</a>
+          <a href="/vocabulary/" className="text-blue-500 text-xs hover:underline">{t('footerVocabulary', lang)}</a>
+          <a href="/guides/" className="text-blue-500 text-xs hover:underline">{t('footerGuides', lang)}</a>
+          <a href="/printable-flashcards/" className="text-blue-500 text-xs hover:underline">{t('footerFlashcards', lang)}</a>
+          <a href="/about/" className="text-blue-500 text-xs hover:underline">{t('footerAbout', lang)}</a>
         </nav>
         <div className="flex justify-center gap-3">
           <button

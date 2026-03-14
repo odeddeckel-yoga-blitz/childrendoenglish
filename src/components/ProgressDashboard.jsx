@@ -18,9 +18,9 @@ export default function ProgressDashboard({ stats, lang = 'en', onBack }) {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
-          <ArrowLeft className="w-5 h-5 text-slate-600" />
+          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
-        <h2 className="text-xl font-bold text-slate-800">{t('progress', lang)}</h2>
+        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('progress', lang)}</h2>
       </div>
 
       {/* Stats grid */}
@@ -52,7 +52,7 @@ export default function ProgressDashboard({ stats, lang = 'en', onBack }) {
       {/* Mastery progress bar */}
       <div className="glass rounded-2xl p-4 space-y-2">
         <div className="flex justify-between text-sm">
-          <span className="font-semibold text-slate-700">{t('vocabularyMastery', lang)}</span>
+          <span className="font-semibold text-slate-700 dark:text-slate-200">{t('vocabularyMastery', lang)}</span>
           <span className="text-slate-500">{wordsLearned}/{totalWords}</span>
         </div>
         <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={wordsLearned} aria-valuemin={0} aria-valuemax={totalWords} aria-label="Vocabulary mastery">
@@ -66,12 +66,12 @@ export default function ProgressDashboard({ stats, lang = 'en', onBack }) {
       {/* Recent quizzes */}
       {recentHistory.length > 0 && (
         <div className="glass rounded-2xl p-4 space-y-3">
-          <h3 className="text-sm font-semibold text-slate-600">{t('recentQuizzes', lang)}</h3>
+          <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('recentQuizzes', lang)}</h3>
           <div className="space-y-2">
             {recentHistory.map((quiz, i) => (
               <div key={i} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
                 <div>
-                  <span className="text-sm font-semibold text-slate-700">{t(`mode_${quiz.mode}`, lang)}</span>
+                  <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t(`mode_${quiz.mode}`, lang)}</span>
                   <span className="text-xs text-slate-500 ml-2">{t(quiz.level, lang)}</span>
                 </div>
                 <div className="flex items-center gap-2">

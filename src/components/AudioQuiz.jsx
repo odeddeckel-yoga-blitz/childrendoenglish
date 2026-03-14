@@ -88,12 +88,12 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
               <RefreshCw className="w-3 h-3" /> {t('hearAgain', lang)}
             </p>
             {quiz.answered && (
-              <p className="text-2xl font-bold text-slate-800 animate-fade-in">{quiz.currentWord.word}</p>
+              <p className="text-2xl font-bold text-slate-800 dark:text-slate-100 animate-fade-in">{quiz.currentWord.word}</p>
             )}
           </>
         ) : (
           <>
-            <h2 className="text-4xl font-black text-slate-800">{quiz.currentWord.word}</h2>
+            <h2 className="text-4xl font-black text-slate-800 dark:text-slate-100">{quiz.currentWord.word}</h2>
             <p className="text-slate-500 text-sm font-mono">{quiz.currentWord.phonetic}</p>
           </>
         )}

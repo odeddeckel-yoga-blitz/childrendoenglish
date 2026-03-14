@@ -39,7 +39,7 @@ export default function QuizOptionGrid({ quiz, loadedImages, onImageLoad, lang }
             )}
             {isFailed ? (
               <div className={`absolute inset-0 ${PLACEHOLDER_COLORS[idx % 4]} flex items-center justify-center`}>
-                <span className="text-2xl font-bold text-slate-700 text-center px-2">{option.word}</span>
+                <span className="text-2xl font-bold text-slate-700 dark:text-slate-200 text-center px-2">{option.word}</span>
               </div>
             ) : (
               <img

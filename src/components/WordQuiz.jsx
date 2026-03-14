@@ -37,7 +37,7 @@ export default function WordQuiz({ words, lang = 'en', soundEnabled, onToggleSou
 
       {/* Word display */}
       <div className="text-center space-y-2 py-4">
-        <h2 className="text-4xl font-black text-slate-800 animate-word-glow">{quiz.currentWord.word}</h2>
+        <h2 className="text-4xl font-black text-slate-800 dark:text-slate-100 animate-word-glow">{quiz.currentWord.word}</h2>
         <p className="text-slate-500 text-sm font-mono">{quiz.currentWord.phonetic}</p>
         <button
           onClick={() => speakWord(quiz.currentWord.word)}

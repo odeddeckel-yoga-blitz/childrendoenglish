@@ -36,7 +36,7 @@ export default function Onboarding({ onComplete, activePlayer, lang: initialLang
           <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-blue-100">
             <BookOpen className="w-10 h-10 text-blue-600" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
             {activePlayer
               ? t('welcomeWithName', lang, { name: activePlayer.name })
               : t('welcomeTitle', lang)}
@@ -53,7 +53,7 @@ export default function Onboarding({ onComplete, activePlayer, lang: initialLang
           <div className="w-20 h-20 mx-auto rounded-2xl flex items-center justify-center bg-emerald-100">
             <Image className="w-10 h-10 text-emerald-600" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800">{t('seeAndLearn', lang)}</h2>
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">{t('seeAndLearn', lang)}</h2>
           <p className="text-slate-500">{t('seeAndLearnDesc', lang)}</p>
         </>
       );
@@ -63,7 +63,7 @@ export default function Onboarding({ onComplete, activePlayer, lang: initialLang
     if (step === 2) {
       return (
         <>
-          <h2 className="text-xl font-bold text-slate-800">{t('tryItOut', lang)}</h2>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('tryItOut', lang)}</h2>
           <p className="text-slate-500 text-sm">{t('whatWordMatches', lang)}</p>
           <img
             src={demoQuestion.image}
@@ -76,7 +76,7 @@ export default function Onboarding({ onComplete, activePlayer, lang: initialLang
               const answered = demoAnswer !== null;
               let btnClass = 'py-2.5 px-3 rounded-xl font-semibold text-sm transition-all ';
               if (!answered) {
-                btnClass += 'bg-white border-2 border-slate-200 text-slate-700 hover:border-blue-400 active:scale-95';
+                btnClass += 'bg-white border-2 border-slate-200 text-slate-700 dark:text-slate-200 hover:border-blue-400 active:scale-95';
               } else if (isCorrect) {
                 btnClass += 'bg-emerald-100 border-2 border-emerald-500 text-emerald-700';
               } else {
@@ -144,8 +144,8 @@ export default function Onboarding({ onComplete, activePlayer, lang: initialLang
             aria-label={t('previousStep', lang)}
           >
             {lang === 'he'
-              ? <ArrowRight className="w-5 h-5 text-slate-600" />
-              : <ArrowLeft className="w-5 h-5 text-slate-600" />}
+              ? <ArrowRight className="w-5 h-5 text-slate-600 dark:text-slate-300" />
+              : <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />}
           </button>
 
           {/* Dots */}

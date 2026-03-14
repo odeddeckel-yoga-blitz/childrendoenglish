@@ -18,7 +18,7 @@ export default function QuizHeader({ score, total, streak, soundEnabled, onToggl
               <Flame className="w-4 h-4" /> {streak}
             </span>
           )}
-          <span className="text-sm font-semibold text-slate-600">{score}/{total}</span>
+          <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{score}/{total}</span>
           <button
             onClick={onToggleSound}
             className="p-2.5 rounded-lg hover:bg-slate-100 transition-colors"

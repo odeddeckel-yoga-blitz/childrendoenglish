@@ -6,7 +6,7 @@ export default function PlayerSelect({ players, activePlayerId, lang = 'en', onS
     <div className="animate-fade-in space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-2xl font-black text-slate-800">{t('whoIsPlaying', lang)}</h1>
+        <h1 className="text-2xl font-black text-slate-800 dark:text-slate-100">{t('whoIsPlaying', lang)}</h1>
       </div>
 
       {/* Player grid */}
@@ -20,7 +20,7 @@ export default function PlayerSelect({ players, activePlayerId, lang = 'en', onS
                        ${player.id === activePlayerId ? 'ring-2 ring-blue-500 bg-blue-50/50' : ''}`}
           >
             <span className="text-4xl">{player.avatar}</span>
-            <span className="font-semibold text-slate-800 text-sm truncate max-w-full">{player.name}</span>
+            <span className="font-semibold text-slate-800 dark:text-slate-100 text-sm truncate max-w-full">{player.name}</span>
           </button>
         ))}
 

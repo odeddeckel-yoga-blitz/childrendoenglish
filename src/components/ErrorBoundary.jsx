@@ -28,7 +28,7 @@ export default class ErrorBoundary extends React.Component {
             <div className="w-16 h-16 mx-auto bg-rose-100 rounded-full flex items-center justify-center">
               <AlertTriangle className="w-8 h-8 text-rose-500" />
             </div>
-            <h2 className="text-xl font-bold text-slate-800">{t('errorTitle', lang)}</h2>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('errorTitle', lang)}</h2>
             <p className="text-slate-500 text-sm">
               {t('errorGeneric', lang)}
             </p>

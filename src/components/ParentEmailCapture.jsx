@@ -34,7 +34,7 @@ export default function ParentEmailCapture({ lang = 'en' }) {
           <Mail className="w-4 h-4 text-blue-600" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-slate-800">{t('parentEmailTitle', lang)}</p>
+          <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{t('parentEmailTitle', lang)}</p>
           <p className="text-xs text-slate-500 mt-0.5">{t('parentEmailDesc', lang)}</p>
         </div>
         <button
@@ -56,7 +56,7 @@ export default function ParentEmailCapture({ lang = 'en' }) {
           placeholder={t('parentEmailPlaceholder', lang)}
           className="flex-1 min-w-0 px-3 py-2 text-sm rounded-xl border border-slate-200 bg-white
                      focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent
-                     placeholder:text-slate-400 text-slate-800"
+                     placeholder:text-slate-400 text-slate-800 dark:text-slate-100"
           autoComplete="email"
         />
         <button

@@ -15,9 +15,9 @@ export default function ParentDashboard({ players = [], lang = 'en', onBack }) {
       {/* Header */}
       <div className="flex items-center gap-3">
         <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
-          <ArrowLeft className="w-5 h-5 text-slate-600" />
+          <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
-        <h2 className="text-xl font-bold text-slate-800">{t('parentDashboard', lang)}</h2>
+        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('parentDashboard', lang)}</h2>
       </div>
 
       {/* Player summary cards */}
@@ -33,7 +33,7 @@ export default function ParentDashboard({ players = [], lang = 'en', onBack }) {
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{player.avatar}</span>
                 <div>
-                  <p className="font-bold text-slate-800">{player.name}</p>
+                  <p className="font-bold text-slate-800 dark:text-slate-100">{player.name}</p>
                   <p className="text-xs text-slate-500">
                     {t('canReadLabel', lang)}: {player.canRead ? '✓' : '✗'}
                   </p>

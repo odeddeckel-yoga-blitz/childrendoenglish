@@ -24,15 +24,15 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
             className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors"
             aria-label={t('backToMenu', lang)}
           >
-            <ArrowLeft className="w-5 h-5 text-slate-600" />
+            <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
           </button>
         )}
-        <h2 className="text-xl font-bold text-slate-800">{t('createPlayer', lang)}</h2>
+        <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('createPlayer', lang)}</h2>
       </div>
 
       {/* Name input */}
       <div className="glass rounded-2xl p-5 space-y-3">
-        <label htmlFor="player-name" className="text-sm font-semibold text-slate-700">
+        <label htmlFor="player-name" className="text-sm font-semibold text-slate-700 dark:text-slate-200">
           {t('playerName', lang)}
         </label>
         <input
@@ -43,7 +43,7 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
           maxLength={20}
           autoFocus
           className="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200
-                     text-lg text-slate-700 placeholder-slate-400 focus:outline-none focus:ring-2
+                     text-lg text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2
                      focus:ring-blue-400 transition-all"
           placeholder={t('playerNamePlaceholder', lang)}
         />
@@ -51,7 +51,7 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
 
       {/* Avatar picker */}
       <div className="glass rounded-2xl p-5 space-y-3">
-        <p className="text-sm font-semibold text-slate-700">{t('chooseAvatar', lang)}</p>
+        <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('chooseAvatar', lang)}</p>
         <div className="grid grid-cols-6 gap-2">
           {AVATARS.map(emoji => (
             <button
@@ -87,7 +87,7 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
             </div>
           </div>
           <div className="space-y-0.5">
-            <p className="text-sm font-semibold text-slate-700">{t('canReadLabel', lang)}</p>
+            <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('canReadLabel', lang)}</p>
             <p className="text-xs text-slate-500">{t('canReadHint', lang)}</p>
           </div>
         </label>

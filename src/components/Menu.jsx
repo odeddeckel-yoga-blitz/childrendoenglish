@@ -32,7 +32,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-black text-slate-800">
+          <h1 className="text-2xl font-black text-slate-800 dark:text-slate-100">
             {t('appName', lang)}
           </h1>
           <p className="text-slate-500 text-sm">{t('tagline', lang)}</p>
@@ -44,7 +44,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             aria-label={soundEnabled ? t('muteSound', lang) : t('enableSound', lang)}
           >
             {soundEnabled
-              ? <Volume2 className="w-5 h-5 text-slate-600" />
+              ? <Volume2 className="w-5 h-5 text-slate-600 dark:text-slate-300" />
               : <VolumeX className="w-5 h-5 text-slate-400" />
             }
           </button>
@@ -55,7 +55,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           >
             {darkMode
               ? <Sun className="w-5 h-5 text-amber-500" />
-              : <Moon className="w-5 h-5 text-slate-600" />
+              : <Moon className="w-5 h-5 text-slate-600 dark:text-slate-300" />
             }
           </button>
           {notifSupported && (
@@ -76,8 +76,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               className="px-2.5 py-1.5 rounded-xl bg-white/50 hover:bg-white/80 transition-colors flex items-center gap-1.5"
               aria-label={lang === 'he' ? 'EN — Switch to English' : 'עב — עבור לעברית'}
             >
-              <Globe className="w-4 h-4 text-slate-600" />
-              <span className="text-xs font-semibold text-slate-600">{lang === 'he' ? 'EN' : 'עב'}</span>
+              <Globe className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+              <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">{lang === 'he' ? 'EN' : 'עב'}</span>
             </button>
           )}
         </div>
@@ -91,7 +91,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
                      hover:shadow-md active:scale-[0.98] transition-all text-start"
         >
           <span className="text-2xl">{activePlayer.avatar}</span>
-          <span className="flex-1 text-sm font-semibold text-slate-700">
+          <span className="flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200">
             {t('playingAs', lang, { name: activePlayer.name })}
           </span>
           <span className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-semibold
@@ -106,7 +106,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-amber-500" />
-            <h2 className="text-sm font-semibold text-slate-700">{t('dailyGoal', lang)}</h2>
+            <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('dailyGoal', lang)}</h2>
           </div>
           <span className="text-xs text-slate-500">
             {stats.dailyGoal?.date === new Date().toISOString().slice(0, 10)
@@ -144,7 +144,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             </div>
           </div>
           <div className="flex-1">
-            <p className="font-bold text-slate-800">{isNewUser ? t('playFirstQuiz', lang) : t('playQuiz', lang)}</p>
+            <p className="font-bold text-slate-800 dark:text-slate-100">{isNewUser ? t('playFirstQuiz', lang) : t('playQuiz', lang)}</p>
             <p className="text-slate-500 text-sm">{t('playQuizDesc', lang)}</p>
           </div>
           {isNewUser && (
@@ -167,7 +167,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             </div>
           </div>
           <div className="flex-1">
-            <p className="font-bold text-slate-800">{t('learnWords', lang)}</p>
+            <p className="font-bold text-slate-800 dark:text-slate-100">{t('learnWords', lang)}</p>
             <p className="text-slate-500 text-sm">{t('learnWordsDesc', lang)}</p>
           </div>
         </button>
@@ -184,7 +184,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             </div>
           </div>
           <div>
-            <p className="font-bold text-slate-800">{t('flashcards', lang)}</p>
+            <p className="font-bold text-slate-800 dark:text-slate-100">{t('flashcards', lang)}</p>
             <p className="text-slate-500 text-sm">{t('flashcardsDesc', lang)}</p>
           </div>
         </button>
@@ -206,7 +206,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
                 <RotateCcw className="w-6 h-6 text-white" />
               </div>
               <div className="flex-1">
-                <p className="font-bold text-slate-800">{t('dailyReview', lang)}</p>
+                <p className="font-bold text-slate-800 dark:text-slate-100">{t('dailyReview', lang)}</p>
                 <p className="text-slate-500 text-sm">{t('dailyReviewDesc', lang)}</p>
               </div>
               {dueCount > 0 ? (
@@ -234,7 +234,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
                 <ListChecks className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="font-bold text-slate-800">{t('myWordList', lang)}</p>
+                <p className="font-bold text-slate-800 dark:text-slate-100">{t('myWordList', lang)}</p>
                 <p className="text-slate-500 text-sm">{t('myWordListDesc', lang)}</p>
               </div>
             </button>
@@ -249,7 +249,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
                 <Map className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="font-bold text-slate-800">{t('learningPath', lang)}</p>
+                <p className="font-bold text-slate-800 dark:text-slate-100">{t('learningPath', lang)}</p>
                 <p className="text-slate-500 text-sm">{t('learningPathDesc', lang)}</p>
               </div>
             </button>
@@ -264,7 +264,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
                 <ShieldCheck className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="font-bold text-slate-800">{t('parentDashboard', lang)}</p>
+                <p className="font-bold text-slate-800 dark:text-slate-100">{t('parentDashboard', lang)}</p>
                 <p className="text-slate-500 text-sm">{t('parentDashboardDesc', lang)}</p>
               </div>
             </button>
@@ -287,7 +287,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           >
             <BarChart2 className="w-5 h-5 text-blue-600" />
             <div className="text-start">
-              <p className="font-semibold text-sm text-slate-800">{t('progress', lang)}</p>
+              <p className="font-semibold text-sm text-slate-800 dark:text-slate-100">{t('progress', lang)}</p>
               <p className="text-xs text-slate-500">{wordsLearned} {t('words', lang)}</p>
             </div>
           </button>
@@ -299,7 +299,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           >
             <Award className="w-5 h-5 text-amber-600" />
             <div className="text-start">
-              <p className="font-semibold text-sm text-slate-800">{t('badges', lang)}</p>
+              <p className="font-semibold text-sm text-slate-800 dark:text-slate-100">{t('badges', lang)}</p>
               <p className="text-xs text-slate-500">{stats.badges?.length || 0} {t('earned', lang)}</p>
             </div>
           </button>
@@ -333,7 +333,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <Download className="w-5 h-5 text-blue-600" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-slate-800">{t('installApp', lang)}</p>
+            <p className="text-sm font-semibold text-slate-800 dark:text-slate-100">{t('installApp', lang)}</p>
             <p className="text-xs text-slate-500">{isIOS ? t('installIOS', lang) : t('installDesc', lang)}</p>
           </div>
           {!isIOS && (
