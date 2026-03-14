@@ -11,7 +11,7 @@ Children Do English is a free, ad-free, privacy-first web app that helps childre
 - URL: https://childrendoenglish.com
 - Price: Free (no ads, no subscriptions, no in-app purchases)
 - Target age: 6-12 years old
-- Words: 303 curated words across 13 categories
+- Words: 342 curated words across 13 categories
 - Languages: English interface with full Hebrew translation
 - Privacy: All data stored locally, no accounts, COPPA-compliant
 - Offline: PWA — installable and fully functional offline
@@ -48,7 +48,7 @@ Animals, Food, Home, Transport, Nature, Colors, Numbers, Clothing, School, Sport
 
 ## Content Pages
 
-- 303 individual word pages: https://childrendoenglish.com/vocabulary/{category}/{word}/
+- 342 individual word pages: https://childrendoenglish.com/vocabulary/{category}/{word}/
 - 13 category pages: https://childrendoenglish.com/vocabulary/{category}/
 - 13 bilingual Hebrew-English category pages: https://childrendoenglish.com/vocabulary/{category}/hebrew/
 - 13 printable flashcard sets: https://childrendoenglish.com/printable-flashcards/{category}/

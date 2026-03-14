@@ -161,7 +161,8 @@ export default {
   iCanRead: 'אני יכול לקרוא!',
   notYet: 'עוד לא',
   parentCanChange: 'הורה יכול לשנות את זה אחר כך',
-  canReadLabel: 'יכול לקרוא אנגלית',
+  canReadLabel: 'יכול/ה לקרוא מילים באנגלית',
+  canReadHint: 'כבו עבור ילדים שעדיין לא קוראים כדי להפעיל מצב האזנה והתאמה',
   listenMatchQuiz: 'האזן והתאם',
   listenMatchQuizDesc: 'שמעו וראו מילה, בחרו את התמונה הנכונה',
   tapToHear: 'לחץ לשמוע שוב',
@@ -348,6 +349,7 @@ export default {
   demoDog: 'Dog',
   demoCat: 'Cat',
   demoFish: 'Fish',
+  demoBird: 'Bird',
 
   // Personal word list placeholder
   wordListPlaceholder: 'cat, dog, apple, tree...',
@@ -438,7 +440,7 @@ export default {
   // Trust signals
   trustTitle: 'בנוי למשפחות',
   trustNoAds: 'ללא פרסומות או מעקב',
-  trustNoAdsDesc: 'אפס פרסומות, אפס איסוף נתונים. רק למידה.',
+  trustNoAdsDesc: 'אפס פרסומות. ניתוח נתונים רק עם הסכמתכם. רק למידה.',
   trustOffline: 'עובד אופליין',
   trustOfflineDesc: 'התקינו פעם אחת, השתמשו בכל מקום — ללא צורך באינטרנט.',
   trustProfiles: 'פרופילים מרובים',

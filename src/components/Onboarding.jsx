@@ -7,7 +7,7 @@ import { getWordByName } from '../data/words';
 const getDemoQuestion = (_lang) => ({
   image: getWordByName('cat')?.imageUrl || '/images/cat.webp',
   correctKey: 'demoCat',
-  optionKeys: ['demoDog', 'demoCat', 'demoFish'],
+  optionKeys: ['demoDog', 'demoCat', 'demoFish', 'demoBird'],
 });
 
 
@@ -70,7 +70,7 @@ export default function Onboarding({ onComplete, activePlayer, lang: initialLang
             alt={t('mysteryWord', lang)}
             className="w-32 h-32 mx-auto rounded-2xl object-cover shadow-md"
           />
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {demoQuestion.optionKeys.map((optionKey) => {
               const isCorrect = optionKey === demoQuestion.correctKey;
               const answered = demoAnswer !== null;

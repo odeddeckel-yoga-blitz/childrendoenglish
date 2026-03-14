@@ -47,7 +47,9 @@ export default function ParentEmailCapture({ lang = 'en' }) {
       </div>
 
       <form onSubmit={handleSubmit} className="flex gap-2">
+        <label className="sr-only" htmlFor="parent-email">{t('parentEmailPlaceholder', lang)}</label>
         <input
+          id="parent-email"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

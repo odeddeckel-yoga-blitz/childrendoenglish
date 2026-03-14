@@ -163,7 +163,8 @@ const translations = {
     iCanRead: 'I can read!',
     notYet: 'Not yet',
     parentCanChange: 'A parent can change this later',
-    canReadLabel: 'Can read English',
+    canReadLabel: 'Can read English words',
+    canReadHint: 'Turn off for pre-readers to enable Listen & Match mode',
     listenMatchQuiz: 'Listen & Match',
     listenMatchQuizDesc: 'Hear & see a word, pick the right image',
     tapToHear: 'Tap to hear again',
@@ -350,6 +351,7 @@ const translations = {
     demoDog: 'Dog',
     demoCat: 'Cat',
     demoFish: 'Fish',
+    demoBird: 'Bird',
 
     // Personal word list placeholder
     wordListPlaceholder: 'cat, dog, apple, tree...',
@@ -440,7 +442,7 @@ const translations = {
     // Trust signals
     trustTitle: 'Built for families',
     trustNoAds: 'No ads or tracking',
-    trustNoAdsDesc: 'Zero ads, zero data collection. Just learning.',
+    trustNoAdsDesc: 'Zero ads. Analytics only with your consent. Just learning.',
     trustOffline: 'Works offline',
     trustOfflineDesc: 'Install once, use anywhere — no internet needed.',
     trustProfiles: 'Multiple profiles',

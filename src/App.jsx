@@ -468,7 +468,14 @@ export default function App() {
         );
 
       case 'loading':
-        return <LoadingScreen progress={quizFlow.loadingProgress} lang={lang} onCancel={resetToMenu} />;
+        return (
+          <LoadingScreen
+            progress={quizFlow.loadingProgress}
+            lang={lang}
+            onRetry={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords)}
+            onCancel={resetToMenu}
+          />
+        );
 
       case 'imageQuiz':
         return (

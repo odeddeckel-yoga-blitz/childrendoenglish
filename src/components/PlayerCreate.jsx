@@ -7,10 +7,11 @@ const AVATARS = ['🦊', '🐱', '🦁', '🐶', '🦄', '🐼', '🐸', '🦋',
 export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState('🦊');
+  const [canRead, setCanRead] = useState(true);
 
   const handleCreate = () => {
     if (!name.trim()) return;
-    onCreatePlayer(name.trim(), avatar, true);
+    onCreatePlayer(name.trim(), avatar, canRead);
   };
 
   return (
@@ -66,6 +67,30 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Can read toggle */}
+      <div className="glass rounded-2xl p-5">
+        <label className="flex items-start gap-3 cursor-pointer">
+          <div className="relative flex-shrink-0 mt-0.5">
+            <input
+              type="checkbox"
+              checked={canRead}
+              onChange={e => setCanRead(e.target.checked)}
+              className="sr-only"
+            />
+            <div
+              onClick={() => setCanRead(v => !v)}
+              className={`w-11 h-6 rounded-full transition-colors ${canRead ? 'bg-blue-500' : 'bg-slate-300'}`}
+            >
+              <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${canRead ? 'translate-x-5' : 'translate-x-0'}`} />
+            </div>
+          </div>
+          <div className="space-y-0.5">
+            <p className="text-sm font-semibold text-slate-700">{t('canReadLabel', lang)}</p>
+            <p className="text-xs text-slate-500">{t('canReadHint', lang)}</p>
+          </div>
+        </label>
       </div>
 
       {/* Create button */}

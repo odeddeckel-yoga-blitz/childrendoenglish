@@ -6,12 +6,13 @@ import { initAnalytics, trackEvent } from './utils/analytics';
 
 // Lazy-load Sentry after initial render to reduce main bundle
 if (import.meta.env.PROD) {
-  const initSentry = () => import('./utils/sentry').then(({ init, browserTracingIntegration }) => {
+  const initSentry = () => import('./utils/sentry').then(({ init, setTag, browserTracingIntegration }) => {
     init({
       dsn: import.meta.env.VITE_SENTRY_DSN || '',
       integrations: [browserTracingIntegration()],
-      tracesSampleRate: 0.5,
+      tracesSampleRate: 0.1,
     });
+    setTag('appVersion', '1.0.0');
   });
   (typeof requestIdleCallback === 'function' ? requestIdleCallback : (fn) => setTimeout(fn, 3000))(initSentry);
 }
