@@ -479,11 +479,9 @@ test.describe('Onboarding Full Flow', () => {
     await page.locator('button:has-text("עברית")').first().scrollIntoViewIfNeeded();
     await page.locator('button:has-text("עברית")').first().click();
 
-    // Should go to player create
-    await page.waitForTimeout(1000);
-
-    // Create a player
+    // Wait for player create screen (loadHebrew is async)
     const nameInput = page.locator('input[type="text"]').first();
+    await nameInput.waitFor({ timeout: 15000 });
     await nameInput.fill('Test');
     // Click create button
     const createBtn = page.locator('button:has-text("צור שחקן"), button:has-text("Create Player")').first();
