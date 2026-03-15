@@ -123,8 +123,8 @@ test.describe('Landing Page', () => {
     await page.goto('/');
     await page.waitForSelector('#root > *', { timeout: 10000 });
     // Scroll to language section and pick English
-    await page.locator('#language-select button:has-text("English")').scrollIntoViewIfNeeded();
-    await page.locator('#language-select button:has-text("English")').click();
+    await page.locator('button:has-text("English")').first().scrollIntoViewIfNeeded();
+    await page.locator('button:has-text("English")').first().click();
     // Should navigate to player create
     await expect(page.getByRole('heading', { name: 'Create Player' })).toBeVisible({ timeout: 5000 });
   });
@@ -476,8 +476,8 @@ test.describe('Onboarding Full Flow', () => {
     await page.waitForSelector('#root > *', { timeout: 10000 });
 
     // Pick Hebrew on the landing page language section
-    await page.locator('#language-select button:has-text("עברית")').scrollIntoViewIfNeeded();
-    await page.locator('#language-select button:has-text("עברית")').click();
+    await page.locator('button:has-text("עברית")').first().scrollIntoViewIfNeeded();
+    await page.locator('button:has-text("עברית")').first().click();
 
     // Should go to player create
     await page.waitForTimeout(1000);
