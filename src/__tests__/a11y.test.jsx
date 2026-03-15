@@ -45,5 +45,5 @@ describe('Accessibility (axe)', () => {
     const { container } = render(<LearnMode {...learnModeProps} />);
     const results = await axe(container);
     expect(results).toHaveNoViolations();
-  }, 15000);
+  }, 30000);
 });

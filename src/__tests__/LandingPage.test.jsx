@@ -19,10 +19,11 @@ const defaultProps = {
 };
 
 describe('LandingPage', () => {
-  it('renders hero with CTA button', () => {
+  it('renders hero with language selection', () => {
     render(<LandingPage {...defaultProps} />);
     expect(screen.getByText('Learn English — The Fun Way!')).toBeInTheDocument();
-    expect(screen.getByText("Let's Get Started")).toBeInTheDocument();
+    expect(screen.getByText('English')).toBeInTheDocument();
+    expect(screen.getAllByText('עברית').length).toBeGreaterThanOrEqual(1);
   });
 
   it('shows "Welcome back" when activePlayer provided', () => {
