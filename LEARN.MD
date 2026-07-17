@@ -10,14 +10,16 @@
 ## SEO / Indexing
 - **Learning**: Sitemap gap FIXED — 397 URLs live, auto-generated in build (`generate-sitemap.js` after vite build). Remaining issues: uniform build-date `<lastmod>` on all 397 URLs (weak freshness signal, generate-sitemap.js:64), and index coverage still UNVERIFIED because GSC API access is broken.
 - **Signal**: `curl -s https://childrendoenglish.com/sitemap.xml | grep -c '<loc>'` → 397.
-- **Action**: Fix GSC access first (below), then pull index coverage — the March fix's payoff has never been measured.
-- **First seen**: 2026-03-13 · **Updated**: 2026-07-17 (fixed; verification blocked)
+- **Learning (07-17, post-verification)**: Index coverage measured via URL Inspection sample (10 URLs): 7 indexed (homepage, word pages, guide, /he/, ages-6-8), 1 crawled-not-indexed (/vocabulary/animals/), 2 NEVER crawled — /printable-flashcards/* and /vocabulary/*/hebrew/* (the differentiator pages). Sitemap hadn't been re-downloaded by Google since 03-18 (verification lapse froze the property); resubmitted 07-17. The sitemaps API `indexed=0` field is unreliable — use URL Inspection sampling instead.
+- **Action**: Next audit: re-sample the hebrew + flashcards URLs; if still uncrawled, add internal links from indexed word pages / consider Indexing API.
+- **First seen**: 2026-03-13 · **Updated**: 2026-07-17 (coverage finally measured)
 - **Confidence**: High
 
-## GSC API Access — BROKEN
-- **Learning**: The shared creds (`~/.config/searchconsole/credentials.json`) are `siteUnverifiedUser` for https://childrendoenglish.com/ — all searchanalytics/sitemaps calls 403. `credentials-rw.json` refresh token is revoked (`invalid_grant`). GA4 Data API works fine (property 526390448).
-- **Action**: Re-verify site ownership for the OAuth user in GSC UI, or run `python3 ~/.config/searchconsole/reauth.py` interactively. Until then, no query/index data for this site.
-- **First seen**: 2026-07-17
+## GSC API Access — FIXED 2026-07-17 (root cause: GA-method verification lapse)
+- **Learning**: Site was verified via the Google Analytics method; consent-gating GA in March removed gtag from the initial HTML → Google silently dropped ownership → API 403s as `siteUnverifiedUser`. Fixed durably: `google-site-verification` META tag in index.html (token `I5LcxA…`) + Site Verification API `webResource.insert(META)`. `siteverification` scope added to reauth.py; Site Verification API enabled in GCP project 775583234771.
+- **Signal**: `sites().list()` permissionLevel; `siteUnverifiedUser` after a consent-gating change = this failure mode. journeyoutline.com has the same lapse (tag committed but prod is broken/stale).
+- **Action**: If any site's GA gets consent-gated, add a META verification tag in the same change. Note: system python3 lost google libs (Homebrew upgrade) — use a venv.
+- **First seen**: 2026-07-17 (fixed same day)
 - **Confidence**: High
 
 ## Analytics
