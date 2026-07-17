@@ -14,6 +14,7 @@ vi.mock('../utils/analytics', () => ({
     quizFunnelMode: vi.fn(),
     quizStart: vi.fn(),
     quizComplete: vi.fn(),
+    quizQuit: vi.fn(),
     quizAnswer: vi.fn(),
   },
 }));
@@ -313,6 +314,43 @@ describe('useQuizFlow', () => {
     const updater = setStats.mock.calls[0][0];
     const updated = updater(baseStats);
     expect(updated.totalQuizzes).toBe(1);
+  });
+
+  it('handleQuizComplete on quit keeps word progress but not completion rewards', async () => {
+    const { result } = renderFlow();
+
+    await act(async () => {
+      await result.current.startQuiz('beginner', 'image');
+    });
+
+    act(() => {
+      result.current.handleQuizComplete({
+        score: 3,
+        total: 4,
+        mode: 'image',
+        quit: true,
+        answers: Array.from({ length: 4 }, (_, i) => ({
+          wordId: `word_${i}`,
+          correct: i < 3,
+          selected: `word_${i}`,
+        })),
+      });
+    });
+
+    const updater = setStats.mock.calls[0][0];
+    const updated = updater(baseStats);
+    // Learning that happened is kept
+    expect(Object.keys(updated.wordProgress)).toHaveLength(4);
+    expect(updated.dailyGoal.wordsReviewed).toBe(4);
+    // But nothing is counted as a completed quiz
+    expect(updated.totalQuizzes).toBe(0);
+    expect(updated.quizHistory).toHaveLength(0);
+    expect(updated.badges).toHaveLength(0);
+    expect(updated.bestScores.beginner).toBeUndefined();
+    // Analytics: quit fires quiz_quit, never quiz_complete
+    expect(analytics.quizQuit).toHaveBeenCalledWith('image', 'beginner', 4);
+    expect(analytics.quizComplete).not.toHaveBeenCalled();
+    expect(navigate).toHaveBeenCalledWith('finished');
   });
 
   it('handleStartPersonalQuiz starts quiz with custom words', async () => {

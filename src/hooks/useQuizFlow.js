@@ -77,31 +77,38 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
   }, [navigate, stats.wordProgress]);
 
   const handleQuizComplete = useCallback((results) => {
-    const { score, total, answers, mode } = results;
+    const { score, total, answers, mode, quit } = results;
 
     setStats(prev => {
-      let updated = {
-        ...prev,
-        totalQuizzes: prev.totalQuizzes + 1,
-        quizHistory: [
-          ...prev.quizHistory,
-          { date: new Date().toISOString(), mode, level: selectedLevel, score, total },
-        ],
-      };
+      let updated = { ...prev };
 
-      // Update best score
-      if (selectedLevel && score > (updated.bestScores[selectedLevel] || 0)) {
-        updated.bestScores = { ...updated.bestScores, [selectedLevel]: score };
-      }
+      // A quit is not a completed quiz: keep the learning that happened
+      // (word progress, daily goal) but don't count the quiz, award
+      // streak/badges, or unlock levels.
+      if (!quit) {
+        updated = {
+          ...updated,
+          totalQuizzes: updated.totalQuizzes + 1,
+          quizHistory: [
+            ...updated.quizHistory,
+            { date: new Date().toISOString(), mode, level: selectedLevel, score, total },
+          ],
+        };
 
-      // Unlock next level
-      if (selectedLevel && score >= 7 && total === 10) {
-        const levels = ['beginner', 'intermediate', 'advanced'];
-        const idx = levels.indexOf(selectedLevel);
-        if (idx < levels.length - 1) {
-          const nextLevel = levels[idx + 1];
-          if (!updated.unlockedLevels.includes(nextLevel)) {
-            updated.unlockedLevels = [...updated.unlockedLevels, nextLevel];
+        // Update best score
+        if (selectedLevel && score > (updated.bestScores[selectedLevel] || 0)) {
+          updated.bestScores = { ...updated.bestScores, [selectedLevel]: score };
+        }
+
+        // Unlock next level
+        if (selectedLevel && score >= 7 && total === 10) {
+          const levels = ['beginner', 'intermediate', 'advanced'];
+          const idx = levels.indexOf(selectedLevel);
+          if (idx < levels.length - 1) {
+            const nextLevel = levels[idx + 1];
+            if (!updated.unlockedLevels.includes(nextLevel)) {
+              updated.unlockedLevels = [...updated.unlockedLevels, nextLevel];
+            }
           }
         }
       }
@@ -115,28 +122,36 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
         updated.wordProgress = wp;
       }
 
-      // Update streak and daily goal
-      updated = updateStreak(updated);
-      updated = updateDailyGoal(updated, answers?.length || total);
+      if (!quit) {
+        // Update streak and daily goal
+        updated = updateStreak(updated);
+        updated = updateDailyGoal(updated, answers?.length || total);
 
-      // Check badges
-      const game = { score, total, mode, level: selectedLevel };
-      const newBadges = [];
-      BADGES.forEach(badge => {
-        if (!updated.badges.includes(badge.id) && badge.check(updated, game)) {
-          newBadges.push(badge.id);
+        // Check badges
+        const game = { score, total, mode, level: selectedLevel };
+        const newBadges = [];
+        BADGES.forEach(badge => {
+          if (!updated.badges.includes(badge.id) && badge.check(updated, game)) {
+            newBadges.push(badge.id);
+          }
+        });
+        if (newBadges.length > 0) {
+          updated.badges = [...updated.badges, ...newBadges];
+          playSound('badge');
         }
-      });
-      if (newBadges.length > 0) {
-        updated.badges = [...updated.badges, ...newBadges];
-        playSound('badge');
+      } else {
+        updated = updateDailyGoal(updated, answers?.length || 0);
       }
 
       return updated;
     });
 
     setQuizResults(results);
-    analytics.quizComplete(mode, selectedLevel, score, total);
+    if (quit) {
+      analytics.quizQuit(mode, selectedLevel, answers?.length ?? 0);
+    } else {
+      analytics.quizComplete(mode, selectedLevel, score, total);
+    }
     navigate('finished');
   }, [selectedLevel, navigate, setStats]);
 

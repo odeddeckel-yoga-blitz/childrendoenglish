@@ -4,13 +4,13 @@ import App from './App';
 import './index.css';
 import { initAnalytics, trackEvent } from './utils/analytics';
 
-// Lazy-load Sentry after initial render to reduce main bundle
+// Lazy-load Sentry after initial render to reduce main bundle.
+// Errors only — no performance tracing — so crash reporting stays anonymous
+// and consistent with the "no tracking" positioning.
 if (import.meta.env.PROD) {
-  const initSentry = () => import('./utils/sentry').then(({ init, setTag, browserTracingIntegration }) => {
+  const initSentry = () => import('./utils/sentry').then(({ init, setTag }) => {
     init({
       dsn: import.meta.env.VITE_SENTRY_DSN || '',
-      integrations: [browserTracingIntegration()],
-      tracesSampleRate: 0.1,
     });
     setTag('appVersion', '1.0.0');
   });

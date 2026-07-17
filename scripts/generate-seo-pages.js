@@ -5,6 +5,13 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 
+// Every generated HTML page gets the consent-aware analytics loader
+// (public/static-analytics.js): cookieless by default, honors the app's
+// stored consent choice, no-op if the visitor declined.
+function writePage(path, html) {
+  writeFileSync(path, html.replace('</head>', '  <script defer src="/static-analytics.js"></script>\n</head>'), 'utf-8');
+}
+
 // Dynamic import of the data module (pure ESM, no JSX)
 const { WORDS, CATEGORIES, getWordsByCategory } = await import(
   join(ROOT, 'src', 'data', 'words.js')
@@ -1160,7 +1167,7 @@ for (const slug of CATEGORIES) {
   mkdirSync(outDir, { recursive: true });
 
   const html = buildCategoryPage(slug, displayName, words);
-  writeFileSync(join(outDir, 'index.html'), html, 'utf-8');
+  writePage(join(outDir, 'index.html'), html, 'utf-8');
   generated++;
   console.log(`  ✓ /vocabulary/${slug}/ (${words.length} words)`);
 }
@@ -1172,7 +1179,7 @@ for (const slug of CATEGORIES) {
   for (const word of words) {
     const wordDir = join(distDir, 'vocabulary', slug, word.id);
     mkdirSync(wordDir, { recursive: true });
-    writeFileSync(join(wordDir, 'index.html'), buildWordPage(word, slug, displayName, words), 'utf-8');
+    writePage(join(wordDir, 'index.html'), buildWordPage(word, slug, displayName, words), 'utf-8');
     wordPagesGenerated++;
   }
   console.log(`  ✓ /vocabulary/${slug}/ word pages (${words.length})`);
@@ -1314,7 +1321,7 @@ const vocabIndexHtml = `<!DOCTYPE html>
 </body>
 </html>`;
 
-writeFileSync(join(distDir, 'vocabulary', 'index.html'), vocabIndexHtml, 'utf-8');
+writePage(join(distDir, 'vocabulary', 'index.html'), vocabIndexHtml, 'utf-8');
 console.log(`  ✓ /vocabulary/ (index page, ${CATEGORIES.length} categories)`);
 
 // --- Overwrite sitemap.xml ---
@@ -1399,7 +1406,7 @@ const aboutFaqSchema = JSON.stringify({
     {
       '@type': 'Question',
       name: 'Is my child\'s data safe?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Absolutely. All learning progress is stored locally on your device and never sent to any server. The app collects no personal information and is COPPA-compliant.' },
+      acceptedAnswer: { '@type': 'Answer', text: 'Absolutely. All learning progress is stored locally on your device and never sent to any server. There are no ads and no accounts. Site analytics run in cookieless mode unless you opt in, and anonymous crash reports help us fix bugs. The app is COPPA-compliant.' },
     },
     {
       '@type': 'Question',
@@ -1510,7 +1517,7 @@ const aboutHtml = `<!DOCTYPE html>
 
     <div class="section">
       <h2>Privacy First</h2>
-      <p>Children Do English is designed with kids' safety in mind. All learning data is stored locally on the device and never sent to any server. We comply with COPPA and collect no personal information. <a href="/privacy">Read our full privacy policy &rarr;</a></p>
+      <p>Children Do English is designed with kids' safety in mind. All learning data is stored locally on the device and never sent to any server. There are no ads and no accounts, site analytics are cookieless unless you opt in, and we use anonymous crash reporting to keep the app working. We comply with COPPA. <a href="/privacy">Read our full privacy policy &rarr;</a></p>
     </div>
 
     <div class="section">
@@ -1548,7 +1555,7 @@ const aboutHtml = `<!DOCTYPE html>
 </html>`;
 
 mkdirSync(join(distDir, 'about'), { recursive: true });
-writeFileSync(join(distDir, 'about', 'index.html'), aboutHtml, 'utf-8');
+writePage(join(distDir, 'about', 'index.html'), aboutHtml, 'utf-8');
 console.log('  \u2713 /about/ (about page)');
 
 // --- Generate Printable Flashcards pages ---
@@ -1708,7 +1715,7 @@ for (const slug of CATEGORIES) {
 
   const outDir = join(flashcardsDir, slug);
   mkdirSync(outDir, { recursive: true });
-  writeFileSync(join(outDir, 'index.html'), buildPrintableFlashcardsPage(slug, displayName, words), 'utf-8');
+  writePage(join(outDir, 'index.html'), buildPrintableFlashcardsPage(slug, displayName, words), 'utf-8');
   flashcardsGenerated++;
   console.log(`  \u2713 /printable-flashcards/${slug}/ (${words.length} cards)`);
 }
@@ -1822,7 +1829,7 @@ const fcIndexHtml = `<!DOCTYPE html>
 </body>
 </html>`;
 
-writeFileSync(join(flashcardsDir, 'index.html'), fcIndexHtml, 'utf-8');
+writePage(join(flashcardsDir, 'index.html'), fcIndexHtml, 'utf-8');
 console.log(`  \u2713 /printable-flashcards/ (index, ${CATEGORIES.length} categories)`);
 
 // --- Generate Blog/Guide pages ---
@@ -2579,7 +2586,7 @@ for (const guide of GUIDES) {
 
   const guideDir = join(guidesDir, guide.slug);
   mkdirSync(guideDir, { recursive: true });
-  writeFileSync(join(guideDir, 'index.html'), guideHtml, 'utf-8');
+  writePage(join(guideDir, 'index.html'), guideHtml, 'utf-8');
   console.log(`  \u2713 /guides/${guide.slug}/`);
 }
 
@@ -2673,14 +2680,14 @@ const guidesIndexHtml = `<!DOCTYPE html>
 </body>
 </html>`;
 
-writeFileSync(join(guidesDir, 'index.html'), guidesIndexHtml, 'utf-8');
+writePage(join(guidesDir, 'index.html'), guidesIndexHtml, 'utf-8');
 console.log(`  \u2713 /guides/ (index, ${GUIDES.length} guides)`);
 
 // --- Generate Hebrew landing page ---
 
 const heDir = join(distDir, 'he');
 mkdirSync(heDir, { recursive: true });
-writeFileSync(join(heDir, 'index.html'), buildHebrewLandingPage(), 'utf-8');
+writePage(join(heDir, 'index.html'), buildHebrewLandingPage(), 'utf-8');
 console.log('  \u2713 /he/ (Hebrew landing page)');
 
 // --- Generate age-bracket landing pages ---
@@ -2688,7 +2695,7 @@ console.log('  \u2713 /he/ (Hebrew landing page)');
 for (const bracket of AGE_BRACKETS) {
   const bracketDir = join(distDir, 'vocabulary', bracket.slug);
   mkdirSync(bracketDir, { recursive: true });
-  writeFileSync(join(bracketDir, 'index.html'), buildAgeBracketPage(bracket, WORDS), 'utf-8');
+  writePage(join(bracketDir, 'index.html'), buildAgeBracketPage(bracket, WORDS), 'utf-8');
   const count = WORDS.filter((w) => w.level === bracket.level).length;
   console.log(`  \u2713 /vocabulary/${bracket.slug}/ (${count} words)`);
 }
@@ -2704,7 +2711,7 @@ for (const slug of CATEGORIES) {
 
   const biDir = join(distDir, 'vocabulary', slug, 'hebrew');
   mkdirSync(biDir, { recursive: true });
-  writeFileSync(join(biDir, 'index.html'), buildBilingualCategoryPage(slug, displayName, hebrewName, words), 'utf-8');
+  writePage(join(biDir, 'index.html'), buildBilingualCategoryPage(slug, displayName, hebrewName, words), 'utf-8');
   bilingualGenerated++;
   console.log(`  \u2713 /vocabulary/${slug}/hebrew/ (${words.length} words)`);
 }

@@ -103,7 +103,7 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, spe
 
   const handleQuit = useCallback(() => {
     clearTimeout(feedbackTimeout.current);
-    analytics.quizQuit(mode, undefined, currentIndex);
+    // quiz_quit is fired by useQuizFlow's handleQuizComplete, which knows the level
     onComplete({ score, total: currentIndex, mode, answers, quit: true });
   }, [score, currentIndex, mode, answers, onComplete]);
 

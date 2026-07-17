@@ -266,7 +266,7 @@ const translations = {
     privacyDataTitle: 'What data we collect',
     privacyDataDesc: 'Children Do English does not collect personal information. We do not ask for names or any identifying details. An optional parent email field is shown during onboarding — if provided, it is saved only in your browser\'s local storage and is never sent to any server.',
     privacyCookieTitle: 'Cookies & tracking',
-    privacyCookieDesc: 'We use Google Analytics to understand how the app is used (page views, feature usage, basic device information). Google Analytics uses cookies and may collect anonymized data. Analytics are only loaded after you give consent via the cookie banner. We do not use any advertising services.',
+    privacyCookieDesc: 'We use Google Analytics to understand how the app is used (page views, feature usage, basic device information). In the app, analytics loads only after you give consent via the cookie banner. On our static content pages (vocabulary, guides, printable flashcards), analytics runs in cookieless mode — no cookies or identifiers are stored unless you have opted in, and if you declined, analytics does not load at all. We do not use any advertising services.',
     privacyStorageTitle: 'What is stored on your device',
     privacyStorageDesc: 'Your learning progress (quiz scores, word progress, streak, badges, and preferences like dark mode and sound) is saved in your browser\'s local storage. This data never leaves your device and is not sent to any server.',
     privacyThirdPartyTitle: 'Third-party services',
