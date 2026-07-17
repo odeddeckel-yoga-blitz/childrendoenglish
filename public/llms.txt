@@ -56,6 +56,11 @@ Animals, Food, Home, Transport, Nature, Colors, Numbers, Clothing, School, Sport
 - 7 educational guides: https://childrendoenglish.com/guides/
 - About page: https://childrendoenglish.com/about/
 
+## Full Dataset
+
+The complete word dataset (all 342 words with definitions, phonetics, Hebrew translations, example sentences, fun facts, and common phrases) is available at:
+https://childrendoenglish.com/llms-full.txt
+
 ## Creator
 
 Built by Oded Deckelbaum, a software developer and parent in Israel.

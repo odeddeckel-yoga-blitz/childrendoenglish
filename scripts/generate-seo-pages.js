@@ -196,7 +196,7 @@ function buildCategoryPage(slug, displayName, words) {
       <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
 
-    <p style="margin-bottom:1.5rem"><a href="/vocabulary/${slug}/hebrew/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">View ${escapeHtml(displayName)} in Hebrew and English &rarr;</a></p>
+    <p style="margin-bottom:1.5rem"><a href="/vocabulary/${slug}/hebrew/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">View ${escapeHtml(displayName)} in Hebrew and English &rarr;</a> &middot; <a href="/printable-flashcards/${slug}/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">Printable ${escapeHtml(displayName)} flashcards &rarr;</a></p>
 
     <div class="categories">
       <h2>Explore More Categories</h2>
@@ -400,6 +400,8 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     </div>
 
     <a href="/vocabulary/${categorySlug}/" class="back-link">&larr; All ${escapeHtml(categoryDisplayName)} words</a>
+
+    <p style="font-size:0.9rem;margin:0.75rem 0 1.5rem"><a href="/printable-flashcards/${categorySlug}/" style="color:#2563eb;text-decoration:none">Printable ${escapeHtml(categoryDisplayName)} flashcards</a> &middot; <a href="/vocabulary/${categorySlug}/hebrew/" style="color:#2563eb;text-decoration:none">${escapeHtml(categoryDisplayName)} words with Hebrew translations</a></p>
 
     <div class="categories">
       <h2>Explore More Categories</h2>
@@ -1313,6 +1315,12 @@ const vocabIndexHtml = `<!DOCTYPE html>
     <div class="cta">
       <a href="/?utm_source=seo&utm_medium=cta&utm_content=vocab_index">Start Learning in the App &rarr;</a>
     </div>
+
+    <p style="text-align:center;margin-bottom:1rem;font-size:0.9rem"><a href="/printable-flashcards/" style="color:#2563eb;text-decoration:none">Printable flashcards for every category &rarr;</a></p>
+
+    <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:1.5rem">Hebrew word lists:
+      ${CATEGORIES.map((slug) => `<a href="/vocabulary/${slug}/hebrew/" style="color:#2563eb;text-decoration:none">${escapeHtml(CATEGORY_NAMES[slug] || slug)}</a>`).join(' &middot; ')}
+    </p>
   </div>
 
   <div class="footer">
@@ -1934,6 +1942,29 @@ const GUIDES = [
 <p>This approach works because of how our brains form memories. Each time you successfully recall something right before you'd forget it, the memory gets stronger and lasts longer.</p>`,
       },
       {
+        h2: 'The Spaced Repetition Schedule',
+        content: `<p>Children Do English uses this review schedule for every word. Each successful review pushes the next one further out; a miss resets the word to the start of the ladder:</p>
+<div style="overflow-x:auto">
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.9rem">
+  <thead>
+    <tr style="background:#f1f5f9">
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Review</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Interval</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">What it does</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">1st</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">1 day after learning</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Catches the word before the first big forgetting drop</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">2nd</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">3 days later</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Confirms the word survived the first gap</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">3rd</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">7 days later</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Moves the word toward medium-term memory</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">4th</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">14 days later</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Strengthens recall across a two-week gap</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">5th</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">30 days later</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">The word is now in long-term memory</td></tr>
+  </tbody>
+</table>
+</div>
+<p>Five short reviews spread over about seven weeks &mdash; roughly two minutes of total practice per word &mdash; is enough to move a new word into long-term memory.</p>`,
+      },
+      {
         h2: 'Why It Works So Well for Children',
         content: `<p>Children's brains are naturally wired for learning, but they also forget quickly. Spaced repetition takes advantage of both:</p>
 <ul>
@@ -2246,7 +2277,26 @@ const GUIDES = [
   <li><a href="/vocabulary/toys/">Toys</a> &mdash; Words kids want to know</li>
   <li><a href="/vocabulary/colors/">Colors</a> &mdash; Fundamental and practical</li>
 </ul>
-<p>Browse all <a href="/vocabulary/">${CATEGORIES.length} vocabulary categories</a> to find what excites your child most.</p>`,
+<p>Browse all <a href="/vocabulary/">${CATEGORIES.length} vocabulary categories</a> to find what excites your child most. Every category also has a bilingual word list showing English and Hebrew side by side:</p>
+<div style="overflow-x:auto">
+<table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.9rem">
+  <thead>
+    <tr style="background:#f1f5f9">
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Category</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Words</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Bilingual list</th>
+      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Printable flashcards</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${CATEGORIES.map((slug) => {
+      const name = CATEGORY_NAMES[slug] || slug;
+      const count = getWordsByCategory(slug).length;
+      return `<tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0"><a href="/vocabulary/${slug}/">${escapeHtml(name)}</a></td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">${count}</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0"><a href="/vocabulary/${slug}/hebrew/">English&ndash;Hebrew ${escapeHtml(name.toLowerCase())}</a></td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0"><a href="/printable-flashcards/${slug}/">Print ${escapeHtml(name.toLowerCase())}</a></td></tr>`;
+    }).join('\n    ')}
+  </tbody>
+</table>
+</div>`,
       },
       {
         h2: 'Daily Practice Routine for Bilingual Families',
@@ -2804,3 +2854,37 @@ writeFileSync(join(distDir, 'sitemap.xml'), sitemap, 'utf-8');
 const totalUrls = 1 + 1 + 1 + CATEGORIES.length + WORDS.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length + AGE_BRACKETS.length + CATEGORIES.length;
 console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about + Hebrew landing`);
 console.log(`Sitemap: ${totalUrls} URLs`);
+
+// ---- llms-full.txt: the complete word dataset for AI answer engines ----
+const llmsFull = [
+  '# Children Do English — Complete Word Data',
+  '',
+  '> Full vocabulary dataset of https://childrendoenglish.com — a free, ad-free English learning app for kids ages 6-12 with Hebrew translations, spaced repetition, and offline PWA support. See /llms.txt for the app overview.',
+  '',
+  `Total words: ${WORDS.length} across ${CATEGORIES.length} categories: ${CATEGORIES.map((c) => CATEGORY_NAMES[c] || c).join(', ')}.`,
+  'Every word has a dedicated page at https://childrendoenglish.com/vocabulary/{category}/{word}/ with photo, phonetics, and Hebrew translation.',
+  '',
+];
+for (const slug of CATEGORIES) {
+  const name = CATEGORY_NAMES[slug] || slug;
+  const words = getWordsByCategory(slug);
+  llmsFull.push(`## ${name} (${words.length} words)`, '');
+  for (const w of words) {
+    const e = ENRICHMENTS[w.id] || {};
+    llmsFull.push(`### ${w.word}`);
+    llmsFull.push(`- Definition: ${w.definition}`);
+    llmsFull.push(`- Part of speech: ${w.partOfSpeech} | Level: ${w.level} | Phonetic: ${w.phonetic}`);
+    llmsFull.push(`- Hebrew translation: ${w.hebrewTranslation}`);
+    if (e.sentences?.length) {
+      llmsFull.push(`- Example sentences: ${e.sentences.join(' ')}`);
+    } else if (w.exampleSentence) {
+      llmsFull.push(`- Example sentence: ${w.exampleSentence}`);
+    }
+    if (e.funFact) llmsFull.push(`- Fun fact: ${e.funFact}`);
+    if (e.collocations?.length) llmsFull.push(`- Common phrases: ${e.collocations.join(', ')}`);
+    llmsFull.push(`- URL: ${SITE}/vocabulary/${slug}/${w.id}/`);
+    llmsFull.push('');
+  }
+}
+writeFileSync(join(distDir, 'llms-full.txt'), llmsFull.join('\n'), 'utf-8');
+console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\n').length / 1024)}KB`);
