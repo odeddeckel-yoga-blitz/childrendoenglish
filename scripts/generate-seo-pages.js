@@ -38,7 +38,8 @@ function buildCrawlMesh() {
     `.crawl-mesh a{color:#0d9488;text-decoration:none;margin-right:.7rem;white-space:nowrap}.crawl-mesh a:hover{text-decoration:underline}</style>` +
     row('Printable Flashcards', [['/printable-flashcards/', 'All flashcards'], ...cats.map((c) => [`/printable-flashcards/${c}/`, label(c)])]) +
     row('Vocabulary in Hebrew', cats.map((c) => [`/vocabulary/${c}/hebrew/`, `${label(c)} עברית`])) +
-    row('Learn by Topic', [['/vocabulary/', 'All vocabulary'], ...cats.map((c) => [`/vocabulary/${c}/`, label(c)]), ['/guides/', 'Parent guides'], ['/app', 'Play the app']]) +
+    row('Play Games', [['/games/', 'All games'], ['/games/word-zapper/', 'Word Zapper'], ['/games/spelling-forge/', 'Spelling Forge'], ['/games/category-conveyor/', 'Category Conveyor'], ['/app', 'Practice app']]) +
+    row('Learn by Topic', [['/vocabulary/', 'All vocabulary'], ...cats.map((c) => [`/vocabulary/${c}/`, label(c)]), ['/guides/', 'Parent guides']]) +
     `</nav>\n`;
   return _meshCache;
 }
@@ -2919,3 +2920,52 @@ for (const slug of CATEGORIES) {
 }
 writeFileSync(join(distDir, 'llms-full.txt'), llmsFull.join('\n'), 'utf-8');
 console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\n').length / 1024)}KB`);
+
+// ---------------------------------------------------------------------------
+// /games/ hub — SEO landing for the standalone vocabulary arcade games
+// (Sep 2026, kidsdomath-crossover plan S1). Games themselves are static pages
+// in public/games/<id>/ copied into dist by Vite; this writes the index.
+// ---------------------------------------------------------------------------
+{
+  const GAMES = [
+    { id: 'word-zapper', emoji: '⚡', name: 'Word Zapper', desc: 'Hear the word, zap the matching picture before it lands! An endless arcade with shields, combos and adaptive speed.' },
+    { id: 'spelling-forge', emoji: '🔨', name: 'Spelling Forge', desc: 'See the picture, hear the word, and forge its spelling letter by letter on the anvil. Watch out for tricky look-alike letters!' },
+    { id: 'category-conveyor', emoji: '📦', name: 'Category Conveyor', desc: 'Photos ride the conveyor belt — sort each one into the right category bin before it slides away!' },
+  ];
+  const gamesDir = join(ROOT, 'dist', 'games');
+  mkdirSync(gamesDir, { recursive: true });
+  const cards = GAMES.map((g) => `
+    <a class="card" href="/games/${g.id}/">
+      <div class="emoji">${g.emoji}</div>
+      <h2>${g.name}</h2>
+      <p>${g.desc}</p>
+      <span class="play">Play free →</span>
+    </a>`).join('');
+  const html = `<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free English Vocabulary Games for Kids — Play Online | ChildrenDoEnglish</title>
+<meta name="description" content="Free English vocabulary arcade games for kids 6-12 — zap words, forge spellings, sort categories. Real photos, spoken words, no ads, no sign-up.">
+<link rel="canonical" href="${SITE}/games/">
+<meta property="og:title" content="Free English Vocabulary Games for Kids — Play Online">
+<meta property="og:description" content="Word Zapper, Spelling Forge and Category Conveyor — free English games with real photos and spoken words. No ads, no sign-up.">
+<meta property="og:url" content="${SITE}/games/"><meta property="og:type" content="website">
+<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'ItemList', name: 'English vocabulary games for kids', itemListElement: GAMES.map((g, i) => ({ '@type': 'ListItem', position: i + 1, name: g.name, url: `${SITE}/games/${g.id}/` })) }).replace(/</g, '\\u003c')}</script>
+<style>
+  body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;margin:0;background:#f0f6ff;color:#1e293b}
+  .wrap{max-width:860px;margin:0 auto;padding:2rem 1rem}
+  h1{font-size:1.9rem;color:#1d4ed8} .sub{color:#64748b;margin-bottom:1.6rem}
+  .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+  .card{display:block;background:#fff;border-radius:1.2rem;padding:1.4rem;text-decoration:none;color:inherit;box-shadow:0 2px 10px rgba(30,64,175,.08);transition:transform .15s}
+  .card:hover{transform:translateY(-3px)} .emoji{font-size:2.6rem} .card h2{margin:.4rem 0;color:#1d4ed8;font-size:1.2rem}
+  .card p{font-size:.9rem;color:#475569;line-height:1.5} .play{color:#0d9488;font-weight:700}
+  .back{display:inline-block;margin-top:1.6rem;color:#0d9488;text-decoration:none;font-weight:600}
+</style></head>
+<body><div class="wrap">
+  <h1>Free English Vocabulary Games for Kids</h1>
+  <p class="sub">Real photos, spoken words, arcade fun — no ads, no sign-up, nothing to install. Just tap and play in the browser on any device.</p>
+  <div class="grid">${cards}</div>
+  <p><a class="back" href="/">← ChildrenDoEnglish home</a> · <a class="back" href="/app">Try the full practice app</a></p>
+</div></body></html>`;
+  writePage(join(gamesDir, 'index.html'), html);
+  console.log('Games hub written: /games/');
+}
