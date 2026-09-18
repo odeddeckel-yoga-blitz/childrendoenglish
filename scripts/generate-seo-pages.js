@@ -17,7 +17,7 @@ const ROOT = join(__dirname, '..');
 // pos 7.5), so the content works; the crawl equity wasn't reaching the rest.
 // Same fix that took kidsdomath from 11 to 67 indexed pages.
 function writePage(path, html) {
-  let out = html.replace('</head>', '  <script defer src="/static-analytics.js"></script>\n</head>');
+  let out = html.replace('</head>', '  <script defer src="/static-analytics.js"></script>\n  <script defer src="/land-beacon.js"></script>\n</head>');
   if (out.includes('</body>') && !out.includes('crawl-mesh')) {
     out = out.replace('</body>', buildCrawlMesh() + '</body>');
   }
