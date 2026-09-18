@@ -8,8 +8,39 @@ const ROOT = join(__dirname, '..');
 // Every generated HTML page gets the consent-aware analytics loader
 // (public/static-analytics.js): cookieless by default, honors the app's
 // stored consent choice, no-op if the visitor declined.
+//
+// It also gets the crawl-mesh footer (buildCrawlMesh below): server-rendered
+// links from EVERY static page to the flashcards + Hebrew + category pages.
+// Rationale (Sep 2026): two months after launch, most /printable-flashcards/*
+// and /vocabulary/*/hebrew/* pages were still "URL is unknown to Google" —
+// the few that DID get crawled rank and earn clicks (everyday flashcards at
+// pos 7.5), so the content works; the crawl equity wasn't reaching the rest.
+// Same fix that took kidsdomath from 11 to 67 indexed pages.
 function writePage(path, html) {
-  writeFileSync(path, html.replace('</head>', '  <script defer src="/static-analytics.js"></script>\n</head>'), 'utf-8');
+  let out = html.replace('</head>', '  <script defer src="/static-analytics.js"></script>\n</head>');
+  if (out.includes('</body>') && !out.includes('crawl-mesh')) {
+    out = out.replace('</body>', buildCrawlMesh() + '</body>');
+  }
+  writeFileSync(path, out, 'utf-8');
+}
+
+let _meshCache = null;
+function buildCrawlMesh() {
+  if (_meshCache) return _meshCache;
+  const cats = CATEGORIES.map((c) => c.id || c.key || c);
+  const label = (c) => String(c).charAt(0).toUpperCase() + String(c).slice(1);
+  const row = (title, links) =>
+    `<h2>${title}</h2><p>` + links.map(([href, text]) => `<a href="${href}">${text}</a>`).join(' ') + `</p>`;
+  _meshCache = `\n<nav class="crawl-mesh" aria-label="Explore ChildrenDoEnglish">` +
+    `<style>.crawl-mesh{max-width:960px;margin:2rem auto 0;padding:1.2rem 1rem 2.2rem;font-size:.78rem;color:#64748b;border-top:1px solid #e2e8f0}` +
+    `.crawl-mesh h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;margin:.8rem 0 .25rem;color:#475569}` +
+    `.crawl-mesh p{margin:0;line-height:1.9}` +
+    `.crawl-mesh a{color:#0d9488;text-decoration:none;margin-right:.7rem;white-space:nowrap}.crawl-mesh a:hover{text-decoration:underline}</style>` +
+    row('Printable Flashcards', [['/printable-flashcards/', 'All flashcards'], ...cats.map((c) => [`/printable-flashcards/${c}/`, label(c)])]) +
+    row('Vocabulary in Hebrew', cats.map((c) => [`/vocabulary/${c}/hebrew/`, `${label(c)} עברית`])) +
+    row('Learn by Topic', [['/vocabulary/', 'All vocabulary'], ...cats.map((c) => [`/vocabulary/${c}/`, label(c)]), ['/guides/', 'Parent guides'], ['/app', 'Play the app']]) +
+    `</nav>\n`;
+  return _meshCache;
 }
 
 // Dynamic import of the data module (pure ESM, no JSX)
