@@ -53,11 +53,6 @@ export default class ErrorBoundary extends React.Component {
             <p className="text-slate-500 text-sm">
               {t('errorGeneric', lang)}
             </p>
-            {this.state.error?.message && (
-              <p className="text-slate-400 text-xs break-words" dir="ltr">
-                {String(this.state.error.message).slice(0, 140)}
-              </p>
-            )}
             <button
               onClick={() => {
                 this.setState({ hasError: false, error: null });
