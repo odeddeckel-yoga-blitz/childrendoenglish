@@ -3,17 +3,24 @@ const GA_ID = import.meta.env.VITE_GA_ID;
 let gaLoaded = false;
 let gtagScriptLoaded = false;
 
+// localStorage can THROW (Safari private mode, storage-blocked iframes, quota).
+// These run at consent-check time on every load — a throw here white-screens
+// the app, so every access is guarded (audit #2 finding, fixed Sep 2026).
+function readConsent() {
+  try { return localStorage.getItem('childrendoenglish-analytics-consent'); } catch { return null; }
+}
+
 export function hasAnalyticsConsent() {
-  return localStorage.getItem('childrendoenglish-analytics-consent') === 'accepted';
+  return readConsent() === 'accepted';
 }
 
 export function setAnalyticsConsent(accepted) {
-  localStorage.setItem('childrendoenglish-analytics-consent', accepted ? 'accepted' : 'declined');
+  try { localStorage.setItem('childrendoenglish-analytics-consent', accepted ? 'accepted' : 'declined'); } catch { /* unavailable */ }
   if (accepted) loadGA();
 }
 
 export function needsConsentPrompt() {
-  return !localStorage.getItem('childrendoenglish-analytics-consent');
+  return !readConsent();
 }
 
 // Load the gtag.js script dynamically (deferred from <head> to reduce LCP)

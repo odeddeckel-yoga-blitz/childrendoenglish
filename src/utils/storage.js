@@ -263,15 +263,20 @@ export const formatLocalDate = (date) => {
 export const updateStreak = (stats) => {
   const today = formatLocalDate(new Date());
   const yesterday = formatLocalDate(new Date(Date.now() - 86400000));
+  const twoDaysAgo = formatLocalDate(new Date(Date.now() - 2 * 86400000));
 
   if (stats.lastActiveDate === today) return stats;
 
-  const newStreak = stats.lastActiveDate === yesterday
-    ? stats.currentStreak + 1
-    : 1;
+  // One "streak freeze": a single missed day is forgiven per streak run, so a
+  // sick day or a busy weekend doesn't wipe a kid's streak (humane, matches
+  // kidsdomath). The freeze re-arms after any normal consecutive day.
+  const consecutive = stats.lastActiveDate === yesterday;
+  const frozen = !consecutive && stats.lastActiveDate === twoDaysAgo && !stats.streakFreezeUsed;
+  const newStreak = consecutive || frozen ? stats.currentStreak + 1 : 1;
 
   return {
     ...stats,
+    streakFreezeUsed: frozen ? true : (consecutive ? false : stats.streakFreezeUsed),
     currentStreak: newStreak,
     longestStreak: Math.max(newStreak, stats.longestStreak),
     lastActiveDate: today,

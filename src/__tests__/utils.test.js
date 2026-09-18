@@ -125,11 +125,34 @@ describe('updateStreak', () => {
     expect(result.currentStreak).toBe(4);
   });
 
-  it('resets streak after gap', () => {
+  it('forgives a single missed day once (streak freeze)', () => {
     const twoDaysAgo = formatLocalDate(new Date(Date.now() - 86400000 * 2));
     const stats = { currentStreak: 5, longestStreak: 5, lastActiveDate: twoDaysAgo };
     const result = updateStreak(stats);
+    expect(result.currentStreak).toBe(6);
+    expect(result.streakFreezeUsed).toBe(true);
+  });
+
+  it('resets streak on a second missed day (freeze already used)', () => {
+    const twoDaysAgo = formatLocalDate(new Date(Date.now() - 86400000 * 2));
+    const stats = { currentStreak: 5, longestStreak: 5, lastActiveDate: twoDaysAgo, streakFreezeUsed: true };
+    const result = updateStreak(stats);
     expect(result.currentStreak).toBe(1);
+  });
+
+  it('resets streak after a multi-day gap', () => {
+    const threeDaysAgo = formatLocalDate(new Date(Date.now() - 86400000 * 3));
+    const stats = { currentStreak: 5, longestStreak: 5, lastActiveDate: threeDaysAgo };
+    const result = updateStreak(stats);
+    expect(result.currentStreak).toBe(1);
+  });
+
+  it('re-arms the freeze after a normal consecutive day', () => {
+    const yesterday = formatLocalDate(new Date(Date.now() - 86400000));
+    const stats = { currentStreak: 5, longestStreak: 5, lastActiveDate: yesterday, streakFreezeUsed: true };
+    const result = updateStreak(stats);
+    expect(result.currentStreak).toBe(6);
+    expect(result.streakFreezeUsed).toBe(false);
   });
 
   it('keeps same-day stats unchanged', () => {
