@@ -475,8 +475,13 @@ test.describe('Onboarding Full Flow', () => {
     await page.goto('/');
     await page.waitForSelector('#root > *', { timeout: 10000 });
 
-    // Pick Hebrew on the landing page language section
+    // Pick Hebrew on the landing page language section. The language card is a
+    // two-step control (since the Jul-2026 onboarding redesign): the first
+    // click switches the interface language, the second click on the now-
+    // selected card enters the app (player create).
     await page.locator('button:has-text("עברית")').first().scrollIntoViewIfNeeded();
+    await page.locator('button:has-text("עברית")').first().click();
+    await page.waitForTimeout(800); // let the Hebrew UI settle
     await page.locator('button:has-text("עברית")').first().click();
 
     // Wait for player create screen (loadHebrew is async)

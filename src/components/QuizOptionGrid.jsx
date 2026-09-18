@@ -1,12 +1,41 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Check, X as XIcon } from 'lucide-react';
 import { getImageUrl } from '../utils/images';
 import { t } from '../utils/i18n';
 
 const PLACEHOLDER_COLORS = ['bg-blue-200', 'bg-emerald-200', 'bg-amber-200', 'bg-purple-200'];
 
+// An image request can hang forever without firing onLoad OR onError (flaky
+// network, stale service-worker limbo) — leaving a kid staring at a blank
+// skeleton card they cannot answer (user-reported, Sep 2026). After this
+// timeout, still-unloaded cards flip to the word-text fallback so the round
+// is always playable.
+const IMAGE_STALL_MS = 7000;
+
 export default function QuizOptionGrid({ quiz, loadedImages, onImageLoad, lang }) {
   const [failedImages, setFailedImages] = useState(new Set());
+
+  // Ref mirror so the stall timer reads the CURRENT loaded set when it fires
+  // (a closure over the prop would see a stale Set and falsely fail cards that
+  // loaded after the timer was armed).
+  const loadedRef = useRef(loadedImages);
+  loadedRef.current = loadedImages;
+
+  const questionId = quiz.currentWord?.id;
+  useEffect(() => {
+    const optionIds = quiz.options.map((o) => o.id);
+    const timer = setTimeout(() => {
+      setFailedImages((prev) => {
+        const next = new Set(prev);
+        for (const id of optionIds) {
+          if (!loadedRef.current.has(id)) next.add(id);
+        }
+        return next;
+      });
+    }, IMAGE_STALL_MS);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionId]);
 
   return (
     <div className="grid grid-cols-2 gap-3 landscape:gap-2 landscape:max-w-sm landscape:mx-auto">
