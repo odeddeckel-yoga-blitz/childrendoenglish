@@ -12,8 +12,29 @@ export default class ErrorBoundary extends React.Component {
     return { hasError: true, error };
   }
 
+  // A deploy invalidates the hashed lazy-chunk filenames; a tab still holding
+  // the previous shell (PWA registerType:'prompt' keeps them alive for a long
+  // time) then fails its next dynamic import and lands here. A single reload
+  // fetches the fresh shell + matching chunks, so recover automatically
+  // instead of showing the error card (user-reported crash, Sep 2026).
+  static isStaleChunkError(error) {
+    return /Failed to fetch dynamically imported module|Importing a module script failed|error loading dynamically imported module|ChunkLoadError/i
+      .test(String(error?.message || error));
+  }
+
   componentDidCatch(error, errorInfo) {
     console.error('ErrorBoundary caught:', error, errorInfo);
+    if (ErrorBoundary.isStaleChunkError(error)) {
+      let reloaded = false;
+      try {
+        reloaded = sessionStorage.getItem('cde-chunk-reload') === '1';
+        if (!reloaded) sessionStorage.setItem('cde-chunk-reload', '1');
+      } catch { /* storage unavailable — fall through to the error card */ }
+      if (!reloaded) {
+        window.location.reload();
+        return; // don't report the transient stale-chunk case to Sentry
+      }
+    }
     import('../utils/sentry').then(({ captureException }) => {
       captureException(error, { extra: errorInfo });
     }).catch(() => {});
@@ -32,6 +53,11 @@ export default class ErrorBoundary extends React.Component {
             <p className="text-slate-500 text-sm">
               {t('errorGeneric', lang)}
             </p>
+            {this.state.error?.message && (
+              <p className="text-slate-400 text-xs break-words" dir="ltr">
+                {String(this.state.error.message).slice(0, 140)}
+              </p>
+            )}
             <button
               onClick={() => {
                 this.setState({ hasError: false, error: null });
