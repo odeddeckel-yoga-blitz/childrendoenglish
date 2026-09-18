@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Category Conveyor — Free English Sorting Game for Kids | ChildrenDoEnglish</title>
+<meta name="description" content="Word photos ride the conveyor belt — tap the right category bin (Animals, Food, Transport, Clothing, Home, Colors) before they slip past! A free English vocabulary sorting arcade for kids ages 6-12.">
+<link rel="canonical" href="https://childrendoenglish.com/games/category-conveyor/">
+<meta name="robots" content="index, follow">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="theme-color" content="#2563eb">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Children Do English">
+<meta property="og:title" content="Category Conveyor — Free English Sorting Game for Kids">
+<meta property="og:description" content="Word photos ride the conveyor belt — tap the right category bin before they slip past! Free English sorting arcade for kids.">
+<meta property="og:url" content="https://childrendoenglish.com/games/category-conveyor/">
+<meta property="og:image" content="https://childrendoenglish.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Category Conveyor — Free English Sorting Game for Kids">
+<meta name="twitter:description" content="Word photos ride the conveyor belt — tap the right category bin before they slip past! Free English sorting arcade for kids.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Category Conveyor","url":"https://childrendoenglish.com/games/category-conveyor/","description":"Word photos ride a conveyor belt — tap the right category bin (Animals, Food, Transport, Clothing, Home, Colors) before they slip past. A free English vocabulary sorting game for kids.","inLanguage":"en","genre":"Educational","gamePlatform":"Web Browser","playMode":"SinglePlayer","applicationCategory":"EducationalApplication","operatingSystem":"Any (modern web browser)","browserRequirements":"Requires JavaScript and HTML5 canvas","isFamilyFriendly":true,"isAccessibleForFree":true,"typicalAgeRange":"6-12","learningResourceType":"Game","educationalUse":"Practice","keywords":"english vocabulary, sorting game, categories, kids english, ESL game","author":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"publisher":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com","logo":{"@type":"ImageObject","url":"https://childrendoenglish.com/icon-512.png"}},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}
+</script>
+<style>
+  :root{
+    --sky0:#dbeafe; --sky1:#eff6ff; --blue:#2563eb; --blue2:#1d4ed8; --ink:#1e293b; --dim:#64748b;
+    --grn:#16a34a; --red:#ef4444; --gold:#f59e0b; --card:#ffffff; --line:#bfdbfe;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+  html,body{margin:0;height:100%;overflow:hidden;background:linear-gradient(180deg,var(--sky1),var(--sky0));
+    font-family:'Trebuchet MS','Comic Sans MS','Segoe UI',system-ui,sans-serif;color:var(--ink);user-select:none;}
+  #stage{position:fixed;inset:0;display:flex;flex-direction:column;}
+  #cvWrap{position:relative;flex:1;min-height:180px;}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  #backPill{position:absolute;left:10px;top:10px;z-index:40;font:bold 13px/1 inherit;color:var(--blue2);
+    text-decoration:none;background:rgba(255,255,255,.92);border:2px solid var(--line);border-radius:999px;
+    padding:8px 13px;box-shadow:0 2px 8px rgba(37,99,235,.15);}
+  #backPill:hover{background:#fff;}
+  #hud{position:absolute;right:10px;top:10px;z-index:40;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+  .pill{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.92);
+    border:2px solid var(--line);font-size:14px;font-weight:bold;color:var(--ink);box-shadow:0 2px 8px rgba(37,99,235,.12);}
+  #mute{cursor:pointer;border:2px solid var(--line);font-family:inherit;}
+  #combo{position:absolute;left:50%;top:56px;transform:translateX(-50%);color:var(--gold);font-size:22px;font-weight:bold;
+    letter-spacing:1px;text-shadow:0 1px 0 #fff,0 0 18px rgba(245,158,11,.55);opacity:0;transition:opacity .25s;
+    pointer-events:none;z-index:35;white-space:nowrap;}
+  #dock{flex:0 0 auto;background:rgba(255,255,255,.85);border-top:3px solid var(--line);padding:8px 10px 12px;
+    display:flex;flex-direction:column;gap:8px;backdrop-filter:blur(4px);}
+  #feedback{min-height:22px;text-align:center;font-weight:bold;font-size:15px;color:var(--dim);line-height:1.3;}
+  #bins{display:flex;gap:8px;justify-content:center;}
+  .bin{flex:1;max-width:220px;min-width:76px;min-height:84px;border-radius:18px;border:3px solid var(--bc,#94a3b8);
+    background:linear-gradient(180deg,#ffffff,#f1f5f9);cursor:pointer;font-family:inherit;color:var(--ink);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px;
+    box-shadow:0 4px 0 var(--bc,#94a3b8),0 6px 14px rgba(30,41,59,.15);
+    transition:transform .08s,box-shadow .08s,filter .1s;}
+  .bin:active{transform:translateY(3px);box-shadow:0 1px 0 var(--bc),0 3px 8px rgba(30,41,59,.15);}
+  .bin .be{font-size:30px;line-height:1;}
+  .bin .bn{font-size:14px;font-weight:900;letter-spacing:.3px;}
+  .bin:focus{outline:none;} .bin:focus-visible{outline:3px solid var(--blue);outline-offset:2px;}
+  @keyframes binPop{0%{transform:scale(1)}45%{transform:scale(1.12)}100%{transform:scale(1)}}
+  .bin.pop{animation:binPop .32s ease;}
+  @keyframes binBuzz{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}
+    60%{transform:translateX(-5px)}80%{transform:translateX(4px)}}
+  .bin.buzz{animation:binBuzz .34s linear;border-color:var(--red)!important;box-shadow:0 4px 0 var(--red),0 6px 14px rgba(239,68,68,.3);}
+  .bin.hint{border-color:var(--grn)!important;box-shadow:0 0 0 4px rgba(22,163,74,.35),0 4px 0 var(--grn)!important;}
+  .overlay{position:absolute;inset:0;z-index:50;display:none;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;gap:14px;padding:22px;background:linear-gradient(180deg,rgba(239,246,255,.97),rgba(219,234,254,.97));
+    overflow:auto;}
+  .overlay.show{display:flex;}
+  .overlay h1,.overlay h2{margin:0;font-size:clamp(30px,7vw,58px);letter-spacing:1px;color:var(--blue2);
+    text-shadow:0 2px 0 #fff;}
+  .overlay .sub{max-width:600px;font-size:clamp(15px,2.6vw,19px);font-weight:600;color:var(--ink);line-height:1.5;}
+  .crewrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  .btn{font-family:inherit;cursor:pointer;padding:15px 30px;border-radius:16px;font-size:19px;font-weight:900;
+    letter-spacing:.5px;border:3px solid var(--blue2);color:#fff;background:linear-gradient(180deg,#3b82f6,var(--blue2));
+    box-shadow:0 5px 0 #1e40af,0 8px 18px rgba(37,99,235,.35);transition:transform .08s,box-shadow .08s;}
+  .btn:active{transform:translateY(4px);box-shadow:0 1px 0 #1e40af;}
+  .scorecard{background:#fff;border:3px solid var(--line);border-radius:18px;padding:16px 26px;font-size:17px;
+    line-height:1.7;box-shadow:0 6px 18px rgba(37,99,235,.15);}
+  .scorecard b{color:var(--blue2);}
+  .newbest{color:var(--gold);font-weight:900;}
+  .about{max-width:620px;font-size:12.5px;color:var(--dim);line-height:1.5;border-top:2px solid var(--line);
+    padding-top:12px;margin-top:8px;}
+  .about h2{font-size:14px;color:var(--dim);margin:0 0 4px;text-shadow:none;}
+  .about a{color:var(--blue2);}
+  @media(max-width:480px){ .bin .be{font-size:24px;} .bin .bn{font-size:12px;} #bins{gap:6px;}
+    .pill{font-size:12px;padding:6px 9px;} }
+  /* narrow screens: HUD drops below the back pill so they never overlap */
+  @media(max-width:620px){ #hud{top:48px;} #combo{top:96px;} }
+  @media(prefers-reduced-motion:reduce){
+    .bin.pop,.bin.buzz{animation:none;} #combo{transition:none;}
+  }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="cvWrap">
+    <canvas id="cv"></canvas>
+    <a id="backPill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
+    <div id="hud">
+      <span class="pill" id="shieldPill">🛡🛡🛡</span>
+      <span class="pill" id="scorePill">⭐ 0</span>
+      <span class="pill" id="levelPill">⚡ LV 1</span>
+      <button class="pill" id="mute" aria-label="Mute or unmute sound">🔊</button>
+    </div>
+    <div id="combo"></div>
+  </div>
+  <div id="dock">
+    <div id="feedback" role="status" aria-live="polite"></div>
+    <div id="bins"></div>
+  </div>
+
+  <div id="menu" class="overlay show">
+    <h1>📦 CATEGORY CONVEYOR</h1>
+    <div class="sub">Word photos ride the belt! When a photo reaches the <b>glowing zone</b>, tap the bin of its
+      <b>category</b> — 🐾 Animals, 🍎 Food, 🚗 Transport and more. Wrong bins bounce the word back out.
+      Let a word slip past the end and you lose a shield!</div>
+    <div class="crewrow">
+      <span class="pill">🛡 3 shields</span>
+      <span class="pill">🔊 Hear every word</span>
+      <span class="pill">⚡ 8 levels, more bins</span>
+      <span class="pill">🏆 Best-score chase</span>
+    </div>
+    <button class="btn" id="startBtn">▶ START SORTING</button>
+    <div class="pill" id="menuBest" style="display:none;"></div>
+    <section class="about">
+      <h2>Category Conveyor — free English sorting game for kids</h2>
+      <p>Kids ages 6-12 practise English vocabulary by sorting real word photos into category bins: Animals, Food,
+      Transport, Clothing, Home and Colors. Every word is spoken aloud, so children connect the picture, the written
+      word and its sound. Fast, accurate sorting speeds the belt up and unlocks trickier words — like <i>orange</i>,
+      which is a fruit AND a color! Free, no ads, no sign-up. Part of
+      <a href="/">Children Do English</a>, a free vocabulary app for kids with Hebrew support.</p>
+    </section>
+  </div>
+
+  <div id="over" class="overlay">
+    <h2 id="overTitle">💥 BELT STOPPED!</h2>
+    <div class="sub" id="overSub">Out of shields — but every word you sorted made your English stronger.</div>
+    <div class="scorecard" id="overCard"></div>
+    <button class="btn" id="againBtn">↺ PLAY AGAIN</button>
+    <a id="overHome" class="pill" href="/">🏠 More English games at childrendoenglish.com</a>
+  </div>
+</div>
+<script src="/static-analytics.js" defer></script>
+<script src="/land-beacon.js" defer></script>
+<script src="./game.js" defer></script>
+</body>
+</html>
