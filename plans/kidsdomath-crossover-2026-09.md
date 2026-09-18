@@ -78,3 +78,32 @@ kidsdomath itself suffered (template-drift lesson in LEARN.MD).
 S1 first (2-3 games as a pilot wave — Word Zapper, Spelling Forge, Category Conveyor — with per-game
 SEO pages + sitemap + footer-mesh links), then S3 beacon + S2 lightning/combo, then more S1 waves,
 S4 when teacher outreach starts, S5 whenever the second wave makes drift real.
+
+## Analytics wiring comparison (added same day, user request)
+
+kidsdomath's stack vs CDE's, and what to port:
+
+| kidsdomath has | CDE today | Port? |
+|---|---|---|
+| **/api/land cookieless beacon** — no-PII {day, game, source-class} tally (ai/seo/hub/direct/external), fires pre-consent via sendBeacon, Neon-backed, token-guarded report endpoint. Exists BECAUSE consent-gating blinded GA to the biggest external channels | Consent-gated GA in app; cookieless GA on static pages only; **ChatGPT landings that bounce pre-consent are invisible — and ChatGPT is CDE's best channel** | **YES — top priority.** Vercel /api function + reuse the Neon free-tier project (own table). CDE pages classify referrer the same way |
+| register-ga4-dims.py (custom dims registered so event params are queryable) | No dims registration script found — quiz_funnel params likely unqueryable in GA4 explore | YES — one-time script run |
+| funnel-report.py (one-command funnel readout w/ bot heuristics) | No equivalent; readouts are ad-hoc | YES — cde-report.py clone |
+| bufferedTrack consent queue (pre-consent events held, flushed on grant) | Unknown — verify quit-guard events pre-consent aren't dropped | Verify, port if missing |
+| BotID suppression | Nothing (traffic small; bots less observed) | Not yet — revisit with traffic |
+| **analytics.js hardening** | Module-scope localStorage WITHOUT try/catch (lines 7/11/16) — known white-screen risk in privacy modes | **FIX NOW** (tiny) |
+| Streak freeze (1-day grace, humane) | Hard streak — one missed day wipes it | YES — kids deserve the grace day |
+| kdm-endscreen (rich results: achievements, related/harder suggestions, next) | ResultScreen is basic | Port pattern into ResultScreen |
+
+## Images + other checks
+- CDE images are fine (342 real photos, og-images generated per category). When S1 games ship:
+  port gen-thumbnails.mjs (Playwright real-screenshot → game-card thumbs + og:image per game).
+- PWA updates: registerType 'prompt' keeps stale shells alive (the 09-18 crash); boundary
+  auto-reload now covers the failure, but consider a visible "update ready" toast UX later.
+- Sentry: get a read-scoped token (~/.sentryclirc token can't read issues — blocked live debugging).
+
+## Quick-wins order (revised)
+1. analytics.js try/catch hardening (minutes) + streak grace (small)
+2. /api/land beacon + Neon table + report endpoint (the ChatGPT-channel visibility gap)
+3. register-ga4-dims + cde-report.py
+4. S1 pilot game wave (Word Zapper, Spelling Forge, Category Conveyor) + per-game SEO pages + thumbnails
+5. S2 lightning/combo/collectibles retrofit → then the rest of the crossover plan
