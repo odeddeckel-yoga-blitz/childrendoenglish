@@ -97,6 +97,34 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
     }
   };
 
+  // Mouse-drag swiping for desktop — touch events never fire there. A drag
+  // must not fall through as a click, or the next card appears pre-flipped.
+  const mouseStart = useRef(null);
+  const suppressClick = useRef(false);
+  const handleMouseDown = (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault(); // no text selection mid-drag
+    mouseStart.current = { x: e.clientX, y: e.clientY };
+  };
+  const handleMouseUp = (e) => {
+    if (!mouseStart.current) return;
+    const dx = e.clientX - mouseStart.current.x;
+    const dy = e.clientY - mouseStart.current.y;
+    mouseStart.current = null;
+    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) suppressClick.current = true;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx > 0) handleKnow();
+      else handleLearning();
+    }
+  };
+  const handleClickCapture = (e) => {
+    if (suppressClick.current) {
+      suppressClick.current = false;
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
   if (finished || cards.length === 0) {
     return (
       <div className="animate-fade-in space-y-6 text-center">
@@ -156,6 +184,10 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
         className="flashcard-container"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={() => { mouseStart.current = null; }}
+        onClickCapture={handleClickCapture}
       >
         <div
           role="button"

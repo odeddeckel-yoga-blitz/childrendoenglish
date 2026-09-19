@@ -478,7 +478,7 @@ const translations = {
     footerAbout: 'About',
 
     // Learn mode
-    swipeToBrowse: 'Swipe to browse words',
+    swipeToBrowse: 'Swipe or use the arrows to browse',
 
     // Arcade layer (kidsdomath crossover): combo scoring
     comboLabel: 'Combo ×{{count}}',

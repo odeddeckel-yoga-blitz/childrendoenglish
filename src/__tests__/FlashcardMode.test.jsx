@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import FlashcardMode from '../components/FlashcardMode';
 import { spacedRepetitionSort } from '../utils/spaced-repetition';
@@ -88,6 +88,20 @@ describe('FlashcardMode', () => {
     render(<FlashcardMode {...defaultProps} />);
     fireEvent.click(screen.getByLabelText('Back to menu'));
     expect(defaultProps.onBack).toHaveBeenCalled();
+  });
+
+  it('mouse drag right marks Know It and advances (desktop swipe)', () => {
+    vi.useFakeTimers();
+    const { container } = render(<FlashcardMode {...defaultProps} />);
+    const card = container.querySelector('.flashcard-container');
+    fireEvent.mouseDown(card, { clientX: 100, clientY: 100, button: 0 });
+    fireEvent.mouseUp(card, { clientX: 220, clientY: 105 });
+    // The advance lands after the 400ms swipe-overlay flash
+    act(() => { vi.advanceTimersByTime(500); });
+    expect(screen.getByText(/2 \//)).toBeInTheDocument();
+    // The drag must not fall through as a click that flips the next card
+    expect(screen.queryByText('Know It')).not.toBeInTheDocument();
+    vi.useRealTimers();
   });
 
   it('shows finished state when cards exhausted', () => {

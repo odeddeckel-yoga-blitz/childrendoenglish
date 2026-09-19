@@ -47,6 +47,50 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
     }
   };
 
+  // Mouse-drag swiping — touch events never fire on desktop, so the "swipe to
+  // browse" promise needs a pointer equivalent. Drags suppress the click that
+  // lands on whatever the cursor was released over.
+  const mouseStart = useRef(null);
+  const suppressClick = useRef(false);
+  const handleMouseDown = (e) => {
+    if (e.button !== 0) return;
+    e.preventDefault(); // no text selection / native image drag mid-swipe
+    mouseStart.current = { x: e.clientX, y: e.clientY };
+  };
+  const handleMouseUp = (e) => {
+    if (!mouseStart.current) return;
+    const dx = e.clientX - mouseStart.current.x;
+    const dy = e.clientY - mouseStart.current.y;
+    mouseStart.current = null;
+    if (Math.abs(dx) > 10 || Math.abs(dy) > 10) suppressClick.current = true;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      if (dx > 0) rtl ? goNext() : goPrev();
+      else rtl ? goPrev() : goNext();
+    }
+  };
+  const handleClickCapture = (e) => {
+    if (suppressClick.current) {
+      suppressClick.current = false;
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  };
+
+  // Keyboard browsing in detail view (desktop): ←/→ move between words
+  useEffect(() => {
+    if (view !== 'detail') return undefined;
+    const onKey = (e) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      const tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      e.preventDefault();
+      if (e.key === 'ArrowRight') rtl ? goPrev() : goNext();
+      else rtl ? goNext() : goPrev();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  });
+
   // Auto-TTS for pre-readers in detail view
   useEffect(() => {
     if (!canRead && view === 'detail' && currentWord) {
@@ -176,6 +220,10 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
           className="space-y-4"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={() => { mouseStart.current = null; }}
+          onClickCapture={handleClickCapture}
         >
           {/* Navigation */}
           <div className="flex items-center justify-between">

@@ -476,7 +476,7 @@ export default {
   footerAbout: 'אודות',
 
   // Learn mode
-  swipeToBrowse: 'החליקו כדי לדפדף במילים',
+  swipeToBrowse: 'החליקו או דפדפו עם החצים',
 
   // Arcade layer (kidsdomath crossover): combo scoring
   comboLabel: 'קומבו ×{{count}}',
