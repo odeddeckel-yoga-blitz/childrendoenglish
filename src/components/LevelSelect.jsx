@@ -82,6 +82,11 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
           <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
         <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('playQuiz', lang)}</h2>
+        {knownLetters?.length > 0 && (
+          <span className="ms-auto px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold" dir="ltr">
+            {t('knownLettersActive', lang, { letters: knownLetters.join(' ') })}
+          </span>
+        )}
       </div>
 
       {/* Level tabs */}

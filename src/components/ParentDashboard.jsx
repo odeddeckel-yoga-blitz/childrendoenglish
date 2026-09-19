@@ -59,12 +59,7 @@ export default function ParentDashboard({ players = [], lang = 'en', onUpdatePla
               {/* Player header */}
               <div className="flex items-center gap-3">
                 <span className="text-3xl">{player.avatar}</span>
-                <div>
-                  <p className="font-bold text-slate-800 dark:text-slate-100">{player.name}</p>
-                  <p className="text-xs text-slate-500">
-                    {t('canReadLabel', lang)}: {player.canRead ? '✓' : '✗'}
-                  </p>
-                </div>
+                <p className="font-bold text-slate-800 dark:text-slate-100">{player.name}</p>
               </div>
 
               {/* Stats grid */}
@@ -105,17 +100,39 @@ export default function ParentDashboard({ players = [], lang = 'en', onUpdatePla
                 </div>
               </div>
 
-              {/* Known letters — "my child is on letter C at school" */}
+              {/* Adjustments — the parent's levers, labeled so they're discoverable */}
               {onUpdatePlayer && (
-                <div className="space-y-2">
+                <div className="space-y-2 border-t border-slate-200 dark:border-slate-700 pt-3">
+                  <p className="text-[11px] font-bold uppercase tracking-wide text-teal-600">{t('parentAdjustments', lang)}</p>
+
+                  {/* Reading mode toggle */}
+                  <button
+                    onClick={() => onUpdatePlayer(player.id, { canRead: !player.canRead })}
+                    className="w-full flex items-center justify-between text-xs py-1.5"
+                    role="switch"
+                    aria-checked={!!player.canRead}
+                  >
+                    <span className="font-semibold text-slate-700 dark:text-slate-200 text-start">
+                      {t('canReadLabel', lang)}
+                      <span className="block font-normal text-[11px] text-slate-500">{t('canReadHint', lang)}</span>
+                    </span>
+                    <span className={`w-10 h-6 rounded-full p-0.5 transition-colors flex-shrink-0 ${player.canRead ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`}>
+                      <span className={`block w-5 h-5 rounded-full bg-white shadow transition-transform ${player.canRead ? 'ltr:translate-x-4 rtl:-translate-x-4' : ''}`} />
+                    </span>
+                  </button>
+
+                  {/* Known letters — "my child is on letter C at school" */}
                   <button
                     onClick={() => setLettersOpenFor(lettersOpenFor === player.id ? null : player.id)}
-                    className="w-full flex items-center justify-between text-xs py-1"
+                    className="w-full flex items-center justify-between text-xs py-1.5 rounded-lg"
                     aria-expanded={lettersOpenFor === player.id}
                   >
-                    <span className="font-semibold text-slate-700 dark:text-slate-200">{t('knownLettersTitle', lang)}</span>
-                    <span className="text-slate-500" dir="ltr">
-                      {player.knownLetters?.length ? player.knownLetters.join(' ') : t('knownLettersAll', lang)}
+                    <span className="font-semibold text-slate-700 dark:text-slate-200 text-start">
+                      {t('knownLettersTitle', lang)}
+                      <span className="block font-normal text-[11px] text-slate-500">{t('knownLettersShort', lang)}</span>
+                    </span>
+                    <span className="text-blue-600 font-semibold flex-shrink-0" dir="ltr">
+                      {player.knownLetters?.length ? player.knownLetters.join(' ') : t('knownLettersAll', lang)} ▾
                     </span>
                   </button>
                   {lettersOpenFor === player.id && (

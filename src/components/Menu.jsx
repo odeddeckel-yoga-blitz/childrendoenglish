@@ -283,16 +283,25 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         </div>
       )}
 
+      {/* Parent area — one visible, self-describing entry so parents know
+          what they can adjust (was a near-invisible footer link) */}
+      {!isNewUser && (
+        <button
+          onClick={() => onNavigate('parentDashboard')}
+          className="w-full glass rounded-2xl p-3.5 flex items-center gap-3
+                     hover:shadow-md active:scale-[0.98] transition-all text-start"
+        >
+          <ShieldCheck className="w-5 h-5 text-teal-600 flex-shrink-0" />
+          <span className="flex-1">
+            <span className="block text-sm font-semibold text-slate-700 dark:text-slate-200">{t('parentDashboard', lang)}</span>
+            <span className="block text-xs text-slate-500">{t('parentDashboardHint', lang)}</span>
+          </span>
+        </button>
+      )}
+
       <div className="text-center space-y-1">
         <p className="text-xs text-slate-400">{t('madeBy', lang)}</p>
         <div className="flex items-center justify-center gap-3">
-          <button
-            onClick={() => onNavigate('parentDashboard')}
-            className="text-xs text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1"
-          >
-            <ShieldCheck className="w-3 h-3" /> {t('parentDashboard', lang)}
-          </button>
-          <span className="text-slate-300">|</span>
           <button
             onClick={() => onNavigate('privacy')}
             className="text-xs text-slate-400 hover:text-slate-600 transition-colors"
