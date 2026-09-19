@@ -93,7 +93,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.js',
-    exclude: ['e2e/**', 'node_modules/**'],
+    exclude: ['e2e/**', 'node_modules/**', 'game-kit/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],

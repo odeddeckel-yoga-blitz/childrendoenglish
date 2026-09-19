@@ -5,14 +5,14 @@ export default {
   dailyGoal: 'יעד יומי',
   words: 'מילים',
   dayStreak: 'ימים ברצף!',
-  learnWords: 'למד מילים',
+  learnWords: 'לומדים מילים',
   learnWordsDesc: 'גלו ולמדו מילים חדשות',
   flashcards: 'כרטיסיות',
-  flashcardsDesc: 'החליקו כדי לסקור מילים',
-  playQuiz: 'שחק חידון',
+  flashcardsDesc: 'החליקו כדי לחזור על מילים',
+  playQuiz: 'שחקו בחידון',
   playQuizDesc: 'בדקו את אוצר המילים שלכם',
   startHere: 'התחילו כאן!',
-  menuMoreFeatures: 'עוד תכונות ייפתחו אחרי החידון הראשון!',
+  menuMoreFeatures: 'עוד משחקים ייפתחו אחרי החידון הראשון!',
   playFirstQuiz: 'שחקו את החידון הראשון!',
   myWordList: 'רשימת המילים שלי',
   myWordListDesc: 'תרגלו מילים מותאמות אישית',
@@ -26,10 +26,10 @@ export default {
   termsOfService: 'תנאי שימוש',
   madeBy: 'נוצר על ידי עודד דקלבאום',
   chooseLevel: 'בחרו רמה',
-  chooseMode: 'בחרו מצב',
+  chooseMode: 'בחרו סוג חידון',
   backToMenu: 'חזרה לתפריט',
   skipThisWord: 'דלגו על מילה זו',
-  playAgain: 'שחק שוב',
+  playAgain: 'שחקו שוב',
   backToMenuBtn: 'חזרה לתפריט',
   question: 'שאלה',
   of: 'מתוך',
@@ -46,8 +46,8 @@ export default {
 
   // Level/Mode
   beginner: 'מתחילים',
-  intermediate: 'בינוני',
-  advanced: 'מתקדם',
+  intermediate: 'ביניים',
+  advanced: 'מתקדמים',
   imageQuiz: 'חידון תמונות',
   imageQuizDesc: 'ראו תמונה, בחרו את המילה הנכונה',
   wordQuiz: 'חידון מילים',
@@ -63,7 +63,7 @@ export default {
   endQuiz: 'לסיים את החידון?',
   progressSaved: 'ההתקדמות שלכם תישמר.',
   continue: 'המשך',
-  endQuizBtn: 'סיים חידון',
+  endQuizBtn: 'סיום החידון',
   whatIsThis: 'מה זה?',
   hearAgain: 'הקישו כדי לשמוע שוב',
   audioUnavailable: 'שמע לא זמין במכשיר זה. מציגים מילים במקום.',
@@ -80,7 +80,7 @@ export default {
   badgesEarned: 'תגים שהושגו',
   review: 'סקירה',
   share: 'שיתוף',
-  changeMode: 'שינוי מצב',
+  changeMode: 'סוג חידון אחר',
   youPicked: 'בחרתם: {{word}}',
 
   // Learn Mode
@@ -96,13 +96,13 @@ export default {
 
   // Flashcards
   tapToFlip: 'הקישו כדי להפוך',
-  stillLearning: 'עדיין לומד',
-  knowIt: 'יודע',
-  swipeHint: 'החליקו ימינה = יודע, החליקו שמאלה = עדיין לומד',
+  stillLearning: 'עדיין לומדים',
+  knowIt: 'יודעים',
+  swipeHint: 'החליקו ימינה = יודעים, החליקו שמאלה = עדיין לומדים',
   sessionComplete: 'הסבב הושלם!',
-  noCardsToReview: 'אין כרטיסים לסקירה!',
-  flipToFront: 'הפוך כרטיס לצד הקדמי',
-  flipToBack: 'הפוך כרטיס כדי לראות תשובה',
+  noCardsToReview: 'אין כרטיסים לחזרה!',
+  flipToFront: 'הפכו את הכרטיס לצד הקדמי',
+  flipToBack: 'הפכו את הכרטיס כדי לראות את התשובה',
   flashcardProgress: 'התקדמות כרטיסיות',
 
   // Badges
@@ -147,25 +147,25 @@ export default {
   whoIsPlaying: 'מי משחק?',
   switchPlayer: 'החלפת שחקן',
   managePlayers: 'ניהול שחקנים',
-  addPlayer: 'הוסף שחקן',
-  createPlayer: 'צור שחקן',
+  addPlayer: 'הוספת שחקן',
+  createPlayer: 'יצירת שחקן',
   playerName: 'שם השחקן',
   playerNamePlaceholder: 'אביגיל',
-  chooseAvatar: 'בחר סמל',
-  deletePlayer: 'מחק שחקן',
+  chooseAvatar: 'בחרו סמל',
+  deletePlayer: 'מחיקת שחקן',
   deleteConfirm: 'למחוק את {{name}}? כל ההתקדמות תאבד.',
-  resetProgress: 'אפס התקדמות',
+  resetProgress: 'איפוס התקדמות',
   resetConfirm: 'לאפס את כל ההתקדמות של {{name}}?',
-  playingAs: 'משחק בתור {{name}}',
-  canYouRead: 'אתם יכולים לקרוא מילים באנגלית?',
-  iCanRead: 'אני יכול לקרוא!',
+  playingAs: 'משחקים בתור {{name}}',
+  canYouRead: 'יודעים לקרוא מילים באנגלית?',
+  iCanRead: 'כבר למדתי לקרוא!',
   notYet: 'עוד לא',
   parentCanChange: 'הורה יכול לשנות את זה אחר כך',
   canReadLabel: 'יכול/ה לקרוא מילים באנגלית',
-  canReadHint: 'כבו עבור ילדים שעדיין לא קוראים כדי להפעיל מצב האזנה והתאמה',
-  listenMatchQuiz: 'האזן והתאם',
+  canReadHint: 'כבו עבור ילדים שעדיין לא קוראים כדי להפעיל חידון הקשבה והתאמה',
+  listenMatchQuiz: 'הקשיבו והתאימו',
   listenMatchQuizDesc: 'שמעו וראו מילה, בחרו את התמונה הנכונה',
-  tapToHear: 'לחץ לשמוע שוב',
+  tapToHear: 'הקישו כדי לשמוע שוב',
 
   // Learn Mode empty state
   tryDifferentSearch: 'נסו חיפוש או קטגוריה אחרת',
@@ -173,7 +173,7 @@ export default {
   // Onboarding i18n
   chooseLanguage: 'באיזו שפה אתם מדברים?',
   welcomeTitle: 'ברוכים הבאים!',
-  welcomeWithName: 'ברוכים הבאים, {{name}}!',
+  welcomeWithName: 'איזה כיף שהצטרפת, {{name}}!',
   welcomeDesc: 'למדו מילים חדשות באנגלית דרך חידונים וכרטיסיות.',
   seeAndLearn: 'ראו ולמדו',
   seeAndLearnDesc: 'התאימו מילים לתמונות, שמעו איך הן נשמעות ועקבו אחרי ההתקדמות.',
@@ -200,7 +200,7 @@ export default {
   lessonProgress: '{{done}} / {{total}} שולטים',
 
   // Parent dashboard
-  parentDashboard: 'לוח הורים',
+  parentDashboard: 'אזור הורים',
   parentDashboardDesc: 'צפו בדוחות למידה',
 
   // Share text
@@ -224,7 +224,7 @@ export default {
   // Quiz feedback
   feedbackCorrect: 'נכון! התשובה היא {{word}}',
   feedbackWrong: 'לא נכון. התשובה הנכונה היא {{word}}.',
-  feedbackSkipped: 'דילוג. התשובה היא {{word}}.',
+  feedbackSkipped: 'דילגתם! התשובה היא {{word}}.',
 
   // Notifications text
   streakReminderTitle: 'שמרו על הרצף!',
@@ -310,7 +310,7 @@ export default {
   mode_image: 'חידון תמונות',
   mode_word: 'חידון מילים',
   mode_audio: 'חידון שמיעה',
-  mode_listen: 'האזן והתאם',
+  mode_listen: 'הקשיבו והתאימו',
 
   // Aria labels
   skipOnboarding: 'דלגו על הדרכה',
@@ -355,7 +355,7 @@ export default {
   wordListPlaceholder: 'cat, dog, apple, tree...',
 
   // Offline indicator
-  offlineMessage: 'אתם במצב לא מקוון. חלק מהתכונות עלולות לא לעבוד.',
+  offlineMessage: 'אין חיבור לאינטרנט. חלק מהאפשרויות אולי לא יעבדו.',
 
   // Storage full warning
   storageFull: 'האחסון מלא. ייתכן שההתקדמות לא תישמר. נסו לנקות נתוני דפדפן ישנים.',
@@ -368,15 +368,15 @@ export default {
   dailyReview: 'חזרה יומית',
   dailyReviewDesc: 'חזרו על מילים שלמדתם',
   wordsDue: '{{count}} מילים לחזרה',
-  allCaughtUp: 'הכל מעודכן!',
+  allCaughtUp: 'חזרתם על הכל!',
   reviewComplete: 'החזרה הושלמה!',
-  wordsReviewed: 'מילים שנחזרו',
+  wordsReviewed: 'מילים שחזרתם עליהן',
 
   // Landing page
   landingHeroTitle: 'למדו אנגלית בכיף!',
   landingHeroDesc: 'אפליקציה חינמית לאוצר מילים לילדים בגילאי 6-12. ללא פרסומות, ללא הרשמה.',
   getStarted: 'בואו נתחיל',
-  welcomeBack: 'ברוכים השבים, {{name}}!',
+  welcomeBack: 'איזה כיף שחזרת, {{name}}!',
   continueBtn: 'המשך',
 
   // Features
@@ -385,7 +385,7 @@ export default {
   featureFlashcardsTitle: 'כרטיסיות',
   featureFlashcardsDesc: 'החליקו כרטיסים עם חזרה מרווחת',
   featureQuizTitle: 'חידונים מהנים',
-  featureQuizDesc: 'מצבי תמונה, מילה, שמע והאזן-והתאם',
+  featureQuizDesc: 'חידוני תמונות, מילים, שמיעה והקשבה',
   featureProgressTitle: 'עקבו אחרי ההתקדמות',
   featureProgressDesc: 'השיגו תגים, שמרו רצפים, ראו את ההתקדמות',
 
@@ -413,14 +413,14 @@ export default {
   faq6Q: 'האם כמה ילדים יכולים להשתמש באפליקציה?',
   faq6A: 'כן! האפליקציה תומכת בפרופילים מרובים כך שאחים יכולים לעקוב אחרי ההתקדמות שלהם בנפרד.',
   faq7Q: 'איך האפליקציה מלמדת אוצר מילים?',
-  faq7A: 'היא משתמשת בחזרה מרווחת ובמצבי חידון מרובים — תמונה, מילה, שמע והתאמת שמיעה — יחד עם כרטיסיות לבניית אוצר מילים לטווח ארוך.',
+  faq7A: 'היא משתמשת בחזרה מרווחת ובכמה סוגי חידונים — תמונה, מילה, שמע והתאמת שמיעה — יחד עם כרטיסיות לבניית אוצר מילים לטווח ארוך.',
 
   // Language select
   confirmLanguage: 'באיזו שפה אתם מדברים?',
   landingStatsWords: '340+ מילים',
   landingStatsCategories: '13 קטגוריות',
-  landingStatsModes: '4 מצבי חידון',
-  landingFeaturesHeading: 'הכל מה שהילד שלכם צריך',
+  landingStatsModes: '4 סוגי חידונים',
+  landingFeaturesHeading: 'כל מה שהילד שלכם צריך',
   landingReadyTitle: 'מוכנים להתחיל ללמוד?',
   landingReadyDesc: 'בחרו שפה והתחילו מיד.',
   landingLangEnglish: 'English',
@@ -435,7 +435,7 @@ export default {
   badgeProgressWords: '{{done}}/{{total}} מילים נלמדו',
   badgeProgressMastered: '{{done}}/{{total}} שולטים',
   badgeProgressStreak: '{{done}}/{{total}} ימים ברצף',
-  badgeProgressPerfect: 'השיגו ציון מושלם בחידון כלשהו',
+  badgeProgressPerfect: 'השיגו ציון מושלם בחידון',
 
   // Trust signals
   trustTitle: 'בנוי למשפחות',

@@ -490,7 +490,7 @@ test.describe('Onboarding Full Flow', () => {
     await nameInput.waitFor({ timeout: 15000 });
     await nameInput.fill('Test');
     // Click create button
-    const createBtn = page.locator('button:has-text("צור שחקן"), button:has-text("Create Player")').first();
+    const createBtn = page.locator('button:has-text("יצירת שחקן"), button:has-text("Create Player")').first();
     await createBtn.click();
 
     // Should go to menu — verify Hebrew RTL applied
@@ -534,8 +534,8 @@ test.describe('Hebrew Mode', () => {
     await setupHebrewUser(page);
     // Should see Hebrew labels
     await expect(page.locator('text=ילדים עושים אנגלית')).toBeVisible({ timeout: 5000 });
-    await expect(page.locator('text=שחק חידון')).toBeVisible();
-    await expect(page.locator('text=למד מילים')).toBeVisible();
+    await expect(page.locator('text=שחקו בחידון')).toBeVisible();
+    await expect(page.locator('text=לומדים מילים')).toBeVisible();
     await expect(page.locator('text=כרטיסיות')).toBeVisible();
   });
 
@@ -549,8 +549,8 @@ test.describe('Hebrew Mode', () => {
 
   test('Level select shows Hebrew labels', async ({ page }) => {
     await setupHebrewUser(page);
-    await page.locator('text=שחק חידון').click();
-    // LevelSelect heading uses t('playQuiz') = 'שחק חידון' in Hebrew
+    await page.locator('text=שחקו בחידון').click();
+    // LevelSelect heading uses t('playQuiz') = 'שחקו בחידון' in Hebrew
     await expect(page.locator('button:has-text("מתחילים")')).toBeVisible({ timeout: 5000 });
   });
 });

@@ -851,7 +851,7 @@ function buildHebrewLandingPage() {
         name: 'לאיזה גיל מתאימה האפליקציה?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'האפליקציה מתאימה לילדים בגילאי 6-12. המילים מחולקות לשלוש רמות קושי (מתחיל, בינוני ומתקדם) כך שכל ילד יכול להתקדם בקצב שלו.',
+          text: 'האפליקציה מתאימה לילדים בגילאי 6-12. המילים מחולקות לשלוש רמות קושי (מתחילים, ביניים ומתקדמים) כך שכל ילד יכול להתקדם בקצב שלו.',
         },
       },
       {
@@ -1026,7 +1026,7 @@ function buildHebrewLandingPage() {
   <div class="stats-bar">
     <div class="stat"><div class="stat-num">${WORDS.length}+</div><div class="stat-label">מילים</div></div>
     <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">קטגוריות</div></div>
-    <div class="stat"><div class="stat-num">4</div><div class="stat-label">מצבי חידון</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">סוגי חידונים</div></div>
     <div class="stat"><div class="stat-num">3</div><div class="stat-label">רמות קושי</div></div>
   </div>
 
@@ -1058,7 +1058,7 @@ function buildHebrewLandingPage() {
         <div class="feature-card">
           <div class="feature-icon">&#128506;</div>
           <h3>מסלול למידה מותאם</h3>
-          <p>שלוש רמות קושי — מתחיל, בינוני ומתקדם — כך שכל ילד מתקדם בקצב שלו.</p>
+          <p>שלוש רמות קושי — מתחילים, ביניים ומתקדמים — כך שכל ילד מתקדם בקצב שלו.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#127942;</div>
@@ -1141,7 +1141,7 @@ function buildHebrewLandingPage() {
         </div>
         <div class="faq-item">
           <div class="faq-q">לאיזה גיל מתאימה האפליקציה?</div>
-          <div class="faq-a">האפליקציה מתאימה לילדים בגילאי 6-12. המילים מחולקות לשלוש רמות קושי (מתחיל, בינוני ומתקדם) כך שכל ילד יכול להתקדם בקצב שלו.</div>
+          <div class="faq-a">האפליקציה מתאימה לילדים בגילאי 6-12. המילים מחולקות לשלוש רמות קושי (מתחילים, ביניים ומתקדמים) כך שכל ילד יכול להתקדם בקצב שלו.</div>
         </div>
         <div class="faq-item">
           <div class="faq-q">כמה מילים יש באפליקציה?</div>
