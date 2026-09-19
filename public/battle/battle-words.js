@@ -307,6 +307,18 @@ export const BATTLE_WORDS = {
    "w": "zoo",
    "he": "גן חיות",
    "img": "/images/zoo.webp"
+  },
+  {
+   "id": "quail",
+   "w": "quail",
+   "he": "שליו",
+   "img": "/images/quail.webp"
+  },
+  {
+   "id": "yak",
+   "w": "yak",
+   "he": "יאק",
+   "img": "/images/yak.webp"
   }
  ],
  "food": [
@@ -779,6 +791,12 @@ export const BATTLE_WORDS = {
    "w": "windmill",
    "he": "טחנת רוח",
    "img": "/images/windmill.webp"
+  },
+  {
+   "id": "yarn",
+   "w": "yarn",
+   "he": "חוט צמר",
+   "img": "/images/yarn.webp"
   }
  ],
  "transport": [
@@ -1933,6 +1951,12 @@ export const BATTLE_WORDS = {
    "w": "newspaper",
    "he": "עיתון",
    "img": "/images/newspaper.webp"
+  },
+  {
+   "id": "question",
+   "w": "question",
+   "he": "שאלה",
+   "img": "/images/question.webp"
   }
  ],
  "sports": [

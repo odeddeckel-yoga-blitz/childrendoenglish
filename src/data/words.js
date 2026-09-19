@@ -558,6 +558,12 @@ export const WORDS = [
   { id: 'unicorn', word: 'unicorn', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A magical horse with one horn on its head', exampleSentence: 'The story was about a white unicorn.', phonetic: '/ˈjuːnɪkɔːrn/', hebrewTranslation: 'חד-קרן', imageUrl: '/images/unicorn.webp' },
   { id: 'dragon', word: 'dragon', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A magical creature in stories that can breathe fire', exampleSentence: 'The dragon guarded its shiny treasure.', phonetic: '/ˈdræɡən/', hebrewTranslation: 'דרקון', imageUrl: '/images/dragon.webp' },
   { id: 'arrow', word: 'arrow', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A thin stick with a point that flies from a bow', exampleSentence: 'The arrow hit the middle of the target.', phonetic: '/ˈæroʊ/', hebrewTranslation: 'חץ', imageUrl: '/images/arrow.webp' },
+
+  // === THIN-LETTER BATCH 2 (Q/U/Y/Z) 2026-09-19 ===
+  { id: 'quail', word: 'quail', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'A small round bird with a short tail', exampleSentence: 'The quail hid in the tall grass.', phonetic: '/kweɪl/', hebrewTranslation: 'שליו', imageUrl: '/images/quail.webp' },
+  { id: 'question', word: 'question', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'Something you ask when you want to know more', exampleSentence: 'The teacher answered every question.', phonetic: '/ˈkwɛstʃən/', hebrewTranslation: 'שאלה', imageUrl: '/images/question.webp' },
+  { id: 'yak', word: 'yak', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'A big hairy ox that lives in cold mountains', exampleSentence: 'The yak has long shaggy fur.', phonetic: '/jæk/', hebrewTranslation: 'יאק', imageUrl: '/images/yak.webp' },
+  { id: 'yarn', word: 'yarn', level: 'intermediate', partOfSpeech: 'noun', category: 'home', definition: 'Soft thread used for knitting', exampleSentence: 'The cat played with a ball of yarn.', phonetic: '/jɑːrn/', hebrewTranslation: 'חוט צמר', imageUrl: '/images/yarn.webp' },
 ];
 
 export const CATEGORIES = [
