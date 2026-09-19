@@ -23,6 +23,12 @@ export function needsConsentPrompt() {
   return !readConsent();
 }
 
+// Owner devices (flagged once via ?internal=1, see land-beacon.js) report all
+// events as traffic_type=internal so GA4's Internal Traffic filter drops them.
+function isInternalDevice() {
+  try { return localStorage.getItem('cde_internal') === '1'; } catch { return false; }
+}
+
 // Load the gtag.js script dynamically (deferred from <head> to reduce LCP)
 function ensureGtagScript() {
   if (gtagScriptLoaded) return;
@@ -31,6 +37,7 @@ function ensureGtagScript() {
   window.gtag = function() { window.dataLayer.push(arguments); };
   window.gtag('consent', 'default', { analytics_storage: 'denied' });
   window.gtag('js', new Date());
+  if (isInternalDevice()) window.gtag('set', { traffic_type: 'internal' });
   window.gtag('config', GA_ID);
   const script = document.createElement('script');
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;

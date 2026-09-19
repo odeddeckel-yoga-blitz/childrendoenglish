@@ -24,6 +24,13 @@
     ad_personalization: 'denied',
   });
   window.gtag('js', new Date());
+  try {
+    // Owner devices (flag set via ?internal=1 in land-beacon.js) — GA4's
+    // Internal Traffic filter drops traffic_type=internal events.
+    if (localStorage.getItem('cde_internal') === '1') {
+      window.gtag('set', { traffic_type: 'internal' });
+    }
+  } catch (e) { /* storage blocked */ }
   window.gtag('config', GA_ID);
   var s = document.createElement('script');
   s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;

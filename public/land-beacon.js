@@ -4,6 +4,13 @@
  * no identifier). See /api/land. */
 (function () {
   try {
+    // Owner opt-out: visiting any page once with ?internal=1 marks THIS browser
+    // as internal traffic forever (localStorage write is the owner's own choice,
+    // not visitor tracking). GA and this beacon both honor the flag.
+    try {
+      if (/[?&]internal=1/.test(location.search)) localStorage.setItem('cde_internal', '1');
+      if (localStorage.getItem('cde_internal') === '1') return;
+    } catch (e) { /* storage unavailable — fall through */ }
     if (navigator.webdriver || !navigator.sendBeacon) return;
     var p = location.pathname, g = 'other';
     if (p === '/' || p === '') g = 'home';
