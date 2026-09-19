@@ -4,7 +4,6 @@ const translations = {
     // Menu (existing)
     appName: 'Children Do English',
     tagline: 'Build your vocabulary!',
-    dailyGoal: 'Daily Goal',
     words: 'words',
     dayStreak: 'day streak!',
     learnWords: 'Learn Words',
@@ -45,7 +44,6 @@ const translations = {
     lightMode: 'Light mode',
     darkModeLabel: 'Dark mode',
     dismissInstall: 'Dismiss install prompt',
-    dayStreakMenu: '{{count}} day streak!',
 
     // Level/Mode
     beginner: 'Beginner',
@@ -330,7 +328,6 @@ const translations = {
     knownLettersDesc: 'Pick the letters your child has learned at school — quizzes, flashcards and Lightning will only use words starting with them.',
     knownLettersAll: 'All letters',
     knownLettersCount: '{{count}} words available',
-    dailyGoalProgress: 'Daily goal progress',
 
     // Badge names
     badge_first_word: 'First Word',

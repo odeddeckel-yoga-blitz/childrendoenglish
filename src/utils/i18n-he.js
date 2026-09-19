@@ -2,7 +2,6 @@ export default {
   // Menu (existing)
   appName: 'ילדים עושים אנגלית',
   tagline: 'בנו את אוצר המילים שלכם!',
-  dailyGoal: 'יעד יומי',
   words: 'מילים',
   dayStreak: 'ימים ברצף!',
   learnWords: 'לומדים מילים',
@@ -43,7 +42,6 @@ export default {
   lightMode: 'מצב בהיר',
   darkModeLabel: 'מצב כהה',
   dismissInstall: 'סגירת הודעת התקנה',
-  dayStreakMenu: '{{count}} ימים ברצף!',
 
   // Level/Mode
   beginner: 'מתחילים',
@@ -328,7 +326,6 @@ export default {
   knownLettersDesc: 'סמנו את האותיות שהילד כבר למד בבית הספר — החידונים, הכרטיסיות והברק ישתמשו רק במילים שמתחילות בהן.',
   knownLettersAll: 'כל האותיות',
   knownLettersCount: '{{count}} מילים זמינות',
-  dailyGoalProgress: 'התקדמות יעד יומי',
 
   // Badge names
   badge_first_word: 'מילה ראשונה',

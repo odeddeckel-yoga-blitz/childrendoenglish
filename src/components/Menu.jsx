@@ -1,10 +1,7 @@
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, Download, X, Users, Map, ShieldCheck, Globe, RotateCcw } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck, Globe, RotateCcw } from 'lucide-react';
 import { t } from '../utils/i18n';
 
 export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
-  const dailyProgress = stats.dailyGoal?.date === new Date().toISOString().slice(0, 10)
-    ? Math.min(stats.dailyGoal.wordsReviewed / 10, 1) * 100
-    : 0;
 
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
   const isNewUser = stats.totalQuizzes === 0 && wordsLearned === 0;
@@ -71,31 +68,6 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         </button>
       )}
 
-      {/* Daily goal progress */}
-      <div className="glass rounded-2xl p-4 space-y-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            <h2 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('dailyGoal', lang)}</h2>
-          </div>
-          <span className="text-xs text-slate-500">
-            {stats.dailyGoal?.date === new Date().toISOString().slice(0, 10)
-              ? stats.dailyGoal.wordsReviewed
-              : 0} / 10 {t('words', lang)}
-          </span>
-        </div>
-        <div className="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={Math.round(dailyProgress)} aria-valuemin={0} aria-valuemax={100} aria-label={t('dailyGoalProgress', lang)}>
-          <div
-            className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500"
-            style={{ width: `${dailyProgress}%` }}
-          />
-        </div>
-        {stats.currentStreak > 0 && (
-          <p className="text-xs text-amber-600 font-medium">
-            🔥 {t('dayStreakMenu', lang, { count: stats.currentStreak })}
-          </p>
-        )}
-      </div>
 
       {/* Assessment removed — levels unlock via quiz scores */}
 
