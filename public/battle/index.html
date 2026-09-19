@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Class Battle — Live English Vocabulary Game for Classrooms | ChildrenDoEnglish</title>
+<meta name="description" content="Free live vocabulary battle for ESL classrooms. The teacher picks a word category, kids join with a 5-letter code on any device, hear the English word and race to tap the right photo. No accounts, no names, nothing stored.">
+<link rel="canonical" href="https://childrendoenglish.com/battle/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChildrenDoEnglish">
+<meta property="og:title" content="Class Battle — Live English Vocabulary Game for Classrooms">
+<meta property="og:description" content="Kids join with a code and race to tap the right photo for each English word. Free, no accounts, COPPA-safe.">
+<meta property="og:url" content="https://childrendoenglish.com/battle/">
+<meta property="og:image" content="https://childrendoenglish.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Class Battle — Live English Vocabulary Game">
+<meta name="twitter:description" content="Kids join with a code and race to tap the right photo for each English word. Free, no accounts, COPPA-safe.">
+<link rel="icon" href="/favicon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Class Battle","url":"https://childrendoenglish.com/battle/","description":"Live multiplayer English vocabulary game for classrooms: teacher creates a room, kids join with a code and race to tap the right photo for each spoken English word.","inLanguage":"en","applicationCategory":"EducationalApplication","operatingSystem":"Any (modern web browser)","isFamilyFriendly":true,"isAccessibleForFree":true,"typicalAgeRange":"6-12","learningResourceType":"Game","educationalUse":"Practice","audience":{"@type":"EducationalAudience","educationalRole":"teacher"},"author":{"@type":"Organization","name":"ChildrenDoEnglish","url":"https://childrendoenglish.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}</script>
+<script defer src="/static-analytics.js"></script>
+<script defer src="/land-beacon.js"></script>
+<style>
+  :root{
+    --indigo:#4f46e5; --indigo2:#6366f1; --blue:#3b82f6; --sky:#eef2ff; --sky2:#dbeafe;
+    --ink:#1e1b4b; --dim:#6b7280; --gold:#f59e0b; --grn:#10b981; --red:#ef4444;
+    --card:#ffffff; --line:rgba(79,70,229,.25);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+  html,body{margin:0;min-height:100%;background:var(--sky);
+    font-family:'Segoe UI','Arial Hebrew','Noto Sans Hebrew',system-ui,-apple-system,sans-serif;
+    color:var(--ink);}
+  body{display:flex;flex-direction:column;align-items:center;padding:64px 16px 40px;gap:18px;}
+  h1,h2{margin:0;font-weight:900;}
+  button{font-family:inherit;cursor:pointer;border:none;color:var(--ink);}
+  .screen{display:none;width:100%;max-width:900px;flex-direction:column;align-items:center;gap:18px;text-align:center;}
+  .screen.show{display:flex;}
+  .card{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:22px 26px;
+    box-shadow:0 10px 40px rgba(79,70,229,.14);width:100%;}
+  .btn{min-height:56px;padding:12px 30px;border-radius:18px;font-size:20px;font-weight:800;letter-spacing:.4px;
+    background:linear-gradient(180deg,var(--indigo2),var(--indigo));color:#fff;
+    box-shadow:0 5px 0 #3730a3,0 10px 24px rgba(79,70,229,.3);transition:transform .08s,filter .12s;}
+  .btn:hover{filter:brightness(1.08);}
+  .btn:active{transform:translateY(3px);box-shadow:0 2px 0 #3730a3;}
+  .btn.green{background:linear-gradient(180deg,#34d399,var(--grn));box-shadow:0 5px 0 #047857,0 10px 24px rgba(16,185,129,.3);}
+  .btn.green:active{box-shadow:0 2px 0 #047857;}
+  .btn.ghost{background:#fff;color:var(--indigo);border:2px solid var(--line);box-shadow:none;font-size:16px;min-height:44px;}
+  .btn[disabled]{opacity:.45;cursor:default;transform:none;}
+  #homePill{position:fixed;left:12px;top:12px;z-index:60;font:700 13px/1 inherit;color:var(--indigo);
+    text-decoration:none;background:rgba(255,255,255,.92);border:1.5px solid var(--line);border-radius:999px;
+    padding:9px 14px;box-shadow:0 2px 10px rgba(79,70,229,.14);}
+  h1.logo{font-size:clamp(34px,7vw,58px);letter-spacing:1px;
+    background:linear-gradient(90deg,var(--blue),var(--indigo),#8b5cf6);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{font-size:clamp(15px,3.2vw,19px);color:var(--ink);font-weight:600;max-width:640px;line-height:1.5;margin:0;}
+  .rolerow{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;width:100%;}
+  .rolecard{flex:1 1 260px;max-width:340px;display:flex;flex-direction:column;gap:10px;align-items:center;padding:26px;}
+  .rolecard .big{font-size:44px;}
+  .privacy{font-size:13px;color:var(--dim);max-width:620px;line-height:1.6;}
+  .grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+  .chip{padding:10px 16px;border-radius:999px;border:2px solid var(--line);background:#fff;font-size:16px;font-weight:700;}
+  .chip.sel{background:var(--indigo);color:#fff;border-color:var(--indigo);}
+  #roomCode{font-size:clamp(56px,14vw,120px);font-weight:900;letter-spacing:.18em;color:var(--indigo);line-height:1.1;}
+  .joinhint{font-size:clamp(15px,3vw,22px);color:var(--dim);font-weight:600;}
+  #hostPlayers,#podiumList{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .clock{font-size:clamp(40px,9vw,72px);font-weight:900;color:var(--indigo);font-variant-numeric:tabular-nums;}
+  .board{display:flex;flex-direction:column;gap:8px;width:100%;max-width:560px;margin:0 auto;text-align:left;}
+  .brow{display:grid;grid-template-columns:34px 1fr 64px;gap:10px;align-items:center;background:#fff;
+    border:1.5px solid var(--line);border-radius:14px;padding:8px 14px;font-weight:800;font-size:17px;position:relative;overflow:hidden;}
+  .brow .bar{position:absolute;inset:0;background:var(--sky2);z-index:0;transition:width .5s;}
+  .brow span{position:relative;z-index:1;}
+  .brow .sc{text-align:right;color:var(--indigo);}
+  #codeInput{width:260px;max-width:80vw;font-size:34px;font-weight:900;letter-spacing:.3em;text-align:center;
+    text-transform:uppercase;border:2.5px solid var(--line);border-radius:16px;padding:12px 8px;color:var(--ink);
+    background:#fff;outline:none;font-family:inherit;}
+  #codeInput:focus{border-color:var(--indigo2);}
+  .err{color:var(--red);font-weight:700;font-size:15px;min-height:20px;margin:0;}
+  .namegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;width:100%;max-width:640px;}
+  .namebtn{padding:14px 10px;border-radius:16px;border:2px solid var(--line);background:#fff;font-size:17px;font-weight:800;}
+  .namebtn:hover{border-color:var(--indigo2);background:var(--sky2);}
+  /* kid play */
+  #playWord{font-size:clamp(38px,10vw,64px);font-weight:900;color:var(--indigo);letter-spacing:.5px;line-height:1.05;}
+  #playHe{font-size:clamp(14px,3.4vw,18px);font-weight:600;color:var(--dim);direction:rtl;}
+  #sayBtn{width:60px;height:60px;border-radius:50%;font-size:26px;background:linear-gradient(180deg,var(--blue),#2563eb);
+    color:#fff;box-shadow:0 4px 0 #1d4ed8;}
+  #sayBtn:active{transform:translateY(2px);box-shadow:0 2px 0 #1d4ed8;}
+  .hud{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;background:#fff;
+    border:1.5px solid var(--line);font-size:14px;font-weight:800;}
+  #choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:560px;}
+  .choice{padding:0;border-radius:20px;overflow:hidden;border:3px solid var(--line);background:#fff;line-height:0;
+    transition:transform .08s,border-color .15s,box-shadow .15s;}
+  .choice img{width:100%;aspect-ratio:4/3;object-fit:cover;pointer-events:none;}
+  .choice:active{transform:scale(.97);}
+  .choice.good{border-color:var(--grn);box-shadow:0 0 0 4px rgba(16,185,129,.35);}
+  .choice.bad{border-color:var(--red);box-shadow:0 0 0 4px rgba(239,68,68,.35);}
+  .choice[disabled]{cursor:default;}
+  /* podium */
+  .podium{display:flex;align-items:flex-end;gap:12px;justify-content:center;margin-top:6px;}
+  .pstep{display:flex;flex-direction:column;align-items:center;gap:6px;width:120px;}
+  .pstep .medal{font-size:34px;}
+  .pstep .pname{font-weight:900;font-size:15px;line-height:1.2;}
+  .pstep .pscore{color:var(--indigo);font-weight:800;font-size:14px;}
+  .pstep .block{width:100%;border-radius:12px 12px 0 0;background:linear-gradient(180deg,var(--indigo2),var(--indigo));}
+  .pstep.p1 .block{height:110px;background:linear-gradient(180deg,#fbbf24,var(--gold));}
+  .pstep.p2 .block{height:80px;}
+  .pstep.p3 .block{height:56px;background:linear-gradient(180deg,#a5b4fc,#818cf8);}
+  @media(prefers-reduced-motion:reduce){ .brow .bar,.choice{transition:none;} }
+</style>
+</head>
+<body>
+<a id="homePill" href="/">← childrendoenglish.com</a>
+
+<!-- home: pick role -->
+<section id="sHome" class="screen show">
+  <h1 class="logo">⚔️ Class Battle</h1>
+  <p class="sub">A live English vocabulary race for the whole class. The teacher puts the room code on the big
+    screen — everyone joins on their own device, hears the word and taps the matching photo. Fastest streaks win!</p>
+  <div class="rolerow">
+    <div class="card rolecard">
+      <div class="big">🧑‍🏫</div>
+      <h2>I'm the Teacher</h2>
+      <p class="sub">Create a battle and show the code on the projector.</p>
+      <button id="btnTeacher" class="btn">Create a Battle</button>
+    </div>
+    <div class="card rolecard">
+      <div class="big">🙋</div>
+      <h2>I'm a Player</h2>
+      <p class="sub">Got a code from your teacher? Jump in!</p>
+      <button id="btnKid" class="btn green">Join with a Code</button>
+    </div>
+  </div>
+  <p class="privacy">🔒 <b>Privacy:</b> no accounts and no sign-up. Players pick a fun nickname from a list — nobody
+    types their real name. Only that picked nickname and the score are stored, and the whole room is automatically
+    deleted about 30 minutes after it's created.</p>
+</section>
+
+<!-- teacher: setup -->
+<section id="sSetup" class="screen">
+  <h2>Pick a word category</h2>
+  <div id="catGrid" class="grid"></div>
+  <h2>Battle length</h2>
+  <div id="durGrid" class="grid"></div>
+  <p id="setupErr" class="err"></p>
+  <button id="btnCreate" class="btn">Create Room →</button>
+</section>
+
+<!-- teacher: lobby (projector) -->
+<section id="sHostLobby" class="screen">
+  <p class="joinhint">Join at <b>childrendoenglish.com/battle</b> with this code:</p>
+  <div id="roomCode"></div>
+  <div class="card">
+    <h2 id="hostCount">Waiting for players…</h2>
+    <div id="hostPlayers" style="margin-top:12px"></div>
+  </div>
+  <button id="btnStart" class="btn green" disabled>Start the Battle! 🚀</button>
+  <p id="hostErr" class="err"></p>
+</section>
+
+<!-- teacher: live leaderboard -->
+<section id="sHostLive" class="screen">
+  <div class="clock" id="hostClock">--:--</div>
+  <h2 id="hostTopic"></h2>
+  <div class="board" id="hostBoard"></div>
+</section>
+
+<!-- kid: enter code -->
+<section id="sJoin" class="screen">
+  <h2>Type your room code</h2>
+  <input id="codeInput" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Room code">
+  <p id="joinErr" class="err"></p>
+  <button id="btnCheckCode" class="btn green">Next →</button>
+</section>
+
+<!-- kid: pick nickname -->
+<section id="sName" class="screen">
+  <h2>Pick your battle name!</h2>
+  <p class="sub">No real names here — choose a hero name from the list.</p>
+  <div id="nameGrid" class="namegrid"></div>
+  <button id="btnMoreNames" class="btn ghost">🎲 Show me different names</button>
+  <p id="nameErr" class="err"></p>
+</section>
+
+<!-- kid: lobby -->
+<section id="sKidLobby" class="screen">
+  <h2 id="kidHello"></h2>
+  <p class="sub">You're in! 👀 Watch the big screen — the battle starts when your teacher presses Start.</p>
+  <div class="card"><div id="kidLobbyPlayers" class="grid"></div></div>
+</section>
+
+<!-- kid: play -->
+<section id="sPlay" class="screen">
+  <div class="hud">
+    <span class="pill">⏱ <span id="kidClock">--:--</span></span>
+    <span class="pill">⭐ <span id="kidScore">0</span></span>
+    <span class="pill">🔥 <span id="kidStreak">0</span></span>
+  </div>
+  <div class="card" style="max-width:620px">
+    <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap">
+      <button id="sayBtn" aria-label="Hear the word again">🔊</button>
+      <div>
+        <div id="playWord"></div>
+        <div id="playHe"></div>
+      </div>
+    </div>
+  </div>
+  <div id="choices"></div>
+</section>
+
+<!-- podium (both roles) -->
+<section id="sPodium" class="screen">
+  <h2 style="font-size:clamp(28px,6vw,44px)">🏆 Battle over!</h2>
+  <p class="sub" id="podiumSelf"></p>
+  <div class="podium" id="podiumTop"></div>
+  <div class="card"><div class="board" id="podiumList" style="flex-direction:column"></div></div>
+  <button id="btnAgain" class="btn">Play again</button>
+  <p class="privacy">This room and all scores will be automatically deleted shortly. Nothing else was stored.</p>
+</section>
+
+<script type="module" src="/battle/battle.js"></script>
+</body>
+</html>

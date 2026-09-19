@@ -15,7 +15,7 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         clientsClaim: true,
         skipWaiting: true,
-        navigateFallbackDenylist: [/\/images\//, /\/api\//, /\/vocabulary\//, /\/printable-flashcards\//, /\/guides\//, /\/about\//, /\/he\//, /\.webp$/, /\.png$/, /\.js$/, /\.css$/],
+        navigateFallbackDenylist: [/\/images\//, /\/api\//, /\/battle\//, /\/vocabulary\//, /\/printable-flashcards\//, /\/guides\//, /\/about\//, /\/he\//, /\.webp$/, /\.png$/, /\.js$/, /\.css$/],
         runtimeCaching: [
           {
             urlPattern: /\/images\/.*\.webp$/,
