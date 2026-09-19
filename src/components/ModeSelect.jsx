@@ -12,15 +12,6 @@ const allModes = [
     iconColor: 'text-purple-600',
   },
   {
-    id: 'image',
-    nameKey: 'imageQuiz',
-    descKey: 'imageQuizDesc',
-    icon: Image,
-    color: 'from-blue-500 to-blue-600',
-    iconBg: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-  },
-  {
     id: 'word',
     nameKey: 'wordQuiz',
     descKey: 'wordQuizDesc',
@@ -28,6 +19,15 @@ const allModes = [
     color: 'from-emerald-500 to-emerald-600',
     iconBg: 'bg-emerald-100',
     iconColor: 'text-emerald-600',
+  },
+  {
+    id: 'image',
+    nameKey: 'imageQuiz',
+    descKey: 'imageQuizDesc',
+    icon: Image,
+    color: 'from-blue-500 to-blue-600',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600',
   },
   {
     id: 'audio',

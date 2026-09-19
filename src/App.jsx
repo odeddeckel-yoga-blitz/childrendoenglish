@@ -489,7 +489,7 @@ export default function App() {
             onInstall={handleInstall}
             onDismissInstall={dismissInstall}
             onNavigate={navigate}
-            onQuickStart={() => quizFlow.startQuiz('beginner', 'image')}
+            onQuickStart={() => quizFlow.startQuiz('beginner', 'listen')}
             onToggleDark={toggleDarkMode}
             onToggleSound={toggleSound}
             onOpenProfilePicker={() => setShowProfilePicker(true)}

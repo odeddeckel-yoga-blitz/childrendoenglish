@@ -190,7 +190,21 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         </button>
 
         {isNewUser && (
-          <p className="text-center text-sm text-slate-400">{t('menuMoreFeatures', lang)}</p>
+          <>
+            {/* Egg teaser — curiosity hook pointing at the hatchery */}
+            <button
+              onClick={() => onNavigate('badges')}
+              className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                         hover:shadow-lg active:scale-[0.98] transition-all text-start"
+            >
+              <div className="text-3xl flex-shrink-0" aria-hidden="true">🥚🥚🥚</div>
+              <div className="flex-1">
+                <p className="font-bold text-slate-800 dark:text-slate-100">{t('hatcheryTeaser', lang)}</p>
+                <p className="text-slate-500 text-sm">{t('hatcheryTeaserDesc', lang)}</p>
+              </div>
+            </button>
+            <p className="text-center text-sm text-slate-400">{t('menuMoreFeatures', lang)}</p>
+          </>
         )}
 
         {!isNewUser && (

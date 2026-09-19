@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowLeft, Lock, Image, Type, Volume2, Headphones } from 'lucide-react';
 import { LEVELS } from '../data/levels';
 import { getWordsByLevel } from '../data/words';
+import { recommendedMode } from '../utils/modeLadder';
 import { t } from '../utils/i18n';
 
 const levelColorMap = {
@@ -21,6 +22,7 @@ const levelColorMap = {
 
 const levelNameKey = { beginner: 'beginner', intermediate: 'intermediate', advanced: 'advanced' };
 
+// Ordered easiest → hardest (MODE_LADDER): hear-first modes before read-first
 const allModes = [
   {
     id: 'listen',
@@ -31,20 +33,20 @@ const allModes = [
     iconColor: 'text-purple-600',
   },
   {
-    id: 'image',
-    nameKey: 'imageQuiz',
-    descKey: 'imageQuizDesc',
-    icon: Image,
-    iconBg: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-  },
-  {
     id: 'word',
     nameKey: 'wordQuiz',
     descKey: 'wordQuizDesc',
     icon: Type,
     iconBg: 'bg-emerald-100',
     iconColor: 'text-emerald-600',
+  },
+  {
+    id: 'image',
+    nameKey: 'imageQuiz',
+    descKey: 'imageQuizDesc',
+    icon: Image,
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600',
   },
   {
     id: 'audio',
@@ -66,6 +68,7 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, onStar
   const modes = canRead
     ? allModes
     : allModes.filter(m => m.id !== 'image');
+  const recommended = recommendedMode(stats.quizHistory, canRead);
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -140,10 +143,15 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, onStar
               <div className={`w-14 h-14 rounded-xl ${mode.iconBg} flex items-center justify-center flex-shrink-0`}>
                 <Icon className={`w-7 h-7 ${mode.iconColor}`} />
               </div>
-              <div>
+              <div className="flex-1">
                 <h3 className="font-bold text-slate-800 dark:text-slate-100">{t(mode.nameKey, lang)}</h3>
                 <p className="text-slate-500 text-sm">{t(mode.descKey, lang)}</p>
               </div>
+              {mode.id === recommended && (
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold flex-shrink-0">
+                  {t('modeRecommended', lang)}
+                </span>
+              )}
             </button>
           );
         })}
