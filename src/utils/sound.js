@@ -43,8 +43,32 @@ export const initTTS = async () => {
 export const isTTSAvailable = () => ttsAvailable;
 
 // Speak a word using Web Speech API
+// Pre-rendered word audio (Piper en_US-amy voice, scripts/generate-word-audio.sh):
+// one consistent, friendly voice on every device instead of whatever TTS the
+// OS ships. Falls back to on-device TTS for any text without a file.
+const wordAudioUrl = (text) =>
+  '/audio/' + text.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-') + '.mp3';
+
+let currentWordAudio = null;
+
+const playWordFile = (text) => new Promise((resolve) => {
+  try {
+    if (currentWordAudio) { currentWordAudio.pause(); currentWordAudio = null; }
+    const audio = new Audio(wordAudioUrl(text));
+    currentWordAudio = audio;
+    audio.onplaying = () => resolve(true);
+    audio.onerror = () => resolve(false);
+    const p = audio.play();
+    if (p && p.catch) p.catch(() => resolve(false));
+  } catch {
+    resolve(false); // jsdom / blocked autoplay → fall back to TTS
+  }
+});
+
 export const speakWord = async (text) => {
   if (!isSoundEnabled()) return;
+
+  if (await playWordFile(text)) return;
 
   // If TTS status unknown, try initializing first
   if (ttsAvailable === null) {
