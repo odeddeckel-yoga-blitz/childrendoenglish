@@ -1562,7 +1562,8 @@ const aboutHtml = `<!DOCTYPE html>
 
     <div class="section">
       <h2>About the Creator</h2>
-      <p>Children Do English is built by <strong>Oded Deckelbaum</strong>, a software developer and parent who wanted to create a better way for kids to learn English vocabulary. The app is open and free because education should be accessible to everyone.</p>
+      <p>Children Do English is built and maintained by me, <strong>Oded Deckelbaum</strong> &mdash; a software engineer and parent who couldn&rsquo;t find an English vocabulary app for my own kids that was genuinely free, ad-free, and focused on real learning. I design and build everything myself, and I stand behind every activity and every privacy claim on this site. Questions or ideas? Reach me at <a href="mailto:odeddeckel@gmail.com">odeddeckel@gmail.com</a>.</p>
+      <p style="font-size:0.9rem;color:#64748b">Also from me: <a href="https://www.kidsdomath.com" rel="me">KidsDoMath</a> &mdash; 200 free math games for kids, built on the same no-ads, privacy-first principles.</p>
     </div>
 
     <div class="section">
