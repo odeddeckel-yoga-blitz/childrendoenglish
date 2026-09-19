@@ -35,6 +35,28 @@ Arcade tier: score = base × (1 + 0.15·streak) × 1.5-fast-bonus; two-way adapt
 for young kids; endless survival + best-score chase for replay pull; name-promise match (a "Racer"
 must race).
 
+## 3b. Word/asset imagery doctrine (childrendoenglish, 2026-09; ~100 images vetted)
+When content needs a per-item image (vocabulary words, game icons, category art):
+- **Never trust search hit #1**: Wikimedia Commons' first result is a book cover, archival
+  scan, or worse ~50% of the time (a "nurse" query returned adult costume photos on a kids'
+  site). Always fan out N candidates → contact sheet → vision review.
+- **Metrics** (reference impl: CDE `scripts/word-image-improver.mjs`): recognizability
+  (target audience names the item from the image alone), kid-suitability (bright, no text,
+  no archival b&w, no brands), technical (≥300px, clean square crop), and the decisive
+  **sole-answer score 0-2**: "what single word would a child say for this image?" — if a
+  RIVAL item from the same content set is as-plausible an answer, the candidate fails
+  (a jungle photo dominated by a house reads "house"; a heart-shaped balloon reads
+  "balloon"; same-category rivals are fatal because they co-appear as quiz options).
+- **Drop rule**: ~3 candidate rounds with fresh search terms; still no passing image →
+  REMOVE the content item rather than ship a weak image. Some words are unservable
+  (ukulele always reads "guitar"; an up-arrow always reads "arrow").
+- **Illustration fallback** (CDE `scripts/generate-illustrations.mjs`): abstract concepts
+  and photo-impossible items get hand-authored flat SVG → sharp → webp in a consistent
+  pastel style — judged by the SAME metrics (a 2-peak zigzag read as the letter "M").
+- **CI guard**: a unit test asserting every content item's image exists on disk and is
+  non-trivial; same pattern for per-item audio if the product ships it (CDE pre-renders
+  all word audio with Piper TTS — one consistent voice beats device TTS roulette).
+
 ## 4. Robustness contracts (each was a shipped bug)
 - **kdm-no-repeat v2**: generator calls wrapped in `window.__kdmFreshO(...)`; if the round object
   contains ANY non-identity randomness (layout seeds, `token:Math.random()`, shuffled decoys) you
