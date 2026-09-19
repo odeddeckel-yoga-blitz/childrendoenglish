@@ -62,6 +62,14 @@ describe('LearnMode', () => {
     expect(screen.getByLabelText('Next word')).toBeInTheDocument();
   });
 
+  it('single-letter search matches only words STARTING with that letter', () => {
+    render(<LearnMode {...defaultProps} />);
+    fireEvent.change(screen.getByLabelText('Search words'), { target: { value: 'c' } });
+    expect(screen.getByText('cat')).toBeInTheDocument();
+    // 'duck' contains c but does not start with it
+    expect(screen.queryByText('duck')).not.toBeInTheDocument();
+  });
+
   it('browses words with a mouse drag in detail view (desktop swipe)', () => {
     render(<LearnMode {...defaultProps} />);
     fireEvent.click(screen.getByLabelText('Detail view'));

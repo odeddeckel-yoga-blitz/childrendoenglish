@@ -15,7 +15,11 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
   const touchStart = useRef({ x: 0, y: 0 });
 
   const filtered = useMemo(() => wordPool.filter(w => {
-    const matchesSearch = !search || w.word.toLowerCase().includes(search.toLowerCase());
+    // A single letter means "words starting with this letter" (letter-of-the-week
+    // practice); longer queries stay substring matches.
+    const q = search.toLowerCase();
+    const word = w.word.toLowerCase();
+    const matchesSearch = !search || (q.length === 1 ? word.startsWith(q) : word.includes(q));
     const matchesCat = !selectedCategory || w.category === selectedCategory;
     return matchesSearch && matchesCat;
   }), [wordPool, search, selectedCategory]);
