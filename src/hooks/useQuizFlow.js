@@ -3,7 +3,6 @@ import { selectQuizWords, updateWordSR } from '../utils/spaced-repetition';
 import { preloadImages } from '../utils/images';
 import { updateStreak, updateDailyGoal } from '../utils/storage';
 import { BADGES } from '../data/badges';
-import { checkCritters } from '../data/critters';
 import { playSound } from '../utils/sound';
 import { analytics } from '../utils/analytics';
 
@@ -23,10 +22,13 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     navigate('loading');
     setLoadingProgress(0);
 
-    const { getWordsByLevel, getDistractors } = await import('../data/words');
+    const { getWordsByLevel, getDistractors, WORDS } = await import('../data/words');
     const { filterByKnownLetters } = await import('../utils/letterFilter');
     // Custom word lists (personal list) are parent-picked — never filtered.
     const pool = words || filterByKnownLetters(getWordsByLevel(level), knownLetters);
+    // Distractor options must be readable too — restrict them to known letters
+    // (getDistractors tops up from the full vocabulary only if it runs dry).
+    const restrict = knownLetters?.length ? filterByKnownLetters(WORDS, knownLetters) : null;
     const selected = selectQuizWords(pool, stats.wordProgress, 10);
 
     if (selected.length === 0) {
@@ -38,7 +40,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     const wordDistractions = new Map();
     const allWordsNeeded = new Set();
     selected.forEach(w => {
-      const distractors = getDistractors(w, 3);
+      const distractors = getDistractors(w, 3, restrict);
       wordDistractions.set(w.id, distractors);
       allWordsNeeded.add(w);
       distractors.forEach(d => allWordsNeeded.add(d));
@@ -84,17 +86,16 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
 
     // Pure completion routine: applied inside the functional setStats updater
     // (safe against concurrent updates, StrictMode-friendly) AND once against
-    // the current stats snapshot to derive the new-best/new-critter flags for
+    // the current stats snapshot to derive the new-best flags for
     // the result screen. Nothing mutates stats mid-quiz, so both runs agree.
     const completeQuiz = (prev) => {
       let updated = { ...prev };
       let arcadeNewBest = false;
       let newBadges = [];
-      let newCritters = [];
 
       // A quit is not a completed quiz: keep the learning that happened
       // (word progress, daily goal) but don't count the quiz, award
-      // streak/badges/critters, or unlock levels.
+      // streak/badges, or unlock levels.
       if (!quit) {
         updated = {
           ...updated,
@@ -122,8 +123,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
           }
         }
 
-        // Arcade bookkeeping: per-mode best combo score, modes played,
-        // categories tried (feeds the critter earn rules)
+        // Arcade bookkeeping: per-mode best combo score, modes played, categories tried
         const arcade = { ...(updated.arcade || {}) };
         const bestByMode = { ...(arcade.bestByMode || {}) };
         const runScore = results.arcade?.score || 0;
@@ -166,26 +166,21 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
           updated.badges = [...updated.badges, ...newBadges];
         }
 
-        // Check collectible critters (hatchery)
-        newCritters = checkCritters(updated, game);
-        if (newCritters.length > 0) {
-          updated.critters = [...(updated.critters || []), ...newCritters];
-        }
       } else {
         updated = updateDailyGoal(updated, answers?.length || 0);
       }
 
-      return { updated, newBadges, newCritters, arcadeNewBest };
+      return { updated, newBadges, arcadeNewBest };
     };
 
     // Snapshot run: derive result-screen flags + reward sound
-    const { newBadges, newCritters, arcadeNewBest } = completeQuiz(stats);
-    if (newBadges.length > 0 || newCritters.length > 0) {
+    const { newBadges, arcadeNewBest } = completeQuiz(stats);
+    if (newBadges.length > 0) {
       playSound('badge');
     }
 
     setStats(prev => completeQuiz(prev).updated);
-    setQuizResults({ ...results, arcadeNewBest, newCritters });
+    setQuizResults({ ...results, arcadeNewBest });
     if (quit) {
       analytics.quizQuit(mode, selectedLevel, answers?.length ?? 0);
     } else {

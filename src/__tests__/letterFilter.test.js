@@ -42,3 +42,24 @@ describe('letterCounts', () => {
     expect(Object.values(counts).reduce((a, b) => a + b, 0)).toBe(WORDS.length);
   });
 });
+
+describe('getDistractors with letter restriction', () => {
+  it('draws options from the restricted pool when it suffices', async () => {
+    const { getDistractors, WORDS: ALL } = await import('../data/words');
+    const cPool = filterByKnownLetters(ALL, ['C']);
+    const target = cPool.find(w => w.word === 'cat');
+    for (let i = 0; i < 10; i++) {
+      const d = getDistractors(target, 3, cPool);
+      expect(d).toHaveLength(3);
+      expect(d.every(w => w.word[0].toUpperCase() === 'C')).toBe(true);
+    }
+  });
+
+  it('tops up from the full vocabulary when the pool is too small', async () => {
+    const { getDistractors, WORDS: ALL } = await import('../data/words');
+    const uPool = filterByKnownLetters(ALL, ['U']);
+    const target = uPool[0];
+    const d = getDistractors(target, 3, uPool);
+    expect(d).toHaveLength(3);
+  });
+});

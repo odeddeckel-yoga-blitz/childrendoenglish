@@ -1,11 +1,10 @@
 import { Play, ArrowLeft, Check, X as XIcon, Zap, Flame } from 'lucide-react';
 import { getWordById } from '../data/words';
-import { getCritterById } from '../data/critters';
 import { LIGHTNING_SECS } from '../utils/arcade';
 import { t } from '../utils/i18n';
 
 export default function ResultScreen({ results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onMenu, onLightning }) {
-  const { score, total, answers = [], arcade, arcadeNewBest, newCritters = [], quit } = results;
+  const { score, total, answers = [], arcade, arcadeNewBest, quit } = results;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const showLightning = !!onLightning && canRead && !quit && total > 0;
 
@@ -69,21 +68,6 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
         </div>
       )}
 
-      {/* Newly hatched critters */}
-      {newCritters.length > 0 && (
-        <div className="glass rounded-2xl p-4 text-center space-y-1">
-          {newCritters.map(id => {
-            const c = getCritterById(id);
-            if (!c) return null;
-            return (
-              <p key={id} className="font-bold text-slate-700 dark:text-slate-200 animate-badge-pop">
-                <span className="text-2xl align-middle">{c.emoji}</span>{' '}
-                {t('critterHatched', lang, { name: t(c.nameKey, lang) })}
-              </p>
-            );
-          })}
-        </div>
-      )}
 
       {/* Action buttons — Play Again is primary */}
       <div className="space-y-3">

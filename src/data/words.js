@@ -574,25 +574,36 @@ export const getWordById = (id) => WORD_MAP.get(id);
 export const getWordByName = (name) => WORD_NAME_MAP.get(name?.toLowerCase());
 
 // Get distractor words for quiz — same category preferred, then same level, then any
-export const getDistractors = (word, count = 3) => {
-  const sameCategoryLevel = WORDS.filter(
-    w => w.id !== word.id && w.category === word.category && w.level === word.level
-  );
-  if (sameCategoryLevel.length >= count) {
-    return fisherYatesShuffleInline(sameCategoryLevel).slice(0, count);
+// restrictTo: optional word subset (e.g. known-letters pool) that distractors
+// should come from, so a kid limited to letter C sees only readable options.
+// Tops up from the full vocabulary only if the restricted pool runs dry.
+export const getDistractors = (word, count = 3, restrictTo = null) => {
+  const picked = [];
+  const used = new Set([word.id]);
+  const take = (candidates) => {
+    for (const w of fisherYatesShuffleInline(candidates)) {
+      if (picked.length >= count) return;
+      // w.word check: the two "orange" homographs must never co-appear
+      if (!used.has(w.id) && w.word.toLowerCase() !== word.word.toLowerCase()) {
+        picked.push(w);
+        used.add(w.id);
+      }
+    }
+  };
+  const tiers = [
+    w => w.category === word.category && w.level === word.level,
+    w => w.category === word.category,
+    w => w.level === word.level,
+    () => true,
+  ];
+  for (const pool of [restrictTo || WORDS, restrictTo ? WORDS : null]) {
+    if (!pool) break;
+    for (const tier of tiers) {
+      if (picked.length >= count) return picked;
+      take(pool.filter(tier));
+    }
   }
-
-  const sameCategory = WORDS.filter(
-    w => w.id !== word.id && w.category === word.category
-  );
-  if (sameCategory.length >= count) {
-    return fisherYatesShuffleInline(sameCategory).slice(0, count);
-  }
-
-  const sameLevel = WORDS.filter(
-    w => w.id !== word.id && w.level === word.level
-  );
-  return fisherYatesShuffleInline(sameLevel).slice(0, count);
+  return picked;
 };
 
 function fisherYatesShuffleInline(array) {

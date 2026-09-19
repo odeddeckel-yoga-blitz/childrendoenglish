@@ -5,8 +5,7 @@ import Menu from './components/Menu';
 import LandingPage from './components/LandingPage';
 import Confetti from './components/Confetti';
 import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, updateStreak, updateDailyGoal } from './utils/storage';
-import { initTTS, playSound } from './utils/sound';
-import { checkCritters, getCritterById } from './data/critters';
+import { initTTS } from './utils/sound';
 import { isRTL, t, loadHebrew } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
 import usePlayerManagement from './hooks/usePlayerManagement';
@@ -15,6 +14,7 @@ import CookieConsent from './components/CookieConsent';
 import { needsConsentPrompt, setAnalyticsConsent, analytics } from './utils/analytics';
 import { checkStreakReminder } from './utils/notifications';
 import { getDueWords } from './utils/spaced-repetition';
+import { filterByKnownLetters } from './utils/letterFilter';
 import { WORDS } from './data/words';
 
 
@@ -43,25 +43,6 @@ const LearningPath = lazy(() => import('./components/LearningPath'));
 const ParentDashboard = lazy(() => import('./components/ParentDashboard'));
 const DailyReview = lazy(() => import('./components/DailyReview'));
 const LightningRound = lazy(() => import('./components/LightningRound'));
-
-/** Non-blocking "You hatched X!" toasts (kidsdomath crossover). */
-function CritterToasts({ toasts, lang }) {
-  if (toasts.length === 0) return null;
-  return (
-    <div className="fixed top-4 left-4 right-4 z-[60] flex flex-col items-center gap-2 pointer-events-none" aria-live="polite">
-      {toasts.map(id => {
-        const c = getCritterById(id);
-        if (!c) return null;
-        return (
-          <div key={id} className="glass rounded-2xl px-5 py-3 shadow-lg animate-slide-up font-bold text-slate-800 dark:text-slate-100">
-            <span className="text-2xl align-middle">{c.emoji}</span>{' '}
-            {t('critterHatched', lang, { name: t(c.nameKey, lang) })}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 // State-to-path mapping for browser history (top-level screens only)
 const STATE_TO_PATH = {
@@ -138,10 +119,8 @@ export default function App() {
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && !navigator.onLine);
   const [storageFull, setStorageFull] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [critterToasts, setCritterToasts] = useState([]);
   const mainRef = useRef(null);
   const prevBadgeCount = useRef(stats.badges?.length || 0);
-  const prevCritters = useRef(stats.critters || []);
 
   const gameStateRef = useRef(initial.current.gameState);
   const legalReturnRef = useRef('menu'); // where privacy/terms should return to
@@ -195,19 +174,6 @@ export default function App() {
     }
     prevBadgeCount.current = currentCount;
   }, [stats.badges]);
-
-  // Hatch-toast when new critters are earned (anywhere: quiz or lightning)
-  useEffect(() => {
-    const current = stats.critters || [];
-    const fresh = current.filter(id => !prevCritters.current.includes(id));
-    prevCritters.current = current;
-    if (fresh.length === 0) return undefined;
-    setCritterToasts(prev => [...prev, ...fresh]);
-    const timer = setTimeout(() => {
-      setCritterToasts(prev => prev.filter(id => !fresh.includes(id)));
-    }, 4000);
-    return () => clearTimeout(timer);
-  }, [stats.critters]);
 
   // Keep gameStateRef in sync for state changes that bypass navigate()
   // (hash routes, popstate)
@@ -300,8 +266,7 @@ export default function App() {
 
   const quizFlow = useQuizFlow({ stats, setStats, navigate, knownLetters: activePlayer?.knownLetters });
 
-  // ⚡ Lightning Round finished: persist per-mode best + rounds count, then
-  // re-check critters (first-lightning / lightning-best earn rules).
+  // ⚡ Lightning Round finished: persist per-mode best + rounds count.
   const handleLightningFinish = useCallback((solves) => {
     const mode = quizFlow.selectedMode;
     setStats(prev => {
@@ -310,13 +275,7 @@ export default function App() {
       if (mode) lightningBest[mode] = Math.max(lightningBest[mode] || 0, solves);
       arcade.lightningBest = lightningBest;
       arcade.lightningRounds = (arcade.lightningRounds || 0) + 1;
-      const updated = { ...prev, arcade };
-      const newCritters = checkCritters(updated);
-      if (newCritters.length > 0) {
-        updated.critters = [...(updated.critters || []), ...newCritters];
-        playSound('badge');
-      }
-      return updated;
+      return { ...prev, arcade };
     });
     analytics.featureUse('lightning_round');
   }, [quizFlow.selectedMode]);
@@ -671,8 +630,8 @@ export default function App() {
             stats={stats}
             lang={lang}
             onBack={() => navigate('menu', 'back')}
-            onStartLesson={(words) => quizFlow.handleStartPersonalQuiz(words, 'image')}
-            onLearnLesson={(words) => { setLearnWords(words); navigate('learning'); }}
+            onStartLesson={(words) => quizFlow.handleStartPersonalQuiz(filterByKnownLetters(words, activePlayer?.knownLetters), 'image')}
+            onLearnLesson={(words) => { setLearnWords(filterByKnownLetters(words, activePlayer?.knownLetters)); navigate('learning'); }}
           />
         );
 
@@ -734,7 +693,6 @@ export default function App() {
   return (
     <div className="app-bg min-h-screen pb-safe">
       <Confetti active={showConfetti} />
-      <CritterToasts toasts={critterToasts} lang={lang} />
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold">
         Skip to content
       </a>

@@ -49,14 +49,15 @@ export default function LightningRound({ words, mode, level, knownLetters = null
     let alive = true;
     (async () => {
       try {
-        const { getWordsByLevel, getDistractors: pick } = await import('../data/words');
+        const { getWordsByLevel, getDistractors: pick, WORDS } = await import('../data/words');
         const { filterByKnownLetters } = await import('../utils/letterFilter');
         const have = new Set((words || []).map(w => w.id));
         const candidates = fisherYatesShuffle(
           filterByKnownLetters(getWordsByLevel(level), knownLetters).filter(w => !have.has(w.id))
         ).slice(0, EXTRA_POOL);
         if (candidates.length === 0) return;
-        const withDistractors = candidates.map(w => ({ ...w, _distractors: pick(w, 3) }));
+        const restrict = knownLetters?.length ? filterByKnownLetters(WORDS, knownLetters) : null;
+        const withDistractors = candidates.map(w => ({ ...w, _distractors: pick(w, 3, restrict) }));
         const needed = new Set();
         withDistractors.forEach(w => { needed.add(w); w._distractors.forEach(d => needed.add(d)); });
         const { missing } = await preloadImages([...needed]);

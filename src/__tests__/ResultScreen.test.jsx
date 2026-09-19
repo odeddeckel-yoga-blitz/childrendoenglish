@@ -88,7 +88,6 @@ describe('ResultScreen arcade layer', () => {
       answers: [],
       arcade: { score: 120, bestStreak: 4, fastAnswers: 6 },
       arcadeNewBest: true,
-      newCritters: ['fox'],
     },
     canRead: true,
     onLightning: vi.fn(),
@@ -102,10 +101,6 @@ describe('ResultScreen arcade layer', () => {
     expect(screen.getByText('★ NEW BEST SCORE!')).toBeInTheDocument();
   });
 
-  it('shows the hatched critter card', () => {
-    render(<ResultScreen {...arcadeProps} />);
-    expect(screen.getByText(/You hatched Foxy!/)).toBeInTheDocument();
-  });
 
   it('offers the Lightning Round and calls onLightning', () => {
     render(<ResultScreen {...arcadeProps} />);
@@ -123,7 +118,7 @@ describe('ResultScreen arcade layer', () => {
     render(
       <ResultScreen
         {...arcadeProps}
-        results={{ ...arcadeProps.results, quit: true, newCritters: [] }}
+        results={{ ...arcadeProps.results, quit: true }}
       />
     );
     expect(screen.queryByText(/Lightning — how many/)).not.toBeInTheDocument();

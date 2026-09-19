@@ -113,7 +113,6 @@ describe('loadStats', () => {
       hasSeenOnboarding: false,
       uiLanguage: 'en',
       quizHistory: [],
-      critters: [],
       arcade: {
         bestByMode: {},
         lightningBest: {},
@@ -150,7 +149,6 @@ describe('saveStats + loadStats roundtrip', () => {
     // Saved fields round-trip exactly; new arcade-layer defaults are merged in
     expect(loaded).toEqual({
       ...stats,
-      critters: [],
       arcade: {
         bestByMode: {},
         lightningBest: {},

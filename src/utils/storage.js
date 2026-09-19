@@ -20,7 +20,6 @@ const getDefaultStats = () => ({
   hasSeenOnboarding: false,
   uiLanguage: 'en',        // 'en' | 'he'
   quizHistory: [],          // [{ date, mode, level, score, total }]
-  critters: [],             // earned collectible critter ids (see data/critters.js)
   arcade: {                 // kidsdomath-crossover arcade layer
     bestByMode: {},         // { [mode]: best combo score }
     lightningBest: {},      // { [mode]: best lightning solves }
