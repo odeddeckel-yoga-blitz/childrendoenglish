@@ -11,10 +11,9 @@ vi.mock('../utils/sound', () => ({
 
 const defaultProps = {
   lang: 'en',
-  activePlayer: null,
   onLanguageStart: vi.fn(),
-  onContinue: vi.fn(),
   onPrivacy: vi.fn(),
+  onTerms: vi.fn(),
   onToggleLanguage: vi.fn(),
 };
 
@@ -26,10 +25,11 @@ describe('LandingPage', () => {
     expect(screen.getAllByText('עברית').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('shows "Welcome back" when activePlayer provided', () => {
-    const activePlayer = { id: '1', name: 'Alex', avatar: '🦊' };
-    render(<LandingPage {...defaultProps} activePlayer={activePlayer} />);
-    expect(screen.getByText('Welcome back, Alex!')).toBeInTheDocument();
+  it('calls onTerms when Terms of Service clicked', () => {
+    const onTerms = vi.fn();
+    render(<LandingPage {...defaultProps} onTerms={onTerms} />);
+    fireEvent.click(screen.getByText('Terms of Service'));
+    expect(onTerms).toHaveBeenCalledTimes(1);
   });
 
   it('calls onLanguageStart when language card clicked', () => {

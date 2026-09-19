@@ -32,10 +32,11 @@
   #stage{position:fixed;inset:0;display:flex;flex-direction:column;}
   #cvWrap{position:relative;flex:1;min-height:180px;}
   canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
-  #backPill{position:absolute;left:10px;top:10px;z-index:40;font:bold 13px/1 inherit;color:var(--blue2);
+  #homePill{position:absolute;left:10px;top:10px;z-index:40;font:bold 13px/1 inherit;color:var(--blue2);
     text-decoration:none;background:rgba(255,255,255,.92);border:2px solid var(--line);border-radius:999px;
     padding:8px 13px;box-shadow:0 2px 8px rgba(37,99,235,.15);}
-  #backPill:hover{background:#fff;}
+  #homePill:hover{background:#fff;}
+  #homePill.leave{background:#dc2626;color:#fff;border-color:#b91c1c;}
   #hud{position:absolute;right:10px;top:10px;z-index:40;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
   .pill{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.92);
     border:2px solid var(--line);font-size:14px;font-weight:bold;color:var(--ink);box-shadow:0 2px 8px rgba(37,99,235,.12);}
@@ -95,7 +96,7 @@
 <div id="stage">
   <div id="cvWrap">
     <canvas id="cv"></canvas>
-    <a id="backPill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
+    <a id="homePill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
     <div id="hud">
       <span class="pill" id="shieldPill">🛡🛡🛡</span>
       <span class="pill" id="scorePill">⭐ 0</span>

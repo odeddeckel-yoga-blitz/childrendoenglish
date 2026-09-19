@@ -103,7 +103,7 @@ function FAQItem({ index, lang }) {
 
 // --- Main Component ---
 
-export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart, onContinue, onPrivacy, onToggleLanguage }) {
+export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, onTerms, onToggleLanguage }) {
   const reveal = useScrollReveal();
 
   return (
@@ -122,25 +122,6 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
           {lang === 'en' ? 'עברית' : 'English'}
         </button>
       </div>
-
-      {/* Returning user bar */}
-      {activePlayer && (
-        <div className="glass rounded-2xl p-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <span className="text-3xl shrink-0">{activePlayer.avatar}</span>
-            <span className="font-bold text-slate-800 dark:text-slate-100 truncate">
-              {t('welcomeBack', lang, { name: activePlayer.name })}
-            </span>
-          </div>
-          <button
-            onClick={onContinue}
-            className="shrink-0 px-5 py-2.5 bg-blue-600 text-white rounded-xl font-semibold
-                       hover:bg-blue-700 active:scale-95 transition-all text-sm"
-          >
-            {t('continueBtn', lang)}
-          </button>
-        </div>
-      )}
 
       {/* Hero */}
       <section className="animate-fade-in text-center space-y-6">
@@ -395,9 +376,12 @@ export default function LandingPage({ lang = 'en', activePlayer, onLanguageStart
             {t('privacyPolicy', lang)}
           </button>
           <span className="text-slate-300">|</span>
-          <a href="/terms" className="text-slate-400 text-xs hover:text-slate-600 transition-colors">
+          <button
+            onClick={onTerms}
+            className="text-slate-400 text-xs hover:text-slate-600 transition-colors"
+          >
             {t('termsOfService', lang)}
-          </a>
+          </button>
         </div>
 
       </footer>

@@ -1,30 +1,12 @@
-import { useState, useMemo } from 'react';
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, Download, X, Users, Map, ShieldCheck, Bell, BellOff, Globe, RotateCcw } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, Sparkles, ListChecks, Download, X, Users, Map, ShieldCheck, Globe, RotateCcw } from 'lucide-react';
 import { t } from '../utils/i18n';
-import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
-import ParentEmailCapture from './ParentEmailCapture';
 
 export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
-  const [notifEnabled, setNotifEnabled] = useState(isNotificationEnabled);
-  const showEmailCapture = useMemo(() => !localStorage.getItem('childrendoenglish-parent-email-prompted'), []);
-  const notifSupported = isNotificationSupported();
-
-  const handleToggleNotif = async () => {
-    if (notifEnabled) {
-      disableNotifications();
-      setNotifEnabled(false);
-    } else {
-      const granted = await requestNotificationPermission();
-      setNotifEnabled(granted);
-    }
-  };
-
   const dailyProgress = stats.dailyGoal?.date === new Date().toISOString().slice(0, 10)
     ? Math.min(stats.dailyGoal.wordsReviewed / 10, 1) * 100
     : 0;
 
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
-  const wordsMastered = Object.values(stats.wordProgress || {}).filter(w => w.interval >= 14).length;
   const isNewUser = stats.totalQuizzes === 0 && wordsLearned === 0;
 
   return (
@@ -58,18 +40,6 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               : <Moon className="w-5 h-5 text-slate-600 dark:text-slate-300" />
             }
           </button>
-          {notifSupported && (
-            <button
-              onClick={handleToggleNotif}
-              className="p-2.5 rounded-xl bg-white/50 hover:bg-white/80 transition-colors"
-              aria-label={notifEnabled ? t('disableReminders', lang) : t('enableReminders', lang)}
-            >
-              {notifEnabled
-                ? <Bell className="w-5 h-5 text-blue-600" />
-                : <BellOff className="w-5 h-5 text-slate-400" />
-              }
-            </button>
-          )}
           {onToggleLanguage && (
             <button
               onClick={onToggleLanguage}
@@ -209,34 +179,25 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
         {!isNewUser && (
           <>
-            {/* Daily Review */}
-            <button
-              onClick={() => dueCount > 0 && onNavigate('dailyReview')}
-              disabled={dueCount === 0}
-              className={`w-full glass rounded-2xl p-4 flex items-center gap-4
-                         transition-all text-start ${dueCount > 0 ? 'hover:shadow-lg active:scale-[0.98] border border-orange-200 bg-orange-50/50' : 'opacity-60 cursor-default'}`}
-            >
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${dueCount > 0 ? 'bg-gradient-to-br from-orange-500 to-orange-600' : 'bg-gradient-to-br from-slate-400 to-slate-500'}`}>
-                <RotateCcw className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1">
-                <p className="font-bold text-slate-800 dark:text-slate-100">{t('dailyReview', lang)}</p>
-                <p className="text-slate-500 text-sm">{t('dailyReviewDesc', lang)}</p>
-              </div>
-              {dueCount > 0 ? (
+            {/* Daily Review — only surfaced when words are actually due */}
+            {dueCount > 0 && (
+              <button
+                onClick={() => onNavigate('dailyReview')}
+                className="w-full glass rounded-2xl p-4 flex items-center gap-4 transition-all text-start
+                           hover:shadow-lg active:scale-[0.98] border border-orange-200 bg-orange-50/50"
+              >
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-orange-500 to-orange-600">
+                  <RotateCcw className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-bold text-slate-800 dark:text-slate-100">{t('dailyReview', lang)}</p>
+                  <p className="text-slate-500 text-sm">{t('dailyReviewDesc', lang)}</p>
+                </div>
                 <span className="px-2.5 py-1 rounded-full bg-orange-500 text-white text-xs font-bold flex-shrink-0">
                   {t('wordsDue', lang, { count: dueCount })}
                 </span>
-              ) : (
-                <span className={`px-2.5 py-1 rounded-full text-xs font-semibold flex-shrink-0 ${
-                  Object.keys(stats.wordProgress || {}).length === 0
-                    ? 'bg-slate-100 text-slate-500'
-                    : 'bg-emerald-100 text-emerald-700'
-                }`}>
-                  {Object.keys(stats.wordProgress || {}).length === 0 ? t('learnMoreToUnlock', lang) : t('allCaughtUp', lang)}
-                </span>
-              )}
-            </button>
+              </button>
+            )}
 
             <button
               onClick={() => onNavigate('personalList')}
@@ -268,28 +229,9 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               </div>
             </button>
 
-            <button
-              onClick={() => onNavigate('parentDashboard')}
-              className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                         hover:shadow-lg active:scale-[0.98] transition-all text-start"
-            >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-600
-                              flex items-center justify-center flex-shrink-0">
-                <ShieldCheck className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <p className="font-bold text-slate-800 dark:text-slate-100">{t('parentDashboard', lang)}</p>
-                <p className="text-slate-500 text-sm">{t('parentDashboardDesc', lang)}</p>
-              </div>
-            </button>
           </>
         )}
       </nav>
-
-      {/* Parent email capture — shown once until submitted or skipped */}
-      {showEmailCapture && (
-        <ParentEmailCapture lang={lang} />
-      )}
 
       {/* Bottom row — hidden for new users */}
       {!isNewUser && (
@@ -317,26 +259,6 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               <p className="text-xs text-slate-500">{stats.badges?.length || 0} {t('earned', lang)}</p>
             </div>
           </button>
-        </div>
-      )}
-
-      {/* Quick stats — hidden for new users */}
-      {!isNewUser && (
-        <div className="glass rounded-2xl p-4">
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <p className="text-2xl font-black text-blue-600">{stats.totalQuizzes}</p>
-              <p className="text-xs text-slate-500">{t('quizzes', lang)}</p>
-            </div>
-            <div>
-              <p className="text-2xl font-black text-emerald-600">{wordsLearned}</p>
-              <p className="text-xs text-slate-500">{t('learned', lang)}</p>
-            </div>
-            <div>
-              <p className="text-2xl font-black text-amber-600">{wordsMastered}</p>
-              <p className="text-xs text-slate-500">{t('mastered', lang)}</p>
-            </div>
-          </div>
         </div>
       )}
 

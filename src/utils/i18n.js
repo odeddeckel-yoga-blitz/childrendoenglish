@@ -324,6 +324,10 @@ const translations = {
     quizProgress: 'Quiz progress',
     selectAvatarLabel: 'Select {{avatar}} avatar',
     noPlayersFound: 'No players found',
+    knownLettersTitle: 'Letters we know',
+    knownLettersDesc: 'Pick the letters your child has learned at school — quizzes, flashcards and Lightning will only use words starting with them.',
+    knownLettersAll: 'All letters',
+    knownLettersCount: '{{count}} words available',
     dailyGoalProgress: 'Daily goal progress',
 
     // Badge names

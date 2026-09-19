@@ -1,14 +1,15 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { ArrowLeft, Volume2, Check, X as XIcon } from 'lucide-react';
 import { WORDS } from '../data/words';
+import { filterByKnownLetters } from '../utils/letterFilter';
 import { spacedRepetitionSort, updateWordSR } from '../utils/spaced-repetition';
 import { getImageUrl } from '../utils/images';
 import { speakWord } from '../utils/sound';
 import { haptic } from '../utils/haptic';
 import { t } from '../utils/i18n';
 
-export default function FlashcardMode({ stats, lang = 'en', canRead = true, words: customWords, onUpdateStats, onBack }) {
-  const sorted = spacedRepetitionSort(customWords || WORDS, stats.wordProgress || {});
+export default function FlashcardMode({ stats, lang = 'en', canRead = true, words: customWords, knownLetters = null, onUpdateStats, onBack }) {
+  const sorted = spacedRepetitionSort(customWords || filterByKnownLetters(WORDS, knownLetters), stats.wordProgress || {});
   const [cards] = useState(sorted);
   const [currentIdx, setCurrentIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);

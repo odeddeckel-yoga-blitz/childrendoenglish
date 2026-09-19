@@ -7,7 +7,7 @@ import { checkCritters } from '../data/critters';
 import { playSound } from '../utils/sound';
 import { analytics } from '../utils/analytics';
 
-export default function useQuizFlow({ stats, setStats, navigate }) {
+export default function useQuizFlow({ stats, setStats, navigate, knownLetters = null }) {
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedMode, setSelectedMode] = useState(null);
   const [quizWords, setQuizWords] = useState([]);
@@ -24,7 +24,9 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
     setLoadingProgress(0);
 
     const { getWordsByLevel, getDistractors } = await import('../data/words');
-    const pool = words || getWordsByLevel(level);
+    const { filterByKnownLetters } = await import('../utils/letterFilter');
+    // Custom word lists (personal list) are parent-picked — never filtered.
+    const pool = words || filterByKnownLetters(getWordsByLevel(level), knownLetters);
     const selected = selectQuizWords(pool, stats.wordProgress, 10);
 
     if (selected.length === 0) {
@@ -75,7 +77,7 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
     analytics.quizStart(mode, level);
     const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
     navigate(stateMap[mode] || 'imageQuiz');
-  }, [navigate, stats.wordProgress]);
+  }, [navigate, stats.wordProgress, knownLetters]);
 
   const handleQuizComplete = useCallback((results) => {
     const { score, total, answers, mode, quit } = results;

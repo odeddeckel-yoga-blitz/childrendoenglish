@@ -464,3 +464,27 @@ $('startBtn').addEventListener('click',()=>WZ.start());
 $('againBtn').addEventListener('click',()=>WZ.start());
 $('mutePill').addEventListener('click',()=>WZ.toggleMute());
 $('sayBtn').addEventListener('click',()=>WZ.say());
+
+/* ---- leave-guard: during an active run the home pill needs two taps ----
+   First tap arms it ("Leave game? Tap again") for 3s; second tap leaves.
+   On the menu / game-over screens a single tap navigates as usual. */
+(function(){
+  var pill=document.getElementById('homePill');
+  if(!pill) return;
+  var orig=pill.textContent, armedUntil=0, timer=null;
+  function inRun(){
+    var m=document.getElementById('menu');
+    var o=document.getElementById('over')||document.getElementById('win');
+    return !!m && !m.classList.contains('show') && !(o&&o.classList.contains('show'));
+  }
+  pill.addEventListener('click',function(e){
+    if(!inRun()) return;                 // menu / end screen: navigate normally
+    if(Date.now()<armedUntil) return;    // second tap within 3s: leave
+    e.preventDefault();                  // first tap: arm
+    armedUntil=Date.now()+3000;
+    pill.textContent='Leave game? Tap again';
+    pill.classList.add('leave');
+    clearTimeout(timer);
+    timer=setTimeout(function(){armedUntil=0;pill.textContent=orig;pill.classList.remove('leave');},3000);
+  });
+})();

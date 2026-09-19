@@ -18,7 +18,7 @@ import { getLightningSecs } from '../utils/arcade';
  */
 const EXTRA_POOL = 20; // same-level words added once their images preload
 
-export default function LightningRound({ words, mode, level, lang = 'en', best = 0, secs, onFinish, onExit }) {
+export default function LightningRound({ words, mode, level, knownLetters = null, lang = 'en', best = 0, secs, onFinish, onExit }) {
   const duration = secs || getLightningSecs();
   const [phase, setPhase] = useState('play'); // 'play' | 'done'
   const [timeLeft, setTimeLeft] = useState(duration);
@@ -50,9 +50,10 @@ export default function LightningRound({ words, mode, level, lang = 'en', best =
     (async () => {
       try {
         const { getWordsByLevel, getDistractors: pick } = await import('../data/words');
+        const { filterByKnownLetters } = await import('../utils/letterFilter');
         const have = new Set((words || []).map(w => w.id));
         const candidates = fisherYatesShuffle(
-          getWordsByLevel(level).filter(w => !have.has(w.id))
+          filterByKnownLetters(getWordsByLevel(level), knownLetters).filter(w => !have.has(w.id))
         ).slice(0, EXTRA_POOL);
         if (candidates.length === 0) return;
         const withDistractors = candidates.map(w => ({ ...w, _distractors: pick(w, 3) }));

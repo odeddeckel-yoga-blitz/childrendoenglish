@@ -322,6 +322,10 @@ export default {
   quizProgress: 'התקדמות החידון',
   selectAvatarLabel: 'בחרו סמל {{avatar}}',
   noPlayersFound: 'לא נמצאו שחקנים',
+  knownLettersTitle: 'אותיות שכבר מכירים',
+  knownLettersDesc: 'סמנו את האותיות שהילד כבר למד בבית הספר — החידונים, הכרטיסיות והברק ישתמשו רק במילים שמתחילות בהן.',
+  knownLettersAll: 'כל האותיות',
+  knownLettersCount: '{{count}} מילים זמינות',
   dailyGoalProgress: 'התקדמות יעד יומי',
 
   // Badge names

@@ -1,5 +1,21 @@
 import { test, expect } from '@playwright/test';
 
+// Neutralize speech synthesis in every test: on some machines headless
+// Chromium's TTS engine hangs the main thread for ~15s per utterance, which
+// stalls the quiz auto-advance timer and makes multi-question flows flaky.
+// getVoices() is left intact so isTTSAvailable() still reports true and
+// TTS-dependent UI (e.g. the audio-quiz speaker button) renders normally.
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => {
+    if (window.speechSynthesis) {
+      try {
+        window.speechSynthesis.speak = () => {};
+        window.speechSynthesis.cancel = () => {};
+      } catch { /* read-only in some browsers — leave as-is */ }
+    }
+  });
+});
+
 // Helper: set localStorage to simulate a Hebrew user
 async function setupHebrewUser(page, overrides = {}) {
   const stats = {
@@ -79,7 +95,7 @@ async function setupReturningUser(page, overrides = {}) {
 }
 
 // Helper: set up a player who still needs onboarding (hasSeenOnboarding: false)
-// This player lands on the LandingPage with a "Continue" bar
+// Any existing player now skips the landing page entirely (straight to menu)
 async function setupNewPlayer(page) {
   await page.addInitScript(() => {
     const id = 'player_test1';
@@ -129,17 +145,28 @@ test.describe('Landing Page', () => {
     await expect(page.getByRole('heading', { name: 'Create Player' })).toBeVisible({ timeout: 5000 });
   });
 
-  test('returning player not onboarded sees landing with Continue button', async ({ page }) => {
+  test('returning single player skips landing and goes straight to the menu', async ({ page }) => {
     await setupNewPlayer(page);
-    // Should see landing page with "Welcome back" bar and Continue button
-    await expect(page.locator('text=Continue')).toBeVisible({ timeout: 5000 });
+    // A player exists → no marketing page; new-user menu shows "Play Your First Quiz!"
+    await expect(page.locator('text=Play Your First Quiz')).toBeVisible({ timeout: 5000 });
   });
 
-  test('clicking Continue goes to menu for single player', async ({ page }) => {
-    await setupNewPlayer(page);
-    await page.locator('button:has-text("Continue")').click();
-    // New user menu shows "Play Your First Quiz!" button
-    await expect(page.locator('text=Play Your First Quiz')).toBeVisible({ timeout: 5000 });
+  test('family with two players boots into player select', async ({ page }) => {
+    await page.addInitScript(() => {
+      const registry = {
+        schemaVersion: 2,
+        activePlayerId: 'p1',
+        players: [
+          { id: 'p1', name: 'Alex', avatar: '🦊', canRead: true, createdAt: new Date().toISOString() },
+          { id: 'p2', name: 'Maya', avatar: '🐼', canRead: true, createdAt: new Date().toISOString() },
+        ],
+      };
+      localStorage.setItem('childrendoenglish-players', JSON.stringify(registry));
+      localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
+    });
+    await page.goto('/');
+    await page.waitForSelector('#root > *', { timeout: 10000 });
+    await expect(page.locator("text=Who's playing?")).toBeVisible({ timeout: 5000 });
   });
 });
 
@@ -638,39 +665,5 @@ test.describe('Badge Earning', () => {
   });
 });
 
-// ── Sharing ─────────────────────────────────────────
-
-test.describe('Sharing', () => {
-  test('result screen share copies quiz text to clipboard', async ({ page, context, browserName }) => {
-    test.skip(browserName !== 'chromium', 'Clipboard permissions only supported in Chromium');
-    // Grant clipboard permissions
-    await context.grantPermissions(['clipboard-read', 'clipboard-write']);
-
-    await setupReturningUser(page);
-
-    // Navigate to quiz
-    await page.locator('text=Play Quiz').click();
-    await page.locator('button:has-text("Beginner")').click();
-    await page.locator('text=Image Quiz').or(page.locator('text=Picture Quiz')).click();
-
-    // Wait for quiz
-    await page.waitForTimeout(3000);
-
-    // Complete quiz
-    await completeQuiz(page, 10);
-
-    // Wait for results
-    await expect(page.locator('text=/\\d+.*\\/.*10/i')).toBeVisible({ timeout: 10000 });
-
-    // Click share button
-    const shareBtn = page.locator('button:has-text("Share")');
-    if ((await shareBtn.count()) > 0) {
-      await shareBtn.click();
-      await page.waitForTimeout(500);
-
-      // Check clipboard — should contain score text
-      const clipText = await page.evaluate(() => navigator.clipboard.readText());
-      expect(clipText).toContain('Children Do English');
-    }
-  });
-});
+// ── Sharing block removed: the result-screen Share button was cut in the
+// UX simplification (kids don't share; parents have other channels). ──

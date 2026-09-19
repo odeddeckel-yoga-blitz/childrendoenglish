@@ -1,12 +1,13 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
 import { ArrowLeft, Search, Grid3X3, BookOpen, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { WORDS, CATEGORIES } from '../data/words';
+import { filterByKnownLetters } from '../utils/letterFilter';
 import { getImageUrl } from '../utils/images';
 import { speakWord } from '../utils/sound';
 import { t, isRTL } from '../utils/i18n';
 
-export default function LearnMode({ stats, lang = 'en', canRead = true, words: customWords, onBack }) {
-  const wordPool = customWords || WORDS;
+export default function LearnMode({ stats, lang = 'en', canRead = true, words: customWords, knownLetters = null, onBack }) {
+  const wordPool = customWords || filterByKnownLetters(WORDS, knownLetters);
   const [view, setView] = useState('grid'); // 'grid' | 'detail'
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);

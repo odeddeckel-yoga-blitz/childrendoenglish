@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowLeft, Lock, Image, Type, Volume2, Headphones } from 'lucide-react';
 import { LEVELS } from '../data/levels';
 import { getWordsByLevel } from '../data/words';
+import { filterByKnownLetters } from '../utils/letterFilter';
 import { recommendedMode } from '../utils/modeLadder';
 import { t } from '../utils/i18n';
 
@@ -58,7 +59,7 @@ const allModes = [
   },
 ];
 
-export default function LevelSelect({ stats, lang = 'en', canRead = true, onStartQuiz, onBack }) {
+export default function LevelSelect({ stats, lang = 'en', canRead = true, knownLetters = null, onStartQuiz, onBack }) {
   // Default to first unlocked level
   const [selectedLevel, setSelectedLevel] = useState(() => {
     const unlocked = LEVELS.filter(l => stats.unlockedLevels.includes(l.id));
@@ -90,7 +91,7 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, onStar
           const active = selectedLevel === level.id;
           const colors = levelColorMap[level.color];
           const localName = t(levelNameKey[level.id], lang);
-          const wordCount = getWordsByLevel(level.id).length;
+          const wordCount = filterByKnownLetters(getWordsByLevel(level.id), knownLetters).length;
 
           return (
             <button

@@ -60,9 +60,11 @@ describe('Menu', () => {
     expect(defaultProps.onToggleDark).toHaveBeenCalled();
   });
 
-  it('renders quick stats with correct values', () => {
+  it('does not render the removed quick-stats card or Parent Dashboard card', () => {
     render(<Menu {...defaultProps} />);
-    expect(screen.getByText('5')).toBeInTheDocument(); // totalQuizzes
+    expect(screen.queryByText('Mastered')).not.toBeInTheDocument();
+    // Parent Dashboard survives only as the small footer link
+    expect(screen.getAllByText('Parent Dashboard')).toHaveLength(1);
   });
 
   it('shows learning path button', () => {

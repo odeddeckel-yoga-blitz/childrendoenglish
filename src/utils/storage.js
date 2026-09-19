@@ -124,6 +124,7 @@ export const updatePlayerProfile = (id, updates) => {
   if (updates.name !== undefined) player.name = updates.name;
   if (updates.avatar !== undefined) player.avatar = updates.avatar;
   if (updates.canRead !== undefined) player.canRead = updates.canRead;
+  if (updates.knownLetters !== undefined) player.knownLetters = updates.knownLetters;
   savePlayerRegistry(registry);
 };
 

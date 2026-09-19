@@ -20,7 +20,6 @@ const defaultProps = {
   level: 'beginner',
   mode: 'image',
   onPlayAgain: vi.fn(),
-  onChangeMode: vi.fn(),
   onMenu: vi.fn(),
 };
 
@@ -35,12 +34,14 @@ describe('ResultScreen', () => {
     expect(screen.getByText('/ 10')).toBeInTheDocument();
   });
 
-  it('renders action buttons (Play Again, Share, Change Mode, Back to Menu)', () => {
+  it('renders only the simplified action buttons (Play Again, Back to Menu)', () => {
     render(<ResultScreen {...defaultProps} />);
     expect(screen.getByText('Play Again')).toBeInTheDocument();
-    expect(screen.getByText('Share')).toBeInTheDocument();
-    expect(screen.getByText('Change Mode')).toBeInTheDocument();
     expect(screen.getByText('Back to Menu')).toBeInTheDocument();
+    // Removed in the UX simplification — must NOT come back
+    expect(screen.queryByText('Share')).not.toBeInTheDocument();
+    expect(screen.queryByText('Change Mode')).not.toBeInTheDocument();
+    expect(screen.queryByText(/Try .* next!/)).not.toBeInTheDocument();
   });
 
   it('calls onPlayAgain when Play Again clicked', () => {
@@ -91,7 +92,6 @@ describe('ResultScreen arcade layer', () => {
     },
     canRead: true,
     onLightning: vi.fn(),
-    onStartMode: vi.fn(),
   };
 
   it('shows this-run arcade stats and the new-best banner', () => {
@@ -127,13 +127,6 @@ describe('ResultScreen arcade layer', () => {
       />
     );
     expect(screen.queryByText(/Lightning — how many/)).not.toBeInTheDocument();
-  });
-
-  it('suggests the next mode and starts it', () => {
-    render(<ResultScreen {...arcadeProps} />);
-    const btn = screen.getByText(/Try Word Quiz next!/);
-    fireEvent.click(btn);
-    expect(arcadeProps.onStartMode).toHaveBeenCalledWith('word');
   });
 
   it('renders without arcade data (legacy results)', () => {

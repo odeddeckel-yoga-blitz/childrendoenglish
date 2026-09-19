@@ -111,8 +111,12 @@ function SuspenseFallback({ lang = 'en' }) {
 function getInitialState() {
   const registry = loadPlayerRegistry();
   const stats = registry ? loadStats(registry.activePlayerId) : loadStats();
-  // Skip landing for returning onboarded single-player users
-  if (registry?.players?.length === 1 && stats?.hasSeenOnboarding) {
+  // Returning users skip the marketing landing entirely:
+  // one player → straight to menu; a family → pick who's playing.
+  if (registry?.players?.length >= 2) {
+    return { gameState: 'playerSelect', registry, stats };
+  }
+  if (registry?.players?.length === 1) {
     return { gameState: 'menu', registry, stats };
   }
   return { gameState: 'landing', registry, stats };
@@ -139,7 +143,16 @@ export default function App() {
   const prevBadgeCount = useRef(stats.badges?.length || 0);
   const prevCritters = useRef(stats.critters || []);
 
+  const gameStateRef = useRef(initial.current.gameState);
+  const legalReturnRef = useRef('menu'); // where privacy/terms should return to
+
   const navigate = useCallback((newState, direction = 'forward') => {
+    // Remember where legal pages were opened from so Back returns there
+    if ((newState === 'privacy' || newState === 'terms')
+        && gameStateRef.current !== 'privacy' && gameStateRef.current !== 'terms') {
+      legalReturnRef.current = gameStateRef.current;
+    }
+    gameStateRef.current = newState;
     setGameState(newState);
     const path = STATE_TO_PATH[newState];
     if (path) {
@@ -195,6 +208,12 @@ export default function App() {
     }, 4000);
     return () => clearTimeout(timer);
   }, [stats.critters]);
+
+  // Keep gameStateRef in sync for state changes that bypass navigate()
+  // (hash routes, popstate)
+  useEffect(() => {
+    gameStateRef.current = gameState;
+  }, [gameState]);
 
   // Move focus to main container on view change for screen readers
   useEffect(() => {
@@ -279,7 +298,7 @@ export default function App() {
     saveStats(stats, playerRegistry?.activePlayerId);
   }, [stats, playerRegistry?.activePlayerId]);
 
-  const quizFlow = useQuizFlow({ stats, setStats, navigate });
+  const quizFlow = useQuizFlow({ stats, setStats, navigate, knownLetters: activePlayer?.knownLetters });
 
   // ⚡ Lightning Round finished: persist per-mode best + rounds count, then
   // re-check critters (first-lightning / lightning-best earn rules).
@@ -409,7 +428,6 @@ export default function App() {
         return (
           <LandingPage
             lang={lang}
-            activePlayer={activePlayer}
             onLanguageStart={(selectedLang) => {
               handleLanguageSelect(selectedLang);
               const next = playerRegistry?.players?.length ? 'menu' : 'playerCreate';
@@ -419,14 +437,8 @@ export default function App() {
                 navigate(next);
               }
             }}
-            onContinue={() => {
-              if (playerRegistry?.players.length >= 2) {
-                navigate('playerSelect');
-              } else {
-                navigate('menu');
-              }
-            }}
             onPrivacy={() => navigate('privacy')}
+            onTerms={() => navigate('terms')}
             onToggleLanguage={handleToggleLanguage}
           />
         );
@@ -503,20 +515,7 @@ export default function App() {
             stats={stats}
             lang={lang}
             canRead={activePlayer?.canRead ?? true}
-            onStartQuiz={(level, mode) => {
-              quizFlow.startQuiz(level, mode);
-            }}
-            onBack={() => navigate('menu', 'back')}
-          />
-        );
-
-      case 'modeSelect':
-        // Legacy: redirect to combined levelSelect
-        return (
-          <LevelSelect
-            stats={stats}
-            lang={lang}
-            canRead={activePlayer?.canRead ?? true}
+            knownLetters={activePlayer?.knownLetters}
             onStartQuiz={(level, mode) => {
               quizFlow.startQuiz(level, mode);
             }}
@@ -592,10 +591,8 @@ export default function App() {
             mode={quizFlow.selectedMode}
             canRead={activePlayer?.canRead ?? true}
             onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords)}
-            onChangeMode={() => navigate('levelSelect', 'back')}
             onMenu={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
             onLightning={quizFlow.quizWords.length > 0 ? () => navigate('lightning') : undefined}
-            onStartMode={(nextMode) => quizFlow.startQuiz(quizFlow.selectedLevel, nextMode, quizFlow.customWords)}
           />
         );
 
@@ -605,6 +602,7 @@ export default function App() {
             words={quizFlow.quizWords}
             mode={quizFlow.selectedMode}
             level={quizFlow.selectedLevel}
+            knownLetters={activePlayer?.knownLetters}
             lang={lang}
             best={stats.arcade?.lightningBest?.[quizFlow.selectedMode] || 0}
             onFinish={handleLightningFinish}
@@ -618,6 +616,7 @@ export default function App() {
             stats={stats}
             lang={lang}
             canRead={activePlayer?.canRead ?? true}
+            knownLetters={activePlayer?.knownLetters}
             words={learnWords}
             onBack={() => { setLearnWords(null); focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back'); }}
           />
@@ -629,6 +628,7 @@ export default function App() {
             stats={stats}
             lang={lang}
             canRead={activePlayer?.canRead ?? true}
+            knownLetters={activePlayer?.knownLetters}
             words={focusedWords}
             onUpdateStats={setStats}
             onBack={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
@@ -699,6 +699,8 @@ export default function App() {
         return (
           <ParentDashboard
             players={playerRegistry?.players || []}
+            activePlayer={activePlayer}
+            onUpdatePlayer={handleUpdatePlayer}
             lang={lang}
             onBack={() => navigate('menu', 'back')}
           />
@@ -706,12 +708,12 @@ export default function App() {
 
       case 'privacy':
         return (
-          <PrivacyPolicy lang={lang} onBack={() => navigate('menu', 'back')} />
+          <PrivacyPolicy lang={lang} onBack={() => navigate(legalReturnRef.current, 'back')} />
         );
 
       case 'terms':
         return (
-          <TermsOfService lang={lang} onBack={() => navigate('menu', 'back')} />
+          <TermsOfService lang={lang} onBack={() => navigate(legalReturnRef.current, 'back')} />
         );
 
       case 'admin':

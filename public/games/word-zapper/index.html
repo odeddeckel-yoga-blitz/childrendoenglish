@@ -44,11 +44,12 @@
     text-decoration:none;background:rgba(255,255,255,.92);border:1.5px solid var(--line);border-radius:999px;
     padding:9px 14px;box-shadow:0 2px 10px rgba(79,70,229,.14);}
   #homePill:hover{background:#fff;}
-  @media(max-width:600px){ #homePill{top:auto;bottom:10px;} }   /* clear of the HUD pills on phones */
+  #homePill.leave{background:#dc2626;color:#fff;border-color:#b91c1c;}
   /* ---- play HUD ---- */
   #topbar{position:absolute;left:0;right:0;top:0;z-index:30;display:none;flex-direction:column;align-items:center;
     gap:6px;padding:10px 12px 12px;pointer-events:none;}
   #topbar.show{display:flex;}
+  @media(max-width:600px){ #topbar{padding-top:52px;} }   /* HUD pills clear the top-left home pill on phones */
   .hudrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
   .pill{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.92);
     border:1.5px solid var(--line);font-size:14px;font-weight:800;color:var(--ink);box-shadow:0 2px 8px rgba(79,70,229,.12);}
@@ -80,7 +81,7 @@
 </head>
 <body>
 <div id="stage">
-  <a id="homePill" href="https://childrendoenglish.com/" aria-label="Back to ChildrenDoEnglish home">← childrendoenglish.com</a>
+  <a id="homePill" href="/" aria-label="Back to ChildrenDoEnglish home">← childrendoenglish.com</a>
   <canvas id="cv"></canvas>
   <div id="flash"></div>
 
@@ -114,7 +115,7 @@
     <h2 id="overTitle">💥 GAME OVER</h2>
     <div class="card glass" id="overCard"></div>
     <button class="btn" id="againBtn">↺ PLAY AGAIN</button>
-    <a id="overHome" href="https://childrendoenglish.com/" style="color:var(--indigo);font-weight:700;text-decoration:underline;font-size:15px;">More English practice at childrendoenglish.com</a>
+    <a id="overHome" href="/" style="color:var(--indigo);font-weight:700;text-decoration:underline;font-size:15px;">More English practice at childrendoenglish.com</a>
   </div>
 </div>
 

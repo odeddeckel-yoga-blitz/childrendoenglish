@@ -1,27 +1,13 @@
-import { Play, ArrowLeft, Share2, RotateCcw, Check, X as XIcon, Zap, Flame } from 'lucide-react';
+import { Play, ArrowLeft, Check, X as XIcon, Zap, Flame } from 'lucide-react';
 import { getWordById } from '../data/words';
 import { getCritterById } from '../data/critters';
-import { suggestNextMode, LIGHTNING_SECS } from '../utils/arcade';
+import { LIGHTNING_SECS } from '../utils/arcade';
 import { t } from '../utils/i18n';
 
-export default function ResultScreen({ results, lang = 'en', level: _level, mode, canRead = true, onPlayAgain, onChangeMode, onMenu, onLightning, onStartMode }) {
+export default function ResultScreen({ results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onMenu, onLightning }) {
   const { score, total, answers = [], arcade, arcadeNewBest, newCritters = [], quit } = results;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const showLightning = !!onLightning && canRead && !quit && total > 0;
-  const nextMode = onStartMode && !quit ? suggestNextMode(mode, canRead) : null;
-
-  const handleShare = async () => {
-    const isPerfect = score === total && total > 0;
-    const shareKey = isPerfect ? 'shareTextPerfect' : 'shareText';
-    const text = `${t(shareKey, lang, { score, total })}\nhttps://childrendoenglish.com`;
-    try {
-      if (navigator.share) {
-        await navigator.share({ text });
-      } else {
-        await navigator.clipboard.writeText(text);
-      }
-    } catch { /* user cancelled share */ }
-  };
 
   const headline = percentage >= 90 ? t('amazing', lang)
     : percentage >= 70 ? t('greatJob', lang)
@@ -121,39 +107,13 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
           </button>
         )}
 
-        {nextMode && (
-          <button
-            onClick={() => onStartMode(nextMode)}
-            className="w-full py-2.5 px-4 glass rounded-xl font-semibold text-slate-600 dark:text-slate-300 text-sm
-                       hover:shadow-md active:scale-95 transition-all"
-          >
-            {t('trySuggestedMode', lang, { mode: t(`mode_${nextMode}`, lang) })}
-          </button>
-        )}
-
-        <div className="grid grid-cols-3 gap-3">
-          <button
-            onClick={onMenu}
-            className="py-2.5 px-3 glass rounded-xl font-semibold text-slate-500 text-sm
-                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5"
-          >
-            <ArrowLeft className="w-4 h-4" /> {t('backToMenuBtn', lang)}
-          </button>
-          <button
-            onClick={handleShare}
-            className="py-2.5 px-3 glass rounded-xl font-semibold text-slate-500 text-sm
-                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5"
-          >
-            <Share2 className="w-4 h-4" /> {t('share', lang)}
-          </button>
-          <button
-            onClick={onChangeMode}
-            className="py-2.5 px-3 glass rounded-xl font-semibold text-slate-500 text-sm
-                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5"
-          >
-            <RotateCcw className="w-4 h-4" /> {t('changeMode', lang)}
-          </button>
-        </div>
+        <button
+          onClick={onMenu}
+          className="w-full py-2.5 px-3 glass rounded-xl font-semibold text-slate-500 text-sm
+                     hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5"
+        >
+          <ArrowLeft className="w-4 h-4" /> {t('backToMenuBtn', lang)}
+        </button>
       </div>
 
       {/* Answer review */}
