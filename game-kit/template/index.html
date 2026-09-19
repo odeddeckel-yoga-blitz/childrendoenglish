@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  KidsDoMath GAME TEMPLATE  —  copy this file to ~/projects/<new-game-id>/index.html
+  ============================================================================
+  A complete, playable skeleton. To make a real game you edit exactly 3 things:
+    1. The  T  string table       (English-only user-facing strings)
+    2. The  Line  module          (puzzle: generators, solved(), render bits)
+    3. FX.draw()                  (the canvas visualization of the math object)
+  Everything else — the string table, screens, chrome, and the KOC onboarding kit
+  (idle-scaffold, first-play cue, READY pulse) — is done and should stay.
+  ENGLISH-ONLY by construction: do NOT add Hebrew, RTL, or a language toggle.
+
+  Placeholder mechanic (REPLACE): match a target number with a stepper.
+  Two demo modes ('match', 'more') show how modes plug in — add your own.
+
+  Read plans/game-generation-prompt.md for the full spec + verification gate.
+  Accent for the hub card must be an ALREADY-EMITTED kid-* token (see spec).
+  ============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>GAME TEMPLATE ⟨emoji⟩ ⟨Topic⟩</title>
+<style>
+  /* ⟨REPLACE the palette to taste; --acc is the game's main accent⟩ */
+  :root{
+    --bg0:#0a0e1c; --bg1:#141a30; --acc:#7c9cff; --acc2:#34f5ff; --gold:#ffd152; --grn:#5cff9d;
+    --red:#ff5d6c; --ink:#eef2ff; --dim:#9aa6c8; --glass:rgba(22,28,52,.6); --line:rgba(140,160,255,.24);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent; touch-action:manipulation;}
+  html,body{margin:0;height:100%;overflow:hidden;background:var(--bg0);
+    font-family:'Trebuchet MS','Segoe UI',system-ui,sans-serif;color:var(--ink);user-select:none;}
+  #stage{position:fixed;inset:0;}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
+  .overlay{position:absolute;inset:0;display:none;flex-direction:column;}
+  .overlay.show{display:flex;}
+
+  .glass{background:var(--glass);border:1px solid var(--line);border-radius:18px;backdrop-filter:blur(7px);box-shadow:0 8px 40px rgba(0,0,0,.5);}
+  button{font-family:inherit;cursor:pointer;border:none;color:var(--ink);}
+  .btn{padding:13px 22px;border-radius:14px;font-size:17px;font-weight:bold;letter-spacing:.5px;border:1px solid var(--line);
+    background:linear-gradient(180deg,rgba(124,156,255,.16),rgba(124,156,255,.05));transition:transform .08s,box-shadow .12s,filter .12s;}
+  .btn:hover{filter:brightness(1.15);box-shadow:0 0 22px rgba(124,156,255,.35);}
+  .btn:active{transform:scale(.95);}
+  .btn.primary{background:linear-gradient(180deg,var(--acc),#3f57c8);color:#040814;border-color:#c3d0ff;}
+  .btn.act{background:linear-gradient(180deg,var(--acc2),#1593c0);color:#04161c;border-color:#b0f2ff;font-size:20px;padding:16px;}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:rgba(8,12,30,.72);border:1px solid var(--line);font-size:14px;font-weight:bold;}
+
+  #menu{align-items:center;justify-content:center;text-align:center;gap:18px;padding:24px;}
+  #menu h1{font-size:clamp(30px,6.6vw,66px);margin:0;letter-spacing:2px;
+    background:linear-gradient(90deg,var(--acc),var(--acc2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 40px rgba(124,156,255,.25);}
+  #menu .sub{color:var(--acc);font-size:clamp(14px,2.4vw,20px);max-width:660px;line-height:1.5;}
+  #menu .tag{font-size:13px;color:var(--dim);max-width:580px;line-height:1.5;}
+  .crewrow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:4px;}
+
+  #play{flex-direction:row;}
+  #facLeft{flex:0 0 58%;position:relative;}
+  #orderBar{position:absolute;left:14px;right:14px;top:12px;padding:10px 14px;font-size:14px;line-height:1.4;}
+  #orderBar .hudrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+  #orderText b{color:var(--gold);}
+  #drone{position:absolute;left:18px;bottom:58px;font-size:13px;color:#04140f;font-weight:bold;
+    background:linear-gradient(180deg,#c6d3ff,#7c9cff);padding:10px 13px;border-radius:12px;max-width:64%;display:none;box-shadow:0 0 22px rgba(124,156,255,.5);line-height:1.45;}
+  #drone .led{font-family:'Courier New',monospace;display:block;margin-top:6px;color:#0a0e1c;background:rgba(255,255,255,.45);border-radius:8px;padding:6px 8px;direction:ltr;text-align:center;}
+  #facRight{flex:1;display:flex;flex-direction:column;gap:12px;padding:16px;padding-bottom:112px;overflow:auto;}
+  #facRight h2{margin:0;font-size:20px;}
+  #facRight .hint{color:var(--dim);font-size:13px;line-height:1.4;margin:-4px 0 0;}
+
+  .row{padding:10px 12px;}
+  .row .pl{font-size:13px;font-weight:bold;margin-bottom:7px;text-align:center;color:var(--dim);}
+  .row .ctl{display:flex;gap:8px;align-items:center;justify-content:center;direction:ltr;}
+  .row .ctl button{width:54px;height:48px;border-radius:12px;font-size:22px;font-weight:bold;background:rgba(124,156,255,.16);border:1px solid var(--line);}
+  .row .ctl .cnt{min-width:64px;text-align:center;font-size:38px;font-weight:bold;direction:ltr;color:var(--acc2);}
+  #statusLine{text-align:center;font-weight:bold;font-size:15px;min-height:20px;}
+
+  .center{align-items:center;justify-content:center;text-align:center;gap:16px;padding:24px;}
+  .center h1{font-size:clamp(28px,6vw,52px);margin:0;}
+  .center .card{max-width:600px;padding:24px 28px;}
+  .logbook{font-size:14px;color:var(--acc);line-height:1.6;max-width:560px;text-align:left;}
+
+  .cnt{direction:ltr;}
+
+  /* kdm-texthierarchy v1 — important-first hierarchy (also auto-injected by scripts/normalize-games.mjs;
+     kept here so authored/generated games ship with it). Title → one-line instruction → START dominate;
+     flavor + SEO prose demote to a quiet footer. On play, the current instruction is the HUD hero. */
+  #menu{gap:14px;}
+  #menu .sub{font-weight:600;}
+  #menu .tag{font-size:12px;opacity:.7;margin-top:2px;}
+  .kdm-about{opacity:.6;border-top:1px solid var(--line,rgba(255,255,255,.12));padding-top:12px !important;margin-top:16px !important;}
+  #orderText{font-size:clamp(15px,2.2vw,17px);font-weight:700;line-height:1.35;}
+  #facRight #panelHead h2{font-size:clamp(16px,2.4vw,19px);line-height:1.25;margin:0 0 2px;}
+  #facRight .hint{opacity:.82;}
+
+  /* KOC onboarding animations (also auto-injected by scripts/normalize-games.mjs; kept here so the
+     template animates when opened directly from file:// during authoring). */
+  @keyframes kocReady{0%,100%{box-shadow:0 0 0 0 rgba(90,255,150,0)}50%{box-shadow:0 0 0 4px rgba(90,255,150,.55),0 0 20px rgba(90,255,150,.6)}}
+  .koc-ready{animation:kocReady 1.05s ease-in-out infinite !important}
+  @keyframes kocCue{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+  .koc-cue{animation:kocCue .9s ease-in-out 3;}
+
+  @media(max-width:760px){
+    #play{flex-direction:column;}
+    #facLeft{flex:0 0 46%;}
+    #cv{bottom:auto;height:46vh;height:46dvh;}
+    #facRight{background:linear-gradient(180deg,#141a30f6,#0a0e1cfc);border-top:1px solid rgba(140,160,255,.18);padding-bottom:16px;}
+    #actBtn{margin-bottom:40px;}
+  }
+
+  #hubBack{position:fixed;left:12px;bottom:12px;z-index:99999;direction:ltr;font:bold 13px/1 -apple-system,system-ui,sans-serif;color:#eaf6ff;text-decoration:none;background:rgba(6,14,28,.72);border:1px solid rgba(130,200,255,.4);border-radius:999px;padding:8px 13px;backdrop-filter:blur(4px);transition:background .12s;}
+  #hubBack:hover{background:rgba(6,14,28,.95);}
+  #dashToggle,#dash{display:none !important;}   /* parent diagnostics removed */
+
+  /* kidsdomath-normalize v1 — inlined so canvas taps/drags work during file:// authoring too
+     (scripts/normalize-games.mjs sees this marker and skips re-injecting; keep the marker string). */
+  #play{pointer-events:none;}      /* the #play overlay lets taps fall through to the canvas... */
+  #facRight{pointer-events:auto;}  /* ...while the control panel stays clickable */
+
+  /* Respect reduced-motion: kill the onboarding pulses (also injected across all games by the normalizer). */
+  @media(prefers-reduced-motion:reduce){ .koc-ready,.koc-cue{animation:none !important;} }
+  #errPill{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);z-index:2147483000;display:none;
+    background:#ff5d6c;color:#fff;font:bold 13px/1 system-ui,sans-serif;padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.5);}
+</style>
+<!-- kdm-progress v1 --><script src="/games/_shared/kdm-progress.js"></script>
+<script>/* kdm-no-repeat v2 */window.__kdmFreshO=function(gen){var p=window.__kdmPrevQ,o,t=0,s=null;do{o=gen();try{s=(o&&o.qkey!=null)?'q:'+o.qkey:JSON.stringify(o)}catch(e){s=null}}while(++t<9&&p&&s&&s===p);window.__kdmPrevQ=s;return o};</script>
+</head>
+<body>
+<div id="stage">
+  <a id="hubBack" href="/" aria-label="Back to KidsDoMath games">← Games</a>
+  <canvas id="cv" role="img" aria-label="Game play area"></canvas>
+  <div id="errPill" role="button" tabindex="0">⚠️ Something broke — tap to reload</div>
+
+  <div id="menu" class="overlay show">
+    <h1 id="t_title">GAME TEMPLATE</h1>
+    <div class="sub" id="t_sub"></div>
+    <div class="crewrow"><span class="pill" id="t_p1"></span><span class="pill" id="t_p2"></span><span class="pill" id="t_p3"></span></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;">
+      <button class="btn" id="t_resume" style="display:none" onclick="Game.resume()"></button>
+      <button class="btn primary" id="t_start" onclick="Game.start()"></button>
+    </div>
+    <div class="tag" id="t_tag"></div>
+  </div>
+
+  <div id="play" class="overlay">
+    <div id="facLeft">
+      <div id="orderBar" class="glass">
+        <div class="hudrow"><span class="pill" id="levelPill">LV 1</span><span class="pill" id="quotaPill">⭐ 0/3</span></div>
+        <div id="orderText"></div>
+      </div>
+      <div id="drone"></div>
+    </div>
+    <div id="facRight">
+      <div id="panelHead"></div>
+      <!-- ⟨REPLACE the controls for your mechanic. This is one number stepper.⟩ -->
+      <div class="row glass" id="ctlBox">
+        <div class="pl" id="valLbl"></div>
+        <div class="ctl"><button data-d="-1">−</button><span class="cnt" id="valCnt">0</span><button data-d="1">+</button></div>
+      </div>
+      <div id="statusLine" aria-live="polite"></div>
+      <button class="btn act" id="actBtn" onclick="Line.commit()"></button>
+    </div>
+  </div>
+
+  <div id="result" class="overlay center">
+    <h1 id="resTitle"></h1><div class="card glass" id="resBody"></div>
+    <button class="btn primary" id="t_continue" onclick="Game.next()"></button>
+  </div>
+
+  <div id="win" class="overlay center">
+    <h1 id="t_winTitle" style="background:linear-gradient(90deg,var(--acc),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;"></h1>
+    <div class="card glass"><p id="t_winIntro"></p><div class="logbook" id="winLog"></div></div>
+    <button class="btn primary" id="t_winBtn" onclick="location.reload()"></button>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ==================== math utils ==================== */
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const ri=(a,b)=>Math.floor(rnd(a,b+1));
+const pick=a=>a[ri(0,a.length-1)];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const now=()=>performance.now();
+const $=id=>document.getElementById(id);
+
+/* ==================== strings — ENGLISH-ONLY (⟨REPLACE the strings⟩) ====================
+   This game is English-only by construction. Do NOT add a Hebrew dictionary, an EN/HE
+   toggle, RTL, or language detection. Every user-facing string still goes through L(). */
+const ltr=s=>s;   // passthrough (kept so any copied game that calls ltr() still works)
+const T={
+  title:'GAME TEMPLATE', sub:'⟨One-line pitch: the math IS the mechanic.⟩',
+  p1:'⟨mode 1⟩', p2:'⟨mode 2⟩', p3:'⟨mode 3⟩',
+  start:'▶ START', hubBack:'← Games', resume:n=>'▶ Continue · LV '+n,
+  tag:'⟨No quizzes — describe how manipulating the game does the math.⟩',
+  level:n=>'LV '+n, quota:(a,b)=>'⭐ '+a+'/'+b,
+  order_match:t=>'Order: set the dial to <b>'+t+'</b>.',
+  order_more:t=>'Order: set the dial to <b>more than '+t+'</b>.',
+  h_match:'🎯 Match It', hint_match:'Use − / + to set the value, then commit.',
+  h_more:'⬆️ Beat It', hint_more:'Set the value higher than the target, then commit.',
+  valLbl:'VALUE', act:'✓ LOCK IN',
+  st_ok:'✅ Ready — LOCK it in!', st_no:v=>'value: '+v,
+  res_clear:n=>'ROUND '+n+' DONE', res_continue:'NEXT →',
+  res_match:t=>'Matched '+t+'.', res_more:(v,t)=>v+' is more than '+t+'.',
+  winTitle:'🏆 COMPLETE', winIntro:'⟨Win blurb.⟩', winBtn:'↺ PLAY AGAIN',
+  win_stats:(lv,clean)=>'⭐ '+lv+' rounds · '+clean+' first-try',
+  // ⟨REPLACE⟩ drone strings — TWO STAGES. Stage 1 teaches the METHOD with the live puzzle's
+  // numbers and NEVER contains the final answer ('change = paid − price' style); the answer
+  // LED only appears at stage 2 (3 further misses). The idle path never escalates past stage 1.
+  drone_match:t=>'🤖 Helper: read the target, then step toward it — count your jumps.',
+  drone_more:t=>'🤖 Helper: "more than '+t+'" means BIGGER than '+t+' — go past it.',
+  st_low:'📉 too low — go higher!', st_high:'📈 too high — come down!',
+};
+function L(k,...a){ let v=T[k]; if(v===undefined)return k; return typeof v==='function'?v(...a):v; }
+function applyText(){
+  document.documentElement.lang='en';
+  const set=(id,v)=>{const e=$(id);if(e)e.innerHTML=v;};
+  set('t_title',L('title')); set('t_sub',L('sub')); set('t_p1',L('p1')); set('t_p2',L('p2')); set('t_p3',L('p3'));
+  set('t_start',L('start')); set('t_tag',L('tag')); set('hubBack',L('hubBack')); set('t_continue',L('res_continue'));
+  set('t_winTitle',L('winTitle')); set('t_winIntro',L('winIntro')); set('t_winBtn',L('winBtn'));
+  set('actBtn',L('act')); set('valLbl',L('valLbl'));
+  // Resume button (powers the hub's "Continue"): show it when a prior session got past level 1.
+  try{ const lv=Game.resumeLevel(); const rb=$('t_resume'); if(rb && lv>1){ rb.textContent=L('resume',lv); rb.style.display=''; } }catch(e){}
+}
+
+/* ==================== FX (canvas) — ⟨REPLACE draw() with your visualization⟩ ==================== */
+const FX=(()=>{
+  const cv=$('cv'), ctx=cv.getContext('2d'); let W=0,H=0,DPR=1,t=0,parts=[],shake=0;
+  const FONT='"Trebuchet MS",system-ui,sans-serif';
+  // setConfig: pushed once per input. For arrays/objects push a COPY (e.g. bars:[...O.bars]),
+  // not the live reference, so a later mutation can't retroactively change what was drawn.
+  let cfg=null; function setConfig(c){ cfg=c; }
+  function resize(){ DPR=Math.min(2,window.devicePixelRatio||1); W=cv.clientWidth; H=cv.clientHeight; cv.width=W*DPR; cv.height=H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); }
+  window.addEventListener('resize',resize);
+  function burst(x,y,n,c,sp=4,lf=1){ for(let i=0;i<n;i++){ const a=Math.random()*Math.PI*2,s=rnd(.5,sp); parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:rnd(.4,1)*lf,max:lf,color:c,r:rnd(1.5,4)}); } }
+  function setShake(m){ shake=Math.max(shake,m); }
+  // Play rect = the visible #facLeft region intersected with the canvas — correct on BOTH
+  // desktop (left column) and mobile (top band). Never hardcode W*0.58: on phones the canvas
+  // is full-width, so a fixed split renders the math object off-centre. cx/cy are the centre
+  // of the real play area; AW/AH its size; ox/oy its offset from the canvas origin.
+  function geo(){
+    const fl=$('facLeft'), cr=cv.getBoundingClientRect();
+    let ox=0, oy=0, aw=W, ah=H;
+    if(fl){ const r=fl.getBoundingClientRect();
+      const l=Math.max(r.left,cr.left), rt=Math.min(r.right,cr.right);
+      const tp=Math.max(r.top,cr.top),  bt=Math.min(r.bottom,cr.bottom);
+      ox=Math.max(0,l-cr.left); oy=Math.max(0,tp-cr.top);
+      aw=Math.max(1,rt-l); ah=Math.max(1,bt-tp);
+    }
+    // #orderBar (the glass HUD) is position:absolute and overlays the TOP of the canvas on
+    // MOBILE (the canvas is a full-width top band). Any goal label / 🎯 target / top of a
+    // beam·scale·tree drawn near y≈oy gets occluded — a recurring bug (4 games in the
+    // 2026-09-05 batch each re-fixed it by hand). Draw such elements below `topSafe` (canvas
+    // coords). On desktop the bar sits above the left play column, so topSafe≈oy. Always ≥oy.
+    let topSafe=oy;
+    const ob=$('orderBar');
+    if(ob){ const r=ob.getBoundingClientRect();
+      if(r.bottom>cr.top && r.top<cr.bottom && r.right>cr.left && r.left<cr.right)
+        topSafe=Math.max(topSafe, Math.min(cr.bottom,r.bottom)-cr.top+8);
+    }
+    // cySafe centres content within the HUD-clear region (use instead of cy for top-heavy layouts).
+    return {AW:aw, AH:ah, ox, oy, cx:ox+aw*0.5, cy:oy+ah*0.5, topSafe, cySafe:topSafe+(oy+ah-topSafe)*0.5};
+  }
+
+  function draw(){                       // ⟨REPLACE: draw your math object from cfg⟩
+    if(!cfg) return; const g=geo(); const sv=cfg.solved;
+    // demo: a big value vs a gold target. NOTE we centre on g.cySafe and clamp the top label
+    // to g.topSafe so neither is hidden behind the #orderBar HUD on mobile — do the same for
+    // YOUR goal labels / targets / scale tops (see geo()).
+    ctx.fillStyle=sv?'#5cff9d':'#eef2ff'; ctx.font='bold 90px '+FONT; ctx.textAlign='center'; ctx.direction='ltr';
+    ctx.fillText(String(cfg.value), g.cx, g.cySafe);
+    if(cfg.target!=null){ ctx.fillStyle='#ffd152'; ctx.font='bold 22px '+FONT; ctx.fillText('🎯 '+cfg.target, g.cx, Math.max(g.topSafe+22, g.cySafe-90)); }
+  }
+  function drawParts(dt){ for(let i=parts.length-1;i>=0;i--){ const p=parts[i]; p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.life-=dt; if(p.life<=0){parts.splice(i,1);continue;} ctx.globalAlpha=clamp(p.life/p.max,0,1); ctx.fillStyle=p.color; ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill(); } ctx.globalAlpha=1; }
+  let last=0;
+  function loop(ts){ const dt=Math.min(.05,(ts-last)/1000)||.016; last=ts; t+=dt; ctx.direction='ltr';
+    const bg=ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0a0e1c'); bg.addColorStop(1,'#141a30'); ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+    ctx.save(); if(shake>.2){ ctx.translate(rnd(-shake,shake),rnd(-shake,shake)); shake*=.86; }
+    if(Game.screen==='play') draw();
+    drawParts(dt); ctx.restore(); requestAnimationFrame(loop);
+  }
+  resize(); requestAnimationFrame(loop);
+  function celebrate(){ const g=geo(); for(const c of ['#7c9cff','#34f5ff','#5cff9d']) burst(g.cx,g.cy,32,c,7,1); setShake(6); }
+
+  // Shared single-axis DIRECT-MANIPULATION helper — the encouraged pattern (grab the object,
+  // it follows your finger). Wire it once instead of re-hand-rolling pointer plumbing per game:
+  //   FX.enableDrag({ hit:(x,y)=>indexUnderCursor(x,y)|null, valueAt:(x,y)=>newValue, onDrag:(id,v)=>Line.setValue(id,v) })
+  // Touching an object moves it immediately (no separate select step — avoids the hidden-multi-
+  // select bug). Works for mouse + touch; sets cursor:grab/grabbing.
+  function enableDrag({hit, valueAt, onDrag, onEnd}){
+    let id=null; cv.style.cursor='grab';
+    const rel=e=>{ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; };
+    cv.addEventListener('pointerdown',e=>{ if(Game.screen!=='play')return; const p=rel(e); const h=hit(p.x,p.y);
+      if(h==null)return; id=h; try{cv.setPointerCapture(e.pointerId);}catch(_){} cv.style.cursor='grabbing';
+      if(valueAt) onDrag(id, valueAt(p.x,p.y)); });
+    window.addEventListener('pointermove',e=>{ if(id==null||Game.screen!=='play')return; const p=rel(e); onDrag(id, valueAt?valueAt(p.x,p.y):p); });
+    window.addEventListener('pointerup',()=>{ if(id==null)return; const done=id; id=null; cv.style.cursor='grab'; onEnd&&onEnd(done); });
+  }
+  return {resize,setConfig,setShake,burst,celebrate,enableDrag,geo, get W(){return W;}, get H(){return H;}};
+})();
+
+/* ==================== Dash — no-op stub (parent diagnostics removed) ==================== */
+const Dash=(()=>({record(){},noteMiss(){},noteDrone(){},setLevel(){},render(){},toggle(){}}))();
+
+/* ==================== Game (screens) ==================== */
+const Game=(()=>{
+  const screens=['menu','play','result','win']; let screen='menu',level=1,clean=0; const MAX=8;
+  function show(s){ screen=s; screens.forEach(x=>$(x)&&$(x).classList.toggle('show',x===s)); FX.resize(); }
+  function start(lvl){ level=Math.max(1,Math.min(lvl||1,MAX)); clean=0; Line.build(level,true); show('play'); }
+  // Resume from the furthest level reached last time (hub "Continue"). Reads shared KDMProgress.
+  function resumeLevel(){ try{ const p=window.KDMProgress&&KDMProgress.forGame(KDMProgress.id); return (p&&p.maxLevel>1)?Math.min(p.maxLevel,MAX):1; }catch(e){ return 1; } }
+  function resume(){ start(resumeLevel()); }
+  function roundClear(used){ if(!used)clean++; const p=Line.resultPayload(); $('resTitle').innerHTML='⭐ '+L('res_clear',level); $('resTitle').style.color='var(--grn)'; $('resBody').innerHTML='<p>'+p.msg+'</p>'; show('result'); }
+  function next(){ if(level>=MAX)return winGame(); level++; if(window.KDMProgress)KDMProgress.played({level}); Line.build(level); show('play'); }
+  function winGame(){ if(window.KDMProgress)KDMProgress.played({completed:true}); $('winLog').innerHTML='<br>'+L('win_stats',MAX,clean); show('win'); }
+  return {start,resume,resumeLevel,next,roundClear,winGame, get screen(){return screen;}, get level(){return level;}, get MAX(){return MAX;}};
+})();
+
+/* ==================== Line (the puzzle) — ⟨REPLACE generators + solved()⟩ ==================== */
+const Line=(()=>{
+  let O=null, made=0, need=3, usedScaffold=0, missSince=0, droneShown=false, droneFull=false, idleT=null;
+  const cuedModes=new Set();   // which modes have shown their first-play cue (cue each mode's DEBUT, not just level 1)
+  let locked=false; // commit-lock: block re-committing an already-solved target during the post-solve respawn window (prevents double-counting a solve)
+
+  /* ⟨REPLACE: one generator per mode. Generate the ANSWER first, then derive the target, so a
+     solution always exists; if a target could be unreachable/pre-solved, reject-loop it:
+       do { ...pick... } while (alreadySolved(...) || !reachable(mode,target))
+     Each generator takes a `tier` (1|2|3) and widens ranges with it — never cold-open on the hardest case.⟩ */
+  const HIMATCH=[9,14,20], HIMORE=[8,14,19];   // per-tier ceilings
+  function genMatch(tier=1){ return {mode:'match', T:ri(3, HIMATCH[tier-1]||20), val:0}; }
+  function genMore(tier=1){ return {mode:'more', T:ri(2, HIMORE[tier-1]||19), val:0}; }
+  // 8 levels; difficulty ramps 1→3 across the run.
+  const LEVELS=[ ()=>genMatch(1), ()=>genMore(1), ()=>genMatch(2), ()=>genMore(2), ()=>genMatch(3), ()=>genMore(2), ()=>genMatch(3), ()=>genMore(3) ];
+
+  function build(level, firstPlay){
+    O=window.__kdmFreshO(LEVELS[(level-1)%LEVELS.length]); made=0; need=3; usedScaffold=0; missSince=0; droneShown=false; droneFull=false; locked=false;
+    $('drone').style.display='none';
+    renderPanel(); renderOrder(); refresh();
+    if(!cuedModes.has(O.mode)){ cuedModes.add(O.mode); cueControls(); }  // KOC: cue each mode's FIRST appearance
+    resetIdle();                                                     // KOC: idle-scaffold timer
+  }
+
+  /* ⟨REPLACE: the win condition per mode⟩ */
+  function solved(){ return O.mode==='match' ? O.val===O.T : O.val>O.T; }
+
+  // NO PRE-COMMIT ORACLE: the `solved` flag sent to FX (and the ✅ status below) is gated on
+  // `locked` — i.e. it only turns true AFTER a correct commit. If it keyed on solved() alone,
+  // every puzzle would be winnable by tapping +/− and watching for green, doing zero math.
+  function pushFX(){ FX.setConfig({ value:O.val, target:O.T, solved:locked&&solved() }); }
+
+  function step(d){ O.val=clamp(O.val+d,0,20); onInput(); }
+  function onInput(){ resetIdle(); $('valCnt').textContent=O.val; pushFX(); refresh(); }
+
+  function commit(){
+    if(locked) return;                                               // commit-lock: ignore taps until the next target spawns
+    clearIdle();
+    if(solved()){
+      locked=true; FX.celebrate(); /* kdm-clean-quota v1 */if(missSince<=2)made++; refresh();
+      if(made>=need) setTimeout(()=>Game.roundClear(usedScaffold>0),520);
+      else setTimeout(respawn,360);
+    }else{ FX.setShake(8); missSince++; refresh();
+      // commit-gated directional nudge (numeric dial) — never live in refresh(), or the oracle returns
+      $('statusLine').textContent = O.val<O.T ? L('st_low') : L('st_high');
+      if(missSince>=3 && !droneShown) showDrone();                                   // KOC: stage-1 method rescue
+      else if(droneShown && !droneFull && missSince>=6) showDrone(true); }           // last resort: answer LED
+  }
+  function respawn(){ locked=false; const lvl=Game.level; O=window.__kdmFreshO(LEVELS[(lvl-1)%LEVELS.length]); missSince=0; droneShown=false; droneFull=false; $('drone').style.display='none'; renderPanel(); renderOrder(); refresh(); resetIdle(); }
+
+  /* ---- KOC onboarding kit ---- */
+  function resetIdle(){ clearIdle(); idleT=setTimeout(()=>{ if(!droneShown && !solved()) showDrone(); }, 14000); }  // ~14s idle → help (canonical: 14s / 3 misses)
+  function clearIdle(){ if(idleT){ clearTimeout(idleT); idleT=null; } }
+  function cueControls(){ const box=$('ctlBox'); if(!box)return; box.classList.add('koc-cue'); setTimeout(()=>box.classList.remove('koc-cue'),2800); }
+  function readyPulse(on){ const b=$('actBtn'); if(b) b.classList.toggle('koc-ready', on); }
+
+  /* ---- UI ---- */
+  function renderOrder(){
+    $('orderText').innerHTML = O.mode==='match' ? L('order_match',O.T) : L('order_more',O.T);
+    $('levelPill').textContent=L('level',Game.level); $('quotaPill').innerHTML=L('quota',made,need);
+  }
+  function renderPanel(){
+    $('panelHead').innerHTML = O.mode==='match' ? `<h2>${L('h_match')}</h2><p class="hint">${L('hint_match')}</p>`
+                                                : `<h2>${L('h_more')}</h2><p class="hint">${L('hint_more')}</p>`;
+    $('valLbl').textContent=L('valLbl');
+    document.querySelectorAll('#ctlBox .ctl button').forEach(b=>b.onclick=()=>step(+b.dataset.d));
+    $('valCnt').textContent=O.val;
+  }
+  function refresh(){
+    renderOrder(); const sv=solved(); const ok=locked&&sv; // ok = correctness REVEALED (post-commit only — never leak sv pre-commit)
+    $('valCnt').textContent=O.val;
+    $('statusLine').textContent = ok ? L('st_ok') : L('st_no', O.val);
+    $('statusLine').style.color = ok ? 'var(--grn)' : 'var(--gold)';
+    readyPulse(ok);                                       // KOC: READY pulse fires with the post-commit celebrate window
+    pushFX();
+  }
+  // TWO-STAGE rescue: stage 1 = method only (also the idle path — never spoils);
+  // stage 2 (`full`, after 3 FURTHER misses) appends the answer LED as the last resort.
+  function showDrone(full){ droneShown=true; if(full) droneFull=true; usedScaffold++; const d=$('drone'); d.style.display='block';
+    d.innerHTML = (O.mode==='match'?L('drone_match',O.T):L('drone_more',O.T))
+      + (droneFull ? `<span class="led">🎯 ${O.T}</span>` : '');
+  }
+  function relocalize(){ renderPanel(); renderOrder(); refresh(); if(droneShown) showDrone(droneFull); }
+  function resultPayload(){ return {msg: O.mode==='match'?L('res_match',O.T):L('res_more',O.val,O.T)}; }
+
+  return {build,step,commit,relocalize,resultPayload, dbg:{
+    get o(){return O;}, solved,
+    // ⟨REQUIRED by the verification harness — REPLACE the bodies for YOUR mechanic⟩
+    // reachable(o): is THIS puzzle's target attainable via the controls? Takes the whole puzzle
+    // object O (codebase convention) so you can read any field. Guards unsolvable/pre-solved gens.
+    reachable(o){ return o.T>=0 && o.T<=20; },
+    // solveForTest: drive O into a solved state so the automated playthrough can clear every level.
+    solveForTest(){ O.val = O.mode==='match'?O.T:O.T+1; onInput(); },
+    // wrongForTest: drive O into a DELIBERATELY WRONG answer and SUBMIT it, through the SAME
+    // path a real wrong tap uses, so the harness can capture this game's actual wrong-answer
+    // feedback. REQUIRED — without it the review harness can't tell a "wrong" beat from a solved
+    // one and the feedback-quality check can't judge your wrong-answer response. Build a
+    // non-solving value here (off-by-one below; adapt to YOUR mechanic), then commit().
+    wrongForTest(){ O.val = (O.mode==='match'?O.T:O.T+1) + 1; onInput(); commit(); },
+    // jumpToLevel: REQUIRED contract member — jump straight to a deep level so deep-level
+    // clarity checks (hud-logic-mismatch.mjs) can reach a round where the mode has shifted
+    // (a reserve/keep/band appears). Steppers get it free via Game.start(lvl); a REAL-TIME
+    // game (belt/wave/lap) whose start() ignores levels MUST set its level + regenerate the
+    // round + spawn one live target here, or the deep-level check can't reach it (logs ⚠shallow).
+    jumpToLevel(n){ Game.start(n); return Game.level; },
+    get made(){return made;}, get need(){return need;},
+  }};
+})();
+
+window.Game=Game; window.Line=Line; window.Dash=Dash; window.FX=FX;
+
+/* Keyboard access (a11y): arrows adjust, Enter/Space commits — only during play.
+   ⟨If your mechanic isn't a single stepper, map these keys to your own control.⟩ */
+window.addEventListener('keydown',e=>{ if(Game.screen!=='play')return;
+  if(e.key==='ArrowUp'||e.key==='ArrowRight'){ Line.step(1); e.preventDefault(); }
+  else if(e.key==='ArrowDown'||e.key==='ArrowLeft'){ Line.step(-1); e.preventDefault(); }
+  else if(e.key==='Enter'||e.key===' '){ Line.commit(); e.preventDefault(); }
+});
+/* Never freeze silently for a kid: surface a tap-to-reload pill on a runtime error. */
+window.addEventListener('error',()=>{ const p=$('errPill'); if(p) p.style.display='block'; });
+(function(){ const p=$('errPill'); if(p){ const go=()=>location.reload(); p.addEventListener('click',go); p.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')go();}); } })();
+
+applyText();   /* MUST be last — modules are defined above; calling earlier hits the TDZ */
+</script>
+<!-- kdm-arcade v1 --><script src="/games/_shared/kdm-arcade.js"></script>
+</body>
+</html>
