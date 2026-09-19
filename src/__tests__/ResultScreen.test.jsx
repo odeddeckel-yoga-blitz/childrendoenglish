@@ -73,3 +73,72 @@ describe('ResultScreen', () => {
     expect(screen.getByText('dog')).toBeInTheDocument();
   });
 });
+
+describe('ResultScreen arcade layer', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const arcadeProps = {
+    ...defaultProps,
+    results: {
+      score: 8,
+      total: 10,
+      answers: [],
+      arcade: { score: 120, bestStreak: 4, fastAnswers: 6 },
+      arcadeNewBest: true,
+      newCritters: ['fox'],
+    },
+    canRead: true,
+    onLightning: vi.fn(),
+    onStartMode: vi.fn(),
+  };
+
+  it('shows this-run arcade stats and the new-best banner', () => {
+    render(<ResultScreen {...arcadeProps} />);
+    expect(screen.getByText('⭐ 120')).toBeInTheDocument();
+    expect(screen.getByText('4')).toBeInTheDocument();
+    expect(screen.getByText('6')).toBeInTheDocument();
+    expect(screen.getByText('★ NEW BEST SCORE!')).toBeInTheDocument();
+  });
+
+  it('shows the hatched critter card', () => {
+    render(<ResultScreen {...arcadeProps} />);
+    expect(screen.getByText(/You hatched Foxy!/)).toBeInTheDocument();
+  });
+
+  it('offers the Lightning Round and calls onLightning', () => {
+    render(<ResultScreen {...arcadeProps} />);
+    const btn = screen.getByText(/Lightning — how many in 60 seconds\?/);
+    fireEvent.click(btn);
+    expect(arcadeProps.onLightning).toHaveBeenCalledTimes(1);
+  });
+
+  it('hides the Lightning Round for pre-readers (canRead false)', () => {
+    render(<ResultScreen {...arcadeProps} canRead={false} />);
+    expect(screen.queryByText(/Lightning — how many/)).not.toBeInTheDocument();
+  });
+
+  it('hides the Lightning Round after a quit', () => {
+    render(
+      <ResultScreen
+        {...arcadeProps}
+        results={{ ...arcadeProps.results, quit: true, newCritters: [] }}
+      />
+    );
+    expect(screen.queryByText(/Lightning — how many/)).not.toBeInTheDocument();
+  });
+
+  it('suggests the next mode and starts it', () => {
+    render(<ResultScreen {...arcadeProps} />);
+    const btn = screen.getByText(/Try Word Quiz next!/);
+    fireEvent.click(btn);
+    expect(arcadeProps.onStartMode).toHaveBeenCalledWith('word');
+  });
+
+  it('renders without arcade data (legacy results)', () => {
+    render(<ResultScreen {...defaultProps} />);
+    expect(screen.getByText('Play Again')).toBeInTheDocument();
+    expect(screen.queryByText('★ NEW BEST SCORE!')).not.toBeInTheDocument();
+  });
+});

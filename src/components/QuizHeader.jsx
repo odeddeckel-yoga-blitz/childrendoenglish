@@ -1,7 +1,7 @@
 import { X, Volume2, VolumeX, Flame } from 'lucide-react';
 import { t } from '../utils/i18n';
 
-export default function QuizHeader({ score, total, streak, soundEnabled, onToggleSound, onQuit, gradientColor = 'from-blue-500 to-blue-600', currentIndex, lang = 'en' }) {
+export default function QuizHeader({ score, total, streak, arcadeScore, soundEnabled, onToggleSound, onQuit, gradientColor = 'from-blue-500 to-blue-600', currentIndex, lang = 'en' }) {
   return (
     <>
       <div className="flex items-center justify-between">
@@ -12,10 +12,29 @@ export default function QuizHeader({ score, total, streak, soundEnabled, onToggl
         >
           <X className="w-5 h-5 text-slate-500" />
         </button>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
+          {streak >= 2 && (
+            <span
+              dir="ltr"
+              className="combo-pill px-2 py-0.5 rounded-full bg-gradient-to-b from-emerald-400 to-emerald-500 text-white font-black text-xs shadow-sm"
+              aria-label={t('comboLabel', lang, { count: streak })}
+            >
+              ×{streak}
+            </span>
+          )}
           {streak >= 3 && (
             <span className="streak-fire flex items-center gap-1 text-amber-500 font-bold text-sm">
               <Flame className="w-4 h-4" /> {streak}
+            </span>
+          )}
+          {typeof arcadeScore === 'number' && (
+            <span
+              dir="ltr"
+              key={arcadeScore}
+              className={`text-sm font-bold text-amber-600 dark:text-amber-400 ${arcadeScore > 0 ? 'animate-score-pop' : ''}`}
+              aria-label={t('arcadeScoreLabel', lang, { score: arcadeScore })}
+            >
+              ⭐ {arcadeScore}
             </span>
           )}
           <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{score}/{total}</span>

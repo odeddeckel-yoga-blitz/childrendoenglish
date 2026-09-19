@@ -5,7 +5,8 @@ import Menu from './components/Menu';
 import LandingPage from './components/LandingPage';
 import Confetti from './components/Confetti';
 import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, updateStreak, updateDailyGoal } from './utils/storage';
-import { initTTS } from './utils/sound';
+import { initTTS, playSound } from './utils/sound';
+import { checkCritters, getCritterById } from './data/critters';
 import { isRTL, t, loadHebrew } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
 import usePlayerManagement from './hooks/usePlayerManagement';
@@ -41,6 +42,26 @@ const ProfilePicker = lazy(() => import('./components/ProfilePicker'));
 const LearningPath = lazy(() => import('./components/LearningPath'));
 const ParentDashboard = lazy(() => import('./components/ParentDashboard'));
 const DailyReview = lazy(() => import('./components/DailyReview'));
+const LightningRound = lazy(() => import('./components/LightningRound'));
+
+/** Non-blocking "You hatched X!" toasts (kidsdomath crossover). */
+function CritterToasts({ toasts, lang }) {
+  if (toasts.length === 0) return null;
+  return (
+    <div className="fixed top-4 left-4 right-4 z-[60] flex flex-col items-center gap-2 pointer-events-none" aria-live="polite">
+      {toasts.map(id => {
+        const c = getCritterById(id);
+        if (!c) return null;
+        return (
+          <div key={id} className="glass rounded-2xl px-5 py-3 shadow-lg animate-slide-up font-bold text-slate-800 dark:text-slate-100">
+            <span className="text-2xl align-middle">{c.emoji}</span>{' '}
+            {t('critterHatched', lang, { name: t(c.nameKey, lang) })}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 // State-to-path mapping for browser history (top-level screens only)
 const STATE_TO_PATH = {
@@ -113,8 +134,10 @@ export default function App() {
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && !navigator.onLine);
   const [storageFull, setStorageFull] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [critterToasts, setCritterToasts] = useState([]);
   const mainRef = useRef(null);
   const prevBadgeCount = useRef(stats.badges?.length || 0);
+  const prevCritters = useRef(stats.critters || []);
 
   const navigate = useCallback((newState, direction = 'forward') => {
     setGameState(newState);
@@ -159,6 +182,19 @@ export default function App() {
     }
     prevBadgeCount.current = currentCount;
   }, [stats.badges]);
+
+  // Hatch-toast when new critters are earned (anywhere: quiz or lightning)
+  useEffect(() => {
+    const current = stats.critters || [];
+    const fresh = current.filter(id => !prevCritters.current.includes(id));
+    prevCritters.current = current;
+    if (fresh.length === 0) return undefined;
+    setCritterToasts(prev => [...prev, ...fresh]);
+    const timer = setTimeout(() => {
+      setCritterToasts(prev => prev.filter(id => !fresh.includes(id)));
+    }, 4000);
+    return () => clearTimeout(timer);
+  }, [stats.critters]);
 
   // Move focus to main container on view change for screen readers
   useEffect(() => {
@@ -244,6 +280,27 @@ export default function App() {
   }, [stats, playerRegistry?.activePlayerId]);
 
   const quizFlow = useQuizFlow({ stats, setStats, navigate });
+
+  // ⚡ Lightning Round finished: persist per-mode best + rounds count, then
+  // re-check critters (first-lightning / lightning-best earn rules).
+  const handleLightningFinish = useCallback((solves) => {
+    const mode = quizFlow.selectedMode;
+    setStats(prev => {
+      const arcade = { ...(prev.arcade || {}) };
+      const lightningBest = { ...(arcade.lightningBest || {}) };
+      if (mode) lightningBest[mode] = Math.max(lightningBest[mode] || 0, solves);
+      arcade.lightningBest = lightningBest;
+      arcade.lightningRounds = (arcade.lightningRounds || 0) + 1;
+      const updated = { ...prev, arcade };
+      const newCritters = checkCritters(updated);
+      if (newCritters.length > 0) {
+        updated.critters = [...(updated.critters || []), ...newCritters];
+        playSound('badge');
+      }
+      return updated;
+    });
+    analytics.featureUse('lightning_round');
+  }, [quizFlow.selectedMode]);
 
   const resetToMenu = useCallback(() => {
     navigate('menu', 'back');
@@ -533,9 +590,24 @@ export default function App() {
             lang={lang}
             level={quizFlow.selectedLevel}
             mode={quizFlow.selectedMode}
+            canRead={activePlayer?.canRead ?? true}
             onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords)}
             onChangeMode={() => navigate('levelSelect', 'back')}
             onMenu={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
+            onLightning={quizFlow.quizWords.length > 0 ? () => navigate('lightning') : undefined}
+            onStartMode={(nextMode) => quizFlow.startQuiz(quizFlow.selectedLevel, nextMode, quizFlow.customWords)}
+          />
+        );
+
+      case 'lightning':
+        return (
+          <LightningRound
+            words={quizFlow.quizWords}
+            mode={quizFlow.selectedMode}
+            lang={lang}
+            best={stats.arcade?.lightningBest?.[quizFlow.selectedMode] || 0}
+            onFinish={handleLightningFinish}
+            onExit={() => navigate('finished', 'back')}
           />
         );
 
@@ -659,6 +731,7 @@ export default function App() {
   return (
     <div className="app-bg min-h-screen pb-safe">
       <Confetti active={showConfetti} />
+      <CritterToasts toasts={critterToasts} lang={lang} />
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold">
         Skip to content
       </a>

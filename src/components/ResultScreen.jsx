@@ -1,10 +1,14 @@
-import { Play, ArrowLeft, Share2, RotateCcw, Check, X as XIcon } from 'lucide-react';
+import { Play, ArrowLeft, Share2, RotateCcw, Check, X as XIcon, Zap, Flame } from 'lucide-react';
 import { getWordById } from '../data/words';
+import { getCritterById } from '../data/critters';
+import { suggestNextMode, LIGHTNING_SECS } from '../utils/arcade';
 import { t } from '../utils/i18n';
 
-export default function ResultScreen({ results, lang = 'en', level: _level, mode: _mode, onPlayAgain, onChangeMode, onMenu }) {
-  const { score, total, answers = [] } = results;
+export default function ResultScreen({ results, lang = 'en', level: _level, mode, canRead = true, onPlayAgain, onChangeMode, onMenu, onLightning, onStartMode }) {
+  const { score, total, answers = [], arcade, arcadeNewBest, newCritters = [], quit } = results;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+  const showLightning = !!onLightning && canRead && !quit && total > 0;
+  const nextMode = onStartMode && !quit ? suggestNextMode(mode, canRead) : null;
 
   const handleShare = async () => {
     const isPerfect = score === total && total > 0;
@@ -48,6 +52,53 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
         </div>
       </div>
 
+      {/* This-run arcade stats (kidsdomath crossover) */}
+      {arcade && arcade.score > 0 && (
+        <div className="glass rounded-2xl p-4">
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div>
+              <p className="text-lg font-black text-amber-600 dark:text-amber-400" dir="ltr">⭐ {arcade.score}</p>
+              <p className="text-[11px] text-slate-500 font-medium">
+                {arcadeNewBest ? t('newBest', lang) : t('runScore', lang)}
+              </p>
+            </div>
+            <div>
+              <p className="text-lg font-black text-orange-500 flex items-center justify-center gap-1" dir="ltr">
+                <Flame className="w-4 h-4" /> {arcade.bestStreak}
+              </p>
+              <p className="text-[11px] text-slate-500 font-medium">{t('runBestCombo', lang)}</p>
+            </div>
+            <div>
+              <p className="text-lg font-black text-sky-500 flex items-center justify-center gap-1" dir="ltr">
+                <Zap className="w-4 h-4" /> {arcade.fastAnswers}
+              </p>
+              <p className="text-[11px] text-slate-500 font-medium">{t('runFastAnswers', lang)}</p>
+            </div>
+          </div>
+          {arcadeNewBest && (
+            <p className="text-center text-sm font-black text-emerald-600 mt-2 animate-badge-pop">
+              {t('newBestBanner', lang)}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Newly hatched critters */}
+      {newCritters.length > 0 && (
+        <div className="glass rounded-2xl p-4 text-center space-y-1">
+          {newCritters.map(id => {
+            const c = getCritterById(id);
+            if (!c) return null;
+            return (
+              <p key={id} className="font-bold text-slate-700 dark:text-slate-200 animate-badge-pop">
+                <span className="text-2xl align-middle">{c.emoji}</span>{' '}
+                {t('critterHatched', lang, { name: t(c.nameKey, lang) })}
+              </p>
+            );
+          })}
+        </div>
+      )}
+
       {/* Action buttons — Play Again is primary */}
       <div className="space-y-3">
         <button
@@ -57,6 +108,28 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
         >
           <Play className="w-4 h-4" /> {t('playAgain', lang)}
         </button>
+
+        {showLightning && (
+          <button
+            onClick={onLightning}
+            className="w-full py-3.5 px-4 rounded-xl font-bold text-amber-700 dark:text-amber-300
+                       bg-gradient-to-b from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/40
+                       border border-amber-300 dark:border-amber-700
+                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
+          >
+            <Zap className="w-4 h-4" /> {t('lightningCta', lang, { secs: LIGHTNING_SECS })}
+          </button>
+        )}
+
+        {nextMode && (
+          <button
+            onClick={() => onStartMode(nextMode)}
+            className="w-full py-2.5 px-4 glass rounded-xl font-semibold text-slate-600 dark:text-slate-300 text-sm
+                       hover:shadow-md active:scale-95 transition-all"
+          >
+            {t('trySuggestedMode', lang, { mode: t(`mode_${nextMode}`, lang) })}
+          </button>
+        )}
 
         <div className="grid grid-cols-3 gap-3">
           <button

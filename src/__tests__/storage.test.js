@@ -113,6 +113,14 @@ describe('loadStats', () => {
       hasSeenOnboarding: false,
       uiLanguage: 'en',
       quizHistory: [],
+      critters: [],
+      arcade: {
+        bestByMode: {},
+        lightningBest: {},
+        lightningRounds: 0,
+        categoriesTried: [],
+        modesPlayed: [],
+      },
     });
   });
 });
@@ -139,7 +147,18 @@ describe('saveStats + loadStats roundtrip', () => {
     saveStats(stats, id);
     const loaded = loadStats(id);
 
-    expect(loaded).toEqual(stats);
+    // Saved fields round-trip exactly; new arcade-layer defaults are merged in
+    expect(loaded).toEqual({
+      ...stats,
+      critters: [],
+      arcade: {
+        bestByMode: {},
+        lightningBest: {},
+        lightningRounds: 0,
+        categoriesTried: [],
+        modesPlayed: [],
+      },
+    });
   });
 });
 

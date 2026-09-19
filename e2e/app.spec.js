@@ -240,8 +240,9 @@ test.describe('Quiz Flow', () => {
     // Answer all 10 questions by clicking the first answer button
     await completeQuiz(page, 10);
 
-    // Should see results screen
-    await expect(page.locator('text=/\\d+.*\\/.*10|score|result/i')).toBeVisible({ timeout: 10000 });
+    // Should see results screen (.first(): the arcade "★ NEW BEST SCORE!"
+    // banner also matches /score/i, which would trip strict mode)
+    await expect(page.locator('text=/\\d+.*\\/.*10|score|result/i').first()).toBeVisible({ timeout: 10000 });
   });
 
   test('image quiz shows image and 4 answer buttons', async ({ page }) => {

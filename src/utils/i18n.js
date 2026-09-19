@@ -476,6 +476,56 @@ const translations = {
 
     // Learn mode
     swipeToBrowse: 'Swipe to browse words',
+
+    // Arcade layer (kidsdomath crossover): combo scoring
+    comboLabel: 'Combo ×{{count}}',
+    arcadeScoreLabel: 'Arcade score {{score}}',
+    newBest: '★ NEW BEST!',
+    newBestBanner: '★ NEW BEST SCORE!',
+    runScore: 'Score',
+    runBestCombo: 'Best combo',
+    runFastAnswers: 'Fast answers',
+
+    // Lightning Round
+    lightningCta: '⚡ Lightning — how many in {{secs}} seconds?',
+    lightningTimeUp: "Time's up!",
+    lightningSolvedIn: 'solved in {{secs}} seconds',
+    lightningNewBest: '★ NEW LIGHTNING BEST!',
+    lightningBestLabel: 'Best: {{count}}',
+    lightningAgain: 'Lightning Again',
+    lightningTimerLabel: '{{secs}} seconds left',
+    backToResults: 'Back to results',
+    trySuggestedMode: 'Try {{mode}} next!',
+
+    // Critter hatchery
+    critterHatched: 'You hatched {{name}}!',
+    critterHatchedLabel: 'Hatched!',
+    hatcheryTitle: 'Critter Hatchery',
+    hatcheryDesc: 'Play quizzes and Lightning Rounds to hatch them all!',
+    critter_chick_name: 'Pip',
+    critter_chick_hint: 'Complete your first quiz',
+    critter_fox_name: 'Foxy',
+    critter_fox_hint: 'Complete 3 quizzes',
+    critter_owl_name: 'Hoot',
+    critter_owl_hint: 'Get a perfect quiz score',
+    critter_turtle_name: 'Shelly',
+    critter_turtle_hint: 'Practice 5 days in a row',
+    critter_frog_name: 'Zippy',
+    critter_frog_hint: 'Play your first Lightning Round',
+    critter_unicorn_name: 'Sparkle',
+    critter_unicorn_hint: 'Solve 10 in one Lightning Round',
+    critter_octopus_name: 'Inky',
+    critter_octopus_hint: 'Try words from 3 categories',
+    critter_whale_name: 'Wally',
+    critter_whale_hint: 'Play all 4 quiz modes',
+    critter_eagle_name: 'Ace',
+    critter_eagle_hint: 'Reach a combo score of 200',
+    critter_dino_name: 'Rex',
+    critter_dino_hint: 'Complete 25 quizzes',
+    critter_panda_name: 'Bamboo',
+    critter_panda_hint: 'Practice 7 days in a row',
+    critter_star_name: 'Nova',
+    critter_star_hint: 'Hatch all the other critters',
   },
 };
 

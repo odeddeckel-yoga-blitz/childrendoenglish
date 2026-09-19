@@ -63,6 +63,7 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
         score={quiz.score}
         total={quiz.total}
         streak={quiz.streak}
+        arcadeScore={quiz.arcadeScore}
         soundEnabled={soundEnabled}
         onToggleSound={onToggleSound}
         onQuit={quiz.openQuitConfirm}

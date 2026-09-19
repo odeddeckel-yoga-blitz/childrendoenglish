@@ -1,5 +1,6 @@
 import { ArrowLeft } from 'lucide-react';
 import { BADGES } from '../data/badges';
+import { CRITTERS } from '../data/critters';
 import { t } from '../utils/i18n';
 
 function getBadgeProgress(badge, stats) {
@@ -78,6 +79,41 @@ export default function BadgesView({ stats, lang = 'en', onBack }) {
                       : t(progress.key, lang, { done: progress.done, total: progress.total })}
                   </p>
                 </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* 🐣 Critter Hatchery (kidsdomath crossover) */}
+      <div className="flex items-center gap-3 pt-2">
+        <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">{t('hatcheryTitle', lang)}</h2>
+        <span className="text-sm text-slate-500 ms-auto" dir="ltr">
+          {stats.critters?.length || 0} / {CRITTERS.length}
+        </span>
+      </div>
+      <p className="text-xs text-slate-500 -mt-4">{t('hatcheryDesc', lang)}</p>
+
+      <div className="grid grid-cols-3 gap-3" data-testid="hatchery">
+        {CRITTERS.map((critter) => {
+          const hatched = stats.critters?.includes(critter.id);
+          return (
+            <div
+              key={critter.id}
+              className={`glass rounded-2xl p-3 text-center space-y-1 transition-all ${
+                hatched ? 'animate-badge-pop' : 'opacity-70'
+              }`}
+            >
+              <div className="text-3xl" aria-hidden="true">{hatched ? critter.emoji : '🥚'}</div>
+              {hatched ? (
+                <>
+                  <p className="font-bold text-slate-800 dark:text-slate-100 text-xs">{t(critter.nameKey, lang)}</p>
+                  <span className="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-semibold rounded-full">
+                    {t('critterHatchedLabel', lang)}
+                  </span>
+                </>
+              ) : (
+                <p className="text-[10px] text-slate-500 leading-tight">{t(critter.hintKey, lang)}</p>
               )}
             </div>
           );

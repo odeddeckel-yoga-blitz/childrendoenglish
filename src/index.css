@@ -114,6 +114,10 @@
   animation: confetti-fall linear forwards;
 }
 
+/* Lightning Round: final-10-seconds pulse (color keyframes reuse pulse-red).
+   Disabled by the global prefers-reduced-motion block below. */
+.lightning-hot { animation: pulse-red 0.8s ease-in-out infinite; }
+
 /* Streak fire glow */
 @keyframes fire-glow {
   0%, 100% { text-shadow: 0 0 8px rgba(245, 158, 11, 0.6); }

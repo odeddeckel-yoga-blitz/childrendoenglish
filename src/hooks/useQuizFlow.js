@@ -3,6 +3,7 @@ import { selectQuizWords, updateWordSR } from '../utils/spaced-repetition';
 import { preloadImages } from '../utils/images';
 import { updateStreak, updateDailyGoal } from '../utils/storage';
 import { BADGES } from '../data/badges';
+import { checkCritters } from '../data/critters';
 import { playSound } from '../utils/sound';
 import { analytics } from '../utils/analytics';
 
@@ -79,12 +80,19 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
   const handleQuizComplete = useCallback((results) => {
     const { score, total, answers, mode, quit } = results;
 
-    setStats(prev => {
+    // Pure completion routine: applied inside the functional setStats updater
+    // (safe against concurrent updates, StrictMode-friendly) AND once against
+    // the current stats snapshot to derive the new-best/new-critter flags for
+    // the result screen. Nothing mutates stats mid-quiz, so both runs agree.
+    const completeQuiz = (prev) => {
       let updated = { ...prev };
+      let arcadeNewBest = false;
+      let newBadges = [];
+      let newCritters = [];
 
       // A quit is not a completed quiz: keep the learning that happened
       // (word progress, daily goal) but don't count the quiz, award
-      // streak/badges, or unlock levels.
+      // streak/badges/critters, or unlock levels.
       if (!quit) {
         updated = {
           ...updated,
@@ -111,6 +119,24 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
             }
           }
         }
+
+        // Arcade bookkeeping: per-mode best combo score, modes played,
+        // categories tried (feeds the critter earn rules)
+        const arcade = { ...(updated.arcade || {}) };
+        const bestByMode = { ...(arcade.bestByMode || {}) };
+        const runScore = results.arcade?.score || 0;
+        if (mode && runScore > (bestByMode[mode] || 0)) {
+          bestByMode[mode] = runScore;
+          arcadeNewBest = true;
+        }
+        arcade.bestByMode = bestByMode;
+        const modesPlayed = new Set(arcade.modesPlayed || []);
+        if (mode) modesPlayed.add(mode);
+        arcade.modesPlayed = [...modesPlayed];
+        const cats = new Set(arcade.categoriesTried || []);
+        quizWords.forEach(w => { if (w.category) cats.add(w.category); });
+        arcade.categoriesTried = [...cats];
+        updated.arcade = arcade;
       }
 
       // Update word progress from answers
@@ -129,7 +155,6 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
 
         // Check badges
         const game = { score, total, mode, level: selectedLevel };
-        const newBadges = [];
         BADGES.forEach(badge => {
           if (!updated.badges.includes(badge.id) && badge.check(updated, game)) {
             newBadges.push(badge.id);
@@ -137,23 +162,35 @@ export default function useQuizFlow({ stats, setStats, navigate }) {
         });
         if (newBadges.length > 0) {
           updated.badges = [...updated.badges, ...newBadges];
-          playSound('badge');
+        }
+
+        // Check collectible critters (hatchery)
+        newCritters = checkCritters(updated, game);
+        if (newCritters.length > 0) {
+          updated.critters = [...(updated.critters || []), ...newCritters];
         }
       } else {
         updated = updateDailyGoal(updated, answers?.length || 0);
       }
 
-      return updated;
-    });
+      return { updated, newBadges, newCritters, arcadeNewBest };
+    };
 
-    setQuizResults(results);
+    // Snapshot run: derive result-screen flags + reward sound
+    const { newBadges, newCritters, arcadeNewBest } = completeQuiz(stats);
+    if (newBadges.length > 0 || newCritters.length > 0) {
+      playSound('badge');
+    }
+
+    setStats(prev => completeQuiz(prev).updated);
+    setQuizResults({ ...results, arcadeNewBest, newCritters });
     if (quit) {
       analytics.quizQuit(mode, selectedLevel, answers?.length ?? 0);
     } else {
       analytics.quizComplete(mode, selectedLevel, score, total);
     }
     navigate('finished');
-  }, [selectedLevel, navigate, setStats]);
+  }, [selectedLevel, navigate, setStats, stats, quizWords]);
 
   const handleStartPersonalQuiz = useCallback((words, mode) => {
     setCustomWords(words);
