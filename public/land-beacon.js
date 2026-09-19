@@ -12,6 +12,16 @@
       if (localStorage.getItem('cde_internal') === '1') return;
     } catch (e) { /* storage unavailable — fall through */ }
     if (navigator.webdriver || !navigator.sendBeacon) return;
+    // Vercel Web Analytics (cookieless, no PII) — one loader covers the SPA and
+    // every static SEO page; internal/webdriver traffic never reaches this line.
+    // The script self-handles SPA route changes (history API).
+    if (!document.getElementById('va-insights')) {
+      var va = document.createElement('script');
+      va.id = 'va-insights';
+      va.defer = true;
+      va.src = '/_vercel/insights/script.js';
+      document.head.appendChild(va);
+    }
     var p = location.pathname, g = 'other';
     if (p === '/' || p === '') g = 'home';
     else if (p.indexOf('/vocabulary/') === 0 && p.indexOf('/hebrew') > -1) g = 'hebrew';
