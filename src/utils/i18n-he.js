@@ -496,10 +496,10 @@ export default {
   trySuggestedMode: 'נסו עכשיו: {{mode}}!',
 
   // Critter hatchery
-  critterHatched: 'הבקעתם את {{name}}!',
+  critterHatched: 'הכירו את {{name}}!',
   critterHatchedLabel: 'בקע!',
   hatcheryTitle: 'פינת החיות',
-  hatcheryDesc: 'שחקו חידונים וסיבובי ברק כדי להבקיע את כולם!',
+  hatcheryDesc: 'שחקו חידונים וסיבובי ברק כדי שכל הביצים ייבקעו!',
   critter_chick_name: 'פיפ',
   critter_chick_hint: 'השלימו את החידון הראשון',
   critter_fox_name: 'פוקסי',

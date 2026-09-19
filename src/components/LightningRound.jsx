@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Zap, ArrowLeft, Volume2 } from 'lucide-react';
 import QuizOptionGrid from './QuizOptionGrid';
-import { getImageUrl } from '../utils/images';
+import { getImageUrl, preloadImages } from '../utils/images';
 import { getDistractors } from '../data/words';
 import { fisherYatesShuffle } from '../utils/shuffle';
 import { playSound, speakWord, isTTSAvailable } from '../utils/sound';
@@ -16,7 +16,9 @@ import { getLightningSecs } from '../utils/arcade';
  * endlessly until the timer runs out. Age-gated upstream (hidden for
  * pre-readers). Test hook: ?lightningSecs=N or the `secs` prop.
  */
-export default function LightningRound({ words, mode, lang = 'en', best = 0, secs, onFinish, onExit }) {
+const EXTRA_POOL = 20; // same-level words added once their images preload
+
+export default function LightningRound({ words, mode, level, lang = 'en', best = 0, secs, onFinish, onExit }) {
   const duration = secs || getLightningSecs();
   const [phase, setPhase] = useState('play'); // 'play' | 'done'
   const [timeLeft, setTimeLeft] = useState(duration);
@@ -26,25 +28,60 @@ export default function LightningRound({ words, mode, lang = 'en', best = 0, sec
   const [answered, setAnswered] = useState(null); // null | 'correct' | 'wrong'
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [loadedImages, setLoadedImages] = useState(new Set());
+  const [extraWords, setExtraWords] = useState([]);
   const orderRef = useRef([]);
+  const cycleStartRef = useRef(0);
   const finishedRef = useRef(false);
   const advanceTimer = useRef(null);
 
   const ttsOk = isTTSAvailable();
-  const pool = words || [];
-  const currentWord = pool.length > 0 ? pool[orderRef.current[qIndex % pool.length] ?? 0] : null;
+  // The round starts instantly on the quiz's preloaded words, then grows with
+  // same-level extras — 60s laps a 10-word pool 2-3×, which reads as "the same
+  // images in a loop". Extras only ever APPEND, so shuffled indices stay valid.
+  const pool = useMemo(() => (words || []).concat(extraWords), [words, extraWords]);
+  const currentWord = pool.length > 0
+    ? pool[orderRef.current[qIndex - cycleStartRef.current] ?? 0]
+    : null;
+
+  // Background pool expansion (skipped when no level, e.g. personal-list rounds)
+  useEffect(() => {
+    if (!level) return undefined;
+    let alive = true;
+    (async () => {
+      try {
+        const { getWordsByLevel, getDistractors: pick } = await import('../data/words');
+        const have = new Set((words || []).map(w => w.id));
+        const candidates = fisherYatesShuffle(
+          getWordsByLevel(level).filter(w => !have.has(w.id))
+        ).slice(0, EXTRA_POOL);
+        if (candidates.length === 0) return;
+        const withDistractors = candidates.map(w => ({ ...w, _distractors: pick(w, 3) }));
+        const needed = new Set();
+        withDistractors.forEach(w => { needed.add(w); w._distractors.forEach(d => needed.add(d)); });
+        const { missing } = await preloadImages([...needed]);
+        const bad = new Set(missing.map(m => m.id));
+        const ready = withDistractors.filter(
+          w => !bad.has(w.id) && w._distractors.every(d => !bad.has(d.id))
+        );
+        if (alive && ready.length > 0) setExtraWords(ready);
+      } catch { /* best-effort: the quiz pool alone still plays */ }
+    })();
+    return () => { alive = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Build / rebuild the shuffled question order. Reshuffles each full cycle,
   // avoiding an immediate back-to-back repeat of the same word (qkey idea).
   useEffect(() => {
     if (pool.length === 0) return;
-    if (qIndex % pool.length === 0) {
+    if (qIndex - cycleStartRef.current >= orderRef.current.length) {
       const last = orderRef.current.length > 0 ? orderRef.current[orderRef.current.length - 1] : -1;
       let order = fisherYatesShuffle(pool.map((_, i) => i));
       if (pool.length > 1 && order[0] === last) {
         order = [...order.slice(1), order[0]];
       }
       orderRef.current = order;
+      cycleStartRef.current = qIndex;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [qIndex, pool.length]);

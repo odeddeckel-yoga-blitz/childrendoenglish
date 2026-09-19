@@ -12,6 +12,12 @@ vi.mock('../utils/haptic', () => ({
   haptic: vi.fn(),
 }));
 
+vi.mock('../utils/images', async (importOriginal) => ({
+  ...(await importOriginal()),
+  getImageUrl: (w) => `/img/${w.id}.webp`,
+  preloadImages: vi.fn(async () => ({ missing: [] })),
+}));
+
 import LightningRound from '../components/LightningRound';
 import { WORDS } from '../data/words';
 
@@ -114,6 +120,24 @@ describe('LightningRound', () => {
     act(() => { vi.advanceTimersByTime(3000); });
     fireEvent.click(screen.getByText('Back to results'));
     expect(onExit).toHaveBeenCalledTimes(1);
+  });
+
+  it('expands the pool with same-level words so a 60s round does not loop the quiz images', async () => {
+    const { container } = renderLightning({ words: testWords.slice(0, 2), level: 'beginner', secs: 999 });
+    // Let the background expansion (dynamic import + mocked preload) resolve
+    await act(async () => { await Promise.resolve(); await Promise.resolve(); await Promise.resolve(); });
+
+    const seen = new Set();
+    for (let i = 0; i < 30; i++) {
+      const src = container.querySelector('img')?.getAttribute('src');
+      if (src) seen.add(src);
+      const option = screen.getAllByRole('button')
+        .find(b => !b.disabled && b.textContent !== 'Back to results');
+      fireEvent.click(option);
+      await act(async () => { vi.advanceTimersByTime(800); });
+    }
+    // Without expansion only 2 distinct prompts are possible
+    expect(seen.size).toBeGreaterThan(2);
   });
 
   it('renders nothing without a word pool', () => {

@@ -604,6 +604,7 @@ export default function App() {
           <LightningRound
             words={quizFlow.quizWords}
             mode={quizFlow.selectedMode}
+            level={quizFlow.selectedLevel}
             lang={lang}
             best={stats.arcade?.lightningBest?.[quizFlow.selectedMode] || 0}
             onFinish={handleLightningFinish}
