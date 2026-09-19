@@ -188,7 +188,7 @@ describe('question generation (client-side)', () => {
   it('every battle word image exists in public/images', () => {
     for (const words of Object.values(BATTLE_WORDS)) {
       expect(words.length).toBeGreaterThanOrEqual(15);
-      expect(words.length).toBeLessThanOrEqual(40);
+      expect(words.length).toBeLessThanOrEqual(60);
       for (const w of words) {
         expect(w.img).toMatch(/^\/images\/[\w-]+\.webp$/);
         expect(fs.existsSync(path.join(repoRoot, 'public', w.img))).toBe(true);

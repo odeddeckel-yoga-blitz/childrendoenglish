@@ -1,5 +1,5 @@
 // GENERATED from src/data/words.js (image ids verified against public/images/).
-// Regenerate by re-running the extraction snippet in plans/kidsdomath-crossover-2026-09.md S4 notes.
+// Regenerate: see scripts/word-image-improver.mjs header + git history of this file.
 export const BATTLE_WORDS = {
  "animals": [
   {
@@ -241,6 +241,72 @@ export const BATTLE_WORDS = {
    "w": "sheep",
    "he": "כבשה",
    "img": "/images/sheep.webp"
+  },
+  {
+   "id": "monkey",
+   "w": "monkey",
+   "he": "קוף",
+   "img": "/images/monkey.webp"
+  },
+  {
+   "id": "eagle",
+   "w": "eagle",
+   "he": "נשר",
+   "img": "/images/eagle.webp"
+  },
+  {
+   "id": "fox",
+   "w": "fox",
+   "he": "שועל",
+   "img": "/images/fox.webp"
+  },
+  {
+   "id": "owl",
+   "w": "owl",
+   "he": "ינשוף",
+   "img": "/images/owl.webp"
+  },
+  {
+   "id": "alligator",
+   "w": "alligator",
+   "he": "אליגטור",
+   "img": "/images/alligator.webp"
+  },
+  {
+   "id": "koala",
+   "w": "koala",
+   "he": "קואלה",
+   "img": "/images/koala.webp"
+  },
+  {
+   "id": "ostrich",
+   "w": "ostrich",
+   "he": "יען",
+   "img": "/images/ostrich.webp"
+  },
+  {
+   "id": "wolf",
+   "w": "wolf",
+   "he": "זאב",
+   "img": "/images/wolf.webp"
+  },
+  {
+   "id": "jellyfish",
+   "w": "jellyfish",
+   "he": "מדוזה",
+   "img": "/images/jellyfish.webp"
+  },
+  {
+   "id": "insect",
+   "w": "insect",
+   "he": "חרק",
+   "img": "/images/insect.webp"
+  },
+  {
+   "id": "zoo",
+   "w": "zoo",
+   "he": "גן חיות",
+   "img": "/images/zoo.webp"
   }
  ],
  "food": [
@@ -483,6 +549,42 @@ export const BATTLE_WORDS = {
    "w": "muffin",
    "he": "מאפין",
    "img": "/images/muffin.webp"
+  },
+  {
+   "id": "jam",
+   "w": "jam",
+   "he": "ריבה",
+   "img": "/images/jam.webp"
+  },
+  {
+   "id": "yogurt",
+   "w": "yogurt",
+   "he": "יוגורט",
+   "img": "/images/yogurt.webp"
+  },
+  {
+   "id": "onion",
+   "w": "onion",
+   "he": "בצל",
+   "img": "/images/onion.webp"
+  },
+  {
+   "id": "grapes",
+   "w": "grapes",
+   "he": "ענבים",
+   "img": "/images/grapes.webp"
+  },
+  {
+   "id": "nut",
+   "w": "nut",
+   "he": "אגוז",
+   "img": "/images/nut.webp"
+  },
+  {
+   "id": "donut",
+   "w": "donut",
+   "he": "סופגנייה",
+   "img": "/images/donut.webp"
   }
  ],
  "home": [
@@ -629,6 +731,54 @@ export const BATTLE_WORDS = {
    "w": "stairs",
    "he": "מדרגות",
    "img": "/images/stairs.webp"
+  },
+  {
+   "id": "igloo",
+   "w": "igloo",
+   "he": "איגלו",
+   "img": "/images/igloo.webp"
+  },
+  {
+   "id": "kettle",
+   "w": "kettle",
+   "he": "קומקום",
+   "img": "/images/kettle.webp"
+  },
+  {
+   "id": "vase",
+   "w": "vase",
+   "he": "אגרטל",
+   "img": "/images/vase.webp"
+  },
+  {
+   "id": "lock",
+   "w": "lock",
+   "he": "מנעול",
+   "img": "/images/lock.webp"
+  },
+  {
+   "id": "quilt",
+   "w": "quilt",
+   "he": "שמיכת טלאים",
+   "img": "/images/quilt.webp"
+  },
+  {
+   "id": "hammer",
+   "w": "hammer",
+   "he": "פטיש",
+   "img": "/images/hammer.webp"
+  },
+  {
+   "id": "lighthouse",
+   "w": "lighthouse",
+   "he": "מגדלור",
+   "img": "/images/lighthouse.webp"
+  },
+  {
+   "id": "windmill",
+   "w": "windmill",
+   "he": "טחנת רוח",
+   "img": "/images/windmill.webp"
   }
  ],
  "transport": [
@@ -769,6 +919,24 @@ export const BATTLE_WORDS = {
    "w": "firetruck",
    "he": "כבאית",
    "img": "/images/firetruck.webp"
+  },
+  {
+   "id": "jet",
+   "w": "jet",
+   "he": "מטוס סילון",
+   "img": "/images/jet.webp"
+  },
+  {
+   "id": "anchor",
+   "w": "anchor",
+   "he": "עוגן",
+   "img": "/images/anchor.webp"
+  },
+  {
+   "id": "wheel",
+   "w": "wheel",
+   "he": "גלגל",
+   "img": "/images/wheel.webp"
   }
  ],
  "nature": [
@@ -903,6 +1071,30 @@ export const BATTLE_WORDS = {
    "w": "cave",
    "he": "מערה",
    "img": "/images/cave.webp"
+  },
+  {
+   "id": "ice",
+   "w": "ice",
+   "he": "קרח",
+   "img": "/images/ice.webp"
+  },
+  {
+   "id": "leaf",
+   "w": "leaf",
+   "he": "עלה",
+   "img": "/images/leaf.webp"
+  },
+  {
+   "id": "jungle",
+   "w": "jungle",
+   "he": "ג'ונגל",
+   "img": "/images/jungle.webp"
+  },
+  {
+   "id": "acorn",
+   "w": "acorn",
+   "he": "בלוט",
+   "img": "/images/acorn.webp"
   }
  ],
  "colors": [
@@ -1343,12 +1535,6 @@ export const BATTLE_WORDS = {
    "img": "/images/battery.webp"
   },
   {
-   "id": "scissors-item",
-   "w": "scissors",
-   "he": "מספריים",
-   "img": "/images/scissors-item.webp"
-  },
-  {
    "id": "thermometer",
    "w": "thermometer",
    "he": "מדחום",
@@ -1431,6 +1617,36 @@ export const BATTLE_WORDS = {
    "w": "paint",
    "he": "לצבוע",
    "img": "/images/paint_verb.webp"
+  },
+  {
+   "id": "king",
+   "w": "king",
+   "he": "מלך",
+   "img": "/images/king.webp"
+  },
+  {
+   "id": "queen",
+   "w": "queen",
+   "he": "מלכה",
+   "img": "/images/queen.webp"
+  },
+  {
+   "id": "astronaut",
+   "w": "astronaut",
+   "he": "אסטרונאוט",
+   "img": "/images/astronaut.webp"
+  },
+  {
+   "id": "x-ray",
+   "w": "x-ray",
+   "he": "צילום רנטגן",
+   "img": "/images/x-ray.webp"
+  },
+  {
+   "id": "heart",
+   "w": "heart",
+   "he": "לב",
+   "img": "/images/heart.webp"
   }
  ],
  "clothing": [
@@ -1559,6 +1775,18 @@ export const BATTLE_WORDS = {
    "w": "zipper",
    "he": "רוכסן",
    "img": "/images/zipper.webp"
+  },
+  {
+   "id": "uniform",
+   "w": "uniform",
+   "he": "מדים",
+   "img": "/images/uniform.webp"
+  },
+  {
+   "id": "ring",
+   "w": "ring",
+   "he": "טבעת",
+   "img": "/images/ring.webp"
   }
  ],
  "school": [
@@ -1687,6 +1915,24 @@ export const BATTLE_WORDS = {
    "w": "locker",
    "he": "לוקר",
    "img": "/images/locker.webp"
+  },
+  {
+   "id": "violin",
+   "w": "violin",
+   "he": "כינור",
+   "img": "/images/violin.webp"
+  },
+  {
+   "id": "xylophone",
+   "w": "xylophone",
+   "he": "קסילופון",
+   "img": "/images/xylophone.webp"
+  },
+  {
+   "id": "newspaper",
+   "w": "newspaper",
+   "he": "עיתון",
+   "img": "/images/newspaper.webp"
   }
  ],
  "sports": [
@@ -2053,6 +2299,24 @@ export const BATTLE_WORDS = {
    "w": "dice",
    "he": "קוביות משחק",
    "img": "/images/dice.webp"
+  },
+  {
+   "id": "unicorn",
+   "w": "unicorn",
+   "he": "חד-קרן",
+   "img": "/images/unicorn.webp"
+  },
+  {
+   "id": "dragon",
+   "w": "dragon",
+   "he": "דרקון",
+   "img": "/images/dragon.webp"
+  },
+  {
+   "id": "arrow",
+   "w": "arrow",
+   "he": "חץ",
+   "img": "/images/arrow.webp"
   }
  ]
 };
