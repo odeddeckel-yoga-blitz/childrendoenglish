@@ -955,6 +955,12 @@ export const BATTLE_WORDS = {
    "w": "wheel",
    "he": "גלגל",
    "img": "/images/wheel.webp"
+  },
+  {
+   "id": "unicycle",
+   "w": "unicycle",
+   "he": "חד-אופן",
+   "img": "/images/unicycle.webp"
   }
  ],
  "nature": [
@@ -1665,6 +1671,12 @@ export const BATTLE_WORDS = {
    "w": "heart",
    "he": "לב",
    "img": "/images/heart.webp"
+  },
+  {
+   "id": "zigzag",
+   "w": "zigzag",
+   "he": "זיגזג",
+   "img": "/images/zigzag.webp"
   }
  ],
  "clothing": [

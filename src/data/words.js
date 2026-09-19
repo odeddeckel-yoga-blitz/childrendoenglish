@@ -564,6 +564,10 @@ export const WORDS = [
   { id: 'question', word: 'question', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'Something you ask when you want to know more', exampleSentence: 'The teacher answered every question.', phonetic: '/ˈkwɛstʃən/', hebrewTranslation: 'שאלה', imageUrl: '/images/question.webp' },
   { id: 'yak', word: 'yak', level: 'advanced', partOfSpeech: 'noun', category: 'animals', definition: 'A big hairy ox that lives in cold mountains', exampleSentence: 'The yak has long shaggy fur.', phonetic: '/jæk/', hebrewTranslation: 'יאק', imageUrl: '/images/yak.webp' },
   { id: 'yarn', word: 'yarn', level: 'intermediate', partOfSpeech: 'noun', category: 'home', definition: 'Soft thread used for knitting', exampleSentence: 'The cat played with a ball of yarn.', phonetic: '/jɑːrn/', hebrewTranslation: 'חוט צמר', imageUrl: '/images/yarn.webp' },
+
+  // Custom SVG illustrations (scripts/generate-illustrations.mjs) — photo search failed for these
+  { id: 'unicycle', word: 'unicycle', level: 'advanced', partOfSpeech: 'noun', category: 'transport', definition: 'A cycle with only one wheel that circus riders balance on', exampleSentence: 'The clown rode a unicycle at the circus.', phonetic: '/ˈjuːnɪsaɪkəl/', hebrewTranslation: 'חד-אופן', imageUrl: '/images/unicycle.webp' },
+  { id: 'zigzag', word: 'zigzag', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A line that goes sharply one way then the other', exampleSentence: 'She drew a zigzag across the page.', phonetic: '/ˈzɪɡzæɡ/', hebrewTranslation: 'זיגזג', imageUrl: '/images/zigzag.webp' },
 ];
 
 export const CATEGORIES = [
