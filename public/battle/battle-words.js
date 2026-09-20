@@ -361,6 +361,24 @@ export const BATTLE_WORDS = {
    "w": "hedgehog",
    "he": "קיפוד",
    "img": "/images/hedgehog.webp"
+  },
+  {
+   "id": "lizard",
+   "w": "lizard",
+   "he": "לטאה",
+   "img": "/images/lizard.webp"
+  },
+  {
+   "id": "llama",
+   "w": "llama",
+   "he": "לאמה",
+   "img": "/images/llama.webp"
+  },
+  {
+   "id": "ladybug",
+   "w": "ladybug",
+   "he": "פרת משה רבנו",
+   "img": "/images/ladybug.webp"
   }
  ],
  "food": [
@@ -675,6 +693,30 @@ export const BATTLE_WORDS = {
    "w": "jelly",
    "he": "ג'לי",
    "img": "/images/jelly.webp"
+  },
+  {
+   "id": "ketchup",
+   "w": "ketchup",
+   "he": "קטשופ",
+   "img": "/images/ketchup.webp"
+  },
+  {
+   "id": "kiwi",
+   "w": "kiwi",
+   "he": "קיווי",
+   "img": "/images/kiwi.webp"
+  },
+  {
+   "id": "lollipop",
+   "w": "lollipop",
+   "he": "סוכרייה על מקל",
+   "img": "/images/lollipop.webp"
+  },
+  {
+   "id": "mango",
+   "w": "mango",
+   "he": "מנגו",
+   "img": "/images/mango.webp"
   }
  ],
  "home": [
@@ -947,6 +989,18 @@ export const BATTLE_WORDS = {
    "w": "jar",
    "he": "צנצנת",
    "img": "/images/jar.webp"
+  },
+  {
+   "id": "kitchen",
+   "w": "kitchen",
+   "he": "מטבח",
+   "img": "/images/kitchen.webp"
+  },
+  {
+   "id": "nail",
+   "w": "nail",
+   "he": "מסמר",
+   "img": "/images/nail.webp"
   }
  ],
  "transport": [
@@ -1983,6 +2037,30 @@ export const BATTLE_WORDS = {
    "w": "grandpa",
    "he": "סבא",
    "img": "/images/grandpa.webp"
+  },
+  {
+   "id": "mom",
+   "w": "mom",
+   "he": "אמא",
+   "img": "/images/mom.webp"
+  },
+  {
+   "id": "microphone",
+   "w": "microphone",
+   "he": "מיקרופון",
+   "img": "/images/microphone.webp"
+  },
+  {
+   "id": "nose",
+   "w": "nose",
+   "he": "אף",
+   "img": "/images/nose.webp"
+  },
+  {
+   "id": "nurse",
+   "w": "nurse",
+   "he": "אחות",
+   "img": "/images/nurse.webp"
   }
  ],
  "clothing": [
@@ -2153,6 +2231,12 @@ export const BATTLE_WORDS = {
    "w": "jeans",
    "he": "ג'ינס",
    "img": "/images/jeans.webp"
+  },
+  {
+   "id": "necklace",
+   "w": "necklace",
+   "he": "שרשרת",
+   "img": "/images/necklace.webp"
   }
  ],
  "school": [
@@ -2317,6 +2401,12 @@ export const BATTLE_WORDS = {
    "w": "glue",
    "he": "דבק",
    "img": "/images/glue.webp"
+  },
+  {
+   "id": "map",
+   "w": "map",
+   "he": "מפה",
+   "img": "/images/map.webp"
   }
  ],
  "sports": [
@@ -2731,6 +2821,36 @@ export const BATTLE_WORDS = {
    "w": "jump rope",
    "he": "חבל קפיצה",
    "img": "/images/jump-rope.webp"
+  },
+  {
+   "id": "knight",
+   "w": "knight",
+   "he": "אביר",
+   "img": "/images/knight.webp"
+  },
+  {
+   "id": "mask",
+   "w": "mask",
+   "he": "מסכה",
+   "img": "/images/mask.webp"
+  },
+  {
+   "id": "marble",
+   "w": "marble",
+   "he": "גולה",
+   "img": "/images/marble.webp"
+  },
+  {
+   "id": "mermaid",
+   "w": "mermaid",
+   "he": "בת ים",
+   "img": "/images/mermaid.webp"
+  },
+  {
+   "id": "ninja",
+   "w": "ninja",
+   "he": "נינג'ה",
+   "img": "/images/ninja.webp"
   }
  ]
 };
