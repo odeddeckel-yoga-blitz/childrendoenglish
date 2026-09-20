@@ -96,6 +96,24 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           )}
         </button>
 
+        {/* Letter-by-letter path — the natural progression for young learners */}
+        <button
+          onClick={() => onNavigate('letterPath')}
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
+        >
+          <div className="flex-shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600
+                            flex items-center justify-center font-black text-white text-lg" aria-hidden="true">
+              A<span className="text-purple-200">b</span>
+            </div>
+          </div>
+          <div className="flex-1">
+            <p className="font-bold text-slate-800 dark:text-slate-100">{t('letterPath', lang)}</p>
+            <p className="text-slate-500 text-sm">{t('letterPathDesc', lang)}</p>
+          </div>
+        </button>
+
         {/* Learn Words */}
         <button
           onClick={() => onNavigate('learning')}

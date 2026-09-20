@@ -18,6 +18,84 @@ const imagesDir = join(__dirname, '..', 'public', 'images');
 const bgRect = (color) => `<rect x="8" y="8" width="496" height="496" rx="64" fill="${color}"/>`;
 
 const ILLUSTRATIONS = {
+  elevator: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#E2E8F0')}
+    <rect x="120" y="90" width="272" height="360" rx="14" fill="#64748B"/>
+    <rect x="196" y="60" width="120" height="34" rx="8" fill="#0F172A"/>
+    <text x="256" y="86" font-size="26" font-family="sans-serif" font-weight="bold" fill="#4ADE80" text-anchor="middle">3</text>
+    <rect x="138" y="110" width="112" height="320" fill="#CBD5E1" stroke="#475569" stroke-width="5"/>
+    <rect x="262" y="110" width="112" height="320" fill="#CBD5E1" stroke="#475569" stroke-width="5"/>
+    <rect x="404" y="220" width="44" height="100" rx="12" fill="#94A3B8"/>
+    <path d="M 426 240 L 438 262 L 414 262 Z" fill="#F8FAFC"/>
+    <path d="M 426 300 L 438 278 L 414 278 Z" fill="#0F172A"/>
+  </svg>`,
+
+  flag: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#F1F5F9')}
+    <rect x="130" y="60" width="14" height="400" rx="7" fill="#78716C"/>
+    <circle cx="137" cy="56" r="12" fill="#57534E"/>
+    <path d="M 144 78 L 420 78 L 380 150 L 420 222 L 144 222 Z" fill="#DC2626"/>
+    <path d="M 144 78 L 420 78 L 380 150 L 144 150 Z" fill="#EF4444"/>
+  </svg>`,
+
+  farmer: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF9C3')}
+    <ellipse cx="256" cy="94" rx="96" ry="20" fill="#D97706"/>
+    <path d="M 200 92 Q 200 40 256 40 Q 312 40 312 92 Z" fill="#F59E0B"/>
+    <circle cx="256" cy="148" r="52" fill="#FCD9B8"/>
+    <circle cx="238" cy="146" r="7" fill="#3E2723"/><circle cx="274" cy="146" r="7" fill="#3E2723"/>
+    <path d="M 236 172 Q 256 188 276 172" fill="none" stroke="#B5651D" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 202 216 Q 256 198 310 216 L 310 340 L 202 340 Z" fill="#1D4ED8"/>
+    <rect x="222" y="216" width="20" height="124" fill="#3B82F6"/>
+    <rect x="270" y="216" width="20" height="124" fill="#3B82F6"/>
+    <rect x="176" y="218" width="28" height="104" rx="14" fill="#FCD9B8"/>
+    <rect x="308" y="218" width="28" height="104" rx="14" fill="#FCD9B8"/>
+    <rect x="214" y="340" width="34" height="100" rx="10" fill="#1E3A8A"/>
+    <rect x="264" y="340" width="34" height="100" rx="10" fill="#1E3A8A"/>
+    <line x1="330" y1="200" x2="330" y2="420" stroke="#92400E" stroke-width="12" stroke-linecap="round"/>
+    <path d="M 310 200 L 350 200 M 316 200 L 316 172 M 330 200 L 330 172 M 344 200 L 344 172" stroke="#6B7280" stroke-width="8" stroke-linecap="round"/>
+  </svg>`,
+
+  fairy: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FDF4FF')}
+    <ellipse cx="176" cy="200" rx="66" ry="96" fill="#F0ABFC" opacity="0.7" transform="rotate(-20 176 200)"/>
+    <ellipse cx="336" cy="200" rx="66" ry="96" fill="#F0ABFC" opacity="0.7" transform="rotate(20 336 200)"/>
+    <circle cx="256" cy="150" r="44" fill="#FCD9B8"/>
+    <path d="M 212 142 A 44 44 0 0 1 300 142 L 300 132 Q 278 106 256 106 Q 234 106 212 132 Z" fill="#FBBF24"/>
+    <circle cx="240" cy="148" r="6" fill="#3E2723"/><circle cx="272" cy="148" r="6" fill="#3E2723"/>
+    <path d="M 238 168 Q 256 182 274 168" fill="none" stroke="#B5651D" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 212 210 Q 256 192 300 210 L 330 400 L 182 400 Z" fill="#D946EF"/>
+    <line x1="318" y1="212" x2="386" y2="140" stroke="#A21CAF" stroke-width="9" stroke-linecap="round"/>
+    <path d="M 386 118 l 7 15 17 2 -12 12 3 17 -15 -8 -15 8 3 -17 -12 -12 17 -2 Z" fill="#FDE047"/>
+  </svg>`,
+
+  family: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF3C7')}
+    <!-- parent 1 -->
+    <circle cx="140" cy="150" r="44" fill="#FCD9B8"/>
+    <path d="M 96 144 A 44 44 0 0 1 184 144 L 184 132 Q 162 106 140 106 Q 118 106 96 132 Z" fill="#3E2723"/>
+    <path d="M 104 196 Q 140 182 176 196 L 176 330 L 104 330 Z" fill="#0F766E"/>
+    <rect x="112" y="330" width="24" height="90" rx="9" fill="#374151"/>
+    <rect x="146" y="330" width="24" height="90" rx="9" fill="#374151"/>
+    <!-- parent 2 -->
+    <circle cx="372" cy="150" r="44" fill="#FCD9B8"/>
+    <path d="M 328 148 A 44 44 0 0 1 416 148 L 416 128 Q 394 102 372 102 Q 350 102 328 128 L 328 190 Q 322 160 328 148 Z" fill="#6B4423"/>
+    <path d="M 336 196 Q 372 182 408 196 L 428 340 L 316 340 Z" fill="#BE185D"/>
+    <rect x="344" y="340" width="22" height="80" rx="9" fill="#FCD9B8"/>
+    <rect x="378" y="340" width="22" height="80" rx="9" fill="#FCD9B8"/>
+    <!-- two kids between -->
+    <circle cx="222" cy="268" r="30" fill="#FCD9B8"/>
+    <path d="M 192 264 A 30 30 0 0 1 252 264 L 252 258 Q 237 240 222 240 Q 207 240 192 258 Z" fill="#6B4423"/>
+    <path d="M 200 302 Q 222 292 244 302 L 244 372 L 200 372 Z" fill="#2563EB"/>
+    <rect x="206" y="372" width="16" height="52" rx="7" fill="#374151"/>
+    <rect x="228" y="372" width="16" height="52" rx="7" fill="#374151"/>
+    <circle cx="296" cy="278" r="26" fill="#FCD9B8"/>
+    <path d="M 270 274 A 26 26 0 0 1 322 274 L 322 288 Q 316 252 296 252 Q 276 252 270 288 Z" fill="#3E2723"/>
+    <path d="M 278 308 Q 296 300 314 308 L 314 368 L 278 368 Z" fill="#DC2626"/>
+    <rect x="283" y="368" width="14" height="48" rx="6" fill="#FCD9B8"/>
+    <rect x="303" y="368" width="14" height="48" rx="6" fill="#FCD9B8"/>
+  </svg>`,
+
   apron: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FCE7F3')}
     <path d="M 216 60 A 44 52 0 0 1 296 60" fill="none" stroke="#9D174D" stroke-width="8"/>

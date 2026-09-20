@@ -43,6 +43,7 @@ const LearningPath = lazy(() => import('./components/LearningPath'));
 const ParentDashboard = lazy(() => import('./components/ParentDashboard'));
 const DailyReview = lazy(() => import('./components/DailyReview'));
 const LightningRound = lazy(() => import('./components/LightningRound'));
+const LetterPath = lazy(() => import('./components/LetterPath'));
 
 // State-to-path mapping for browser history (top-level screens only)
 const STATE_TO_PATH = {
@@ -60,6 +61,7 @@ const STATE_TO_PATH = {
   playerManage: '/manage',
   playerCreate: '/new-player',
   personalList: '/my-words',
+  letterPath: '/letters',
   terms: '/terms',
   dailyReview: '/daily-review',
 };
@@ -142,7 +144,7 @@ export default function App() {
       }
     }
     analytics.screenView(newState);
-    const features = ['landing', 'learning', 'flashcards', 'badges', 'progress', 'personalList', 'learningPath', 'parentDashboard', 'dailyReview'];
+    const features = ['landing', 'learning', 'flashcards', 'badges', 'progress', 'personalList', 'learningPath', 'letterPath', 'parentDashboard', 'dailyReview'];
     if (features.includes(newState)) analytics.featureUse(newState);
   }, []);
 
@@ -567,6 +569,16 @@ export default function App() {
             best={stats.arcade?.lightningBest?.[quizFlow.selectedMode] || 0}
             onFinish={handleLightningFinish}
             onExit={() => navigate('finished', 'back')}
+          />
+        );
+
+      case 'letterPath':
+        return (
+          <LetterPath
+            stats={stats}
+            lang={lang}
+            onPracticeLetter={(letter, words) => quizFlow.handleStartPersonalQuiz(words, 'listen')}
+            onBack={() => navigate('menu', 'back')}
           />
         );
 

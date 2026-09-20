@@ -633,6 +633,18 @@ export const BATTLE_WORDS = {
    "w": "bean",
    "he": "שעועית",
    "img": "/images/bean.webp"
+  },
+  {
+   "id": "fig",
+   "w": "fig",
+   "he": "תאנה",
+   "img": "/images/fig.webp"
+  },
+  {
+   "id": "fries",
+   "w": "fries",
+   "he": "צ'יפס",
+   "img": "/images/fries.webp"
   }
  ],
  "home": [
@@ -851,6 +863,24 @@ export const BATTLE_WORDS = {
    "w": "carpet",
    "he": "שטיח",
    "img": "/images/carpet.webp"
+  },
+  {
+   "id": "elevator",
+   "w": "elevator",
+   "he": "מעלית",
+   "img": "/images/elevator.webp"
+  },
+  {
+   "id": "fan",
+   "w": "fan",
+   "he": "מאוורר",
+   "img": "/images/fan.webp"
+  },
+  {
+   "id": "fridge",
+   "w": "fridge",
+   "he": "מקרר",
+   "img": "/images/fridge.webp"
   }
  ],
  "transport": [
@@ -1185,6 +1215,18 @@ export const BATTLE_WORDS = {
    "w": "beach",
    "he": "חוף ים",
    "img": "/images/beach.webp"
+  },
+  {
+   "id": "earth",
+   "w": "earth",
+   "he": "כדור הארץ",
+   "img": "/images/earth.webp"
+  },
+  {
+   "id": "fire",
+   "w": "fire",
+   "he": "אש",
+   "img": "/images/fire.webp"
   }
  ],
  "colors": [
@@ -1815,6 +1857,30 @@ export const BATTLE_WORDS = {
    "w": "diamond",
    "he": "יהלום",
    "img": "/images/diamond.webp"
+  },
+  {
+   "id": "flag",
+   "w": "flag",
+   "he": "דגל",
+   "img": "/images/flag.webp"
+  },
+  {
+   "id": "farmer",
+   "w": "farmer",
+   "he": "חקלאי",
+   "img": "/images/farmer.webp"
+  },
+  {
+   "id": "family",
+   "w": "family",
+   "he": "משפחה",
+   "img": "/images/family.webp"
+  },
+  {
+   "id": "fountain",
+   "w": "fountain",
+   "he": "מזרקה",
+   "img": "/images/fountain.webp"
   }
  ],
  "clothing": [
@@ -2533,6 +2599,12 @@ export const BATTLE_WORDS = {
    "w": "drone",
    "he": "רחפן",
    "img": "/images/drone.webp"
+  },
+  {
+   "id": "fairy",
+   "w": "fairy",
+   "he": "פיה",
+   "img": "/images/fairy.webp"
   }
  ]
 };
