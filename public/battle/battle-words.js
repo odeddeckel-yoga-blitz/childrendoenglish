@@ -669,6 +669,12 @@ export const BATTLE_WORDS = {
    "w": "hot dog",
    "he": "נקניקייה",
    "img": "/images/hot-dog.webp"
+  },
+  {
+   "id": "jelly",
+   "w": "jelly",
+   "he": "ג'לי",
+   "img": "/images/jelly.webp"
   }
  ],
  "home": [
@@ -929,6 +935,18 @@ export const BATTLE_WORDS = {
    "w": "hanger",
    "he": "קולב",
    "img": "/images/hanger.webp"
+  },
+  {
+   "id": "iron",
+   "w": "iron",
+   "he": "מגהץ",
+   "img": "/images/iron.webp"
+  },
+  {
+   "id": "jar",
+   "w": "jar",
+   "he": "צנצנת",
+   "img": "/images/jar.webp"
   }
  ],
  "transport": [
@@ -1099,6 +1117,12 @@ export const BATTLE_WORDS = {
    "w": "cab",
    "he": "מונית",
    "img": "/images/cab.webp"
+  },
+  {
+   "id": "jeep",
+   "w": "jeep",
+   "he": "ג'יפ",
+   "img": "/images/jeep.webp"
   }
  ],
  "nature": [
@@ -2123,6 +2147,12 @@ export const BATTLE_WORDS = {
    "w": "apron",
    "he": "סינר",
    "img": "/images/apron.webp"
+  },
+  {
+   "id": "jeans",
+   "w": "jeans",
+   "he": "ג'ינס",
+   "img": "/images/jeans.webp"
   }
  ],
  "school": [
@@ -2695,6 +2725,12 @@ export const BATTLE_WORDS = {
    "w": "ghost",
    "he": "רוח רפאים",
    "img": "/images/ghost.webp"
+  },
+  {
+   "id": "jump-rope",
+   "w": "jump rope",
+   "he": "חבל קפיצה",
+   "img": "/images/jump-rope.webp"
   }
  ]
 };

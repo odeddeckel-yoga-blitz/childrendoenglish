@@ -18,6 +18,42 @@ const imagesDir = join(__dirname, '..', 'public', 'images');
 const bgRect = (color) => `<rect x="8" y="8" width="496" height="496" rx="64" fill="${color}"/>`;
 
 const ILLUSTRATIONS = {
+  jar: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF9C3')}
+    <rect x="176" y="96" width="160" height="44" rx="14" fill="#B45309"/>
+    <path d="M 186 140 L 326 140 L 344 200 L 344 400 Q 344 440 304 440 L 208 440 Q 168 440 168 400 L 168 200 Z"
+      fill="#DBEAFE" fill-opacity="0.55" stroke="#93C5FD" stroke-width="9"/>
+    <line x1="196" y1="220" x2="196" y2="400" stroke="#EFF6FF" stroke-width="10" stroke-linecap="round"/>
+  </svg>`,
+
+  jeans: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#F1F5F9')}
+    <path d="M 166 80 L 346 80 L 366 440 L 286 440 L 262 220 L 250 220 L 226 440 L 146 440 Z" fill="#2563EB"/>
+    <rect x="166" y="80" width="180" height="34" fill="#1D4ED8"/>
+    <circle cx="256" cy="97" r="9" fill="#FBBF24"/>
+    <path d="M 166 128 Q 196 152 212 128" fill="none" stroke="#93C5FD" stroke-width="5"/>
+    <path d="M 346 128 Q 316 152 300 128" fill="none" stroke="#93C5FD" stroke-width="5"/>
+    <line x1="150" y1="432" x2="224" y2="432" stroke="#93C5FD" stroke-width="6"/>
+    <line x1="288" y1="432" x2="362" y2="432" stroke="#93C5FD" stroke-width="6"/>
+  </svg>`,
+
+  jelly: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FFF1F2')}
+    <ellipse cx="256" cy="404" rx="190" ry="30" fill="#E2E8F0"/>
+    <path d="M 130 396 Q 120 300 150 240 Q 176 190 256 190 Q 336 190 362 240 Q 392 300 382 396 Q 350 380 320 396 Q 288 380 256 396 Q 224 380 192 396 Q 162 380 130 396 Z"
+      fill="#F43F5E" fill-opacity="0.85" stroke="#BE123C" stroke-width="8"/>
+    <ellipse cx="216" cy="250" rx="34" ry="18" fill="#FDA4AF" fill-opacity="0.8"/>
+  </svg>`,
+
+  'jump-rope': `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#ECFEFF')}
+    <path d="M 120 330 Q 110 140 256 140 Q 402 140 392 330" fill="none" stroke="#F43F5E" stroke-width="16" stroke-linecap="round"/>
+    <rect x="94" y="322" width="52" height="120" rx="24" fill="#0E7490"/>
+    <rect x="366" y="322" width="52" height="120" rx="24" fill="#0E7490"/>
+    <rect x="104" y="322" width="32" height="26" rx="10" fill="#155E75"/>
+    <rect x="376" y="322" width="32" height="26" rx="10" fill="#155E75"/>
+  </svg>`,
+
   gift: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FEF2F2')}
     <rect x="116" y="210" width="280" height="230" rx="14" fill="#EF4444"/>

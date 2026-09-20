@@ -636,6 +636,14 @@ export const WORDS = [
   { id: 'hedgehog', word: 'hedgehog', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A small animal covered with sharp spines', exampleSentence: 'A hedgehog walked through our garden at night.', phonetic: '/ˈhɛdʒhɒɡ/', hebrewTranslation: 'קיפוד', imageUrl: '/images/hedgehog.webp' },
   { id: 'hanger', word: 'hanger', level: 'intermediate', partOfSpeech: 'noun', category: 'home', definition: 'A curved piece you hang clothes on in the closet', exampleSentence: 'Put your shirt on a hanger.', phonetic: '/ˈhæŋər/', hebrewTranslation: 'קולב', imageUrl: '/images/hanger.webp' },
   { id: 'hot-dog', word: 'hot dog', level: 'beginner', partOfSpeech: 'noun', category: 'food', definition: 'A warm sausage inside a long soft bun', exampleSentence: 'He ate a hot dog at the game.', phonetic: '/ˈhɒt dɒɡ/', hebrewTranslation: 'נקניקייה', imageUrl: '/images/hot-dog.webp' },
+
+  // === USER-REQUESTED I+J WORDS (letter school lists) 2026-09-20 ===
+  { id: 'iron', word: 'iron', level: 'intermediate', partOfSpeech: 'noun', category: 'home', definition: 'A hot tool that makes clothes smooth and flat', exampleSentence: 'Mom pressed the shirt with an iron.', phonetic: '/ˈaɪərn/', hebrewTranslation: 'מגהץ', imageUrl: '/images/iron.webp' },
+  { id: 'jar', word: 'jar', level: 'beginner', partOfSpeech: 'noun', category: 'home', definition: 'A glass container with a lid', exampleSentence: 'The cookies are in the glass jar.', phonetic: '/dʒɑːr/', hebrewTranslation: 'צנצנת', imageUrl: '/images/jar.webp' },
+  { id: 'jeep', word: 'jeep', level: 'beginner', partOfSpeech: 'noun', category: 'transport', definition: 'A strong car that can drive on rocks and sand', exampleSentence: 'The jeep climbed the rocky hill.', phonetic: '/dʒiːp/', hebrewTranslation: "ג'יפ", imageUrl: '/images/jeep.webp' },
+  { id: 'jeans', word: 'jeans', level: 'beginner', partOfSpeech: 'noun', category: 'clothing', definition: 'Strong blue cotton pants', exampleSentence: 'He wore jeans and a t-shirt.', phonetic: '/dʒiːnz/', hebrewTranslation: "ג'ינס", imageUrl: '/images/jeans.webp' },
+  { id: 'jelly', word: 'jelly', level: 'beginner', partOfSpeech: 'noun', category: 'food', definition: 'A sweet wobbly dessert', exampleSentence: 'The red jelly wobbled on the plate.', phonetic: '/ˈdʒɛli/', hebrewTranslation: "ג'לי", imageUrl: '/images/jelly.webp' },
+  { id: 'jump-rope', word: 'jump rope', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A rope with handles that you jump over again and again', exampleSentence: 'She can do fifty jumps with her jump rope.', phonetic: '/ˈdʒʌmp roʊp/', hebrewTranslation: 'חבל קפיצה', imageUrl: '/images/jump-rope.webp' },
 ];
 
 export const CATEGORIES = [
