@@ -114,11 +114,13 @@ Only after some traffic exists (PH rewards momentum). Tagline: "Free, private En
 vocabulary app for kids". Use the Show HN comment as the maker story.
 
 ## Assets checklist (before first send)
-- [ ] 3 screenshots: menu (Hebrew UI), a listen-mode picture quiz, parent dashboard letters picker
-- [ ] 1 short screen recording of a quiz round (for FB groups; phone-portrait)
-- [ ] Confirm /battle works from a cold browser (room create + join)
-- [ ] Verify About page renders the founder section (it's the accountability link every pitch
-      leans on): https://childrendoenglish.com/about/
+- [x] 5 phone-framed screenshots delivered 2026-09-20 (Hebrew menu, Letter Path A-Z map,
+      listen quiz, letters chip on Play, class battle room screen)
+- [ ] 1 short screen recording of a quiz round (for FB groups; phone-portrait) — optional
+- [x] /battle cold-verified on production 2026-09-20 (room created end-to-end, code GDSKT)
+- [x] About founder section verified live 2026-09-20
+- Baseline arrivals (measure lift against this): 41 land-beacon hits over Sep 19-20,
+  only 4 from search — effectively zero organic reach before outreach.
 
 ## Rules of engagement
 - One community per day max; never cross-post the same text to sibling groups on the same day.
