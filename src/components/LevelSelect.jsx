@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
+const LetterPicker = lazy(() => import('./LetterPicker'));
 import { ArrowLeft, Lock, Image, Type, Volume2, Headphones } from 'lucide-react';
 import { LEVELS } from '../data/levels';
 import { getWordsByLevel } from '../data/words';
@@ -59,12 +60,13 @@ const allModes = [
   },
 ];
 
-export default function LevelSelect({ stats, lang = 'en', canRead = true, knownLetters = null, onStartQuiz, onBack }) {
+export default function LevelSelect({ stats, lang = 'en', canRead = true, knownLetters = null, onChangeLetters, onStartQuiz, onBack }) {
   // Default to first unlocked level
   const [selectedLevel, setSelectedLevel] = useState(() => {
     const unlocked = LEVELS.filter(l => stats.unlockedLevels.includes(l.id));
     return unlocked.length > 0 ? unlocked[unlocked.length - 1].id : 'beginner';
   });
+  const [lettersOpen, setLettersOpen] = useState(false);
 
   const modes = canRead
     ? allModes
@@ -82,12 +84,30 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
           <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
         <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('playQuiz', lang)}</h2>
-        {knownLetters?.length > 0 && (
-          <span className="ms-auto px-2.5 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold" dir="ltr">
-            {t('knownLettersActive', lang, { letters: knownLetters.join(' ') })}
-          </span>
+        {onChangeLetters && (
+          <button
+            onClick={() => setLettersOpen(o => !o)}
+            aria-expanded={lettersOpen}
+            className={`ms-auto px-2.5 py-1 rounded-full text-xs font-semibold transition-colors ${
+              knownLetters?.length ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600 hover:bg-blue-100'}`}
+            dir="ltr"
+          >
+            {knownLetters?.length
+              ? t('knownLettersActive', lang, { letters: knownLetters.join(' ') })
+              : `ABC ▾`}
+          </button>
         )}
       </div>
+
+      {/* Known-letters picker — visible where quizzes start */}
+      {lettersOpen && onChangeLetters && (
+        <div className="glass rounded-2xl p-4">
+          <p className="text-xs font-bold text-slate-700 dark:text-slate-200 mb-2">{t('knownLettersTitle', lang)}</p>
+          <Suspense fallback={null}>
+            <LetterPicker knownLetters={knownLetters} onChange={onChangeLetters} lang={lang} />
+          </Suspense>
+        </div>
+      )}
 
       {/* Level tabs */}
       <div className="flex gap-2">

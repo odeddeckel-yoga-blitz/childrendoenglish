@@ -594,6 +594,17 @@ export const WORDS = [
   { id: 'beetle', word: 'beetle', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'An insect with a hard shiny shell', exampleSentence: 'A black beetle walked across the path.', phonetic: '/ˈbiːtəl/', hebrewTranslation: 'חיפושית', imageUrl: '/images/beetle.webp' },
 
   { id: 'carpet', word: 'carpet', level: 'beginner', partOfSpeech: 'noun', category: 'home', definition: 'A soft covering for the floor', exampleSentence: 'The cat slept on the carpet.', phonetic: '/ˈkɑːrpɪt/', hebrewTranslation: 'שטיח', imageUrl: '/images/carpet.webp' },
+
+  // === USER-REQUESTED A+D WORDS (letter school lists) 2026-09-20 ===
+  { id: 'apron', word: 'apron', level: 'intermediate', partOfSpeech: 'noun', category: 'clothing', definition: 'A cloth you wear to keep clothes clean while cooking', exampleSentence: 'Grandma wore an apron while baking.', phonetic: '/ˈeɪprən/', hebrewTranslation: 'סינר', imageUrl: '/images/apron.webp' },
+  { id: 'axe', word: 'axe', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A tool with a heavy blade for chopping wood', exampleSentence: 'He chopped the log with an axe.', phonetic: '/æks/', hebrewTranslation: 'גרזן', imageUrl: '/images/axe.webp' },
+  { id: 'angel', word: 'angel', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A kind figure with wings from stories', exampleSentence: 'The angel had big white wings.', phonetic: '/ˈeɪndʒəl/', hebrewTranslation: 'מלאך', imageUrl: '/images/angel.webp' },
+  { id: 'aquarium', word: 'aquarium', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A glass tank where fish live', exampleSentence: 'Colorful fish swim in the aquarium.', phonetic: '/əˈkwɛriəm/', hebrewTranslation: 'אקווריום', imageUrl: '/images/aquarium.webp' },
+  { id: 'dad', word: 'dad', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'Your father', exampleSentence: 'Dad read me a story at night.', phonetic: '/dæd/', hebrewTranslation: 'אבא', imageUrl: '/images/dad.webp' },
+  { id: 'dinosaur', word: 'dinosaur', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A giant animal that lived long, long ago', exampleSentence: 'The dinosaur had sharp teeth.', phonetic: '/ˈdaɪnəsɔːr/', hebrewTranslation: 'דינוזאור', imageUrl: '/images/dinosaur.webp' },
+  { id: 'doctor', word: 'doctor', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'A person who helps sick people get better', exampleSentence: 'The doctor listened to my heart.', phonetic: '/ˈdɒktər/', hebrewTranslation: 'רופא', imageUrl: '/images/doctor.webp' },
+  { id: 'diamond', word: 'diamond', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A shiny precious stone that sparkles', exampleSentence: 'The ring had a small diamond.', phonetic: '/ˈdaɪmənd/', hebrewTranslation: 'יהלום', imageUrl: '/images/diamond.webp' },
+  { id: 'drone', word: 'drone', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A small flying machine you control from the ground', exampleSentence: 'The drone flew high above the park.', phonetic: '/droʊn/', hebrewTranslation: 'רחפן', imageUrl: '/images/drone.webp' },
 ];
 
 export const CATEGORIES = [

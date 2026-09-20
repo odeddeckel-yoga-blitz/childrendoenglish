@@ -475,6 +475,7 @@ export default function App() {
             lang={lang}
             canRead={activePlayer?.canRead ?? true}
             knownLetters={activePlayer?.knownLetters}
+            onChangeLetters={activePlayer ? (letters) => handleUpdatePlayer(activePlayer.id, { knownLetters: letters }) : undefined}
             onStartQuiz={(level, mode) => {
               quizFlow.startQuiz(level, mode);
             }}

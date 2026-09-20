@@ -18,6 +18,79 @@ const imagesDir = join(__dirname, '..', 'public', 'images');
 const bgRect = (color) => `<rect x="8" y="8" width="496" height="496" rx="64" fill="${color}"/>`;
 
 const ILLUSTRATIONS = {
+  apron: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FCE7F3')}
+    <path d="M 216 60 A 44 52 0 0 1 296 60" fill="none" stroke="#9D174D" stroke-width="8"/>
+    <rect x="216" y="108" width="80" height="84" rx="8" fill="#DB2777"/>
+    <path d="M 216 192 L 148 232 L 148 428 L 364 428 L 364 232 L 296 192 Z" fill="#EC4899"/>
+    <path d="M 148 244 Q 96 258 84 232 Q 108 222 148 228 Z" fill="#9D174D"/>
+    <path d="M 364 244 Q 416 258 428 232 Q 404 222 364 228 Z" fill="#9D174D"/>
+    <rect x="206" y="290" width="100" height="70" rx="12" fill="#F9A8D4"/>
+    <path d="M 216 192 L 296 192" stroke="#9D174D" stroke-width="8"/>
+  </svg>`,
+
+  angel: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#E0F2FE')}
+    <ellipse cx="256" cy="96" rx="52" ry="14" fill="none" stroke="#FBBF24" stroke-width="10"/>
+    <path d="M 176 220 Q 60 180 44 260 Q 110 300 186 280 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="6"/>
+    <path d="M 336 220 Q 452 180 468 260 Q 402 300 326 280 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="6"/>
+    <circle cx="256" cy="164" r="46" fill="#FCD9B8"/>
+    <circle cx="238" cy="160" r="7" fill="#3E2723"/><circle cx="274" cy="160" r="7" fill="#3E2723"/>
+    <path d="M 236 184 Q 256 200 276 184" fill="none" stroke="#B5651D" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 200 240 Q 256 214 312 240 L 344 440 L 168 440 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="8"/>
+  </svg>`,
+
+  dad: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF3C7')}
+    <!-- dad -->
+    <circle cx="200" cy="120" r="54" fill="#FCD9B8"/>
+    <path d="M 146 112 A 54 54 0 0 1 254 112 L 254 100 Q 226 66 200 66 Q 174 66 146 100 Z" fill="#3E2723"/>
+    <circle cx="182" cy="122" r="7" fill="#3E2723"/><circle cx="218" cy="122" r="7" fill="#3E2723"/>
+    <path d="M 180 146 Q 200 162 220 146" fill="none" stroke="#B5651D" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 158 190 Q 200 172 242 190 L 242 330 L 158 330 Z" fill="#0F766E"/>
+    <rect x="132" y="192" width="26" height="120" rx="13" fill="#0F766E"/>
+    <rect x="242" y="192" width="26" height="130" rx="13" fill="#0F766E"/>
+    <rect x="166" y="330" width="30" height="106" rx="10" fill="#374151"/>
+    <rect x="206" y="330" width="30" height="106" rx="10" fill="#374151"/>
+    <!-- child holding dad's hand -->
+    <circle cx="342" cy="252" r="36" fill="#FCD9B8"/>
+    <path d="M 306 246 A 36 36 0 0 1 378 246 L 378 240 Q 360 218 342 218 Q 324 218 306 240 Z" fill="#6B4423"/>
+    <circle cx="330" cy="252" r="5" fill="#3E2723"/><circle cx="354" cy="252" r="5" fill="#3E2723"/>
+    <path d="M 330 268 Q 342 278 354 268" fill="none" stroke="#B5651D" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 316 296 Q 342 284 368 296 L 368 380 L 316 380 Z" fill="#DC2626"/>
+    <rect x="298" y="298" width="18" height="66" rx="9" fill="#DC2626"/>
+    <rect x="368" y="298" width="18" height="66" rx="9" fill="#DC2626"/>
+    <rect x="322" y="380" width="20" height="58" rx="8" fill="#1E3A8A"/>
+    <rect x="350" y="380" width="20" height="58" rx="8" fill="#1E3A8A"/>
+    <line x1="268" y1="318" x2="302" y2="340" stroke="#FCD9B8" stroke-width="14" stroke-linecap="round"/>
+  </svg>`,
+
+  doctor: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#ECFDF5')}
+    <circle cx="256" cy="132" r="56" fill="#FCD9B8"/>
+    <path d="M 200 124 A 56 56 0 0 1 312 124 L 312 112 Q 284 76 256 76 Q 228 76 200 112 Z" fill="#4B5563"/>
+    <circle cx="236" cy="134" r="7" fill="#3E2723"/><circle cx="276" cy="134" r="7" fill="#3E2723"/>
+    <path d="M 234 158 Q 256 174 278 158" fill="none" stroke="#B5651D" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 196 208 Q 256 186 316 208 L 332 440 L 180 440 Z" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="8"/>
+    <path d="M 236 208 L 256 260 L 276 208 Z" fill="#38BDF8"/>
+    <rect x="160" y="212" width="30" height="130" rx="15" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="6"/>
+    <rect x="322" y="212" width="30" height="130" rx="15" fill="#F8FAFC" stroke="#CBD5E1" stroke-width="6"/>
+    <path d="M 232 214 Q 226 280 250 300" fill="none" stroke="#334155" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="256" cy="310" r="18" fill="#334155"/>
+    <circle cx="256" cy="310" r="9" fill="#94A3B8"/>
+  </svg>`,
+
+  diamond: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#EFF6FF')}
+    <polygon points="156,170 356,170 416,240 256,430 96,240" fill="#60A5FA" stroke="#1D4ED8" stroke-width="10" stroke-linejoin="round"/>
+    <polygon points="156,170 216,240 256,170" fill="#93C5FD"/>
+    <polygon points="256,170 296,240 356,170" fill="#BFDBFE"/>
+    <polygon points="216,240 256,430 296,240" fill="#3B82F6"/>
+    <line x1="96" y1="240" x2="416" y2="240" stroke="#1D4ED8" stroke-width="8"/>
+    <path d="M 396 120 l 6 14 15 2 -11 10 3 15 -13 -7 -13 7 3 -15 -11 -10 15 -2 Z" fill="#FDE047"/>
+    <path d="M 106 128 l 5 11 12 2 -9 8 2 12 -10 -6 -10 6 2 -12 -9 -8 12 -2 Z" fill="#FDE047"/>
+  </svg>`,
+
   box: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FEF3C7')}
     <!-- cardboard box with open top flaps -->

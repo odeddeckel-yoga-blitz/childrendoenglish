@@ -331,6 +331,18 @@ export const BATTLE_WORDS = {
    "w": "beetle",
    "he": "חיפושית",
    "img": "/images/beetle.webp"
+  },
+  {
+   "id": "aquarium",
+   "w": "aquarium",
+   "he": "אקווריום",
+   "img": "/images/aquarium.webp"
+  },
+  {
+   "id": "dinosaur",
+   "w": "dinosaur",
+   "he": "דינוזאור",
+   "img": "/images/dinosaur.webp"
   }
  ],
  "food": [
@@ -1773,6 +1785,36 @@ export const BATTLE_WORDS = {
    "w": "baby",
    "he": "תינוק",
    "img": "/images/baby.webp"
+  },
+  {
+   "id": "axe",
+   "w": "axe",
+   "he": "גרזן",
+   "img": "/images/axe.webp"
+  },
+  {
+   "id": "angel",
+   "w": "angel",
+   "he": "מלאך",
+   "img": "/images/angel.webp"
+  },
+  {
+   "id": "dad",
+   "w": "dad",
+   "he": "אבא",
+   "img": "/images/dad.webp"
+  },
+  {
+   "id": "doctor",
+   "w": "doctor",
+   "he": "רופא",
+   "img": "/images/doctor.webp"
+  },
+  {
+   "id": "diamond",
+   "w": "diamond",
+   "he": "יהלום",
+   "img": "/images/diamond.webp"
   }
  ],
  "clothing": [
@@ -1931,6 +1973,12 @@ export const BATTLE_WORDS = {
    "w": "button",
    "he": "כפתור",
    "img": "/images/button.webp"
+  },
+  {
+   "id": "apron",
+   "w": "apron",
+   "he": "סינר",
+   "img": "/images/apron.webp"
   }
  ],
  "school": [
@@ -2479,6 +2527,12 @@ export const BATTLE_WORDS = {
    "w": "cannon",
    "he": "תותח",
    "img": "/images/cannon.webp"
+  },
+  {
+   "id": "drone",
+   "w": "drone",
+   "he": "רחפן",
+   "img": "/images/drone.webp"
   }
  ]
 };
