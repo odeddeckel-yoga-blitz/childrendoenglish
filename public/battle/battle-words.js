@@ -379,6 +379,24 @@ export const BATTLE_WORDS = {
    "w": "ladybug",
    "he": "פרת משה רבנו",
    "img": "/images/ladybug.webp"
+  },
+  {
+   "id": "peacock",
+   "w": "peacock",
+   "he": "טווס",
+   "img": "/images/peacock.webp"
+  },
+  {
+   "id": "rooster",
+   "w": "rooster",
+   "he": "תרנגול",
+   "img": "/images/rooster.webp"
+  },
+  {
+   "id": "worm",
+   "w": "worm",
+   "he": "תולעת",
+   "img": "/images/worm.webp"
   }
  ],
  "food": [
@@ -717,6 +735,18 @@ export const BATTLE_WORDS = {
    "w": "mango",
    "he": "מנגו",
    "img": "/images/mango.webp"
+  },
+  {
+   "id": "olive",
+   "w": "olive",
+   "he": "זית",
+   "img": "/images/olive.webp"
+  },
+  {
+   "id": "pumpkin",
+   "w": "pumpkin",
+   "he": "דלעת",
+   "img": "/images/pumpkin.webp"
   }
  ],
  "home": [
@@ -1001,6 +1031,12 @@ export const BATTLE_WORDS = {
    "w": "nail",
    "he": "מסמר",
    "img": "/images/nail.webp"
+  },
+  {
+   "id": "oven",
+   "w": "oven",
+   "he": "תנור",
+   "img": "/images/oven.webp"
   }
  ],
  "transport": [
@@ -1353,6 +1389,12 @@ export const BATTLE_WORDS = {
    "w": "fire",
    "he": "אש",
    "img": "/images/fire.webp"
+  },
+  {
+   "id": "ocean",
+   "w": "ocean",
+   "he": "אוקיינוס",
+   "img": "/images/ocean.webp"
   }
  ],
  "colors": [
@@ -2061,6 +2103,12 @@ export const BATTLE_WORDS = {
    "w": "nurse",
    "he": "אחות",
    "img": "/images/nurse.webp"
+  },
+  {
+   "id": "vet",
+   "w": "vet",
+   "he": "וטרינר",
+   "img": "/images/vet.webp"
   }
  ],
  "clothing": [
@@ -2851,6 +2899,18 @@ export const BATTLE_WORDS = {
    "w": "ninja",
    "he": "נינג'ה",
    "img": "/images/ninja.webp"
+  },
+  {
+   "id": "pirate",
+   "w": "pirate",
+   "he": "שודד ים",
+   "img": "/images/pirate.webp"
+  },
+  {
+   "id": "wizard",
+   "w": "wizard",
+   "he": "קוסם",
+   "img": "/images/wizard.webp"
   }
  ]
 };

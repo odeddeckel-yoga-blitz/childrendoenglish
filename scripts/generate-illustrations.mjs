@@ -18,6 +18,90 @@ const imagesDir = join(__dirname, '..', 'public', 'images');
 const bgRect = (color) => `<rect x="8" y="8" width="496" height="496" rx="64" fill="${color}"/>`;
 
 const ILLUSTRATIONS = {
+  oven: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#F1F5F9')}
+    <rect x="106" y="96" width="300" height="330" rx="18" fill="#64748B"/>
+    <rect x="126" y="116" width="260" height="52" rx="10" fill="#475569"/>
+    <circle cx="156" cy="142" r="13" fill="#CBD5E1"/><circle cx="196" cy="142" r="13" fill="#CBD5E1"/>
+    <circle cx="316" cy="142" r="13" fill="#CBD5E1"/><circle cx="356" cy="142" r="13" fill="#CBD5E1"/>
+    <rect x="126" y="188" width="260" height="210" rx="12" fill="#334155"/>
+    <rect x="146" y="208" width="220" height="150" rx="8" fill="#FDE68A"/>
+    <rect x="156" y="288" width="200" height="10" fill="#78350F"/>
+    <ellipse cx="256" cy="272" rx="64" ry="24" fill="#D97706"/>
+    <rect x="196" y="374" width="120" height="12" rx="6" fill="#94A3B8"/>
+  </svg>`,
+
+  olive: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#F7FEE7')}
+    <path d="M 256 96 Q 330 120 368 190" fill="none" stroke="#65A30D" stroke-width="10" stroke-linecap="round"/>
+    <path d="M 300 108 Q 330 84 366 96 Q 356 130 318 132 Q 302 124 300 108 Z" fill="#84CC16"/>
+    <path d="M 336 148 Q 372 132 402 152 Q 386 184 350 178 Q 338 164 336 148 Z" fill="#84CC16"/>
+    <ellipse cx="200" cy="270" rx="62" ry="78" fill="#65A30D"/>
+    <ellipse cx="182" cy="244" rx="16" ry="24" fill="#A3E635" fill-opacity="0.6"/>
+    <ellipse cx="316" cy="300" rx="58" ry="74" fill="#3F6212"/>
+    <ellipse cx="300" cy="276" rx="14" ry="22" fill="#84CC16" fill-opacity="0.5"/>
+    <ellipse cx="252" cy="392" rx="54" ry="66" fill="#1C1917"/>
+    <ellipse cx="238" cy="370" rx="12" ry="18" fill="#57534E" fill-opacity="0.7"/>
+  </svg>`,
+
+  pirate: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF3C7')}
+    <path d="M 176 128 Q 180 70 256 70 Q 332 70 336 128 L 348 132 Q 352 146 336 146 L 176 146 Q 160 146 164 132 Z" fill="#1E293B"/>
+    <path d="M 214 96 m -6 0 a 6 6 0 1 0 12 0 a 6 6 0 1 0 -12 0 M 238 88 l 12 12 M 250 88 l -12 12" stroke="#F8FAFC" stroke-width="4" fill="#F8FAFC"/>
+    <circle cx="256" cy="188" r="54" fill="#FCD9B8"/>
+    <ellipse cx="234" cy="182" rx="14" ry="16" fill="#1E293B"/>
+    <path d="M 220 150 L 250 168" stroke="#1E293B" stroke-width="8"/>
+    <circle cx="278" cy="184" r="7" fill="#3E2723"/>
+    <path d="M 240 216 Q 258 230 276 214" fill="none" stroke="#B5651D" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="310" cy="206" r="8" fill="#FBBF24"/>
+    <path d="M 204 258 Q 256 240 308 258 L 308 380 L 204 380 Z" fill="#DC2626"/>
+    <path d="M 204 300 L 308 300 L 308 320 L 204 320 Z" fill="#F8FAFC"/>
+    <rect x="178" y="262" width="28" height="104" rx="14" fill="#DC2626"/>
+    <rect x="306" y="262" width="28" height="104" rx="14" fill="#DC2626"/>
+    <rect x="216" y="380" width="30" height="76" rx="10" fill="#78350F"/>
+    <rect x="266" y="380" width="30" height="76" rx="10" fill="#78350F"/>
+    <line x1="348" y1="300" x2="404" y2="230" stroke="#64748B" stroke-width="10" stroke-linecap="round"/>
+    <path d="M 340 308 Q 356 322 372 306 L 360 290 Z" fill="#B45309"/>
+  </svg>`,
+
+  vet: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#F0FDF4')}
+    <circle cx="230" cy="130" r="52" fill="#FCD9B8"/>
+    <path d="M 178 122 A 52 52 0 0 1 282 122 L 282 110 Q 256 78 230 78 Q 204 78 178 110 Z" fill="#92400E"/>
+    <circle cx="212" cy="132" r="7" fill="#3E2723"/><circle cx="248" cy="132" r="7" fill="#3E2723"/>
+    <path d="M 210 156 Q 230 172 250 156" fill="none" stroke="#B5651D" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 176 202 Q 230 184 284 202 L 298 420 L 162 420 Z" fill="#34D399"/>
+    <rect x="144" y="206" width="28" height="118" rx="14" fill="#34D399"/>
+    <rect x="286" y="206" width="28" height="118" rx="14" fill="#34D399"/>
+    <path d="M 208 204 Q 202 262 224 280" fill="none" stroke="#065F46" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="230" cy="290" r="15" fill="#065F46"/>
+    <!-- dog patient -->
+    <ellipse cx="366" cy="380" rx="76" ry="52" fill="#D97706"/>
+    <circle cx="404" cy="330" r="38" fill="#D97706"/>
+    <path d="M 380 302 Q 372 274 392 276 Q 400 292 396 306 Z" fill="#92400E"/>
+    <path d="M 428 302 Q 436 274 416 276 Q 408 292 412 306 Z" fill="#92400E"/>
+    <circle cx="394" cy="326" r="6" fill="#3E2723"/><circle cx="416" cy="326" r="6" fill="#3E2723"/>
+    <ellipse cx="406" cy="344" rx="9" ry="7" fill="#3E2723"/>
+    <path d="M 296 372 Q 316 356 336 372" fill="none" stroke="#92400E" stroke-width="10" stroke-linecap="round"/>
+  </svg>`,
+
+  wizard: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#EDE9FE')}
+    <path d="M 256 40 L 330 168 L 182 168 Z" fill="#7C3AED"/>
+    <path d="M 268 92 l 5 11 12 2 -9 8 2 12 -10 -6 -10 6 2 -12 -9 -8 12 -2 Z" fill="#FDE047"/>
+    <ellipse cx="256" cy="170" rx="94" ry="16" fill="#6D28D9"/>
+    <circle cx="256" cy="212" r="46" fill="#FCD9B8"/>
+    <circle cx="240" cy="208" r="6" fill="#3E2723"/><circle cx="272" cy="208" r="6" fill="#3E2723"/>
+    <path d="M 216 238 Q 230 226 256 232 Q 282 226 296 238 Q 292 292 256 296 Q 220 292 216 238 Z" fill="#E5E7EB"/>
+    <path d="M 208 268 Q 256 250 304 268 L 322 440 L 190 440 Z" fill="#7C3AED"/>
+    <path d="M 236 300 l 4 9 10 1 -7 7 2 10 -9 -5 -9 5 2 -10 -7 -7 10 -1 Z" fill="#FDE047"/>
+    <path d="M 282 350 l 4 9 10 1 -7 7 2 10 -9 -5 -9 5 2 -10 -7 -7 10 -1 Z" fill="#FDE047"/>
+    <rect x="168" y="272" width="26" height="100" rx="13" fill="#7C3AED"/>
+    <rect x="318" y="272" width="26" height="100" rx="13" fill="#7C3AED"/>
+    <line x1="348" y1="240" x2="348" y2="430" stroke="#92400E" stroke-width="12" stroke-linecap="round"/>
+    <path d="M 348 240 l 7 15 17 2 -12 12 3 17 -15 -8 -15 8 3 -17 -12 -12 17 -2 Z" fill="#FDE047"/>
+  </svg>`,
+
   mom: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FCE7F3')}
     <path d="M 152 128 Q 152 66 200 66 Q 248 66 248 128 L 248 236 Q 234 248 220 236 L 220 150 L 180 150 L 180 236 Q 166 248 152 236 Z" fill="#6B4423"/>
