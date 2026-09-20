@@ -18,6 +18,71 @@ const imagesDir = join(__dirname, '..', 'public', 'images');
 const bgRect = (color) => `<rect x="8" y="8" width="496" height="496" rx="64" fill="${color}"/>`;
 
 const ILLUSTRATIONS = {
+  box: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF3C7')}
+    <!-- cardboard box with open top flaps -->
+    <polygon points="116,200 256,150 396,200 256,250" fill="#E7B26C"/>
+    <polygon points="116,200 116,400 256,450 256,250" fill="#C4894F"/>
+    <polygon points="396,200 396,400 256,450 256,250" fill="#B07A42"/>
+    <polygon points="116,200 60,150 200,104 256,150" fill="#D9A05E"/>
+    <polygon points="396,200 452,150 312,104 256,150" fill="#CE9654"/>
+    <line x1="256" y1="250" x2="256" y2="450" stroke="#8A5A2B" stroke-width="6"/>
+  </svg>`,
+
+  bell: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#EDE9FE')}
+    <!-- golden bell with clapper -->
+    <rect x="238" y="72" width="36" height="30" rx="12" fill="#B45309"/>
+    <path d="M 256 92 C 180 92 156 180 152 280 Q 150 330 110 356 L 402 356 Q 362 330 360 280 C 356 180 332 92 256 92 Z" fill="#F59E0B" stroke="#B45309" stroke-width="10"/>
+    <rect x="110" y="348" width="292" height="26" rx="13" fill="#B45309"/>
+    <circle cx="256" cy="408" r="26" fill="#92400E"/>
+  </svg>`,
+
+  bone: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#DBEAFE')}
+    <!-- classic cartoon dog bone -->
+    <g fill="#F8FAFC" stroke="#94A3B8" stroke-width="9">
+      <rect x="150" y="226" width="212" height="60" rx="30"/>
+      <circle cx="140" cy="222" r="46"/><circle cx="140" cy="290" r="46"/>
+      <circle cx="372" cy="222" r="46"/><circle cx="372" cy="290" r="46"/>
+    </g>
+    <rect x="150" y="232" width="212" height="48" rx="24" fill="#F8FAFC"/>
+  </svg>`,
+
+  brush: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FCE7F3')}
+    <!-- hairbrush: paddle with bristles + handle, tilted -->
+    <g transform="rotate(-30 256 256)">
+      <rect x="236" y="290" width="40" height="150" rx="18" fill="#92400E"/>
+      <ellipse cx="256" cy="185" rx="92" ry="120" fill="#B45309"/>
+      <ellipse cx="256" cy="185" rx="70" ry="98" fill="#1F2937"/>
+      <g fill="#F9FAFB">
+        <circle cx="256" cy="120" r="7"/><circle cx="222" cy="140" r="7"/><circle cx="290" cy="140" r="7"/>
+        <circle cx="204" cy="180" r="7"/><circle cx="256" cy="170" r="7"/><circle cx="308" cy="180" r="7"/>
+        <circle cx="222" cy="220" r="7"/><circle cx="290" cy="220" r="7"/><circle cx="256" cy="250" r="7"/>
+        <circle cx="204" cy="145" r="7"/><circle cx="308" cy="145" r="7"/><circle cx="238" cy="205" r="7"/>
+        <circle cx="274" cy="205" r="7"/>
+      </g>
+    </g>
+  </svg>`,
+
+  boy: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#E0F2FE')}
+    <!-- friendly flat boy figure -->
+    <circle cx="256" cy="170" r="78" fill="#FCD9B8"/>
+    <path d="M 178 160 A 78 78 0 0 1 334 160 L 334 148 Q 300 96 256 96 Q 212 96 178 148 Z" fill="#6B4423"/>
+    <circle cx="228" cy="172" r="9" fill="#3E2723"/><circle cx="284" cy="172" r="9" fill="#3E2723"/>
+    <path d="M 226 206 Q 256 230 286 206" fill="none" stroke="#B5651D" stroke-width="8" stroke-linecap="round"/>
+    <path d="M 202 262 Q 256 244 310 262 L 310 372 L 202 372 Z" fill="#2563EB"/>
+    <rect x="168" y="266" width="32" height="96" rx="16" fill="#2563EB"/>
+    <rect x="312" y="266" width="32" height="96" rx="16" fill="#2563EB"/>
+    <circle cx="184" cy="370" r="14" fill="#FCD9B8"/><circle cx="328" cy="370" r="14" fill="#FCD9B8"/>
+    <rect x="212" y="372" width="38" height="84" rx="10" fill="#374151"/>
+    <rect x="262" y="372" width="38" height="84" rx="10" fill="#374151"/>
+    <rect x="204" y="452" width="54" height="22" rx="11" fill="#DC2626"/>
+    <rect x="254" y="452" width="54" height="22" rx="11" fill="#DC2626"/>
+  </svg>`,
+
   can: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FEE2E2')}
     <!-- soda can: silver top with pull tab, red body with a plain wave band -->

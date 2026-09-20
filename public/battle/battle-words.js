@@ -325,6 +325,12 @@ export const BATTLE_WORDS = {
    "w": "caterpillar",
    "he": "זחל",
    "img": "/images/caterpillar.webp"
+  },
+  {
+   "id": "beetle",
+   "w": "beetle",
+   "he": "חיפושית",
+   "img": "/images/beetle.webp"
   }
  ],
  "food": [
@@ -609,6 +615,12 @@ export const BATTLE_WORDS = {
    "w": "can",
    "he": "פחית",
    "img": "/images/can.webp"
+  },
+  {
+   "id": "bean",
+   "w": "bean",
+   "he": "שעועית",
+   "img": "/images/bean.webp"
   }
  ],
  "home": [
@@ -809,6 +821,18 @@ export const BATTLE_WORDS = {
    "w": "yarn",
    "he": "חוט צמר",
    "img": "/images/yarn.webp"
+  },
+  {
+   "id": "box",
+   "w": "box",
+   "he": "קופסה",
+   "img": "/images/box.webp"
+  },
+  {
+   "id": "brush",
+   "w": "brush",
+   "he": "מברשת",
+   "img": "/images/brush.webp"
   }
  ],
  "transport": [
@@ -1137,6 +1161,12 @@ export const BATTLE_WORDS = {
    "w": "acorn",
    "he": "בלוט",
    "img": "/images/acorn.webp"
+  },
+  {
+   "id": "beach",
+   "w": "beach",
+   "he": "חוף ים",
+   "img": "/images/beach.webp"
   }
  ],
  "colors": [
@@ -1713,6 +1743,30 @@ export const BATTLE_WORDS = {
    "w": "cart",
    "he": "עגלת קניות",
    "img": "/images/cart.webp"
+  },
+  {
+   "id": "bag",
+   "w": "bag",
+   "he": "שקית",
+   "img": "/images/bag.webp"
+  },
+  {
+   "id": "boy",
+   "w": "boy",
+   "he": "ילד",
+   "img": "/images/boy.webp"
+  },
+  {
+   "id": "bone",
+   "w": "bone",
+   "he": "עצם",
+   "img": "/images/bone.webp"
+  },
+  {
+   "id": "baby",
+   "w": "baby",
+   "he": "תינוק",
+   "img": "/images/baby.webp"
   }
  ],
  "clothing": [
@@ -1859,6 +1913,18 @@ export const BATTLE_WORDS = {
    "w": "cap",
    "he": "כובע מצחייה",
    "img": "/images/cap.webp"
+  },
+  {
+   "id": "boot",
+   "w": "boot",
+   "he": "מגף",
+   "img": "/images/boot.webp"
+  },
+  {
+   "id": "button",
+   "w": "button",
+   "he": "כפתור",
+   "img": "/images/button.webp"
   }
  ],
  "school": [
@@ -2011,6 +2077,12 @@ export const BATTLE_WORDS = {
    "w": "question",
    "he": "שאלה",
    "img": "/images/question.webp"
+  },
+  {
+   "id": "bell",
+   "w": "bell",
+   "he": "פעמון",
+   "img": "/images/bell.webp"
   }
  ],
  "sports": [
