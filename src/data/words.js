@@ -592,6 +592,8 @@ export const WORDS = [
   { id: 'beach', word: 'beach', level: 'beginner', partOfSpeech: 'noun', category: 'nature', definition: 'The sandy place next to the sea', exampleSentence: 'We built a sandcastle at the beach.', phonetic: '/biːtʃ/', hebrewTranslation: 'חוף ים', imageUrl: '/images/beach.webp' },
   { id: 'bean', word: 'bean', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'A small seed that people cook and eat', exampleSentence: 'Mom cooked rice with beans.', phonetic: '/biːn/', hebrewTranslation: 'שעועית', imageUrl: '/images/bean.webp' },
   { id: 'beetle', word: 'beetle', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'An insect with a hard shiny shell', exampleSentence: 'A black beetle walked across the path.', phonetic: '/ˈbiːtəl/', hebrewTranslation: 'חיפושית', imageUrl: '/images/beetle.webp' },
+
+  { id: 'carpet', word: 'carpet', level: 'beginner', partOfSpeech: 'noun', category: 'home', definition: 'A soft covering for the floor', exampleSentence: 'The cat slept on the carpet.', phonetic: '/ˈkɑːrpɪt/', hebrewTranslation: 'שטיח', imageUrl: '/images/carpet.webp' },
 ];
 
 export const CATEGORIES = [

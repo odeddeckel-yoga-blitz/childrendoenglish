@@ -833,6 +833,12 @@ export const BATTLE_WORDS = {
    "w": "brush",
    "he": "מברשת",
    "img": "/images/brush.webp"
+  },
+  {
+   "id": "carpet",
+   "w": "carpet",
+   "he": "שטיח",
+   "img": "/images/carpet.webp"
   }
  ],
  "transport": [

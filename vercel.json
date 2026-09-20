@@ -10,29 +10,83 @@
     }
   },
   "rewrites": [
-    { "source": "/play", "destination": "/" },
-    { "source": "/learn", "destination": "/" },
-    { "source": "/flashcards", "destination": "/" },
-    { "source": "/badges", "destination": "/" },
-    { "source": "/progress", "destination": "/" },
-    { "source": "/path", "destination": "/" },
-    { "source": "/parent", "destination": "/" },
-    { "source": "/privacy", "destination": "/" },
-    { "source": "/players", "destination": "/" },
-    { "source": "/manage", "destination": "/" },
-    { "source": "/new-player", "destination": "/" },
-    { "source": "/my-words", "destination": "/" },
-    { "source": "/app", "destination": "/" },
-    { "source": "/daily-review", "destination": "/" },
-    { "source": "/terms", "destination": "/" }
+    {
+      "source": "/play",
+      "destination": "/"
+    },
+    {
+      "source": "/learn",
+      "destination": "/"
+    },
+    {
+      "source": "/flashcards",
+      "destination": "/"
+    },
+    {
+      "source": "/badges",
+      "destination": "/"
+    },
+    {
+      "source": "/progress",
+      "destination": "/"
+    },
+    {
+      "source": "/path",
+      "destination": "/"
+    },
+    {
+      "source": "/parent",
+      "destination": "/"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/"
+    },
+    {
+      "source": "/players",
+      "destination": "/"
+    },
+    {
+      "source": "/manage",
+      "destination": "/"
+    },
+    {
+      "source": "/new-player",
+      "destination": "/"
+    },
+    {
+      "source": "/my-words",
+      "destination": "/"
+    },
+    {
+      "source": "/app",
+      "destination": "/"
+    },
+    {
+      "source": "/daily-review",
+      "destination": "/"
+    },
+    {
+      "source": "/terms",
+      "destination": "/"
+    }
   ],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
         {
           "key": "Strict-Transport-Security",
           "value": "max-age=31536000; includeSubDomains; preload"
@@ -71,6 +125,15 @@
         {
           "key": "Cache-Control",
           "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/audio/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=604800"
         }
       ]
     }

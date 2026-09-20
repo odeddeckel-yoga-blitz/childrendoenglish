@@ -23,7 +23,20 @@ export default defineConfig({
             options: {
               cacheName: 'word-images-v3',
               expiration: {
-                maxEntries: 400,
+                // Must exceed the full image set (409 words + numbers/colors
+                // ≈470 files) or the cache thrashes and quizzes re-fetch.
+                maxEntries: 800,
+                maxAgeSeconds: 30 * 24 * 60 * 60,
+              },
+            },
+          },
+          {
+            urlPattern: /\/audio\/.*\.mp3$/,
+            handler: 'StaleWhileRevalidate',
+            options: {
+              cacheName: 'word-audio-v2',
+              expiration: {
+                maxEntries: 800,
                 maxAgeSeconds: 30 * 24 * 60 * 60,
               },
             },
