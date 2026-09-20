@@ -18,6 +18,44 @@ const imagesDir = join(__dirname, '..', 'public', 'images');
 const bgRect = (color) => `<rect x="8" y="8" width="496" height="496" rx="64" fill="${color}"/>`;
 
 const ILLUSTRATIONS = {
+  can: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEE2E2')}
+    <!-- soda can: silver top with pull tab, red body with a plain wave band -->
+    <rect x="176" y="128" width="160" height="290" rx="14" fill="#EF4444"/>
+    <path d="M176 240 Q 226 210 256 240 T 336 240 L 336 300 Q 286 330 256 300 T 176 300 Z" fill="#FECACA"/>
+    <ellipse cx="256" cy="418" rx="80" ry="18" fill="#B91C1C"/>
+    <ellipse cx="256" cy="128" rx="80" ry="22" fill="#D1D5DB" stroke="#6B7280" stroke-width="5"/>
+    <rect x="238" y="106" width="36" height="14" rx="7" fill="#6B7280"/>
+    <circle cx="256" cy="122" r="9" fill="#9CA3AF" stroke="#4B5563" stroke-width="4"/>
+  </svg>`,
+
+  cap: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF9C3')}
+    <!-- baseball cap, side view, brim pointing left -->
+    <path d="M 140 300 A 118 118 0 0 1 376 300 Z" fill="#2563EB"/>
+    <path d="M 258 182 A 118 118 0 0 0 140 300 L 200 300 Q 210 220 258 182 Z" fill="#1D4ED8"/>
+    <rect x="36" y="288" width="190" height="30" rx="15" fill="#1E40AF"/>
+    <rect x="140" y="296" width="240" height="20" rx="10" fill="#1D4ED8"/>
+    <circle cx="258" cy="180" r="12" fill="#1E3A8A"/>
+    <path d="M 258 182 Q 290 230 300 300" fill="none" stroke="#1E40AF" stroke-width="6"/>
+  </svg>`,
+
+  cartoon: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#EDE9FE')}
+    <!-- retro TV playing a cartoon: smiling character on screen -->
+    <line x1="180" y1="140" x2="130" y2="60" stroke="#6D28D9" stroke-width="12" stroke-linecap="round"/>
+    <line x1="332" y1="140" x2="382" y2="60" stroke="#6D28D9" stroke-width="12" stroke-linecap="round"/>
+    <rect x="96" y="140" width="320" height="250" rx="26" fill="#7C3AED"/>
+    <rect x="124" y="168" width="264" height="194" rx="14" fill="#FEF3C7"/>
+    <circle cx="256" cy="252" r="58" fill="#F59E0B"/>
+    <path d="M 236 226 Q 246 210 252 226" fill="none" stroke="#78350F" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="238" cy="244" r="8" fill="#78350F"/><circle cx="276" cy="244" r="8" fill="#78350F"/>
+    <path d="M 230 272 Q 256 296 282 272" fill="none" stroke="#78350F" stroke-width="8" stroke-linecap="round"/>
+    <path d="M 300 200 l 8 16 17 2 -12 12 3 17 -16 -8 -16 8 3 -17 -12 -12 17 -2 Z" fill="#EF4444"/>
+    <rect x="180" y="390" width="30" height="24" rx="6" fill="#5B21B6"/>
+    <rect x="302" y="390" width="30" height="24" rx="6" fill="#5B21B6"/>
+  </svg>`,
+
   zigzag: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FEFCBF')}
     <polyline points="52,330 116,182 180,330 244,182 308,330 372,182 436,330"

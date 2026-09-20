@@ -568,6 +568,16 @@ export const WORDS = [
   // Custom SVG illustrations (scripts/generate-illustrations.mjs) — photo search failed for these
   { id: 'unicycle', word: 'unicycle', level: 'advanced', partOfSpeech: 'noun', category: 'transport', definition: 'A cycle with only one wheel that circus riders balance on', exampleSentence: 'The clown rode a unicycle at the circus.', phonetic: '/ˈjuːnɪsaɪkəl/', hebrewTranslation: 'חד-אופן', imageUrl: '/images/unicycle.webp' },
   { id: 'zigzag', word: 'zigzag', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A line that goes sharply one way then the other', exampleSentence: 'She drew a zigzag across the page.', phonetic: '/ˈzɪɡzæɡ/', hebrewTranslation: 'זיגזג', imageUrl: '/images/zigzag.webp' },
+
+  // === USER-REQUESTED C-WORDS (letter-C school list) 2026-09-20 ===
+  { id: 'can', word: 'can', level: 'beginner', partOfSpeech: 'noun', category: 'food', definition: 'A metal container for food or drink', exampleSentence: 'He opened a can of corn.', phonetic: '/kæn/', hebrewTranslation: 'פחית', imageUrl: '/images/can.webp' },
+  { id: 'cap', word: 'cap', level: 'beginner', partOfSpeech: 'noun', category: 'clothing', definition: 'A soft hat with a flat curved part in front', exampleSentence: 'He wore a red cap to the game.', phonetic: '/kæp/', hebrewTranslation: 'כובע מצחייה', imageUrl: '/images/cap.webp' },
+  { id: 'cab', word: 'cab', level: 'intermediate', partOfSpeech: 'noun', category: 'transport', definition: 'A car you pay to ride in, another word for taxi', exampleSentence: 'They took a cab to the airport.', phonetic: '/kæb/', hebrewTranslation: 'מונית', imageUrl: '/images/cab.webp' },
+  { id: 'camera', word: 'camera', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'A device for taking pictures', exampleSentence: 'She took a photo with her camera.', phonetic: '/ˈkæmərə/', hebrewTranslation: 'מצלמה', imageUrl: '/images/camera.webp' },
+  { id: 'caterpillar', word: 'caterpillar', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A small crawling creature that turns into a butterfly', exampleSentence: 'The caterpillar ate a green leaf.', phonetic: '/ˈkætərpɪlər/', hebrewTranslation: 'זחל', imageUrl: '/images/caterpillar.webp' },
+  { id: 'cartoon', word: 'cartoon', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A funny drawing or an animated show', exampleSentence: 'They watched a cartoon on Saturday morning.', phonetic: '/kɑːrˈtuːn/', hebrewTranslation: 'סרט מצויר', imageUrl: '/images/cartoon.webp' },
+  { id: 'cart', word: 'cart', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'A basket on wheels you push at the store', exampleSentence: 'Dad pushed the cart through the supermarket.', phonetic: '/kɑːrt/', hebrewTranslation: 'עגלת קניות', imageUrl: '/images/cart.webp' },
+  { id: 'cannon', word: 'cannon', level: 'advanced', partOfSpeech: 'noun', category: 'toys', definition: 'A big old gun on wheels that shoots heavy balls', exampleSentence: 'An old cannon stood by the castle wall.', phonetic: '/ˈkænən/', hebrewTranslation: 'תותח', imageUrl: '/images/cannon.webp' },
 ];
 
 export const CATEGORIES = [

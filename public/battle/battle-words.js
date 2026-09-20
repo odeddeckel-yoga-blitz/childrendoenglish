@@ -319,6 +319,12 @@ export const BATTLE_WORDS = {
    "w": "yak",
    "he": "יאק",
    "img": "/images/yak.webp"
+  },
+  {
+   "id": "caterpillar",
+   "w": "caterpillar",
+   "he": "זחל",
+   "img": "/images/caterpillar.webp"
   }
  ],
  "food": [
@@ -597,6 +603,12 @@ export const BATTLE_WORDS = {
    "w": "donut",
    "he": "סופגנייה",
    "img": "/images/donut.webp"
+  },
+  {
+   "id": "can",
+   "w": "can",
+   "he": "פחית",
+   "img": "/images/can.webp"
   }
  ],
  "home": [
@@ -961,6 +973,12 @@ export const BATTLE_WORDS = {
    "w": "unicycle",
    "he": "חד-אופן",
    "img": "/images/unicycle.webp"
+  },
+  {
+   "id": "cab",
+   "w": "cab",
+   "he": "מונית",
+   "img": "/images/cab.webp"
   }
  ],
  "nature": [
@@ -1677,6 +1695,24 @@ export const BATTLE_WORDS = {
    "w": "zigzag",
    "he": "זיגזג",
    "img": "/images/zigzag.webp"
+  },
+  {
+   "id": "camera",
+   "w": "camera",
+   "he": "מצלמה",
+   "img": "/images/camera.webp"
+  },
+  {
+   "id": "cartoon",
+   "w": "cartoon",
+   "he": "סרט מצויר",
+   "img": "/images/cartoon.webp"
+  },
+  {
+   "id": "cart",
+   "w": "cart",
+   "he": "עגלת קניות",
+   "img": "/images/cart.webp"
   }
  ],
  "clothing": [
@@ -1817,6 +1853,12 @@ export const BATTLE_WORDS = {
    "w": "ring",
    "he": "טבעת",
    "img": "/images/ring.webp"
+  },
+  {
+   "id": "cap",
+   "w": "cap",
+   "he": "כובע מצחייה",
+   "img": "/images/cap.webp"
   }
  ],
  "school": [
@@ -2353,6 +2395,12 @@ export const BATTLE_WORDS = {
    "w": "arrow",
    "he": "חץ",
    "img": "/images/arrow.webp"
+  },
+  {
+   "id": "cannon",
+   "w": "cannon",
+   "he": "תותח",
+   "img": "/images/cannon.webp"
   }
  ]
 };
