@@ -8,7 +8,7 @@ everywhere; it reads as authenticity, not spam, when the product is free and ad-
 ## Core pitch (reuse everywhere — English)
 
 > **Children Do English** (https://childrendoenglish.com) — a free English-vocabulary app for
-> Hebrew-speaking kids ages 5–12: 388 words with real images, recorded audio, and Hebrew
+> Hebrew-speaking kids ages 5–12: 480+ words with real images, recorded audio, and Hebrew
 > translations, taught through picture quizzes, flashcards and spaced repetition. Four quiz modes
 > ordered from zero-reading (hear a word, tap the picture) to full reading, a letter-by-letter
 > mode for beginners ("my child is on letter C"), multiple kid profiles, and a parent dashboard.
@@ -17,14 +17,14 @@ everywhere; it reads as authenticity, not spam, when the product is free and ad-
 > his own kids. For classrooms: a free Kahoot-style live vocabulary battle at
 > childrendoenglish.com/battle — students join with a room code, no student accounts.
 
-One-liner: *"Free English vocabulary for Hebrew-speaking kids — 388 words with pictures and
+One-liner: *"Free English vocabulary for Hebrew-speaking kids — 480+ words with pictures and
 audio, no ads, no sign-up, everything stays on the device."*
 
 ## Core pitch (Hebrew — for Israeli groups)
 
 > בניתי אפליקציה חינמית ללימוד אוצר מילים באנגלית לילדים דוברי עברית (גילאי 5–12):
 > **Children Do English** — https://childrendoenglish.com
-> 388 מילים עם תמונות אמיתיות, הקראה קולית ותרגום לעברית, דרך חידוני תמונות, כרטיסיות
+> יותר מ-480 מילים עם תמונות אמיתיות, הקראה קולית ותרגום לעברית, דרך חידוני תמונות, כרטיסיות
 > וחזרה מרווחת. יש מצב "הקשיבו והתאימו" לילדים שעוד לא קוראים, מצב אותיות ("הילד שלי לומד
 > עכשיו את האות C") שמגביל את המשחקים לאותיות שכבר למדו, פרופילים לכמה ילדים, ואזור הורים.
 > **בלי פרסומות, בלי הרשמה, בלי איסוף נתונים** — הכל נשמר על המכשיר בלבד. עובד גם בלי
@@ -57,7 +57,7 @@ so than most edtech. He sources "Best of" lists from reader tips (verified respo
 during the KidsDoMath kit).
 - Contact: comment/contact form on his current "Best…" ELL/vocabulary roundup.
 - Message: *"Hi Larry — I'm a parent/software engineer in Israel who built
-  childrendoenglish.com: a free English-vocabulary app for young Hebrew-speaking ELLs. 388
+  childrendoenglish.com: a free English-vocabulary app for young Hebrew-speaking ELLs. 480+
   words with photos, recorded audio and L1 (Hebrew) translations, spaced repetition, and a
   listen-first mode for pre-readers — no ads, no logins, no data collection (everything stays
   on the device). There's also a free Kahoot-style live vocab battle for classrooms with no
@@ -94,7 +94,7 @@ Title: **Show HN: Free English-vocab app for my kids – no ads, no accounts, da
 URL: https://childrendoenglish.com
 First comment (post immediately after submitting):
 > My kids are native Hebrew speakers learning English, and everything I tried was ad-riddled,
-> subscription-walled, or wanted an account for a 6-year-old. So I built my own: 388 words,
+> subscription-walled, or wanted an account for a 6-year-old. So I built my own: 480+ words,
 > each with a vetted photo, recorded audio (pre-rendered with Piper TTS so every device sounds
 > the same), Hebrew translations, spaced repetition, and quiz modes ordered by reading demand —
 > a pre-reader can play entirely by ear. A "known letters" mode limits the whole app to letters

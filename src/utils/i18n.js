@@ -392,7 +392,7 @@ const translations = {
 
     // Features
     featureLearnTitle: 'Learn Words',
-    featureLearnDesc: 'Browse 340+ words with images, audio & translations',
+    featureLearnDesc: 'Browse 480+ words with images, audio & translations',
     featureFlashcardsTitle: 'Flashcards',
     featureFlashcardsDesc: 'Swipe through cards with spaced repetition',
     featureQuizTitle: 'Fun Quizzes',
@@ -428,7 +428,7 @@ const translations = {
 
     // Language select
     confirmLanguage: 'What language do you speak?',
-    landingStatsWords: '340+ Words',
+    landingStatsWords: '480+ Words',
     landingStatsCategories: '13 Categories',
     landingStatsModes: '4 Quiz Modes',
     landingFeaturesHeading: 'Everything your child needs',

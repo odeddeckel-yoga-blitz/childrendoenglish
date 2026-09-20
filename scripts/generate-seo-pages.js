@@ -2262,7 +2262,7 @@ const GUIDES = [
     slug: 'english-vocabulary-for-bilingual-hebrew-english-kids',
     heroImage: '/og/feelings.png',
     title: 'English Vocabulary for Bilingual Hebrew-English Kids — A Parent\'s Guide',
-    description: 'Help your bilingual Hebrew-English child build English vocabulary. 342 words with Hebrew translations, phonetics, and pictures. Free app for kids 6-12.',
+    description: 'Help your bilingual Hebrew-English child build English vocabulary. 480+ words with Hebrew translations, phonetics, and pictures. Free app for kids 6-12.',
     h1: 'English Vocabulary for Bilingual Hebrew-English Kids',
     sections: [
       {

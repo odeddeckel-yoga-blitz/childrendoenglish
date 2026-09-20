@@ -426,7 +426,7 @@ export default {
 
   // Language select
   confirmLanguage: 'באיזו שפה אתם מדברים?',
-  landingStatsWords: '340+ מילים',
+  landingStatsWords: '480+ מילים',
   landingStatsCategories: '13 קטגוריות',
   landingStatsModes: '4 סוגי חידונים',
   landingFeaturesHeading: 'כל מה שהילד שלכם צריך',
