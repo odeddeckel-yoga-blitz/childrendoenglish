@@ -18,6 +18,109 @@ const imagesDir = join(__dirname, '..', 'public', 'images');
 const bgRect = (color) => `<rect x="8" y="8" width="496" height="496" rx="64" fill="${color}"/>`;
 
 const ILLUSTRATIONS = {
+  gift: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF2F2')}
+    <rect x="116" y="210" width="280" height="230" rx="14" fill="#EF4444"/>
+    <rect x="96" y="160" width="320" height="66" rx="12" fill="#DC2626"/>
+    <rect x="236" y="160" width="40" height="280" fill="#FDE047"/>
+    <path d="M 256 158 C 200 158 176 120 200 96 C 224 76 252 108 256 150 C 260 108 288 76 312 96 C 336 120 312 158 256 158 Z" fill="#FDE047" stroke="#EAB308" stroke-width="8"/>
+  </svg>`,
+
+  glue: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FFF7ED')}
+    <rect x="236" y="52" width="40" height="34" rx="6" fill="#F97316"/>
+    <path d="M 236 86 L 276 86 L 296 130 L 216 130 Z" fill="#FB923C"/>
+    <rect x="176" y="130" width="160" height="270" rx="26" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="8"/>
+    <rect x="196" y="190" width="120" height="140" rx="14" fill="#FDBA74"/>
+    <text x="256" y="272" font-size="44" font-family="sans-serif" font-weight="bold" fill="#7C2D12" text-anchor="middle">GLUE</text>
+    <path d="M 256 430 C 246 452 236 458 236 470 A 20 20 0 0 0 276 470 C 276 458 266 452 256 430 Z" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="5"/>
+  </svg>`,
+
+  glasses: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#F0F9FF')}
+    <circle cx="166" cy="266" r="84" fill="#DBEAFE" fill-opacity="0.5" stroke="#1E3A8A" stroke-width="14"/>
+    <circle cx="346" cy="266" r="84" fill="#DBEAFE" fill-opacity="0.5" stroke="#1E3A8A" stroke-width="14"/>
+    <path d="M 250 258 Q 256 240 262 258" fill="none" stroke="#1E3A8A" stroke-width="12"/>
+    <line x1="82" y1="256" x2="40" y2="222" stroke="#1E3A8A" stroke-width="12" stroke-linecap="round"/>
+    <line x1="430" y1="256" x2="472" y2="222" stroke="#1E3A8A" stroke-width="12" stroke-linecap="round"/>
+  </svg>`,
+
+  hammock: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#ECFDF5')}
+    <rect x="56" y="120" width="26" height="320" rx="12" fill="#92400E"/>
+    <circle cx="69" cy="104" r="46" fill="#22C55E"/>
+    <circle cx="40" cy="132" r="34" fill="#4ADE80"/>
+    <rect x="430" y="120" width="26" height="320" rx="12" fill="#92400E"/>
+    <circle cx="443" cy="104" r="46" fill="#22C55E"/>
+    <circle cx="472" cy="132" r="34" fill="#4ADE80"/>
+    <path d="M 82 250 Q 256 380 430 250" fill="none" stroke="#F59E0B" stroke-width="10"/>
+    <path d="M 120 268 Q 256 372 392 268 L 380 300 Q 256 396 132 300 Z" fill="#FBBF24"/>
+    <g stroke="#D97706" stroke-width="5">
+      <path d="M 150 282 Q 256 370 362 282" fill="none"/>
+      <path d="M 136 292 Q 256 384 376 292" fill="none"/>
+    </g>
+  </svg>`,
+
+  girl: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FCE7F3')}
+    <path d="M 178 150 Q 178 84 256 84 Q 334 84 334 150 L 334 250 Q 320 262 306 250 L 306 160 L 206 160 L 206 250 Q 192 262 178 250 Z" fill="#6B4423"/>
+    <circle cx="256" cy="166" r="72" fill="#FCD9B8"/>
+    <path d="M 184 150 A 72 72 0 0 1 328 150 L 328 140 Q 296 96 256 96 Q 216 96 184 140 Z" fill="#6B4423"/>
+    <circle cx="230" cy="168" r="8" fill="#3E2723"/><circle cx="282" cy="168" r="8" fill="#3E2723"/>
+    <path d="M 228 200 Q 256 222 284 200" fill="none" stroke="#B5651D" stroke-width="7" stroke-linecap="round"/>
+    <path d="M 210 256 Q 256 240 302 256 L 340 400 L 172 400 Z" fill="#DB2777"/>
+    <rect x="162" y="260" width="30" height="92" rx="15" fill="#FCD9B8"/>
+    <rect x="320" y="260" width="30" height="92" rx="15" fill="#FCD9B8"/>
+    <rect x="216" y="400" width="26" height="56" rx="10" fill="#FCD9B8"/>
+    <rect x="270" y="400" width="26" height="56" rx="10" fill="#FCD9B8"/>
+    <rect x="208" y="452" width="42" height="20" rx="10" fill="#9D174D"/>
+    <rect x="262" y="452" width="42" height="20" rx="10" fill="#9D174D"/>
+  </svg>`,
+
+  ghost: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#EDE9FE')}
+    <path d="M 256 70 C 160 70 130 160 130 250 L 130 400 Q 152 378 173 400 Q 194 422 215 400 Q 236 378 256 400 Q 277 422 298 400 Q 319 378 340 400 Q 361 422 382 400 L 382 250 C 382 160 352 70 256 70 Z"
+      fill="#F8FAFC" stroke="#CBD5E1" stroke-width="8"/>
+    <circle cx="222" cy="210" r="14" fill="#1E293B"/>
+    <circle cx="290" cy="210" r="14" fill="#1E293B"/>
+    <ellipse cx="256" cy="262" rx="16" ry="22" fill="#1E293B"/>
+  </svg>`,
+
+  grandma: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#F3E8FF')}
+    <circle cx="256" cy="86" r="30" fill="#E5E7EB"/>
+    <circle cx="256" cy="160" r="64" fill="#FCD9B8"/>
+    <path d="M 192 150 A 64 64 0 0 1 320 150 L 320 136 Q 290 100 256 100 Q 222 100 192 136 Z" fill="#E5E7EB"/>
+    <circle cx="232" cy="162" r="16" fill="none" stroke="#7C3AED" stroke-width="6"/>
+    <circle cx="280" cy="162" r="16" fill="none" stroke="#7C3AED" stroke-width="6"/>
+    <line x1="248" y1="162" x2="264" y2="162" stroke="#7C3AED" stroke-width="6"/>
+    <circle cx="232" cy="164" r="6" fill="#3E2723"/><circle cx="280" cy="164" r="6" fill="#3E2723"/>
+    <path d="M 232 196 Q 256 214 280 196" fill="none" stroke="#B5651D" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 206 238 Q 256 222 306 238 L 336 440 L 176 440 Z" fill="#7C3AED"/>
+    <rect x="166" y="244" width="28" height="96" rx="14" fill="#FCD9B8"/>
+    <rect x="318" y="244" width="28" height="96" rx="14" fill="#FCD9B8"/>
+  </svg>`,
+
+  grandpa: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#ECFDF5')}
+    <circle cx="256" cy="160" r="64" fill="#FCD9B8"/>
+    <path d="M 196 138 Q 206 112 232 106 L 232 122 Q 214 126 208 144 Z" fill="#E5E7EB"/>
+    <path d="M 316 138 Q 306 112 280 106 L 280 122 Q 298 126 304 144 Z" fill="#E5E7EB"/>
+    <circle cx="232" cy="158" r="16" fill="none" stroke="#334155" stroke-width="6"/>
+    <circle cx="280" cy="158" r="16" fill="none" stroke="#334155" stroke-width="6"/>
+    <line x1="248" y1="158" x2="264" y2="158" stroke="#334155" stroke-width="6"/>
+    <circle cx="232" cy="160" r="6" fill="#3E2723"/><circle cx="280" cy="160" r="6" fill="#3E2723"/>
+    <path d="M 226 196 Q 256 214 286 196 Q 276 210 256 210 Q 236 210 226 196 Z" fill="#E5E7EB"/>
+    <path d="M 208 238 Q 256 222 304 238 L 304 380 L 208 380 Z" fill="#78716C"/>
+    <path d="M 236 238 L 256 268 L 276 238 L 276 380 L 236 380 Z" fill="#F5F5F4"/>
+    <rect x="178" y="242" width="28" height="104" rx="14" fill="#78716C"/>
+    <rect x="306" y="242" width="28" height="104" rx="14" fill="#78716C"/>
+    <rect x="218" y="380" width="32" height="84" rx="10" fill="#44403C"/>
+    <rect x="262" y="380" width="32" height="84" rx="10" fill="#44403C"/>
+    <line x1="352" y1="300" x2="352" y2="452" stroke="#92400E" stroke-width="12" stroke-linecap="round"/>
+    <path d="M 352 300 Q 352 280 372 282" fill="none" stroke="#92400E" stroke-width="12" stroke-linecap="round"/>
+  </svg>`,
+
   elevator: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#E2E8F0')}
     <rect x="120" y="90" width="272" height="360" rx="14" fill="#64748B"/>

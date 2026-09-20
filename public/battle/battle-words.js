@@ -343,6 +343,24 @@ export const BATTLE_WORDS = {
    "w": "dinosaur",
    "he": "דינוזאור",
    "img": "/images/dinosaur.webp"
+  },
+  {
+   "id": "goose",
+   "w": "goose",
+   "he": "אווז",
+   "img": "/images/goose.webp"
+  },
+  {
+   "id": "gorilla",
+   "w": "gorilla",
+   "he": "גורילה",
+   "img": "/images/gorilla.webp"
+  },
+  {
+   "id": "hedgehog",
+   "w": "hedgehog",
+   "he": "קיפוד",
+   "img": "/images/hedgehog.webp"
   }
  ],
  "food": [
@@ -645,6 +663,12 @@ export const BATTLE_WORDS = {
    "w": "fries",
    "he": "צ'יפס",
    "img": "/images/fries.webp"
+  },
+  {
+   "id": "hot-dog",
+   "w": "hot dog",
+   "he": "נקניקייה",
+   "img": "/images/hot-dog.webp"
   }
  ],
  "home": [
@@ -881,6 +905,30 @@ export const BATTLE_WORDS = {
    "w": "fridge",
    "he": "מקרר",
    "img": "/images/fridge.webp"
+  },
+  {
+   "id": "gate",
+   "w": "gate",
+   "he": "שער",
+   "img": "/images/gate.webp"
+  },
+  {
+   "id": "hose",
+   "w": "hose",
+   "he": "צינור השקיה",
+   "img": "/images/hose.webp"
+  },
+  {
+   "id": "hammock",
+   "w": "hammock",
+   "he": "ערסל",
+   "img": "/images/hammock.webp"
+  },
+  {
+   "id": "hanger",
+   "w": "hanger",
+   "he": "קולב",
+   "img": "/images/hanger.webp"
   }
  ],
  "transport": [
@@ -1881,6 +1929,36 @@ export const BATTLE_WORDS = {
    "w": "fountain",
    "he": "מזרקה",
    "img": "/images/fountain.webp"
+  },
+  {
+   "id": "gift",
+   "w": "gift",
+   "he": "מתנה",
+   "img": "/images/gift.webp"
+  },
+  {
+   "id": "girl",
+   "w": "girl",
+   "he": "ילדה",
+   "img": "/images/girl.webp"
+  },
+  {
+   "id": "glasses",
+   "w": "glasses",
+   "he": "משקפיים",
+   "img": "/images/glasses.webp"
+  },
+  {
+   "id": "grandma",
+   "w": "grandma",
+   "he": "סבתא",
+   "img": "/images/grandma.webp"
+  },
+  {
+   "id": "grandpa",
+   "w": "grandpa",
+   "he": "סבא",
+   "img": "/images/grandpa.webp"
   }
  ],
  "clothing": [
@@ -2203,6 +2281,12 @@ export const BATTLE_WORDS = {
    "w": "bell",
    "he": "פעמון",
    "img": "/images/bell.webp"
+  },
+  {
+   "id": "glue",
+   "w": "glue",
+   "he": "דבק",
+   "img": "/images/glue.webp"
   }
  ],
  "sports": [
@@ -2605,6 +2689,12 @@ export const BATTLE_WORDS = {
    "w": "fairy",
    "he": "פיה",
    "img": "/images/fairy.webp"
+  },
+  {
+   "id": "ghost",
+   "w": "ghost",
+   "he": "רוח רפאים",
+   "img": "/images/ghost.webp"
   }
  ]
 };
