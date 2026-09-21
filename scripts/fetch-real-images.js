@@ -160,7 +160,7 @@ async function searchWikimedia(query) {
 
   try {
     const res = await fetch(url, {
-      headers: { 'User-Agent': 'ChildrenDoEnglish/1.0 (educational app; odeddeckel@gmail.com)' },
+      headers: { 'User-Agent': 'ChildrenDoEnglish/1.0 (educational app; info@childrendoenglish.com)' },
     });
     const data = await res.json();
 
@@ -196,7 +196,7 @@ async function searchWikimedia(query) {
 
 async function downloadAndConvert(imageUrl, outputPath) {
   const res = await fetch(imageUrl, {
-    headers: { 'User-Agent': 'ChildrenDoEnglish/1.0 (educational app; odeddeckel@gmail.com)' },
+    headers: { 'User-Agent': 'ChildrenDoEnglish/1.0 (educational app; info@childrendoenglish.com)' },
   });
 
   if (!res.ok) throw new Error(`HTTP ${res.status}`);

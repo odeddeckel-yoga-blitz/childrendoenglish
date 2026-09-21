@@ -44,7 +44,7 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const imagesDir = join(__dirname, '..', 'public', 'images');
 const workDir = join(__dirname, '..', '.image-work');
-const UA = { 'User-Agent': 'ChildrenDoEnglish/1.0 (educational app; odeddeckel@gmail.com)' };
+const UA = { 'User-Agent': 'ChildrenDoEnglish/1.0 (educational app; info@childrendoenglish.com)' };
 const BAD_NAME = /\b(cover|title|page|catalog|advert|poster|book|manuscript|folio|stamp|coin|map|document|newspaper_|magazine)\b/i;
 
 async function searchCandidates(term, limit = 6) {
