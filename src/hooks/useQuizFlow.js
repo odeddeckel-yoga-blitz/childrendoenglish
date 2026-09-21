@@ -5,6 +5,7 @@ import { updateStreak, updateDailyGoal } from '../utils/storage';
 import { BADGES } from '../data/badges';
 import { playSound } from '../utils/sound';
 import { analytics } from '../utils/analytics';
+import { sendLearn, sendLearnBatch } from '../utils/learnBeacon';
 
 export default function useQuizFlow({ stats, setStats, navigate, knownLetters = null }) {
   const [selectedLevel, setSelectedLevel] = useState(null);
@@ -77,12 +78,19 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
 
     setQuizWords(wordsWithDistractors);
     analytics.quizStart(mode, level);
+    sendLearn('quiz_start', mode || 'unknown');
     const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
     navigate(stateMap[mode] || 'imageQuiz');
   }, [navigate, stats.wordProgress, knownLetters]);
 
   const handleQuizComplete = useCallback((results) => {
     const { score, total, answers, mode, quit } = results;
+
+    // Per-word learning tallies → one batched cookieless beacon per quiz
+    // (feeds the Word Learning Optimizer's hardest-words ranking).
+    if (Array.isArray(answers) && answers.length > 0) {
+      sendLearnBatch(answers.map(a => ({ e: a.correct ? 'ans_ok' : 'ans_no', i: String(a.wordId) })));
+    }
 
     // Pure completion routine: applied inside the functional setStats updater
     // (safe against concurrent updates, StrictMode-friendly) AND once against
@@ -183,8 +191,10 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     setQuizResults({ ...results, arcadeNewBest });
     if (quit) {
       analytics.quizQuit(mode, selectedLevel, answers?.length ?? 0);
+      sendLearn('quiz_quit', mode || 'unknown');
     } else {
       analytics.quizComplete(mode, selectedLevel, score, total);
+      sendLearn('quiz_done', mode || 'unknown');
     }
     navigate('finished');
   }, [selectedLevel, navigate, setStats, stats, quizWords]);

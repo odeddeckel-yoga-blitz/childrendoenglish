@@ -15,6 +15,7 @@ import { needsConsentPrompt, setAnalyticsConsent, analytics } from './utils/anal
 import { checkStreakReminder } from './utils/notifications';
 import { getDueWords } from './utils/spaced-repetition';
 import { filterByKnownLetters } from './utils/letterFilter';
+import { sendLearn } from './utils/learnBeacon';
 import { WORDS } from './data/words';
 
 
@@ -577,7 +578,7 @@ export default function App() {
           <LetterPath
             stats={stats}
             lang={lang}
-            onPracticeLetter={(letter, words) => quizFlow.handleStartPersonalQuiz(words, 'listen')}
+            onPracticeLetter={(letter, words) => { sendLearn('letter', letter.toLowerCase()); quizFlow.handleStartPersonalQuiz(words, 'listen'); }}
             onBack={() => navigate('menu', 'back')}
           />
         );
