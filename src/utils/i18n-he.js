@@ -27,7 +27,6 @@ export default {
   mastered: 'שולטים',
   privacyPolicy: 'מדיניות פרטיות',
   termsOfService: 'תנאי שימוש',
-  madeBy: 'נוצר על ידי עודד דקלבאום',
   chooseLevel: 'בחרו רמה',
   chooseMode: 'בחרו סוג חידון',
   backToMenu: 'חזרה לתפריט',

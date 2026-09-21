@@ -29,7 +29,6 @@ const translations = {
     mastered: 'Mastered',
     privacyPolicy: 'Privacy Policy',
     termsOfService: 'Terms of Service',
-    madeBy: 'Made by Oded Deckelbaum',
     chooseLevel: 'Choose Level',
     chooseMode: 'Choose Mode',
     backToMenu: 'Back to menu',

@@ -276,7 +276,6 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       )}
 
       <div className="text-center space-y-1">
-        <p className="text-xs text-slate-400">{t('madeBy', lang)}</p>
         <div className="flex items-center justify-center gap-3">
           <button
             onClick={() => onNavigate('privacy')}

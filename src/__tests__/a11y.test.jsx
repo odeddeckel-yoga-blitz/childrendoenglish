@@ -41,9 +41,10 @@ describe('Accessibility (axe)', () => {
     expect(results).toHaveNoViolations();
   });
 
-  it('LearnMode has no a11y violations', async () => {
+  // 60s: the grid renders the full vocabulary (480+ cards) and axe scales with DOM size
+  it('LearnMode has no a11y violations', { timeout: 60000 }, async () => {
     const { container } = render(<LearnMode {...learnModeProps} />);
     const results = await axe(container);
     expect(results).toHaveNoViolations();
-  }, 30000);
+  });
 });
