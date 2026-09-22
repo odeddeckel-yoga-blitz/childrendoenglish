@@ -250,6 +250,21 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
   const capitalWord = word.word.charAt(0).toUpperCase() + word.word.slice(1);
   const title = `${capitalWord} - English Vocabulary for Kids | Children Do English`;
   const description = `Learn the English word "${word.word}" — ${word.definition}. With pronunciation (${word.phonetic}), example sentence, and Hebrew translation (${word.hebrewTranslation}). Free for kids ages 6-12.`;
+  const audioFile = word.word.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-') + '.mp3';
+  // Deterministic same-category distractors (different word text AND Hebrew, so
+  // the mini-quiz never shows a synonym pair like taxi/cab as separate options)
+  const sibs = categoryWords.filter((w) => w.id !== word.id
+    && w.word.toLowerCase() !== word.word.toLowerCase() && w.hebrewTranslation !== word.hebrewTranslation);
+  const hash = [...word.id].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+  const d1 = sibs[hash % Math.max(1, sibs.length)];
+  const d2 = sibs[(hash * 7 + 3) % Math.max(1, sibs.length)] === d1
+    ? sibs[(hash * 7 + 4) % Math.max(1, sibs.length)] : sibs[(hash * 7 + 3) % Math.max(1, sibs.length)];
+  const opts = [word, d1, d2].filter(Boolean).filter((w, i, arr) => arr.findIndex((x) => x.id === w.id) === i);
+  // Deterministic order (hash-rotated) so the answer isn't always first
+  const rot = hash % opts.length;
+  const ordered = opts.slice(rot).concat(opts.slice(0, rot));
+  const quizOptions = ordered.map((w) =>
+    `<button class="mq-opt" data-k="${w.id}" aria-label="picture option"><img src="/images/${w.id}.webp" alt="" width="132" height="132" loading="lazy" /></button>`).join('\n        ');
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -417,7 +432,43 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
       <div class="hero-def">${escapeHtml(word.definition)}</div>
       <div class="hero-ex">&ldquo;${escapeHtml(word.exampleSentence)}&rdquo;</div>
       <div class="hero-he">${escapeHtml(word.hebrewTranslation)}</div>
+      <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear ${escapeHtml(word.word)}">🔊 Hear &ldquo;${escapeHtml(word.word)}&rdquo;</button>
     </div>
+
+    <style>
+      .say-btn{margin-top:0.9rem;padding:0.7rem 1.4rem;border:0;border-radius:999px;background:#7c3aed;color:#fff;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(124,58,237,.35)}
+      .say-btn.say-active{transform:scale(0.97)}
+      .mini-quiz{background:#fff;border-radius:1rem;padding:1.4rem;margin:1.5rem 0;text-align:center;box-shadow:0 1px 6px rgba(15,23,42,.08)}
+      .mini-quiz h2{font-size:1.15rem;margin:0 0 0.9rem;color:#1e293b}
+      .mq-options{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap}
+      .mq-opt{border:3px solid #e2e8f0;border-radius:0.9rem;padding:0;background:#fff;cursor:pointer;overflow:hidden;transition:transform .12s}
+      .mq-opt img{display:block;width:132px;height:132px;object-fit:cover}
+      .mq-opt:hover{transform:translateY(-2px)}
+      .mq-opt.mq-right{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.3)}
+      .mq-opt.mq-wrong{border-color:#ef4444;animation:mqshake .5s}
+      .mq-opt.mq-dim{opacity:.45}
+      @keyframes mqshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+      .mq-result{margin-top:1rem}
+      .mq-yay{font-size:1.2rem;font-weight:800;color:#059669;margin:0 0 0.6rem}
+      .mq-cta{display:inline-block;padding:0.8rem 1.6rem;background:#2563eb;color:#fff;border-radius:999px;font-weight:700;text-decoration:none}
+      .cta-top{display:block;text-align:center;margin:1.2rem 0}
+      .cta-top a{display:inline-block;padding:0.85rem 1.7rem;background:#2563eb;color:#fff;border-radius:999px;font-weight:800;text-decoration:none;font-size:1.02rem;box-shadow:0 2px 10px rgba(37,99,235,.35)}
+      .cta-top p{font-size:.8rem;color:#64748b;margin:.45rem 0 0}
+    </style>
+
+    <div class="mini-quiz" data-answer="${word.id}">
+      <h2>🎮 Try it &mdash; tap the picture of &ldquo;${escapeHtml(word.word)}&rdquo;</h2>
+      <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear the word">🔊 Listen</button>
+      <div class="mq-options">
+        ${quizOptions}
+      </div>
+      <div class="mq-result" hidden>
+        <p class="mq-yay">🎉 That&rsquo;s right!</p>
+        <a class="mq-cta" href="/?utm_source=seo&utm_medium=miniquiz&utm_content=vocab_word">Play 10 more like this free &rarr;</a>
+      </div>
+    </div>
+
+    <span class="cta-top"><a href="/?utm_source=seo&utm_medium=cta_top&utm_content=vocab_word">🎧 Practice free &mdash; no ads, no sign-up</a><p>481 words with pictures &amp; audio &middot; works offline</p></span>
 
     ${enrichmentHtml}
 
@@ -446,6 +497,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
   <div class="footer">
     &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
   </div>
+  <script defer src="/vocab-quiz.js"></script>
 </body>
 </html>`;
 }
