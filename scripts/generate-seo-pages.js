@@ -273,6 +273,17 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
   // Deterministic order (hash-rotated) so the answer isn't always first
   const rot = hash % opts.length;
   const ordered = opts.slice(rot).concat(opts.slice(0, rot));
+  // Prev/next word arrows (user feedback 2026-09-26): browse the category
+  // without going back to the index — also a same-category crawl mesh.
+  const wIdx = categoryWords.findIndex((w) => w.id === word.id);
+  const prevW = wIdx > 0 ? categoryWords[wIdx - 1] : null;
+  const nextW = wIdx >= 0 && wIdx < categoryWords.length - 1 ? categoryWords[wIdx + 1] : null;
+  const navLink = (w, arrow) => w
+    ? `<a href="/vocabulary/${categorySlug}/${w.id}/">${arrow === 'prev' ? '&larr; ' : ''}${escapeHtml(w.word.charAt(0).toUpperCase() + w.word.slice(1))}${arrow === 'next' ? ' &rarr;' : ''}</a>`
+    : '<span class="nav-spacer"></span>';
+  const wordNav = (prevW || nextW)
+    ? `\n    <nav class="word-nav" aria-label="Browse ${escapeHtml(categoryDisplayName)} words">\n      ${navLink(prevW, 'prev')}\n      ${navLink(nextW, 'next')}\n    </nav>`
+    : '';
   const quizOptions = ordered.map((w) =>
     `<button class="mq-opt" data-k="${w.id}" aria-label="picture option"><img src="/images/${w.id}.webp" alt="" width="132" height="132" loading="lazy" /></button>`).join('\n        ');
 
@@ -435,7 +446,10 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
 
   <div class="container">
     <div class="word-hero">
-      <img src="/images/${word.id}.webp" alt="${escapeHtml(word.word)}" width="192" height="192" />
+      <button class="hero-img-btn" data-say="/audio/${audioFile}" aria-label="Hear ${escapeHtml(word.word)}">
+        <img src="/images/${word.id}.webp" alt="${escapeHtml(word.word)}" width="192" height="192" />
+        <span class="img-sound-hint" aria-hidden="true">🔊</span>
+      </button>
       <div class="hero-word">${escapeHtml(word.word)}</div>
       <div class="hero-phonetic">${escapeHtml(word.phonetic)}</div>
       <div class="hero-pos">${escapeHtml(word.partOfSpeech)}</div>
@@ -445,9 +459,17 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
       <p class="hero-cite" style="font-size:0.86rem;color:#64748b;max-width:34rem;margin:0.7rem auto 0">The English word &ldquo;${escapeHtml(word.word)}&rdquo; means: ${escapeHtml(word.definition)}. In Hebrew: ${escapeHtml(word.hebrewTranslation)}.</p>
       <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear ${escapeHtml(word.word)}">🔊 Hear &ldquo;${escapeHtml(word.word)}&rdquo;</button>
     </div>
-
+${wordNav}
     <style>
       .say-btn{margin-top:0.9rem;padding:0.7rem 1.4rem;border:0;border-radius:999px;background:#7c3aed;color:#fff;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(124,58,237,.35)}
+      .hero-img-btn{position:relative;display:block;margin:0 auto 1rem;padding:0;border:0;background:none;cursor:pointer;border-radius:0.75rem}
+      .hero-img-btn img{margin:0}
+      .hero-img-btn:active{transform:scale(0.97)}
+      .img-sound-hint{position:absolute;bottom:8px;right:8px;background:rgba(255,255,255,0.92);border-radius:999px;padding:3px 7px;font-size:1.05rem;box-shadow:0 1px 4px rgba(15,23,42,.25)}
+      .word-nav{display:flex;justify-content:space-between;gap:1rem;max-width:480px;margin:0 auto 1.5rem}
+      .word-nav a{display:inline-flex;align-items:center;gap:0.4rem;padding:0.6rem 1.1rem;background:#fff;border-radius:999px;color:#2563eb;font-weight:700;text-decoration:none;box-shadow:0 1px 4px rgba(15,23,42,.12);font-size:0.95rem}
+      .word-nav a:hover{box-shadow:0 2px 8px rgba(15,23,42,.2)}
+      .word-nav .nav-spacer{flex:1}
       .say-btn.say-active{transform:scale(0.97)}
       .mini-quiz{background:#fff;border-radius:1rem;padding:1.4rem;margin:1.5rem 0;text-align:center;box-shadow:0 1px 6px rgba(15,23,42,.08)}
       .mini-quiz h2{font-size:1.15rem;margin:0 0 0.9rem;color:#1e293b}

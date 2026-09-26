@@ -267,8 +267,9 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
               <img
                 src={getImageUrl(currentWord)}
                 alt={currentWord.definition}
-                className={`w-full h-full object-cover transition-opacity ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
+                className={`w-full h-full object-cover transition-opacity cursor-pointer ${imgLoaded ? 'opacity-100' : 'opacity-0'}`}
                 onLoad={() => setImgLoaded(true)}
+                onClick={() => speakWord(currentWord.word)}
                 loading="lazy"
                 width={512}
                 height={384}
