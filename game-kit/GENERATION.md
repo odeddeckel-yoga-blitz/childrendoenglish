@@ -200,7 +200,10 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
   `orderBar.getBoundingClientRect().bottom`. The template's `geo()` now returns **`topSafe`** (canvas-y below
   which you're clear of the HUD) and **`cySafe`** (centre of the HUD-clear region). Use them: centre top-heavy
   content on `cySafe`, and clamp any top label/target to `>= topSafe`. Never draw a must-read element in the top
-  band without clamping. Verify on mobile 390×844 with the HUD present, not just desktop.
+  band without clamping. Verify on mobile 390×844 with the HUD present, not just desktop. ⚠ **Watch the glyph
+  ascent, not just the baseline.** A text baseline that clears `topSafe` can still poke into the HUD, because
+  the glyph's ascent (~0.8× font size) extends above the baseline — clamp using the glyph's top edge (baseline
+  − ascent), not the baseline y itself.
 - **⭐ CSS-driven canvas resizes don't fire `window.resize` — canvas hit-testing goes STALE.** The mobile
   hint shrinks `#cv` via a `:has()` reflow (58vh→40vh); an orientation flip or dynamic-viewport change does the
   same. None of these dispatch a `window 'resize'` event, so a game whose only hook is
@@ -220,6 +223,15 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
   later math achievement, not exact placement.) This is a by-eye answer, so it needs the full bypass lockdown —
   see "Bypass of a by-eye / spatial answer" (drag-only, no directional nudge, no pre-commit oracle, hidden value,
   sparse scale, reveal after commit).
+  **Estimation-mode verification checklist (7 channels)** — before shipping, confirm all seven independently;
+  leaving one open promotes it into the bypass (see "Audit the convergence channels as a SET" above):
+  1. Input is drag-only (no numeric stepper).
+  2. No directional too-high/low nudge, live or on commit.
+  3. No pre-commit oracle (no live ✅ / glow keyed to `solved()`).
+  4. No leaked live numeric readout.
+  5. Sparse scale — landmark ticks only (0 / mid / end, or 0°/90°/180°), minor ticks off.
+  6. Target value hidden until commit.
+  7. Reveal-on-commit includes an accuracy read ("bullseye" / "off by N"), not just correct/wrong.
 - **Show the user's units, not the engine's proxy.** When the model stores a scaled internal value (e.g. a
   0–100 position standing in for a 0–1 fraction, or basis points for a decimal), never surface that raw number
   — it's meaningless to the kid and actively misleads ("75" on a line labelled 0 · ½ · 1). Render one
@@ -278,6 +290,13 @@ Pre-readers can't parse instructions. Every game must have:
    bobbing ↕ / grab glyph over every bar) so "all of these are grabbable" is shown, not hidden behind a
    select-then-adjust step. A cue on only the stepper teaches the wrong affordance — see the hidden-multi-select
    anti-pattern. For canvas-drag games, glow the drag handle.
+   ⚠ **Cue coherence — a shared/reused first-play cue (e.g. an auto finger walkthrough) must resolve to a REAL
+   discrete input control, NEVER fall back to the bare `#cv` canvas as a phantom demo.** If the cue logic
+   targets a tagged container (e.g. `#ctlBox`/`#tiles`/`#choices`) and falls through to the canvas when none of
+   those exist, a game whose real controls live untagged in the side panel gets a finger pointing at empty play
+   area while the actual input sits elsewhere on screen. Tag your discrete-input container so the shared cue can
+   find it, or explicitly opt out (a `window.__kdmNoArcadeDemo`-style flag) if the game already shows its own
+   cue. A pure canvas-tap/drag game (the canvas IS the input) is fine as-is.
 3. **Visual READY confirmation.** When input matches the target, pulse the action button green (`.koc-ready`
    → `kocReady` keyframes) so "you've got it, now commit" is obvious before the click. Corollary (auto-injected
    by `normalize-games.mjs` as `kdm-cta-emphasis`): the submit button is *de-emphasised* until it has

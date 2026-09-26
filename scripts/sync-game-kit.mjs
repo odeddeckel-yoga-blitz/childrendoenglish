@@ -16,6 +16,9 @@ const MAP = {
   'test/realinput.spec.mjs': 'game-kit/test/realinput.spec.mjs',
   'GENERATION.md': 'game-kit/GENERATION.md',
   'PATTERNS.md': 'plans/game-kit-patterns.md',
+  // Growth-infra syncable code (env-configured per site — see kit infra/seo/README.md).
+  'infra/seo/optimizer.py': 'tools/seo/optimizer.py',
+  'infra/seo/push-index.py': 'tools/seo/push-index.py',
 };
 
 const hash = (p) => createHash('sha256').update(readFileSync(p)).digest('hex').slice(0, 12);

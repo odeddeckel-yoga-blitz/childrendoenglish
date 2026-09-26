@@ -12,7 +12,8 @@ from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 
-SITE = 'https://childrendoenglish.com/'
+SITE = os.environ.get('GSC_SITE', 'https://childrendoenglish.com/')       # per-site: set in env
+SITEMAP = os.environ.get('GSC_SITEMAP', SITE.rstrip('/') + '/sitemap.xml')
 
 cred_path = os.path.expanduser('~/.config/searchconsole/credentials.json')
 d = json.load(open(cred_path))
@@ -26,7 +27,7 @@ except Exception as e:
     sys.exit(2)
 
 wm = build('webmasters', 'v3', credentials=creds)
-wm.sitemaps().submit(siteUrl=SITE, feedpath=SITE + 'sitemap.xml').execute()
+wm.sitemaps().submit(siteUrl=SITE, feedpath=SITEMAP).execute()
 print('sitemap resubmitted')
 
 idx = build('indexing', 'v3', credentials=creds)

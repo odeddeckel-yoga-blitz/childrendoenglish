@@ -31,9 +31,20 @@ from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 
-SITE = 'https://childrendoenglish.com/'
+# --- PER-SITE CONFIG (env-driven so this file syncs byte-identical across sites) ---
+# Set these in the consumer's tools/seo/ wrapper or shell env. Defaults are CDE's.
+#   GSC_SITE   full property URL, trailing slash   SEO_OVERRIDES  path to title-overrides JSON
+#   GSC_SITEMAP  sitemap URL                        SEO_BRAND      brand suffix for drafted titles
+#   SEO_TEMPLATE_REWRITE_DATE  YYYY-MM-DD of the last site-wide title-template change (or '')
+#   SEO_RTL_TWIN=1  enable the ELL/RTL "Hebrew-in-title" (IL%) heuristic (CDE-only; off elsewhere)
+# Sections 1-7 are site-agnostic. The IL%/RTL heuristic, the /vocabulary/ link-advisor, and the
+# drafted-proposal wording are ELL-shaped: they no-op or read oddly off CDE — adapt per site.
+SITE = os.environ.get('GSC_SITE', 'https://childrendoenglish.com/')
+SITEMAP = os.environ.get('GSC_SITEMAP', SITE.rstrip('/') + '/sitemap.xml')
+BRAND = os.environ.get('SEO_BRAND', 'Children Do English')
+RTL_TWIN = os.environ.get('SEO_RTL_TWIN', '1') == '1'
 MIN_IMP_PAGE, MIN_IMP_QUERY = 20, 10
-TEMPLATE_REWRITE_DATE = '2026-09-26'  # site-wide "Meaning for Kids" title change
+TEMPLATE_REWRITE_DATE = os.environ.get('SEO_TEMPLATE_REWRITE_DATE', '2026-09-26')
 
 def expected_ctr(pos):
     for limit, ctr in [(1.5, 0.28), (2.5, 0.15), (3.5, 0.10), (5, 0.07), (7, 0.045), (10, 0.03), (15, 0.015), (20, 0.008)]:
@@ -105,8 +116,9 @@ for r in pages:
     mob_pen = ''
     if 'MOBILE' in dv and 'DESKTOP' in dv and dv['MOBILE'][0] - dv['DESKTOP'][0] >= 3:
         mob_pen = f"  📱 mobile pos {dv['MOBILE'][0]:.0f} vs desktop {dv['DESKTOP'][0]:.0f}"
-    heb = '  🇮🇱 Hebrew-title candidate' if ilpct >= 40 else ''
-    scored.append((imp * gap, f"  {p[:48]:48} pos {pos:4.1f}  {imp:4.0f} imp  {clk:2.0f} clk  IL {ilpct:2.0f}%{heb}{mob_pen}"))
+    heb = ('  🇮🇱 Hebrew-title candidate' if ilpct >= 40 else '') if RTL_TWIN else ''
+    il_seg = f"  IL {ilpct:2.0f}%" if RTL_TWIN else ''
+    scored.append((imp * gap, f"  {p[:48]:48} pos {pos:4.1f}  {imp:4.0f} imp  {clk:2.0f} clk{il_seg}{heb}{mob_pen}"))
 scored.sort(reverse=True)
 print(f"— 1. CTR-opportunity pages (title/description territory, pos ≤10, ≥{MIN_IMP_PAGE} imp):")
 print('\n'.join(s for _, s in scored[:top]) or '  none')
@@ -163,7 +175,7 @@ def verdict(label, page_filter, added):
           f"pos {pre[2]:.1f} → {post[2]:.1f}  ({'✅ improved' if post[1]/max(1,post[0]) > pre[1]/max(1,pre[0]) else '➖ not yet'})")
 
 verdict('site-wide title template', None, TEMPLATE_REWRITE_DATE)
-overrides_path = os.path.join(os.path.dirname(__file__), '..', '..', 'scripts', 'seo-title-overrides.json')
+overrides_path = os.environ.get('SEO_OVERRIDES', os.path.join(os.path.dirname(__file__), '..', '..', 'scripts', 'seo-title-overrides.json'))
 for pth, o in json.load(open(overrides_path)).items():
     if o.get('added'):
         verdict(pth, [{'dimension': 'page', 'expression': SITE.rstrip('/') + pth}], o['added'])
@@ -198,7 +210,7 @@ else:
 # 7 — zero-impression audit
 print('\n— 7. Zero-impression audit (sitemap vs 90d of GSC):')
 import re as _re
-sm_path = os.path.join(os.path.dirname(__file__), '..', '..', 'dist', 'sitemap.xml')
+sm_path = os.environ.get('SEO_SITEMAP_FILE', os.path.join(os.path.dirname(__file__), '..', '..', 'dist', 'sitemap.xml'))
 if not os.path.exists(sm_path):
     print('  dist/sitemap.xml not found — run a build first')
 else:
@@ -226,8 +238,10 @@ for _, line in scored[:5]:
     best = max(qs, key=lambda r: r['impressions'])['keys'][0]
     wordish = p.rstrip('/').split('/')[-1].replace('-', ' ').title()
     proposals[p] = {
-        'title': f"{wordish} — {best.title()} (Picture, Audio & Hebrew) | Children Do English",
-        'description': f"{best.capitalize()}? Kid-friendly answer with picture, audio pronunciation, example sentence and Hebrew translation. Free for kids.",
+        # Generic draft wording — the owner reviews before merging; adapt the phrasing to the
+        # site's content type (CDE: picture/audio/Hebrew; a games site: "free … game", etc.).
+        'title': f"{wordish} — {best.title()} | {BRAND}",
+        'description': f"{best.capitalize()}? A free, kid-friendly page — no ads, no sign-up, works in any browser.",
         'based_on_queries': [r['keys'][0] for r in qs[:3]],
         'added': end,
     }
