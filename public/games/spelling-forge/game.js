@@ -346,6 +346,17 @@ function forgeWrong(){
     say(S.word.en);
   }, RM?120:820);
 }
+
+/* play-depth beacon (cde_learn channel) — same guards as land-beacon.js:
+   automation (navigator.webdriver) and owner devices (cde_internal) never count */
+function learnBeacon(ev){
+  try{
+    if(navigator.webdriver) return;
+    if(localStorage.getItem('cde_internal')==='1') return;
+    if(navigator.sendBeacon) navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:ev,i:'spelling-forge'}]}));
+  }catch(e){}
+}
+
 function nextWord(){
   if(S.screen!=='play') return;
   S.wordIdx++;
@@ -353,6 +364,7 @@ function nextWord(){
     S.wordIdx=0; S.level++;
     if(S.level>MAXLV){ winGame(); return; }
     toast('⬆️ LEVEL '+S.level+(S.level>=7?' — 🎧 listen-only!':''));
+    learnBeacon('g_lvl');
     chord(659);
   }
   buildRound();
@@ -378,6 +390,7 @@ function winGame(){
   chord(659); setTimeout(()=>chord(784),220);
   try{ const r=$('winTitle').getBoundingClientRect(); FX.burst(r.left+r.width/2,r.bottom,40,'#fbbf24',8,1.2); }catch(e){}
   track('game_complete',{score:S.score,perfect:S.perfect});
+  learnBeacon('g_cmp');
 }
 
 /* ---------- wiring ---------- */

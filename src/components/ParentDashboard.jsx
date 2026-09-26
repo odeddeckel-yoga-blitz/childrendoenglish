@@ -7,7 +7,6 @@ import { t } from '../utils/i18n';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
-import ParentEmailCapture from './ParentEmailCapture';
 
 export default function ParentDashboard({ players = [], lang = 'en', onUpdatePlayer, onBack }) {
   const playerStats = useMemo(
@@ -24,7 +23,6 @@ export default function ParentDashboard({ players = [], lang = 'en', onUpdatePla
     const next = [...current].sort();
     onUpdatePlayer?.(player.id, { knownLetters: next.length ? next : null });
   };
-  const showEmailCapture = useMemo(() => !localStorage.getItem('childrendoenglish-parent-email-prompted'), []);
   const notifSupported = isNotificationSupported();
 
   const handleToggleNotif = async () => {
@@ -198,10 +196,6 @@ export default function ParentDashboard({ players = [], lang = 'en', onUpdatePla
         </button>
       )}
 
-      {/* Parent email capture — shown once until submitted or skipped */}
-      {showEmailCapture && (
-        <ParentEmailCapture lang={lang} />
-      )}
     </div>
   );
 }

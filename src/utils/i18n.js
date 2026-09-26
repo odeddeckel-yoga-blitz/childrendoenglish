@@ -188,9 +188,6 @@ const translations = {
     demoWrongSuffix: "! You'll get the hang of it.",
 
     // Parent email
-    parentEmailTitle: 'Parent Email (Optional)',
-    parentEmailDesc: 'Get progress reports and learning tips. We never share your email.',
-    parentEmailPlaceholder: 'parent@email.com',
     skipStep: 'Skip this step',
 
     // Data export/import
@@ -419,7 +416,7 @@ const translations = {
     faq4Q: 'Is there Hebrew support?',
     faq4A: 'Yes! Full Hebrew interface and translations for every word.',
     faq5Q: 'How many words does it include?',
-    faq5A: 'Over 340 words across 13 categories, organized into 3 difficulty levels.',
+    faq5A: '480+ words across 13 categories, organized into 3 difficulty levels.',
     faq6Q: 'Can multiple kids use the app?',
     faq6A: 'Yes! The app supports multiple player profiles so siblings can each track their own progress independently.',
     faq7Q: 'How does it teach vocabulary?',

@@ -233,6 +233,8 @@ function buildCategoryPage(slug, displayName, words) {
 
     <p style="margin-bottom:1.5rem"><a href="/vocabulary/${slug}/hebrew/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">View ${escapeHtml(displayName)} in Hebrew and English &rarr;</a> &middot; <a href="/printable-flashcards/${slug}/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">Printable ${escapeHtml(displayName)} flashcards &rarr;</a></p>
 
+    <p style="margin-bottom:1.5rem;font-size:0.9rem;color:#64748b">Browse by age: <a href="/vocabulary/ages-6-8/" style="color:#2563eb;text-decoration:none">Ages 6-8</a> &middot; <a href="/vocabulary/ages-9-10/" style="color:#2563eb;text-decoration:none">Ages 9-10</a> &middot; <a href="/vocabulary/ages-11-12/" style="color:#2563eb;text-decoration:none">Ages 11-12</a></p>
+
     <div class="categories">
       <h2>Explore More Categories</h2>
       <div class="cat-links">
@@ -857,7 +859,7 @@ const HREFLANG_HE = ''; // Only add he hreflang on pages with Hebrew equivalents
 function buildHebrewLandingPage() {
   const url = `${SITE}/he/`;
   const title = 'לימוד אנגלית לילדים בחינם | Children Do English - אוצר מילים, חידונים ומשחקים';
-  const description = 'אפליקציה חינמית ללימוד אנגלית לילדים בגילאי 6-12. למעלה מ-340 מילים באנגלית עם תמונות, הגייה, משפטים ותרגום לעברית. ללא פרסומות, ללא רישום.';
+  const description = 'אפליקציה חינמית ללימוד אנגלית לילדים בגילאי 6-12. למעלה מ-480 מילים באנגלית עם תמונות, הגייה, משפטים ותרגום לעברית. ללא פרסומות, ללא רישום.';
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -920,7 +922,7 @@ function buildHebrewLandingPage() {
         name: 'כמה מילים יש באפליקציה?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'האפליקציה כוללת למעלה מ-340 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.',
+          text: 'האפליקציה כוללת למעלה מ-480 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.',
         },
       },
       {
@@ -1206,7 +1208,7 @@ function buildHebrewLandingPage() {
         </div>
         <div class="faq-item">
           <div class="faq-q">כמה מילים יש באפליקציה?</div>
-          <div class="faq-a">האפליקציה כוללת למעלה מ-340 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.</div>
+          <div class="faq-a">האפליקציה כוללת למעלה מ-480 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.</div>
         </div>
         <div class="faq-item">
           <div class="faq-q">האם יש תמיכה בעברית?</div>
@@ -2000,6 +2002,7 @@ const GUIDES = [
   <li>Keep sessions short (5 minutes max)</li>
   <li>Celebrate every small win to build confidence</li>
 </ul>
+<p>See the full <a href="/vocabulary/ages-6-8/">list of beginner words for ages 6-8</a>.</p>
 
 <h3>Ages 8-10 (Intermediate)</h3>
 <ul>
@@ -2307,7 +2310,7 @@ const GUIDES = [
   <li><strong>Category Race</strong> &mdash; Spread cards from 3 categories on a table. Call out a category and race to grab all the matching cards.</li>
   <li><strong>Spelling Bee</strong> &mdash; One player shows a picture card. The other must say the word and spell it correctly.</li>
 </ul>
-<p>Printable games are especially useful for younger kids (ages 6-8) who benefit from tactile, hands-on practice.</p>`,
+<p>Printable games are especially useful for younger kids (<a href="/vocabulary/ages-6-8/">ages 6-8</a>) who benefit from tactile, hands-on practice.</p>`,
       },
       {
         h2: 'The Best Free Vocabulary Game App for Kids',

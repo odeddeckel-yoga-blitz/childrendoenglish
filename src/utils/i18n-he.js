@@ -186,9 +186,6 @@ export default {
   demoWrongSuffix: '! תתרגלו בקרוב.',
 
   // Parent email
-  parentEmailTitle: 'אימייל הורה (אופציונלי)',
-  parentEmailDesc: 'קבלו דוחות התקדמות וטיפים ללמידה. לעולם לא נשתף את האימייל שלכם.',
-  parentEmailPlaceholder: 'parent@email.com',
   skipStep: 'דלגו על שלב זה',
 
   // Data export/import
@@ -389,7 +386,7 @@ export default {
 
   // Features
   featureLearnTitle: 'למדו מילים',
-  featureLearnDesc: 'גלו מעל 340 מילים עם תמונות, שמע ותרגומים',
+  featureLearnDesc: 'גלו מעל 480 מילים עם תמונות, שמע ותרגומים',
   featureFlashcardsTitle: 'כרטיסיות',
   featureFlashcardsDesc: 'החליקו כרטיסים עם חזרה מרווחת',
   featureQuizTitle: 'חידונים מהנים',
@@ -417,7 +414,7 @@ export default {
   faq4Q: 'יש תמיכה בעברית?',
   faq4A: 'כן! ממשק עברית מלא ותרגומים לכל מילה.',
   faq5Q: 'כמה מילים יש?',
-  faq5A: 'מעל 340 מילים ב-13 קטגוריות, מסודרות ב-3 רמות קושי.',
+  faq5A: 'מעל 480 מילים ב-13 קטגוריות, מסודרות ב-3 רמות קושי.',
   faq6Q: 'האם כמה ילדים יכולים להשתמש באפליקציה?',
   faq6A: 'כן! האפליקציה תומכת בפרופילים מרובים כך שאחים יכולים לעקוב אחרי ההתקדמות שלהם בנפרד.',
   faq7Q: 'איך האפליקציה מלמדת אוצר מילים?',

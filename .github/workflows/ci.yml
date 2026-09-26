@@ -30,6 +30,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Game-kit drift check
+        run: node scripts/sync-game-kit.mjs --check
+
       - name: Test
         run: npx vitest run
 

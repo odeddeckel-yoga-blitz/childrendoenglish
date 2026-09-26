@@ -1,4 +1,4 @@
-// 342 curated words across 13 categories, 3 difficulty levels
+// 481 curated words across 13 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===

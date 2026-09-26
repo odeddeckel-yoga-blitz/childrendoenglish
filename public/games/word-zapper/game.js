@@ -269,12 +269,24 @@ cv.addEventListener('pointerdown',e=>{
   tap(e.clientX-r.left,e.clientY-r.top);
 });
 
+
+/* play-depth beacon (cde_learn channel) — same guards as land-beacon.js:
+   automation (navigator.webdriver) and owner devices (cde_internal) never count */
+function learnBeacon(ev){
+  try{
+    if(navigator.webdriver) return;
+    if(localStorage.getItem('cde_internal')==='1') return;
+    if(navigator.sendBeacon) navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:ev,i:'word-zapper'}]}));
+  }catch(e){}
+}
+
 /* two-way adaptive: 4-streak of fast correct zaps → up-tier */
 function tierUp(){
   S.tier++;
   S.speedMul=Math.min(2.6,S.speedMul*1.12);
   S.spawnInt=Math.max(1.3,S.spawnInt*0.92);
   toast('⚡ SPEED UP — LV '+S.tier);
+  learnBeacon('g_lvl');
   chord(659); shakeIt(5); updateHUD();
 }
 
@@ -421,6 +433,7 @@ function start(){
 }
 function gameOver(){
   S.playing=false; S.target=null;
+  learnBeacon('g_cmp');
   try{ if('speechSynthesis' in window) speechSynthesis.cancel(); }catch(e){}
   const isBest=S.score>0&&S.score>S.runStartBest;
   const c=$('overCard');

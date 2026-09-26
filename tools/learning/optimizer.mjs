@@ -104,3 +104,33 @@ const letters = rows.filter(r => r.ev === 'letter').sort((a, b) => b.n - a.n);
 if (letters.length > 0) {
   console.log('\n— letter-path practice taps: ' + letters.map(r => `${r.item.toUpperCase()}:${r.n}`).join(' '));
 }
+
+// --- games: play depth (KDM parity — levelups ÷ opens per game) ---
+// Opens come from cde_land page pings (/games/<id>), level-ups and completed
+// runs from the g_lvl/g_cmp learn events the games fire (webdriver-excluded).
+// depth ≈ 0 on real opens = the game loses visitors → rebuild/fix candidate.
+const gameEv = {};
+for (const r of rows) {
+  if (r.ev !== 'g_lvl' && r.ev !== 'g_cmp') continue;
+  const g = (gameEv[r.item] = gameEv[r.item] || { lvl: 0, cmp: 0 });
+  g[r.ev === 'g_lvl' ? 'lvl' : 'cmp'] += r.n;
+}
+const landRows = await q`SELECT page, sum(n)::int AS n FROM cde_land
+  WHERE day >= CURRENT_DATE - ${days}::int AND page LIKE '/games/%' GROUP BY page`;
+const opens = {};
+for (const r of landRows) {
+  const id = r.page.replace(/^\/games\//, '').replace(/\/$/, '');
+  if (id) opens[id] = (opens[id] || 0) + r.n;
+}
+const gameIds = [...new Set([...Object.keys(opens), ...Object.keys(gameEv)])].sort();
+if (gameIds.length > 0) {
+  console.log('\n— games play depth (level-ups ÷ opens; completes = finished runs):');
+  for (const id of gameIds) {
+    const o = opens[id] || 0;
+    const { lvl = 0, cmp = 0 } = gameEv[id] || {};
+    const depth = o ? (lvl / o).toFixed(2) : '—';
+    const flag = o >= 10 && lvl / o < 0.2 ? '  ⚠ ranks-but-doesn’t-engage → fix/rebuild candidate' : '';
+    console.log(`  ${id.padEnd(20)} opens ${String(o).padStart(4)}  levelups ${String(lvl).padStart(4)}  completes ${String(cmp).padStart(3)}  depth ${depth}${flag}`);
+  }
+  console.log('  (note: beacons ship 2026-09-26 — opens predate levelups until the deploy ages in)');
+}

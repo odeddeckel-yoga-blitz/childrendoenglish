@@ -310,6 +310,17 @@ function slipped(f){
 }
 
 /* ---------------- levels ---------------- */
+
+/* play-depth beacon (cde_learn channel) — same guards as land-beacon.js:
+   automation (navigator.webdriver) and owner devices (cde_internal) never count */
+function learnBeacon(ev){
+  try{
+    if(navigator.webdriver) return;
+    if(localStorage.getItem('cde_internal')==='1') return;
+    if(navigator.sendBeacon) navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:ev,i:'category-conveyor'}]}));
+  }catch(e){}
+}
+
 function levelUp(){
   if(!S.playing) return;
   S.sortedInLevel = 0; S.fastStreak = 0;
@@ -322,6 +333,7 @@ function levelUp(){
     S.items.length = 0; S.spawnT = 0.6;                      // sweep the belt — new bins
     renderBins(); preloadCats(bins());
     toast('⚡ LV ' + S.level + ' — ' + (bins().length) + ' BINS!');
+    learnBeacon('g_lvl');
   } else {
     toast('⚡ FASTER BELT!');
   }
@@ -330,6 +342,7 @@ function levelUp(){
 
 function gameOver(){
   S.playing = false;
+  learnBeacon('g_cmp');
   try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
   const isBest = S.score > 0 && S.score > S.runStartBest;
   $('overCard').innerHTML =
