@@ -175,6 +175,59 @@ const ILLUSTRATIONS = {
     <path d="M 380 250 l 10 22 22 10 -22 10 -10 22 -10 -22 -22 -10 22 -10 Z" fill="#475569"/>
   </svg>`,
 
+  ketchup: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF2F2')}
+    <!-- squeeze bottle -->
+    <path d="M 196 170 L 316 170 L 306 430 Q 256 448 206 430 Z" fill="#DC2626"/>
+    <path d="M 206 170 L 306 170 L 306 200 L 206 200 Z" fill="#B91C1C"/>
+    <!-- neck + cap -->
+    <rect x="226" y="120" width="60" height="52" rx="8" fill="#DC2626"/>
+    <rect x="236" y="84" width="40" height="40" rx="8" fill="#F8FAFC"/>
+    <rect x="248" y="64" width="16" height="24" rx="6" fill="#F8FAFC"/>
+    <!-- label with tomato (no text) -->
+    <rect x="216" y="240" width="80" height="120" rx="16" fill="#FFF7ED"/>
+    <circle cx="256" cy="300" r="34" fill="#EF4444"/>
+    <path d="M 256 266 Q 246 252 232 254 Q 244 262 248 270 Z" fill="#16A34A"/>
+    <path d="M 256 266 Q 266 252 280 254 Q 268 262 264 270 Z" fill="#16A34A"/>
+    <!-- ketchup dollop beside bottle -->
+    <path d="M 356 404 Q 366 376 384 392 Q 402 376 410 402 Q 420 428 384 430 Q 350 430 356 404 Z" fill="#DC2626"/>
+  </svg>`,
+
+  knight: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#EFF6FF')}
+    <!-- plume -->
+    <path d="M 256 52 Q 300 60 296 104 L 256 96 Z" fill="#DC2626"/>
+    <!-- helmet -->
+    <path d="M 200 150 Q 200 88 256 88 Q 312 88 312 150 L 312 176 L 200 176 Z" fill="#94A3B8"/>
+    <rect x="200" y="140" width="112" height="14" rx="7" fill="#475569"/>
+    <!-- visor slit + face shadow -->
+    <rect x="216" y="158" width="80" height="10" rx="5" fill="#1E293B"/>
+    <!-- torso armor -->
+    <path d="M 196 200 Q 256 182 316 200 L 308 340 L 204 340 Z" fill="#CBD5E1"/>
+    <path d="M 196 200 Q 256 182 316 200 L 314 236 L 198 236 Z" fill="#94A3B8"/>
+    <!-- gold cross emblem (knight, not robot) -->
+    <rect x="246" y="248" width="20" height="64" rx="6" fill="#FCD34D"/>
+    <rect x="226" y="266" width="60" height="20" rx="6" fill="#FCD34D"/>
+    <!-- belt -->
+    <rect x="204" y="330" width="104" height="18" rx="9" fill="#475569"/>
+    <!-- arms -->
+    <rect x="164" y="204" width="34" height="112" rx="17" fill="#94A3B8"/>
+    <rect x="314" y="204" width="34" height="112" rx="17" fill="#94A3B8"/>
+    <!-- legs -->
+    <rect x="214" y="348" width="34" height="104" rx="12" fill="#94A3B8"/>
+    <rect x="264" y="348" width="34" height="104" rx="12" fill="#94A3B8"/>
+    <rect x="208" y="440" width="46" height="20" rx="9" fill="#475569"/>
+    <rect x="258" y="440" width="46" height="20" rx="9" fill="#475569"/>
+    <!-- shield on left arm -->
+    <path d="M 128 236 Q 180 222 232 236 L 232 300 Q 180 344 128 300 Z" fill="#2563EB"/>
+    <path d="M 148 248 Q 180 240 212 248 L 212 292 Q 180 320 148 292 Z" fill="#FCD34D"/>
+    <!-- sword in right hand -->
+    <rect x="352" y="104" width="16" height="176" rx="6" fill="#CBD5E1" stroke="#64748B" stroke-width="4"/>
+    <path d="M 350 104 L 360 74 L 370 104 Z" fill="#CBD5E1" stroke="#64748B" stroke-width="4"/>
+    <rect x="332" y="276" width="56" height="14" rx="7" fill="#B45309"/>
+    <rect x="352" y="288" width="16" height="30" rx="8" fill="#92400E"/>
+  </svg>`,
+
   map: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FEF9C3')}
     <path d="M 96 100 Q 88 92 100 86 L 412 86 Q 424 92 416 100 L 416 412 Q 424 420 412 426 L 100 426 Q 88 420 96 412 Z" fill="#FDE68A" stroke="#B45309" stroke-width="8"/>

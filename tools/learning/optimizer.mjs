@@ -25,6 +25,14 @@
  *   word's difficulty/level placement. 4. Wait ~2 weeks post-fix before
  *   re-judging a word (data-age guardrail below prints per-word freshness
  *   caveats when the whole window is younger than a week).
+ *
+ * IMPORTANT — this optimizer is REACTIVE (needs quiz volume before a bad
+ * asset surfaces as a wrong-rate). Content-level checks are separate,
+ * PROACTIVE gates that must run at generation time, because a word with no
+ * traffic yet is invisible here (knight.mp3 shipped broken 2026-09-22; zero
+ * quiz data meant nothing flagged it until a parent did):
+ *   - audio: scripts/voice-audit.py after EVERY generate-word-audio.sh batch
+ *   - images: word-image-improver metrics (esp. sole-answer) at add time
  */
 import { neon } from '@neondatabase/serverless';
 import { WORDS } from '../../src/data/words.js';

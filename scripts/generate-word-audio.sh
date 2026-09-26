@@ -44,3 +44,13 @@ for f in "$WORK"/wav/*.wav; do
   ffmpeg -v error -y -i "$f" -ac 1 -ar 22050 -q:a 7 "public/audio/$base.mp3"
 done
 echo "done: $(ls public/audio/*.mp3 | wc -l | tr -d ' ') mp3s, $(du -sh public/audio | cut -f1)"
+
+# MANDATORY POST-STEP — audit what was just generated (knight.mp3 shipped broken
+# 2026-09-22 because batch audio skipped this): flag words whisper mishears, then
+# fix flagged ones per scripts/word-voice-improver.py (lessac/ryan rescue chain).
+cat <<'REMINDER'
+NEXT: audit the new audio before committing —
+  python3 -m venv /tmp/voice-venv && /tmp/voice-venv/bin/pip install faster-whisper   # once
+  /tmp/voice-venv/bin/python scripts/voice-audit.py <new words...>
+Flagged words → re-render per scripts/word-voice-improver.py (amy→lessac→ryan chain).
+REMINDER
