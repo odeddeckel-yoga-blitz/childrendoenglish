@@ -721,7 +721,7 @@ export default function App() {
           <button onClick={() => setStorageFull(false)} className="underline font-semibold">&times;</button>
         </div>
       )}
-      <main id="main-content" ref={mainRef} tabIndex={-1} className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg md:max-w-2xl'} mx-auto px-4 py-6 outline-none`}>
+      <main id="main-content" ref={mainRef} tabIndex={-1} className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg md:max-w-2xl'} mx-auto px-4 py-6 outline-hidden`}>
         <Suspense fallback={<SuspenseFallback lang={lang} />}>
           <ErrorBoundary key={gameState} onReset={resetToMenu} lang={lang}>
             {renderState()}

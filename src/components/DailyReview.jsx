@@ -109,7 +109,7 @@ export default function DailyReview({ words, stats, lang = 'en', canRead: _canRe
     return (
       <div className="animate-fade-in space-y-6 text-center">
         <div className="space-y-2">
-          <div className="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto rounded-full bg-linear-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
             <Trophy className="w-8 h-8 text-white" />
           </div>
           <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100">{t('reviewComplete', lang)}</h2>
@@ -120,7 +120,7 @@ export default function DailyReview({ words, stats, lang = 'en', canRead: _canRe
           <p className="text-sm text-slate-500">{t('wordsReviewed', lang)}</p>
           <div className="w-full h-3 bg-slate-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-500"
+              className="h-full bg-linear-to-r from-emerald-400 to-emerald-600 rounded-full transition-all duration-500"
               style={{ width: `${percentage}%` }}
             />
           </div>
@@ -132,7 +132,7 @@ export default function DailyReview({ words, stats, lang = 'en', canRead: _canRe
             const word = reviewWords.current[i];
             return (
               <div key={r.wordId} className="flex items-center gap-3 py-1.5">
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${r.correct ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}`}>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${r.correct ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}`}>
                   {r.correct ? <Check className="w-3.5 h-3.5" /> : <XIcon className="w-3.5 h-3.5" />}
                 </div>
                 <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{word?.word}</span>
@@ -143,7 +143,7 @@ export default function DailyReview({ words, stats, lang = 'en', canRead: _canRe
 
         <button
           onClick={onBack}
-          className="w-full py-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold hover:shadow-lg active:scale-[0.98] transition-all"
+          className="w-full py-3 rounded-xl bg-linear-to-r from-blue-500 to-blue-600 text-white font-semibold hover:shadow-lg active:scale-[0.98] transition-all"
         >
           {t('backToMenuBtn', lang)}
         </button>
@@ -175,7 +175,7 @@ export default function DailyReview({ words, stats, lang = 'en', canRead: _canRe
       {/* Progress bar */}
       <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={currentIndex} aria-valuemin={0} aria-valuemax={total} aria-label={t('quizProgress', lang)}>
         <div
-          className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-300"
+          className="h-full bg-linear-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-300"
           style={{ width: `${(currentIndex / total) * 100}%` }}
         />
       </div>

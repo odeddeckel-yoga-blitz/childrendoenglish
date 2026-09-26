@@ -78,7 +78,7 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
           <>
             <button
               onClick={() => speakWord(quiz.currentWord.word)}
-              className="mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-amber-400 to-amber-600
+              className="mx-auto w-24 h-24 rounded-full bg-linear-to-br from-amber-400 to-amber-600
                          flex items-center justify-center shadow-lg hover:shadow-xl
                          active:scale-95 transition-all"
               aria-label={t('hearAgain', lang)}

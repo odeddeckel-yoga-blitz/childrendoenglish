@@ -256,12 +256,12 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
           {t('appPreviewTitle', lang)}
         </h2>
         <div className="mx-auto w-60">
-          <div className="rounded-[2rem] border-[3px] border-slate-800 dark:border-slate-600 overflow-hidden shadow-2xl">
+          <div className="rounded-4xl border-[3px] border-slate-800 dark:border-slate-600 overflow-hidden shadow-2xl">
             <div className="bg-blue-600 px-4 py-2 flex items-center justify-between">
               <span className="text-white text-xs font-bold">{t('appPreviewQuestion', lang)}</span>
               <span className="text-white/70 text-xs">✓ 2/2</span>
             </div>
-            <div className="p-4 space-y-3 bg-gradient-to-b from-blue-50 to-white dark:from-slate-800 dark:to-slate-900">
+            <div className="p-4 space-y-3 bg-linear-to-b from-blue-50 to-white dark:from-slate-800 dark:to-slate-900">
               <p className="text-center text-sm font-bold text-slate-700 dark:text-slate-200">{t('appPreviewPrompt', lang)}</p>
               <img src="/images/cat.webp" alt="" className="w-24 h-24 mx-auto rounded-2xl object-cover shadow-md" loading="lazy" />
               <div className="grid grid-cols-2 gap-2">

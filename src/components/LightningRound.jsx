@@ -234,7 +234,7 @@ export default function LightningRound({ words, mode, level, knownLetters = null
           {ttsOk ? (
             <button
               onClick={() => speakWord(currentWord.word)}
-              className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-amber-600
+              className="mx-auto w-20 h-20 rounded-full bg-linear-to-br from-amber-400 to-amber-600
                          flex items-center justify-center shadow-lg active:scale-95 transition-transform"
               aria-label={t('hearAgain', lang)}
             >

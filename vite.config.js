@@ -1,11 +1,13 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import asyncCss from './vite-plugin-async-css.js';
 
 export default defineConfig({
   plugins: [
     react(),
+    tailwindcss(),
     asyncCss(),
     VitePWA({
       registerType: 'prompt',
@@ -95,9 +97,12 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          icons: ['lucide-react'],
+        // Vite 8 (rolldown) replaced object-form manualChunks with codeSplitting
+        codeSplitting: {
+          groups: [
+            { name: 'icons', test: /node_modules[\\/]lucide-react[\\/]/ },
+            { name: 'vendor', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/ },
+          ],
         },
       },
     },

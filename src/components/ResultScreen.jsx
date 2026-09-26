@@ -83,7 +83,7 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
           <button
             onClick={onLightning}
             className="w-full py-3.5 px-4 rounded-xl font-bold text-amber-700 dark:text-amber-300
-                       bg-gradient-to-b from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/40
+                       bg-linear-to-b from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/40
                        border border-amber-300 dark:border-amber-700
                        hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
           >
@@ -116,7 +116,7 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
                     answer.correct ? 'bg-emerald-50' : 'bg-rose-50'
                   }`}
                 >
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
+                  <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 ${
                     answer.correct ? 'bg-emerald-500' : 'bg-rose-500'
                   }`}>
                     {answer.correct

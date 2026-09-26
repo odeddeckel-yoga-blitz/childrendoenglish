@@ -92,7 +92,7 @@ export default function ParentDashboard({ players = [], lang = 'en', onUpdatePla
                 </div>
                 <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all"
+                    className="h-full bg-linear-to-r from-blue-500 to-blue-600 rounded-full transition-all"
                     style={{ width: `${(wordsLearned / totalWords) * 100}%` }}
                   />
                 </div>
@@ -114,8 +114,8 @@ export default function ParentDashboard({ players = [], lang = 'en', onUpdatePla
                       {t('canReadLabel', lang)}
                       <span className="block font-normal text-[11px] text-slate-500">{t('canReadHint', lang)}</span>
                     </span>
-                    <span className={`w-10 h-6 rounded-full p-0.5 transition-colors flex-shrink-0 ${player.canRead ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`}>
-                      <span className={`block w-5 h-5 rounded-full bg-white shadow transition-transform ${player.canRead ? 'ltr:translate-x-4 rtl:-translate-x-4' : ''}`} />
+                    <span className={`w-10 h-6 rounded-full p-0.5 transition-colors shrink-0 ${player.canRead ? 'bg-emerald-500' : 'bg-slate-300 dark:bg-slate-600'}`}>
+                      <span className={`block w-5 h-5 rounded-full bg-white shadow-sm transition-transform ${player.canRead ? 'ltr:translate-x-4 rtl:-translate-x-4' : ''}`} />
                     </span>
                   </button>
 
@@ -129,7 +129,7 @@ export default function ParentDashboard({ players = [], lang = 'en', onUpdatePla
                       {t('knownLettersTitle', lang)}
                       <span className="block font-normal text-[11px] text-slate-500">{t('knownLettersShort', lang)}</span>
                     </span>
-                    <span className="text-blue-600 font-semibold flex-shrink-0" dir="ltr">
+                    <span className="text-blue-600 font-semibold shrink-0" dir="ltr">
                       {player.knownLetters?.length ? player.knownLetters.join(' ') : t('knownLettersAll', lang)} ▾
                     </span>
                   </button>
@@ -187,8 +187,8 @@ export default function ParentDashboard({ players = [], lang = 'en', onUpdatePla
                      hover:shadow-md active:scale-[0.98] transition-all text-start"
         >
           {notifEnabled
-            ? <Bell className="w-5 h-5 text-blue-600 flex-shrink-0" />
-            : <BellOff className="w-5 h-5 text-slate-400 flex-shrink-0" />
+            ? <Bell className="w-5 h-5 text-blue-600 shrink-0" />
+            : <BellOff className="w-5 h-5 text-slate-400 shrink-0" />
           }
           <span className="flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200">
             {notifEnabled ? t('disableReminders', lang) : t('enableReminders', lang)}

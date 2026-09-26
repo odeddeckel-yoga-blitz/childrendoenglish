@@ -115,7 +115,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
   return (
     <div className="animate-fade-in space-y-4">
       {/* Sticky header + search + pills */}
-      <div className="sticky top-0 z-10 bg-gradient-to-b from-slate-50 to-slate-50/95 backdrop-blur-sm pb-2 space-y-4">
+      <div className="sticky top-0 z-10 bg-linear-to-b from-slate-50 to-slate-50/95 backdrop-blur-xs pb-2 space-y-4">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -153,7 +153,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
             onChange={e => setSearch(e.target.value)}
             placeholder={t('searchPlaceholder', lang)}
             className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/70 border border-slate-200
-                       text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2
+                       text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-hidden focus:ring-2
                        focus:ring-blue-400 transition-all"
           />
         </div>
@@ -262,7 +262,7 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
 
           {/* Card */}
           <div className="glass rounded-2xl overflow-hidden">
-            <div className="aspect-[4/3] bg-slate-100 relative">
+            <div className="aspect-4/3 bg-slate-100 relative">
               {!imgLoaded && <div className="absolute inset-0 skeleton-pulse bg-slate-200" />}
               <img
                 src={getImageUrl(currentWord)}

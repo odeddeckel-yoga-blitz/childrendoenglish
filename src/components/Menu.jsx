@@ -79,8 +79,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           className={`w-full glass rounded-2xl p-4 flex items-center gap-4
                      hover:shadow-lg active:scale-[0.98] transition-all text-start${isNewUser ? ' ring-2 ring-emerald-400 ring-offset-2 bg-blue-50/50' : ''}`}
         >
-          <div className="relative flex-shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600
+          <div className="relative shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-blue-600
                             flex items-center justify-center">
               <Play className="w-6 h-6 text-white" />
             </div>
@@ -90,7 +90,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <p className="text-slate-500 text-sm">{t('playQuizDesc', lang)}</p>
           </div>
           {isNewUser && (
-            <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold flex-shrink-0">
+            <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold shrink-0">
               {t('startHere', lang)}
             </span>
           )}
@@ -102,8 +102,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
                      hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
-          <div className="flex-shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600
+          <div className="shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500 to-purple-600
                             flex items-center justify-center font-black text-white text-lg" aria-hidden="true">
               A<span className="text-purple-200">b</span>
             </div>
@@ -120,8 +120,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
                      hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
-          <div className="relative flex-shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600
+          <div className="relative shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600
                             flex items-center justify-center">
               <BookOpen className="w-6 h-6 text-white" />
             </div>
@@ -137,8 +137,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
                      hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
-          <div className="flex-shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600
+          <div className="shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-amber-500 to-amber-600
                             flex items-center justify-center">
               <Layers className="w-6 h-6 text-white" />
             </div>
@@ -162,14 +162,14 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
                 className="w-full glass rounded-2xl p-4 flex items-center gap-4 transition-all text-start
                            hover:shadow-lg active:scale-[0.98] border border-orange-200 bg-orange-50/50"
               >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-orange-500 to-orange-600">
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-linear-to-br from-orange-500 to-orange-600">
                   <RotateCcw className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
                   <p className="font-bold text-slate-800 dark:text-slate-100">{t('dailyReview', lang)}</p>
                   <p className="text-slate-500 text-sm">{t('dailyReviewDesc', lang)}</p>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-orange-500 text-white text-xs font-bold flex-shrink-0">
+                <span className="px-2.5 py-1 rounded-full bg-orange-500 text-white text-xs font-bold shrink-0">
                   {t('wordsDue', lang, { count: dueCount })}
                 </span>
               </button>
@@ -180,8 +180,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               className="w-full glass rounded-2xl p-4 flex items-center gap-4
                          hover:shadow-lg active:scale-[0.98] transition-all text-start"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600
-                              flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500 to-purple-600
+                              flex items-center justify-center shrink-0">
                 <ListChecks className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -195,8 +195,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               className="w-full glass rounded-2xl p-4 flex items-center gap-4
                          hover:shadow-lg active:scale-[0.98] transition-all text-start"
             >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600
-                              flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-xl bg-linear-to-br from-indigo-500 to-indigo-600
+                              flex items-center justify-center shrink-0">
                 <Map className="w-6 h-6 text-white" />
               </div>
               <div>
@@ -241,7 +241,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       {/* PWA install banner */}
       {showInstallBanner && (
         <div className="glass rounded-2xl p-4 flex items-center gap-3 border border-blue-200 bg-blue-50/50">
-          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
             <Download className="w-5 h-5 text-blue-600" />
           </div>
           <div className="flex-1 min-w-0">
@@ -267,7 +267,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           className="w-full glass rounded-2xl p-3.5 flex items-center gap-3
                      hover:shadow-md active:scale-[0.98] transition-all text-start"
         >
-          <ShieldCheck className="w-5 h-5 text-teal-600 flex-shrink-0" />
+          <ShieldCheck className="w-5 h-5 text-teal-600 shrink-0" />
           <span className="flex-1">
             <span className="block text-sm font-semibold text-slate-700 dark:text-slate-200">{t('parentDashboard', lang)}</span>
             <span className="block text-xs text-slate-500">{t('parentDashboardHint', lang)}</span>

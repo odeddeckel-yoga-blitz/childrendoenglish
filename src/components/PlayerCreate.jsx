@@ -43,7 +43,7 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
           maxLength={20}
           autoFocus
           className="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200
-                     text-lg text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2
+                     text-lg text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-hidden focus:ring-2
                      focus:ring-blue-400 transition-all"
           placeholder={t('playerNamePlaceholder', lang)}
         />
@@ -72,7 +72,7 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
       {/* Can read toggle */}
       <div className="glass rounded-2xl p-5">
         <label className="flex items-start gap-3 cursor-pointer">
-          <div className="relative flex-shrink-0 mt-0.5">
+          <div className="relative shrink-0 mt-0.5">
             <input
               type="checkbox"
               checked={canRead}
@@ -83,7 +83,7 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
               onClick={() => setCanRead(v => !v)}
               className={`w-11 h-6 rounded-full transition-colors ${canRead ? 'bg-blue-500' : 'bg-slate-300'}`}
             >
-              <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${canRead ? 'translate-x-5' : 'translate-x-0'}`} />
+              <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${canRead ? 'translate-x-5' : 'translate-x-0'}`} />
             </div>
           </div>
           <div className="space-y-0.5">

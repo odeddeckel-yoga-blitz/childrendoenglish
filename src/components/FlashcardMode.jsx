@@ -221,7 +221,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
                   {currentCard.category}
                 </span>
               </div>
-              <div className="p-4 text-center flex-shrink-0">
+              <div className="p-4 text-center shrink-0">
                 <p className="text-slate-400 text-sm">{t('tapToFlip', lang)}</p>
               </div>
             </div>

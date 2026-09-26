@@ -162,7 +162,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
               onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
               placeholder={words.length === 0 ? t('wordListPlaceholder', lang) : ''}
               className="w-full bg-transparent text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400
-                         focus:outline-none focus:ring-2 focus:ring-blue-400 rounded py-1 px-1"
+                         focus:outline-hidden focus:ring-2 focus:ring-blue-400 rounded py-1 px-1"
               autoComplete="off"
               role="combobox"
               aria-expanded={showSuggestions && suggestions.length > 0}
@@ -193,7 +193,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
                     <img
                       src={word.imageUrl}
                       alt=""
-                      className="w-8 h-8 rounded-lg object-cover flex-shrink-0"
+                      className="w-8 h-8 rounded-lg object-cover shrink-0"
                       loading="lazy"
                     />
                     <div className="flex-1 min-w-0">
@@ -202,7 +202,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
                         <span className="text-slate-400 ms-2">{word.hebrewTranslation}</span>
                       )}
                     </div>
-                    <span className="text-xs text-slate-400 flex-shrink-0">{word.category}</span>
+                    <span className="text-xs text-slate-400 shrink-0">{word.category}</span>
                   </li>
                 ))}
               </ul>
@@ -240,7 +240,7 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
                 className="px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-sm font-semibold
                            flex items-center gap-1.5"
               >
-                <img src={word.imageUrl} alt="" className="w-5 h-5 rounded object-cover" loading="lazy" />
+                <img src={word.imageUrl} alt="" className="w-5 h-5 rounded-sm object-cover" loading="lazy" />
                 {word.word}
               </span>
             ))}

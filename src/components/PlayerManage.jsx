@@ -118,7 +118,7 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
                     onChange={e => setEditName(e.target.value)}
                     maxLength={20}
                     className="flex-1 px-3 py-2 rounded-lg border border-slate-200 text-sm
-                               focus:outline-none focus:ring-2 focus:ring-blue-400"
+                               focus:outline-hidden focus:ring-2 focus:ring-blue-400"
                     autoFocus
                   />
                   <button onClick={() => saveEdit(player)} className="p-2 rounded-lg bg-emerald-100 text-emerald-600 hover:bg-emerald-200 transition-colors">
