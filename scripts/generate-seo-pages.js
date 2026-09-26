@@ -438,6 +438,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
       <div class="hero-def">${escapeHtml(word.definition)}</div>
       <div class="hero-ex">&ldquo;${escapeHtml(word.exampleSentence)}&rdquo;</div>
       <div class="hero-he">${escapeHtml(word.hebrewTranslation)}</div>
+      <p class="hero-cite" style="font-size:0.86rem;color:#64748b;max-width:34rem;margin:0.7rem auto 0">The English word &ldquo;${escapeHtml(word.word)}&rdquo; means: ${escapeHtml(word.definition)}. In Hebrew: ${escapeHtml(word.hebrewTranslation)}.</p>
       <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear ${escapeHtml(word.word)}">🔊 Hear &ldquo;${escapeHtml(word.word)}&rdquo;</button>
     </div>
 
