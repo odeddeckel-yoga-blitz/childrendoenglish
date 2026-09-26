@@ -16,7 +16,7 @@ export default function QuizHeader({ score, total, streak, arcadeScore, soundEna
           {streak >= 2 && (
             <span
               dir="ltr"
-              className="combo-pill px-2 py-0.5 rounded-full bg-gradient-to-b from-emerald-400 to-emerald-500 text-white font-black text-xs shadow-sm"
+              className="combo-pill px-2 py-0.5 rounded-full bg-linear-to-b from-emerald-400 to-emerald-500 text-white font-black text-xs shadow-xs"
               aria-label={t('comboLabel', lang, { count: streak })}
             >
               ×{streak}
@@ -53,7 +53,7 @@ export default function QuizHeader({ score, total, streak, arcadeScore, soundEna
 
       <div className="w-full h-2 bg-slate-200 rounded-full overflow-hidden" role="progressbar" aria-valuenow={currentIndex} aria-valuemin={0} aria-valuemax={total} aria-label={t('quizProgress', lang)}>
         <div
-          className={`h-full bg-gradient-to-r ${gradientColor} rounded-full transition-all duration-300`}
+          className={`h-full bg-linear-to-r ${gradientColor} rounded-full transition-all duration-300`}
           style={{ width: `${((currentIndex) / total) * 100}%` }}
         />
       </div>

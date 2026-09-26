@@ -75,7 +75,7 @@ export default function ModeSelect({ level, lang = 'en', canRead = true, onSelec
                          hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all"
               style={{ animationDelay: `${index * 80}ms` }}
             >
-              <div className={`w-14 h-14 rounded-xl ${mode.iconBg} flex items-center justify-center flex-shrink-0`}>
+              <div className={`w-14 h-14 rounded-xl ${mode.iconBg} flex items-center justify-center shrink-0`}>
                 <Icon className={`w-7 h-7 ${mode.iconColor}`} />
               </div>
               <div>

@@ -54,7 +54,7 @@ export default function AdminLogin({ onAuth }) {
             onChange={e => setPassword(e.target.value)}
             placeholder="Enter password"
             className="w-full px-4 py-3 rounded-xl bg-white/70 border border-slate-200
-                       text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2
+                       text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-hidden focus:ring-2
                        focus:ring-blue-400 transition-all"
             autoFocus
           />

@@ -40,12 +40,12 @@ export default function LearningPath({ stats, lang = 'en', onBack, onStartLesson
                   <div className="flex items-center gap-2">
                     <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{title}</p>
                     {status === 'completed' && (
-                      <span className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center flex-shrink-0">
+                      <span className="w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center shrink-0">
                         <Check className="w-3 h-3 text-white" />
                       </span>
                     )}
                     {isLocked && (
-                      <Lock className="w-4 h-4 text-slate-400 flex-shrink-0" />
+                      <Lock className="w-4 h-4 text-slate-400 shrink-0" />
                     )}
                   </div>
                   <p className="text-xs text-slate-500">{t(lesson.level, lang)}</p>

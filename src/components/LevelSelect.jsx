@@ -128,7 +128,7 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
                 active
                   ? `${colors.activeBg} ${colors.activeText} shadow-md`
                   : unlocked
-                    ? `${colors.bg} ${colors.text} hover:shadow-sm border ${colors.border}`
+                    ? `${colors.bg} ${colors.text} hover:shadow-xs border ${colors.border}`
                     : 'bg-slate-100 text-slate-400 cursor-not-allowed'
               }`}
             >
@@ -166,7 +166,7 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
                          hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all"
               style={{ animationDelay: `${index * 80}ms` }}
             >
-              <div className={`w-14 h-14 rounded-xl ${mode.iconBg} flex items-center justify-center flex-shrink-0`}>
+              <div className={`w-14 h-14 rounded-xl ${mode.iconBg} flex items-center justify-center shrink-0`}>
                 <Icon className={`w-7 h-7 ${mode.iconColor}`} />
               </div>
               <div className="flex-1">
@@ -174,7 +174,7 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
                 <p className="text-slate-500 text-sm">{t(mode.descKey, lang)}</p>
               </div>
               {mode.id === recommended && (
-                <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold flex-shrink-0">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold shrink-0">
                   {t('modeRecommended', lang)}
                 </span>
               )}

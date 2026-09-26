@@ -60,7 +60,7 @@ export default function ListenMatchQuiz({ words, lang = 'en', soundEnabled, onTo
         {ttsOk && (
           <button
             onClick={() => speakWord(quiz.currentWord.word)}
-            className="mx-auto w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600
+            className="mx-auto w-16 h-16 rounded-full bg-linear-to-br from-purple-400 to-purple-600
                        flex items-center justify-center shadow-lg hover:shadow-xl
                        active:scale-95 transition-all"
             aria-label={t('tapToHear', lang)}

@@ -129,7 +129,7 @@ export default function ImageReplacer({ word, password, onClose, onReplaced }) {
               onChange={e => { setQueries(e.target.value); setPage(0); }}
               rows={3}
               className="w-full px-3 py-2 rounded-xl bg-white/70 border border-slate-200
-                         text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-none focus:ring-2
+                         text-sm text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-hidden focus:ring-2
                          focus:ring-blue-400 transition-all resize-none font-mono"
               placeholder="e.g. tabby cat face portrait"
             />
