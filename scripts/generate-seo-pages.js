@@ -58,6 +58,7 @@ try {
   console.warn('No word-enrichments.js found, word pages will render without enrichments');
 }
 
+const TITLE_OVERRIDES = JSON.parse(readFileSync(new URL('./seo-title-overrides.json', import.meta.url), 'utf8'));
 const SITE = 'https://childrendoenglish.com';
 
 const CATEGORY_NAMES = {
@@ -247,9 +248,14 @@ function buildCategoryPage(slug, displayName, words) {
 
 function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
   const url = `${SITE}/vocabulary/${categorySlug}/${word.id}/`;
+  const path = `/vocabulary/${categorySlug}/${word.id}/`;
   const capitalWord = word.word.charAt(0).toUpperCase() + word.word.slice(1);
-  const title = `${capitalWord} - English Vocabulary for Kids | Children Do English`;
-  const description = `Learn the English word "${word.word}" — ${word.definition}. With pronunciation (${word.phonetic}), example sentence, and Hebrew translation (${word.hebrewTranslation}). Free for kids ages 6-12.`;
+  // Title speaks to the queries GSC actually shows ("X meaning for kids",
+  // "X definition for kids") and advertises the differentiators. Per-page
+  // overrides from tools/seo/optimizer.py runs live in seo-title-overrides.json.
+  const override = TITLE_OVERRIDES[path] || {};
+  const title = override.title || `${capitalWord} — Meaning for Kids, with Picture, Audio & Hebrew | Children Do English`;
+  const description = override.description || `What does "${word.word}" mean? Kid-friendly definition: ${word.definition}. With picture, audio pronunciation (${word.phonetic}), example sentence, and Hebrew translation (${word.hebrewTranslation}). Free for kids ages 6-12.`;
   const audioFile = word.word.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-') + '.mp3';
   // Deterministic same-category distractors (different word text AND Hebrew, so
   // the mini-quiz never shows a synonym pair like taxi/cab as separate options)
