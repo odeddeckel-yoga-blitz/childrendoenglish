@@ -59,6 +59,8 @@ try {
 }
 
 const TITLE_OVERRIDES = JSON.parse(readFileSync(new URL('./seo-title-overrides.json', import.meta.url), 'utf8'));
+// Pages the SEO optimizer's link advisor wants boosted (rendered on /vocabulary/)
+const SEO_FEATURED = JSON.parse(readFileSync(new URL('./seo-featured.json', import.meta.url), 'utf8'));
 const SITE = 'https://childrendoenglish.com';
 
 const CATEGORY_NAMES = {
@@ -1326,6 +1328,12 @@ const categoryCards = CATEGORIES.map((slug) => {
       </a>`;
 }).join('\n');
 
+const featuredRow = SEO_FEATURED.length ? `
+    <div class="featured" style="background:#eff6ff;border-radius:0.9rem;padding:1rem 1.2rem;margin:0 0 1.4rem">
+      <strong style="font-size:0.95rem;color:#1e40af">⭐ Popular</strong>
+      <span style="font-size:0.92rem">&nbsp; ${SEO_FEATURED.map((f) => `<a href="${f.path}" style="color:#2563eb;margin-inline-end:1rem">${escapeHtml(f.label)}</a>`).join('')}</span>
+    </div>` : '';
+
 const vocabIndexHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1397,6 +1405,7 @@ const vocabIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="container">
+    ${featuredRow}
     <p class="intro">${escapeHtml(vocabIndexDesc)}</p>
 
     <div class="grid">
