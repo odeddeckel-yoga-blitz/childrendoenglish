@@ -1,6 +1,6 @@
 # Multi-language Learner Support — ES + AR (plan, 2026-09-30)
 
-**STATUS: Phase 1 (WS1+WS2 Spanish in-app) SHIPPED 2026-09-30 (commit 5bfdc38) — LANGS registry, LanguagePicker, dynamic hero tiles + shell sync, suggestion banner, i18n-es (386 keys), 480 ES glosses + synonym-aware gate, gloss() wired into LearnMode/Flashcards/PersonalWordList+search, 6 new e2e. AR stubs gated ready:false. NEXT: Phase 2 = WS3 ES SEO surface (Guatemala page first) + WS4 beacons/optimizer.**
+**STATUS: Phases 1+2 SHIPPED 2026-09-30. Phase 1 (5bfdc38): ES in-app + scaffolding. Phase 2 (52e6e26+4372622+45c13f0): lang-aware beacons (Neon lang columns live), optimizer language views (kit 1.3.0), /es/ landing + 13 bilingual + 14 printable-ES pages, hreflang clusters, 28 URLs pinged. Guatemala 'beachhead' was the brand query at pos 1.5 — devoted user, not ES content; surface built fresh. NEXT: Phase 3 = AR (i18n-ar strings, 480 AR glosses incl. orthography-variant copy, RTL pages) after the ES measure-gate (~3 wks: /es/ impressions + es-UI sessions in cde_land.lang).**
 
 Owner decision basis: expansion research — AR: "translate this page" tell, no interactive
 product in "English words for kids with pictures" space (Pinterest/PDF blogs only).
