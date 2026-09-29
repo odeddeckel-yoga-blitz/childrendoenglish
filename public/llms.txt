@@ -19,6 +19,8 @@ with pronunciation, an example sentence, and the Hebrew translation.
   everyday things, clothing, school, sports, feelings, and toys.
 - [Words with Hebrew translations](https://childrendoenglish.com/vocabulary/animals/hebrew/):
   bilingual English-Hebrew lists per category.
+- [Words with Spanish translations](https://childrendoenglish.com/vocabulary/animals/spanish/):
+  bilingual English-Spanish lists per category.
 - [By age](https://childrendoenglish.com/vocabulary/ages-6-8/): ages 6-8, 9-10, 11-12.
 
 ## Guides
@@ -31,6 +33,9 @@ with pronunciation, an example sentence, and the Hebrew translation.
 - [Free practice app](https://childrendoenglish.com/): quizzes (listen-first for
   pre-readers), flashcards, letter-by-letter practice, parent dashboard. Works
   offline; nothing to install or sign up for.
+- [Spanish landing page](https://childrendoenglish.com/es/): the app for
+  Spanish-speaking kids — English vocabulary with photos, native English
+  pronunciation, and Spanish translations (interface available in Spanish).
 - [Printable flashcards](https://childrendoenglish.com/printable-flashcards/animals/)
 
 ## About

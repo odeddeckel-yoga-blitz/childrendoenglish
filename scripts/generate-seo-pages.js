@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import ES_GLOSSES from '../src/data/word-glosses-es.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -38,6 +39,7 @@ function buildCrawlMesh() {
     `.crawl-mesh a{color:#0d9488;text-decoration:none;margin-right:.7rem;white-space:nowrap}.crawl-mesh a:hover{text-decoration:underline}</style>` +
     row('Printable Flashcards', [['/printable-flashcards/', 'All flashcards'], ...cats.map((c) => [`/printable-flashcards/${c}/`, label(c)])]) +
     row('Vocabulary in Hebrew', cats.map((c) => [`/vocabulary/${c}/hebrew/`, `${label(c)} עברית`])) +
+    row('Vocabulary in Spanish', cats.map((c) => [`/vocabulary/${c}/spanish/`, `${label(c)} español`])) +
     row('Play Games', [['/games/', 'All games'], ['/games/word-zapper/', 'Word Zapper'], ['/games/spelling-forge/', 'Spelling Forge'], ['/games/category-conveyor/', 'Category Conveyor'], ['/app', 'Practice app']]) +
     row('Learn by Topic', [['/vocabulary/', 'All vocabulary'], ...cats.map((c) => [`/vocabulary/${c}/`, label(c)]), ['/guides/', 'Parent guides']]) +
     `</nav>\n`;
@@ -152,6 +154,7 @@ function buildCategoryPage(slug, displayName, words) {
   <link rel="canonical" href="${url}" />
   <link rel="alternate" hreflang="en" href="${url}" />
   <link rel="alternate" hreflang="he" href="${SITE}/vocabulary/${slug}/hebrew/" />
+  <link rel="alternate" hreflang="es" href="${SITE}/vocabulary/${slug}/spanish/" />
   <link rel="alternate" hreflang="x-default" href="${url}" />
   <link rel="icon" type="image/png" href="/favicon.png" />
 
@@ -231,7 +234,7 @@ function buildCategoryPage(slug, displayName, words) {
       <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
 
-    <p style="margin-bottom:1.5rem"><a href="/vocabulary/${slug}/hebrew/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">View ${escapeHtml(displayName)} in Hebrew and English &rarr;</a> &middot; <a href="/printable-flashcards/${slug}/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">Printable ${escapeHtml(displayName)} flashcards &rarr;</a></p>
+    <p style="margin-bottom:1.5rem"><a href="/vocabulary/${slug}/hebrew/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">View ${escapeHtml(displayName)} in Hebrew and English &rarr;</a> &middot; <a href="/vocabulary/${slug}/spanish/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">View ${escapeHtml(displayName)} in Spanish and English &rarr;</a> &middot; <a href="/printable-flashcards/${slug}/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">Printable ${escapeHtml(displayName)} flashcards &rarr;</a></p>
 
     <p style="margin-bottom:1.5rem;font-size:0.9rem;color:#64748b">Browse by age: <a href="/vocabulary/ages-6-8/" style="color:#2563eb;text-decoration:none">Ages 6-8</a> &middot; <a href="/vocabulary/ages-9-10/" style="color:#2563eb;text-decoration:none">Ages 9-10</a> &middot; <a href="/vocabulary/ages-11-12/" style="color:#2563eb;text-decoration:none">Ages 11-12</a></p>
 
@@ -517,7 +520,7 @@ ${wordNav}
 
     <a href="/vocabulary/${categorySlug}/" class="back-link">&larr; All ${escapeHtml(categoryDisplayName)} words</a>
 
-    <p style="font-size:0.9rem;margin:0.75rem 0 1.5rem"><a href="/printable-flashcards/${categorySlug}/" style="color:#2563eb;text-decoration:none">Printable ${escapeHtml(categoryDisplayName)} flashcards</a> &middot; <a href="/vocabulary/${categorySlug}/hebrew/" style="color:#2563eb;text-decoration:none">${escapeHtml(categoryDisplayName)} words with Hebrew translations</a></p>
+    <p style="font-size:0.9rem;margin:0.75rem 0 1.5rem"><a href="/printable-flashcards/${categorySlug}/" style="color:#2563eb;text-decoration:none">Printable ${escapeHtml(categoryDisplayName)} flashcards</a> &middot; <a href="/vocabulary/${categorySlug}/hebrew/" style="color:#2563eb;text-decoration:none">${escapeHtml(categoryDisplayName)} words with Hebrew translations</a> &middot; <a href="/vocabulary/${categorySlug}/spanish/" style="color:#2563eb;text-decoration:none">${escapeHtml(categoryDisplayName)} words with Spanish translations</a></p>
 
     <div class="categories">
       <h2>Explore More Categories</h2>
@@ -723,6 +726,22 @@ const CATEGORY_NAMES_HE = {
   toys: 'צעצועים ומשחקים',
 };
 
+const CATEGORY_NAMES_ES = {
+  animals: 'Animales',
+  food: 'Comida y bebidas',
+  home: 'Casa y muebles',
+  transport: 'Transporte y vehículos',
+  nature: 'Naturaleza',
+  colors: 'Colores',
+  numbers: 'Números',
+  clothing: 'Ropa',
+  school: 'Escuela',
+  sports: 'Deportes y actividades',
+  feelings: 'Emociones',
+  everyday: 'Cosas de todos los días',
+  toys: 'Juguetes y juegos',
+};
+
 function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
   const url = `${SITE}/vocabulary/${slug}/hebrew/`;
   const title = `${displayName} in Hebrew and English — Bilingual Vocabulary for Kids | Children Do English`;
@@ -776,6 +795,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
   <link rel="canonical" href="${url}" />
   <link rel="alternate" hreflang="en" href="${SITE}/vocabulary/${slug}/" />
   <link rel="alternate" hreflang="he" href="${url}" />
+  <link rel="alternate" hreflang="es" href="${SITE}/vocabulary/${slug}/spanish/" />
   <link rel="alternate" hreflang="x-default" href="${SITE}/vocabulary/${slug}/" />
   <link rel="icon" type="image/png" href="/favicon.png" />
 
@@ -863,6 +883,161 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
 
     <div class="categories">
       <h2>More Bilingual Categories</h2>
+      <div class="cat-links">
+        ${otherCategoryLinks}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+  </div>
+</body>
+</html>`;
+}
+
+function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words) {
+  const url = `${SITE}/vocabulary/${slug}/spanish/`;
+  const title = `${displayName} in Spanish and English — Vocabulario bilingüe para niños | Children Do English`;
+  const description = `Learn ${words.length} ${displayName.toLowerCase()} words in English and Spanish side by side — ${spanishName.toLowerCase()} en inglés para niños. With pictures, English pronunciation, and definitions. Free bilingual vocabulary for kids ages 6-12.`;
+
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Vocabulary', item: `${SITE}/vocabulary/` },
+      { '@type': 'ListItem', position: 3, name: displayName, item: `${SITE}/vocabulary/${slug}/` },
+      { '@type': 'ListItem', position: 4, name: 'Spanish & English', item: url },
+    ],
+  });
+
+  const wordRows = words
+    .map(
+      (w) => `
+      <div class="bilingual-card">
+        <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="bi-img" loading="lazy" width="96" height="96" />
+        <div class="bi-content">
+          <div class="bi-en">
+            <a href="/vocabulary/${slug}/${w.id}/" class="bi-word">${escapeHtml(w.word)}</a>
+            <div class="bi-phonetic">${escapeHtml(w.phonetic)}</div>
+            <div class="bi-def">${escapeHtml(w.definition)}</div>
+          </div>
+          <div class="bi-es">
+            <div class="bi-es-word">${escapeHtml(ES_GLOSSES[w.id] || '')}</div>
+          </div>
+        </div>
+      </div>`
+    )
+    .join('\n');
+
+  const otherCategoryLinks = CATEGORIES.filter((c) => c !== slug)
+    .map(
+      (c) =>
+        `<a href="/vocabulary/${c}/spanish/">${escapeHtml(CATEGORY_NAMES[c] || c)} / ${escapeHtml(CATEGORY_NAMES_ES[c] || c)}</a>`
+    )
+    .join('\n        ');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${url}" />
+  <link rel="alternate" hreflang="en" href="${SITE}/vocabulary/${slug}/" />
+  <link rel="alternate" hreflang="he" href="${SITE}/vocabulary/${slug}/hebrew/" />
+  <link rel="alternate" hreflang="es" href="${url}" />
+  <link rel="alternate" hreflang="x-default" href="${SITE}/vocabulary/${slug}/" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <meta property="og:locale" content="es_LA" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:image" content="${SITE}/og/${slug}.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${SITE}/og/${slug}.png" />
+
+  <script type="application/ld+json">${breadcrumbSchema}</script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
+    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
+    .header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+    .header p { opacity: 0.9; font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
+    .intro { margin-bottom: 1.5rem; color: #475569; }
+    .bilingual-list { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+    .bilingual-card { display: flex; gap: 1rem; background: #fff; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); align-items: center; }
+    .bi-img { width: 96px; height: 96px; border-radius: 0.6rem; object-fit: cover; flex-shrink: 0; }
+    .bi-content { display: flex; flex: 1; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .bi-en { flex: 1; min-width: 200px; }
+    .bi-word { font-size: 1.15rem; font-weight: 700; color: #1e293b; text-decoration: none; }
+    .bi-word:hover { text-decoration: underline; color: #2563eb; }
+    .bi-phonetic { font-size: 0.8rem; color: #94a3b8; }
+    .bi-def { font-size: 0.85rem; color: #475569; margin-top: 0.2rem; }
+    .bi-es { text-align: right; min-width: 100px; }
+    .bi-es-word { font-size: 1.3rem; font-weight: 700; color: #1e293b; }
+    .cta { text-align: center; margin: 2rem 0; }
+    .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
+    .cta a:hover { background: #1d4ed8; }
+    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; }
+    .back-link { display: inline-block; margin-bottom: 1rem; color: #2563eb; text-decoration: none; font-size: 0.9rem; }
+    .back-link:hover { text-decoration: underline; }
+    .categories { margin-top: 2rem; }
+    .categories h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
+    .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+    .cat-links a:hover { background: #2563eb; color: #fff; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    @media (max-width: 600px) {
+      .bilingual-card { flex-direction: column; text-align: center; }
+      .bi-content { flex-direction: column; align-items: center; }
+      .bi-es { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>${escapeHtml(displayName)} in Spanish and English</h1>
+    <p>${escapeHtml(displayName)} / ${escapeHtml(spanishName)} &mdash; ${words.length} palabras bilingües</p>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="/">Home</a> &rsaquo; <a href="/vocabulary/">Vocabulary</a> &rsaquo; <a href="/vocabulary/${slug}/">${escapeHtml(displayName)}</a> &rsaquo; Spanish &amp; English
+  </div>
+
+  <div class="container">
+    <p class="intro">${escapeHtml(description)}</p>
+
+    <div class="bilingual-list">
+      ${wordRows}
+    </div>
+
+    <div class="cta">
+      <a href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=bilingual_category_es">Practica estas palabras en la app &rarr;</a>
+      <p class="cta-sub">Gratis &middot; Sin anuncios &middot; Interfaz en español &middot; Funciona sin conexión</p>
+    </div>
+
+    <a href="/vocabulary/${slug}/" class="back-link">&larr; All ${escapeHtml(displayName)} words</a>
+    <p style="font-size:0.9rem;margin-bottom:1rem"><a href="/printable-flashcards/${slug}/spanish/" style="color:#2563eb;text-decoration:none">Imprimir tarjetas de ${escapeHtml(spanishName.toLowerCase())} en inglés y español &rarr;</a></p>
+
+    <div class="categories">
+      <h2>Más categorías bilingües</h2>
       <div class="cat-links">
         ${otherCategoryLinks}
       </div>
@@ -1004,6 +1179,7 @@ function buildHebrewLandingPage() {
   <link rel="canonical" href="${url}" />
   <link rel="alternate" hreflang="en" href="${SITE}/" />
   <link rel="alternate" hreflang="he" href="${url}" />
+  <link rel="alternate" hreflang="es" href="${SITE}/es/" />
   <link rel="alternate" hreflang="x-default" href="${SITE}/" />
   <link rel="icon" type="image/png" href="/favicon.png" />
 
@@ -1269,6 +1445,336 @@ function buildHebrewLandingPage() {
 </html>`;
 }
 
+function buildSpanishLandingPage() {
+  const url = `${SITE}/es/`;
+  const title = 'Aprende vocabulario en inglés para niños — gratis | Children Do English';
+  const description = 'App gratuita para que los niños de 6 a 12 años aprendan vocabulario en inglés. Más de 480 palabras con fotos, pronunciación en inglés nativo y traducción al español. Sin anuncios, sin registro.';
+
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Español', item: url },
+    ],
+  });
+
+  const webAppSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Children Do English',
+    url: SITE,
+    description: 'App gratuita para aprender vocabulario en inglés, para niños de 6 a 12 años, con quizzes de fotos, tarjetas de memoria y retos de audio',
+    applicationCategory: 'EducationalApplication',
+    operatingSystem: 'Any',
+    inLanguage: ['en', 'es'],
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+    author: {
+      '@type': 'Person',
+      name: 'Oded Deckelbaum',
+      url: SITE,
+    },
+    audience: {
+      '@type': 'EducationalAudience',
+      educationalRole: 'student',
+      suggestedMinAge: 6,
+      suggestedMaxAge: 12,
+    },
+  });
+
+  const faqSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+      {
+        '@type': 'Question',
+        name: '¿Qué es Children Do English?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Es una app web gratuita para que los niños aprendan vocabulario en inglés. Cada palabra viene con una foto real, pronunciación en inglés, una oración de ejemplo y su traducción al español. Los niños practican con quizzes de fotos, tarjetas de memoria y retos de audio.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: '¿Es realmente gratis?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '¡Sí! Children Do English es completamente gratis, sin anuncios, sin compras dentro de la app y sin necesidad de registrarse.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: '¿Cómo funciona la pronunciación?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'Cada palabra tiene audio grabado con pronunciación nativa en inglés. Los niños escuchan la palabra en inglés real — esa es la clave del método — mientras la interfaz y las traducciones están en español.',
+        },
+      },
+      {
+        '@type': 'Question',
+        name: '¿Funciona sin internet?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: '¡Sí! Es una Progressive Web App que guarda el contenido después de la primera visita, así los niños pueden practicar sin conexión a internet.',
+        },
+      },
+    ],
+  });
+
+  const categoryGrid = CATEGORIES.map((slug) => {
+    const spanishName = CATEGORY_NAMES_ES[slug] || slug;
+    const words = getWordsByCategory(slug);
+    return `
+        <a href="/vocabulary/${slug}/spanish/" class="cat-item">
+          <span class="cat-name">${spanishName}</span>
+          <span class="cat-count">${words.length} palabras</span>
+        </a>`;
+  }).join('\n');
+
+  return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
+  <meta name="keywords" content="vocabulario en inglés para niños, aprender inglés para niños, inglés para niños gratis, palabras en inglés con fotos y pronunciación" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${url}" />
+  <link rel="alternate" hreflang="en" href="${SITE}/" />
+  <link rel="alternate" hreflang="he" href="${SITE}/he/" />
+  <link rel="alternate" hreflang="es" href="${url}" />
+  <link rel="alternate" hreflang="x-default" href="${SITE}/" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="es_LA" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${SITE}/og-image.png" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">${breadcrumbSchema}</script>
+  <script type="application/ld+json">${webAppSchema}</script>
+  <script type="application/ld+json">${faqSchema}</script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Hero */
+    .hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; padding: 3rem 1rem 2.5rem; text-align: center; }
+    .hero h1 { font-size: 1.85rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1.3; }
+    .hero .subtitle { font-size: 1.05rem; opacity: 0.92; margin-bottom: 1.5rem; max-width: 540px; margin-left: auto; margin-right: auto; }
+    .cta-btn { display: inline-block; background: #fff; color: #2563eb; padding: 0.85rem 2.25rem; border-radius: 0.6rem; font-weight: 700; font-size: 1.1rem; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); text-decoration: none; }
+    .cta-sub { margin-top: 0.75rem; font-size: 0.8rem; opacity: 0.8; }
+
+    /* Stats bar */
+    .stats-bar { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; background: #fff; padding: 1rem; border-bottom: 1px solid #e2e8f0; }
+    .stat { text-align: center; }
+    .stat-num { font-size: 1.25rem; font-weight: 800; color: #2563eb; }
+    .stat-label { font-size: 0.8rem; color: #64748b; }
+
+    /* Sections */
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1rem; }
+    .section { padding: 2.5rem 0; }
+    .section-title { font-size: 1.4rem; font-weight: 800; text-align: center; margin-bottom: 1.5rem; color: #1e293b; }
+
+    /* Feature cards */
+    .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+    .feature-card { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .feature-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+    .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
+    .feature-card p { font-size: 0.9rem; color: #475569; }
+
+    /* How it works */
+    .steps { display: flex; flex-direction: column; gap: 1rem; max-width: 600px; margin: 0 auto; }
+    .step { display: flex; align-items: flex-start; gap: 1rem; background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .step-num { width: 2.5rem; height: 2.5rem; border-radius: 50%; background: #2563eb; color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; flex-shrink: 0; }
+    .step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.15rem; }
+    .step p { font-size: 0.9rem; color: #475569; }
+
+    /* Category grid */
+    .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+    .cat-item { display: flex; justify-content: space-between; align-items: center; background: #fff; border-radius: 0.6rem; padding: 0.85rem 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.06); text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
+    .cat-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px); text-decoration: none; }
+    .cat-name { font-weight: 700; color: #1e293b; }
+    .cat-count { font-size: 0.8rem; color: #2563eb; font-weight: 600; }
+
+    /* FAQ */
+    .faq-list { max-width: 700px; margin: 0 auto; }
+    .faq-item { background: #fff; border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .faq-q { font-weight: 700; font-size: 1rem; margin-bottom: 0.35rem; color: #1e293b; }
+    .faq-a { font-size: 0.9rem; color: #475569; line-height: 1.6; }
+
+    /* Final CTA */
+    .final-cta { text-align: center; padding: 2.5rem 1rem; background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; }
+    .final-cta h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .final-cta p { opacity: 0.9; margin-bottom: 1.25rem; }
+
+    /* Footer */
+    .footer { text-align: center; padding: 1.5rem 1rem; color: #94a3b8; font-size: 0.8rem; background: #f8fafc; }
+    .footer a { color: #94a3b8; }
+    .footer a:hover { color: #64748b; }
+  </style>
+</head>
+<body>
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Aprende vocabulario en inglés — ¡gratis y divertido!</h1>
+    <p class="subtitle">Aprende vocabulario en inglés — con fotos, pronunciación y español. App gratuita para niños de 6 a 12 años, con audio en inglés nativo y traducción al español de cada palabra.</p>
+    <a href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=spanish_landing" class="cta-btn">Empieza a aprender ahora &rarr;</a>
+    <p class="cta-sub">Sin anuncios &middot; Sin registro &middot; Totalmente gratis</p>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num">${WORDS.length}+</div><div class="stat-label">palabras</div></div>
+    <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">categorías</div></div>
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">modos de práctica</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">niveles</div></div>
+  </div>
+
+  <!-- Features -->
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">¿Cómo aprenderán inglés tus hijos?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">&#128248;</div>
+          <h3>Aprender con fotos</h3>
+          <p>Cada palabra viene con una foto real que ayuda a los niños a recordar el significado de forma visual.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128266;</div>
+          <h3>Pronunciación en inglés nativo</h3>
+          <p>Cada palabra tiene audio grabado en inglés real. Los niños escuchan y repiten — así se entrena el oído desde el primer día.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#127918;</div>
+          <h3>Quizzes divertidos</h3>
+          <p>Cuatro modos de práctica — fotos, palabras, audio y parejas — que convierten el aprendizaje en un juego.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128196;</div>
+          <h3>Tarjetas de memoria</h3>
+          <p>Tarjetas interactivas con foto, pronunciación, definición y traducción al español.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128257;</div>
+          <h3>Repaso espaciado</h3>
+          <p>Un sistema inteligente que repite las palabras justo antes de que se olviden, para memorizarlas a largo plazo.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#127942;</div>
+          <h3>Insignias y logros</h3>
+          <p>Los niños coleccionan insignias y siguen su progreso, lo que los motiva a seguir aprendiendo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">¿Cómo funciona?</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div>
+            <h3>Elige una categoría</h3>
+            <p>Elige entre 13 categorías como animales, comida, colores, deportes y más.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div>
+            <h3>Aprende palabras nuevas</h3>
+            <p>Cada palabra se muestra con foto, pronunciación en inglés, definición, oración de ejemplo y traducción al español.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div>
+            <h3>Avanza y colecciona insignias</h3>
+            <p>Practica con quizzes, sigue tu progreso y gana insignias por tus logros.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Category grid -->
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">13 categorías para aprender</h2>
+      <div class="cat-grid">
+        ${categoryGrid}
+      </div>
+      <p style="text-align:center;margin-top:1.25rem;font-size:0.9rem"><a href="/printable-flashcards/spanish/">Tarjetas imprimibles de vocabulario en inglés y español &rarr;</a></p>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">Preguntas frecuentes</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q">¿Qué es Children Do English?</div>
+          <div class="faq-a">Es una app web gratuita para que los niños aprendan vocabulario en inglés. Cada palabra viene con una foto real, pronunciación en inglés, una oración de ejemplo y su traducción al español. Los niños practican con quizzes de fotos, tarjetas de memoria y retos de audio.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">¿Es realmente gratis?</div>
+          <div class="faq-a">¡Sí! Children Do English es completamente gratis, sin anuncios, sin compras dentro de la app y sin necesidad de registrarse.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">¿Cómo funciona la pronunciación?</div>
+          <div class="faq-a">Cada palabra tiene audio grabado con pronunciación nativa en inglés. Los niños escuchan la palabra en inglés real — esa es la clave del método — mientras la interfaz y las traducciones están en español.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">¿Funciona sin internet?</div>
+          <div class="faq-a">¡Sí! Es una Progressive Web App que guarda el contenido después de la primera visita, así los niños pueden practicar sin conexión a internet.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Final CTA -->
+  <div class="final-cta">
+    <h2>¿Listos para empezar?</h2>
+    <p>¡Únete a los miles de niños que ya aprenden inglés jugando!</p>
+    <a href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=spanish_landing" class="cta-btn">Empieza a aprender gratis &rarr;</a>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English &middot;
+    <a href="/about/">Acerca de</a> &middot;
+    <a href="/">English</a>
+  </div>
+</body>
+</html>`;
+}
+
 // --- Generate pages ---
 
 const distDir = join(ROOT, 'dist');
@@ -1442,8 +1948,12 @@ const vocabIndexHtml = `<!DOCTYPE html>
 
     <p style="text-align:center;margin-bottom:1rem;font-size:0.9rem"><a href="/printable-flashcards/" style="color:#2563eb;text-decoration:none">Printable flashcards for every category &rarr;</a></p>
 
-    <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:1.5rem">Hebrew word lists:
+    <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:1rem">Hebrew word lists:
       ${CATEGORIES.map((slug) => `<a href="/vocabulary/${slug}/hebrew/" style="color:#2563eb;text-decoration:none">${escapeHtml(CATEGORY_NAMES[slug] || slug)}</a>`).join(' &middot; ')}
+    </p>
+
+    <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:1.5rem">Spanish word lists:
+      ${CATEGORIES.map((slug) => `<a href="/vocabulary/${slug}/spanish/" style="color:#2563eb;text-decoration:none">${escapeHtml(CATEGORY_NAMES[slug] || slug)}</a>`).join(' &middot; ')}
     </p>
   </div>
 
@@ -1741,6 +2251,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="${url}" />
   <link rel="alternate" hreflang="en" href="${url}" />
+  <link rel="alternate" hreflang="es" href="${SITE}/printable-flashcards/${slug}/spanish/" />
   <link rel="alternate" hreflang="x-default" href="${url}" />
   ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
@@ -1776,6 +2287,9 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1rem; color: #475569; }
+    .lang-variant { font-size: 0.85rem; margin-bottom: 1rem; }
+    .lang-variant a { color: #2563eb; text-decoration: none; }
+    .lang-variant a:hover { text-decoration: underline; }
     .print-btn { display: inline-block; background: #2563eb; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; margin-bottom: 1.5rem; }
     .print-btn:hover { background: #1d4ed8; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
@@ -1815,6 +2329,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
 
   <div class="container">
     <p class="intro">${escapeHtml(description)}</p>
+    <p class="lang-variant"><a href="/printable-flashcards/${slug}/spanish/">View these flashcards in English and Spanish &rarr;</a></p>
     <button class="print-btn" onclick="window.print()">Print These Flashcards</button>
 
     <div class="grid">
@@ -1841,6 +2356,153 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
 </html>`;
 }
 
+function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, words) {
+  const url = `${SITE}/printable-flashcards/${slug}/spanish/`;
+  const enUrl = `${SITE}/printable-flashcards/${slug}/`;
+  const title = `Printable ${displayName} Flashcards in English and Spanish — Free PDF-ready | Children Do English`;
+  const description = `Tarjetas imprimibles de vocabulario en inglés con fotos: ${words.length} free printable ${displayName.toLowerCase()} flashcards in English and Spanish, con traducción al español. Real photos, English phonetics, and Spanish glosses. Just print and cut!`;
+
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'Printable Flashcards', item: `${SITE}/printable-flashcards/` },
+      { '@type': 'ListItem', position: 3, name: displayName, item: enUrl },
+      { '@type': 'ListItem', position: 4, name: 'Spanish & English', item: url },
+    ],
+  });
+
+  const flashcardCards = words
+    .map(
+      (w) => `
+      <div class="flashcard">
+        <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="fc-img" width="160" height="160" />
+        <div class="fc-word">${escapeHtml(w.word)}</div>
+        <div class="fc-phonetic">${escapeHtml(w.phonetic)}</div>
+        <div class="fc-es">${escapeHtml(ES_GLOSSES[w.id] || '')}</div>
+      </div>`
+    )
+    .join('\n');
+
+  const categoryLinks = CATEGORIES
+    .filter((c) => c !== slug)
+    .map((c) => `<a href="/printable-flashcards/${c}/spanish/">${escapeHtml(CATEGORY_NAMES[c] || c)} / ${escapeHtml(CATEGORY_NAMES_ES[c] || c)}</a>`)
+    .join('\n        ');
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${url}" />
+  <link rel="alternate" hreflang="en" href="${enUrl}" />
+  <link rel="alternate" hreflang="es" href="${url}" />
+  <link rel="alternate" hreflang="x-default" href="${enUrl}" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <!-- Open Graph -->
+  <meta property="og:locale" content="es_LA" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:image" content="${SITE}/og/${slug}.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${SITE}/og/${slug}.png" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">${breadcrumbSchema}</script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
+    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
+    .header h1 { font-size: 1.65rem; margin-bottom: 0.25rem; }
+    .header p { opacity: 0.9; font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
+    .intro { margin-bottom: 1rem; color: #475569; }
+    .lang-variant { font-size: 0.85rem; margin-bottom: 1rem; }
+    .lang-variant a { color: #2563eb; text-decoration: none; }
+    .lang-variant a:hover { text-decoration: underline; }
+    .print-btn { display: inline-block; background: #2563eb; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; margin-bottom: 1.5rem; }
+    .print-btn:hover { background: #1d4ed8; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .flashcard { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; border: 2px dashed #e2e8f0; page-break-inside: avoid; }
+    .fc-img { width: 160px; height: 160px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 0.75rem; display: block; }
+    .fc-word { font-size: 1.4rem; font-weight: 800; color: #1e293b; margin-bottom: 0.15rem; }
+    .fc-phonetic { font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.35rem; }
+    .fc-es { color: #475569; font-size: 0.95rem; font-weight: 600; }
+    .cta { text-align: center; margin: 2rem 0; }
+    .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
+    .cta a:hover { background: #1d4ed8; }
+    .categories { margin-top: 2rem; }
+    .categories h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
+    .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+    .cat-links a:hover { background: #2563eb; color: #fff; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    @media print {
+      .header, .breadcrumb, .print-btn, .cta, .categories, .footer, .lang-variant, .no-print { display: none !important; }
+      body { background: #fff; }
+      .grid { grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+      .flashcard { border: 2px dashed #ccc; box-shadow: none; padding: 0.75rem; }
+      .fc-img { width: 100px; height: 100px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Printable ${escapeHtml(displayName)} Flashcards in English and Spanish</h1>
+    <p>${words.length} bilingual flashcards &mdash; ${escapeHtml(displayName)} / ${escapeHtml(spanishName)}</p>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="/">Home</a> &rsaquo; <a href="/printable-flashcards/">Printable Flashcards</a> &rsaquo; <a href="/printable-flashcards/${slug}/">${escapeHtml(displayName)}</a> &rsaquo; Spanish &amp; English
+  </div>
+
+  <div class="container">
+    <p class="intro">${escapeHtml(description)}</p>
+    <p class="lang-variant"><a href="/printable-flashcards/${slug}/">View the English-only version &rarr;</a></p>
+    <button class="print-btn" onclick="window.print()">Print These Flashcards</button>
+
+    <div class="grid">
+      ${flashcardCards}
+    </div>
+
+    <div class="cta">
+      <a href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=flashcard_category_es">Practica estas palabras en la app &rarr;</a>
+      <p style="margin-top:0.5rem;font-size:0.8rem;color:#64748b">Gratis &middot; Sin anuncios &middot; Funciona sin conexión &middot; Sin registro</p>
+    </div>
+
+    <div class="categories">
+      <h2>More Printable Flashcards in Spanish</h2>
+      <div class="cat-links">
+        ${categoryLinks}
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+  </div>
+</body>
+</html>`;
+}
+
 for (const slug of CATEGORIES) {
   const displayName = CATEGORY_NAMES[slug] || slug;
   const words = getWordsByCategory(slug);
@@ -1851,6 +2513,22 @@ for (const slug of CATEGORIES) {
   writePage(join(outDir, 'index.html'), buildPrintableFlashcardsPage(slug, displayName, words), 'utf-8');
   flashcardsGenerated++;
   console.log(`  \u2713 /printable-flashcards/${slug}/ (${words.length} cards)`);
+}
+
+// --- Generate Spanish printable flashcards pages (per category) ---
+
+let esFlashcardsGenerated = 0;
+for (const slug of CATEGORIES) {
+  const displayName = CATEGORY_NAMES[slug] || slug;
+  const spanishName = CATEGORY_NAMES_ES[slug] || slug;
+  const words = getWordsByCategory(slug);
+  if (words.length === 0) continue;
+
+  const esOutDir = join(flashcardsDir, slug, 'spanish');
+  mkdirSync(esOutDir, { recursive: true });
+  writePage(join(esOutDir, 'index.html'), buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, words), 'utf-8');
+  esFlashcardsGenerated++;
+  console.log(`  \u2713 /printable-flashcards/${slug}/spanish/ (${words.length} cards)`);
 }
 
 // Printable flashcards index page
@@ -1892,6 +2570,7 @@ const fcIndexHtml = `<!DOCTYPE html>
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="${fcIndexUrl}" />
   <link rel="alternate" hreflang="en" href="${fcIndexUrl}" />
+  <link rel="alternate" hreflang="es" href="${SITE}/printable-flashcards/spanish/" />
   <link rel="alternate" hreflang="x-default" href="${fcIndexUrl}" />
   ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
@@ -1946,6 +2625,7 @@ const fcIndexHtml = `<!DOCTYPE html>
 
   <div class="container">
     <p class="intro">Choose a category below to view and print free English vocabulary flashcards. Each flashcard includes a picture, the English word, phonetic pronunciation, definition, and Hebrew translation. Perfect for kids ages 6-12.</p>
+    <p style="font-size:0.9rem;margin-bottom:1rem"><a href="/printable-flashcards/spanish/" style="color:#2563eb;text-decoration:none">Ver tarjetas imprimibles en inglés y español &rarr;</a></p>
 
     <div class="grid">
       ${fcCategoryCards}
@@ -1964,6 +2644,127 @@ const fcIndexHtml = `<!DOCTYPE html>
 
 writePage(join(flashcardsDir, 'index.html'), fcIndexHtml, 'utf-8');
 console.log(`  \u2713 /printable-flashcards/ (index, ${CATEGORIES.length} categories)`);
+
+// --- Generate Spanish printable flashcards packs landing page ---
+
+const esFcIndexUrl = `${SITE}/printable-flashcards/spanish/`;
+const esFcIndexTitle = 'Tarjetas Imprimibles de Vocabulario en Ingl\u00e9s y Espa\u00f1ol \u2014 Gratis | Children Do English';
+const esFcIndexDesc = `Tarjetas de vocabulario en ingl\u00e9s listas para imprimir, con fotos reales y traducci\u00f3n al espa\u00f1ol. ${WORDS.length} palabras en ${CATEGORIES.length} categor\u00edas. \u00a1Solo imprime y recorta!`;
+
+const esFcIndexBreadcrumb = JSON.stringify({
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name: 'Printable Flashcards', item: fcIndexUrl },
+    { '@type': 'ListItem', position: 3, name: 'Espa\u00f1ol', item: esFcIndexUrl },
+  ],
+});
+
+const esFcCategoryCards = CATEGORIES.map((slug) => {
+  const name = CATEGORY_NAMES[slug] || slug;
+  const spanishName = CATEGORY_NAMES_ES[slug] || slug;
+  const words = getWordsByCategory(slug);
+  const previewWords = words.slice(0, 3);
+  const previewImgs = previewWords
+    .map((w) => `<img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" style="width:40px;height:40px;border-radius:0.4rem;object-fit:cover" loading="lazy" width="40" height="40" />`)
+    .join(' ');
+  return `
+      <a href="/printable-flashcards/${slug}/spanish/" class="cat-card">
+        <div style="display:flex;gap:0.3rem;margin-bottom:0.5rem">${previewImgs}</div>
+        <h2>${escapeHtml(name)} / ${escapeHtml(spanishName)}</h2>
+        <p class="word-count">${words.length} tarjetas</p>
+      </a>`;
+}).join('\n');
+
+const esFcIndexHtml = `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(esFcIndexTitle)}</title>
+  <meta name="description" content="${escapeHtml(esFcIndexDesc)}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${esFcIndexUrl}" />
+  <link rel="alternate" hreflang="en" href="${fcIndexUrl}" />
+  <link rel="alternate" hreflang="es" href="${esFcIndexUrl}" />
+  <link rel="alternate" hreflang="x-default" href="${fcIndexUrl}" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <meta property="og:locale" content="es_LA" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${esFcIndexUrl}" />
+  <meta property="og:title" content="${escapeHtml(esFcIndexTitle)}" />
+  <meta property="og:description" content="${escapeHtml(esFcIndexDesc)}" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(esFcIndexTitle)}" />
+  <meta name="twitter:description" content="${escapeHtml(esFcIndexDesc)}" />
+  <meta name="twitter:image" content="${SITE}/og-image.png" />
+
+  <script type="application/ld+json">${esFcIndexBreadcrumb}</script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
+    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
+    .header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
+    .header p { opacity: 0.9; font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
+    .intro { margin-bottom: 1.5rem; color: #475569; }
+    .lang-variant { font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .lang-variant a { color: #2563eb; text-decoration: none; }
+    .lang-variant a:hover { text-decoration: underline; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+    .cat-card { display: block; background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
+    .cat-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); transform: translateY(-2px); }
+    .cat-card h2 { font-size: 1.05rem; font-weight: 700; color: #1e293b; margin-bottom: 0.2rem; }
+    .cat-card .word-count { font-size: 0.8rem; color: #2563eb; font-weight: 600; }
+    .cta { text-align: center; margin: 2rem 0; }
+    .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; }
+    .cta a:hover { background: #1d4ed8; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Tarjetas Imprimibles de Vocabulario en Ingl\u00e9s y Espa\u00f1ol</h1>
+    <p>${WORDS.length} tarjetas biling\u00fces en ${CATEGORIES.length} categor\u00edas</p>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="/">Home</a> &rsaquo; <a href="/printable-flashcards/">Printable Flashcards</a> &rsaquo; Espa\u00f1ol
+  </div>
+
+  <div class="container">
+    <p class="intro">Tarjetas de vocabulario en ingl\u00e9s listas para imprimir, con fotos reales y traducci\u00f3n al espa\u00f1ol. Elige una categor\u00eda para ver e imprimir tarjetas gratis. Cada tarjeta incluye una foto real, la palabra en ingl\u00e9s, la pronunciaci\u00f3n fon\u00e9tica y la traducci\u00f3n al espa\u00f1ol. Perfectas para ni\u00f1os de 6 a 12 a\u00f1os.</p>
+    <p class="lang-variant"><a href="/printable-flashcards/">Ver la versi\u00f3n solo en ingl\u00e9s &rarr;</a></p>
+
+    <div class="grid">
+      ${esFcCategoryCards}
+    </div>
+
+    <div class="cta">
+      <a href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=flashcard_index_es">Practica en la app &rarr;</a>
+    </div>
+  </div>
+
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/es/" style="color:#94a3b8">Espa\u00f1ol</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+  </div>
+</body>
+</html>`;
+
+const esFlashcardsIndexDir = join(flashcardsDir, 'spanish');
+mkdirSync(esFlashcardsIndexDir, { recursive: true });
+writePage(join(esFlashcardsIndexDir, 'index.html'), esFcIndexHtml, 'utf-8');
+console.log(`  \u2713 /printable-flashcards/spanish/ (index, ${CATEGORIES.length} categories)`);
 
 // --- Generate Blog/Guide pages ---
 
@@ -2866,6 +3667,13 @@ mkdirSync(heDir, { recursive: true });
 writePage(join(heDir, 'index.html'), buildHebrewLandingPage(), 'utf-8');
 console.log('  \u2713 /he/ (Hebrew landing page)');
 
+// --- Generate Spanish landing page ---
+
+const esDir = join(distDir, 'es');
+mkdirSync(esDir, { recursive: true });
+writePage(join(esDir, 'index.html'), buildSpanishLandingPage(), 'utf-8');
+console.log('  \u2713 /es/ (Spanish landing page)');
+
 // --- Generate age-bracket landing pages ---
 
 for (const bracket of AGE_BRACKETS) {
@@ -2892,10 +3700,33 @@ for (const slug of CATEGORIES) {
   console.log(`  \u2713 /vocabulary/${slug}/hebrew/ (${words.length} words)`);
 }
 
+// --- Generate bilingual Spanish-English category pages ---
+
+let spanishBilingualGenerated = 0;
+for (const slug of CATEGORIES) {
+  const displayName = CATEGORY_NAMES[slug] || slug;
+  const spanishName = CATEGORY_NAMES_ES[slug] || slug;
+  const words = getWordsByCategory(slug);
+  if (words.length === 0) continue;
+
+  const esCatDir = join(distDir, 'vocabulary', slug, 'spanish');
+  mkdirSync(esCatDir, { recursive: true });
+  writePage(join(esCatDir, 'index.html'), buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words), 'utf-8');
+  spanishBilingualGenerated++;
+  console.log(`  \u2713 /vocabulary/${slug}/spanish/ (${words.length} words)`);
+}
+
 // --- Overwrite sitemap.xml ---
 
 const heEntry = `  <url>
     <loc>${SITE}/he/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>`;
+
+const esEntry = `  <url>
+    <loc>${SITE}/es/</loc>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -2949,6 +3780,15 @@ const bilingualEntries = CATEGORIES.map(
   </url>`
 ).join('\n');
 
+const spanishBilingualEntries = CATEGORIES.map(
+  (slug) => `  <url>
+    <loc>${SITE}/vocabulary/${slug}/spanish/</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>`
+).join('\n');
+
 const ageBracketEntries = AGE_BRACKETS.map(
   (b) => `  <url>
     <loc>${SITE}/vocabulary/${b.slug}/</loc>
@@ -2962,6 +3802,7 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${spaEntries}
 ${heEntry}
+${esEntry}
 ${vocabIndexEntry}
 ${vocabEntries}
 ${wordEntries}
@@ -2972,13 +3813,14 @@ ${guidesIndexEntry}
 ${guideEntries}
 ${ageBracketEntries}
 ${bilingualEntries}
+${spanishBilingualEntries}
 </urlset>
 `;
 
 writeFileSync(join(distDir, 'sitemap.xml'), sitemap, 'utf-8');
 
-const totalUrls = 1 + 1 + 1 + CATEGORIES.length + WORDS.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length + AGE_BRACKETS.length + CATEGORIES.length;
-console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about + Hebrew landing`);
+const totalUrls = 1 + 1 + 1 + 1 + CATEGORIES.length + WORDS.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length + AGE_BRACKETS.length + CATEGORIES.length + CATEGORIES.length;
+console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about + Hebrew landing + Spanish landing + ${spanishBilingualGenerated} Spanish bilingual pages`);
 console.log(`Sitemap: ${totalUrls} URLs`);
 
 // ---- llms-full.txt: the complete word dataset for AI answer engines ----
