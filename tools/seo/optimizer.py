@@ -216,8 +216,17 @@ def verdict(label, page_filter, added):
     if pre[0] < 10 or post[0] < 10:
         print(f"  {label}: insufficient impressions to judge (pre {pre[0]:.0f} / post {post[0]:.0f})")
         return
-    print(f"  {label}: CTR {100*pre[1]/max(1,pre[0]):.1f}% → {100*post[1]/max(1,post[0]):.1f}%, "
-          f"pos {pre[2]:.1f} → {post[2]:.1f}  ({'✅ improved' if post[1]/max(1,post[0]) > pre[1]/max(1,pre[0]) else '➖ not yet'})")
+    pre_ctr, post_ctr, post_pos = pre[1] / max(1, pre[0]), post[1] / max(1, post[0]), post[2]
+    improved = post_ctr > pre_ctr
+    # Intent-mismatch flag (the prime-factory lesson): the title was rewritten, the page ranks
+    # PAGE 1 (so CTR is snippet-driven, not position-capped), yet CTR didn't lift AND still
+    # trails what that rank should earn. More rewrites won't help — the searcher's intent
+    # doesn't match the page. Stop re-tuning; the query is the mismatch, not the words.
+    flag = ''
+    if not improved and post_pos <= 10 and post_ctr < expected_ctr(post_pos):
+        flag = f"  ⚠ no lift at pos {post_pos:.1f} (want ~{100*expected_ctr(post_pos):.0f}%) → likely query-INTENT mismatch, stop re-tuning"
+    print(f"  {label}: CTR {100*pre_ctr:.1f}% → {100*post_ctr:.1f}%, "
+          f"pos {pre[2]:.1f} → {post_pos:.1f}  ({'✅ improved' if improved else '➖ not yet'}){flag}")
 
 verdict('site-wide title template', None, TEMPLATE_REWRITE_DATE)
 overrides_path = os.environ.get('SEO_OVERRIDES', os.path.join(os.path.dirname(__file__), '..', '..', 'scripts', 'seo-title-overrides.json'))
