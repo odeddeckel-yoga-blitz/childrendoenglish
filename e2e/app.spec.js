@@ -138,9 +138,12 @@ test.describe('Landing Page', () => {
     });
     await page.goto('/');
     await page.waitForSelector('#root > *', { timeout: 10000 });
-    // Scroll to language section and pick English
-    await page.locator('button:has-text("English")').first().scrollIntoViewIfNeeded();
-    await page.locator('button:has-text("English")').first().click();
+    // Pick the English HERO TILE by its unique subtitle — a bare "English"
+    // selector also matches the top-bar LanguagePicker (multilang, 2026-09-30)
+    // and .first() resolves to that picker, opening a popover instead.
+    const enTile = page.locator('button', { hasText: 'Learn vocabulary in English' });
+    await enTile.scrollIntoViewIfNeeded();
+    await enTile.click();
     // Should navigate to player create
     await expect(page.getByRole('heading', { name: 'Create Player' })).toBeVisible({ timeout: 5000 });
   });
