@@ -39,7 +39,6 @@ const COLORS = {
   ivory:     '#FFFFF0',
   lime:      '#32CD32',
   indigo:    '#4B0082',
-  amber:     '#FFBF00',
   scarlet:   '#FF2400',
   magenta:   '#FF00FF',
 };
