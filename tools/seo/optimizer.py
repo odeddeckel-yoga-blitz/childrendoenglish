@@ -331,6 +331,42 @@ for _, line in band[:5]:
     sugg = ['/', '/vocabulary/'] + ([f'/vocabulary/{cat}/'] if cat else []) + top_linkers
     print(f"  {p[:48]:48} ← link from: {', '.join(dict.fromkeys(sugg))}")
 
+# 8.5 — language-market fit (multilang: GSC country-groups × language surfaces)
+# Sized per-language: are the language surfaces (/he/, /es/, /vocabulary/*/hebrew|spanish/)
+# earning impressions where their speakers are, and (when the land beacon carries lang)
+# are those arrivals actually USING the localized interface? "AR-region impressions up
+# but ar-UI sessions flat" = the localization isn't landing.
+LANG_SURFACES = {
+    'he': ('/he/', '/hebrew/'),
+    'es': ('/es/', '/spanish/'),
+    'ar': ('/ar/', '/arabic/'),
+}
+COUNTRY_GROUPS = {
+    'IL': {'isr'},
+    'ES-region': {'mex', 'esp', 'arg', 'col', 'per', 'chl', 'gtm', 'ecu', 'bol', 'ven',
+                  'dom', 'hnd', 'slv', 'nic', 'cri', 'pan', 'pry', 'ury', 'pri'},
+    'AR-region': {'are', 'egy', 'sau', 'jor', 'mar', 'dza', 'tun', 'irq', 'kwt', 'qat',
+                  'bhr', 'omn', 'lbn', 'lby', 'yem', 'syr', 'pse'},
+}
+print('\n— 8.5. Language-market fit:')
+cp_rows = q(['country', 'page'])
+for grp, countries in COUNTRY_GROUPS.items():
+    gi = sum(r['impressions'] for r in cp_rows if r['keys'][0] in countries)
+    gc = sum(r['clicks'] for r in cp_rows if r['keys'][0] in countries)
+    per_lang = []
+    for lg, prefixes in LANG_SURFACES.items():
+        li = sum(r['impressions'] for r in cp_rows
+                 if r['keys'][0] in countries and any(px in path(r['keys'][1]) for px in prefixes))
+        if li:
+            per_lang.append(f'{lg}-surface {li}')
+    print(f'  {grp:10} {gi:5.0f} imp {gc:3.0f} clk  ' + (' · '.join(per_lang) or 'no language-surface impressions yet'))
+# Whole-site per-surface totals (all countries) — is the surface indexed at all?
+for lg, prefixes in LANG_SURFACES.items():
+    ti = sum(r['impressions'] for r in pages if any(px in path(r['keys'][0]) for px in prefixes))
+    tc = sum(r['clicks'] for r in pages if any(px in path(r['keys'][0]) for px in prefixes))
+    print(f'  {lg}-surface total: {ti:.0f} imp, {tc:.0f} clk')
+print('  (interface-language USAGE lives in cde_land.lang — compare via tools/learning/optimizer.mjs / land report)')
+
 # 9 — search appearance
 sa = q(['searchAppearance'])
 print('\n— 9. Search appearance (rich results): ' + (', '.join(f"{r['keys'][0]}:{r['impressions']:.0f}imp/{r['clicks']:.0f}clk" for r in sa) if sa else 'none reported yet'))

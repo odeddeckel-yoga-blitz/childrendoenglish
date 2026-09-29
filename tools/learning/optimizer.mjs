@@ -50,6 +50,12 @@ const q = neon(url);
 
 const rows = await q`SELECT ev, item, sum(n)::int AS n, min(day) AS first, max(day) AS last
   FROM cde_learn WHERE day >= CURRENT_DATE - ${days}::int GROUP BY ev, item`;
+// Per-interface-language split (lang column live 2026-09-30; earlier rows read 'en').
+// Diagnostic per the amber lesson: a word hard under ONE language = that language's
+// GLOSS problem; hard under every language = image/audio/word-selection problem.
+const langRows = await q`SELECT lang, ev, item, sum(n)::int AS n
+  FROM cde_learn WHERE day >= CURRENT_DATE - ${days}::int AND ev IN ('ans_ok','ans_no')
+  GROUP BY lang, ev, item`;
 
 if (rows.length === 0) {
   console.log(`No learning events in the last ${days}d — the beacon ships with this commit; give it traffic.`);
@@ -92,6 +98,32 @@ for (const w of ranked.slice(0, top)) {
 }
 if (thin.length > 0) {
   console.log(`\n— insufficient data (<${FLOOR} attempts) but trending hard: ${thin.slice(0, 10).map(w => `${w.id}(${(w.wrong * 100).toFixed(0)}%/${w.attempts})`).join(', ')}`);
+}
+
+// --- per-language wrong-rates (only shown once non-en volume exists) ---
+const byLangWord = {};
+for (const r of langRows) {
+  const k = r.lang;
+  const w = ((byLangWord[k] = byLangWord[k] || {})[r.item] = byLangWord[k][r.item] || { ok: 0, no: 0 });
+  w[r.ev === 'ans_ok' ? 'ok' : 'no'] += r.n;
+}
+const nonEn = Object.keys(byLangWord).filter((l) => l !== 'en');
+if (nonEn.length > 0) {
+  console.log('\n— per-language wrong-rates (gloss-vs-asset diagnostic):');
+  for (const lg of nonEn) {
+    const hard = Object.entries(byLangWord[lg])
+      .map(([id, { ok, no }]) => ({ id, a: ok + no, w: no / Math.max(1, ok + no) }))
+      .filter((x) => x.a >= 5 && x.w > TARGET_WRONG)
+      .sort((a, b) => b.w * b.a - a.w * a.a);
+    const enW = (id) => {
+      const e = byLangWord.en?.[id];
+      return e ? `${Math.round((100 * e.no) / Math.max(1, e.ok + e.no))}%` : '—';
+    };
+    console.log(`  [${lg}] ${hard.length ? '' : 'no words above target'}`);
+    for (const x of hard.slice(0, 8)) {
+      console.log(`    ${x.id.padEnd(16)} wrong ${(x.w * 100).toFixed(0)}% × ${x.a}  (en: ${enW(x.id)})  ${enW(x.id) !== '—' && x.w * 100 - parseInt(enW(x.id)) > 15 ? '→ likely ' + lg.toUpperCase() + ' GLOSS issue' : ''}`);
+    }
+  }
 }
 
 // --- mode funnel ---
