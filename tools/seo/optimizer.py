@@ -101,7 +101,17 @@ total_imp = sum(r['impressions'] for r in pages)
 total_clk = sum(r['clicks'] for r in pages)
 il_total = sum(a['il'] for a in il_share.values())
 print(f"{days}d: {total_clk} clicks / {total_imp} impressions across {len(pages)} pages "
-      f"(site CTR {100*total_clk/max(1,total_imp):.1f}%, IL share {100*il_total/max(1,total_imp):.0f}%)\n")
+      f"(site CTR {100*total_clk/max(1,total_imp):.1f}%, IL share {100*il_total/max(1,total_imp):.0f}%)")
+# Discovery health: brand queries are people who already know us; NON-brand growth is real
+# discovery. A rising non-brand share means SEO is reaching new people, not just the loyal few.
+_bkey = ''.join(c for c in BRAND.lower() if c.isalnum())
+_collapse = lambda s: ''.join(c for c in str(s).lower() if c.isalnum())
+_q_clk = sum(r['clicks'] for r in queries)
+_brand_clk = sum(r['clicks'] for r in queries if _bkey and _bkey in _collapse(r['keys'][0]))
+if _q_clk:
+    print(f"  brand vs discovery: {_brand_clk} brand / {_q_clk - _brand_clk} non-brand clicks "
+          f"({100*(_q_clk - _brand_clk)/_q_clk:.0f}% non-brand — higher = more real discovery)")
+print()
 
 # 1 — CTR-opportunity pages
 # Per-page top query, for the brand-sitelink filter below: a page ranking pos ~1-5
@@ -170,12 +180,23 @@ for k, v in sorted(cann.items(), key=lambda kv: -sum(x[1] for x in kv[1]))[:8]:
 if not cann:
     print('  none')
 
-# 4 — page-2 band
+# 4 — ranking-limited pages (pos 11-30 = page 2-3). RANKING problem, NOT titles: a rewrite
+# can't lift a page that isn't on page 1. Learned the hard way — the real opportunity spans
+# well past pos 20 (high-impression landing pages sitting at pos 14-19 AND 25-68), so the old
+# pos≤20 band hid most of them. Sort by impressions; the pos column shows how far off page 1.
 band = [(r['impressions'], f"  {path(r['keys'][0])[:52]:52} pos {r['position']:4.1f}  {r['impressions']:4.0f} imp")
-        for r in pages if MIN_IMP_PAGE <= r['impressions'] and 10 < r['position'] <= 20]
+        for r in pages if MIN_IMP_PAGE <= r['impressions'] and 10 < r['position'] <= 30]
 band.sort(reverse=True)
-print('\n— 4. Page-2 band (RANKING problem — internal links/content, not titles):')
+print('\n— 4. Ranking-limited pages (pos 11-30 — internal links/content/authority, NOT titles):')
 print('\n'.join(s for _, s in band[:top]) or '  none')
+# The bottleneck verdict: title-limited (a rewrite CAN help) vs ranking-limited (only
+# authority/links can). Encodes the core lesson so nobody burns time rewriting titles on
+# page-2/3 pages — that was the repeated trap: pages ranked pos 25-68, titles were fine.
+_ranking_limited = sum(1 for r in pages if r['impressions'] >= MIN_IMP_PAGE and r['position'] > 10)
+if _ranking_limited > len(scored):
+    print(f"\n  ▸ verdict: {_ranking_limited} high-impression pages are RANKING-limited (pos >10) vs "
+          f"{len(scored)} title-limited (pos ≤10, low CTR). The lever is authority/backlinks (outreach), "
+          f"not more title rewrites.")
 
 # 5 — rewrite verdicts
 print('\n— 5. Rewrite verdicts (needs ≥14d post-change):')
