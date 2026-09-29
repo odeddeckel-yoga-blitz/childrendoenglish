@@ -17,6 +17,13 @@ function isExcluded() {
 
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
 
+function uiLang() {
+  try {
+    const l = localStorage.getItem('cde_lang');
+    return ['he', 'es', 'ar'].includes(l) ? l : 'en';
+  } catch { return 'en'; }
+}
+
 export function sendLearnBatch(events) {
   try {
     if (isExcluded() || !navigator.sendBeacon) return;
@@ -24,7 +31,7 @@ export function sendLearnBatch(events) {
       .filter(x => x && typeof x.e === 'string' && typeof x.i === 'string' && ITEM_RE.test(x.i))
       .slice(0, 30);
     if (clean.length === 0) return;
-    navigator.sendBeacon('/api/land', JSON.stringify({ batch: clean }));
+    navigator.sendBeacon('/api/land', JSON.stringify({ batch: clean, l: uiLang() }));
   } catch { /* a beacon must never break the app */ }
 }
 

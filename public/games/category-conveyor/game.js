@@ -317,7 +317,8 @@ function learnBeacon(ev){
   try{
     if(navigator.webdriver) return;
     if(localStorage.getItem('cde_internal')==='1') return;
-    if(navigator.sendBeacon) navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:ev,i:'category-conveyor'}]}));
+    var l = 'en'; try { var sl = localStorage.getItem('cde_lang'); if (['he','es','ar'].indexOf(sl) >= 0) l = sl; } catch(e) {}
+    if(navigator.sendBeacon) navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:ev,i:'category-conveyor'}], l:l}));
   }catch(e){}
 }
 

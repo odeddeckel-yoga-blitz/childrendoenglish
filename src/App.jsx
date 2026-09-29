@@ -210,6 +210,8 @@ export default function App() {
   const [, forceUpdate] = useState(0);
   useEffect(() => {
     if (lang !== 'en') loadLocale(lang).then(() => forceUpdate(n => n + 1));
+    // Beacon-readable language flag (land/learn beacons + games tag events with it)
+    try { localStorage.setItem('cde_lang', lang); } catch { /* storage unavailable */ }
     document.documentElement.dir = isRTL(lang) ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
     const desc = document.querySelector('meta[name="description"]');
