@@ -1,5 +1,7 @@
 # Multi-language Learner Support — ES + AR (plan, 2026-09-30)
 
+**STATUS: APPROVED by owner 2026-09-30 ("go"). Not yet started — implement per phase order, starting WS1+WS2 (Phase 1). Re-verify the plan against the live repo before each phase.**
+
 Owner decision basis: expansion research — AR: "translate this page" tell, no interactive
 product in "English words for kids with pictures" space (Pinterest/PDF blogs only).
 ES: game head-terms locked (Árbol ABC) but vocabulary-with-pronunciation and
