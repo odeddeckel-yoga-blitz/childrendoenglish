@@ -1,6 +1,6 @@
 # Multi-language Learner Support — ES + AR (plan, 2026-09-30)
 
-**STATUS: APPROVED by owner 2026-09-30 ("go"). Not yet started — implement per phase order, starting WS1+WS2 (Phase 1). Re-verify the plan against the live repo before each phase.**
+**STATUS: Phase 1 (WS1+WS2 Spanish in-app) SHIPPED 2026-09-30 (commit 5bfdc38) — LANGS registry, LanguagePicker, dynamic hero tiles + shell sync, suggestion banner, i18n-es (386 keys), 480 ES glosses + synonym-aware gate, gloss() wired into LearnMode/Flashcards/PersonalWordList+search, 6 new e2e. AR stubs gated ready:false. NEXT: Phase 2 = WS3 ES SEO surface (Guatemala page first) + WS4 beacons/optimizer.**
 
 Owner decision basis: expansion research — AR: "translate this page" tell, no interactive
 product in "English words for kids with pictures" space (Pinterest/PDF blogs only).
