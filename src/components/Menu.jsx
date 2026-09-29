@@ -1,7 +1,9 @@
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck, Globe, RotateCcw } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck, RotateCcw } from 'lucide-react';
 import { t } from '../utils/i18n';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onToggleLanguage }) {
+import LanguagePicker from './LanguagePicker';
+
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage }) {
 
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
   const isNewUser = stats.totalQuizzes === 0 && wordsLearned === 0;
@@ -37,15 +39,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               : <Moon className="w-5 h-5 text-slate-600 dark:text-slate-300" />
             }
           </button>
-          {onToggleLanguage && (
-            <button
-              onClick={onToggleLanguage}
-              className="px-2.5 py-1.5 rounded-xl bg-white/50 hover:bg-white/80 transition-colors flex items-center gap-1.5"
-              aria-label={lang === 'he' ? 'EN — Switch to English' : 'עב — עבור לעברית'}
-            >
-              <Globe className="w-4 h-4 text-slate-600 dark:text-slate-300" />
-              <span className="text-xs font-semibold text-slate-600 dark:text-slate-300">{lang === 'he' ? 'EN' : 'עב'}</span>
-            </button>
+          {onSelectLanguage && (
+            <LanguagePicker lang={lang} onSelectLanguage={onSelectLanguage} />
           )}
         </div>
       </div>

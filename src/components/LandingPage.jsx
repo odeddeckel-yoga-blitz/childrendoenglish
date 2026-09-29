@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { BookOpen, Layers, Play, BarChart2, ChevronDown, Globe, Brain } from 'lucide-react';
-import { t } from '../utils/i18n';
+import { BookOpen, Layers, Play, BarChart2, ChevronDown, Brain } from 'lucide-react';
+import { t, LANGS } from '../utils/i18n';
+import LanguagePicker from './LanguagePicker';
 
 const FEATURES = [
   { key: 'Learn', icon: BookOpen, color: 'blue' },
@@ -103,25 +104,59 @@ function FAQItem({ index, lang }) {
 
 // --- Main Component ---
 
-export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, onTerms, onToggleLanguage }) {
+// Each tile advertises itself in ITS OWN language — a Spanish-speaking parent
+// scanning the grid finds "Español" without reading anything else.
+const TILE_DESC = {
+  en: 'Learn vocabulary in English',
+  he: 'ממשק מלא בעברית',
+  es: 'Interfaz en español',
+  ar: 'واجهة بالعربية',
+};
+
+export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, onTerms, onSelectLanguage }) {
+  // Browser-language suggestion: one-time, non-blocking, dismiss remembered.
+  // navigator.language only (no geo-IP) — COPPA-simple.
+  const [suggest, setSuggest] = useState(null);
+  useEffect(() => {
+    try {
+      if (lang !== 'en' || localStorage.getItem('cde-lang-suggest-done')) return;
+      const nav = (navigator.language || '').slice(0, 2);
+      const match = LANGS.find((l) => l.ready !== false && l.code !== 'en' && l.code === nav);
+      if (match) setSuggest(match);
+    } catch { /* storage unavailable */ }
+  }, [lang]);
+  const dismissSuggest = () => {
+    setSuggest(null);
+    try { localStorage.setItem('cde-lang-suggest-done', '1'); } catch { /* ignore */ }
+  };
   const reveal = useScrollReveal();
 
   return (
     <div className="space-y-16 pb-8">
       {/* Top bar */}
       <div className="flex items-center justify-end">
-        <button
-          onClick={onToggleLanguage}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl
-                     bg-white/60 hover:bg-white/90 dark:bg-slate-800/60 dark:hover:bg-slate-800/90
-                     border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300
-                     text-sm font-medium transition-colors"
-          aria-label={lang === 'en' ? 'עברית' : 'English'}
-        >
-          <Globe className="w-4 h-4" />
-          {lang === 'en' ? 'עברית' : 'English'}
-        </button>
+        <LanguagePicker lang={lang} onSelectLanguage={onSelectLanguage} />
       </div>
+
+      {/* Browser-language suggestion (es: "¿Prefieres español?") */}
+      {suggest && (
+        <div dir={suggest.rtl ? 'rtl' : 'ltr'}
+             className="glass rounded-2xl px-4 py-3 -mt-12 flex items-center gap-3 text-sm max-w-sm mx-auto">
+          <span aria-hidden="true">{suggest.flag}</span>
+          <span className="flex-1 text-slate-700 dark:text-slate-200 font-medium">
+            {suggest.code === 'es' ? '¿Prefieres español?' : suggest.code === 'ar' ? 'هل تفضل العربية؟' : suggest.native + '?'}
+          </span>
+          <button
+            onClick={() => { dismissSuggest(); onSelectLanguage(suggest.code); }}
+            className="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold"
+          >
+            {suggest.code === 'es' ? 'Sí' : suggest.code === 'ar' ? 'نعم' : 'Yes'}
+          </button>
+          <button onClick={dismissSuggest} className="px-2 py-1.5 text-slate-400 hover:text-slate-600" aria-label="No">
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Hero */}
       <section className="animate-fade-in text-center space-y-6">
@@ -153,36 +188,28 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
           ))}
         </div>
 
-        {/* Language selection — start immediately */}
-        <div className="grid grid-cols-2 gap-3 max-w-xs mx-auto">
-          <button
-            onClick={() => onLanguageStart('en')}
-            className="glass rounded-2xl p-4 space-y-2 text-center
-                       hover:scale-[1.03] active:scale-95 transition-transform cursor-pointer
-                       border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600"
-          >
-            <span className="text-3xl block">🇬🇧</span>
-            <span className="font-bold text-slate-800 dark:text-slate-100 text-sm block">
-              {t('landingLangEnglish', lang)}
-            </span>
-            <span className="text-slate-500 dark:text-slate-300 text-xs block">
-              {t('landingLangEnDesc', lang)}
-            </span>
-          </button>
-          <button
-            onClick={() => onLanguageStart('he')}
-            className="glass rounded-2xl p-4 space-y-2 text-center
-                       hover:scale-[1.03] active:scale-95 transition-transform cursor-pointer
-                       border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600"
-          >
-            <span className="text-3xl block">🇮🇱</span>
-            <span className="font-bold text-slate-800 dark:text-slate-100 text-sm block">
-              {t('landingLangHebrew', lang)}
-            </span>
-            <span className="text-slate-500 dark:text-slate-300 text-xs block">
-              {t('landingLangHeDesc', lang)}
-            </span>
-          </button>
+        {/* Language selection — one tap starts the app in that language.
+            Tiles render from the LANGS registry (ready ones only), each in its
+            own language, so adding language #5 is a data change. */}
+        <div className={`grid gap-3 mx-auto ${LANGS.filter((l) => l.ready !== false).length > 2 ? 'grid-cols-3 max-w-md' : 'grid-cols-2 max-w-xs'}`}>
+          {LANGS.filter((l) => l.ready !== false).map((l) => (
+            <button
+              key={l.code}
+              onClick={() => onLanguageStart(l.code)}
+              dir={l.rtl ? 'rtl' : 'ltr'}
+              className="glass rounded-2xl p-4 space-y-2 text-center
+                         hover:scale-[1.03] active:scale-95 transition-transform cursor-pointer
+                         border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600"
+            >
+              <span className="text-3xl block" aria-hidden="true">{l.flag}</span>
+              <span className="font-bold text-slate-800 dark:text-slate-100 text-sm block">
+                {l.native}
+              </span>
+              <span className="text-slate-500 dark:text-slate-300 text-xs block">
+                {TILE_DESC[l.code] || ''}
+              </span>
+            </button>
+          ))}
         </div>
       </section>
 

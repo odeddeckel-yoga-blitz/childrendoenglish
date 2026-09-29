@@ -6,7 +6,7 @@ import { spacedRepetitionSort, updateWordSR } from '../utils/spaced-repetition';
 import { getImageUrl } from '../utils/images';
 import { speakWord } from '../utils/sound';
 import { haptic } from '../utils/haptic';
-import { t } from '../utils/i18n';
+import { t, gloss } from '../utils/i18n';
 
 export default function FlashcardMode({ stats, lang = 'en', canRead = true, words: customWords, knownLetters = null, onUpdateStats, onBack }) {
   const sorted = spacedRepetitionSort(customWords || filterByKnownLetters(WORDS, knownLetters), stats.wordProgress || {});
@@ -244,8 +244,8 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
               <p className="text-center text-slate-600 dark:text-slate-300">{currentCard.definition}</p>
               <p className="text-center text-sm text-slate-500 italic">"{currentCard.exampleSentence}"</p>
               <div className="pt-3 border-t border-slate-200">
-                <p className="text-xl text-center font-semibold text-blue-600" dir="rtl">
-                  {currentCard.hebrewTranslation}
+                <p className="text-xl text-center font-semibold text-blue-600" dir={(lang === 'es') ? 'ltr' : 'rtl'}>
+                  {gloss(currentCard, lang === 'en' ? 'he' : lang) || currentCard.hebrewTranslation}
                 </p>
               </div>
             </div>

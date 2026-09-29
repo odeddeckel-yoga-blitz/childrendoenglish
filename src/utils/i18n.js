@@ -504,16 +504,58 @@ const translations = {
   },
 };
 
-// Lazy-load Hebrew translations on first use
-let heLoading = null;
-export function loadHebrew() {
-  if (translations.he) return Promise.resolve();
-  if (!heLoading) {
-    heLoading = import('./i18n-he.js').then(m => {
-      translations.he = m.default;
-    });
+// Interface languages. Each non-en language lazy-loads its string module on
+// first use (keeps the main bundle flat); adding a language = one entry here
+// + an i18n-<lang>.js file (+ a word-glosses-<lang>.js if it glosses the vocab).
+export const LANGS = [
+  { code: 'en', native: 'English', flag: '🇬🇧', rtl: false },
+  { code: 'he', native: 'עברית', flag: '🇮🇱', rtl: true },
+  { code: 'es', native: 'Español', flag: '🇪🇸', rtl: false },
+  // ready:false = shipped as scaffolding only; hidden from the picker until its
+  // string+gloss files land (AR phase). Everything else already handles it.
+  { code: 'ar', native: 'العربية', flag: '🇸🇦', rtl: true, ready: false },
+];
+const LOCALE_IMPORTS = {
+  he: () => import('./i18n-he.js'),
+  es: () => import('./i18n-es.js'),
+  ar: () => import('./i18n-ar.js'),
+};
+
+// Word glosses (kid-level translation of each vocabulary word) — Hebrew lives
+// inline in words.js (legacy hebrewTranslation field); other languages are lazy
+// modules keyed by word id. gloss() below is the single access point.
+const GLOSS_IMPORTS = {
+  es: () => import('../data/word-glosses-es.js'),
+  ar: () => import('../data/word-glosses-ar.js'),
+};
+const glosses = {};
+
+let localeLoading = {};
+export function loadLocale(lang) {
+  const jobs = [];
+  if (lang !== 'en' && !translations[lang] && LOCALE_IMPORTS[lang]) {
+    if (!localeLoading[lang]) {
+      localeLoading[lang] = LOCALE_IMPORTS[lang]().then(m => { translations[lang] = m.default; });
+    }
+    jobs.push(localeLoading[lang]);
   }
-  return heLoading;
+  if (!glosses[lang] && GLOSS_IMPORTS[lang]) {
+    if (!localeLoading['g:' + lang]) {
+      localeLoading['g:' + lang] = GLOSS_IMPORTS[lang]().then(m => { glosses[lang] = m.default; });
+    }
+    jobs.push(localeLoading['g:' + lang]);
+  }
+  return jobs.length ? Promise.all(jobs) : Promise.resolve();
+}
+// Back-compat alias (pre-multilang call sites)
+export const loadHebrew = () => loadLocale('he');
+
+// The learner-language gloss for a word: Hebrew from the word entry itself,
+// other languages from their lazy module (empty string until loaded / for en).
+export function gloss(word, lang) {
+  if (!word) return '';
+  if (lang === 'he') return word.hebrewTranslation || '';
+  return glosses[lang]?.[word.id] || '';
 }
 
 export function t(key, lang = 'en', params) {
@@ -527,5 +569,5 @@ export function t(key, lang = 'en', params) {
 }
 
 export function isRTL(lang) {
-  return lang === 'he';
+  return lang === 'he' || lang === 'ar';
 }

@@ -4,7 +4,7 @@ import { WORDS, CATEGORIES } from '../data/words';
 import { filterByKnownLetters } from '../utils/letterFilter';
 import { getImageUrl } from '../utils/images';
 import { speakWord } from '../utils/sound';
-import { t, isRTL } from '../utils/i18n';
+import { t, isRTL, gloss } from '../utils/i18n';
 
 export default function LearnMode({ stats, lang = 'en', canRead = true, words: customWords, knownLetters = null, onBack }) {
   const wordPool = customWords || filterByKnownLetters(WORDS, knownLetters);
@@ -290,8 +290,8 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
               </button>
             </div>
             {/* Hebrew box */}
-            <div className="bg-slate-50 dark:bg-slate-800/50 px-5 py-4 border-y border-slate-200 dark:border-slate-700" dir="rtl">
-              <p className="text-2xl font-bold text-slate-800 dark:text-slate-100">{currentWord.hebrewTranslation}</p>
+            <div className="bg-slate-50 dark:bg-slate-800/50 px-5 py-4 border-y border-slate-200 dark:border-slate-700" dir={(lang === 'es') ? 'ltr' : 'rtl'}>
+              <p className="text-2xl font-bold text-slate-800 dark:text-slate-100">{gloss(currentWord, lang === 'en' ? 'he' : lang) || currentWord.hebrewTranslation}</p>
             </div>
             {/* Info box */}
             <div className="px-5 py-4 space-y-2">

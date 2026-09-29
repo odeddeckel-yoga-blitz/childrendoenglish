@@ -41,3 +41,45 @@ for (const [lvl, n] of Object.entries(byLevel)) console.log(`  ${lvl.padEnd(12)}
 
 const thin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').filter(L => (byLetter[L] || 0) < THIN_LETTER);
 if (thin.length) console.log(`\nNext batch should prioritize letters: ${thin.join(' ')}`);
+
+// --- Gloss gate (multilang: plans/multilang-es-ar-2026-10.md WS2.2/WS5) ---
+// Generation-time check, same doctrine as the voice audit: reactive optimizers
+// can't see a new word, so gloss completeness must be validated here.
+// Also the text-space twin of the image sole-answer metric: two words in the
+// same CATEGORY sharing one gloss make the reveal text ambiguous in that language.
+const GLOSS_LANGS = ['es']; // add 'ar' when its gloss file lands
+let glossExit = 0;
+for (const gl of GLOSS_LANGS) {
+  let glosses;
+  try {
+    glosses = (await import(`../src/data/word-glosses-${gl}.js`)).default;
+  } catch {
+    console.log(`\n— ${gl} glosses: file missing (src/data/word-glosses-${gl}.js) ⚠`);
+    glossExit = 1;
+    continue;
+  }
+  const missing = WORDS.filter((w) => !glosses[w.id]);
+  const orphans = Object.keys(glosses).filter((id) => !WORDS.some((w) => w.id === id));
+  const byCatGloss = {};
+  const collisions = [];
+  for (const w of WORDS) {
+    const g = (glosses[w.id] || '').toLowerCase().trim();
+    if (!g) continue;
+    const key = `${w.category}::${g}`;
+    if (byCatGloss[key]) {
+      // True synonyms (taxi/cab) legitimately share a gloss — the existing
+      // product already accepts this when their HEBREW glosses are also equal,
+      // and quiz distractor logic excludes same-gloss pairs. Flag only real clashes.
+      const other = WORDS.find((x) => x.id === byCatGloss[key]);
+      if (!other || other.hebrewTranslation !== w.hebrewTranslation) {
+        collisions.push(`${w.category}: "${glosses[w.id]}" ← ${byCatGloss[key]} + ${w.id}`);
+      }
+    } else byCatGloss[key] = w.id;
+  }
+  console.log(`\n— ${gl} glosses: ${WORDS.length - missing.length}/${WORDS.length} covered`);
+  if (missing.length) { console.log(`  ⚠ missing: ${missing.map((w) => w.id).join(', ')}`); glossExit = 1; }
+  if (orphans.length) console.log(`  orphan gloss keys (word removed?): ${orphans.join(', ')}`);
+  if (collisions.length) { console.log(`  ⚠ same-category collisions:\n    ${collisions.join('\n    ')}`); glossExit = 1; }
+  if (!missing.length && !collisions.length) console.log('  complete, no same-category collisions ✓');
+}
+process.exitCode = glossExit;

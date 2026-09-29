@@ -6,7 +6,7 @@ import LandingPage from './components/LandingPage';
 import Confetti from './components/Confetti';
 import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, updateStreak, updateDailyGoal } from './utils/storage';
 import { initTTS } from './utils/sound';
-import { isRTL, t, loadHebrew } from './utils/i18n';
+import { isRTL, t, loadLocale } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
 import usePlayerManagement from './hooks/usePlayerManagement';
 import useInstallPrompt from './hooks/useInstallPrompt';
@@ -209,7 +209,7 @@ export default function App() {
   const lang = stats.uiLanguage || 'en';
   const [, forceUpdate] = useState(0);
   useEffect(() => {
-    if (lang === 'he') loadHebrew().then(() => forceUpdate(n => n + 1));
+    if (lang !== 'en') loadLocale(lang).then(() => forceUpdate(n => n + 1));
     document.documentElement.dir = isRTL(lang) ? 'rtl' : 'ltr';
     document.documentElement.lang = lang;
     const desc = document.querySelector('meta[name="description"]');
@@ -225,15 +225,16 @@ export default function App() {
         : 'english vocabulary, kids learning, vocabulary quiz, english for kids, learn english, flashcards, hebrew english, ESL games for children, english words for kids, learn english vocabulary online free, english learning app for kids, picture vocabulary games, vocabulary builder kids, english practice kids, educational games kids, free english learning games, english pronunciation app for kids, bilingual vocabulary app, hebrew english learning app, spaced repetition vocabulary kids, esl practice app for kids');
     }
     const ogLocale = document.querySelector('meta[property="og:locale"]');
-    if (ogLocale) ogLocale.setAttribute('content', lang === 'he' ? 'he_IL' : 'en_US');
+    const OG = { he: 'he_IL', es: 'es_ES', ar: 'ar_AR' };
+    if (ogLocale) ogLocale.setAttribute('content', OG[lang] || 'en_US');
   }, [lang]);
 
   // Read ?lang= URL param on mount (for hreflang SEO)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const urlLang = params.get('lang');
-    if (urlLang === 'he' && lang !== 'he') {
-      setStats(prev => ({ ...prev, uiLanguage: 'he' }));
+    if (['he', 'es', 'ar'].includes(urlLang) && lang !== urlLang) {
+      setStats(prev => ({ ...prev, uiLanguage: urlLang }));
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -314,10 +315,6 @@ export default function App() {
     setStats(prev => ({ ...prev, uiLanguage: lang }));
   }, []);
 
-  const handleToggleLanguage = useCallback(() => {
-    setStats(prev => ({ ...prev, uiLanguage: prev.uiLanguage === 'he' ? 'en' : 'he' }));
-  }, []);
-
   // Detect hash routes: #admin, #quiz/{mode}/{ids}, #words/{ids}
   useEffect(() => {
     const checkHash = async () => {
@@ -393,15 +390,15 @@ export default function App() {
             onLanguageStart={(selectedLang) => {
               handleLanguageSelect(selectedLang);
               const next = playerRegistry?.players?.length ? 'menu' : 'playerCreate';
-              if (selectedLang === 'he') {
-                loadHebrew().then(() => navigate(next));
+              if (selectedLang !== 'en') {
+                loadLocale(selectedLang).then(() => navigate(next));
               } else {
                 navigate(next);
               }
             }}
             onPrivacy={() => navigate('privacy')}
             onTerms={() => navigate('terms')}
-            onToggleLanguage={handleToggleLanguage}
+            onSelectLanguage={(l) => { handleLanguageSelect(l); if (l !== 'en') loadLocale(l); }}
           />
         );
 
@@ -467,7 +464,7 @@ export default function App() {
             onToggleDark={toggleDarkMode}
             onToggleSound={toggleSound}
             onOpenProfilePicker={() => setShowProfilePicker(true)}
-            onToggleLanguage={handleToggleLanguage}
+            onSelectLanguage={(l) => { handleLanguageSelect(l); if (l !== 'en') loadLocale(l); }}
           />
         );
 

@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useRef, useEffect } from 'react';
 import { ArrowLeft, Play, Share2, Check, X, Link, BookOpen, Layers } from 'lucide-react';
 import { WORDS, getWordByName } from '../data/words';
-import { t } from '../utils/i18n';
+import { t, gloss } from '../utils/i18n';
 
 export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, onFlashcard, onBack, initialWords }) {
   const [words, setWords] = useState(() => initialWords || []);
@@ -18,7 +18,8 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
     ? WORDS.filter(w =>
         !selectedIds.has(w.id) &&
         (w.word.toLowerCase().startsWith(query.toLowerCase()) ||
-         w.hebrewTranslation?.includes(query))
+         w.hebrewTranslation?.includes(query) ||
+         gloss(w, lang)?.toLowerCase().includes(query.toLowerCase()))
       ).slice(0, 8)
     : [];
 
@@ -198,8 +199,8 @@ export default function PersonalWordList({ lang = 'en', onStartQuiz, onLearn, on
                     />
                     <div className="flex-1 min-w-0">
                       <span className="font-semibold text-slate-800 dark:text-slate-100">{word.word}</span>
-                      {lang === 'he' && word.hebrewTranslation && (
-                        <span className="text-slate-400 ms-2">{word.hebrewTranslation}</span>
+                      {lang !== 'en' && gloss(word, lang) && (
+                        <span className="text-slate-400 ms-2">{gloss(word, lang)}</span>
                       )}
                     </div>
                     <span className="text-xs text-slate-400 shrink-0">{word.category}</span>
