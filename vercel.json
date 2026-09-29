@@ -137,5 +137,17 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/vocabulary/colors/amber",
+      "destination": "/vocabulary/colors/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/colors/amber/",
+      "destination": "/vocabulary/colors/",
+      "permanent": true
+    }
   ]
 }

@@ -23,7 +23,10 @@ Sections:
   entries to scripts/seo-featured.json (rendered as the "Popular" row on /vocabulary/).
 
 Operating loop: run weekly → write overrides (WITH "added" dates) for section-1/2
-winners → rebuild + deploy → tools/seo/push-index.py <urls> → judge in section 5
+winners → rebuild + deploy → tools/seo/push-index.py <urls> → judge in section 5.
+When CONTENT IS REMOVED (a vocabulary word's page, a retired game): ship a
+vercel.json 301 alongside the removal — section 7's ghost list flags stragglers
+(pages Google still shows that no longer exist in the sitemap).
 after 2-3 weeks. Priority = impressions x (expected_ctr(position) − actual_ctr).
 """
 import json, os, sys, datetime
@@ -101,7 +104,22 @@ print(f"{days}d: {total_clk} clicks / {total_imp} impressions across {len(pages)
       f"(site CTR {100*total_clk/max(1,total_imp):.1f}%, IL share {100*il_total/max(1,total_imp):.0f}%)\n")
 
 # 1 — CTR-opportunity pages
+# Per-page top query, for the brand-sitelink filter below: a page ranking pos ~1-5
+# on the BRAND query with ~0 clicks is a sitelink under the homepage result — the
+# homepage takes the click, and no title rewrite can change that. Flag, don't chase.
+top_query = {}
+for r in query_page:
+    p = path(r['keys'][1])
+    if r['impressions'] > top_query.get(p, (0, ''))[0]:
+        top_query[p] = (r['impressions'], r['keys'][0])
+_norm = lambda t: ''.join(ch for ch in t.lower() if ch.isalnum())
+_brand_n = _norm(BRAND)
+def brandish(query_text):
+    qn = _norm(query_text)
+    return len(qn) >= 4 and (qn in _brand_n or _brand_n in qn)
+
 scored = []
+brand_noise = []
 for r in pages:
     imp, clk, pos = r['impressions'], r['clicks'], r['position']
     if imp < MIN_IMP_PAGE or pos > 10:
@@ -110,6 +128,10 @@ for r in pages:
     if gap <= 0:
         continue
     p = path(r['keys'][0])
+    tq = top_query.get(p, (0, ''))[1]
+    if pos <= 5 and tq and brandish(tq):
+        brand_noise.append(f"{p} (top query '{tq}')")
+        continue
     ish = il_share.get(p, {'il': 0, 'all': 1})
     ilpct = 100 * ish['il'] / max(1, ish['all'])
     dv = dev_pos.get(p, {})
@@ -122,6 +144,8 @@ for r in pages:
 scored.sort(reverse=True)
 print(f"— 1. CTR-opportunity pages (title/description territory, pos ≤10, ≥{MIN_IMP_PAGE} imp):")
 print('\n'.join(s for _, s in scored[:top]) or '  none')
+if brand_noise:
+    print('  excluded as brand-sitelink noise (homepage takes the click): ' + '; '.join(brand_noise[:4]))
 
 # 2 — CTR-opportunity queries
 qscored = []
@@ -215,13 +239,30 @@ if not os.path.exists(sm_path):
     print('  dist/sitemap.xml not found — run a build first')
 else:
     sm_urls = set(_re.findall(r'<loc>([^<]+)</loc>', open(sm_path).read()))
-    shown90 = {path(r['keys'][0]).rstrip('/') + '/' for r in q(['page'], (today - datetime.timedelta(days=90)).isoformat(), end)}
+    rows90 = q(['page'], (today - datetime.timedelta(days=90)).isoformat(), end)
+    shown90 = {path(r['keys'][0]).rstrip('/') + '/' for r in rows90}
     never = sorted(path(u).rstrip('/') + '/' for u in sm_urls if (path(u).rstrip('/') + '/') not in shown90)
     from collections import Counter
     bucket = Counter(('/' + p.split('/')[1] + '/') if len(p.split('/')) > 2 else p for p in never)
     print(f'  {len(never)}/{len(sm_urls)} sitemap URLs never shown in 90d, by section: '
           + ', '.join(f'{k}:{v}' for k, v in bucket.most_common(8)))
     print('  sample: ' + ', '.join(never[:6]))
+    # Ghosts: the REVERSE direction — Google still surfaces a page that no longer
+    # exists in the current build (removed word, renamed route). Each one is either
+    # a missing vercel.json 301 (losing accrued equity) or an accepted 404.
+    sm_paths = {path(u).rstrip('/') + '/' for u in sm_urls}
+    ghosts = [(r['impressions'], r['clicks'], path(r['keys'][0]).rstrip('/') + '/')
+              for r in rows90
+              if '?' not in r['keys'][0] and '#' not in r['keys'][0]
+              and (path(r['keys'][0]).rstrip('/') + '/') not in sm_paths
+              and r['impressions'] >= 5]
+    ghosts.sort(reverse=True)
+    if ghosts:
+        print('  ghosts (in GSC, NOT in sitemap — removed/renamed → add a 301 or accept the 404):')
+        for i, c, p in ghosts[:8]:
+            print(f'    {p[:52]:52} {i:4.0f} imp  {c:2.0f} clk')
+    else:
+        print('  ghosts: none (every page Google shows exists in the current sitemap)')
 
 # 8 — auto-drafted override proposals for top CTR pages
 print('\n— 8. Override proposals (review, then merge into scripts/seo-title-overrides.json):')
