@@ -506,14 +506,13 @@ test.describe('Onboarding Full Flow', () => {
     await page.goto('/');
     await page.waitForSelector('#root > *', { timeout: 10000 });
 
-    // Pick Hebrew on the landing page language section. The language card is a
-    // two-step control (since the Jul-2026 onboarding redesign): the first
-    // click switches the interface language, the second click on the now-
-    // selected card enters the app (player create).
-    await page.locator('button:has-text("עברית")').first().scrollIntoViewIfNeeded();
-    await page.locator('button:has-text("עברית")').first().click();
-    await page.waitForTimeout(800); // let the Hebrew UI settle
-    await page.locator('button:has-text("עברית")').first().click();
+    // Pick Hebrew on the landing page. Since the multilang tiles (2026-09-30)
+    // ONE click on a language tile loads the locale and enters the app —
+    // target the tile by its unique Hebrew subtitle (a bare "עברית" selector
+    // would also match the top-bar LanguagePicker after the language flips).
+    const heTile = page.locator('button', { hasText: 'ממשק מלא בעברית' });
+    await heTile.scrollIntoViewIfNeeded();
+    await heTile.click();
 
     // Wait for player create screen (loadHebrew is async)
     const nameInput = page.locator('input[type="text"]').first();
