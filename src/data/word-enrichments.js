@@ -3134,7 +3134,6 @@ export const ENRICHMENTS = {
     ],
     "relatedWords": [
       "golden",
-      "amber",
       "orange_color",
       "lime"
     ]
@@ -3195,7 +3194,6 @@ export const ENRICHMENTS = {
     "relatedWords": [
       "red",
       "yellow",
-      "amber",
       "golden"
     ]
   },
@@ -3255,7 +3253,6 @@ export const ENRICHMENTS = {
     "relatedWords": [
       "beige",
       "cream",
-      "amber",
       "maroon"
     ]
   },
@@ -3314,7 +3311,6 @@ export const ENRICHMENTS = {
     ],
     "relatedWords": [
       "yellow",
-      "amber",
       "orange_color",
       "silver"
     ]
@@ -3335,8 +3331,7 @@ export const ENRICHMENTS = {
     "relatedWords": [
       "green",
       "yellow",
-      "turquoise",
-      "amber"
+      "turquoise"
     ]
   },
   "indigo": {
@@ -3359,27 +3354,7 @@ export const ENRICHMENTS = {
       "navy"
     ]
   },
-  "amber": {
-    "sentences": [
-      "The traffic light turned amber, so the car slowed down to stop.",
-      "The ancient insect was perfectly preserved inside a piece of amber.",
-      "Her eyes were a warm amber color, like honey in sunlight."
-    ],
-    "funFact": "Real amber is actually fossilized tree sap that is millions of years old! Sometimes ancient insects got stuck in the sap and were perfectly preserved inside amber for millions of years. Scientists have found dinosaur-era insects and even dinosaur feathers trapped in amber!",
-    "collocations": [
-      "amber light",
-      "amber eyes",
-      "golden amber",
-      "amber glow"
-    ],
-    "relatedWords": [
-      "golden",
-      "orange_color",
-      "yellow",
-      "brown"
-    ]
-  },
-  "beige": {
+    "beige": {
     "sentences": [
       "The walls of the classroom were painted a calm beige color.",
       "She chose a beige cardigan because it goes with everything she wears.",
@@ -3495,8 +3470,7 @@ export const ENRICHMENTS = {
     "relatedWords": [
       "pink",
       "orange_color",
-      "cream",
-      "amber"
+      "cream"
     ]
   },
   "violet": {

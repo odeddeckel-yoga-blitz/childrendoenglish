@@ -1489,12 +1489,6 @@ export const BATTLE_WORDS = {
    "img": "/images/indigo.webp"
   },
   {
-   "id": "amber",
-   "w": "amber",
-   "he": "ענבר",
-   "img": "/images/amber.webp"
-  },
-  {
    "id": "beige",
    "w": "beige",
    "he": "בז'",

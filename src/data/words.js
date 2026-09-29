@@ -1,4 +1,4 @@
-// 481 curated words across 13 categories, 3 difficulty levels
+// 480 curated words across 13 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -154,7 +154,6 @@ export const WORDS = [
   { id: 'golden', word: 'golden', level: 'advanced', partOfSpeech: 'adjective', category: 'colors', definition: 'A shiny warm yellow color like gold', exampleSentence: 'The golden sunset was beautiful.', phonetic: '/ˈɡoʊldən/', hebrewTranslation: 'זהוב', imageUrl: '/images/golden.webp' },
   { id: 'lime', word: 'lime', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'A bright yellow-green color like a lime fruit', exampleSentence: 'Her lime green shoes were very bright.', phonetic: '/laɪm/', hebrewTranslation: 'ירוק ליים', imageUrl: '/images/lime.webp' },
   { id: 'indigo', word: 'indigo', level: 'advanced', partOfSpeech: 'adjective', category: 'colors', definition: 'A deep blue-purple color', exampleSentence: 'The night sky turned a deep indigo.', phonetic: '/ˈɪndɪˌɡoʊ/', hebrewTranslation: 'אינדיגו', imageUrl: '/images/indigo.webp' },
-  { id: 'amber', word: 'amber', level: 'advanced', partOfSpeech: 'adjective', category: 'colors', definition: 'A warm golden-orange color like honey', exampleSentence: 'The traffic light turned amber.', phonetic: '/ˈæmbər/', hebrewTranslation: 'ענבר', imageUrl: '/images/amber.webp' },
 
   // === NUMBERS ===
   // Beginner

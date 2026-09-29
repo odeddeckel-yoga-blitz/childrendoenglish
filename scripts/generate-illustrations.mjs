@@ -175,24 +175,6 @@ const ILLUSTRATIONS = {
     <path d="M 380 250 l 10 22 22 10 -22 10 -10 22 -10 -22 -22 -10 22 -10 Z" fill="#475569"/>
   </svg>`,
 
-  amber: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
-    ${bgRect('#FFFBEB')}
-    <!-- amber resin droplet on a cord — the material, not a swatch: flat warm
-         circles (yellow/golden/orange/brown) are quiz rivals a hue can't beat -->
-    <path d="M 236 96 Q 256 76 276 96 L 276 128 L 236 128 Z" fill="#92400E"/>
-    <rect x="248" y="56" width="16" height="44" rx="8" fill="#92400E"/>
-    <path d="M 256 120 Q 380 210 380 300 Q 380 404 256 404 Q 132 404 132 300 Q 132 210 256 120 Z" fill="#F59E0B"/>
-    <path d="M 256 148 Q 356 224 356 300 Q 356 384 256 384 Q 156 384 156 300 Q 156 224 256 148 Z" fill="#FBBF24"/>
-    <!-- glow highlight -->
-    <ellipse cx="216" cy="240" rx="34" ry="52" fill="#FDE68A" opacity="0.85"/>
-    <!-- tiny ancient bug inclusion -->
-    <ellipse cx="284" cy="310" rx="16" ry="11" fill="#78350F"/>
-    <circle cx="270" cy="306" r="6" fill="#78350F"/>
-    <line x1="292" y1="300" x2="304" y2="292" stroke="#78350F" stroke-width="3"/>
-    <line x1="294" y1="310" x2="308" y2="308" stroke="#78350F" stroke-width="3"/>
-    <line x1="292" y1="320" x2="304" y2="328" stroke="#78350F" stroke-width="3"/>
-  </svg>`,
-
   ketchup: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FEF2F2')}
     <!-- squeeze bottle -->
