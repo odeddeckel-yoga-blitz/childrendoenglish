@@ -1,6 +1,6 @@
 # Multi-language Learner Support — ES + AR (plan, 2026-09-30)
 
-**STATUS: Phases 1+2 SHIPPED 2026-09-30. Phase 1 (5bfdc38): ES in-app + scaffolding. Phase 2 (52e6e26+4372622+45c13f0): lang-aware beacons (Neon lang columns live), optimizer language views (kit 1.3.0), /es/ landing + 13 bilingual + 14 printable-ES pages, hreflang clusters, 28 URLs pinged. Guatemala 'beachhead' was the brand query at pos 1.5 — devoted user, not ES content; surface built fresh. NEXT: Phase 3 = AR (i18n-ar strings, 480 AR glosses incl. orthography-variant copy, RTL pages) after the ES measure-gate (~3 wks: /es/ impressions + es-UI sessions in cde_land.lang).**
+**STATUS: Phases 1+2 SHIPPED 2026-09-30 (ES in-app + SEO surface + lang-aware measurement). PHASE 3 (ARABIC) ON HOLD — owner decision 2026-10-01. Do not start AR work (strings, glosses, RTL pages) until the owner explicitly un-holds it; the ES measure-gate results (Oct 10 peek / Oct 20 full) inform that decision but do NOT auto-start AR. The ar scaffolding (LANGS entry ready:false + stub files) stays in place — it is inert.**
 
 Owner decision basis: expansion research — AR: "translate this page" tell, no interactive
 product in "English words for kids with pictures" space (Pinterest/PDF blogs only).
