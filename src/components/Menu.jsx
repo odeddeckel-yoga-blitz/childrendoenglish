@@ -144,6 +144,24 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           </div>
         </button>
 
+        {/* Vocabulary arcade — standalone game pages (full navigation out of the
+            SPA; the games' home pill links back). Engagement fix 2026-10-01:
+            the games had ZERO in-app doors, so real users never found them. */}
+        <a
+          href="/games/"
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
+        >
+          <div className="shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600
+                            flex items-center justify-center text-2xl" aria-hidden="true">🎮</div>
+          </div>
+          <div>
+            <p className="font-bold text-slate-800 dark:text-slate-100">{t('arcadeGames', lang)}</p>
+            <p className="text-slate-500 text-sm">{t('arcadeGamesDesc', lang)}</p>
+          </div>
+        </a>
+
         {isNewUser && (
           <p className="text-center text-sm text-slate-400">{t('menuMoreFeatures', lang)}</p>
         )}

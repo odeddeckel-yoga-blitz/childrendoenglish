@@ -501,6 +501,11 @@ const translations = {
     lightningTimerLabel: '{{secs}} seconds left',
     backToResults: 'Back to results',
     trySuggestedMode: 'Try {{mode}} next!',
+
+    // Vocabulary arcade (standalone games — /games/)
+    arcadeGames: 'Play Games',
+    arcadeGamesDesc: 'Zap, spell and sort English words',
+    resultTryGame: 'Bonus: play {{name}}!',
   },
 };
 

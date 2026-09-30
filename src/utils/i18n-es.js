@@ -499,4 +499,7 @@ export default {
   lightningTimerLabel: '{{secs}} segundos restantes',
   backToResults: 'Volver a los resultados',
   trySuggestedMode: '¡Prueba {{mode}} ahora!',
+  arcadeGames: 'Juegos',
+  arcadeGamesDesc: 'Atrapa, deletrea y ordena palabras en inglés',
+  resultTryGame: '¡Extra: juega {{name}}!',
 };

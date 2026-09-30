@@ -499,4 +499,7 @@ export default {
   lightningTimerLabel: 'נותרו {{secs}} שניות',
   backToResults: 'חזרה לתוצאות',
   trySuggestedMode: 'נסו עכשיו: {{mode}}!',
+  arcadeGames: 'משחקים',
+  arcadeGamesDesc: 'תפסו, אייתו ומיינו מילים באנגלית',
+  resultTryGame: 'בונוס: שחקו {{name}}!',
 };

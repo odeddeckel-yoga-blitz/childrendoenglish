@@ -98,6 +98,27 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
         >
           <ArrowLeft className="w-4 h-4" /> {t('backToMenuBtn', lang)}
         </button>
+
+        {/* Rotating arcade suggestion — the post-quiz "what next" moment is the
+            one natural door to the standalone games (they live outside the SPA). */}
+        {(() => {
+          const ARCADE = [
+            { id: 'word-zapper', name: 'Word Zapper', emoji: '⚡' },
+            { id: 'spelling-forge', name: 'Spelling Forge', emoji: '🔨' },
+            { id: 'category-conveyor', name: 'Category Conveyor', emoji: '📦' },
+          ];
+          const g = ARCADE[new Date().getDate() % ARCADE.length];
+          return (
+            <a
+              href={`/games/${g.id}/`}
+              className="w-full py-3 px-4 rounded-xl font-bold text-emerald-700 dark:text-emerald-300
+                         bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700
+                         hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 text-sm"
+            >
+              <span aria-hidden="true">{g.emoji}</span> {t('resultTryGame', lang, { name: g.name })}
+            </a>
+          );
+        })()}
       </div>
 
       {/* Answer review */}
