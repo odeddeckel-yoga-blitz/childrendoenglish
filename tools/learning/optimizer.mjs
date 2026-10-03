@@ -155,22 +155,20 @@ for (const r of rows) {
   const g = (gameEv[r.item] = gameEv[r.item] || { lvl: 0, cmp: 0 });
   g[r.ev === 'g_lvl' ? 'lvl' : 'cmp'] += r.n;
 }
-const landRows = await q`SELECT page, sum(n)::int AS n FROM cde_land
-  WHERE day >= CURRENT_DATE - ${days}::int AND page LIKE '/games/%' GROUP BY page`;
-const opens = {};
-for (const r of landRows) {
-  const id = r.page.replace(/^\/games\//, '').replace(/\/$/, '');
-  if (id) opens[id] = (opens[id] || 0) + r.n;
-}
-const gameIds = [...new Set([...Object.keys(opens), ...Object.keys(gameEv)])].sort();
-if (gameIds.length > 0) {
-  console.log('\n— games play depth (level-ups ÷ opens; completes = finished runs):');
+// cde_land stores page CLASSES (the 'games' class covers all /games/* pages),
+// never paths — so opens are catalog-level; per-game splits come from the
+// g_lvl/g_cmp items. (A per-game LIKE query here silently matched nothing.)
+const landRows = await q`SELECT sum(n)::int AS n FROM cde_land
+  WHERE day >= CURRENT_DATE - ${days}::int AND page = 'games'`;
+const gamesOpens = landRows[0]?.n || 0;
+const gameIds = Object.keys(gameEv).sort();
+if (gamesOpens > 0 || gameIds.length > 0) {
+  const totLvl = gameIds.reduce((a, id) => a + gameEv[id].lvl, 0);
+  const depth = gamesOpens ? (totLvl / gamesOpens).toFixed(2) : '—';
+  console.log(`\n— games: ${gamesOpens} opens (catalog-level), ${totLvl} level-ups, depth ${depth}` +
+    (gamesOpens >= 10 && totLvl / gamesOpens < 0.2 ? '  ⚠ opens don’t convert to play — check first-play UX' : ''));
   for (const id of gameIds) {
-    const o = opens[id] || 0;
-    const { lvl = 0, cmp = 0 } = gameEv[id] || {};
-    const depth = o ? (lvl / o).toFixed(2) : '—';
-    const flag = o >= 10 && lvl / o < 0.2 ? '  ⚠ ranks-but-doesn’t-engage → fix/rebuild candidate' : '';
-    console.log(`  ${id.padEnd(20)} opens ${String(o).padStart(4)}  levelups ${String(lvl).padStart(4)}  completes ${String(cmp).padStart(3)}  depth ${depth}${flag}`);
+    console.log(`  ${id.padEnd(20)} levelups ${String(gameEv[id].lvl).padStart(4)}  completes ${String(gameEv[id].cmp).padStart(3)}`);
   }
-  console.log('  (note: beacons ship 2026-09-26 — opens predate levelups until the deploy ages in)');
+  console.log('  (games page-class ships 2026-10-03 — opens before that date landed in \'other\')');
 }
