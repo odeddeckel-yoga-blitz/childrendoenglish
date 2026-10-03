@@ -37,6 +37,9 @@ function buildCrawlMesh() {
     `.crawl-mesh h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;margin:.8rem 0 .25rem;color:#475569}` +
     `.crawl-mesh p{margin:0;line-height:1.9}` +
     `.crawl-mesh a{color:#0d9488;text-decoration:none;margin-right:.7rem;white-space:nowrap}.crawl-mesh a:hover{text-decoration:underline}</style>` +
+    // Language landings FIRST — hreflang alone gave /he/ zero link equity for
+    // months (pos ~21); every generated page now links each language's front door.
+    row('Languages · שפות · Idiomas', [['/', 'English'], ['/he/', 'עברית — לימוד אנגלית לילדים'], ['/es/', 'Español — vocabulario en inglés para niños']]) +
     row('Printable Flashcards', [['/printable-flashcards/', 'All flashcards'], ...cats.map((c) => [`/printable-flashcards/${c}/`, label(c)])]) +
     row('Vocabulary in Hebrew', cats.map((c) => [`/vocabulary/${c}/hebrew/`, `${label(c)} עברית`])) +
     row('Vocabulary in Spanish', cats.map((c) => [`/vocabulary/${c}/spanish/`, `${label(c)} español`])) +
