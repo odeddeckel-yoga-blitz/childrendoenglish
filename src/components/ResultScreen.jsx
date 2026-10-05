@@ -3,7 +3,7 @@ import { getWordById } from '../data/words';
 import { LIGHTNING_SECS } from '../utils/arcade';
 import { t } from '../utils/i18n';
 
-export default function ResultScreen({ results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onMenu, onLightning }) {
+export default function ResultScreen({ cycleNext, results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onMenu, onLightning }) {
   const { score, total, answers = [], arcade, arcadeNewBest, quit } = results;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const showLightning = !!onLightning && canRead && !quit && total > 0;
@@ -68,6 +68,17 @@ export default function ResultScreen({ results, lang = 'en', level: _level, mode
         </div>
       )}
 
+
+      {/* Learning-cycle continuation — primary when a cycle stage just finished */}
+      {cycleNext && (
+        <button
+          onClick={cycleNext.onClick}
+          className="w-full py-4 px-4 rounded-xl font-black text-white bg-blue-600 hover:bg-blue-700
+                     active:scale-95 transition-all shadow-md text-lg"
+        >
+          {cycleNext.label}
+        </button>
+      )}
 
       {/* Action buttons — Play Again is primary */}
       <div className="space-y-3">

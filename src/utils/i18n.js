@@ -506,6 +506,19 @@ const translations = {
     arcadeGames: 'Play Games',
     arcadeGamesDesc: 'Zap, spell and sort English words',
     resultTryGame: 'Bonus: play {{name}}!',
+
+    // Learning cycle (guided learn→practice→advance loop)
+    cycleContinue: 'Continue learning',
+    cycleBatchTitle: 'Word batch {{num}} — letter {{label}}',
+    cycleStageOf: 'Step {{step}} of {{total}}',
+    cycleNextStage: 'Next: {{mode}} →',
+    cycleFinishBatch: 'Finish the batch! 🎉',
+    cycleBatchDone: 'Batch {{num}} complete!',
+    cycleBatchDoneDesc: 'You practiced {{count}} words. They will come back in reviews until you master them.',
+    cycleNextBatch: 'Start batch {{num}} →',
+    cycleMastered: '{{count}} words mastered',
+    cycleAllDone: 'You finished every batch! 🏆',
+    cycleStart: 'Start learning!',
   },
 };
 

@@ -3,7 +3,7 @@ import { t } from '../utils/i18n';
 
 import LanguagePicker from './LanguagePicker';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart: _onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage, onContinueCycle, cycleInfo }) {
 
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
   const isNewUser = stats.totalQuizzes === 0 && wordsLearned === 0;
@@ -66,13 +66,40 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
       {/* Assessment removed — levels unlock via quiz scores */}
 
+      {/* Learning cycle hero — THE answer to "what do I do?": one continue
+          button over the batch ladder (learn 10 → practice through stages →
+          advance). Everything below is explore, not the main path. */}
+      {onContinueCycle && (
+        <button
+          onClick={onContinueCycle}
+          className="w-full rounded-2xl p-5 text-start text-white shadow-lg
+                     bg-linear-to-br from-blue-600 to-indigo-600
+                     hover:shadow-xl active:scale-[0.98] transition-all ring-2 ring-emerald-400 ring-offset-2"
+        >
+          <p className="text-xs font-semibold uppercase tracking-wide text-blue-100">
+            {cycleInfo?.isNew ? t('startHere', lang) : t('cycleContinue', lang)}
+          </p>
+          <p className="text-lg font-black mt-1">
+            {t('cycleBatchTitle', lang, { num: (cycleInfo?.batch ?? 0) + 1, label: cycleInfo?.label || 'A' })}
+          </p>
+          <div className="flex items-center justify-between mt-2 text-sm text-blue-100">
+            <span>{t('cycleStageOf', lang, { step: (cycleInfo?.stage ?? 0) + 1, total: cycleInfo?.stages ?? 3 })}</span>
+            <span>{t('cycleMastered', lang, { count: cycleInfo?.mastered ?? 0 })}</span>
+          </div>
+          <div className="mt-2 h-2 rounded-full bg-white/25 overflow-hidden" aria-hidden="true">
+            <div className="h-full bg-emerald-300 rounded-full transition-all"
+                 style={{ width: `${Math.min(100, Math.round(100 * ((cycleInfo?.batch ?? 0) / (cycleInfo?.totalBatches || 48))))}%` }} />
+          </div>
+        </button>
+      )}
+
       {/* Main actions */}
       <nav aria-label="Main menu" className="space-y-3">
         {/* Play Quiz — primary action for new users */}
         <button
-          onClick={() => isNewUser && onQuickStart ? onQuickStart() : onNavigate('levelSelect')}
-          className={`w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-start${isNewUser ? ' ring-2 ring-emerald-400 ring-offset-2 bg-blue-50/50' : ''}`}
+          onClick={() => onNavigate('levelSelect')}
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
           <div className="relative shrink-0">
             <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-blue-600
@@ -81,14 +108,9 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             </div>
           </div>
           <div className="flex-1">
-            <p className="font-bold text-slate-800 dark:text-slate-100">{isNewUser ? t('playFirstQuiz', lang) : t('playQuiz', lang)}</p>
+            <p className="font-bold text-slate-800 dark:text-slate-100">{t('playQuiz', lang)}</p>
             <p className="text-slate-500 text-sm">{t('playQuizDesc', lang)}</p>
           </div>
-          {isNewUser && (
-            <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold shrink-0">
-              {t('startHere', lang)}
-            </span>
-          )}
         </button>
 
         {/* Letter-by-letter path — the natural progression for young learners */}

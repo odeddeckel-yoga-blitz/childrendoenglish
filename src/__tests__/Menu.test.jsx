@@ -77,14 +77,20 @@ describe('Menu', () => {
     expect(screen.getAllByText('Parent Dashboard').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('calls onQuickStart for new user clicking Play Quiz', () => {
-    const onQuickStart = vi.fn();
+  it('leads with the learning-cycle Continue card; clicking starts the cycle', () => {
+    // The cycle hero replaced the old new-user quick-start (2026-10-05):
+    // one obvious continue action instead of a menu of equal doors.
+    const onContinueCycle = vi.fn();
     const onNavigate = vi.fn();
     const newUserStats = { ...defaultStats, totalQuizzes: 0, wordProgress: {} };
-    render(<Menu {...defaultProps} stats={newUserStats} onQuickStart={onQuickStart} onNavigate={onNavigate} />);
-    fireEvent.click(screen.getByText('Play Your First Quiz!'));
-    expect(onQuickStart).toHaveBeenCalled();
-    expect(onNavigate).not.toHaveBeenCalledWith('levelSelect');
+    render(<Menu {...defaultProps} stats={newUserStats} onContinueCycle={onContinueCycle}
+      cycleInfo={{ batch: 0, stage: 0, label: 'A', stages: 3, mastered: 0, totalBatches: 48, isNew: true }}
+      onNavigate={onNavigate} />);
+    fireEvent.click(screen.getByText(/Word batch 1/));
+    expect(onContinueCycle).toHaveBeenCalled();
+    // The regular quiz card now always routes to level select
+    fireEvent.click(screen.getByText('Play Quiz'));
+    expect(onNavigate).toHaveBeenCalledWith('levelSelect');
   });
 
   it('renders in Hebrew when lang=he', async () => {

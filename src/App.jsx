@@ -17,6 +17,8 @@ import { getDueWords } from './utils/spaced-repetition';
 import { filterByKnownLetters } from './utils/letterFilter';
 import { sendLearn } from './utils/learnBeacon';
 import { WORDS } from './data/words';
+import { cycleState, advanceCycle, batchWords, batchLabel, batchCount, stagesFor, masteredCount } from './utils/learningCycle';
+import BatchComplete from './components/BatchComplete';
 
 
 const Onboarding = lazy(() => import('./components/Onboarding'));
@@ -119,6 +121,10 @@ export default function App() {
   const [learnWords, setLearnWords] = useState(null);
   const [sharedWords, setSharedWords] = useState(null);
   const [focusedWords, setFocusedWords] = useState(null);
+  // Learning cycle: cycleRun marks the in-flight quiz as a cycle stage;
+  // batchDoneNum (1-based) drives the batch-complete interstitial.
+  const [cycleRun, setCycleRun] = useState(false);
+  const [batchDoneNum, setBatchDoneNum] = useState(null);
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && !navigator.onLine);
   const [storageFull, setStorageFull] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -273,6 +279,40 @@ export default function App() {
   const quizFlow = useQuizFlow({ stats, setStats, navigate, knownLetters: activePlayer?.knownLetters });
 
   // ⚡ Lightning Round finished: persist per-mode best + rounds count.
+  // Start (or resume) the current cycle stage: a quiz over the batch's words in
+  // the ladder's current mode. Fires cyc_start on a batch's first stage.
+  const startCycleStage = useCallback(() => {
+    const { batch, stage } = cycleState(stats);
+    const canRead = activePlayer?.canRead ?? true;
+    const kl = activePlayer?.knownLetters;
+    const ladder = stagesFor(canRead);
+    const safeStage = Math.min(stage, ladder.length - 1);
+    if (safeStage === 0) sendLearn('cyc_start', 'b' + batch);
+    setCycleRun(true);
+    quizFlow.startQuiz(null, ladder[safeStage], batchWords(batch, kl));
+  }, [stats, activePlayer, quizFlow]);
+
+  // After a COMPLETED cycle stage: record it, advance stats, and either start
+  // the next stage or celebrate the batch. Soft gate by design — mastery
+  // accrues later via SRS resurfacing, never blocks advancement.
+  const continueCycle = useCallback(() => {
+    const { batch, stage } = cycleState(stats);
+    const canRead = activePlayer?.canRead ?? true;
+    const kl = activePlayer?.knownLetters;
+    sendLearn('cyc_stage', `b${batch}_s${stage}`);
+    const next = advanceCycle(stats, canRead);
+    setStats(prev => ({ ...prev, cycle: { batch: next.batch, stage: next.stage } }));
+    if (next.batchDone) {
+      sendLearn('cyc_done', 'b' + batch);
+      setCycleRun(false);
+      setBatchDoneNum(batch + 1);
+      navigate('batchComplete');
+    } else {
+      const ladder = stagesFor(canRead);
+      quizFlow.startQuiz(null, ladder[next.stage], batchWords(batch, kl));
+    }
+  }, [stats, activePlayer, quizFlow, navigate, setStats]);
+
   const handleLightningFinish = useCallback((solves) => {
     const mode = quizFlow.selectedMode;
     setStats(prev => {
@@ -463,6 +503,19 @@ export default function App() {
             onDismissInstall={dismissInstall}
             onNavigate={navigate}
             onQuickStart={() => quizFlow.startQuiz('beginner', 'listen')}
+            onContinueCycle={startCycleStage}
+            cycleInfo={(() => {
+              const { batch, stage } = cycleState(stats);
+              const kl = activePlayer?.knownLetters;
+              return {
+                batch, stage,
+                label: batchLabel(batch, kl),
+                stages: stagesFor(activePlayer?.canRead ?? true).length,
+                mastered: masteredCount(stats),
+                totalBatches: batchCount(kl),
+                isNew: (stats.totalQuizzes || 0) === 0 && batch === 0 && stage === 0,
+              };
+            })()}
             onToggleDark={toggleDarkMode}
             onToggleSound={toggleSound}
             onOpenProfilePicker={() => setShowProfilePicker(true)}
@@ -552,9 +605,27 @@ export default function App() {
             level={quizFlow.selectedLevel}
             mode={quizFlow.selectedMode}
             canRead={activePlayer?.canRead ?? true}
+            cycleNext={(() => {
+              if (!cycleRun || quizFlow.quizResults?.quit) return null;
+              const next = advanceCycle(stats, activePlayer?.canRead ?? true);
+              if (next.batchDone) return { label: t('cycleFinishBatch', lang), onClick: continueCycle };
+              const modeKey = { listen: 'listenMatchQuiz', image: 'imageQuiz', word: 'wordQuiz' }[stagesFor(activePlayer?.canRead ?? true)[next.stage]];
+              return { label: t('cycleNextStage', lang, { mode: t(modeKey, lang) }), onClick: continueCycle };
+            })()}
             onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords)}
-            onMenu={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
+            onMenu={() => { setCycleRun(false); focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back'); }}
             onLightning={quizFlow.quizWords.length > 0 ? () => navigate('lightning') : undefined}
+          />
+        );
+
+      case 'batchComplete':
+        return (
+          <BatchComplete
+            stats={stats}
+            lang={lang}
+            batchJustDone={batchDoneNum || 1}
+            onNextBatch={startCycleStage}
+            onBackToMenu={() => navigate('menu', 'back')}
           />
         );
 

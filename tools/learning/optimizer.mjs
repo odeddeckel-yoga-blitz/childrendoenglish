@@ -145,6 +145,21 @@ if (letters.length > 0) {
   console.log('\n— letter-path practice taps: ' + letters.map(r => `${r.item.toUpperCase()}:${r.n}`).join(' '));
 }
 
+// --- learning-cycle funnel (cyc_start → per-stage → cyc_done per batch) ---
+const cyc = rows.filter(r => ['cyc_start', 'cyc_stage', 'cyc_done'].includes(r.ev));
+if (cyc.length > 0) {
+  const starts = cyc.filter(r => r.ev === 'cyc_start').reduce((a, r) => a + r.n, 0);
+  const dones = cyc.filter(r => r.ev === 'cyc_done').reduce((a, r) => a + r.n, 0);
+  console.log(`\n— learning cycle: ${starts} batch starts → ${dones} batch completions (${starts ? Math.round(100 * dones / starts) : 0}%)`);
+  const byStage = {};
+  for (const r of cyc.filter(x => x.ev === 'cyc_stage')) {
+    const m = r.item.match(/_s(\d+)$/);
+    if (m) byStage[m[1]] = (byStage[m[1]] || 0) + r.n;
+  }
+  const stageLine = Object.entries(byStage).sort().map(([s, n]) => `s${s}:${n}`).join('  ');
+  if (stageLine) console.log(`  stage completions: ${stageLine}  (a step-down between stages = the drop-off stage)`);
+}
+
 // --- games: play depth (KDM parity — levelups ÷ opens per game) ---
 // Opens come from cde_land page pings (/games/<id>), level-ups and completed
 // runs from the g_lvl/g_cmp learn events the games fire (webdriver-excluded).
