@@ -150,8 +150,9 @@ test.describe('Landing Page', () => {
 
   test('returning single player skips landing and goes straight to the menu', async ({ page }) => {
     await setupNewPlayer(page);
-    // A player exists → no marketing page; new-user menu shows "Play Your First Quiz!"
-    await expect(page.locator('text=Play Your First Quiz')).toBeVisible({ timeout: 5000 });
+    // A player exists → no marketing page; the menu leads with the learning-cycle
+    // Continue card (replaced "Play Your First Quiz!" 2026-10-05).
+    await expect(page.getByText(/Word batch 1/)).toBeVisible({ timeout: 5000 });
   });
 
   test('family with two players boots into player select', async ({ page }) => {
