@@ -61,7 +61,14 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
   symbol and the motion in the same place.
 - **Mandatory parent-diagnostics panel.** Built into the early games, then removed product-wide — it competed
   with kid clarity. Don't add one.
-- **Punishing game-over / lives.** Use the forgiving recycle model instead.
+- **Punishing game-over / lives.** Use the forgiving recycle model instead — a miss shakes +
+  teaches + recycles, it must NEVER end the run. This is invisible to reachability/playtest (the
+  game still wins) yet silently crushes mid-game retention: a 2026-10-03 beacon read showed
+  pattern-weaver losing ~everyone past L5 to a 3-shield game-over, and a sweep found the same
+  legacy pattern in **14 other games** (shields that decrement on a miss and `gameOver()` at zero).
+  **Enforced by the `forgiving-model` mechanical check** — it flags a lives/shields/hearts counter
+  whose depletion triggers a run-ending call, so a game that ships it fails review/CI. A bare
+  `gameOver()` definition left unused is fine; the ban is on *calling* it from a miss path.
 - **Hidden multi-select.** A single stepper/control that only affects *one* of several manipulable objects,
   with no signal that the others are selectable/movable. Players adjust the default object, can't reach the
   target, and conclude the puzzle is unsolvable. (This shipped in Stat Lab v1: tap-to-select-a-bar worked but
@@ -166,6 +173,15 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
   The math object lives on the canvas; steppers/taps live in the panel.
 - **Tiered difficulty.** Each generator takes a `tier` (1|2|3) and widens its ranges — the template demo and
   `LEVELS` illustrate this. Never cold-open on the hardest case; `tier` should climb with the level index.
+- **One hard thing at a time (no difficulty-stacking).** When a level introduces a NEW mechanic or dimension
+  (a drift current, an obstacle to dodge, negatives, a second operation…), **ease the OTHER difficulty dials at
+  that same level** so the player learns the new thing while the rest is easy — never ship a level where a brand-
+  new mechanic lands AND the core math is also near its peak. Stacking two hard things at one level is the #1
+  cause of a mid-game drop-off cliff. Concretely: at the introduction level, lower the number ranges / step size
+  back toward tier-1 for a board or two, then let them climb again once the new mechanic is familiar. (Real case:
+  *deep-sea-vector-salvage* introduced drift currents while vector deltas were still near max — ~77% of players
+  quit across those two levels; the fix was to drop the delta size at the current-introduction levels, not to
+  remove currents. The engagement optimizer's **⚠ Difficulty cliffs** table flags this pattern automatically.)
 - **Direct-manipulation drag.** The template ships `FX.enableDrag({hit, valueAt, onDrag})` — grab the object
   and it follows the finger. Use it instead of re-rolling pointer plumbing (that's where the
   hidden-multi-select bug lives).
