@@ -40,4 +40,26 @@ for u in urls:
     except Exception as e:
         fail += 1
         if fail <= 2: print('fail:', u, str(e)[:100])
-print(f'indexing pings: {ok} ok, {fail} failed')
+print(f'Google indexing pings: {ok} ok, {fail} failed')
+
+# --- IndexNow (Bing/Yandex/etc.) — one POST covers every participating engine.
+# Key file must be hosted at https://<host>/<key>.txt (public by design); the
+# consumer keeps it in its public/ dir. Skipped silently when no key is present.
+import urllib.request as _ur
+host = SITE.replace('https://', '').replace('http://', '').rstrip('/')
+key_glob = [f for f in os.listdir(os.environ.get('INDEXNOW_KEY_DIR', 'public'))
+            if f.endswith('.txt') and len(f) == 36] if os.path.isdir(os.environ.get('INDEXNOW_KEY_DIR', 'public')) else []
+if urls and key_glob:
+    key = key_glob[0][:-4]
+    body = json.dumps({'host': host, 'key': key,
+                       'keyLocation': f'https://{host}/{key}.txt',
+                       'urlList': urls[:10000]}).encode()
+    req = _ur.Request('https://api.indexnow.org/indexnow', data=body,
+                      headers={'Content-Type': 'application/json; charset=utf-8'})
+    try:
+        with _ur.urlopen(req, timeout=30) as r:
+            print(f'IndexNow: HTTP {r.status} for {len(urls)} url(s) (Bing/Yandex/…)')
+    except Exception as e:
+        print('IndexNow failed:', str(e)[:120])
+elif urls:
+    print('IndexNow: no key file in public/ — generate one (32-hex .txt) to enable')
