@@ -22,7 +22,9 @@ Sections:
   Internal-link advisor: page-2 band entries get suggested linkers; act by adding
   entries to scripts/seo-featured.json (rendered as the "Popular" row on /vocabulary/).
 
-Operating loop: run weekly → write overrides (WITH "added" dates) for section-1/2
+Operating loop: run weekly → ALSO run bing_query.py alongside (Bing is invisible
+to GSC and has been the larger search referrer on kidsdomath — judge CTR levers
+on both engines) → write overrides (WITH "added" dates) for section-1/2
 winners → rebuild + deploy → tools/seo/push-index.py <urls> → judge in section 5.
 When CONTENT IS REMOVED (a vocabulary word's page, a retired game): ship a
 vercel.json 301 alongside the removal — section 7's ghost list flags stragglers
