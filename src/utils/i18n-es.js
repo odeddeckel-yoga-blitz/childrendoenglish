@@ -418,13 +418,13 @@ export default {
   faq6Q: '¿Pueden varios niños usar la app?',
   faq6A: '¡Sí! La app admite múltiples perfiles de jugador para que cada hermano pueda seguir su propio progreso de forma independiente.',
   faq7Q: '¿Cómo enseña vocabulario?',
-  faq7A: 'Usa repetición espaciada y varios modos de quiz — imágenes, palabras, audio y escuchar-emparejar — junto con tarjetas para construir un vocabulario duradero.',
+  faq7A: 'Cada grupo de 10 palabras sube una escalera de práctica de 11 pasos — tarjetas, quizzes de escucha y lectura, juegos de letras que faltan, práctica de oraciones y juegos arcade — con repetición espaciada hasta dominarlas.',
 
   // Language select
   confirmLanguage: '¿Qué idioma hablas?',
   landingStatsWords: '480+ Palabras',
   landingStatsCategories: '13 Categorías',
-  landingStatsModes: '4 Modos de Quiz',
+  landingStatsModes: 'Escalera de 11 pasos',
   landingFeaturesHeading: 'Todo lo que tu hijo necesita',
   landingReadyTitle: '¿Listo para empezar a aprender?',
   landingReadyDesc: 'Elige tu idioma y comienza de inmediato.',

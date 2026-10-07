@@ -298,8 +298,10 @@ export default function App() {
     if (ladderSet) return ladderSet;
     const { batch } = cycleState(stats);
     const built = buildSet('batch', { stats, knownLetters: klNow });
-    return { ...built, source: 'batch', label: t('cycleBatchTitle', lang, { num: batch + 1, label: batchLabel(batch, klNow) }) };
-  }, [ladderSet, stats, klNow, lang]);
+    // labelParts, not a baked string: lazy-loaded locale strings arrive after
+    // this memo, so the render site translates (LadderMap re-renders then).
+    return { ...built, source: 'batch', labelParts: { num: batch + 1, label: batchLabel(batch, klNow) } };
+  }, [ladderSet, stats, klNow]);
 
   const ladderSteps = useMemo(() => stepsFor(canReadNow, activeSet.words), [canReadNow, activeSet]);
 
@@ -720,7 +722,7 @@ export default function App() {
             lang={lang}
             canRead={canReadNow}
             setWords={activeSet.words}
-            setLabel={activeSet.label}
+            setLabel={activeSet.labelParts ? t('cycleBatchTitle', lang, activeSet.labelParts) : activeSet.label}
             currentStepKey={ladderPos.currentKey}
             doneKeys={ladderPos.doneKeys}
             onStartStep={startLadderStep}

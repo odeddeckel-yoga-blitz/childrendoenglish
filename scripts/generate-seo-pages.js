@@ -1652,7 +1652,7 @@ function buildSpanishLandingPage() {
   <div class="stats-bar">
     <div class="stat"><div class="stat-num">${WORDS.length}+</div><div class="stat-label">palabras</div></div>
     <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">categorías</div></div>
-    <div class="stat"><div class="stat-num">4</div><div class="stat-label">modos de práctica</div></div>
+    <div class="stat"><div class="stat-num">11</div><div class="stat-label">pasos de práctica</div></div>
     <div class="stat"><div class="stat-num">3</div><div class="stat-label">niveles</div></div>
   </div>
 
@@ -1674,7 +1674,7 @@ function buildSpanishLandingPage() {
         <div class="feature-card">
           <div class="feature-icon">&#127918;</div>
           <h3>Quizzes divertidos</h3>
-          <p>Cuatro modos de práctica — fotos, palabras, audio y parejas — que convierten el aprendizaje en un juego.</p>
+          <p>Una escalera de 11 pasos — tarjetas, quizzes, letras que faltan, oraciones y juegos arcade — que convierte el aprendizaje en un juego.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128196;</div>
@@ -3040,7 +3040,7 @@ const GUIDES = [
       {
         h2: 'Picture Quizzes: From Passive to Active Learning',
         content: `<p>Looking at picture flashcards is passive learning. To move vocabulary into long-term memory, kids need to <strong>actively retrieve</strong> the word. That's where picture quizzes come in.</p>
-<p><a href="/">Children Do English</a> offers four quiz modes that use pictures:</p>
+<p><a href="/">Children Do English</a> practices every word through a guided 11-step ladder with pictures at every step:</p>
 <ul>
   <li><strong>Image Quiz</strong> &mdash; See a picture, pick the correct English word from four options</li>
   <li><strong>Word Quiz</strong> &mdash; See an English word, pick the matching picture</li>
@@ -3315,7 +3315,7 @@ const GUIDES = [
 <ul>
   <li><strong>Full Hebrew integration</strong> &mdash; Every word includes Hebrew translation, and the entire interface is available in Hebrew. No other app on this list offers this level of Hebrew support.</li>
   <li><strong>Spaced repetition built in</strong> &mdash; The app automatically schedules word reviews at optimal intervals, so kids remember what they learn long-term.</li>
-  <li><strong>Four quiz modes</strong> &mdash; Image quiz, word quiz, audio challenge, and flashcard review keep practice varied and engaging.</li>
+  <li><strong>An 11-step practice ladder</strong> &mdash; flashcards, listening and reading quizzes, missing-letter spelling games, sentence practice and arcade games take each group of words from first meeting to mastery.</li>
   <li><strong>Truly free</strong> &mdash; No premium tier, no ads, no in-app purchases. Every feature is available to every user.</li>
   <li><strong>Works completely offline</strong> &mdash; After the first visit, the app works without internet. Perfect for car rides and areas with spotty connectivity.</li>
   <li><strong>Multiple player profiles</strong> &mdash; Siblings can each track their own progress on the same device.</li>

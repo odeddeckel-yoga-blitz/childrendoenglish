@@ -420,13 +420,13 @@ const translations = {
     faq6Q: 'Can multiple kids use the app?',
     faq6A: 'Yes! The app supports multiple player profiles so siblings can each track their own progress independently.',
     faq7Q: 'How does it teach vocabulary?',
-    faq7A: 'It uses spaced repetition and multiple quiz modes — image, word, audio, and listen & match — along with flashcards to build lasting vocabulary.',
+    faq7A: 'Every group of 10 words climbs an 11-step practice ladder — flashcards, listening and reading quizzes, missing-letter spelling games, sentence practice and arcade games — with spaced repetition resurfacing words until they are mastered.',
 
     // Language select
     confirmLanguage: 'What language do you speak?',
     landingStatsWords: '480+ Words',
     landingStatsCategories: '13 Categories',
-    landingStatsModes: '4 Quiz Modes',
+    landingStatsModes: '11-Step Ladder',
     landingFeaturesHeading: 'Everything your child needs',
     landingReadyTitle: 'Ready to start learning?',
     landingReadyDesc: 'Choose your language and jump right in.',

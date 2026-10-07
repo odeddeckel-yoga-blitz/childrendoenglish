@@ -30,7 +30,10 @@ with pronunciation, an example sentence, and the Hebrew translation.
 
 ## App
 
-- [Free practice app](https://childrendoenglish.com/): quizzes (listen-first for
+- [Free practice app](https://childrendoenglish.com/): every group of 10 words
+  climbs a guided 11-step practice ladder — flashcards, listening and reading
+  quizzes, missing-letter spelling games, sentence practice and arcade games —
+  with spaced repetition until mastery. Quizzes are listen-first (for
   pre-readers), flashcards, letter-by-letter practice, parent dashboard. Works
   offline; nothing to install or sign up for.
 - [Spanish landing page](https://childrendoenglish.com/es/): the app for
