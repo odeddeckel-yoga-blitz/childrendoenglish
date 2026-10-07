@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, useCallback, lazy, Suspense, useMemo } from 'react';
 import ErrorBoundary from './components/ErrorBoundary';
 import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
@@ -17,7 +17,11 @@ import { getDueWords } from './utils/spaced-repetition';
 import { filterByKnownLetters } from './utils/letterFilter';
 import { sendLearn } from './utils/learnBeacon';
 import { WORDS } from './data/words';
-import { cycleState, advanceCycle, batchWords, batchLabel, batchCount, stagesFor, masteredCount } from './utils/learningCycle';
+import { cycleState, advanceCycle, batchLabel, batchCount, stepsFor, LADDER, buildSet, repeatSet, masteredCount } from './utils/learningCycle';
+import LadderMap from './components/LadderMap';
+import SetPicker from './components/SetPicker';
+import LetterFix from './components/LetterFix';
+import SentenceGap from './components/SentenceGap';
 import BatchComplete from './components/BatchComplete';
 
 
@@ -121,10 +125,16 @@ export default function App() {
   const [learnWords, setLearnWords] = useState(null);
   const [sharedWords, setSharedWords] = useState(null);
   const [focusedWords, setFocusedWords] = useState(null);
-  // Learning cycle: cycleRun marks the in-flight quiz as a cycle stage;
-  // batchDoneNum (1-based) drives the batch-complete interstitial.
+  // Practice ladder: ladderSet is the active word set ({source, words, token,
+  // label}); batch sets track position in stats.cycle, ad-hoc sets in adhocPos.
+  // cycleRun marks an in-flight quiz as a ladder step; ladderStepKey = which.
   const [cycleRun, setCycleRun] = useState(false);
   const [batchDoneNum, setBatchDoneNum] = useState(null);
+  const [ladderSet, setLadderSet] = useState(null);
+  const [ladderStepKey, setLadderStepKey] = useState(null);
+  const [adhocPos, setAdhocPos] = useState({ done: [] });
+  const [extraDone, setExtraDone] = useState([]); // batch steps completed out of order
+  const sessionSeed = useMemo(() => Math.floor(Date.now() / 3600000), []);
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && !navigator.onLine);
   const [storageFull, setStorageFull] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -279,39 +289,117 @@ export default function App() {
   const quizFlow = useQuizFlow({ stats, setStats, navigate, knownLetters: activePlayer?.knownLetters });
 
   // ⚡ Lightning Round finished: persist per-mode best + rounds count.
-  // Start (or resume) the current cycle stage: a quiz over the batch's words in
-  // the ladder's current mode. Fires cyc_start on a batch's first stage.
-  const startCycleStage = useCallback(() => {
-    const { batch, stage } = cycleState(stats);
-    const canRead = activePlayer?.canRead ?? true;
-    const kl = activePlayer?.knownLetters;
-    const ladder = stagesFor(canRead);
-    const safeStage = Math.min(stage, ladder.length - 1);
-    if (safeStage === 0) sendLearn('cyc_start', 'b' + batch);
-    setCycleRun(true);
-    quizFlow.startQuiz(null, ladder[safeStage], batchWords(batch, kl));
-  }, [stats, activePlayer, quizFlow]);
+  // ---- Practice ladder controller ----------------------------------------
+  const canReadNow = activePlayer?.canRead ?? true;
+  const klNow = activePlayer?.knownLetters;
 
-  // After a COMPLETED cycle stage: record it, advance stats, and either start
-  // the next stage or celebrate the batch. Soft gate by design — mastery
-  // accrues later via SRS resurfacing, never blocks advancement.
-  const continueCycle = useCallback(() => {
-    const { batch, stage } = cycleState(stats);
-    const canRead = activePlayer?.canRead ?? true;
-    const kl = activePlayer?.knownLetters;
-    sendLearn('cyc_stage', `b${batch}_s${stage}`);
-    const next = advanceCycle(stats, canRead);
-    setStats(prev => ({ ...prev, cycle: { batch: next.batch, stage: next.stage } }));
-    if (next.batchDone) {
-      sendLearn('cyc_done', 'b' + batch);
-      setCycleRun(false);
-      setBatchDoneNum(batch + 1);
-      navigate('batchComplete');
-    } else {
-      const ladder = stagesFor(canRead);
-      quizFlow.startQuiz(null, ladder[next.stage], batchWords(batch, kl));
+  // The active set: explicit ladderSet, else the current cycle batch.
+  const activeSet = useMemo(() => {
+    if (ladderSet) return ladderSet;
+    const { batch } = cycleState(stats);
+    const built = buildSet('batch', { stats, knownLetters: klNow });
+    return { ...built, source: 'batch', label: t('cycleBatchTitle', lang, { num: batch + 1, label: batchLabel(batch, klNow) }) };
+  }, [ladderSet, stats, klNow, lang]);
+
+  const ladderSteps = useMemo(() => stepsFor(canReadNow, activeSet.words), [canReadNow, activeSet]);
+
+  // Position: batch sets derive from stats.cycle.stage; ad-hoc sets from adhocPos.
+  const ladderPos = useMemo(() => {
+    if (activeSet.source === 'batch') {
+      const { stage } = cycleState(stats);
+      const idx = Math.min(stage, ladderSteps.length - 1);
+      return { currentKey: ladderSteps[idx]?.key, doneKeys: [...ladderSteps.slice(0, idx).map((st) => st.key), ...extraDone] };
     }
-  }, [stats, activePlayer, quizFlow, navigate, setStats]);
+    const remaining = ladderSteps.find((st) => !adhocPos.done.includes(st.key));
+    return { currentKey: remaining?.key, doneKeys: adhocPos.done };
+  }, [activeSet, stats, ladderSteps, adhocPos, extraDone]);
+
+  const openLadder = useCallback((source = 'batch', letters = null) => {
+    if (source === 'batch') {
+      setLadderSet(null);
+    } else {
+      const built = buildSet(source, { stats, knownLetters: klNow, letters, seed: sessionSeed });
+      const labels = { letters: t('ladderSetLetters', lang), surprise: t('ladderSetSurprise', lang), fresh: t('ladderSetFresh', lang) };
+      setLadderSet({ ...built, source, label: labels[source] || '' });
+      setAdhocPos({ done: [] });
+    }
+    setExtraDone([]);
+    navigate('ladder');
+  }, [stats, klNow, sessionSeed, lang, navigate]);
+
+  // Launch a step (any step — free navigation). Fires cyc_start on a set's first step.
+  const startLadderStep = useCallback((stepKey, wordsOverride = null) => {
+    const step = LADDER.find((st) => st.key === stepKey);
+    if (!step) return;
+    const words = wordsOverride || activeSet.words;
+    if (ladderPos.doneKeys.length === 0 && stepKey === ladderPos.currentKey) {
+      sendLearn('cyc_start', activeSet.token);
+    }
+    setLadderStepKey(stepKey);
+    if (step.kind === 'quiz') {
+      const mode = canReadNow ? step.mode : (step.preReaderMode || step.mode);
+      setCycleRun(true);
+      quizFlow.startQuiz(null, mode, words);
+      return;
+    }
+    if (step.kind === 'flashcards') { setCycleRun(true); setFocusedWords(words); navigate('flashcards'); return; }
+    if (step.kind === 'letterfix') { navigate('letterFix'); return; }
+    if (step.kind === 'sentence') { navigate('sentenceGap'); return; }
+    if (step.kind === 'arcade') {
+      // Mark-on-launch (cross-page completion isn't trackable in v1; g_lvl/g_cmp
+      // beacons measure real play). Then a full navigation out of the SPA.
+      completeLadderStep(stepKey);
+      const ids = words.map((w) => w.id).join(',');
+      window.location.href = `/games/${step.game}/?words=${encodeURIComponent(ids)}&from=ladder`;
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeSet, ladderPos, canReadNow, quizFlow, navigate]);
+
+  // Record a completed step; advance position; celebrate batch completion.
+  const completeLadderStep = useCallback((stepKey) => {
+    sendLearn('cyc_stage', `${activeSet.token}_${stepKey}`);
+    setCycleRun(false);
+    if (activeSet.source === 'batch') {
+      const { batch } = cycleState(stats);
+      if (stepKey === ladderPos.currentKey) {
+        const next = advanceCycle(stats, canReadNow, activeSet.words);
+        setStats((prev) => ({ ...prev, cycle: { batch: next.batch, stage: next.stage } }));
+        if (next.batchDone) {
+          sendLearn('cyc_done', activeSet.token);
+          setExtraDone([]);
+          setBatchDoneNum(batch + 1);
+          navigate('batchComplete');
+          return;
+        }
+      } else if (!ladderPos.doneKeys.includes(stepKey)) {
+        setExtraDone((cur) => [...cur, stepKey]);
+      }
+      navigate('ladder');
+      return;
+    }
+    const done = adhocPos.done.includes(stepKey) ? adhocPos.done : [...adhocPos.done, stepKey];
+    setAdhocPos({ done });
+    if (done.length >= ladderSteps.length) sendLearn('cyc_done', activeSet.token);
+    navigate('ladder');
+   
+  }, [activeSet, ladderPos, stats, canReadNow, adhocPos, ladderSteps, navigate, setStats]);
+
+  // Per-step repeats: rerun the SAME step with a different or bigger draw.
+  const repeatLadderStep = useCallback((kind) => {
+    const words = repeatSet(activeSet.words, activeSet.source, {
+      kind, stats, knownLetters: klNow, seed: sessionSeed + 7,
+    });
+    startLadderStep(ladderStepKey, words);
+   
+  }, [activeSet, ladderStepKey, stats, klNow, sessionSeed, startLadderStep]);
+
+  // Letter Fix / Sentence Gap results → per-word spelling tallies (Know vs Spell map).
+  const handleSpellingResult = useCallback((wordId, ok) => {
+    setStats((prev) => {
+      const cur = prev.spelling?.[wordId] || { ok: 0, no: 0 };
+      return { ...prev, spelling: { ...(prev.spelling || {}), [wordId]: { ok: cur.ok + (ok ? 1 : 0), no: cur.no + (ok ? 0 : 1) } } };
+    });
+  }, [setStats]);
 
   const handleLightningFinish = useCallback((solves) => {
     const mode = quizFlow.selectedMode;
@@ -503,14 +591,14 @@ export default function App() {
             onDismissInstall={dismissInstall}
             onNavigate={navigate}
             onQuickStart={() => quizFlow.startQuiz('beginner', 'listen')}
-            onContinueCycle={startCycleStage}
+            onContinueCycle={() => openLadder('batch')}
             cycleInfo={(() => {
               const { batch, stage } = cycleState(stats);
               const kl = activePlayer?.knownLetters;
               return {
                 batch, stage,
                 label: batchLabel(batch, kl),
-                stages: stagesFor(activePlayer?.canRead ?? true).length,
+                stages: ladderSteps.length,
                 mastered: masteredCount(stats),
                 totalBatches: batchCount(kl),
                 isNew: (stats.totalQuizzes || 0) === 0 && batch === 0 && stage === 0,
@@ -606,15 +694,72 @@ export default function App() {
             mode={quizFlow.selectedMode}
             canRead={activePlayer?.canRead ?? true}
             cycleNext={(() => {
-              if (!cycleRun || quizFlow.quizResults?.quit) return null;
-              const next = advanceCycle(stats, activePlayer?.canRead ?? true);
-              if (next.batchDone) return { label: t('cycleFinishBatch', lang), onClick: continueCycle };
-              const modeKey = { listen: 'listenMatchQuiz', image: 'imageQuiz', word: 'wordQuiz' }[stagesFor(activePlayer?.canRead ?? true)[next.stage]];
-              return { label: t('cycleNextStage', lang, { mode: t(modeKey, lang) }), onClick: continueCycle };
+              if (!cycleRun || quizFlow.quizResults?.quit || !ladderStepKey) return null;
+              const isCurrent = ladderStepKey === ladderPos.currentKey;
+              const nextIdx = ladderSteps.findIndex((st) => st.key === ladderStepKey) + 1;
+              const willFinish = isCurrent && nextIdx >= ladderSteps.length && activeSet.source === 'batch';
+              const nextStep = ladderSteps[nextIdx];
+              const label = willFinish ? t('cycleFinishBatch', lang)
+                : nextStep ? t('cycleNextStage', lang, { mode: t(nextStep.labelKey, lang) })
+                : t('ladderStepDone', lang) + ' ✓';
+              return { label, onClick: () => completeLadderStep(ladderStepKey) };
             })()}
+            cycleRepeats={cycleRun && !quizFlow.quizResults?.quit ? [
+              { label: t('ladderAgainDifferent', lang), onClick: () => repeatLadderStep('different') },
+              { label: t('ladderAgainMore', lang), onClick: () => repeatLadderStep('more') },
+            ] : null}
             onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords)}
             onMenu={() => { setCycleRun(false); focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back'); }}
             onLightning={quizFlow.quizWords.length > 0 ? () => navigate('lightning') : undefined}
+          />
+        );
+
+      case 'ladder':
+        return (
+          <LadderMap
+            lang={lang}
+            canRead={canReadNow}
+            setWords={activeSet.words}
+            setLabel={activeSet.label}
+            currentStepKey={ladderPos.currentKey}
+            doneKeys={ladderPos.doneKeys}
+            onStartStep={startLadderStep}
+            onPickSet={() => navigate('setPicker')}
+            onBack={() => navigate('menu', 'back')}
+          />
+        );
+
+      case 'setPicker':
+        return (
+          <SetPicker
+            lang={lang}
+            onPick={(source, letters) => openLadder(source, letters)}
+            onBack={() => navigate('ladder', 'back')}
+          />
+        );
+
+      case 'letterFix': {
+        const lfStep = LADDER.find((st) => st.key === ladderStepKey);
+        return (
+          <LetterFix
+            words={activeSet.words}
+            mode={lfStep?.mode || 'easy'}
+            lang={lang}
+            onResult={handleSpellingResult}
+            onComplete={() => completeLadderStep(ladderStepKey)}
+            onBack={() => navigate('ladder', 'back')}
+          />
+        );
+      }
+
+      case 'sentenceGap':
+        return (
+          <SentenceGap
+            words={activeSet.words}
+            lang={lang}
+            onResult={handleSpellingResult}
+            onComplete={() => completeLadderStep(ladderStepKey)}
+            onBack={() => navigate('ladder', 'back')}
           />
         );
 
@@ -624,7 +769,7 @@ export default function App() {
             stats={stats}
             lang={lang}
             batchJustDone={batchDoneNum || 1}
-            onNextBatch={startCycleStage}
+            onNextBatch={() => openLadder('batch')}
             onBackToMenu={() => navigate('menu', 'back')}
           />
         );
@@ -675,6 +820,7 @@ export default function App() {
             words={focusedWords}
             onUpdateStats={setStats}
             onBack={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
+            onComplete={cycleRun && ladderStepKey === 'fc' ? () => completeLadderStep('fc') : undefined}
           />
         );
 

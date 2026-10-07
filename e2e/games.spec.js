@@ -74,3 +74,19 @@ for (const g of GAMES) {
     expect(beaconHits, `${g.id} beacons must not fire under automation`).toEqual([]);
   });
 }
+
+// Practice-ladder scoping: ?words= must restrict the playable pool (word-zapper
+// exposes the target word id; across several rounds it must stay inside the set).
+test('word-zapper honors ?words= scoping', async ({ page }) => {
+  const ids = ['cat', 'dog', 'fish', 'bird', 'rabbit'];
+  await page.goto(`/games/word-zapper/index.html?words=${ids.join(',')}&from=ladder`);
+  await page.click('#startBtn');
+  await page.waitForFunction(() => window.WZ && WZ.dbg.screen === 'play' && WZ.dbg.hasTargetSprite(), null, { timeout: 10000 });
+  for (let i = 0; i < 6; i++) {
+    const target = await page.evaluate(() => WZ.dbg.targetWord());
+    expect(ids, `round ${i} target ${target} must be in the scoped set`).toContain(target);
+    await page.evaluate(() => WZ.dbg.solveForTest());
+    await page.waitForTimeout(350);
+    await page.waitForFunction(() => WZ.dbg.hasTargetSprite(), null, { timeout: 10000 }).catch(() => {});
+  }
+});

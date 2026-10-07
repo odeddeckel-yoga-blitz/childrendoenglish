@@ -89,6 +89,25 @@ const WORDS = [
   {id:'cream',en:'cream',he:'שמנת',cat:'colors',tricky:'🎨 cream is a COLOR here — look at the picture!'},
 ];
 
+/* Practice-ladder scoping (2026-10-07): ?words=id,id,... restricts the pool to
+   the learner's current set. Guarded: falls back to the full catalog when the
+   restricted pool is too small to play well. */
+(function(){
+  try {
+    var q = new URLSearchParams(location.search).get('words');
+    if (!q) return;
+    var ids = {}; q.split(',').forEach(function(id){ ids[id.trim()] = 1; });
+    var filtered = WORDS.filter(function(w){ return ids[w.id]; });
+    var cats = {}; filtered.forEach(function(w){ if (w.cat) cats[w.cat] = 1; });
+    var catOk = !('cat' in (WORDS[0] || {})) || Object.keys(cats).length >= 2;
+    if (filtered.length >= 4 && catOk) {
+      WORDS.length = 0;
+      filtered.forEach(function(w){ WORDS.push(w); });
+    }
+  } catch(e) { /* never break the game */ }
+})();
+
+
 /* bins per level: 2 (LV1-2) → 3 (LV3-5) → 4 (LV6-8) */
 const LEVEL_BINS = [
   ['animals','food'],

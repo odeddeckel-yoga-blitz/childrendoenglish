@@ -38,6 +38,25 @@ const WORDS=[
 {id:'parrot',en:'parrot',he:'תוכי'},{id:'pencil',en:'pencil',he:'עיפרון'},{id:'puzzle',en:'puzzle',he:'פאזל'},
 {id:'sandwich',en:'sandwich',he:'כריך'},{id:'window',en:'window',he:'חלון'},{id:'swimming',en:'swimming',he:'שחייה'}
 ];
+
+/* Practice-ladder scoping (2026-10-07): ?words=id,id,... restricts the pool to
+   the learner's current set. Guarded: falls back to the full catalog when the
+   restricted pool is too small to play well. */
+(function(){
+  try {
+    var q = new URLSearchParams(location.search).get('words');
+    if (!q) return;
+    var ids = {}; q.split(',').forEach(function(id){ ids[id.trim()] = 1; });
+    var filtered = WORDS.filter(function(w){ return ids[w.id]; });
+    var cats = {}; filtered.forEach(function(w){ if (w.cat) cats[w.cat] = 1; });
+    var catOk = !('cat' in (WORDS[0] || {})) || Object.keys(cats).length >= 2;
+    if (filtered.length >= 4 && catOk) {
+      WORDS.length = 0;
+      filtered.forEach(function(w){ WORDS.push(w); });
+    }
+  } catch(e) { /* never break the game */ }
+})();
+
 /* level → word pool: L1-2 three letters, L3-4 four, L5-6 five, L7-8 six+ (listen-only) */
 function poolFor(level){
   if(level<=2) return WORDS.filter(w=>w.en.length===3);

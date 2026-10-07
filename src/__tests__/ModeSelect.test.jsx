@@ -22,12 +22,11 @@ describe('ModeSelect', () => {
     expect(defaultProps.onBack).toHaveBeenCalled();
   });
 
-  it('renders all 4 quiz modes for readers', () => {
+  it('renders the 3 quiz modes for readers (audio folded into the practice ladder)', () => {
     render(<ModeSelect {...defaultProps} />);
     expect(screen.getByText('Listen & Match')).toBeInTheDocument();
     expect(screen.getByText('Image Quiz')).toBeInTheDocument();
     expect(screen.getByText('Word Quiz')).toBeInTheDocument();
-    expect(screen.getByText('Audio Quiz')).toBeInTheDocument();
   });
 
   it('hides Image Quiz for pre-readers (canRead=false)', () => {

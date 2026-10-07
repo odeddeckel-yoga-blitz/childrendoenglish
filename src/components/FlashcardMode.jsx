@@ -8,7 +8,7 @@ import { speakWord } from '../utils/sound';
 import { haptic } from '../utils/haptic';
 import { t, gloss } from '../utils/i18n';
 
-export default function FlashcardMode({ stats, lang = 'en', canRead = true, words: customWords, knownLetters = null, onUpdateStats, onBack }) {
+export default function FlashcardMode({ stats, lang = 'en', canRead = true, words: customWords, knownLetters = null, onUpdateStats, onBack, onComplete }) {
   const sorted = spacedRepetitionSort(customWords || filterByKnownLetters(WORDS, knownLetters), stats.wordProgress || {});
   const [cards] = useState(sorted);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -147,10 +147,20 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
             </div>
           )}
         </div>
+        {onComplete && cards.length > 0 && (
+          <button
+            onClick={onComplete}
+            className="w-full py-3.5 px-6 bg-blue-600 text-white rounded-xl font-black text-lg
+                       hover:bg-blue-700 active:scale-95 transition-all shadow-md"
+          >
+            {t('continue', lang)} →
+          </button>
+        )}
         <button
           onClick={onBack}
-          className="w-full py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold
-                     hover:bg-blue-700 active:scale-95 transition-all"
+          className={onComplete && cards.length > 0
+            ? 'w-full py-2 text-sm text-slate-400 hover:text-slate-600'
+            : 'w-full py-3 px-6 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 active:scale-95 transition-all'}
         >
           {t('backToMenuBtn', lang)}
         </button>

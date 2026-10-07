@@ -1,4 +1,4 @@
-import { ArrowLeft, Image, Type, Volume2, Headphones } from 'lucide-react';
+import { ArrowLeft, Image, Type, Headphones } from 'lucide-react';
 import { t } from '../utils/i18n';
 
 const allModes = [
@@ -28,15 +28,6 @@ const allModes = [
     color: 'from-blue-500 to-blue-600',
     iconBg: 'bg-blue-100',
     iconColor: 'text-blue-600',
-  },
-  {
-    id: 'audio',
-    nameKey: 'audioQuiz',
-    descKey: 'audioQuizDesc',
-    icon: Volume2,
-    color: 'from-amber-500 to-amber-600',
-    iconBg: 'bg-amber-100',
-    iconColor: 'text-amber-600',
   },
 ];
 

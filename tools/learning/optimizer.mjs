@@ -151,13 +151,17 @@ if (cyc.length > 0) {
   const starts = cyc.filter(r => r.ev === 'cyc_start').reduce((a, r) => a + r.n, 0);
   const dones = cyc.filter(r => r.ev === 'cyc_done').reduce((a, r) => a + r.n, 0);
   console.log(`\n— learning cycle: ${starts} batch starts → ${dones} batch completions (${starts ? Math.round(100 * dones / starts) : 0}%)`);
-  const byStage = {};
+  // Items are <batchToken>_<stepKey> (full-ladder, 2026-10-07; legacy _s<n> kept)
+  const STEP_ORDER = ['fc', 'aud', 'wq', 'iq', 'conv', 'lf1', 'lf2', 'lf3', 'forge', 'sent', 'zap', 's0', 's1', 's2'];
+  const byStep = {};
   for (const r of cyc.filter(x => x.ev === 'cyc_stage')) {
-    const m = r.item.match(/_s(\d+)$/);
-    if (m) byStage[m[1]] = (byStage[m[1]] || 0) + r.n;
+    const key = r.item.split('_').slice(1).join('_') || r.item;
+    byStep[key] = (byStep[key] || 0) + r.n;
   }
-  const stageLine = Object.entries(byStage).sort().map(([s, n]) => `s${s}:${n}`).join('  ');
-  if (stageLine) console.log(`  stage completions: ${stageLine}  (a step-down between stages = the drop-off stage)`);
+  const stepLine = Object.keys(byStep)
+    .sort((a, b) => STEP_ORDER.indexOf(a) - STEP_ORDER.indexOf(b))
+    .map((k) => `${k}:${byStep[k]}`).join('  ');
+  if (stepLine) console.log(`  step completions: ${stepLine}  (a step-down along the ladder = the drop-off step)`);
 }
 
 // --- games: play depth (KDM parity — levelups ÷ opens per game) ---

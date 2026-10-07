@@ -3,7 +3,7 @@ import { getWordById } from '../data/words';
 import { LIGHTNING_SECS } from '../utils/arcade';
 import { t } from '../utils/i18n';
 
-export default function ResultScreen({ cycleNext, results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onMenu, onLightning }) {
+export default function ResultScreen({ cycleNext, cycleRepeats, results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onMenu, onLightning }) {
   const { score, total, answers = [], arcade, arcadeNewBest, quit } = results;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const showLightning = !!onLightning && canRead && !quit && total > 0;
@@ -78,6 +78,18 @@ export default function ResultScreen({ cycleNext, results, lang = 'en', level: _
         >
           {cycleNext.label}
         </button>
+      )}
+      {cycleRepeats && (
+        <div className="flex gap-2">
+          {cycleRepeats.map((r) => (
+            <button key={r.label} onClick={r.onClick}
+              className="flex-1 py-2.5 px-2 rounded-xl text-sm font-bold text-blue-700 dark:text-blue-300
+                         bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700
+                         hover:shadow-sm active:scale-95 transition-all">
+              {r.label}
+            </button>
+          ))}
+        </div>
       )}
 
       {/* Action buttons — Play Again is primary */}

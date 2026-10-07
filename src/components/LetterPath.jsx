@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { WORDS } from '../data/words';
 import { t } from '../utils/i18n';
@@ -10,6 +10,9 @@ const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
  *  child's progress on that letter's words; tapping starts a quiz drawn ONLY
  *  from that letter (listen-first, so pre-readers can play it too). */
 export default function LetterPath({ stats, lang = 'en', onPracticeLetter, onBack }) {
+  // Dual progress view (full-ladder plan): 'know' = met the word (any SRS
+  // progress; mastered = interval ≥14), 'spell' = Letter Fix tallies ok−no ≥3.
+  const [view, setView] = useState('know');
   const byLetter = useMemo(() => {
     const map = {};
     WORDS.forEach(w => {
@@ -19,6 +22,8 @@ export default function LetterPath({ stats, lang = 'en', onPracticeLetter, onBac
     return map;
   }, []);
   const wp = stats.wordProgress || {};
+  const sp = stats.spelling || {};
+  const counted = (w) => (view === 'know' ? !!wp[w.id] : ((sp[w.id]?.ok || 0) - (sp[w.id]?.no || 0)) >= 3);
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -32,6 +37,17 @@ export default function LetterPath({ stats, lang = 'en', onPracticeLetter, onBac
         </div>
       </div>
 
+      {/* Know ↔ Spell view toggle */}
+      <div className="flex gap-2" role="group" aria-label={t('letterPath', lang)}>
+        {[['know', 'mapViewKnow'], ['spell', 'mapViewSpell']].map(([key, labelKey]) => (
+          <button key={key} onClick={() => setView(key)} aria-pressed={view === key}
+            className={`flex-1 py-2 rounded-xl text-sm font-bold transition-colors
+              ${view === key ? 'bg-blue-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300'}`}>
+            {t(labelKey, lang)}
+          </button>
+        ))}
+      </div>
+
       <div className="grid grid-cols-4 gap-2.5" dir="ltr">
         {ALPHABET.map(letter => {
           const words = byLetter[letter] || [];
@@ -42,7 +58,7 @@ export default function LetterPath({ stats, lang = 'en', onPracticeLetter, onBac
               </div>
             );
           }
-          const learned = words.filter(w => wp[w.id]).length;
+          const learned = words.filter(counted).length;
           const pct = Math.round((learned / words.length) * 100);
           const done = learned === words.length;
           return (
@@ -58,7 +74,7 @@ export default function LetterPath({ stats, lang = 'en', onPracticeLetter, onBac
               <span className="text-[10px] text-slate-500 block" dir="ltr">{learned}/{words.length}</span>
               <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
                 <div
-                  className={`h-full rounded-full transition-all ${done ? 'bg-emerald-500' : 'bg-blue-500'}`}
+                  className={`h-full rounded-full transition-all ${done ? 'bg-emerald-500' : view === 'spell' ? 'bg-amber-500' : 'bg-blue-500'}`}
                   style={{ width: `${pct}%` }}
                 />
               </div>
