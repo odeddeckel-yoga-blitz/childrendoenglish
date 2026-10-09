@@ -43,6 +43,10 @@ with pronunciation, an example sentence, and the Hebrew translation.
   ללימוד אנגלית לילדים — free English-learning games for Hebrew-speaking kids,
   with by-age (6-8, 9-10, 11-12) and by-topic pages. Hebrew interface, real
   native-English audio, no ads, no sign-up.
+- [Flashcard maker](https://childrendoenglish.com/tools/flashcard-maker/): free
+  printable photo-flashcard generator — 488 real-photo words or any pasted list,
+  4/6/9 cards per page, Hebrew/Spanish backs, mirrored back pages for aligned
+  double-sided printing. No login, no watermark.
 - [Printable flashcards](https://childrendoenglish.com/printable-flashcards/animals/)
 
 ## About

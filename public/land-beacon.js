@@ -27,6 +27,7 @@
     else if (p.indexOf('/he/') === 0 || p.indexOf('/he') === 0 && p.length <= 4 || (p.indexOf('/vocabulary/') === 0 && p.indexOf('/hebrew') > -1)) g = 'hebrew';
     else if (p.indexOf('/es') === 0 || (p.indexOf('/vocabulary/') === 0 && p.indexOf('/spanish') > -1)) g = 'spanish';
     else if (p.indexOf('/games') === 0) g = 'games';
+    else if (p.indexOf('/tools') === 0) g = 'tool';
     else if (p.indexOf('/vocabulary') === 0) g = 'vocab';
     else if (p.indexOf('/printable-flashcards') === 0) g = 'flashcards';
     else if (p.indexOf('/guides') === 0) g = 'guide';
