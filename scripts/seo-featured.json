@@ -22,5 +22,17 @@
   {
     "path": "/vocabulary/colors/beige/",
     "label": "Beige — color word for kids"
+  },
+  {
+    "path": "/vocabulary/food/potato/",
+    "label": "Potato — meaning for kids"
+  },
+  {
+    "path": "/vocabulary/food/carrot/",
+    "label": "Carrot — meaning for kids"
+  },
+  {
+    "path": "/vocabulary/nature/volcano/",
+    "label": "Volcano — meaning for kids"
   }
 ]

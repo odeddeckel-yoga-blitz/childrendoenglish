@@ -1,7 +1,52 @@
 {
   "/vocabulary/food/pasta/": {
     "title": "Pasta in English and Hebrew (פסטה) — Picture, Audio & Meaning for Kids",
-    "description": "What is pasta in English? Kid-friendly meaning with picture, audio pronunciation, example sentence and Hebrew translation (פסטה). Free vocabulary app for kids.",
-    "added": "2026-09-26"
+    "description": "Can your child say \"pasta\" in English? Tap the picture to hear it, try the 3-question mini quiz, and see the Hebrew word (פסטה). Free, no ads, no sign-up.",
+    "added": "2026-10-10",
+    "note": "tease v2 — v1 (2026-09-26) flat 0 clk @ pos 8"
+  },
+  "/vocabulary/feelings/surprised/": {
+    "description": "Teach \"surprised\" the fun way: a real photo, native audio your child can replay, a quick picture quiz, and the Hebrew word (מופתע). Free for ages 6-12, no sign-up.",
+    "added": "2026-10-10"
+  },
+  "/vocabulary/school/compass/": {
+    "description": "Learn \"compass\" with a real photo, tap-to-hear pronunciation, a 3-question mini quiz and the Hebrew word (מצפן). Free English vocabulary for kids 6-12, no ads.",
+    "added": "2026-10-10"
+  },
+  "/vocabulary/food/popcorn/": {
+    "description": "Hear \"popcorn\" said by a native speaker, see the photo, quiz your child in 30 seconds, and learn the Hebrew word (פופקורן). Free for kids 6-12, no sign-up.",
+    "added": "2026-10-10"
+  },
+  "/vocabulary/everyday/magnifier/": {
+    "description": "A real photo, native audio, a quick quiz and the Hebrew word (זכוכית מגדלת) — the fun way for kids to learn \"magnifying glass\" in English. Free, no ads, no sign-up.",
+    "added": "2026-10-10"
+  },
+  "/vocabulary/everyday/broom/": {
+    "description": "Teach \"broom\" in English with a real photo, tap-to-hear pronunciation, a 3-question picture quiz and the Hebrew word (מטאטא). Free for kids 6-12, no ads.",
+    "added": "2026-10-10"
+  },
+  "/vocabulary/school/locker/": {
+    "description": "Learn \"locker\" the kid way: real photo, native audio you can replay, a quick quiz and the Hebrew word. Free English vocabulary for ages 6-12, no sign-up.",
+    "added": "2026-10-10"
+  },
+  "/vocabulary/feelings/worried/": {
+    "description": "Help your child learn \"worried\" with a real photo, native-speaker audio, a 3-question quiz and the Hebrew word (מודאג). Free for kids 6-12, no ads, no sign-up.",
+    "added": "2026-10-10"
+  },
+  "/vocabulary/everyday/plate/": {
+    "description": "Hear \"plate\" in clear native English, see the photo, try the 30-second quiz and learn the Hebrew word (צלחת). Free vocabulary practice for kids 6-12, no sign-up.",
+    "added": "2026-10-10"
+  },
+  "/vocabulary/everyday/towel/": {
+    "description": "Teach \"towel\" with a real photo, tap-to-hear pronunciation, a quick picture quiz and the Hebrew word (מגבת). Free English for kids 6-12, no ads, no sign-up.",
+    "added": "2026-10-10"
+  },
+  "/vocabulary/everyday/stamp/": {
+    "description": "Learn \"stamp\" in English: real photo, native audio your child can replay, a 3-question quiz and the Hebrew word (בול). Free for ages 6-12, no ads, no sign-up.",
+    "added": "2026-10-10"
+  },
+  "/vocabulary/everyday/candle/": {
+    "description": "A real photo, native-speaker audio, a 30-second quiz and the Hebrew word (נר) — the fun way for kids to learn \"candle\" in English. Free, no ads, no sign-up.",
+    "added": "2026-10-10"
   }
 }
