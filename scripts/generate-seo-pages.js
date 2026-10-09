@@ -115,6 +115,36 @@ function faqSchemaFor(pairs) {
     })),
   });
 }
+function howToSchemaFor({ name, description, steps, supplies = [], tools = [], totalTime = 'PT10M', lang = 'en' }) {
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name, description, inLanguage: lang, totalTime,
+    estimatedCost: { '@type': 'MonetaryAmount', currency: 'USD', value: '0' },
+    supply: supplies.map((x) => ({ '@type': 'HowToSupply', name: x })),
+    tool: tools.map((x) => ({ '@type': 'HowToTool', name: x })),
+    step: steps.map((st, i) => ({ '@type': 'HowToStep', position: i + 1, name: plainText(st.name), text: plainText(st.text) })),
+  });
+}
+function howToHtml(heading, steps) {
+  return `<section class="howto no-print" style="background:#fff;border-radius:0.75rem;padding:1rem 1.25rem;margin:0 0 1.25rem;box-shadow:0 1px 3px rgba(0,0,0,0.08);font-size:0.93rem">
+      <h2 style="font-size:1.05rem;margin:0 0 0.5rem;color:#1e293b">${escapeHtml(heading)}</h2>
+      <ol style="margin:0 0 0 1.25rem;color:#475569">${steps.map((st) => `<li style="margin-bottom:0.3rem"><strong>${escapeHtml(st.name)}.</strong> ${escapeHtml(st.text)}</li>`).join('')}</ol>
+    </section>`;
+}
+const PRINT_STEPS_EN = (what) => [
+  { name: 'Open the set', text: `Open this ${what} flashcard page on a computer or tablet that can reach your printer.` },
+  { name: 'Print', text: 'Click "Print These Flashcards" or press Ctrl+P (Cmd+P on Mac). The header, links and buttons are hidden automatically; only the cards print, 3 across, each with a dashed cutting border.' },
+  { name: 'Choose paper', text: 'Pick A4 or Letter in portrait and turn on "Background graphics" so the photos print. Card stock (160-200 gsm) gives sturdier cards; plain paper works if you laminate.' },
+  { name: 'Cut', text: 'Cut along the dashed lines. For double-sided cards with the translation on the back, use the free Flashcard Maker, which mirrors the back pages so duplex printing lines up.' },
+];
+const PRINT_STEPS_ES = (what) => [
+  { name: 'Abre el set', text: `Abre esta página de tarjetas de ${what} en una computadora o tableta conectada a tu impresora.` },
+  { name: 'Imprime', text: 'Haz clic en "Print These Flashcards" o pulsa Ctrl+P (Cmd+P en Mac). El encabezado, los enlaces y los botones se ocultan solos; solo se imprimen las tarjetas, 3 por fila, cada una con borde punteado para recortar.' },
+  { name: 'Elige el papel', text: 'Selecciona A4 o Carta en vertical y activa "Gráficos de fondo" para que salgan las fotos. La cartulina (160-200 g) da tarjetas más resistentes; el papel normal sirve si las plastificas.' },
+  { name: 'Recorta', text: 'Recorta por las líneas punteadas. Para tarjetas a doble cara con la traducción al dorso, usa el Flashcard Maker gratuito, que refleja las páginas traseras para que la impresión dúplex coincida.' },
+];
+
 const LEVEL_LABEL = { beginner: 'Beginner (ages 6-8)', intermediate: 'Intermediate (ages 9-10)', advanced: 'Advanced (ages 11-12)' };
 function listWords(ws, max = 12) {
   const names = ws.slice(0, max).map((w) => w.word);
@@ -3035,6 +3065,22 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
     ],
   });
 
+  // GEO: HowTo (the page IS a how-to-print task) + FAQ + answer-first intro.
+  const lower = displayName.toLowerCase();
+  const steps = PRINT_STEPS_EN(lower);
+  const howToSchema = howToSchemaFor({
+    name: `How to print ${lower} flashcards for kids`,
+    description: `Print ${words.length} free ${lower} flashcards with real photos, English words, pronunciation, definitions and Hebrew translations, then cut along the dashed lines.`,
+    steps, supplies: ['Printer paper or card stock (A4 or Letter)'], tools: ['Printer', 'Scissors'],
+  });
+  const faqSchema = faqSchemaFor([
+    { q: `How many ${lower} flashcards are in this set?`, a: `${words.length} cards. Each one has a real photo, the English word, its phonetic pronunciation, a kid-friendly definition and the Hebrew translation. They print 3 across with dashed cutting borders.` },
+    { q: `Are these ${lower} flashcards free to print?`, a: 'Yes. No login, no watermark and no paid tier: open the page, press print, cut.' },
+    { q: 'Can I print the flashcards double-sided?', a: 'This set prints single-sided with everything on the front. For double-sided cards with the translation on the back, use the free Flashcard Maker at /tools/flashcard-maker/, which mirrors the back pages so duplex printing lines up.' },
+    { q: `Is there a Spanish version of the ${lower} flashcards?`, a: `Yes: /printable-flashcards/${slug}/spanish/ has the same ${words.length} cards with English words and Spanish translations.` },
+  ]);
+  const answerFirst = `${displayName} flashcards to print: ${words.length} cards, each with a real photo, the English word, its pronunciation, a kid-friendly definition and the Hebrew translation. Click Print, choose A4 or Letter, and cut along the dashed lines; the cards come out 3 across.`;
+
   const flashcardCards = words
     .map(
       (w) => `
@@ -3087,6 +3133,8 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
 
   <!-- Structured Data -->
   <script type="application/ld+json">${breadcrumbSchema}</script>
+  <script type="application/ld+json">${howToSchema}</script>
+  <script type="application/ld+json">${faqSchema}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -3140,7 +3188,8 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
   </div>
 
   <div class="container">
-    <p class="intro">${escapeHtml(description)}</p>
+    <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
+    ${howToHtml(`How to print the ${lower} flashcards`, steps)}
     <p class="lang-variant"><a href="/printable-flashcards/${slug}/spanish/">View these flashcards in English and Spanish &rarr;</a></p>
     <button class="print-btn" onclick="window.print()">Print These Flashcards</button>
 
@@ -3184,6 +3233,22 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
       { '@type': 'ListItem', position: 4, name: 'Spanish & English', item: url },
     ],
   });
+
+  // GEO (es): HowTo + FAQ + answer-first, in Spanish for the ES searcher.
+  const lowerEs = spanishName.toLowerCase();
+  const steps = PRINT_STEPS_ES(lowerEs);
+  const howToSchema = howToSchemaFor({
+    lang: 'es',
+    name: `Cómo imprimir tarjetas de ${lowerEs} en inglés y español`,
+    description: `Imprime ${words.length} tarjetas gratis de ${lowerEs} con fotos reales, la palabra en inglés, su pronunciación y la traducción al español, y recórtalas por las líneas punteadas.`,
+    steps, supplies: ['Papel o cartulina (A4 o Carta)'], tools: ['Impresora', 'Tijeras'],
+  });
+  const faqSchema = faqSchemaFor([
+    { q: `¿Cuántas tarjetas de ${lowerEs} hay en este set?`, a: `${words.length} tarjetas. Cada una tiene una foto real, la palabra en inglés, su pronunciación fonética y la traducción al español. Se imprimen 3 por fila con bordes punteados para recortar.` },
+    { q: '¿Las tarjetas son gratis?', a: 'Sí. Sin registro, sin marca de agua y sin versión de pago: abre la página, imprime y recorta.' },
+    { q: '¿Se pueden imprimir a doble cara?', a: 'Este set se imprime a una cara, con todo al frente. Para tarjetas a doble cara con la traducción al dorso, usa el Flashcard Maker gratuito en /tools/flashcard-maker/, que refleja las páginas traseras para que la impresión dúplex coincida.' },
+  ]);
+  const answerFirst = `Tarjetas de ${lowerEs} para imprimir: ${words.length} tarjetas, cada una con una foto real, la palabra en inglés, su pronunciación y la traducción al español. Haz clic en Print, elige A4 o Carta y recorta por las líneas punteadas; salen 3 tarjetas por fila.`;
 
   const flashcardCards = words
     .map(
@@ -3235,6 +3300,8 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
 
   <!-- Structured Data -->
   <script type="application/ld+json">${breadcrumbSchema}</script>
+  <script type="application/ld+json">${howToSchema}</script>
+  <script type="application/ld+json">${faqSchema}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -3287,7 +3354,8 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
   </div>
 
   <div class="container">
-    <p class="intro">${escapeHtml(description)}</p>
+    <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
+    ${howToHtml(`Cómo imprimir las tarjetas de ${lowerEs}`, steps)}
     <p class="lang-variant"><a href="/printable-flashcards/${slug}/">View the English-only version &rarr;</a></p>
     <button class="print-btn" onclick="window.print()">Print These Flashcards</button>
 
@@ -3348,6 +3416,18 @@ const fcIndexUrl = `${SITE}/printable-flashcards/`;
 const fcIndexTitle = 'Free Printable English Flashcards for Kids | Children Do English';
 const fcIndexDesc = `Free printable English vocabulary flashcards for kids ages 6-12. ${WORDS.length} words across ${CATEGORIES.length} categories with pictures, definitions, and Hebrew translations. Just print and cut!`;
 
+const fcIndexSteps = PRINT_STEPS_EN('English');
+const fcIndexHowTo = howToSchemaFor({
+  name: 'How to print free English flashcards for kids',
+  description: `Pick one of ${CATEGORIES.length} categories (${WORDS.length} words), press print, and cut along the dashed lines.`,
+  steps: [{ name: 'Pick a category', text: `Choose one of the ${CATEGORIES.length} sets below (animals, food, colors and more); every card has a real photo, the English word, pronunciation, definition and Hebrew translation.` }, ...fcIndexSteps.slice(1)],
+  supplies: ['Printer paper or card stock (A4 or Letter)'], tools: ['Printer', 'Scissors'],
+});
+const fcIndexFaq = faqSchemaFor([
+  { q: 'How many printable English flashcards are there?', a: `${WORDS.length} cards in ${CATEGORIES.length} category sets, all free. Each card has a real photo, the English word, its pronunciation, a kid-friendly definition and the Hebrew translation; a Spanish version of every set is at /printable-flashcards/spanish/.` },
+  { q: 'Can I print the flashcards double-sided?', a: 'The category sets print single-sided. For double-sided cards with the translation on the back, or your own word list, use the free Flashcard Maker at /tools/flashcard-maker/.' },
+]);
+const fcIndexAnswer = `Free printable English flashcards for kids: ${WORDS.length} cards in ${CATEGORIES.length} sets, each with a real photo, the English word, pronunciation, definition and Hebrew translation. Pick a category, press print, cut along the dashed lines.`;
 const fcIndexBreadcrumb = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -3403,6 +3483,8 @@ const fcIndexHtml = `<!DOCTYPE html>
   <meta name="twitter:image" content="${SITE}/og-image.png" />
 
   <script type="application/ld+json">${fcIndexBreadcrumb}</script>
+  <script type="application/ld+json">${fcIndexHowTo}</script>
+  <script type="application/ld+json">${fcIndexFaq}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -3436,7 +3518,8 @@ const fcIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="container">
-    <p class="intro">Choose a category below to view and print free English vocabulary flashcards. Each flashcard includes a picture, the English word, phonetic pronunciation, definition, and Hebrew translation. Perfect for kids ages 6-12.</p>
+    <p class="intro answer-first">${escapeHtml(fcIndexAnswer)}</p>
+    ${howToHtml('How to print the flashcards', [{ name: 'Pick a category', text: `Choose one of the ${CATEGORIES.length} sets below.` }, ...fcIndexSteps.slice(1)])}
     <p style="font-size:0.9rem;margin-bottom:1rem"><a href="/printable-flashcards/spanish/" style="color:#2563eb;text-decoration:none">Ver tarjetas imprimibles en inglés y español &rarr;</a></p>
 
     <div class="grid">
@@ -3459,6 +3542,19 @@ console.log(`  \u2713 /printable-flashcards/ (index, ${CATEGORIES.length} catego
 
 // --- Generate Spanish printable flashcards packs landing page ---
 
+const esFcIndexSteps = PRINT_STEPS_ES('vocabulario');
+const esFcIndexHowTo = howToSchemaFor({
+  lang: 'es',
+  name: 'Cómo imprimir tarjetas de vocabulario en inglés y español',
+  description: `Elige una de ${CATEGORIES.length} categorías (${WORDS.length} palabras), imprime y recorta por las líneas punteadas.`,
+  steps: [{ name: 'Elige una categoría', text: `Elige uno de los ${CATEGORIES.length} sets (animales, comida, colores y más); cada tarjeta tiene una foto real, la palabra en inglés, su pronunciación y la traducción al español.` }, ...esFcIndexSteps.slice(1)],
+  supplies: ['Papel o cartulina (A4 o Carta)'], tools: ['Impresora', 'Tijeras'],
+});
+const esFcIndexFaq = faqSchemaFor([
+  { q: '¿Cuántas tarjetas imprimibles de inglés hay?', a: `${WORDS.length} tarjetas en ${CATEGORIES.length} sets por categoría, todas gratis, con foto real, la palabra en inglés, su pronunciación y la traducción al español.` },
+  { q: '¿Se pueden imprimir a doble cara?', a: 'Los sets por categoría se imprimen a una cara. Para tarjetas a doble cara con la traducción al dorso, o con tu propia lista de palabras, usa el Flashcard Maker gratuito en /tools/flashcard-maker/.' },
+]);
+const esFcIndexAnswer = `Tarjetas de vocabulario en inglés y español para imprimir gratis: ${WORDS.length} tarjetas en ${CATEGORIES.length} sets, cada una con foto real, la palabra en inglés, su pronunciación y la traducción al español. Elige una categoría, imprime y recorta por las líneas punteadas.`;
 const esFcIndexUrl = `${SITE}/printable-flashcards/spanish/`;
 const esFcIndexTitle = 'Tarjetas Imprimibles de Vocabulario en Ingl\u00e9s y Espa\u00f1ol \u2014 Gratis | Children Do English';
 const esFcIndexDesc = `Tarjetas de vocabulario en ingl\u00e9s listas para imprimir, con fotos reales y traducci\u00f3n al espa\u00f1ol. ${WORDS.length} palabras en ${CATEGORIES.length} categor\u00edas. \u00a1Solo imprime y recorta!`;
@@ -3519,6 +3615,8 @@ const esFcIndexHtml = `<!DOCTYPE html>
   <meta name="twitter:image" content="${SITE}/og-image.png" />
 
   <script type="application/ld+json">${esFcIndexBreadcrumb}</script>
+  <script type="application/ld+json">${esFcIndexHowTo}</script>
+  <script type="application/ld+json">${esFcIndexFaq}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -3555,7 +3653,8 @@ const esFcIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="container">
-    <p class="intro">Tarjetas de vocabulario en ingl\u00e9s listas para imprimir, con fotos reales y traducci\u00f3n al espa\u00f1ol. Elige una categor\u00eda para ver e imprimir tarjetas gratis. Cada tarjeta incluye una foto real, la palabra en ingl\u00e9s, la pronunciaci\u00f3n fon\u00e9tica y la traducci\u00f3n al espa\u00f1ol. Perfectas para ni\u00f1os de 6 a 12 a\u00f1os.</p>
+    <p class="intro answer-first">${escapeHtml(esFcIndexAnswer)}</p>
+    ${howToHtml('Cómo imprimir las tarjetas', [{ name: 'Elige una categoría', text: `Elige uno de los ${CATEGORIES.length} sets.` }, ...esFcIndexSteps.slice(1)])}
     <p class="lang-variant"><a href="/printable-flashcards/">Ver la versi\u00f3n solo en ingl\u00e9s &rarr;</a></p>
 
     <div class="grid">

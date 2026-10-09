@@ -80,7 +80,7 @@ const pct = (a, b) => (b ? Math.round((100 * a) / b) : 0);
 console.log(`structured data: ${blocks} JSON-LD blocks across ${Object.values(cov).reduce((a, c) => a + c.n, 0)} pages`);
 console.log('page type           pages  FAQ/HowTo   answer-first   types');
 for (const [t, c] of Object.entries(cov).sort((a, b) => b[1].n - a[1].n)) {
-  if (!quiet || t === 'word' || t === 'category' || t === 'guide' || t === 'age') {
+  if (!quiet || ['word', 'category', 'guide', 'age', 'flashcards'].includes(t)) {
     console.log(`${t.padEnd(20)}${String(c.n).padStart(5)}  ${String(pct(c.answer, c.n) + '%').padStart(6)}      ${String(pct(c.answerFirst, c.n) + '%').padStart(6)}      ${Object.entries(c.types).map(([k, v]) => `${k}:${v}`).join(' ')}`);
   }
 }
