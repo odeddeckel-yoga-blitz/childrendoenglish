@@ -209,14 +209,15 @@ const ILLUSTRATIONS = {
 
   underwear: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#F0F9FF')}
-    <!-- briefs: waistband + leg openings -->
-    <path d="M 116 180 L 396 180 L 396 250 Q 340 330 300 352 L 300 376 L 212 376 L 212 352 Q 172 330 116 250 Z" fill="#60A5FA"/>
-    <rect x="116" y="168" width="280" height="38" rx="14" fill="#2563EB"/>
-    <path d="M 116 252 Q 160 318 210 348" stroke="#3B82F6" stroke-width="10" fill="none"/>
-    <path d="M 396 252 Q 352 318 302 348" stroke="#3B82F6" stroke-width="10" fill="none"/>
-    <!-- waistband stitching -->
-    <line x1="128" y1="187" x2="384" y2="187" stroke="#DBEAFE" stroke-width="5" stroke-dasharray="12 8"/>
-    <circle cx="256" cy="280" r="20" fill="#3B82F6"/>
+    <!-- classic white briefs with a contrasting waistband — the iconic read -->
+    <path d="M 116 186 L 396 186 L 396 248 Q 342 324 304 348 L 300 372 L 212 372 L 208 348 Q 170 324 116 248 Z" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="5"/>
+    <rect x="110" y="162" width="292" height="44" rx="16" fill="#3B82F6"/>
+    <line x1="126" y1="184" x2="386" y2="184" stroke="#BFDBFE" stroke-width="6" stroke-dasharray="14 9"/>
+    <!-- leg-opening ribbing -->
+    <path d="M 120 252 Q 168 318 212 346" stroke="#93C5FD" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <path d="M 392 252 Q 344 318 300 346" stroke="#93C5FD" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <!-- center seam -->
+    <path d="M 256 206 L 256 368" stroke="#E2E8F0" stroke-width="6"/>
   </svg>`,
 
   medal: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
