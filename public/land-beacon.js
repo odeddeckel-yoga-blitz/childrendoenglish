@@ -24,7 +24,7 @@
     }
     var p = location.pathname, g = 'other';
     if (p === '/' || p === '') g = 'home';
-    else if (p.indexOf('/vocabulary/') === 0 && p.indexOf('/hebrew') > -1) g = 'hebrew';
+    else if (p.indexOf('/he/') === 0 || p.indexOf('/he') === 0 && p.length <= 4 || (p.indexOf('/vocabulary/') === 0 && p.indexOf('/hebrew') > -1)) g = 'hebrew';
     else if (p.indexOf('/es') === 0 || (p.indexOf('/vocabulary/') === 0 && p.indexOf('/spanish') > -1)) g = 'spanish';
     else if (p.indexOf('/games') === 0) g = 'games';
     else if (p.indexOf('/vocabulary') === 0) g = 'vocab';

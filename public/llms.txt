@@ -39,6 +39,10 @@ with pronunciation, an example sentence, and the Hebrew translation.
 - [Spanish landing page](https://childrendoenglish.com/es/): the app for
   Spanish-speaking kids — English vocabulary with photos, native English
   pronunciation, and Spanish translations (interface available in Spanish).
+- [Hebrew games hub](https://childrendoenglish.com/he/english-games/): משחקים
+  ללימוד אנגלית לילדים — free English-learning games for Hebrew-speaking kids,
+  with by-age (6-8, 9-10, 11-12) and by-topic pages. Hebrew interface, real
+  native-English audio, no ads, no sign-up.
 - [Printable flashcards](https://childrendoenglish.com/printable-flashcards/animals/)
 
 ## About

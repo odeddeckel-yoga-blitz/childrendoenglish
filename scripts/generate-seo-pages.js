@@ -40,6 +40,12 @@ function buildCrawlMesh() {
     // Language landings FIRST — hreflang alone gave /he/ zero link equity for
     // months (pos ~21); every generated page now links each language's front door.
     row('Languages · שפות · Idiomas', [['/', 'English'], ['/he/', 'עברית — לימוד אנגלית לילדים'], ['/es/', 'Español — vocabulario en inglés para niños']]) +
+    // Hebrew games cluster (Oct 2026): targets "משחקים ללימוד אנגלית לילדים" queries.
+    row('משחקים באנגלית', [
+      ['/he/english-games/', 'משחקים ללימוד אנגלית לילדים'],
+      ...HE_GAMES_AGES.map((a) => [`/he/english-games/${a.slug}/`, `גילאי ${a.ages} (${a.grades})`]),
+      ...HE_GAMES_TOPICS.map((t) => [`/he/english-games/${t}/`, `אנגלית לילדים — ${CATEGORY_NAMES_HE[t] || t}`]),
+    ]) +
     row('Printable Flashcards', [['/printable-flashcards/', 'All flashcards'], ...cats.map((c) => [`/printable-flashcards/${c}/`, label(c)])]) +
     row('Vocabulary in Hebrew', cats.map((c) => [`/vocabulary/${c}/hebrew/`, `${label(c)} עברית`])) +
     row('Vocabulary in Spanish', cats.map((c) => [`/vocabulary/${c}/spanish/`, `${label(c)} español`])) +
@@ -882,6 +888,8 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
       <p class="cta-sub">Free &middot; No ads &middot; Full Hebrew support &middot; Works offline</p>
     </div>
 
+    <p dir="rtl" lang="he" style="text-align:center;margin:0 0 1.5rem;font-size:0.95rem">מעדיפים ללמוד דרך משחק? <a href="/he/english-games/">משחקים ללימוד אנגלית לילדים — חינם, בלי פרסומות ובלי הרשמה</a></p>
+
     <a href="/vocabulary/${slug}/" class="back-link">&larr; All ${escapeHtml(displayName)} words</a>
 
     <div class="categories">
@@ -1292,6 +1300,11 @@ function buildHebrewLandingPage() {
     <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">קטגוריות</div></div>
     <div class="stat"><div class="stat-num">4</div><div class="stat-label">סוגי חידונים</div></div>
     <div class="stat"><div class="stat-num">3</div><div class="stat-label">רמות קושי</div></div>
+  </div>
+
+  <!-- Hebrew games hub banner -->
+  <div style="text-align:center;padding:0.9rem 1rem;background:#fffbeb;border-bottom:1px solid #fde68a;font-size:0.95rem">
+    &#127918; <a href="/he/english-games/" style="font-weight:700">משחקים ללימוד אנגלית לילדים</a> — לפי גיל ולפי נושא, חינם ובלי הרשמה
   </div>
 
   <!-- Features -->
@@ -1776,6 +1789,513 @@ function buildSpanishLandingPage() {
   </div>
 </body>
 </html>`;
+}
+
+// ---------------------------------------------------------------------------
+// Hebrew games cluster — /he/english-games/ hub + 3 by-age + 6 by-topic pages.
+// Targets "משחקים ללימוד אנגלית לילדים" queries. Slug policy: ASCII slugs with
+// Hebrew RTL content, consistent with /he/. generate-sitemap.js scans dist/,
+// so writePage() alone puts these in the sitemap.
+// ---------------------------------------------------------------------------
+
+const HE_GAMES_TOPICS = ['animals', 'food', 'colors', 'numbers', 'school', 'home'];
+
+const HE_GAMES_AGES = [
+  {
+    slug: 'ages-6-8',
+    level: 'beginner',
+    ages: '6-8',
+    grades: 'א׳-ב׳',
+    levelHe: 'מתחילים',
+    pitch:
+      'הצעדים הראשונים באנגלית, בדיוק בקצב של כיתות א׳-ב׳: מילים בסיסיות כמו חיות, צבעים ומספרים, עם תמונות אמיתיות והגייה של דוברי שפת אם. החידונים מתחילים בהאזנה — כך שגם ילדים שעוד לא קוראים באנגלית יכולים לשחק ולהצליח.',
+  },
+  {
+    slug: 'ages-9-10',
+    level: 'intermediate',
+    ages: '9-10',
+    grades: 'ג׳-ד׳',
+    levelHe: 'ביניים',
+    pitch:
+      'בדיוק כשמתחילים אנגלית ברצינות בכיתות ג׳-ד׳: אוצר מילים רחב יותר, חידוני קריאה והאזנה, ומשחקי איות עם אותיות חסרות שמחזקים את הכתיבה. כל מילה עם תמונה אמיתית, הגייה של דוברי שפת אם ותרגום לעברית.',
+  },
+  {
+    slug: 'ages-11-12',
+    level: 'advanced',
+    ages: '11-12',
+    grades: 'ה׳-ו׳',
+    levelHe: 'מתקדמים',
+    pitch:
+      'אתגר אמיתי לכיתות ה׳-ו׳: מילים מתקדמות, תרגול משפטים שלמים ומשחקי איות — הכנה מצוינת לקראת חטיבת הביניים. ההגייה מוקלטת על ידי דוברי אנגלית שפת אם, כך שהאוזן מתרגלת לאנגלית אמיתית.',
+  },
+];
+
+const HE_GAMES_TOPIC_INTROS = {
+  animals:
+    'חיות הן כמעט תמיד המילים הראשונות שילדים אוהבים ללמוד באנגלית. במשחקים כאן הילדים שומעים את שם החיה באנגלית מפי דובר שפת אם, רואים תמונה אמיתית, ובוחרים את התשובה הנכונה — בלי שינון משעמם.',
+  food:
+    'אוכל ושתייה הם אוצר מילים שילדים פוגשים כל יום — בבית, בגן ובמסעדה. המשחקים מלמדים את המילים דרך תמונות אמיתיות של מאכלים, הגייה מוקלטת וחידונים קצרים וכיפיים.',
+  colors:
+    'צבעים הם אחד הנושאים הראשונים בלימוד אנגלית לילדים. כאן לומדים אותם דרך משחק: שומעים את שם הצבע באנגלית, רואים אותו, ובוחרים נכון — שוב ושוב עד ששולטים.',
+  numbers:
+    'מספרים באנגלית הם בסיס שכל ילד צריך. המשחקים משלבים האזנה, קריאה ואיות של המספרים, עם חזרה מרווחת שדואגת שהמילים באמת נשארות בזיכרון.',
+  school:
+    'מילות בית הספר — עיפרון, מחברת, ילקוט — הן מילים שילדים משתמשים בהן כל יום. המשחקים הופכים אותן לטבעיות באנגלית, עם תמונות אמיתיות והגייה של דוברי שפת אם.',
+  home:
+    'הבית הוא סביבת המילים הקרובה ביותר לילד: רהיטים, חדרים וחפצים יומיומיים. במשחקים לומדים אותם באנגלית דרך תמונות, שמע וחידונים — והתרגום לעברית תמיד שם לעזרה.',
+};
+
+// "480+" style rounded count, derived from WORDS (never hardcoded).
+const HE_GAMES_WORDS_ROUNDED = Math.floor(WORDS.length / 10) * 10;
+
+const HE_GAMES_CSS = `
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; direction: rtl; text-align: right; }
+    a { color: #2563eb; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; padding: 2.75rem 1rem 2.25rem; text-align: center; }
+    .hero h1 { font-size: 1.8rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1.3; }
+    .hero .subtitle { font-size: 1.05rem; opacity: 0.92; margin-bottom: 1.25rem; max-width: 560px; margin-left: auto; margin-right: auto; }
+    .hero-cite { font-size: 0.86rem; opacity: 0.85; max-width: 36rem; margin: 0.9rem auto 0; }
+    .cta-btn { display: inline-block; background: #fff; color: #2563eb; padding: 0.85rem 2.25rem; border-radius: 0.6rem; font-weight: 700; font-size: 1.1rem; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
+    .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); text-decoration: none; }
+    .cta-sub { margin-top: 0.75rem; font-size: 0.8rem; opacity: 0.8; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
+    .stats-bar { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; background: #fff; padding: 1rem; border-bottom: 1px solid #e2e8f0; }
+    .stat { text-align: center; }
+    .stat-num { font-size: 1.25rem; font-weight: 800; color: #2563eb; direction: ltr; display: inline-block; }
+    .stat-label { font-size: 0.8rem; color: #64748b; }
+    .container { max-width: 960px; margin: 0 auto; padding: 0 1rem; }
+    .section { padding: 2.25rem 0; }
+    .section-title { font-size: 1.35rem; font-weight: 800; text-align: center; margin-bottom: 1.25rem; color: #1e293b; }
+    .prose { max-width: 700px; margin: 0 auto; }
+    .prose p { margin-bottom: 0.9rem; color: #334155; }
+    .age-grid, .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0.85rem; }
+    .cluster-card { display: block; background: #fff; border-radius: 0.75rem; padding: 1.1rem 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
+    .cluster-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); transform: translateY(-1px); text-decoration: none; }
+    .cluster-card h3 { font-size: 1.05rem; font-weight: 800; color: #2563eb; margin-bottom: 0.2rem; }
+    .cluster-card p { font-size: 0.85rem; color: #475569; }
+    .word-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; }
+    .word-card { background: #fff; border-radius: 0.75rem; padding: 0.85rem 0.5rem; text-align: center; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .word-card img { width: 96px; height: 96px; border-radius: 0.6rem; object-fit: cover; }
+    .word-en { font-weight: 800; font-size: 1.05rem; direction: ltr; margin-top: 0.4rem; }
+    .word-he { color: #475569; font-size: 0.9rem; }
+    .res-links { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+    .res-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+    .res-links a:hover { background: #2563eb; color: #fff; }
+    .faq-list { max-width: 700px; margin: 0 auto; }
+    .faq-item { background: #fff; border-radius: 0.75rem; padding: 1.25rem; margin-bottom: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .faq-q { font-weight: 700; font-size: 1rem; margin-bottom: 0.35rem; color: #1e293b; }
+    .faq-a { font-size: 0.9rem; color: #475569; line-height: 1.6; }
+    .final-cta { text-align: center; padding: 2.25rem 1rem; background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; }
+    .final-cta h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .final-cta p { opacity: 0.9; margin-bottom: 1.1rem; }
+    .footer { text-align: center; padding: 1.5rem 1rem; color: #94a3b8; font-size: 0.8rem; background: #f8fafc; }
+    .footer a { color: #94a3b8; }
+`;
+
+// Shared <head> + shell for the Hebrew games cluster pages.
+function buildHeGamesShell({ path, title, description, enUrl, esUrl, schemas, body }) {
+  const url = `${SITE}${path}`;
+  const esLink = esUrl ? `\n  <link rel="alternate" hreflang="es" href="${esUrl}" />` : '';
+  return `<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(description)}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${url}" />
+  <link rel="alternate" hreflang="en" href="${enUrl}" />
+  <link rel="alternate" hreflang="he" href="${url}" />${esLink}
+  <link rel="alternate" hreflang="x-default" href="${enUrl}" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+
+  <meta property="og:locale" content="he_IL" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(description)}" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="${escapeHtml(title)}" />
+  <meta name="twitter:description" content="${escapeHtml(description)}" />
+  <meta name="twitter:image" content="${SITE}/og-image.png" />
+
+${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join('\n')}
+
+  <style>${HE_GAMES_CSS}</style>
+</head>
+<body>
+${body}
+
+  <div class="footer">
+    &copy; ${new Date().getFullYear()} Children Do English &middot;
+    <a href="/he/">עברית — דף הבית</a> &middot;
+    <a href="/about/">אודות</a> &middot;
+    <a href="/">English</a>
+  </div>
+</body>
+</html>`;
+}
+
+function heGamesWordCard(w) {
+  return `
+        <div class="word-card">
+          <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)} — ${escapeHtml(w.hebrewTranslation)}" loading="lazy" width="96" height="96" />
+          <div class="word-en">${escapeHtml(w.word)}</div>
+          <div class="word-he">${escapeHtml(w.hebrewTranslation)}</div>
+        </div>`;
+}
+
+function buildHebrewGamesHubPage() {
+  const path = '/he/english-games/';
+  const title = 'משחקים ללימוד אנגלית לילדים — חינם, בלי פרסומות ובלי הרשמה | Children Do English';
+  const description = `משחקים ללימוד אנגלית לילדים בחינם: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים עם תמונות אמיתיות, הגייה של דוברי שפת אם וסולם תרגול בן 11 שלבים. בלי פרסומות ובלי הרשמה — פשוט משחקים ולומדים.`;
+
+  const faq = [
+    {
+      q: 'האם המשחקים באמת בחינם?',
+      a: 'כן, לגמרי. כל המשחקים והמילים פתוחים בחינם, בלי פרסומות, בלי רכישות בתוך האפליקציה ובלי צורך בהרשמה. פשוט נכנסים ומתחילים לשחק.',
+    },
+    {
+      q: 'איך המשחקים עובדים?',
+      a: `כל קבוצה של 10 מילים עולה בסולם תרגול בן 11 שלבים: כרטיסיות, חידוני האזנה וקריאה, משחקי איות עם אותיות חסרות, תרגול משפטים ומשחקי ארקייד. מערכת חזרה מרווחת מחזירה כל מילה בדיוק לפני ששוכחים אותה, עד שליטה מלאה ביותר מ-${HE_GAMES_WORDS_ROUNDED} מילים.`,
+    },
+    {
+      q: 'לאיזה גיל המשחקים מתאימים?',
+      a: 'לילדים בגילאי 6-12. המילים מחולקות לשלוש רמות — מתחילים (א׳-ב׳), ביניים (ג׳-ד׳) ומתקדמים (ה׳-ו׳) — וכל ילד מתקדם בקצב שלו.',
+    },
+    {
+      q: 'האם הילד צריך לדעת לקרוא באנגלית?',
+      a: 'לא. החידונים מתחילים בהאזנה — הילד שומע את המילה באנגלית מפי דובר שפת אם ובוחר תמונה — כך שגם ילדים שעוד לא קוראים באנגלית יכולים לשחק. הממשק כולו זמין בעברית, והלימוד עצמו הוא באנגלית אמיתית.',
+    },
+  ];
+
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'עברית', item: `${SITE}/he/` },
+      { '@type': 'ListItem', position: 3, name: 'משחקים ללימוד אנגלית לילדים', item: `${SITE}${path}` },
+    ],
+  });
+
+  const faqSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  });
+
+  const ageCards = HE_GAMES_AGES.map((a) => {
+    const count = WORDS.filter((w) => w.level === a.level).length;
+    return `
+        <a href="/he/english-games/${a.slug}/" class="cluster-card">
+          <h3>גילאי ${a.ages} (${a.grades})</h3>
+          <p>רמת ${a.levelHe} &middot; <span style="direction:ltr;display:inline-block">${count}</span> מילים</p>
+        </a>`;
+  }).join('\n');
+
+  const topicCards = HE_GAMES_TOPICS.map((t) => {
+    const words = getWordsByCategory(t);
+    return `
+        <a href="/he/english-games/${t}/" class="cluster-card">
+          <h3>${CATEGORY_NAMES_HE[t] || t}</h3>
+          <p>${CATEGORY_NAMES[t] || t} &middot; <span style="direction:ltr;display:inline-block">${words.length}</span> מילים</p>
+        </a>`;
+  }).join('\n');
+
+  const bilingualLinks = CATEGORIES.map(
+    (c) => `<a href="/vocabulary/${c}/hebrew/">${escapeHtml(CATEGORY_NAMES_HE[c] || c)}</a>`
+  ).join('\n        ');
+
+  const flashcardLinks = HE_GAMES_TOPICS.map(
+    (t) => `<a href="/printable-flashcards/${t}/">${escapeHtml(CATEGORY_NAMES_HE[t] || t)}</a>`
+  ).join('\n        ');
+
+  const faqHtml = faq
+    .map(
+      (f) => `
+        <div class="faq-item">
+          <div class="faq-q">${f.q}</div>
+          <div class="faq-a">${f.a}</div>
+        </div>`
+    )
+    .join('\n');
+
+  const body = `
+  <div class="hero">
+    <h1>משחקים ללימוד אנגלית לילדים</h1>
+    <p class="subtitle">חינם, בלי פרסומות ובלי הרשמה: הילדים לומדים אנגלית דרך משחק — עם תמונות אמיתיות, הגייה של דוברי שפת אם וממשק בעברית.</p>
+    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_hub" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
+    <p class="cta-sub">בלי פרסומות &middot; בלי הרשמה &middot; חינם לגמרי</p>
+    <p class="hero-cite">Children Do English מציע משחקים חינמיים ללימוד אנגלית לילדים בגילאי 6-12: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים באנגלית עם תמונות אמיתיות, הגייה של דוברי שפת אם, סולם תרגול בן 11 שלבים ותרגום לעברית — בלי פרסומות ובלי הרשמה.</p>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-num">${WORDS.length}+</div><div class="stat-label">מילים</div></div>
+    <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">קטגוריות</div></div>
+    <div class="stat"><div class="stat-num">11</div><div class="stat-label">שלבי תרגול</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">רמות קושי</div></div>
+  </div>
+
+  <div class="section">
+    <div class="container prose">
+      <h2 class="section-title">מה זה Children Do English?</h2>
+      <p>אתר חינמי שבו ילדים לומדים אנגלית דרך משחק. יש בו יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים באנגלית, וכל מילה מגיעה עם תמונה אמיתית (לא איור), הגייה מוקלטת של דוברי אנגלית שפת אם, הגדרה פשוטה, משפט לדוגמה ותרגום לעברית.</p>
+      <p>העיקרון פשוט: הממשק בעברית, הלימוד באנגלית אמיתית. הילד שומע אנגלית של דוברי שפת אם מהרגע הראשון, וההוראות וההסברים בעברית — כך שהוא אף פעם לא הולך לאיבוד.</p>
+      <p>מה שמייחד את האתר הוא סולם התרגול בן 11 השלבים: כל קבוצה של 10 מילים עוברת דרך כרטיסיות, חידוני האזנה, חידוני קריאה, משחקי איות עם אותיות חסרות, תרגול משפטים ומשחקי ארקייד — עם חזרה מרווחת שמוודאת שהמילים נשארות בזיכרון לטווח ארוך. זה לא עוד דף תרגול: זה מסלול שלם, מהמפגש הראשון עם המילה ועד שליטה מלאה.</p>
+      <p>והכי חשוב: הכול בחינם, בלי פרסומות, בלי הרשמה ובלי איסוף מידע. נכנסים — ומשחקים.</p>
+    </div>
+  </div>
+
+  <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">משחקים לפי גיל</h2>
+      <div class="age-grid">
+        ${ageCards}
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">משחקים לפי נושא</h2>
+      <div class="topic-grid">
+        ${topicCards}
+      </div>
+    </div>
+  </div>
+
+  <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">עוד חומרי לימוד בחינם</h2>
+      <p style="text-align:center;color:#475569;margin-bottom:0.9rem">רשימות מילים דו-לשוניות אנגלית-עברית, לכל קטגוריה:</p>
+      <div class="res-links">
+        ${bilingualLinks}
+      </div>
+      <p style="text-align:center;color:#475569;margin:1.4rem 0 0.9rem">כרטיסיות להדפסה (באנגלית): <a href="/printable-flashcards/">כל הכרטיסיות</a></p>
+      <div class="res-links">
+        ${flashcardLinks}
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">שאלות נפוצות</h2>
+      <div class="faq-list">
+        ${faqHtml}
+      </div>
+    </div>
+  </div>
+
+  <div class="final-cta">
+    <h2>מוכנים לשחק?</h2>
+    <p>כל המשחקים פתוחים עכשיו, בחינם ובלי הרשמה.</p>
+    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_hub" class="cta-btn">התחילו לשחק בחינם &#8592;</a>
+  </div>`;
+
+  return buildHeGamesShell({
+    path,
+    title,
+    description,
+    enUrl: `${SITE}/`,
+    schemas: [breadcrumbSchema, faqSchema],
+    body,
+  });
+}
+
+function buildHebrewGamesAgePage(age) {
+  const path = `/he/english-games/${age.slug}/`;
+  const levelWords = WORDS.filter((w) => w.level === age.level);
+  const title = `משחקים ללימוד אנגלית לילדים בגילאי ${age.ages} (${age.grades}) — חינם | Children Do English`;
+  const description = `משחקים ללימוד אנגלית לילדים בגילאי ${age.ages}, מותאמים לכיתות ${age.grades}: ${levelWords.length} מילים ברמת ${age.levelHe} עם תמונות אמיתיות, הגייה של דוברי שפת אם ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
+
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'משחקים ללימוד אנגלית לילדים', item: `${SITE}/he/english-games/` },
+      { '@type': 'ListItem', position: 3, name: `גילאי ${age.ages}`, item: `${SITE}${path}` },
+    ],
+  });
+
+  // Sample words at this level, one per category for variety.
+  const samples = [];
+  const seenCats = new Set();
+  for (const w of levelWords) {
+    if (!seenCats.has(w.category)) {
+      seenCats.add(w.category);
+      samples.push(w);
+      if (samples.length === 6) break;
+    }
+  }
+
+  const otherAges = HE_GAMES_AGES.filter((a) => a.slug !== age.slug)
+    .map((a) => `<a href="/he/english-games/${a.slug}/">גילאי ${a.ages} (${a.grades})</a>`)
+    .join('\n        ');
+
+  const topicLinks = HE_GAMES_TOPICS.map(
+    (t) => `<a href="/vocabulary/${t}/hebrew/">${escapeHtml(CATEGORY_NAMES_HE[t] || t)} — רשימת מילים בעברית</a>`
+  ).join('\n        ');
+
+  const flashcardLinks = HE_GAMES_TOPICS.map(
+    (t) => `<a href="/printable-flashcards/${t}/">${escapeHtml(CATEGORY_NAMES_HE[t] || t)} — כרטיסיות להדפסה</a>`
+  ).join('\n        ');
+
+  const body = `
+  <div class="hero">
+    <h1>משחקים ללימוד אנגלית לילדים בגילאי ${age.ages}</h1>
+    <p class="subtitle">רמת ${age.levelHe}, מותאם לכיתות ${age.grades} — <span style="direction:ltr;display:inline-block">${levelWords.length}</span> מילים באנגלית עם תמונות, שמע ותרגום לעברית.</p>
+    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${age.slug.replace(/-/g, '_')}" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
+    <p class="cta-sub">בלי פרסומות &middot; בלי הרשמה &middot; חינם לגמרי</p>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="/he/">עברית</a> &lsaquo; <a href="/he/english-games/">משחקים ללימוד אנגלית לילדים</a> &lsaquo; גילאי ${age.ages}
+  </div>
+
+  <div class="section" style="padding-top:0.5rem">
+    <div class="container prose">
+      <p>${age.pitch}</p>
+      <p>ברמה הזו מחכות <span style="direction:ltr;display:inline-block">${levelWords.length}</span> מילים, וכל אחת עוברת דרך סולם תרגול בן 11 שלבים — מכרטיסייה ראשונה ועד משחקי ארקייד — עם חזרה מרווחת עד שליטה מלאה. הכול בחינם, בלי פרסומות ובלי הרשמה.</p>
+    </div>
+  </div>
+
+  <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">טעימה מהמילים ברמה הזו</h2>
+      <div class="word-grid">
+        ${samples.map(heGamesWordCard).join('\n')}
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">עוד חומרים לגיל הזה</h2>
+      <div class="res-links">
+        ${topicLinks}
+      </div>
+      <div class="res-links" style="margin-top:0.75rem">
+        ${flashcardLinks}
+      </div>
+      <p style="text-align:center;margin-top:1.25rem;color:#475569">גילאים אחרים:</p>
+      <div class="res-links" style="margin-top:0.5rem">
+        ${otherAges}
+      </div>
+    </div>
+  </div>
+
+  <div class="final-cta">
+    <h2>מוכנים לשחק?</h2>
+    <p>המשחקים מחכים — מותאמים בדיוק לגילאי ${age.ages}.</p>
+    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${age.slug.replace(/-/g, '_')}" class="cta-btn">התחילו לשחק בחינם &#8592;</a>
+  </div>`;
+
+  return buildHeGamesShell({
+    path,
+    title,
+    description,
+    enUrl: `${SITE}/vocabulary/${age.slug}/`,
+    schemas: [breadcrumbSchema],
+    body,
+  });
+}
+
+function buildHebrewGamesTopicPage(slug) {
+  const path = `/he/english-games/${slug}/`;
+  const hebrewName = CATEGORY_NAMES_HE[slug] || slug;
+  const displayName = CATEGORY_NAMES[slug] || slug;
+  const words = getWordsByCategory(slug);
+  const title = `אנגלית לילדים — ${hebrewName}: משחקים ללימוד המילים בחינם | Children Do English`;
+  const description = `משחקים ללימוד אנגלית לילדים בנושא ${hebrewName}: ${words.length} מילים עם תמונות אמיתיות, הגייה של דוברי שפת אם ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
+
+  const breadcrumbSchema = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+      { '@type': 'ListItem', position: 2, name: 'משחקים ללימוד אנגלית לילדים', item: `${SITE}/he/english-games/` },
+      { '@type': 'ListItem', position: 3, name: hebrewName, item: `${SITE}${path}` },
+    ],
+  });
+
+  const preview = words.slice(0, 8);
+
+  const otherTopics = HE_GAMES_TOPICS.filter((t) => t !== slug)
+    .map((t) => `<a href="/he/english-games/${t}/">${escapeHtml(CATEGORY_NAMES_HE[t] || t)}</a>`)
+    .join('\n        ');
+
+  const body = `
+  <div class="hero">
+    <h1>אנגלית לילדים — ${hebrewName}</h1>
+    <p class="subtitle">משחקים ללימוד <span style="direction:ltr;display:inline-block">${words.length}</span> מילות ${hebrewName} באנגלית (${escapeHtml(displayName)}) — עם תמונות אמיתיות, שמע ותרגום לעברית.</p>
+    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${slug}" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
+    <p class="cta-sub">בלי פרסומות &middot; בלי הרשמה &middot; חינם לגמרי</p>
+  </div>
+
+  <div class="breadcrumb">
+    <a href="/he/">עברית</a> &lsaquo; <a href="/he/english-games/">משחקים ללימוד אנגלית לילדים</a> &lsaquo; ${hebrewName}
+  </div>
+
+  <div class="section" style="padding-top:0.5rem">
+    <div class="container prose">
+      <p>${HE_GAMES_TOPIC_INTROS[slug] || ''}</p>
+    </div>
+  </div>
+
+  <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">טעימה מהמילים בנושא ${hebrewName}</h2>
+      <div class="word-grid">
+        ${preview.map(heGamesWordCard).join('\n')}
+      </div>
+      <p style="text-align:center;margin-top:1.25rem"><a href="/vocabulary/${slug}/hebrew/">לרשימה המלאה: כל <span style="direction:ltr;display:inline-block">${words.length}</span> מילות ה${hebrewName} באנגלית ובעברית</a></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">עוד בנושא ${hebrewName}</h2>
+      <div class="res-links">
+        <a href="/vocabulary/${slug}/hebrew/">רשימת מילים אנגלית-עברית — ${hebrewName}</a>
+        <a href="/printable-flashcards/${slug}/">כרטיסיות ${hebrewName} להדפסה</a>
+      </div>
+      <p style="text-align:center;margin-top:1.25rem;color:#475569">נושאים נוספים:</p>
+      <div class="res-links" style="margin-top:0.5rem">
+        ${otherTopics}
+      </div>
+    </div>
+  </div>
+
+  <div class="final-cta">
+    <h2>מוכנים לשחק?</h2>
+    <p>כל מילות ה${hebrewName} מחכות במשחק — בחינם ובלי הרשמה.</p>
+    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${slug}" class="cta-btn">התחילו לשחק בחינם &#8592;</a>
+  </div>`;
+
+  return buildHeGamesShell({
+    path,
+    title,
+    description,
+    enUrl: `${SITE}/vocabulary/${slug}/`,
+    esUrl: `${SITE}/vocabulary/${slug}/spanish/`,
+    schemas: [breadcrumbSchema],
+    body,
+  });
 }
 
 // --- Generate pages ---
@@ -3717,6 +4237,29 @@ for (const slug of CATEGORIES) {
   writePage(join(esCatDir, 'index.html'), buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words), 'utf-8');
   spanishBilingualGenerated++;
   console.log(`  \u2713 /vocabulary/${slug}/spanish/ (${words.length} words)`);
+}
+
+// --- Generate Hebrew games cluster (/he/english-games/) ---
+
+{
+  const heGamesDir = join(distDir, 'he', 'english-games');
+  mkdirSync(heGamesDir, { recursive: true });
+  writePage(join(heGamesDir, 'index.html'), buildHebrewGamesHubPage(), 'utf-8');
+  console.log('  \u2713 /he/english-games/ (Hebrew games hub)');
+
+  for (const age of HE_GAMES_AGES) {
+    const ageDir = join(heGamesDir, age.slug);
+    mkdirSync(ageDir, { recursive: true });
+    writePage(join(ageDir, 'index.html'), buildHebrewGamesAgePage(age), 'utf-8');
+    console.log(`  \u2713 /he/english-games/${age.slug}/`);
+  }
+
+  for (const slug of HE_GAMES_TOPICS) {
+    const topicDir = join(heGamesDir, slug);
+    mkdirSync(topicDir, { recursive: true });
+    writePage(join(topicDir, 'index.html'), buildHebrewGamesTopicPage(slug), 'utf-8');
+    console.log(`  \u2713 /he/english-games/${slug}/`);
+  }
 }
 
 // --- Overwrite sitemap.xml ---
