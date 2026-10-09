@@ -67,6 +67,18 @@ surfacing the cold inventory to the traffic you already have — NOT more games.
   committed `game-stats.json`, a prebuild `pick-*.mjs` derives the pick from it (no live
   timestamp, so it doesn't churn every build). Routes existing hub traffic to cold inventory +
   harvests the engagement data that says which items deserve promotion.
+  - **Precondition — a PER-ITEM open signal** (CDE, 2026-10): depth = level-ups ÷ opens needs
+    per-item *opens*. If the land beacon only tallies page/item CLASSES (CDE's did), per-item
+    opens don't exist — add a per-item open event (`g_open`/`w_open`, webdriver + internal-flag
+    excluded, item-id whitelisted) BEFORE depth is computable per item. (kidsdomath's beacon was
+    already per-game `{day,game_id,...}`, so it needed nothing — this bites class-level beacons.)
+  - **Many cold candidates → rotate the tiebreak, with a REAL hash** (CDE, 2026-10): when
+    hundreds of items tie at 0 traffic, a *stable* id tiebreak pins the alphabetically-first
+    forever — and it can never graduate, because spotlight clicks alone won't clear the bar. Salt
+    the tiebreak with the snapshot DATE so cold items take turns per run. ⚠ a polynomial hash
+    (`h*31+c`) is affine in the salt, so the arg-min is salt-invariant and the pick never moves —
+    rotation silently fails. Use a mixing hash (FNV-1a + an avalanche step) and add a
+    rotation test (different salt ⇒ different pick) or you won't notice it's stuck.
 - **Win-screen next-game bias**: suggest a RELEVANT, not-yet-mastered next step, preferring an
   already-engaging item over a cold one. Ship as a measured version; revisit on a fixed clock.
 - ⚠ **Honest caveat**: these redistribute EXISTING arrivals — they do not create new ones.
