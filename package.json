@@ -7,6 +7,7 @@
     "dev": "vite",
     "prebuild": "node scripts/pick-spotlight.mjs",
     "build": "vite build && node scripts/generate-seo-pages.js && node scripts/generate-og-images.js && node scripts/generate-sitemap.js",
+    "postbuild": "node scripts/validate-schema.mjs --quiet",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

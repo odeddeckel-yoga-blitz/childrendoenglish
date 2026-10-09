@@ -136,6 +136,11 @@ surfacing the cold inventory to the traffic you already have — NOT more games.
 - Agents report, the coordinating session commits (scoped `git add`).
 - On transient API drops/stalls: resume-from-transcript with "re-read your files from disk first —
   trust the disk, not memory."
+- **Write briefs and handoffs in Simplified Technical English (ASD-STE100 spirit)**: short
+  sentences, one idea each, active voice, plain verbs, controlled vocabulary, no ambiguity. These
+  are read under context-switching across many sessions — they must land in one pass. Lead with the
+  task and the acceptance test; put the "why" in one line, not a paragraph. (Keep rich prose for
+  genuine analysis/tradeoffs — STE is for instructions, not for thinking out loud.)
 
 ## 7. Consuming this kit
 Each consumer repo carries `scripts/sync-game-kit.mjs` (copies kit files in, stamps

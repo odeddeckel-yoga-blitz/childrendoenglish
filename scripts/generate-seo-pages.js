@@ -99,6 +99,39 @@ function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+// GEO helpers (kit NEW-SITE-PLAYBOOK §7: schema + Q&A and an answer-first body
+// are the levers with evidence; llms.txt is kept but never credited).
+const ENTITY_MAP = { '&mdash;': '—', '&ndash;': '–', '&rarr;': '→', '&larr;': '←', '&hellip;': '…', '&rsquo;': '’', '&lsquo;': '‘', '&ldquo;': '“', '&rdquo;': '”', '&middot;': '·', '&nbsp;': ' ', '&amp;': '&', '&lt;': '<', '&gt;': '>', '&quot;': '"', '&#39;': "'" };
+function plainText(html) {
+  return String(html).replace(/<[^>]*>/g, ' ').replace(/&[a-z#0-9]+;/g, (e) => ENTITY_MAP[e] ?? e).replace(/\s+/g, ' ').trim();
+}
+function faqSchemaFor(pairs) {
+  return JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: pairs.filter((q) => q && q.q && q.a).map((q) => ({
+      '@type': 'Question', name: plainText(q.q),
+      acceptedAnswer: { '@type': 'Answer', text: plainText(q.a) },
+    })),
+  });
+}
+const LEVEL_LABEL = { beginner: 'Beginner (ages 6-8)', intermediate: 'Intermediate (ages 9-10)', advanced: 'Advanced (ages 11-12)' };
+function listWords(ws, max = 12) {
+  const names = ws.slice(0, max).map((w) => w.word);
+  return names.length > 1 ? names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1] : names[0] || '';
+}
+// Comparison element with real numbers (assistants lift tables verbatim, with credit).
+function levelTable(words, caption) {
+  const n = (lvl) => words.filter((w) => w.level === lvl).length;
+  const rows = ['beginner', 'intermediate', 'advanced'].filter((l) => n(l) > 0)
+    .map((l) => `<tr><td>${LEVEL_LABEL[l]}</td><td>${n(l)}</td><td>${escapeHtml(listWords(words.filter((w) => w.level === l), 3))}</td></tr>`).join('');
+  return `<table class="level-table" style="width:100%;max-width:640px;margin:0 auto 1.5rem;border-collapse:collapse;background:#fff;border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);font-size:0.92rem">
+      <caption style="caption-side:top;text-align:start;font-weight:700;color:#334155;padding:0.5rem 0.75rem">${escapeHtml(caption)}</caption>
+      <thead><tr style="background:#eff6ff;color:#1e3a8a"><th style="text-align:start;padding:0.5rem 0.75rem">Level</th><th style="text-align:start;padding:0.5rem 0.75rem">Words</th><th style="text-align:start;padding:0.5rem 0.75rem">Examples</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`.replace(/<td>/g, '<td style="padding:0.5rem 0.75rem;border-top:1px solid #e2e8f0">');
+}
+
 function buildCategoryPage(slug, displayName, words) {
   const url = `${SITE}/vocabulary/${slug}/`;
   const wordCount = words.length;
@@ -129,6 +162,23 @@ function buildCategoryPage(slug, displayName, words) {
     url,
     hasDefinedTerm: definedTerms,
   });
+
+  // Answer-first opening + FAQ (GEO): the direct answer to "which <x> words
+  // should a kid learn?" comes BEFORE the grid; the meta description stays a tease.
+  const byLevel = (l) => words.filter((w) => w.level === l);
+  const beg = byLevel('beginner'), adv = byLevel('advanced');
+  const lower = displayName.toLowerCase();
+  const answerFirst = `${displayName} words in English for kids: ${wordCount} words`
+    + (beg.length ? `, from beginner words like ${listWords(beg, 3)}` : '')
+    + (adv.length ? ` to advanced words like ${listWords(adv, 2)}` : '')
+    + `. Every word has a real photo, native audio, a kid-friendly definition, an example sentence and a Hebrew translation.`;
+  const faqSchema = faqSchemaFor([
+    { q: `How many ${lower} words in English should a child learn?`, a: `This list has ${wordCount} ${lower} words for kids ages 6-12: ${beg.length} beginner (ages 6-8), ${byLevel('intermediate').length} intermediate (ages 9-10) and ${adv.length} advanced (ages 11-12). Start with the beginner words and add 3-5 new words a day.` },
+    beg.length ? { q: `Which ${lower} words should a beginner (ages 6-8) learn first?`, a: `Start with concrete ${lower} words a child can see and point to: ${listWords(beg, 12)}. Each one has a picture and audio on this page.` } : null,
+    adv.length ? { q: `Which ${lower} words are for ages 11-12?`, a: `Advanced ${lower} words for ages 11-12 include ${listWords(adv, 12)}.` } : null,
+    { q: `Do the ${lower} words include Hebrew and Spanish translations?`, a: `Yes. Every ${lower} word has a Hebrew translation on this page, and the Spanish version of this list is at /vocabulary/${slug}/spanish/. Audio is always in English.` },
+  ]);
+  const levelTableHtml = levelTable(words, `${displayName} words by level`);
 
   const wordCards = words
     .map(
@@ -187,6 +237,7 @@ function buildCategoryPage(slug, displayName, words) {
   <!-- Structured Data -->
   <script type="application/ld+json">${breadcrumbSchema}</script>
   <script type="application/ld+json">${definedTermSetSchema}</script>
+  <script type="application/ld+json">${faqSchema}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -232,7 +283,8 @@ function buildCategoryPage(slug, displayName, words) {
   </div>
 
   <div class="container">
-    <p class="intro">${escapeHtml(description)}</p>
+    <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
+    ${levelTableHtml}
 
     <div class="grid">
       ${wordCards}
@@ -318,6 +370,16 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     inDefinedTermSet: `${SITE}/vocabulary/${categorySlug}/`,
   });
 
+  // FAQ (GEO): the three questions GSC shows for word pages, answered from the
+  // word data itself. Answer lives in the BODY + schema; the meta stays a tease.
+  const esGloss = ES_GLOSSES[word.id] || '';
+  const faqSchema = faqSchemaFor([
+    { q: `What does "${word.word}" mean?`, a: `"${capitalWord}" means: ${word.definition}. Example: "${word.exampleSentence}"` },
+    { q: `How do you say ${word.word} in Hebrew${esGloss ? ' and Spanish' : ''}?`, a: `In Hebrew, ${word.word} is ${word.hebrewTranslation}.${esGloss ? ` In Spanish, it is ${esGloss}.` : ''}` },
+    { q: `How do you pronounce "${word.word}"?`, a: `${capitalWord} is pronounced ${word.phonetic}. It is a ${word.partOfSpeech}. You can hear a native speaker say it on this page.` },
+  ]);
+  const answerFirst = `"${capitalWord}" means: ${word.definition}. In Hebrew: ${word.hebrewTranslation}.`;
+
   // Pick 5 related words from same category, excluding current
   const related = categoryWords.filter((w) => w.id !== word.id).slice(0, 5);
   const relatedCards = related
@@ -397,6 +459,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
   <!-- Structured Data -->
   <script type="application/ld+json">${breadcrumbSchema}</script>
   <script type="application/ld+json">${definedTermSchema}</script>
+  <script type="application/ld+json">${faqSchema}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -449,7 +512,8 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
 <body>
   <div class="header">
     <h1>${escapeHtml(capitalWord)}</h1>
-    <p>${escapeHtml(categoryDisplayName)} &middot; ${escapeHtml(word.level)}</p>
+    <p class="answer-first" style="opacity:1;font-size:1.02rem;max-width:36rem;margin:0.35rem auto 0">${escapeHtml(answerFirst)}</p>
+    <p style="font-size:0.85rem;margin-top:0.35rem">${escapeHtml(categoryDisplayName)} &middot; ${escapeHtml(word.level)}</p>
   </div>
 
   <div class="breadcrumb">
@@ -468,7 +532,6 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
       <div class="hero-def">${escapeHtml(word.definition)}</div>
       <div class="hero-ex">&ldquo;${escapeHtml(word.exampleSentence)}&rdquo;</div>
       <div class="hero-he">${escapeHtml(word.hebrewTranslation)}</div>
-      <p class="hero-cite" style="font-size:0.86rem;color:#64748b;max-width:34rem;margin:0.7rem auto 0">The English word &ldquo;${escapeHtml(word.word)}&rdquo; means: ${escapeHtml(word.definition)}. In Hebrew: ${escapeHtml(word.hebrewTranslation)}.</p>
       <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear ${escapeHtml(word.word)}">🔊 Hear &ldquo;${escapeHtml(word.word)}&rdquo;</button>
     </div>
 ${wordNav}
@@ -513,7 +576,7 @@ ${wordNav}
       </div>
     </div>
 
-    <span class="cta-top"><a href="/?utm_source=seo&utm_medium=cta_top&utm_content=vocab_word">🎧 Practice free &mdash; no ads, no sign-up</a><p>481 words with pictures &amp; audio &middot; works offline</p></span>
+    <span class="cta-top"><a href="/?utm_source=seo&utm_medium=cta_top&utm_content=vocab_word">🎧 Practice free &mdash; no ads, no sign-up</a><p>${WORDS.length} words with pictures &amp; audio &middot; works offline</p></span>
 
     ${enrichmentHtml}
 
@@ -590,6 +653,19 @@ function buildAgeBracketPage(bracket, allWords) {
     if (!wordsByCategory[w.category]) wordsByCategory[w.category] = [];
     wordsByCategory[w.category].push(w);
   }
+  // Answer-first opening + FAQ + category-count table (GEO)
+  const catCounts = CATEGORIES.filter((c) => wordsByCategory[c]).map((c) => ({ c, name: CATEGORY_NAMES[c] || c, n: wordsByCategory[c].length })).sort((a, b) => b.n - a.n);
+  const answerFirst = `English words for kids ages ${bracket.ageRange}: ${words.length} ${bracket.description} words across ${catCounts.length} categories, such as ${listWords(words.slice(0, 5), 5)}. The biggest groups are ${catCounts.slice(0, 3).map((x) => `${x.name.toLowerCase()} (${x.n})`).join(', ')}. Every word has a real photo, native audio, an example sentence and a Hebrew translation.`;
+  const faqSchema = faqSchemaFor([
+    { q: `How many English words should a child aged ${bracket.ageRange} learn?`, a: `This ${bracket.description} list has ${words.length} English words for ages ${bracket.ageRange}, spread over ${catCounts.length} categories. Learning 3-5 new words a day with a picture and an example sentence, then reviewing them on a spaced schedule, covers it in a few months.` },
+    { q: `Which English word categories are best for ages ${bracket.ageRange}?`, a: `For ages ${bracket.ageRange} the largest ${bracket.description} categories are ${catCounts.slice(0, 5).map((x) => `${x.name.toLowerCase()} (${x.n} words)`).join(', ')}.` },
+    { q: `What are some ${bracket.description} English words for ages ${bracket.ageRange}?`, a: `Examples: ${listWords(words.slice(0, 15), 15)}.` },
+  ]);
+  const catTable = `<table class="level-table" style="width:100%;max-width:640px;margin:0 auto 1.5rem;border-collapse:collapse;background:#fff;border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);font-size:0.92rem">
+      <caption style="caption-side:top;text-align:start;font-weight:700;color:#334155;padding:0.5rem 0.75rem">${bracket.description.charAt(0).toUpperCase() + bracket.description.slice(1)} words for ages ${bracket.ageRange}, by category</caption>
+      <thead><tr style="background:#eff6ff;color:#1e3a8a"><th style="text-align:start;padding:0.5rem 0.75rem">Category</th><th style="text-align:start;padding:0.5rem 0.75rem">Words</th><th style="text-align:start;padding:0.5rem 0.75rem">Examples</th></tr></thead>
+      <tbody>${catCounts.map((x) => `<tr><td style="padding:0.5rem 0.75rem;border-top:1px solid #e2e8f0"><a href="/vocabulary/${x.c}/" style="color:#2563eb;text-decoration:none">${escapeHtml(x.name)}</a></td><td style="padding:0.5rem 0.75rem;border-top:1px solid #e2e8f0">${x.n}</td><td style="padding:0.5rem 0.75rem;border-top:1px solid #e2e8f0">${escapeHtml(listWords(wordsByCategory[x.c], 3))}</td></tr>`).join('')}</tbody>
+    </table>`;
 
   const categoryBlocks = CATEGORIES
     .filter((slug) => wordsByCategory[slug] && wordsByCategory[slug].length > 0)
@@ -649,6 +725,7 @@ function buildAgeBracketPage(bracket, allWords) {
 
   <script type="application/ld+json">${breadcrumbSchema}</script>
   <script type="application/ld+json">${definedTermSetSchema}</script>
+  <script type="application/ld+json">${faqSchema}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -695,7 +772,8 @@ function buildAgeBracketPage(bracket, allWords) {
   </div>
 
   <div class="container">
-    <p class="intro">${escapeHtml(description)}</p>
+    <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
+    ${catTable}
 
     ${categoryBlocks}
 
@@ -4109,7 +4187,70 @@ const GUIDES = [
   },
 ];
 
+// GEO layer for guides: a 1-2 sentence DIRECT answer rendered first under the
+// H1, and real question-form FAQs (section headings aren't questions, and
+// assistants quote Q&A pairs). Grounded in each guide's own body text.
+const GUIDE_GEO = {
+  'how-to-teach-kids-english-vocabulary': {
+    answer: 'Teach kids English vocabulary by introducing 3-5 new words a day with a picture, a simple definition and an example sentence, then reviewing them on a spaced schedule (1, 3, 7, 14 and 30 days). Ten minutes a day split into review, learn and quiz beats long weekly sessions.',
+    faq: [
+      { q: 'How many new English words should a child learn per week?', a: 'About 5-10 new words per week, introduced 3-5 at a time with a picture and an example sentence, then reviewed on a spaced schedule. Children who learn words this way retain them far better than children who meet words randomly.' },
+      { q: 'What is the best daily routine for teaching vocabulary?', a: 'Ten minutes a day: 2 minutes reviewing 5 learned words with flashcards, 5 minutes learning 3-5 new words with pictures and definitions, and 3 minutes of a quick quiz. Over a month that is 90-150 new words, with older words reinforced by spaced review.' },
+      { q: 'Which English words should a 6-8 year old learn first?', a: 'Concrete everyday words a child can see and point to: animals, food, colors and everyday objects. Use lots of pictures, keep sessions to about 5 minutes, and celebrate small wins.' },
+    ],
+  },
+  'learn-english-words-with-pictures': {
+    answer: 'Pictures help kids learn English words faster because the word is stored through two channels at once, visual and verbal (dual coding), which improves retention. Start with concrete categories like animals, food and everyday objects, show about 5 new picture cards per session, and move from looking at cards to active picture quizzes.',
+    faq: [
+      { q: 'Why do pictures help children learn vocabulary?', a: 'A picture next to a new word makes the brain encode it through two channels at once, visual and verbal. This is dual-coding theory, and decades of research show it clearly improves how much children retain.' },
+      { q: 'Which word categories are best for learning with pictures?', a: 'Categories with high visual concreteness, meaning things a child can see and point to: animals, food, everyday objects, transport and colors. Abstract words are harder to illustrate and should come later.' },
+      { q: 'How many picture flashcards should a child see per session?', a: 'About 5 new picture cards per session, not 20. Say each word aloud, then switch from passive looking to an active picture quiz so the child has to retrieve the word.' },
+    ],
+  },
+  'spaced-repetition-for-kids': {
+    answer: 'Spaced repetition means reviewing a word at growing intervals, 1, 3, 7, 14 and 30 days after learning it, instead of cramming it ten times in one sitting. Each successful review pushes the next one further out and a miss resets the word to the start, which is why kids keep words for months with only minutes a day.',
+    faq: [
+      { q: 'What is spaced repetition?', a: 'A learning technique where you review information at gradually increasing intervals instead of cramming. A word is studied once today, once tomorrow, once in 3 days, then in a week and a month.' },
+      { q: 'What spaced repetition schedule should kids use?', a: 'Review 1 day after learning, then 3, 7, 14 and 30 days later. Each successful review pushes the next review further out; a miss resets the word to the start of the ladder.' },
+      { q: 'Is spaced repetition better than traditional flashcards?', a: 'Yes for long-term memory. Traditional flashcards are reviewed randomly or all at once in long cramming sessions; spaced repetition uses short, optimally timed daily sessions, builds stronger long-term memory and feels easier for kids.' },
+    ],
+  },
+  'english-vocabulary-games-for-kids': {
+    answer: 'The best English vocabulary games for kids are picture matching, audio "hear it, pick it" challenges, streak and badge challenges, and printable flashcard games like memory match. Games work better than worksheets because play releases dopamine, which strengthens memory formation.',
+    faq: [
+      { q: 'Why do games work better than worksheets for learning vocabulary?', a: 'Play releases dopamine, the chemical that makes kids want "one more round", and dopamine strengthens memory formation. Words met in a game stick better than words copied on a worksheet.' },
+      { q: 'What is the simplest vocabulary game for kids?', a: 'Image matching: show a picture and ask "what is this word?". It tests recognition and recall at the same time, because the child must connect a visual cue to the word.' },
+      { q: 'Which vocabulary games can kids play without a screen?', a: 'Printable flashcard games such as memory match (print two copies of a set, place them face down and flip pairs), plus speed rounds and category sorting. They work in the car, in waiting rooms and during quiet time.' },
+    ],
+  },
+  'english-vocabulary-for-bilingual-hebrew-english-kids': {
+    answer: 'Hebrew-speaking kids learn English vocabulary fastest when the Hebrew translation is used as a bridge at first and then gradually withdrawn, starting with cognates and loanwords for quick wins, in a 10-minute daily routine of review, new words and practice. The main hurdles are the switch in reading direction and English vowel sounds.',
+    faq: [
+      { q: 'Should I use Hebrew translations when teaching my child English words?', a: 'Yes, at first. A Hebrew translation gives an instant anchor for a new English word. The goal is to progressively withdraw the translation so the child thinks in English directly, using the Hebrew as a bridge rather than a crutch.' },
+      { q: 'Which English words are easiest for Hebrew-speaking kids?', a: 'Cognates and loanwords that sound similar in both languages. Starting there gives quick wins and builds confidence before moving to words with no Hebrew echo.' },
+      { q: 'What makes English hard for Hebrew-speaking children?', a: 'Switching from right-to-left Hebrew to left-to-right English is a major shift for early readers, and English vowel sounds and spelling are far less regular than Hebrew.' },
+    ],
+  },
+  'english-learning-activities-for-kids': {
+    answer: 'The most effective English learning activities for kids are picture-word matching, listen-and-match audio practice, flashcard games like speed rounds and category sorts, and a short daily routine of review, learn and practice. Active play builds stronger memories than passive textbook study.',
+    faq: [
+      { q: 'What is the best English learning activity for young kids?', a: 'Picture-word matching. When a child matches a picture of a cat to the word "cat", the word is stored both visually and verbally, which is one of the fastest ways to learn vocabulary.' },
+      { q: 'How long should a daily English routine be for a child?', a: 'About 10 minutes: 2 minutes reviewing due words, 3 minutes learning 3-5 new words from one category, and 5 minutes of a quiz or game. Consistency matters more than session length.' },
+      { q: 'How do I keep my child motivated to learn English words?', a: 'Make progress visible: day streaks, badges for milestones like a first quiz or 50 words learned, and a growing list of mastered words. Kids are motivated by seeing what they have already done.' },
+    ],
+  },
+  'best-english-learning-apps-for-kids': {
+    answer: 'For Hebrew-English families, Children Do English is the only completely free, ad-free vocabulary app with full Hebrew support and offline access; Duolingo has the broadest curriculum but shows ads on its free tier, and Lingokids and Khan Academy Kids suit ages 2-8. The deciding factor is consistency: ten minutes a day on any good app beats an hour of sporadic use.',
+    faq: [
+      { q: 'What is the best free English learning app for kids?', a: 'For vocabulary, Children Do English: free, no ads, 488 words with real photos, native audio, Hebrew and Spanish translations, and it works offline. For a broad language course, Duolingo’s free tier is the most popular but includes ads.' },
+      { q: 'Is Duolingo good for kids learning English?', a: 'It is the most downloaded language app and its gamified lessons build a daily habit, with a comprehensive curriculum. The downsides for kids are ads on the free tier and only partial Hebrew support; the ad-free version is paid.' },
+      { q: 'Which English app is best for ages 2-8?', a: 'Lingokids (songs, animated characters and mini-games, but a limited free tier) and Khan Academy Kids (free, about 500 words, no Hebrew). Starfall is a strong free option for early reading.' },
+    ],
+  },
+};
+
 for (const guide of GUIDES) {
+  const geo = GUIDE_GEO[guide.slug] || {};
   const guideUrl = `${SITE}/guides/${guide.slug}/`;
   const guideBreadcrumb = JSON.stringify({
     '@context': 'https://schema.org',
@@ -4142,14 +4283,12 @@ for (const guide of GUIDES) {
   const faqSchema = JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
-    mainEntity: guide.sections.map((s) => ({
-      '@type': 'Question',
-      name: s.h2,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: s.content.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(),
-      },
-    })),
+    mainEntity: (geo.faq && geo.faq.length ? geo.faq : guide.sections.map((s) => ({ q: s.h2, a: s.content })))
+      .map((x) => ({
+        '@type': 'Question',
+        name: plainText(x.q),
+        acceptedAnswer: { '@type': 'Answer', text: plainText(x.a) },
+      })),
   });
 
   const midCta = `
@@ -4256,7 +4395,8 @@ for (const guide of GUIDES) {
 <body>
   <div class="header">
     <h1>${escapeHtml(guide.h1)}</h1>
-    <p>A guide for parents and teachers</p>
+    ${geo.answer ? `<p class="answer-first" style="opacity:1;font-size:1.02rem;max-width:40rem;margin:0.5rem auto 0;text-align:start">${escapeHtml(geo.answer)}</p>` : ''}
+    <p style="font-size:0.85rem;margin-top:0.5rem">A guide for parents and teachers</p>
   </div>
 
   <div class="breadcrumb">
