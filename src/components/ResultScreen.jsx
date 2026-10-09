@@ -2,6 +2,7 @@ import { Play, ArrowLeft, Check, X as XIcon, Zap, Flame } from 'lucide-react';
 import { getWordById } from '../data/words';
 import { LIGHTNING_SECS } from '../utils/arcade';
 import { t } from '../utils/i18n';
+import { ARCADE } from '../data/arcadeGames';
 
 export default function ResultScreen({ cycleNext, cycleRepeats, results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onMenu, onLightning }) {
   const { score, total, answers = [], arcade, arcadeNewBest, quit } = results;
@@ -125,11 +126,6 @@ export default function ResultScreen({ cycleNext, cycleRepeats, results, lang = 
         {/* Rotating arcade suggestion — the post-quiz "what next" moment is the
             one natural door to the standalone games (they live outside the SPA). */}
         {(() => {
-          const ARCADE = [
-            { id: 'word-zapper', name: 'Word Zapper', emoji: '⚡' },
-            { id: 'spelling-forge', name: 'Spelling Forge', emoji: '🔨' },
-            { id: 'category-conveyor', name: 'Category Conveyor', emoji: '📦' },
-          ];
           const g = ARCADE[new Date().getDate() % ARCADE.length];
           return (
             <a

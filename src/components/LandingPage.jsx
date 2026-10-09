@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { BookOpen, Layers, Play, BarChart2, ChevronDown, Brain } from 'lucide-react';
+import SpotlightCards from './SpotlightCards';
 import { t, LANGS } from '../utils/i18n';
 import LanguagePicker from './LanguagePicker';
 
@@ -211,6 +212,12 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
             </button>
           ))}
         </div>
+      </section>
+
+      {/* Today's picks — same build-time spotlight as the home menu, so first
+          visits (SEO/AI arrivals) also get a door to the cold tail. */}
+      <section className="animate-fade-in max-w-md mx-auto -mt-8">
+        <SpotlightCards lang={lang} />
       </section>
 
       {/* Features */}

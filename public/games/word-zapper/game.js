@@ -299,6 +299,7 @@ function learnBeacon(ev){
     if(navigator.sendBeacon) navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:ev,i:'word-zapper'}], l:l}));
   }catch(e){}
 }
+learnBeacon('g_open'); /* per-game opens (cde_land only knows the 'games' class) */
 
 /* two-way adaptive: 4-streak of fast correct zaps → up-tier */
 function tierUp(){

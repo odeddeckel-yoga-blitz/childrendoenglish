@@ -57,6 +57,22 @@ When content needs a per-item image (vocabulary words, game icons, category art)
   non-trivial; same pattern for per-item audio if the product ships it (CDE pre-renders
   all word audio with Piper TTS — one consistent voice beats device TTS roulette).
 
+## 3c. Discovery & retention — hub-level (kidsdomath, 2026-10)
+Once a catalog outruns demand (kidsdomath reached 205 math + 200 science games), the lever is
+surfacing the cold inventory to the traffic you already have — NOT more games.
+- **Self-rotating spotlight ("Game of the Day")**: the hub spotlights the LOWEST-traffic
+  non-graduated item (one per strand/subject). A game **graduates** — drops out so the
+  next-lowest surfaces on the next build — once it clears an engagement bar (kidsdomath:
+  ≥30 plays AND depth ≥2, depth = level-ups ÷ opens). Deterministic: the optimizer emits a
+  committed `game-stats.json`, a prebuild `pick-*.mjs` derives the pick from it (no live
+  timestamp, so it doesn't churn every build). Routes existing hub traffic to cold inventory +
+  harvests the engagement data that says which items deserve promotion.
+- **Win-screen next-game bias**: suggest a RELEVANT, not-yet-mastered next step, preferring an
+  already-engaging item over a cold one. Ship as a measured version; revisit on a fixed clock.
+- ⚠ **Honest caveat**: these redistribute EXISTING arrivals — they do not create new ones.
+  Catalog size is never the arrival lever; distribution (backlinks/referrals) is. Build a
+  spotlight to USE traffic, never to justify more inventory ahead of validated demand.
+
 ## 4. Robustness contracts (each was a shipped bug)
 - **kdm-no-repeat v2**: generator calls wrapped in `window.__kdmFreshO(...)`; if the round object
   contains ANY non-identity randomness (layout seeds, `token:Math.random()`, shuffled decoys) you
@@ -79,6 +95,12 @@ When content needs a per-item image (vocabulary words, game icons, category art)
   reload once (sessionStorage guard).
 - **PWA**: add game/battle routes to `navigateFallbackDenylist`; remember `prompt`-mode SW keeps
   old shells alive across deploys.
+- **Inner-scroll ≠ overlap fix** (flaky-CI class, recurred across several science games): resolving
+  a crowded mobile panel with `#choices{overflow-y:auto}` does NOT satisfy the overlap detector —
+  scrolled-off buttons keep their geometric rects and intermittently overlap the footer/actBtn, so
+  the check passes on most RNG draws and fails on the tall-choice draw (red-on-main surprise). Make
+  the panel actually FIT (cap choice count / shrink type / reserve a bottom dock), don't rely on
+  overflow. The harness uses the game's own RNG, so a single clean run never proves it — loop it.
 
 ## 5. Verification protocol (non-negotiable, per game)
 1. `node test/playthrough.mjs <game>` — dbg contract, 560-round reachability sweep, win flow,

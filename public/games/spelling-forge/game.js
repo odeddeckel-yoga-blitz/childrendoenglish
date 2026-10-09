@@ -376,6 +376,7 @@ function learnBeacon(ev){
     if(navigator.sendBeacon) navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:ev,i:'spelling-forge'}], l:l}));
   }catch(e){}
 }
+learnBeacon('g_open'); /* per-game opens (cde_land only knows the 'games' class) */
 
 function nextWord(){
   if(S.screen!=='play') return;

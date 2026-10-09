@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "prebuild": "node scripts/pick-spotlight.mjs",
     "build": "vite build && node scripts/generate-seo-pages.js && node scripts/generate-og-images.js && node scripts/generate-sitemap.js",
     "preview": "vite preview",
     "test": "vitest run",

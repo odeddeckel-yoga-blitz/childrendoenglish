@@ -507,6 +507,12 @@ const translations = {
     arcadeGamesDesc: 'Zap, spell and sort English words',
     resultTryGame: 'Bonus: play {{name}}!',
 
+    // Home spotlight (build-time picks — src/components/SpotlightCards.jsx)
+    spotlightTitle: "Today's picks",
+    spotlightWord: 'Word of the day',
+    spotlightGame: 'Game of the day',
+    spotlightPlay: 'Play now',
+
     // Learning cycle (guided learn→practice→advance loop)
     cycleContinue: 'Continue learning',
     cycleBatchTitle: 'Word batch {{num}} — letter {{label}}',

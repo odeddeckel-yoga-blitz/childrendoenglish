@@ -1,4 +1,5 @@
 import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck, RotateCcw } from 'lucide-react';
+import SpotlightCards from './SpotlightCards';
 import { t } from '../utils/i18n';
 
 import LanguagePicker from './LanguagePicker';
@@ -183,6 +184,10 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <p className="text-slate-500 text-sm">{t('arcadeGamesDesc', lang)}</p>
           </div>
         </a>
+
+        {/* Today's picks — build-time spotlight of one cold word + one cold game
+            (scripts/pick-spotlight.mjs). Uses the traffic we have; doesn't create any. */}
+        <SpotlightCards lang={lang} />
 
         {isNewUser && (
           <p className="text-center text-sm text-slate-400">{t('menuMoreFeatures', lang)}</p>
