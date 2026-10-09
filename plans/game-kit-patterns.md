@@ -101,6 +101,13 @@ surfacing the cold inventory to the traffic you already have — NOT more games.
   definition). Mirror loaded-state in a ref if a timer reads it (stale closures).
 - **Asset integrity in CI**: a unit test asserting every referenced image exists on disk and is
   non-trivial (≥500b).
+- **Schema integrity as a build gate** (CDE, 2026-10): if the site relies on JSON-LD for AI
+  citation (FAQPage/HowTo/Article/BreadcrumbList), wire a `postbuild` validator that parses every
+  JSON-LD block in `dist` and FAILS the build on a missing required field per `@type` (FAQPage →
+  Question/Answer text present and entity-decoded; BreadcrumbList → positions; etc.). Makes schema
+  coverage a non-regressing contract, and catches silent corruption — CDE's old guide answers
+  carried a literal `&mdash;`. Structural + offline (not Google's Rich Results Test); the target is
+  AI citation, not rich-result eligibility (FAQ rich results are gated to gov/health anyway).
 - **TTS**: speechSynthesis triple-guarded — feature-detect, voices-loaded, and
   `navigator.webdriver` skip (headless TTS can stall the main thread ~14s).
 - **Stale-deploy chunks** (SPA hosts): error boundaries detect chunk-load failure signatures and
