@@ -34,7 +34,7 @@ HOMOPHONES = {
     'sun': 'son', 'flour': 'flower', 'sea': 'see', 'ate': 'eight',
     'pear': 'pair', 'hair': 'hare', 'one': 'won', 'four': 'for',
     'wear': 'where', 'meat': 'meet', 'blue': 'blew', 'road': 'rode',
-    'nose': 'knows', 'tail': 'tale', 'whale': 'wail',
+    'nose': 'knows', 'tail': 'tale', 'whale': 'wail', 'medal': 'metal',
 }
 
 def norm(s):

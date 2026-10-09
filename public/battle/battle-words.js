@@ -2107,6 +2107,12 @@ export const BATTLE_WORDS = {
  ],
  "clothing": [
   {
+   "id": "underwear",
+   "w": "underwear",
+   "he": "תחתונים",
+   "img": "/images/underwear.webp"
+  },
+  {
    "id": "hat",
    "w": "hat",
    "he": "כובע",
@@ -2453,6 +2459,24 @@ export const BATTLE_WORDS = {
  ],
  "sports": [
   {
+   "id": "yoga",
+   "w": "yoga",
+   "he": "יוגה",
+   "img": "/images/yoga.webp"
+  },
+  {
+   "id": "skates",
+   "w": "skates",
+   "he": "גלגיליות",
+   "img": "/images/skates.webp"
+  },
+  {
+   "id": "medal",
+   "w": "medal",
+   "he": "מדליה",
+   "img": "/images/medal.webp"
+  },
+  {
    "id": "ball",
    "w": "ball",
    "he": "כדור",
@@ -2580,6 +2604,18 @@ export const BATTLE_WORDS = {
   }
  ],
  "feelings": [
+  {
+   "id": "yawn",
+   "w": "yawn",
+   "he": "פיהוק",
+   "img": "/images/yawn.webp"
+  },
+  {
+   "id": "quiet",
+   "w": "quiet",
+   "he": "שקט",
+   "img": "/images/quiet.webp"
+  },
   {
    "id": "happy",
    "w": "happy",
@@ -2714,6 +2750,18 @@ export const BATTLE_WORDS = {
   }
  ],
  "toys": [
+  {
+   "id": "seesaw",
+   "w": "seesaw",
+   "he": "נדנדת מאזניים",
+   "img": "/images/seesaw.webp"
+  },
+  {
+   "id": "ukulele",
+   "w": "ukulele",
+   "he": "יוקוללה",
+   "img": "/images/ukulele.webp"
+  },
   {
    "id": "skateboard",
    "w": "skateboard",

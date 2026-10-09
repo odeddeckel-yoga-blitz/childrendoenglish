@@ -175,6 +175,86 @@ const ILLUSTRATIONS = {
     <path d="M 380 250 l 10 22 22 10 -22 10 -10 22 -10 -22 -22 -10 22 -10 Z" fill="#475569"/>
   </svg>`,
 
+  quiet: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#EEF2FF')}
+    <!-- shhh face: finger to lips -->
+    <circle cx="256" cy="250" r="150" fill="#FDE68A"/>
+    <circle cx="200" cy="215" r="14" fill="#1E293B"/>
+    <circle cx="312" cy="215" r="14" fill="#1E293B"/>
+    <path d="M 196 190 Q 212 180 228 190" stroke="#92400E" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M 284 190 Q 300 180 316 190" stroke="#92400E" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <line x1="236" y1="300" x2="276" y2="300" stroke="#1E293B" stroke-width="8" stroke-linecap="round"/>
+    <!-- finger over lips -->
+    <rect x="242" y="246" width="28" height="104" rx="14" fill="#FBBF24" stroke="#D97706" stroke-width="4"/>
+    <circle cx="256" cy="246" r="14" fill="#FBBF24" stroke="#D97706" stroke-width="4"/>
+    <!-- little zzz-free "shh" sparkles -->
+    <path d="M 388 130 l 6 14 14 6 -14 6 -6 14 -6 -14 -14 -6 14 -6 Z" fill="#A5B4FC"/>
+    <path d="M 118 150 l 5 11 11 5 -11 5 -5 11 -5 -11 -11 -5 11 -5 Z" fill="#C7D2FE"/>
+  </svg>`,
+
+  yawn: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#F5F3FF')}
+    <!-- yawning face: closed eyes + wide open mouth + hand -->
+    <circle cx="256" cy="245" r="150" fill="#FDE68A"/>
+    <path d="M 182 212 Q 200 224 218 212" stroke="#1E293B" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <path d="M 294 212 Q 312 224 330 212" stroke="#1E293B" stroke-width="9" fill="none" stroke-linecap="round"/>
+    <ellipse cx="256" cy="310" rx="44" ry="56" fill="#7C2D12"/>
+    <ellipse cx="256" cy="336" rx="26" ry="20" fill="#F87171"/>
+    <!-- hand partially covering the mouth -->
+    <rect x="286" y="300" width="84" height="56" rx="26" fill="#FBBF24" stroke="#D97706" stroke-width="4"/>
+    <!-- sleepy z z -->
+    <text x="392" y="130" font-family="system-ui,sans-serif" font-size="56" font-weight="900" fill="#8B5CF6">z</text>
+    <text x="430" y="92" font-family="system-ui,sans-serif" font-size="40" font-weight="900" fill="#A78BFA">z</text>
+  </svg>`,
+
+  underwear: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#F0F9FF')}
+    <!-- briefs: waistband + leg openings -->
+    <path d="M 116 180 L 396 180 L 396 250 Q 340 330 300 352 L 300 376 L 212 376 L 212 352 Q 172 330 116 250 Z" fill="#60A5FA"/>
+    <rect x="116" y="168" width="280" height="38" rx="14" fill="#2563EB"/>
+    <path d="M 116 252 Q 160 318 210 348" stroke="#3B82F6" stroke-width="10" fill="none"/>
+    <path d="M 396 252 Q 352 318 302 348" stroke="#3B82F6" stroke-width="10" fill="none"/>
+    <!-- waistband stitching -->
+    <line x1="128" y1="187" x2="384" y2="187" stroke="#DBEAFE" stroke-width="5" stroke-dasharray="12 8"/>
+    <circle cx="256" cy="280" r="20" fill="#3B82F6"/>
+  </svg>`,
+
+  medal: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF9C3')}
+    <!-- ribbon -->
+    <path d="M 196 60 L 256 230 L 316 60 L 276 60 L 256 130 L 236 60 Z" fill="#DC2626"/>
+    <path d="M 236 60 L 256 130 L 276 60 Z" fill="#B91C1C"/>
+    <!-- gold disc -->
+    <circle cx="256" cy="320" r="118" fill="#F59E0B" stroke="#B45309" stroke-width="10"/>
+    <circle cx="256" cy="320" r="86" fill="#FBBF24"/>
+    <!-- number 1 -->
+    <rect x="248" y="276" width="22" height="92" rx="6" fill="#92400E"/>
+    <path d="M 248 292 L 228 304 L 228 282 L 248 272 Z" fill="#92400E"/>
+    <!-- shine -->
+    <ellipse cx="218" cy="282" rx="22" ry="34" fill="#FDE68A" opacity="0.8" transform="rotate(-30 218 282)"/>
+  </svg>`,
+
+  skates: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FFF1F2')}
+    <!-- roller skate: boot + 4 wheels -->
+    <path d="M 128 150 L 240 150 L 252 260 L 356 268 Q 392 274 392 312 L 392 348 L 120 348 L 120 160 Z" fill="#F43F5E"/>
+    <rect x="120" y="318" width="272" height="34" rx="12" fill="#BE123C"/>
+    <!-- laces -->
+    <line x1="152" y1="180" x2="216" y2="180" stroke="#FFF" stroke-width="8" stroke-linecap="round"/>
+    <line x1="156" y1="210" x2="222" y2="210" stroke="#FFF" stroke-width="8" stroke-linecap="round"/>
+    <line x1="162" y1="240" x2="230" y2="240" stroke="#FFF" stroke-width="8" stroke-linecap="round"/>
+    <circle cx="186" cy="246" r="8" fill="#FDE68A"/>
+    <!-- toe stop -->
+    <rect x="96" y="330" width="34" height="26" rx="12" fill="#FBBF24"/>
+    <!-- wheels -->
+    <circle cx="170" cy="392" r="34" fill="#FBBF24" stroke="#B45309" stroke-width="8"/>
+    <circle cx="258" cy="392" r="34" fill="#FBBF24" stroke="#B45309" stroke-width="8"/>
+    <circle cx="346" cy="392" r="34" fill="#FBBF24" stroke="#B45309" stroke-width="8"/>
+    <circle cx="170" cy="392" r="10" fill="#92400E"/>
+    <circle cx="258" cy="392" r="10" fill="#92400E"/>
+    <circle cx="346" cy="392" r="10" fill="#92400E"/>
+  </svg>`,
+
   ketchup: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FEF2F2')}
     <!-- squeeze bottle -->

@@ -507,4 +507,12 @@ export default {
   'wizard': 'mago',
   'knight': 'caballero',
   'jump-rope': 'cuerda de saltar',
+  'quiet': 'callado',
+  'yawn': 'bostezo',
+  'ukulele': 'ukelele',
+  'underwear': 'ropa interior',
+  'medal': 'medalla',
+  'skates': 'patines',
+  'yoga': 'yoga',
+  'seesaw': 'sube y baja',
 };

@@ -1,4 +1,4 @@
-// 480 curated words across 13 categories, 3 difficulty levels
+// 488 curated words across 13 categories, 3 difficulty levels
 
 export const WORDS = [
   // === ANIMALS ===
@@ -679,6 +679,14 @@ export const WORDS = [
   { id: 'vet', word: 'vet', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A doctor who takes care of animals', exampleSentence: 'The vet checked the puppy\'s ears.', phonetic: '/vɛt/', hebrewTranslation: 'וטרינר', imageUrl: '/images/vet.webp' },
   { id: 'worm', word: 'worm', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A long soft tiny animal that lives in the soil', exampleSentence: 'The bird pulled a worm from the ground.', phonetic: '/wɜːrm/', hebrewTranslation: 'תולעת', imageUrl: '/images/worm.webp' },
   { id: 'wizard', word: 'wizard', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A man with magic powers from stories', exampleSentence: 'The wizard waved his magic staff.', phonetic: '/ˈwɪzərd/', hebrewTranslation: 'קוסם', imageUrl: '/images/wizard.webp' },
+  { id: 'quiet', word: 'quiet', level: 'beginner', partOfSpeech: 'adjective', category: 'feelings', definition: 'Making little or no sound', exampleSentence: 'Please be quiet in the library.', phonetic: '/ˈkwaɪət/', hebrewTranslation: 'שקט', imageUrl: '/images/quiet.webp' },
+  { id: 'yawn', word: 'yawn', level: 'intermediate', partOfSpeech: 'noun', category: 'feelings', definition: 'Opening your mouth wide when you are tired or bored', exampleSentence: 'She gave a big yawn before bedtime.', phonetic: '/jɔːn/', hebrewTranslation: 'פיהוק', imageUrl: '/images/yawn.webp' },
+  { id: 'ukulele', word: 'ukulele', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A small guitar with four strings', exampleSentence: 'He played a happy song on his ukulele.', phonetic: '/ˌjuːkəˈleɪli/', hebrewTranslation: 'יוקוללה', imageUrl: '/images/ukulele.webp' },
+  { id: 'underwear', word: 'underwear', level: 'beginner', partOfSpeech: 'noun', category: 'clothing', definition: 'Clothes you wear under your other clothes', exampleSentence: 'Pack clean underwear for the trip.', phonetic: '/ˈʌndərwer/', hebrewTranslation: 'תחתונים', imageUrl: '/images/underwear.webp' },
+  { id: 'medal', word: 'medal', level: 'intermediate', partOfSpeech: 'noun', category: 'sports', definition: 'A metal prize on a ribbon for winning or doing something special', exampleSentence: 'She won a gold medal in the race.', phonetic: '/ˈmedl/', hebrewTranslation: 'מדליה', imageUrl: '/images/medal.webp' },
+  { id: 'skates', word: 'skates', level: 'intermediate', partOfSpeech: 'noun', category: 'sports', definition: 'Shoes with wheels for rolling on the ground', exampleSentence: 'He rides his skates in the park.', phonetic: '/skeɪts/', hebrewTranslation: 'גלגיליות', imageUrl: '/images/skates.webp' },
+  { id: 'yoga', word: 'yoga', level: 'intermediate', partOfSpeech: 'noun', category: 'sports', definition: 'Slow exercises where you stretch and breathe calmly', exampleSentence: 'Mom does yoga every morning.', phonetic: '/ˈjoʊɡə/', hebrewTranslation: 'יוגה', imageUrl: '/images/yoga.webp' },
+  { id: 'seesaw', word: 'seesaw', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A playground board where one child goes up while the other goes down', exampleSentence: 'The two friends played on the seesaw.', phonetic: '/ˈsiːsɔː/', hebrewTranslation: 'נדנדת מאזניים', imageUrl: '/images/seesaw.webp' },
 ];
 
 export const CATEGORIES = [
