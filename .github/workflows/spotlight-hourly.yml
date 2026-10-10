@@ -1,0 +1,40 @@
+name: Spotlight hourly
+
+# Hourly keep-or-swap loop for the home "Today's picks" (tools/spotlight/hourly.mjs).
+# Needs the DATABASE_URL repo secret (Neon); without it the script exits 0 and
+# does nothing. Commits only when the snapshot/spotlight/flags changed, which
+# triggers CI + the Vercel deploy that rotates the cards.
+on:
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: spotlight-hourly
+  cancel-in-progress: false
+
+jobs:
+  spotlight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci --omit=dev --ignore-scripts
+      - name: Decide keep/swap
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: node tools/spotlight/hourly.mjs
+      - name: Commit if changed
+        run: |
+          git add src/data/spotlight.json src/data/cde-stats.json tools/spotlight/flags.json tools/spotlight/log.jsonl
+          if git diff --cached --quiet; then echo "no change"; exit 0; fi
+          git config user.name "spotlight-bot"
+          git config user.email "spotlight-bot@users.noreply.github.com"
+          git commit -m "spotlight: hourly keep/swap ($(date -u +%Y-%m-%dT%H:%MZ))"
+          git pull --rebase origin main
+          git push origin HEAD:main

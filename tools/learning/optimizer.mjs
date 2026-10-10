@@ -192,30 +192,17 @@ if (gamesOpens > 0 || gameIds.length > 0) {
   console.log('  (games page-class ships 2026-10-03 — opens before that date landed in \'other\')');
 }
 
-// --- committed snapshot for the build-time home spotlight ---
+// --- committed snapshot for the build-time home spotlight (shared with tools/spotlight/hourly.mjs) ---
 // scripts/pick-spotlight.mjs (prebuild) derives "Today's picks" from THIS file,
 // never from the live DB, so builds are deterministic. generatedAt is the last
 // day with data (not wall-clock) so re-running on unchanged data is a no-op.
-// Shape: { words: { id: [answers, correct] }, games: { id: { opens, lvl, cmp } } }
 {
-  const words = {};
-  const games = {};
-  let last = '';
-  for (const r of rows) {
-    if (r.last && String(r.last) > last) last = String(r.last).slice(0, 10);
-    if (r.ev === 'ans_ok' || r.ev === 'ans_no') {
-      const w = (words[r.item] = words[r.item] || [0, 0]);
-      w[0] += r.n; if (r.ev === 'ans_ok') w[1] += r.n;
-    } else if (r.ev === 'g_lvl' || r.ev === 'g_cmp' || r.ev === 'g_open') {
-      const g = (games[r.item] = games[r.item] || { opens: 0, lvl: 0, cmp: 0 });
-      g[r.ev === 'g_lvl' ? 'lvl' : r.ev === 'g_cmp' ? 'cmp' : 'opens'] += r.n;
-    }
-  }
-  const snap = { generatedAt: last ? `${last}T00:00:00.000Z` : null, window: `${days}d`, gamesOpens, words, games };
+  const { fetchSnapshot } = await import('./snapshot.mjs');
   const { writeFileSync } = await import('node:fs');
   const { fileURLToPath } = await import('node:url');
   const { join, dirname } = await import('node:path');
+  const snap = await fetchSnapshot(q, days);
   const out = join(dirname(fileURLToPath(import.meta.url)), '../../src/data/cde-stats.json');
   writeFileSync(out, JSON.stringify(snap) + '\n');
-  console.log(`\n— snapshot written: src/data/cde-stats.json (${Object.keys(words).length} words, ${Object.keys(games).length} games; commit it + rebuild to rotate the spotlight)`);
+  console.log(`\n— snapshot written: src/data/cde-stats.json (${Object.keys(snap.words).length} words, ${Object.keys(snap.games).length} games; commit it + rebuild to rotate the spotlight)`);
 }
