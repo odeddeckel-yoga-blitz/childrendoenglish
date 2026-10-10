@@ -25,6 +25,11 @@ const dry = process.argv.includes('--dry-run');
 
 const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 if (!url) { console.log('spotlight-hourly: DATABASE_URL not set — nothing to do (add the repo secret to enable).'); process.exit(0); }
+if (!/^postgres(ql)?:\/\/[^\s'"]+$/.test(url)) {
+  // Soft-fail: an hourly RED run would mail the owner 24×/day. Say exactly what is wrong instead.
+  console.log(`spotlight-hourly: DATABASE_URL is not a bare connection string (must start with postgresql:// — no psql prefix, no quotes). Nothing to do until the repo secret is fixed.`);
+  process.exit(0);
+}
 const q = neon(url);
 
 const { WORDS } = await import(pathToFileURL(join(REPO, 'src/data/words.js')).href);
