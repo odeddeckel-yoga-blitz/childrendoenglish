@@ -90,6 +90,10 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     // (feeds the Word Learning Optimizer's hardest-words ranking).
     if (Array.isArray(answers) && answers.length > 0) {
       sendLearnBatch(answers.map(a => ({ e: a.correct ? 'ans_ok' : 'ans_no', i: String(a.wordId) })));
+      // Per-asset split (amber lesson: a hard word under ONE probe = that asset's
+      // problem — image / audio / the word itself). Separate batch (30-event cap).
+      const probe = { image: 'img', word: 'txt', listen: 'aud', audio: 'aud' }[mode];
+      if (probe) sendLearnBatch(answers.map(a => ({ e: a.correct ? 'ansm_ok' : 'ansm_no', i: `${a.wordId}@${probe}` })));
     }
 
     // Pure completion routine: applied inside the functional setStats updater

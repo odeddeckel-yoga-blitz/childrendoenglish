@@ -66,3 +66,13 @@ describe('decideSpotlight', () => {
     expect(r.runOptimizer).toBe(true);
   });
 });
+
+describe('diagnoseWord', () => {
+  it('names the asset from parent taps first, then from the weakest probe', async () => {
+    const { diagnoseWord } = await import('../utils/spotlightDecide');
+    expect(diagnoseWord({ fb: { 'cat@aud': 2 }, modes: { 'cat@img': [10, 2] } }, 'cat').asset).toBe('audio');
+    expect(diagnoseWord({ modes: { 'cat@img': [10, 3], 'cat@aud': [10, 9], 'cat@txt': [4, 0] } }, 'cat').asset).toBe('image'); // txt has <5 answers
+    expect(diagnoseWord({ modes: { 'cat@img': [10, 8] } }, 'cat').asset).toBe('unknown');
+    expect(diagnoseWord({}, 'cat').evidence).toMatch(/no per-probe data/);
+  });
+});

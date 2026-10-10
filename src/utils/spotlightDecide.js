@@ -22,6 +22,22 @@ export const RULES = {
 };
 
 const DAY = 86400000;
+
+// Which asset is at fault for a word, from the per-probe answer split and the
+// explicit feedback taps (both in the snapshot). Explicit taps win when ≥2
+// agree; else the probe with the lowest accuracy over ≥5 answers.
+export const PROBE_ASSET = { aud: 'audio', img: 'image', txt: 'word' };
+export function diagnoseWord(snap, id) {
+  const fbOf = (k) => snap?.fb?.[`${id}@${k}`] || 0;
+  const taps = { image: fbOf('img'), audio: fbOf('aud'), word: fbOf('hard') };
+  const topTap = Object.entries(taps).sort((a, b) => b[1] - a[1])[0];
+  if (topTap && topTap[1] >= 2) return { asset: topTap[0], evidence: `${topTap[1]} parent taps`, taps };
+  const probes = Object.entries(PROBE_ASSET)
+    .map(([p, asset]) => { const m = snap?.modes?.[`${id}@${p}`]; return m && m[0] >= 5 ? { asset, acc: m[1] / m[0], n: m[0] } : null; })
+    .filter(Boolean).sort((a, b) => a.acc - b.acc);
+  if (probes.length && probes[0].acc < 0.6) return { asset: probes[0].asset, evidence: `${Math.round(probes[0].acc * 100)}% over ${probes[0].n} ${probes[0].asset} probes`, taps, probes };
+  return { asset: 'unknown', evidence: probes.length ? 'all probes ≥60%' : 'no per-probe data yet', taps, probes };
+}
 const ms = (t) => (typeof t === 'number' ? t : t ? Date.parse(t) : NaN);
 export const daysBetween = (a, b) => (ms(b) - ms(a)) / DAY;
 
@@ -44,7 +60,7 @@ export function judgeLane(lane, cur, live, snap, now) {
   const watch = lane === 'word' ? RULES.watchWordAcc : RULES.watchGameDepth;
   const graduated = lane === 'word' ? wordGraduated(wordStat(snap, cur.id)) : gameGraduated(gameStat(snap, cur.id));
   const flag = sufficient && exposure >= RULES.judgeExposure && rate !== null && rate < watch
-    ? { lane, id: cur.id, exposure, rate: Number(rate.toFixed(2)), severity: rate < poor ? 'poor' : 'watch' } : null;
+    ? { lane, id: cur.id, exposure, rate: Number(rate.toFixed(2)), severity: rate < poor ? 'poor' : 'watch', ...(lane === 'word' ? { diagnosis: diagnoseWord(snap, cur.id) } : {}) } : null;
   let action = 'keep', reason = sufficient ? 'engaging, keep collecting' : 'waiting for traffic';
   if (graduated) { action = 'swap'; reason = `graduated (${lane === 'word' ? `ans≥${GRAD.word.ans}, acc≥${GRAD.word.acc}` : `opens≥${GRAD.game.opens}, depth≥${GRAD.game.depth}`})`; }
   else if (flag?.severity === 'poor') { action = 'swap'; reason = `low engagement after ${exposure} exposures (rate ${flag.rate}) → improver`; }

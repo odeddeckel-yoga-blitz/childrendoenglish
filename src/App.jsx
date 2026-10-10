@@ -51,6 +51,7 @@ const ParentDashboard = lazy(() => import('./components/ParentDashboard'));
 const DailyReview = lazy(() => import('./components/DailyReview'));
 const LightningRound = lazy(() => import('./components/LightningRound'));
 const LetterPath = lazy(() => import('./components/LetterPath'));
+const WordCheck = lazy(() => import('./components/WordCheck'));
 
 // State-to-path mapping for browser history (top-level screens only)
 const STATE_TO_PATH = {
@@ -125,6 +126,7 @@ export default function App() {
   const [showProfilePicker, setShowProfilePicker] = useState(false);
   const [showConsent, setShowConsent] = useState(() => needsConsentPrompt());
   const [learnWords, setLearnWords] = useState(null);
+  const [checkWord, setCheckWord] = useState(null); // word-of-the-day check target
   const [sharedWords, setSharedWords] = useState(null);
   const [focusedWords, setFocusedWords] = useState(null);
   // Practice ladder: ladderSet is the active word set ({source, words, token,
@@ -549,7 +551,7 @@ export default function App() {
               const hasPlayers = !!playerRegistry?.players?.length;
               if (!hasPlayers && lang === 'en') { window.location.href = `/vocabulary/${w.category}/${w.id}/`; return; }
               handleLanguageSelect(lang);
-              const go = () => { if (hasPlayers) { setLearnWords([w]); navigate('learning'); } else navigate('playerCreate'); };
+              const go = () => { if (hasPlayers) { setCheckWord(w); navigate('wordCheck'); } else navigate('playerCreate'); };
               if (lang !== 'en') loadLocale(lang).then(go); else go();
             }}
             onSelectLanguage={(l) => { handleLanguageSelect(l); if (l !== 'en') loadLocale(l); }}
@@ -632,7 +634,7 @@ export default function App() {
             onToggleSound={toggleSound}
             onOpenProfilePicker={() => setShowProfilePicker(true)}
             onSelectLanguage={(l) => { handleLanguageSelect(l); if (l !== 'en') loadLocale(l); }}
-            onOpenSpotlightWord={(w) => { setLearnWords([w]); navigate('learning'); }}
+            onOpenSpotlightWord={(w) => { setCheckWord(w); navigate('wordCheck'); }}
           />
         );
 
@@ -820,6 +822,16 @@ export default function App() {
             lang={lang}
             onPracticeLetter={(letter, words) => { sendLearn('letter', letter.toLowerCase()); quizFlow.handleStartPersonalQuiz(words, 'listen'); }}
             onBack={() => navigate('menu', 'back')}
+          />
+        );
+
+      case 'wordCheck':
+        return (
+          <WordCheck
+            word={checkWord || learnWords?.[0]}
+            lang={lang}
+            canRead={activePlayer?.canRead ?? true}
+            onDone={() => { setCheckWord(null); navigate('menu', 'back'); }}
           />
         );
 

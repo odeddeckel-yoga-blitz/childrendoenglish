@@ -1,14 +1,15 @@
 // Shared snapshot builder: one SQL pass over cde_learn/cde_land → the committed
 // src/data/cde-stats.json shape read by the spotlight decider.
 //   { generatedAt, window, gamesOpens, words: { id: [answers, correct] },
-//     games: { id: { opens, lvl, cmp } }, spot: { 'w_<id>'|'g_<id>': clicks } }
+//     games: { id: { opens, lvl, cmp } }, spot: { 'w_<id>'|'g_<id>': clicks },
+//     modes: { '<id>@aud|img|txt': [answers, correct] }, fb: { '<id>@img|aud|hard|ok': taps } }
 // generatedAt = last day WITH data (not wall-clock) so unchanged data → identical file.
 export async function fetchSnapshot(q, days = 28) {
   const rows = await q`SELECT ev, item, sum(n)::int AS n, max(day)::text AS last
     FROM cde_learn WHERE day >= CURRENT_DATE - ${days}::int GROUP BY ev, item`;
   const land = await q`SELECT sum(n)::int AS n FROM cde_land
     WHERE day >= CURRENT_DATE - ${days}::int AND page = 'games'`;
-  const words = {}, games = {}, spot = {};
+  const words = {}, games = {}, spot = {}, modes = {}, fb = {};
   let last = '';
   for (const r of rows) {
     if (r.last && r.last > last) last = r.last.slice(0, 10);
@@ -20,10 +21,15 @@ export async function fetchSnapshot(q, days = 28) {
       g[r.ev === 'g_lvl' ? 'lvl' : r.ev === 'g_cmp' ? 'cmp' : 'opens'] += r.n;
     } else if (r.ev === 'spot') {
       spot[r.item] = (spot[r.item] || 0) + r.n;
+    } else if (r.ev === 'ansm_ok' || r.ev === 'ansm_no') {
+      const m = (modes[r.item] = modes[r.item] || [0, 0]);
+      m[0] += r.n; if (r.ev === 'ansm_ok') m[1] += r.n;
+    } else if (r.ev === 'wfb') {
+      fb[r.item] = (fb[r.item] || 0) + r.n;
     }
   }
   const sorted = (o) => Object.fromEntries(Object.entries(o).sort(([a], [b]) => (a < b ? -1 : 1)));
-  return { generatedAt: last ? `${last}T00:00:00.000Z` : null, window: `${days}d`, gamesOpens: land[0]?.n || 0, words: sorted(words), games: sorted(games), spot: sorted(spot) };
+  return { generatedAt: last ? `${last}T00:00:00.000Z` : null, window: `${days}d`, gamesOpens: land[0]?.n || 0, words: sorted(words), games: sorted(games), spot: sorted(spot), modes: sorted(modes), fb: sorted(fb) };
 }
 
 /** Live exposure for the current spotlight since each lane's `since` date. */

@@ -513,6 +513,20 @@ const translations = {
     spotlightGame: 'Game of the day',
     spotlightPlay: 'Play now',
 
+    // Word-of-the-day check (3 probes + feedback — src/components/WordCheck.jsx)
+    wcTitle: 'Word check',
+    wcStepAud: 'Tap the picture you hear',
+    wcStepImg: 'Which word is this?',
+    wcStepTxt: 'What does it mean?',
+    wcScore: '{{score}} of {{total}} right',
+    wcAsk: 'Was anything off with this word?',
+    wcFbImg: 'Picture unclear',
+    wcFbAud: 'Sound unclear',
+    wcFbHard: 'Too hard',
+    wcFbOk: 'All good',
+    wcThanks: 'Thanks! That helps us fix it.',
+    wcBack: 'Back to home',
+
     // Learning cycle (guided learn→practice→advance loop)
     cycleContinue: 'Continue learning',
     cycleBatchTitle: 'Word batch {{num}} — letter {{label}}',

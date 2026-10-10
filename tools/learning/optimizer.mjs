@@ -192,6 +192,30 @@ if (gamesOpens > 0 || gameIds.length > 0) {
   console.log('  (games page-class ships 2026-10-03 — opens before that date landed in \'other\')');
 }
 
+// --- per-asset diagnosis (ansm_* probe split + wfb parent taps; WordCheck + quizzes) ---
+// A word hard under ONE probe = that asset's problem: aud→audio, img→image,
+// txt→the word/gloss. Explicit taps (img/aud/hard/ok) are the strongest signal.
+{
+  const modes = {}, fb = {};
+  for (const r of rows) {
+    if (r.ev === 'ansm_ok' || r.ev === 'ansm_no') { const m = (modes[r.item] = modes[r.item] || [0, 0]); m[0] += r.n; if (r.ev === 'ansm_ok') m[1] += r.n; }
+    else if (r.ev === 'wfb') fb[r.item] = (fb[r.item] || 0) + r.n;
+  }
+  const ids = new Set([...Object.keys(modes), ...Object.keys(fb)].map((k) => k.split('@')[0]));
+  if (ids.size) {
+    console.log('\n— per-asset diagnosis (owner action: image → re-shoot/sole-answer check · audio → regenerate + ear-check · word → age check / DROP-RULE):');
+    const lines = [];
+    for (const id of ids) {
+      const probe = (p) => { const m = modes[`${id}@${p}`]; return m ? `${p} ${Math.round(100 * m[1] / m[0])}%(${m[0]})` : `${p} —`; };
+      const taps = ['img', 'aud', 'hard', 'ok'].map((k) => fb[`${id}@${k}`] ? `${k}×${fb[`${id}@${k}`]}` : null).filter(Boolean).join(' ');
+      const worst = ['aud', 'img', 'txt'].map((p) => { const m = modes[`${id}@${p}`]; return m && m[0] >= 5 ? [p, m[1] / m[0]] : null; }).filter(Boolean).sort((x, y) => x[1] - y[1])[0];
+      const flagged = (fb[`${id}@img`] || 0) + (fb[`${id}@aud`] || 0) + (fb[`${id}@hard`] || 0) >= 2 || (worst && worst[1] < 0.6);
+      if (flagged) lines.push(`  ${id.padEnd(16)} ${probe('aud')}  ${probe('img')}  ${probe('txt')}  taps: ${taps || '—'}`);
+    }
+    console.log(lines.length ? lines.join('\n') : `  ${ids.size} words have probe/tap data, none flagged (no probe <60% over ≥5 answers, no ≥2 parent taps)`);
+  }
+}
+
 // --- committed snapshot for the build-time home spotlight (shared with tools/spotlight/hourly.mjs) ---
 // scripts/pick-spotlight.mjs (prebuild) derives "Today's picks" from THIS file,
 // never from the live DB, so builds are deterministic. generatedAt is the last
