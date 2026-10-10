@@ -94,6 +94,11 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         </button>
       )}
 
+      {/* Today's picks — build-time spotlight of one cold word + one cold game
+          (scripts/pick-spotlight.mjs). Sits right under the Continue hero for
+          visibility (owner, 2026-10-10); uses the traffic we have, creates none. */}
+      <SpotlightCards lang={lang} onOpenWord={onOpenSpotlightWord} />
+
       {/* Main actions */}
       <nav aria-label="Main menu" className="space-y-3">
         {/* Play Quiz — primary action for new users */}
@@ -184,10 +189,6 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <p className="text-slate-500 text-sm">{t('arcadeGamesDesc', lang)}</p>
           </div>
         </a>
-
-        {/* Today's picks — build-time spotlight of one cold word + one cold game
-            (scripts/pick-spotlight.mjs). Uses the traffic we have; doesn't create any. */}
-        <SpotlightCards lang={lang} onOpenWord={onOpenSpotlightWord} />
 
         {isNewUser && (
           <p className="text-center text-sm text-slate-400">{t('menuMoreFeatures', lang)}</p>
