@@ -1,3 +1,5 @@
+/* chrome strings by interface language (../cde-l10n.js + ./l10n.js); d = English fallback */
+function L10N(k,d){try{var v=window.CDE_T&&window.CDE_T(k);return v!=null?v:d;}catch(e){return d;}}
 /* error pill: friendly reload prompt if anything throws */
 (function(){var s=false;window.addEventListener('error',function(){if(s)return;s=true;try{var d=document.createElement('button');d.textContent='⚠️ Oops, something broke — tap to reload';d.style.cssText='position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:2147483200;background:#ef4444;color:#fff;font:bold 14px/1.2 system-ui,sans-serif;border:none;border-radius:999px;padding:10px 16px;box-shadow:0 6px 24px rgba(0,0,0,.4);cursor:pointer;';d.onclick=function(){location.reload()};(document.body||document.documentElement).appendChild(d);}catch(e){}});})();
 
@@ -24,51 +26,51 @@ const RM=(()=>{ try{ return matchMedia('(prefers-reduced-motion:reduce)').matche
    grp: visually-confusable group — two words sharing a grp never fall together. */
 const WORDS=[
   /* animals */
-  {id:'cat',en:'cat',he:'חתול',lv:1},{id:'dog',en:'dog',he:'כלב',lv:1},{id:'fish',en:'fish',he:'דג',lv:1},
-  {id:'bird',en:'bird',he:'ציפור',lv:1,grp:'bird'},{id:'duck',en:'duck',he:'ברווז',lv:1,grp:'bird'},
-  {id:'rabbit',en:'rabbit',he:'ארנב',lv:1},{id:'horse',en:'horse',he:'סוס',lv:1},{id:'cow',en:'cow',he:'פרה',lv:1},
-  {id:'pig',en:'pig',he:'חזיר',lv:1},{id:'bee',en:'bee',he:'דבורה',lv:1},{id:'mouse',en:'mouse',he:'עכבר',lv:1},
-  {id:'frog',en:'frog',he:'צפרדע',lv:1},{id:'bear',en:'bear',he:'דוב',lv:1},
-  {id:'elephant',en:'elephant',he:'פיל',lv:2},{id:'penguin',en:'penguin',he:'פינגווין',lv:2},
-  {id:'giraffe',en:'giraffe',he:"ג'ירפה",lv:2},{id:'lion',en:'lion',he:'אריה',lv:2},{id:'turtle',en:'turtle',he:'צב',lv:2},
+  {id:'cat',en:'cat',he:'חתול',es:'gato',lv:1},{id:'dog',en:'dog',he:'כלב',es:'perro',lv:1},{id:'fish',en:'fish',he:'דג',es:'pez',lv:1},
+  {id:'bird',en:'bird',he:'ציפור',es:'pájaro',lv:1,grp:'bird'},{id:'duck',en:'duck',he:'ברווז',es:'pato',lv:1,grp:'bird'},
+  {id:'rabbit',en:'rabbit',he:'ארנב',es:'conejo',lv:1},{id:'horse',en:'horse',he:'סוס',es:'caballo',lv:1},{id:'cow',en:'cow',he:'פרה',es:'vaca',lv:1},
+  {id:'pig',en:'pig',he:'חזיר',es:'cerdo',lv:1},{id:'bee',en:'bee',he:'דבורה',es:'abeja',lv:1},{id:'mouse',en:'mouse',he:'עכבר',es:'ratón',lv:1},
+  {id:'frog',en:'frog',he:'צפרדע',es:'rana',lv:1},{id:'bear',en:'bear',he:'דוב',es:'oso',lv:1},
+  {id:'elephant',en:'elephant',he:'פיל',es:'elefante',lv:2},{id:'penguin',en:'penguin',he:'פינגווין',es:'pingüino',lv:2},
+  {id:'giraffe',en:'giraffe',he:"ג'ירפה",es:'jirafa',lv:2},{id:'lion',en:'lion',he:'אריה',es:'león',lv:2},{id:'turtle',en:'turtle',he:'צב',es:'tortuga',lv:2},
   /* food */
-  {id:'apple',en:'apple',he:'תפוח',lv:1},{id:'banana',en:'banana',he:'בננה',lv:1},{id:'bread',en:'bread',he:'לחם',lv:1},
-  {id:'milk',en:'milk',he:'חלב',lv:1},{id:'egg',en:'egg',he:'ביצה',lv:1},{id:'orange',en:'orange',he:'תפוז',lv:1},
-  {id:'cake',en:'cake',he:'עוגה',lv:1},{id:'cheese',en:'cheese',he:'גבינה',lv:1},
-  {id:'pizza',en:'pizza',he:'פיצה',lv:2},{id:'watermelon',en:'watermelon',he:'אבטיח',lv:2},
-  {id:'carrot',en:'carrot',he:'גזר',lv:2},{id:'icecream',en:'ice cream',he:'גלידה',lv:2},
-  {id:'strawberry',en:'strawberry',he:'תות',lv:3},
+  {id:'apple',en:'apple',he:'תפוח',es:'manzana',lv:1},{id:'banana',en:'banana',he:'בננה',es:'banana',lv:1},{id:'bread',en:'bread',he:'לחם',es:'pan',lv:1},
+  {id:'milk',en:'milk',he:'חלב',es:'leche',lv:1},{id:'egg',en:'egg',he:'ביצה',es:'huevo',lv:1},{id:'orange',en:'orange',he:'תפוז',es:'naranja',lv:1},
+  {id:'cake',en:'cake',he:'עוגה',es:'pastel',lv:1},{id:'cheese',en:'cheese',he:'גבינה',es:'queso',lv:1},
+  {id:'pizza',en:'pizza',he:'פיצה',es:'pizza',lv:2},{id:'watermelon',en:'watermelon',he:'אבטיח',es:'sandía',lv:2},
+  {id:'carrot',en:'carrot',he:'גזר',es:'zanahoria',lv:2},{id:'icecream',en:'ice cream',he:'גלידה',es:'helado',lv:2},
+  {id:'strawberry',en:'strawberry',he:'תות',es:'fresa',lv:3},
   /* transport */
-  {id:'car',en:'car',he:'מכונית',lv:1},{id:'bus',en:'bus',he:'אוטובוס',lv:1},{id:'bicycle',en:'bicycle',he:'אופניים',lv:1},
-  {id:'airplane',en:'airplane',he:'מטוס',lv:1},{id:'train',en:'train',he:'רכבת',lv:1},{id:'truck',en:'truck',he:'משאית',lv:1},
-  {id:'ship',en:'ship',he:'ספינה',lv:1,grp:'boat'},{id:'boat',en:'boat',he:'סירה',lv:2,grp:'boat'},
-  {id:'helicopter',en:'helicopter',he:'מסוק',lv:2},{id:'rocket',en:'rocket',he:'רקטה',lv:3},
+  {id:'car',en:'car',he:'מכונית',es:'carro',lv:1},{id:'bus',en:'bus',he:'אוטובוס',es:'autobús',lv:1},{id:'bicycle',en:'bicycle',he:'אופניים',es:'bicicleta',lv:1},
+  {id:'airplane',en:'airplane',he:'מטוס',es:'avión',lv:1},{id:'train',en:'train',he:'רכבת',es:'tren',lv:1},{id:'truck',en:'truck',he:'משאית',es:'camión',lv:1},
+  {id:'ship',en:'ship',he:'ספינה',es:'barco',lv:1,grp:'boat'},{id:'boat',en:'boat',he:'סירה',es:'bote',lv:2,grp:'boat'},
+  {id:'helicopter',en:'helicopter',he:'מסוק',es:'helicóptero',lv:2},{id:'rocket',en:'rocket',he:'רקטה',es:'cohete',lv:3},
   /* home */
-  {id:'house',en:'house',he:'בית',lv:1},{id:'bed',en:'bed',he:'מיטה',lv:1},{id:'chair',en:'chair',he:'כיסא',lv:1},
-  {id:'table',en:'table',he:'שולחן',lv:1},{id:'door',en:'door',he:'דלת',lv:1},
-  {id:'window',en:'window',he:'חלון',lv:2},{id:'lamp',en:'lamp',he:'מנורה',lv:2},{id:'clock',en:'clock',he:'שעון',lv:2},
+  {id:'house',en:'house',he:'בית',es:'casa',lv:1},{id:'bed',en:'bed',he:'מיטה',es:'cama',lv:1},{id:'chair',en:'chair',he:'כיסא',es:'silla',lv:1},
+  {id:'table',en:'table',he:'שולחן',es:'mesa',lv:1},{id:'door',en:'door',he:'דלת',es:'puerta',lv:1},
+  {id:'window',en:'window',he:'חלון',es:'ventana',lv:2},{id:'lamp',en:'lamp',he:'מנורה',es:'lámpara',lv:2},{id:'clock',en:'clock',he:'שעון',es:'reloj',lv:2},
   /* colors — one color card on screen at a time (they all look alike in shape) */
-  {id:'red',en:'red',he:'אדום',lv:1,grp:'color'},{id:'blue',en:'blue',he:'כחול',lv:1,grp:'color'},
-  {id:'green',en:'green',he:'ירוק',lv:1,grp:'color'},{id:'yellow',en:'yellow',he:'צהוב',lv:1,grp:'color'},
-  {id:'black',en:'black',he:'שחור',lv:1,grp:'color'},{id:'white',en:'white',he:'לבן',lv:1,grp:'color'},
-  {id:'purple',en:'purple',he:'סגול',lv:2,grp:'color'},{id:'pink',en:'pink',he:'ורוד',lv:2,grp:'color'},
+  {id:'red',en:'red',he:'אדום',es:'rojo',lv:1,grp:'color'},{id:'blue',en:'blue',he:'כחול',es:'azul',lv:1,grp:'color'},
+  {id:'green',en:'green',he:'ירוק',es:'verde',lv:1,grp:'color'},{id:'yellow',en:'yellow',he:'צהוב',es:'amarillo',lv:1,grp:'color'},
+  {id:'black',en:'black',he:'שחור',es:'negro',lv:1,grp:'color'},{id:'white',en:'white',he:'לבן',es:'blanco',lv:1,grp:'color'},
+  {id:'purple',en:'purple',he:'סגול',es:'morado',lv:2,grp:'color'},{id:'pink',en:'pink',he:'ורוד',es:'rosado',lv:2,grp:'color'},
   /* nature */
-  {id:'sun',en:'sun',he:'שמש',lv:1,grp:'sky'},{id:'star',en:'star',he:'כוכב',lv:1,grp:'sky'},
-  {id:'tree',en:'tree',he:'עץ',lv:1},{id:'flower',en:'flower',he:'פרח',lv:1},{id:'rain',en:'rain',he:'גשם',lv:1},
-  {id:'moon',en:'moon',he:'ירח',lv:1},{id:'rainbow',en:'rainbow',he:'קשת בענן',lv:2},
+  {id:'sun',en:'sun',he:'שמש',es:'sol',lv:1,grp:'sky'},{id:'star',en:'star',he:'כוכב',es:'estrella',lv:1,grp:'sky'},
+  {id:'tree',en:'tree',he:'עץ',es:'árbol',lv:1},{id:'flower',en:'flower',he:'פרח',es:'flor',lv:1},{id:'rain',en:'rain',he:'גשם',es:'lluvia',lv:1},
+  {id:'moon',en:'moon',he:'ירח',es:'luna',lv:1},{id:'rainbow',en:'rainbow',he:'קשת בענן',es:'arcoíris',lv:2},
   /* clothing */
-  {id:'hat',en:'hat',he:'כובע',lv:1},{id:'shirt',en:'shirt',he:'חולצה',lv:1},{id:'dress',en:'dress',he:'שמלה',lv:1},
-  {id:'shoes',en:'shoes',he:'נעליים',lv:1,grp:'feet'},{id:'socks',en:'socks',he:'גרביים',lv:1,grp:'feet'},
-  {id:'umbrella',en:'umbrella',he:'מטריה',lv:3},
+  {id:'hat',en:'hat',he:'כובע',es:'sombrero',lv:1},{id:'shirt',en:'shirt',he:'חולצה',es:'camisa',lv:1},{id:'dress',en:'dress',he:'שמלה',es:'vestido',lv:1},
+  {id:'shoes',en:'shoes',he:'נעליים',es:'zapatos',lv:1,grp:'feet'},{id:'socks',en:'socks',he:'גרביים',es:'calcetines',lv:1,grp:'feet'},
+  {id:'umbrella',en:'umbrella',he:'מטריה',es:'paraguas',lv:3},
   /* school */
-  {id:'book',en:'book',he:'ספר',lv:1},{id:'ruler',en:'ruler',he:'סרגל',lv:1},
-  {id:'pen',en:'pen',he:'עט',lv:1,grp:'pen'},{id:'pencil',en:'pencil',he:'עיפרון',lv:2,grp:'pen'},
+  {id:'book',en:'book',he:'ספר',es:'libro',lv:1},{id:'ruler',en:'ruler',he:'סרגל',es:'regla',lv:1},
+  {id:'pen',en:'pen',he:'עט',es:'bolígrafo',lv:1,grp:'pen'},{id:'pencil',en:'pencil',he:'עיפרון',es:'lápiz',lv:2,grp:'pen'},
   /* toys */
-  {id:'kite',en:'kite',he:'עפיפון',lv:1},{id:'doll',en:'doll',he:'בובה',lv:1},
-  {id:'balloon',en:'balloon',he:'בלון',lv:1,grp:'ball'},{id:'robot',en:'robot',he:'רובוט',lv:2},
+  {id:'kite',en:'kite',he:'עפיפון',es:'cometa',lv:1},{id:'doll',en:'doll',he:'בובה',es:'muñeca',lv:1},
+  {id:'balloon',en:'balloon',he:'בלון',es:'globo',lv:1,grp:'ball'},{id:'robot',en:'robot',he:'רובוט',es:'robot',lv:2},
   /* everyday */
-  {id:'cup',en:'cup',he:'כוס',lv:1},{id:'key',en:'key',he:'מפתח',lv:1},{id:'phone',en:'phone',he:'טלפון',lv:1},
-  {id:'ball',en:'ball',he:'כדור',lv:1,grp:'ball'},
+  {id:'cup',en:'cup',he:'כוס',es:'taza',lv:1},{id:'key',en:'key',he:'מפתח',es:'llave',lv:1},{id:'phone',en:'phone',he:'טלפון',es:'teléfono',lv:1},
+  {id:'ball',en:'ball',he:'כדור',es:'pelota',lv:1,grp:'ball'},
 ];
 
 /* Practice-ladder scoping (2026-10-07): ?words=id,id,... restricts the pool to
@@ -218,7 +220,7 @@ function announce(word){
   S.target=word; S.targetAt=performance.now(); lastTargetId=word.id;
   const en=$('targetEn'), he=$('targetHe');
   if(en) en.textContent=word.en;
-  if(he) he.textContent=word.he;
+  if(he) he.textContent=(window.CDE_GLOSS?CDE_GLOSS(word):word.he);
   speak(word.en);
 }
 function newRound(){
@@ -306,7 +308,7 @@ function tierUp(){
   S.tier++;
   S.speedMul=Math.min(2.6,S.speedMul*1.12);
   S.spawnInt=Math.max(1.3,S.spawnInt*0.92);
-  toast('⚡ SPEED UP — LV '+S.tier);
+  toast(L10N('speedUp','⚡ SPEED UP — LV ')+S.tier);
   learnBeacon('g_lvl');
   chord(659); shakeIt(5); updateHUD();
 }
@@ -448,7 +450,7 @@ function start(){
   S.runStartBest=S.best;
   show('play'); updateHUD();
   const en=$('targetEn'), he=$('targetHe');
-  if(en) en.textContent='…'; if(he) he.textContent='מקשיבים…';
+  if(en) en.textContent='…'; if(he) he.textContent=L10N('listening','מקשיבים…');
   ac();
   try{ if('speechSynthesis' in window) speechSynthesis.resume(); }catch(e){}
 }
@@ -458,9 +460,9 @@ function gameOver(){
   try{ if('speechSynthesis' in window) speechSynthesis.cancel(); }catch(e){}
   const isBest=S.score>0&&S.score>S.runStartBest;
   const c=$('overCard');
-  if(c) c.innerHTML='⭐ Score <b>'+S.score+'</b>'
-    +(isBest?' · <span class="newbest">★ NEW BEST!</span>':' · best <b>'+S.best+'</b>')
-    +'<br>⚡ Reached <b>LV '+S.tier+'</b> · zapped <b>'+S.zapped+'</b> word'+(S.zapped===1?'':'s');
+  if(c) c.innerHTML=L10N('lbScore','⭐ Score')+' <b>'+S.score+'</b>'
+    +(isBest?' · <span class="newbest">'+L10N('lbNewBest','★ NEW BEST!')+'</span>':' · '+L10N('lbBest','best')+' <b>'+S.best+'</b>')
+    +'<br>'+L10N('lbReached','⚡ Reached')+' <b>LV '+S.tier+'</b> · '+L10N('lbZapped','zapped')+' <b>'+S.zapped+'</b>'+(window.CDE_LANG&&window.CDE_LANG!=='en'?'':' word'+(S.zapped===1?'':'s'));
   show('over');
   beep(120,0.6,'sawtooth',0.16,60);
 }
@@ -516,7 +518,7 @@ $('sayBtn').addEventListener('click',()=>WZ.say());
     if(Date.now()<armedUntil) return;    // second tap within 3s: leave
     e.preventDefault();                  // first tap: arm
     armedUntil=Date.now()+3000;
-    pill.textContent='Leave game? Tap again';
+    pill.textContent=L10N('leave','Leave game? Tap again');
     pill.classList.add('leave');
     clearTimeout(timer);
     timer=setTimeout(function(){armedUntil=0;pill.textContent=orig;pill.classList.remove('leave');},3000);

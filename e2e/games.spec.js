@@ -90,3 +90,18 @@ test('word-zapper honors ?words= scoping', async ({ page }) => {
     await page.waitForFunction(() => WZ.dbg.hasTargetSprite(), null, { timeout: 10000 }).catch(() => {});
   }
 });
+
+// DOM-chrome localization (2026-10-10): menus/HUD/overlays follow the app's
+// interface language (?lang= mirrors the cde_lang localStorage flag); the
+// spoken/typed English content does not change.
+test('game chrome follows the interface language (he / es), English stays default', async ({ page }) => {
+  await page.goto('/games/word-zapper/index.html?lang=he');
+  await expect(page.locator('#startBtn')).toHaveText('▶ התחלה');
+  await expect(page.locator('#startBtn')).toHaveAttribute('dir', 'rtl');
+  await page.goto('/games/spelling-forge/index.html?lang=es');
+  await expect(page.locator('#startBtn')).toHaveText('▶ EMPEZAR A FORJAR');
+  await page.goto('/games/category-conveyor/index.html?lang=he');
+  await expect(page.locator('#startBtn')).toHaveText('▶ להתחיל למיין');
+  await page.goto('/games/category-conveyor/index.html');
+  await expect(page.locator('#startBtn')).toHaveText('▶ START SORTING');
+});

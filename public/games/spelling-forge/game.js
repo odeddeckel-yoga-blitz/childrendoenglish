@@ -1,4 +1,6 @@
 "use strict";
+/* chrome strings by interface language (../cde-l10n.js + ./l10n.js); d = English fallback */
+function L10N(k,d){try{var v=window.CDE_T&&window.CDE_T(k);return v!=null?v:d;}catch(e){return d;}}
 /* ============================================================
    SPELLING FORGE — hear it, see it, forge it letter by letter.
    Tap-tile-pad architecture modeled on KidsDoMath column-crunch;
@@ -13,30 +15,30 @@ const RM=(()=>{ try{ return matchMedia('(prefers-reduced-motion:reduce)').matche
 
 /* ---------- word bank: 90 words inlined from the site's vocabulary ---------- */
 const WORDS=[
-{id:'ant',en:'ant',he:'נמלה'},{id:'bat',en:'bat',he:'מחבט'},{id:'bed',en:'bed',he:'מיטה'},{id:'bus',en:'bus',he:'אוטובוס'},
-{id:'car',en:'car',he:'מכונית'},{id:'cat',en:'cat',he:'חתול'},{id:'cup',en:'cup',he:'כוס'},{id:'dog',en:'dog',he:'כלב'},
-{id:'ear',en:'ear',he:'אוזן'},{id:'eye',en:'eye',he:'עין'},{id:'fox',en:'fox',he:'שועל'},{id:'hat',en:'hat',he:'כובע'},
-{id:'key',en:'key',he:'מפתח'},{id:'net',en:'net',he:'רשת'},{id:'one',en:'one',he:'אחד'},{id:'pen',en:'pen',he:'עט'},
-{id:'pig',en:'pig',he:'חזיר'},{id:'red',en:'red',he:'אדום'},{id:'sad',en:'sad',he:'עצוב'},{id:'shy',en:'shy',he:'ביישן'},
-{id:'six',en:'six',he:'שש'},{id:'ten',en:'ten',he:'עשר'},{id:'tie',en:'tie',he:'עניבה'},{id:'two',en:'two',he:'שניים'},
-{id:'ball',en:'ball',he:'כדור'},{id:'belt',en:'belt',he:'חגורה'},{id:'blue',en:'blue',he:'כחול'},{id:'book',en:'book',he:'ספר'},
-{id:'calm',en:'calm',he:'רגוע'},{id:'cook_verb',en:'cook',he:'לבשל'},{id:'deer',en:'deer',he:'אייל'},{id:'doll',en:'doll',he:'בובה'},
-{id:'drum',en:'drum',he:'תוף'},{id:'fish',en:'fish',he:'דג'},{id:'fork',en:'fork',he:'מזלג'},{id:'frog',en:'frog',he:'צפרדע'},
-{id:'goat',en:'goat',he:'עז'},{id:'hand',en:'hand',he:'יד'},{id:'lake',en:'lake',he:'אגם'},{id:'lion',en:'lion',he:'אריה'},
-{id:'moon',en:'moon',he:'ירח'},{id:'nest',en:'nest',he:'קן'},{id:'pink',en:'pink',he:'ורוד'},{id:'read_verb',en:'read',he:'לקרוא'},
-{id:'ship',en:'ship',he:'ספינה'},{id:'star',en:'star',he:'כוכב'},{id:'tent',en:'tent',he:'אוהל'},{id:'vest',en:'vest',he:'אפודה'},
-{id:'amber',en:'amber',he:'ענבר'},{id:'beige',en:'beige',he:'בז\''},{id:'brave',en:'brave',he:'אמיץ'},{id:'brown',en:'brown',he:'חום'},
-{id:'cliff',en:'cliff',he:'צוק'},{id:'cream',en:'cream',he:'שמנת'},{id:'dress',en:'dress',he:'שמלה'},{id:'fence',en:'fence',he:'גדר'},
-{id:'grape',en:'grape',he:'ענב'},{id:'happy',en:'happy',he:'שמח'},{id:'horse',en:'horse',he:'סוס'},{id:'kayak',en:'kayak',he:'קייאק'},
-{id:'paint_verb',en:'paint',he:'לצבוע'},{id:'peach',en:'peach',he:'אפרסק'},{id:'pizza',en:'pizza',he:'פיצה'},{id:'river',en:'river',he:'נהר'},
-{id:'scarf',en:'scarf',he:'צעיף'},{id:'sheep',en:'sheep',he:'כבשה'},{id:'sixty',en:'sixty',he:'שישים'},{id:'socks',en:'socks',he:'גרביים'},
-{id:'three',en:'three',he:'שלוש'},{id:'tired',en:'tired',he:'עייף'},{id:'train',en:'train',he:'רכבת'},{id:'whale',en:'whale',he:'לוויתן'},
-{id:'airplane',en:'airplane',he:'מטוס'},{id:'bathtub',en:'bathtub',he:'אמבטיה'},{id:'calendar',en:'calendar',he:'לוח שנה'},
-{id:'climbing',en:'climbing',he:'טיפוס'},{id:'desert',en:'desert',he:'מדבר'},{id:'feather',en:'feather',he:'נוצה'},
-{id:'forest',en:'forest',he:'יער'},{id:'guitar',en:'guitar',he:'גיטרה'},{id:'jacket',en:'jacket',he:'ז\'קט'},
-{id:'meadow',en:'meadow',he:'אחו'},{id:'monkey',en:'monkey',he:'קוף'},{id:'nervous',en:'nervous',he:'עצבני'},
-{id:'parrot',en:'parrot',he:'תוכי'},{id:'pencil',en:'pencil',he:'עיפרון'},{id:'puzzle',en:'puzzle',he:'פאזל'},
-{id:'sandwich',en:'sandwich',he:'כריך'},{id:'window',en:'window',he:'חלון'},{id:'swimming',en:'swimming',he:'שחייה'}
+{id:'ant',en:'ant',he:'נמלה',es:'hormiga'},{id:'bat',en:'bat',he:'מחבט',es:'bate'},{id:'bed',en:'bed',he:'מיטה',es:'cama'},{id:'bus',en:'bus',he:'אוטובוס',es:'autobús'},
+{id:'car',en:'car',he:'מכונית',es:'carro'},{id:'cat',en:'cat',he:'חתול',es:'gato'},{id:'cup',en:'cup',he:'כוס',es:'taza'},{id:'dog',en:'dog',he:'כלב',es:'perro'},
+{id:'ear',en:'ear',he:'אוזן',es:'oreja'},{id:'eye',en:'eye',he:'עין',es:'ojo'},{id:'fox',en:'fox',he:'שועל',es:'zorro'},{id:'hat',en:'hat',he:'כובע',es:'sombrero'},
+{id:'key',en:'key',he:'מפתח',es:'llave'},{id:'net',en:'net',he:'רשת',es:'red'},{id:'one',en:'one',he:'אחד',es:'uno'},{id:'pen',en:'pen',he:'עט',es:'bolígrafo'},
+{id:'pig',en:'pig',he:'חזיר',es:'cerdo'},{id:'red',en:'red',he:'אדום',es:'rojo'},{id:'sad',en:'sad',he:'עצוב',es:'triste'},{id:'shy',en:'shy',he:'ביישן',es:'tímido'},
+{id:'six',en:'six',he:'שש',es:'seis'},{id:'ten',en:'ten',he:'עשר',es:'diez'},{id:'tie',en:'tie',he:'עניבה',es:'corbata'},{id:'two',en:'two',he:'שניים',es:'dos'},
+{id:'ball',en:'ball',he:'כדור',es:'pelota'},{id:'belt',en:'belt',he:'חגורה',es:'cinturón'},{id:'blue',en:'blue',he:'כחול',es:'azul'},{id:'book',en:'book',he:'ספר',es:'libro'},
+{id:'calm',en:'calm',he:'רגוע',es:'tranquilo'},{id:'cook_verb',en:'cook',he:'לבשל',es:'cocinar'},{id:'deer',en:'deer',he:'אייל',es:'venado'},{id:'doll',en:'doll',he:'בובה',es:'muñeca'},
+{id:'drum',en:'drum',he:'תוף',es:'tambor'},{id:'fish',en:'fish',he:'דג',es:'pez'},{id:'fork',en:'fork',he:'מזלג',es:'tenedor'},{id:'frog',en:'frog',he:'צפרדע',es:'rana'},
+{id:'goat',en:'goat',he:'עז',es:'cabra'},{id:'hand',en:'hand',he:'יד',es:'mano'},{id:'lake',en:'lake',he:'אגם',es:'lago'},{id:'lion',en:'lion',he:'אריה',es:'león'},
+{id:'moon',en:'moon',he:'ירח',es:'luna'},{id:'nest',en:'nest',he:'קן',es:'nido'},{id:'pink',en:'pink',he:'ורוד',es:'rosado'},{id:'read_verb',en:'read',he:'לקרוא',es:'leer'},
+{id:'ship',en:'ship',he:'ספינה',es:'barco'},{id:'star',en:'star',he:'כוכב',es:'estrella'},{id:'tent',en:'tent',he:'אוהל',es:'carpa'},{id:'vest',en:'vest',he:'אפודה',es:'chaleco'},
+{id:'beige',en:'beige',he:'בז\'',es:'beige'},{id:'brave',en:'brave',he:'אמיץ',es:'valiente'},{id:'brown',en:'brown',he:'חום',es:'marrón'},
+{id:'cliff',en:'cliff',he:'צוק',es:'acantilado'},{id:'cream',en:'cream',he:'שמנת',es:'crema'},{id:'dress',en:'dress',he:'שמלה',es:'vestido'},{id:'fence',en:'fence',he:'גדר',es:'cerca'},
+{id:'grape',en:'grape',he:'ענב',es:'uva'},{id:'happy',en:'happy',he:'שמח',es:'feliz'},{id:'horse',en:'horse',he:'סוס',es:'caballo'},{id:'kayak',en:'kayak',he:'קייאק',es:'kayak'},
+{id:'paint_verb',en:'paint',he:'לצבוע',es:'pintar'},{id:'peach',en:'peach',he:'אפרסק',es:'durazno'},{id:'pizza',en:'pizza',he:'פיצה',es:'pizza'},{id:'river',en:'river',he:'נהר',es:'río'},
+{id:'scarf',en:'scarf',he:'צעיף',es:'bufanda'},{id:'sheep',en:'sheep',he:'כבשה',es:'oveja'},{id:'sixty',en:'sixty',he:'שישים',es:'sesenta'},{id:'socks',en:'socks',he:'גרביים',es:'calcetines'},
+{id:'three',en:'three',he:'שלוש',es:'tres'},{id:'tired',en:'tired',he:'עייף',es:'cansado'},{id:'train',en:'train',he:'רכבת',es:'tren'},{id:'whale',en:'whale',he:'לוויתן',es:'ballena'},
+{id:'airplane',en:'airplane',he:'מטוס',es:'avión'},{id:'bathtub',en:'bathtub',he:'אמבטיה',es:'bañera'},{id:'calendar',en:'calendar',he:'לוח שנה',es:'calendario'},
+{id:'climbing',en:'climbing',he:'טיפוס',es:'escalada'},{id:'desert',en:'desert',he:'מדבר',es:'desierto'},{id:'feather',en:'feather',he:'נוצה',es:'pluma'},
+{id:'forest',en:'forest',he:'יער',es:'bosque'},{id:'guitar',en:'guitar',he:'גיטרה',es:'guitarra'},{id:'jacket',en:'jacket',he:'ז\'קט',es:'chaqueta'},
+{id:'meadow',en:'meadow',he:'אחו',es:'pradera'},{id:'monkey',en:'monkey',he:'קוף',es:'mono'},{id:'nervous',en:'nervous',he:'עצבני',es:'nervioso'},
+{id:'parrot',en:'parrot',he:'תוכי',es:'loro'},{id:'pencil',en:'pencil',he:'עיפרון',es:'lápiz'},{id:'puzzle',en:'puzzle',he:'פאזל',es:'rompecabezas'},
+{id:'sandwich',en:'sandwich',he:'כריך',es:'sándwich'},{id:'window',en:'window',he:'חלון',es:'ventana'},{id:'swimming',en:'swimming',he:'שחייה',es:'natación'}
 ];
 
 /* Practice-ladder scoping (2026-10-07): ?words=id,id,... restricts the pool to
@@ -194,7 +196,7 @@ function buildRound(){
   const img=$('photo');
   img.src='/images/'+S.word.id+'.webp';
   img.alt=listenOnly?'':('photo of '+S.word.en);
-  $('heWord').textContent=S.word.he;
+  $('heWord').textContent=(window.CDE_GLOSS?CDE_GLOSS(S.word):S.word.he);
   $('heWord').style.display=listenOnly?'none':'';
   renderSlots(); renderPad(); refreshForge();
   setStatus(listenOnly?'🎧 Listen closely, then forge the word — the photo is your reward!':'Tap the letter tiles to spell what you see and hear!');
@@ -291,7 +293,7 @@ function autoFill(){
   const step=()=>{
     if(S.screen!=='play'||S.locked){ S.autoFilling=false; return; }
     const empties=S.slots.filter(s=>s.ch===null).length;
-    if(empties<=1){ S.autoFilling=false; updateHintGlow(); setStatus('⚒️ One letter left — you finish it!','var(--gold)'); return; }
+    if(empties<=1){ S.autoFilling=false; updateHintGlow(); setStatus(L10N('oneLeft','⚒️ One letter left — you finish it!'),'var(--gold)'); return; }
     const j=S.slots.findIndex(s=>s.ch===null);
     const need=S.letters[j];
     const idx=S.tiles.findIndex(t=>!t.used&&t.ch===need);
@@ -299,7 +301,7 @@ function autoFill(){
     tapTile(idx,true);
     setTimeout(step,RM?60:520);
   };
-  setStatus('🤖 The forge helps out — watch the letters!','var(--gold)');
+  setStatus(L10N('helps','🤖 The forge helps out — watch the letters!'),'var(--gold)');
   setTimeout(step,RM?60:400);
 }
 
@@ -308,7 +310,7 @@ function forge(){
   if(S.screen!=='play'||S.locked||S.autoFilling) return;
   ac();
   const emptyAt=S.slots.findIndex(s=>s.ch===null);
-  if(emptyAt>=0){ FX.shake(5); thud(); setStatus('Fill every slot first!','var(--red)'); return; }
+  if(emptyAt>=0){ FX.shake(5); thud(); setStatus(L10N('fillSlots','Fill every slot first!'),'var(--red)'); return; }
   const guess=S.slots.map(s=>s.ch).join('');
   if(guess===S.word.en){ forgeSuccess(); } else { forgeWrong(); }
 }
@@ -335,7 +337,7 @@ function forgeSuccess(){
   $('photoCard').classList.remove('myst');
   $('heWord').style.display='';
   say(S.word.en);
-  setStatus('⚒️ CLANG! <b style="color:var(--grn)">'+S.word.en.toUpperCase()+'</b> forged! · <span dir="rtl">'+S.word.he+'</span> · +'+pts,'var(--grn)');
+  setStatus('⚒️ CLANG! <b style="color:var(--grn)">'+S.word.en.toUpperCase()+'</b> '+L10N('forged','forged!')+' · <span dir="rtl">'+(window.CDE_GLOSS?CDE_GLOSS(S.word):S.word.he)+'</span> · +'+pts,'var(--grn)');
   if(S.streak>=3) toast('🔥 COMBO ×'+S.streak);
   updateHUD();
   track('word_forged',{word:S.word.en,level:S.level,streak:S.streak});
@@ -361,7 +363,7 @@ function forgeWrong(){
     /* two-stage hints */
     if(S.wrongForges>=4){ S.hintStage=2; S.usedHint=true; updateHintGlow(); autoFill(); }
     else if(S.wrongForges>=2){ S.hintStage=1; S.usedHint=true; updateHintGlow();
-      setStatus('💡 Hint: the glowing tile goes in the next slot!','var(--gold)'); }
+      setStatus(L10N('hint','💡 Hint: the glowing tile goes in the next slot!'),'var(--gold)'); }
     say(S.word.en);
   }, RM?120:820);
 }
@@ -384,7 +386,7 @@ function nextWord(){
   if(S.wordIdx>=WORDS_PER_LEVEL){
     S.wordIdx=0; S.level++;
     if(S.level>MAXLV){ winGame(); return; }
-    toast('⬆️ LEVEL '+S.level+(S.level>=7?' — 🎧 listen-only!':''));
+    toast(L10N('level','⬆️ LEVEL ')+S.level+(S.level>=7?L10N('listenOnly',' — 🎧 listen-only!'):''));
     learnBeacon('g_lvl');
     chord(659);
   }
@@ -403,10 +405,10 @@ function start(){
 }
 function winGame(){
   const isBest=S.score>0&&S.score>S.runStartBest;
-  $('winBody').innerHTML='⭐ Score <b>'+S.score+'</b>'
-    +(isBest?' · <b style="color:var(--gold)">★ NEW BEST!</b>':' · best <b>'+S.best+'</b>')
-    +'<br>⚒️ Forged <b>'+S.forged+'</b> words across all <b>'+MAXLV+'</b> levels'
-    +'<br>✨ First-strike words (no misses, no hints): <b>'+S.perfect+'</b>';
+  $('winBody').innerHTML=L10N('lbScore','⭐ Score')+' <b>'+S.score+'</b>'
+    +(isBest?' · <b style="color:var(--gold)">'+L10N('lbNewBest','★ NEW BEST!')+'</b>':' · '+L10N('lbBest','best')+' <b>'+S.best+'</b>')
+    +'<br>'+L10N('lbForged','⚒️ Forged')+' <b>'+S.forged+'</b> '+L10N('lbWordsAcross','words across all')+' <b>'+MAXLV+'</b> '+L10N('lbLevels','levels')
+    +'<br>'+L10N('lbPerfect','✨ First-strike words (no misses, no hints):')+' <b>'+S.perfect+'</b>';
   show('win');
   chord(659); setTimeout(()=>chord(784),220);
   try{ const r=$('winTitle').getBoundingClientRect(); FX.burst(r.left+r.width/2,r.bottom,40,'#fbbf24',8,1.2); }catch(e){}
@@ -473,7 +475,7 @@ window.SF={
     if(Date.now()<armedUntil) return;    // second tap within 3s: leave
     e.preventDefault();                  // first tap: arm
     armedUntil=Date.now()+3000;
-    pill.textContent='Leave game? Tap again';
+    pill.textContent=L10N('leave','Leave game? Tap again');
     pill.classList.add('leave');
     clearTimeout(timer);
     timer=setTimeout(function(){armedUntil=0;pill.textContent=orig;pill.classList.remove('leave');},3000);

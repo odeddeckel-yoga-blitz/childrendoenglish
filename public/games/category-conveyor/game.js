@@ -1,4 +1,6 @@
 "use strict";
+/* chrome strings by interface language (../cde-l10n.js + ./l10n.js); d = English fallback */
+function L10N(k,d){try{var v=window.CDE_T&&window.CDE_T(k);return v!=null?v:d;}catch(e){return d;}}
 /* ============================================================
    CATEGORY CONVEYOR — English sorting arcade (ChildrenDoEnglish)
    Word photos ride a conveyor belt. When a photo is inside the
@@ -23,70 +25,72 @@ const CATS = {
   home:     { name:'Home',      emoji:'🏠', color:'#16a34a' },
   colors:   { name:'Colors',    emoji:'🎨', color:'#ec4899' },
 };
+// bin labels follow the interface language (spoken words stay English)
+Object.keys(CATS).forEach(function(k){ var n=L10N('cat_'+k,null); if(n) CATS[k].name=n; });
 /* {id, en, he, cat} — id maps to /images/<id>.webp. "tricky" items are deliberate
    cross-category traps (foods that are also colors and vice versa); they only
    spawn at LV6+ when BOTH the Food and Colors bins are on screen. */
 const WORDS = [
   // animals (21)
-  {id:'cat',en:'cat',he:'חתול',cat:'animals'},{id:'dog',en:'dog',he:'כלב',cat:'animals'},
-  {id:'fish',en:'fish',he:'דג',cat:'animals'},{id:'bird',en:'bird',he:'ציפור',cat:'animals'},
-  {id:'rabbit',en:'rabbit',he:'ארנב',cat:'animals'},{id:'horse',en:'horse',he:'סוס',cat:'animals'},
-  {id:'cow',en:'cow',he:'פרה',cat:'animals'},{id:'elephant',en:'elephant',he:'פיל',cat:'animals'},
-  {id:'penguin',en:'penguin',he:'פינגווין',cat:'animals'},{id:'duck',en:'duck',he:'ברווז',cat:'animals'},
-  {id:'pig',en:'pig',he:'חזיר',cat:'animals'},{id:'bee',en:'bee',he:'דבורה',cat:'animals'},
-  {id:'mouse',en:'mouse',he:'עכבר',cat:'animals'},{id:'snake',en:'snake',he:'נחש',cat:'animals'},
-  {id:'tiger',en:'tiger',he:'נמר',cat:'animals'},{id:'zebra',en:'zebra',he:'זברה',cat:'animals'},
-  {id:'shark',en:'shark',he:'כריש',cat:'animals'},{id:'lion',en:'lion',he:'אריה',cat:'animals'},
-  {id:'frog',en:'frog',he:'צפרדע',cat:'animals'},{id:'bear',en:'bear',he:'דוב',cat:'animals'},
-  {id:'monkey',en:'monkey',he:'קוף',cat:'animals'},
+  {id:'cat',en:'cat',he:'חתול',es:'gato',cat:'animals'},{id:'dog',en:'dog',he:'כלב',es:'perro',cat:'animals'},
+  {id:'fish',en:'fish',he:'דג',es:'pez',cat:'animals'},{id:'bird',en:'bird',he:'ציפור',es:'pájaro',cat:'animals'},
+  {id:'rabbit',en:'rabbit',he:'ארנב',es:'conejo',cat:'animals'},{id:'horse',en:'horse',he:'סוס',es:'caballo',cat:'animals'},
+  {id:'cow',en:'cow',he:'פרה',es:'vaca',cat:'animals'},{id:'elephant',en:'elephant',he:'פיל',es:'elefante',cat:'animals'},
+  {id:'penguin',en:'penguin',he:'פינגווין',es:'pingüino',cat:'animals'},{id:'duck',en:'duck',he:'ברווז',es:'pato',cat:'animals'},
+  {id:'pig',en:'pig',he:'חזיר',es:'cerdo',cat:'animals'},{id:'bee',en:'bee',he:'דבורה',es:'abeja',cat:'animals'},
+  {id:'mouse',en:'mouse',he:'עכבר',es:'ratón',cat:'animals'},{id:'snake',en:'snake',he:'נחש',es:'serpiente',cat:'animals'},
+  {id:'tiger',en:'tiger',he:'נמר',es:'tigre',cat:'animals'},{id:'zebra',en:'zebra',he:'זברה',es:'cebra',cat:'animals'},
+  {id:'shark',en:'shark',he:'כריש',es:'tiburón',cat:'animals'},{id:'lion',en:'lion',he:'אריה',es:'león',cat:'animals'},
+  {id:'frog',en:'frog',he:'צפרדע',es:'rana',cat:'animals'},{id:'bear',en:'bear',he:'דוב',es:'oso',cat:'animals'},
+  {id:'monkey',en:'monkey',he:'קוף',es:'mono',cat:'animals'},
   // food (21 + 1 tricky)
-  {id:'apple',en:'apple',he:'תפוח',cat:'food'},{id:'banana',en:'banana',he:'בננה',cat:'food'},
-  {id:'bread',en:'bread',he:'לחם',cat:'food'},{id:'milk',en:'milk',he:'חלב',cat:'food'},
-  {id:'egg',en:'egg',he:'ביצה',cat:'food'},{id:'pizza',en:'pizza',he:'פיצה',cat:'food'},
-  {id:'watermelon',en:'watermelon',he:'אבטיח',cat:'food'},{id:'carrot',en:'carrot',he:'גזר',cat:'food'},
-  {id:'strawberry',en:'strawberry',he:'תות',cat:'food'},{id:'chocolate',en:'chocolate',he:'שוקולד',cat:'food'},
-  {id:'cake',en:'cake',he:'עוגה',cat:'food'},{id:'soup',en:'soup',he:'מרק',cat:'food'},
-  {id:'juice',en:'juice',he:'מיץ',cat:'food'},{id:'potato',en:'potato',he:'תפוח אדמה',cat:'food'},
-  {id:'cucumber',en:'cucumber',he:'מלפפון',cat:'food'},{id:'icecream',en:'ice cream',he:'גלידה',cat:'food'},
-  {id:'popcorn',en:'popcorn',he:'פופקורן',cat:'food'},{id:'cheese',en:'cheese',he:'גבינה',cat:'food'},
-  {id:'cookie',en:'cookie',he:'עוגיה',cat:'food'},{id:'grape',en:'grape',he:'ענב',cat:'food'},
-  {id:'tomato',en:'tomato',he:'עגבנייה',cat:'food'},
-  {id:'orange',en:'orange',he:'תפוז',cat:'food',tricky:'🍊 orange is a FRUIT here — look at the picture!'},
+  {id:'apple',en:'apple',he:'תפוח',es:'manzana',cat:'food'},{id:'banana',en:'banana',he:'בננה',es:'banana',cat:'food'},
+  {id:'bread',en:'bread',he:'לחם',es:'pan',cat:'food'},{id:'milk',en:'milk',he:'חלב',es:'leche',cat:'food'},
+  {id:'egg',en:'egg',he:'ביצה',es:'huevo',cat:'food'},{id:'pizza',en:'pizza',he:'פיצה',es:'pizza',cat:'food'},
+  {id:'watermelon',en:'watermelon',he:'אבטיח',es:'sandía',cat:'food'},{id:'carrot',en:'carrot',he:'גזר',es:'zanahoria',cat:'food'},
+  {id:'strawberry',en:'strawberry',he:'תות',es:'fresa',cat:'food'},{id:'chocolate',en:'chocolate',he:'שוקולד',es:'chocolate',cat:'food'},
+  {id:'cake',en:'cake',he:'עוגה',es:'pastel',cat:'food'},{id:'soup',en:'soup',he:'מרק',es:'sopa',cat:'food'},
+  {id:'juice',en:'juice',he:'מיץ',es:'jugo',cat:'food'},{id:'potato',en:'potato',he:'תפוח אדמה',es:'papa',cat:'food'},
+  {id:'cucumber',en:'cucumber',he:'מלפפון',es:'pepino',cat:'food'},{id:'icecream',en:'ice cream',he:'גלידה',es:'helado',cat:'food'},
+  {id:'popcorn',en:'popcorn',he:'פופקורן',es:'palomitas',cat:'food'},{id:'cheese',en:'cheese',he:'גבינה',es:'queso',cat:'food'},
+  {id:'cookie',en:'cookie',he:'עוגיה',es:'galleta',cat:'food'},{id:'grape',en:'grape',he:'ענב',es:'uva',cat:'food'},
+  {id:'tomato',en:'tomato',he:'עגבנייה',es:'tomate',cat:'food'},
+  {id:'orange',en:'orange',he:'תפוז',es:'naranja',cat:'food',tricky:'🍊 orange is a FRUIT here — look at the picture!'},
   // transport (16)
-  {id:'car',en:'car',he:'מכונית',cat:'transport'},{id:'bus',en:'bus',he:'אוטובוס',cat:'transport'},
-  {id:'bicycle',en:'bicycle',he:'אופניים',cat:'transport'},{id:'airplane',en:'airplane',he:'מטוס',cat:'transport'},
-  {id:'train',en:'train',he:'רכבת',cat:'transport'},{id:'boat',en:'boat',he:'סירה',cat:'transport'},
-  {id:'helicopter',en:'helicopter',he:'מסוק',cat:'transport'},{id:'motorcycle',en:'motorcycle',he:'אופנוע',cat:'transport'},
-  {id:'scooter',en:'scooter',he:'קורקינט',cat:'transport'},{id:'ambulance',en:'ambulance',he:'אמבולנס',cat:'transport'},
-  {id:'tractor',en:'tractor',he:'טרקטור',cat:'transport'},{id:'rocket',en:'rocket',he:'רקטה',cat:'transport'},
-  {id:'truck',en:'truck',he:'משאית',cat:'transport'},{id:'ship',en:'ship',he:'ספינה',cat:'transport'},
-  {id:'taxi',en:'taxi',he:'מונית',cat:'transport'},{id:'firetruck',en:'firetruck',he:'כבאית',cat:'transport'},
+  {id:'car',en:'car',he:'מכונית',es:'carro',cat:'transport'},{id:'bus',en:'bus',he:'אוטובוס',es:'autobús',cat:'transport'},
+  {id:'bicycle',en:'bicycle',he:'אופניים',es:'bicicleta',cat:'transport'},{id:'airplane',en:'airplane',he:'מטוס',es:'avión',cat:'transport'},
+  {id:'train',en:'train',he:'רכבת',es:'tren',cat:'transport'},{id:'boat',en:'boat',he:'סירה',es:'bote',cat:'transport'},
+  {id:'helicopter',en:'helicopter',he:'מסוק',es:'helicóptero',cat:'transport'},{id:'motorcycle',en:'motorcycle',he:'אופנוע',es:'motocicleta',cat:'transport'},
+  {id:'scooter',en:'scooter',he:'קורקינט',es:'patinete',cat:'transport'},{id:'ambulance',en:'ambulance',he:'אמבולנס',es:'ambulancia',cat:'transport'},
+  {id:'tractor',en:'tractor',he:'טרקטור',es:'tractor',cat:'transport'},{id:'rocket',en:'rocket',he:'רקטה',es:'cohete',cat:'transport'},
+  {id:'truck',en:'truck',he:'משאית',es:'camión',cat:'transport'},{id:'ship',en:'ship',he:'ספינה',es:'barco',cat:'transport'},
+  {id:'taxi',en:'taxi',he:'מונית',es:'taxi',cat:'transport'},{id:'firetruck',en:'firetruck',he:'כבאית',es:'camión de bomberos',cat:'transport'},
   // clothing (16)
-  {id:'hat',en:'hat',he:'כובע',cat:'clothing'},{id:'shirt',en:'shirt',he:'חולצה',cat:'clothing'},
-  {id:'shoes',en:'shoes',he:'נעליים',cat:'clothing'},{id:'dress',en:'dress',he:'שמלה',cat:'clothing'},
-  {id:'jacket',en:'jacket',he:"ז'קט",cat:'clothing'},{id:'gloves',en:'gloves',he:'כפפות',cat:'clothing'},
-  {id:'scarf',en:'scarf',he:'צעיף',cat:'clothing'},{id:'sweater',en:'sweater',he:'סוודר',cat:'clothing'},
-  {id:'backpack',en:'backpack',he:'תיק גב',cat:'clothing'},{id:'sunglasses',en:'sunglasses',he:'משקפי שמש',cat:'clothing'},
-  {id:'helmet',en:'helmet',he:'קסדה',cat:'clothing'},{id:'belt',en:'belt',he:'חגורה',cat:'clothing'},
-  {id:'socks',en:'socks',he:'גרביים',cat:'clothing'},{id:'hoodie',en:'hoodie',he:"קפוצ'ון",cat:'clothing'},
-  {id:'raincoat',en:'raincoat',he:'מעיל גשם',cat:'clothing'},{id:'sandals',en:'sandals',he:'סנדלים',cat:'clothing'},
+  {id:'hat',en:'hat',he:'כובע',es:'sombrero',cat:'clothing'},{id:'shirt',en:'shirt',he:'חולצה',es:'camisa',cat:'clothing'},
+  {id:'shoes',en:'shoes',he:'נעליים',es:'zapatos',cat:'clothing'},{id:'dress',en:'dress',he:'שמלה',es:'vestido',cat:'clothing'},
+  {id:'jacket',en:'jacket',he:"ז'קט",es:'chaqueta',cat:'clothing'},{id:'gloves',en:'gloves',he:'כפפות',es:'guantes',cat:'clothing'},
+  {id:'scarf',en:'scarf',he:'צעיף',es:'bufanda',cat:'clothing'},{id:'sweater',en:'sweater',he:'סוודר',es:'suéter',cat:'clothing'},
+  {id:'backpack',en:'backpack',he:'תיק גב',es:'mochila',cat:'clothing'},{id:'sunglasses',en:'sunglasses',he:'משקפי שמש',es:'lentes de sol',cat:'clothing'},
+  {id:'helmet',en:'helmet',he:'קסדה',es:'casco',cat:'clothing'},{id:'belt',en:'belt',he:'חגורה',es:'cinturón',cat:'clothing'},
+  {id:'socks',en:'socks',he:'גרביים',es:'calcetines',cat:'clothing'},{id:'hoodie',en:'hoodie',he:"קפוצ'ון",es:'sudadera con capucha',cat:'clothing'},
+  {id:'raincoat',en:'raincoat',he:'מעיל גשם',es:'impermeable',cat:'clothing'},{id:'sandals',en:'sandals',he:'סנדלים',es:'sandalias',cat:'clothing'},
   // home (14)
-  {id:'house',en:'house',he:'בית',cat:'home'},{id:'bed',en:'bed',he:'מיטה',cat:'home'},
-  {id:'chair',en:'chair',he:'כיסא',cat:'home'},{id:'table',en:'table',he:'שולחן',cat:'home'},
-  {id:'door',en:'door',he:'דלת',cat:'home'},{id:'window',en:'window',he:'חלון',cat:'home'},
-  {id:'lamp',en:'lamp',he:'מנורה',cat:'home'},{id:'clock',en:'clock',he:'שעון',cat:'home'},
-  {id:'mirror',en:'mirror',he:'מראה',cat:'home'},{id:'curtain',en:'curtain',he:'וילון',cat:'home'},
-  {id:'pillow',en:'pillow',he:'כרית',cat:'home'},{id:'bathtub',en:'bathtub',he:'אמבטיה',cat:'home'},
-  {id:'drawer',en:'drawer',he:'מגירה',cat:'home'},{id:'ladder',en:'ladder',he:'סולם',cat:'home'},
+  {id:'house',en:'house',he:'בית',es:'casa',cat:'home'},{id:'bed',en:'bed',he:'מיטה',es:'cama',cat:'home'},
+  {id:'chair',en:'chair',he:'כיסא',es:'silla',cat:'home'},{id:'table',en:'table',he:'שולחן',es:'mesa',cat:'home'},
+  {id:'door',en:'door',he:'דלת',es:'puerta',cat:'home'},{id:'window',en:'window',he:'חלון',es:'ventana',cat:'home'},
+  {id:'lamp',en:'lamp',he:'מנורה',es:'lámpara',cat:'home'},{id:'clock',en:'clock',he:'שעון',es:'reloj',cat:'home'},
+  {id:'mirror',en:'mirror',he:'מראה',es:'espejo',cat:'home'},{id:'curtain',en:'curtain',he:'וילון',es:'cortina',cat:'home'},
+  {id:'pillow',en:'pillow',he:'כרית',es:'almohada',cat:'home'},{id:'bathtub',en:'bathtub',he:'אמבטיה',es:'bañera',cat:'home'},
+  {id:'drawer',en:'drawer',he:'מגירה',es:'cajón',cat:'home'},{id:'ladder',en:'ladder',he:'סולם',es:'escalera de mano',cat:'home'},
   // colors (10 + 3 tricky)
-  {id:'red',en:'red',he:'אדום',cat:'colors'},{id:'blue',en:'blue',he:'כחול',cat:'colors'},
-  {id:'green',en:'green',he:'ירוק',cat:'colors'},{id:'yellow',en:'yellow',he:'צהוב',cat:'colors'},
-  {id:'black',en:'black',he:'שחור',cat:'colors'},{id:'white',en:'white',he:'לבן',cat:'colors'},
-  {id:'purple',en:'purple',he:'סגול',cat:'colors'},{id:'pink',en:'pink',he:'ורוד',cat:'colors'},
-  {id:'brown',en:'brown',he:'חום',cat:'colors'},{id:'gray',en:'gray',he:'אפור',cat:'colors'},
-  {id:'lime',en:'lime',he:'ירוק ליים',cat:'colors',tricky:'🎨 lime is a COLOR here — look at the picture!'},
-  {id:'peach',en:'peach',he:'אפרסק',cat:'colors',tricky:'🎨 peach is a COLOR here — look at the picture!'},
-  {id:'cream',en:'cream',he:'שמנת',cat:'colors',tricky:'🎨 cream is a COLOR here — look at the picture!'},
+  {id:'red',en:'red',he:'אדום',es:'rojo',cat:'colors'},{id:'blue',en:'blue',he:'כחול',es:'azul',cat:'colors'},
+  {id:'green',en:'green',he:'ירוק',es:'verde',cat:'colors'},{id:'yellow',en:'yellow',he:'צהוב',es:'amarillo',cat:'colors'},
+  {id:'black',en:'black',he:'שחור',es:'negro',cat:'colors'},{id:'white',en:'white',he:'לבן',es:'blanco',cat:'colors'},
+  {id:'purple',en:'purple',he:'סגול',es:'morado',cat:'colors'},{id:'pink',en:'pink',he:'ורוד',es:'rosado',cat:'colors'},
+  {id:'brown',en:'brown',he:'חום',es:'marrón',cat:'colors'},{id:'gray',en:'gray',he:'אפור',es:'gris',cat:'colors'},
+  {id:'lime',en:'lime',he:'ירוק ליים',es:'verde limón',cat:'colors',tricky:'🎨 lime is a COLOR here — look at the picture!'},
+  {id:'peach',en:'peach',he:'אפרסק',es:'durazno',cat:'colors',tricky:'🎨 peach is a COLOR here — look at the picture!'},
+  {id:'cream',en:'cream',he:'שמנת',es:'crema',cat:'colors',tricky:'🎨 cream is a COLOR here — look at the picture!'},
 ];
 
 /* Practice-ladder scoping (2026-10-07): ?words=id,id,... restricts the pool to
@@ -353,10 +357,10 @@ function levelUp(){
     for(const it of S.items) burst(it.x, g.beltY, 12, '#3b82f6', 5, 0.7);
     S.items.length = 0; S.spawnT = 0.6;                      // sweep the belt — new bins
     renderBins(); preloadCats(bins());
-    toast('⚡ LV ' + S.level + ' — ' + (bins().length) + ' BINS!');
+    toast('⚡ LV ' + S.level + ' — ' + (bins().length) + L10N('bins',' BINS!'));
     learnBeacon('g_lvl');
   } else {
-    toast('⚡ FASTER BELT!');
+    toast(L10N('fasterBelt','⚡ FASTER BELT!'));
   }
   chord(523); shakeIt(6); updateHUD();
 }
@@ -367,9 +371,9 @@ function gameOver(){
   try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
   const isBest = S.score > 0 && S.score > S.runStartBest;
   $('overCard').innerHTML =
-    '⭐ Score <b>' + S.score + '</b>' +
-    (isBest ? ' · <span class="newbest">★ NEW BEST!</span>' : ' · best <b>' + S.best + '</b>') +
-    '<br>📦 Sorted <b>' + S.sorted + '</b> words · reached <b>LV ' + S.level + '</b>';
+    L10N('lbScore','⭐ Score') + ' <b>' + S.score + '</b>' +
+    (isBest ? ' · <span class="newbest">' + L10N('lbNewBest','★ NEW BEST!') + '</span>' : ' · ' + L10N('lbBest','best') + ' <b>' + S.best + '</b>') +
+    '<br>' + L10N('lbSorted','📦 Sorted') + ' <b>' + S.sorted + '</b> ' + L10N('lbWords','words') + ' · ' + L10N('lbReached','reached') + ' <b>LV ' + S.level + '</b>';
   show('over');
   beep(140,0.5,'sawtooth',0.16,60);
 }
@@ -612,7 +616,7 @@ window.addEventListener('keydown', e => {
 });
 
 const mb = $('menuBest');
-if(S.best > 0){ mb.style.display = ''; mb.textContent = '🏆 Your best: ' + S.best; }
+if(S.best > 0){ mb.style.display = ''; mb.textContent = L10N('yourBest','🏆 Your best: ') + S.best; }
 
 /* test/debug contract (used by the Playwright verification; no gameplay shortcuts) */
 window.CC = {
@@ -652,7 +656,7 @@ resize(); initClouds(); requestAnimationFrame(loop);
     if(Date.now()<armedUntil) return;    // second tap within 3s: leave
     e.preventDefault();                  // first tap: arm
     armedUntil=Date.now()+3000;
-    pill.textContent='Leave game? Tap again';
+    pill.textContent=L10N('leave','Leave game? Tap again');
     pill.classList.add('leave');
     clearTimeout(timer);
     timer=setTimeout(function(){armedUntil=0;pill.textContent=orig;pill.classList.remove('leave');},3000);

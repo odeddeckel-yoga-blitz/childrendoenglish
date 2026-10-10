@@ -1,0 +1,13 @@
+/* Spelling Forge — DOM-chrome strings (see ../cde-l10n.js). Letters/words stay English. */
+window.CDE_STRINGS={
+  en:{forged:'forged!',level:'⬆️ LEVEL ',listenOnly:' — 🎧 listen-only!',leave:'Leave game? Tap again',fillSlots:'Fill every slot first!',oneLeft:'⚒️ One letter left — you finish it!',hint:'💡 Hint: the glowing tile goes in the next slot!',helps:'🤖 The forge helps out — watch the letters!',
+      lbScore:'⭐ Score',lbBest:'best',lbNewBest:'★ NEW BEST!',lbForged:'⚒️ Forged',lbWordsAcross:'words across all',lbLevels:'levels',lbPerfect:'✨ First-strike words (no misses, no hints):'},
+  he:{sub:'שומעים את המילה ורואים את התמונה, ואז <b>מחשלים אותה אות אחרי אות</b> — גוררים את האריחים לחריצים ומקישים <b>FORGE</b>! זהירות מאותיות מטעות.',pillHear:'🔊 שומעים כל מילה',pillDecoy:'🧲 אותיות מטעות',pillLevels:'🏆 8 שלבים · מרדף אחרי השיא',start:'▶ להתחיל לחשל',
+      tag:'בשלבים 1–2 מחשלים מילים קצרות, והמילים מתארכות ככל שעולים שלב. בראש הנפחייה מאייתים לפי שמיעה בלבד — התמונה היא הפרס!',listenSpell:'מקשיבים ומאייתים — התמונה נפתחת כשמחשלים!',winTitle:'🏆 נפח אמן',again:'↺ לחשל שוב',home:'🎮 עוד משחקים ב-childrendoenglish.com',
+      forged:'חושלה!',level:'⬆️ שלב ',listenOnly:' — 🎧 רק לפי שמיעה!',leave:'לצאת מהמשחק? הקישו שוב',fillSlots:'קודם ממלאים את כל החריצים!',oneLeft:'⚒️ נשארה אות אחת — סיימו אתם!',hint:'💡 רמז: האריח הזוהר הולך לחריץ הבא!',helps:'🤖 הנפחייה עוזרת — שימו לב לאותיות!',
+      lbScore:'⭐ ניקוד',lbBest:'שיא',lbNewBest:'★ שיא חדש!',lbForged:'⚒️ חושלו',lbWordsAcross:'מילים ב-',lbLevels:'שלבים',lbPerfect:'✨ מילים במכה אחת (בלי טעויות, בלי רמזים):'},
+  es:{sub:'Escucha la palabra y mira su imagen, luego <b>fórjala letra por letra</b>: arrastra las fichas a los huecos y golpea <b>FORGE</b>. ¡Cuidado con las letras trampa!',pillHear:'🔊 Escucha cada palabra',pillDecoy:'🧲 Letras trampa',pillLevels:'🏆 8 niveles · supera tu récord',start:'▶ EMPEZAR A FORJAR',
+      tag:'En los niveles 1–2 se forjan palabras cortas, y crecen al subir de nivel. En lo alto de la forja deletreas solo de oído: ¡la foto es tu premio!',listenSpell:'ESCUCHA Y DELETREA — la foto se revela al forjarla',winTitle:'🏆 MAESTRO HERRERO',again:'↺ FORJAR OTRA VEZ',home:'🎮 Más juegos en childrendoenglish.com',
+      forged:'¡forjada!',level:'⬆️ NIVEL ',listenOnly:' — 🎧 ¡solo de oído!',leave:'¿Salir del juego? Toca otra vez',fillSlots:'¡Llena todos los huecos primero!',oneLeft:'⚒️ Queda una letra: ¡termínala tú!',hint:'💡 Pista: la ficha que brilla va en el siguiente hueco',helps:'🤖 La forja te ayuda: ¡mira las letras!',
+      lbScore:'⭐ Puntos',lbBest:'récord',lbNewBest:'★ ¡NUEVO RÉCORD!',lbForged:'⚒️ Forjaste',lbWordsAcross:'palabras en los',lbLevels:'niveles',lbPerfect:'✨ Palabras al primer golpe (sin fallos ni pistas):'}
+};

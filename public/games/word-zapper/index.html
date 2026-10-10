@@ -104,21 +104,23 @@
 
   <div id="menu" class="overlay show">
     <h1>WORD ZAPPER ⚡</h1>
-    <div class="sub">Hear the word — <b>zap the matching picture</b> before it reaches the ground!</div>
-    <div class="subhe">שומעים מילה באנגלית — לוחצים מהר על התמונה הנכונה!</div>
-    <div class="crewrow"><span class="pill">🔊 Spoken words</span><span class="pill">🛡 3 shields</span><span class="pill">🏆 Best-score chase</span></div>
-    <button class="btn" id="startBtn">▶ START</button>
-    <div class="tag">Endless survival: fast correct zaps speed things up and bring trickier words — a miss slows them back down. If the picture you were asked for touches the ground, you lose a shield. Lose all 3 and the run is over!</div>
+    <div class="sub" data-l10n="sub">Hear the word — <b>zap the matching picture</b> before it reaches the ground!</div>
+    <div class="subhe" data-l10n="subhe">שומעים מילה באנגלית — לוחצים מהר על התמונה הנכונה!</div>
+    <div class="crewrow"><span class="pill" data-l10n="pillSpoken">🔊 Spoken words</span><span class="pill" data-l10n="pillShields">🛡 3 shields</span><span class="pill" data-l10n="pillBest">🏆 Best-score chase</span></div>
+    <button class="btn" id="startBtn" data-l10n="start">▶ START</button>
+    <div class="tag" data-l10n="tag">Endless survival: fast correct zaps speed things up and bring trickier words — a miss slows them back down. If the picture you were asked for touches the ground, you lose a shield. Lose all 3 and the run is over!</div>
   </div>
 
   <div id="over" class="overlay">
-    <h2 id="overTitle">💥 GAME OVER</h2>
+    <h2 id="overTitle" data-l10n="overTitle">💥 GAME OVER</h2>
     <div class="card glass" id="overCard"></div>
-    <button class="btn" id="againBtn">↺ PLAY AGAIN</button>
-    <a id="overHome" href="/" style="color:var(--indigo);font-weight:700;text-decoration:underline;font-size:15px;">More English practice at childrendoenglish.com</a>
+    <button class="btn" id="againBtn" data-l10n="again">↺ PLAY AGAIN</button>
+    <a id="overHome" data-l10n="home" href="/" style="color:var(--indigo);font-weight:700;text-decoration:underline;font-size:15px;">More English practice at childrendoenglish.com</a>
   </div>
 </div>
 
+<script src="../cde-l10n.js" defer></script>
+<script src="./l10n.js" defer></script>
 <script src="./game.js" defer></script>
 </body>
 </html>

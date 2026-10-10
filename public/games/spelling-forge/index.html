@@ -123,10 +123,10 @@
 <div id="stage">
   <div id="menu" class="overlay show">
     <h1>⚒️ SPELLING FORGE</h1>
-    <div class="sub">Hear the word and see its picture, then <b>forge it letter by letter</b> — tap the tiles into the slots and strike <b>FORGE</b>! Watch out for tricky decoy letters.</div>
-    <div class="crewrow"><span class="pill">🔊 Hear every word</span><span class="pill">🧲 Tricky decoy letters</span><span class="pill">🏆 8 levels · best-score chase</span></div>
-    <button class="btn primary" id="startBtn">▶ START FORGING</button>
-    <div class="tag">Levels 1–2 forge short words, and the words grow longer as you level up. At the top of the forge you must spell by ear alone — the photo is your reward!</div>
+    <div class="sub" data-l10n="sub">Hear the word and see its picture, then <b>forge it letter by letter</b> — tap the tiles into the slots and strike <b>FORGE</b>! Watch out for tricky decoy letters.</div>
+    <div class="crewrow"><span class="pill" data-l10n="pillHear">🔊 Hear every word</span><span class="pill" data-l10n="pillDecoy">🧲 Tricky decoy letters</span><span class="pill" data-l10n="pillLevels">🏆 8 levels · best-score chase</span></div>
+    <button class="btn primary" id="startBtn" data-l10n="start">▶ START FORGING</button>
+    <div class="tag" data-l10n="tag">Levels 1–2 forge short words, and the words grow longer as you level up. At the top of the forge you must spell by ear alone — the photo is your reward!</div>
     <section class="about">
       <h2 style="font-size:15px;margin:0 0 4px;color:inherit;">Spelling Forge</h2>
       <p style="margin:0 0 4px;">A free English spelling game for kids ages 6–12. Each round speaks a real vocabulary word aloud and shows its photo; children build the spelling from letter tiles — with lookalike decoy letters like b/d and tricky vowels — and get targeted feedback on exactly which letters were wrong.</p>
@@ -144,7 +144,7 @@
     </div>
     <div id="photoCard">
       <img id="photo" alt="" draggable="false">
-      <div id="photoMyst">🎧<small>LISTEN &amp; SPELL — photo unlocks when you forge it!</small></div>
+      <div id="photoMyst">🎧<small data-l10n="listenSpell">LISTEN &amp; SPELL — photo unlocks when you forge it!</small></div>
       <span id="heWord" dir="rtl"></span>
       <button id="sayBtn" aria-label="Hear the word again">🔊</button>
     </div>
@@ -155,14 +155,16 @@
   </div>
 
   <div id="win" class="overlay">
-    <h2 id="winTitle">🏆 MASTER BLACKSMITH</h2>
+    <h2 id="winTitle" data-l10n="winTitle">🏆 MASTER BLACKSMITH</h2>
     <div class="card glass" id="winBody"></div>
-    <button class="btn primary" id="againBtn">↺ FORGE AGAIN</button>
-    <a class="btn" href="/" style="text-decoration:none;color:var(--ink);">🎮 More at childrendoenglish.com</a>
+    <button class="btn primary" id="againBtn" data-l10n="again">↺ FORGE AGAIN</button>
+    <a class="btn" data-l10n="home" href="/" style="text-decoration:none;color:var(--ink);">🎮 More at childrendoenglish.com</a>
   </div>
 </div>
 <div id="combo"></div>
 
+<script src="../cde-l10n.js" defer></script>
+<script src="./l10n.js" defer></script>
 <script src="./game.js" defer></script>
 </body>
 </html>

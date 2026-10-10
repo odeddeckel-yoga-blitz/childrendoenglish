@@ -112,16 +112,16 @@
 
   <div id="menu" class="overlay show">
     <h1>📦 CATEGORY CONVEYOR</h1>
-    <div class="sub">Word photos ride the belt! When a photo reaches the <b>glowing zone</b>, tap the bin of its
+    <div class="sub" data-l10n="sub">Word photos ride the belt! When a photo reaches the <b>glowing zone</b>, tap the bin of its
       <b>category</b> — 🐾 Animals, 🍎 Food, 🚗 Transport and more. Wrong bins bounce the word back out.
       Let a word slip past the end and you lose a shield!</div>
     <div class="crewrow">
-      <span class="pill">🛡 3 shields</span>
-      <span class="pill">🔊 Hear every word</span>
-      <span class="pill">⚡ 8 levels, more bins</span>
-      <span class="pill">🏆 Best-score chase</span>
+      <span class="pill" data-l10n="pillShields">🛡 3 shields</span>
+      <span class="pill" data-l10n="pillHear">🔊 Hear every word</span>
+      <span class="pill" data-l10n="pillLevels">⚡ 8 levels, more bins</span>
+      <span class="pill" data-l10n="pillBest">🏆 Best-score chase</span>
     </div>
-    <button class="btn" id="startBtn">▶ START SORTING</button>
+    <button class="btn" id="startBtn" data-l10n="start">▶ START SORTING</button>
     <div class="pill" id="menuBest" style="display:none;"></div>
     <section class="about">
       <h2>Category Conveyor — free English sorting game for kids</h2>
@@ -134,15 +134,17 @@
   </div>
 
   <div id="over" class="overlay">
-    <h2 id="overTitle">💥 BELT STOPPED!</h2>
-    <div class="sub" id="overSub">Out of shields — but every word you sorted made your English stronger.</div>
+    <h2 id="overTitle" data-l10n="overTitle">💥 BELT STOPPED!</h2>
+    <div class="sub" id="overSub" data-l10n="overSub">Out of shields — but every word you sorted made your English stronger.</div>
     <div class="scorecard" id="overCard"></div>
-    <button class="btn" id="againBtn">↺ PLAY AGAIN</button>
-    <a id="overHome" class="pill" href="/">🏠 More English games at childrendoenglish.com</a>
+    <button class="btn" id="againBtn" data-l10n="again">↺ PLAY AGAIN</button>
+    <a id="overHome" class="pill" data-l10n="home" href="/">🏠 More English games at childrendoenglish.com</a>
   </div>
 </div>
 <script src="/static-analytics.js" defer></script>
 <script src="/land-beacon.js" defer></script>
+<script src="../cde-l10n.js" defer></script>
+<script src="./l10n.js" defer></script>
 <script src="./game.js" defer></script>
 </body>
 </html>
