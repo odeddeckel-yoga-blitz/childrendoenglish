@@ -31,7 +31,7 @@ jobs:
         run: node tools/spotlight/hourly.mjs
       - name: Commit if changed
         run: |
-          git add src/data/spotlight.json src/data/cde-stats.json tools/spotlight/flags.json tools/spotlight/log.jsonl
+          git add -A -- src/data/spotlight.json src/data/cde-stats.json tools/spotlight/
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git config user.name "spotlight-bot"
           git config user.email "spotlight-bot@users.noreply.github.com"
