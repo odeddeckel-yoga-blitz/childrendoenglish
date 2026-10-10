@@ -74,5 +74,7 @@ if (flags.length) {
 }
 const text = JSON.stringify(next, null, 2) + '\n';
 if (!dry && text !== (prev ? JSON.stringify(prev, null, 2) + '\n' : '')) writeFileSync(SPOT, text);
-if (!dry) appendFileSync(LOG, JSON.stringify({ at: new Date(now).toISOString(), live, sufficient, verdicts: Object.fromEntries(Object.entries(verdicts).map(([k, v]) => [k, { action: v.action, reason: v.reason }])), changes }) + '\n');
+// Log only EVENTS (swaps / flags / optimizer runs). A per-hour 'keep' line would
+// commit — and deploy — every hour for nothing; the run's own log has the detail.
+if (!dry && (changes.length || flags.length || sufficient.word || sufficient.game)) appendFileSync(LOG, JSON.stringify({ at: new Date(now).toISOString(), live, sufficient, verdicts: Object.fromEntries(Object.entries(verdicts).map(([k, v]) => [k, { action: v.action, reason: v.reason }])), changes, flags }) + '\n');
 console.log(changes.length ? 'SWAPPED: ' + changes.map((c) => `${c.lane} ${c.from || '∅'}→${c.to} (${c.reason})`).join('; ') : 'no swap');
