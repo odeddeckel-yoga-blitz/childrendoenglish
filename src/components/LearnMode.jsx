@@ -8,7 +8,8 @@ import { t, isRTL, gloss } from '../utils/i18n';
 
 export default function LearnMode({ stats, lang = 'en', canRead = true, words: customWords, knownLetters = null, onBack }) {
   const wordPool = customWords || filterByKnownLetters(WORDS, knownLetters);
-  const [view, setView] = useState('grid'); // 'grid' | 'detail'
+  // A one-word custom pool (home spotlight) opens straight on the word card.
+  const [view, setView] = useState(customWords && customWords.length === 1 ? 'detail' : 'grid'); // 'grid' | 'detail'
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [detailIndex, setDetailIndex] = useState(0);

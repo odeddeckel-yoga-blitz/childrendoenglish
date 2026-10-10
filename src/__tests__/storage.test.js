@@ -9,6 +9,9 @@ import {
   exportAllData,
   importAllData,
   resetPlayerProgress,
+  shouldResumeActivePlayer,
+  touchLastActive,
+  RESUME_WINDOW_MS,
 } from '../utils/storage';
 
 /** Create a fresh localStorage mock so tests stay isolated. */
@@ -232,5 +235,26 @@ describe('resetPlayerProgress', () => {
     expect(stats.currentStreak).toBe(0);
     expect(stats.badges).toEqual([]);
     expect(stats.unlockedLevels).toEqual(['beginner']);
+  });
+});
+
+describe('shouldResumeActivePlayer (skip "who\'s playing?" on a quick return)', () => {
+  const reg = { players: [{ id: 'a' }, { id: 'b' }], activePlayerId: 'b' };
+  it('resumes within the window and asks again after it', () => {
+    const now = 1_000_000_000;
+    expect(shouldResumeActivePlayer(reg, now, now - 5 * 60 * 1000)).toBe(true);
+    expect(shouldResumeActivePlayer(reg, now, now - RESUME_WINDOW_MS - 1)).toBe(false);
+    expect(shouldResumeActivePlayer(reg, now, 0)).toBe(false);            // never active
+    expect(shouldResumeActivePlayer(reg, now, now + 60 * 1000)).toBe(false); // clock went backwards
+  });
+  it('never resumes without a valid active player', () => {
+    const now = 1_000_000_000;
+    expect(shouldResumeActivePlayer({ players: [{ id: 'a' }], activePlayerId: 'zzz' }, now, now - 1000)).toBe(false);
+    expect(shouldResumeActivePlayer(null, now, now - 1000)).toBe(false);
+  });
+  it('touchLastActive persists a timestamp the default read picks up', () => {
+    localStorage.clear();
+    touchLastActive(123456);
+    expect(shouldResumeActivePlayer(reg, 123456 + 1000)).toBe(true);
   });
 });

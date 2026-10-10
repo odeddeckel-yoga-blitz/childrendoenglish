@@ -5,6 +5,14 @@ const PLAYERS_KEY = 'childrendoenglish-players';
 const PLAYER_PREFIX = 'childrendoenglish-player-';
 const DARK_KEY = 'childrendoenglish-dark';
 const SOUND_KEY = 'childrendoenglish-sound';
+const LAST_ACTIVE_KEY = 'childrendoenglish-last-active';
+// A cold start inside this window after the last in-app activity resumes the
+// active player instead of asking "who's playing?" again. The arcade games are
+// separate static pages, so coming back from one IS a cold start — without
+// this, every game exit re-asked (owner report 2026-10-10). Two hours keeps a
+// shared family tablet asking again by the next sitting; switching profiles
+// is still one tap on the menu.
+export const RESUME_WINDOW_MS = 2 * 60 * 60 * 1000;
 
 /** @returns {Stats} Default stats object with all fields initialized */
 const getDefaultStats = () => ({
@@ -185,6 +193,20 @@ export const saveStats = (stats, playerId) => {
 };
 
 // --- Global preferences (unchanged) ---
+
+export const touchLastActive = (now = Date.now()) => {
+  try { localStorage.setItem(LAST_ACTIVE_KEY, String(now)); } catch { /* storage unavailable */ }
+};
+
+export const getLastActive = () => {
+  try { const v = Number(localStorage.getItem(LAST_ACTIVE_KEY)); return Number.isFinite(v) && v > 0 ? v : 0; } catch { return 0; }
+};
+
+/** True when a multi-player registry should skip the "who's playing?" screen. */
+export const shouldResumeActivePlayer = (registry, now = Date.now(), lastActive = getLastActive()) => {
+  if (!registry?.activePlayerId || !registry.players?.some((p) => p.id === registry.activePlayerId)) return false;
+  return lastActive > 0 && now - lastActive >= 0 && now - lastActive < RESUME_WINDOW_MS;
+};
 
 export const isDarkMode = () => {
   try {

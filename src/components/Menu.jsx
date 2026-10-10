@@ -4,7 +4,7 @@ import { t } from '../utils/i18n';
 
 import LanguagePicker from './LanguagePicker';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart: _onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage, onContinueCycle, cycleInfo }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart: _onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage, onContinueCycle, cycleInfo, onOpenSpotlightWord }) {
 
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
   const isNewUser = stats.totalQuizzes === 0 && wordsLearned === 0;
@@ -187,7 +187,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
         {/* Today's picks — build-time spotlight of one cold word + one cold game
             (scripts/pick-spotlight.mjs). Uses the traffic we have; doesn't create any. */}
-        <SpotlightCards lang={lang} />
+        <SpotlightCards lang={lang} onOpenWord={onOpenSpotlightWord} />
 
         {isNewUser && (
           <p className="text-center text-sm text-slate-400">{t('menuMoreFeatures', lang)}</p>

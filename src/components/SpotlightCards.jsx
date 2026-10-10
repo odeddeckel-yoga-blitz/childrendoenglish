@@ -9,7 +9,10 @@ import { sendLearn } from '../utils/learnBeacon';
 // have to inventory they never reach, and the 'spot' beacon measures whether
 // the spotlight actually moves the item. It redistributes traffic — it does
 // not create any (game-kit PATTERNS §3c).
-export default function SpotlightCards({ lang = 'en' }) {
+// onOpenWord(word): when given, the word card opens the word INSIDE the app
+// (LearnMode, current interface language) instead of the static English
+// /vocabulary/ page — a Hebrew/Spanish UI must never flip to English on tap.
+export default function SpotlightCards({ lang = 'en', onOpenWord }) {
   const w = spotlight.word ? getWordById(spotlight.word.id) : null;
   const g = spotlight.game || null;
   if (!w && !g) return null;
@@ -22,20 +25,36 @@ export default function SpotlightCards({ lang = 'en' }) {
         <span aria-hidden="true">⭐</span> {t('spotlightTitle', lang)}
       </p>
       <div className="grid grid-cols-2 gap-3">
-        {w && (
-          <a
-            href={`/vocabulary/${w.category}/${w.id}/`}
-            onClick={() => sendLearn('spot', 'w_' + w.id)}
-            className={card}
-            data-spot="word"
-          >
-            <img src={w.imageUrl} alt="" width="56" height="56" loading="lazy" decoding="async"
-                 className="w-14 h-14 rounded-xl object-cover bg-slate-100 dark:bg-slate-700" />
-            <p className={label}>{t('spotlightWord', lang)}</p>
-            <p className="font-bold text-slate-800 dark:text-slate-100 leading-tight">{w.word}</p>
-            {wordGloss && <p className="text-sm text-slate-500 dark:text-slate-300 leading-tight">{wordGloss}</p>}
-          </a>
-        )}
+        {w && (() => {
+          const inner = (
+            <>
+              <img src={w.imageUrl} alt="" width="56" height="56" loading="lazy" decoding="async"
+                   className="w-14 h-14 rounded-xl object-cover bg-slate-100 dark:bg-slate-700" />
+              <p className={label}>{t('spotlightWord', lang)}</p>
+              <p className="font-bold text-slate-800 dark:text-slate-100 leading-tight">{w.word}</p>
+              {wordGloss && <p className="text-sm text-slate-500 dark:text-slate-300 leading-tight">{wordGloss}</p>}
+            </>
+          );
+          return onOpenWord ? (
+            <button
+              type="button"
+              onClick={() => { sendLearn('spot', 'w_' + w.id); onOpenWord(w); }}
+              className={card}
+              data-spot="word"
+            >
+              {inner}
+            </button>
+          ) : (
+            <a
+              href={`/vocabulary/${w.category}/${w.id}/`}
+              onClick={() => sendLearn('spot', 'w_' + w.id)}
+              className={card}
+              data-spot="word"
+            >
+              {inner}
+            </a>
+          );
+        })()}
         {g && (
           <a
             href={`/games/${g.id}/`}

@@ -114,7 +114,7 @@ const TILE_DESC = {
   ar: 'واجهة بالعربية',
 };
 
-export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, onTerms, onSelectLanguage }) {
+export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, onTerms, onSelectLanguage, onOpenSpotlightWord }) {
   // Browser-language suggestion: one-time, non-blocking, dismiss remembered.
   // navigator.language only (no geo-IP) — COPPA-simple.
   const [suggest, setSuggest] = useState(null);
@@ -217,7 +217,7 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
       {/* Today's picks — same build-time spotlight as the home menu, so first
           visits (SEO/AI arrivals) also get a door to the cold tail. */}
       <section className="animate-fade-in max-w-md mx-auto -mt-8">
-        <SpotlightCards lang={lang} />
+        <SpotlightCards lang={lang} onOpenWord={onOpenSpotlightWord} />
       </section>
 
       {/* Features */}

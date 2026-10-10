@@ -4,7 +4,7 @@ import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
 import LandingPage from './components/LandingPage';
 import Confetti from './components/Confetti';
-import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, updateStreak, updateDailyGoal } from './utils/storage';
+import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, updateStreak, updateDailyGoal, touchLastActive, shouldResumeActivePlayer } from './utils/storage';
 import { initTTS } from './utils/sound';
 import { isRTL, t, loadLocale } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
@@ -104,7 +104,9 @@ function getInitialState() {
   // Returning users skip the marketing landing entirely:
   // one player → straight to menu; a family → pick who's playing.
   if (registry?.players?.length >= 2) {
-    return { gameState: 'playerSelect', registry, stats };
+    // ...unless this is a quick return (e.g. back from an arcade game page):
+    // resume the active player instead of asking again.
+    return { gameState: shouldResumeActivePlayer(registry) ? 'menu' : 'playerSelect', registry, stats };
   }
   if (registry?.players?.length === 1) {
     return { gameState: 'menu', registry, stats };
@@ -136,6 +138,14 @@ export default function App() {
   const [extraDone, setExtraDone] = useState([]); // batch steps completed out of order
   const sessionSeed = useMemo(() => Math.floor(Date.now() / 3600000), []);
   const [isOffline, setIsOffline] = useState(() => typeof navigator !== 'undefined' && !navigator.onLine);
+  // Leaving the SPA (arcade game pages are separate documents) counts as
+  // activity, so the return trip resumes the player (see RESUME_WINDOW_MS).
+  useEffect(() => {
+    const stamp = () => touchLastActive();
+    window.addEventListener('pagehide', stamp);
+    document.addEventListener('visibilitychange', stamp);
+    return () => { window.removeEventListener('pagehide', stamp); document.removeEventListener('visibilitychange', stamp); };
+  }, []);
   const [storageFull, setStorageFull] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const mainRef = useRef(null);
@@ -152,6 +162,7 @@ export default function App() {
     }
     gameStateRef.current = newState;
     setGameState(newState);
+    touchLastActive();
     const path = STATE_TO_PATH[newState];
     if (path) {
       if (direction === 'back') {
@@ -530,6 +541,17 @@ export default function App() {
             }}
             onPrivacy={() => navigate('privacy')}
             onTerms={() => navigate('terms')}
+            onOpenSpotlightWord={(w) => {
+              // Keep the interface language: a Hebrew/Spanish landing must not
+              // jump to the English static word page. With a player we open the
+              // word in-app; a first visit starts the app in that language
+              // (English first visits keep the static page — same language).
+              const hasPlayers = !!playerRegistry?.players?.length;
+              if (!hasPlayers && lang === 'en') { window.location.href = `/vocabulary/${w.category}/${w.id}/`; return; }
+              handleLanguageSelect(lang);
+              const go = () => { if (hasPlayers) { setLearnWords([w]); navigate('learning'); } else navigate('playerCreate'); };
+              if (lang !== 'en') loadLocale(lang).then(go); else go();
+            }}
             onSelectLanguage={(l) => { handleLanguageSelect(l); if (l !== 'en') loadLocale(l); }}
           />
         );
@@ -610,6 +632,7 @@ export default function App() {
             onToggleSound={toggleSound}
             onOpenProfilePicker={() => setShowProfilePicker(true)}
             onSelectLanguage={(l) => { handleLanguageSelect(l); if (l !== 'en') loadLocale(l); }}
+            onOpenSpotlightWord={(w) => { setLearnWords([w]); navigate('learning'); }}
           />
         );
 
