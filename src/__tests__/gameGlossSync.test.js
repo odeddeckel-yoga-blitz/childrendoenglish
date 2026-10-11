@@ -13,7 +13,7 @@ const RE = /\{id:'([a-z_-]+)',en:'[^']*',he:(['"])((?:\\.|(?!\2).)*)\2,es:(['"])
 describe('arcade game glosses match words.js', () => {
   for (const g of ['category-conveyor', 'spelling-forge', 'word-zapper']) {
     it(g, () => {
-      const src = fs.readFileSync(path.join(__dirname, '../../public/games', g, 'game.js'), 'utf8');
+      const src = fs.readFileSync(path.join(process.cwd(), 'public/games', g, 'game.js'), 'utf8');
       const drift = [];
       let n = 0;
       for (const m of src.matchAll(RE)) {
