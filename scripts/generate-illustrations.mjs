@@ -416,7 +416,6 @@ const ILLUSTRATIONS = {
     <path d="M 236 86 L 276 86 L 296 130 L 216 130 Z" fill="#FB923C"/>
     <rect x="176" y="130" width="160" height="270" rx="26" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="8"/>
     <rect x="196" y="190" width="120" height="140" rx="14" fill="#FDBA74"/>
-    <text x="256" y="272" font-size="44" font-family="sans-serif" font-weight="bold" fill="#7C2D12" text-anchor="middle">GLUE</text>
     <path d="M 256 430 C 246 452 236 458 236 470 A 20 20 0 0 0 276 470 C 276 458 266 452 256 430 Z" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="5"/>
   </svg>`,
 

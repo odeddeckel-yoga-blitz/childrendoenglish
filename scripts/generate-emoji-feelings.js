@@ -11,7 +11,7 @@ const feelingEmojis = {
   happy:        '1f60a',       // 😊
   sad:          '1f622',       // 😢
   angry:        '1f620',       // 😠
-  scared:       '1f628',       // 😨
+  scared:       '1f631',       // 😱 (😨 was near-identical to nervous 😰 — batch-5 review 2026-10-11)
   tired:        '1f634',       // 😴
   hungry:       '1f924',       // 🤤
   brave:        '1f4aa',       // 💪

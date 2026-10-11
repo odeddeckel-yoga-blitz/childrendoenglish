@@ -722,6 +722,8 @@ export const CONFUSABLE_PAIRS = [
   ['nervous', 'worried'], ['frustrated', 'angry'],
   // batch-4 review: a shopping cart and a kids' wagon are both 'עגלה'; white vs cream spheres
   ['cart', 'wagon'], ['white', 'cream'],
+  // batch-5 (drawn-icon) review: singular/plural glosses differ (ענב/ענבים); fear faces sit one emoji apart
+  ['grape', 'grapes'], ['nervous', 'scared'], ['scared', 'worried'],
 ];
 const CONFUSABLE = new Map();
 for (const [a, b] of CONFUSABLE_PAIRS) { (CONFUSABLE.get(a) || CONFUSABLE.set(a, new Set()).get(a)).add(b); (CONFUSABLE.get(b) || CONFUSABLE.set(b, new Set()).get(b)).add(a); }
