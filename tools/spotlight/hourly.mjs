@@ -22,6 +22,8 @@ const STATS = join(REPO, 'src/data/cde-stats.json');
 const FLAGS = join(REPO, 'tools/spotlight/flags.json');
 const LOG = join(REPO, 'tools/spotlight/log.jsonl');
 const dry = process.argv.includes('--dry-run');
+// On-demand optimizer run regardless of the traffic bar (workflow_dispatch input / --optimizer)
+const force = process.env.FORCE_OPTIMIZER === '1' || process.argv.includes('--optimizer');
 
 const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
 if (!url) { console.log('spotlight-hourly: DATABASE_URL not set — nothing to do (add the repo secret to enable).'); process.exit(0); }
@@ -51,9 +53,10 @@ for (const lane of ['word', 'game']) {
 
 // 2. engagement optimizer (snapshot refresh + report) only when traffic justifies it
 let snap = oldSnap;
-if (sufficient.word || sufficient.game) {
+if (sufficient.word || sufficient.game || force) {
   snap = await fetchSnapshot(q, 28);
   if (!dry) writeFileSync(STATS, JSON.stringify(snap) + '\n');
+  if (force && !(sufficient.word || sufficient.game)) console.log('optimizer forced (on-demand run)');
   console.log(`snapshot refreshed (${Object.keys(snap.words).length} words, ${Object.keys(snap.games).length} games, generatedAt ${snap.generatedAt})`);
   const rep = spawnSync(process.execPath, [join(REPO, 'tools/learning/optimizer.mjs'), '28'], { env: process.env, encoding: 'utf8' });
   console.log('— engagement optimizer report —\n' + (rep.stdout || '').trim().split('\n').slice(0, 60).join('\n'));

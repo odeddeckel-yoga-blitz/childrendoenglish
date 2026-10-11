@@ -8,6 +8,11 @@ on:
   schedule:
     - cron: '17 * * * *'
   workflow_dispatch:
+    inputs:
+      force_optimizer:
+        description: 'Run the engagement optimizer + refresh the snapshot even below the traffic bar'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -28,6 +33,7 @@ jobs:
       - name: Decide keep/swap
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          FORCE_OPTIMIZER: ${{ inputs.force_optimizer == true && '1' || '0' }}
         run: node tools/spotlight/hourly.mjs
       - name: Commit if changed
         run: |
