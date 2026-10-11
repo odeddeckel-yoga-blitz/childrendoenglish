@@ -209,7 +209,7 @@ export const WORDS = [
   // Intermediate
   { id: 'pencil', word: 'pencil', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A writing tool made of wood with graphite inside', exampleSentence: 'Sharpen your pencil before the test.', phonetic: '/ˈpɛnsəl/', hebrewTranslation: 'עיפרון', imageUrl: '/images/pencil.webp' },
   { id: 'eraser', word: 'eraser', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A small rubber tool for removing pencil marks', exampleSentence: 'Use the eraser to fix your mistake.', phonetic: '/ɪˈreɪsər/', hebrewTranslation: 'מחק', imageUrl: '/images/eraser.webp' },
-  { id: 'crayon', word: 'crayon', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A colored wax stick for drawing', exampleSentence: 'She colored the picture with a red crayon.', phonetic: '/ˈkreɪɒn/', hebrewTranslation: 'צבע', imageUrl: '/images/crayon.webp' },
+  { id: 'crayon', word: 'crayon', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A colored wax stick for drawing', exampleSentence: 'She colored the picture with a red crayon.', phonetic: '/ˈkreɪɒn/', hebrewTranslation: 'צבע שעווה', imageUrl: '/images/crayon.webp' },
   { id: 'notebook', word: 'notebook', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A small book with blank pages for writing', exampleSentence: 'Write the homework in your notebook.', phonetic: '/ˈnoʊtˌbʊk/', hebrewTranslation: 'מחברת', imageUrl: '/images/notebook.webp' },
   // Advanced
   { id: 'scissors', word: 'scissors', level: 'advanced', partOfSpeech: 'noun', category: 'school', definition: 'A tool with two blades for cutting paper', exampleSentence: 'Cut along the line with scissors.', phonetic: '/ˈsɪzərz/', hebrewTranslation: 'מספריים', imageUrl: '/images/scissors.webp' },
@@ -724,6 +724,11 @@ export const CONFUSABLE_PAIRS = [
   ['cart', 'wagon'], ['white', 'cream'],
   // batch-5 (drawn-icon) review: singular/plural glosses differ (ענב/ענבים); fear faces sit one emoji apart
   ['grape', 'grapes'], ['nervous', 'scared'], ['scared', 'worried'],
+  // batch-6 full photo review: same object/activity photographed for both words
+  ['crayon', 'crayons'], ['pasta', 'spaghetti'], ['pasta', 'noodles'], ['spaghetti', 'noodles'],
+  ['tennis', 'badminton'], ['climb_verb', 'climbing'], ['paint_verb', 'paintbrush'],
+  ['goal', 'soccer'], ['goal', 'net'], ['curtain', 'window'],
+  ['mirror', 'vase'], // mirror photo reflects a vase; no clean replacement on Commons
 ];
 const CONFUSABLE = new Map();
 for (const [a, b] of CONFUSABLE_PAIRS) { (CONFUSABLE.get(a) || CONFUSABLE.set(a, new Set()).get(a)).add(b); (CONFUSABLE.get(b) || CONFUSABLE.set(b, new Set()).get(b)).add(a); }
