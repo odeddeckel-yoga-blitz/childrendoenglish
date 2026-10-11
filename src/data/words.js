@@ -249,7 +249,7 @@ export const WORDS = [
   { id: 'proud', word: 'proud', level: 'intermediate', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling good about something you did', exampleSentence: 'She was proud of her painting.', phonetic: '/praʊd/', hebrewTranslation: 'גאה', imageUrl: '/images/proud.webp' },
   // Advanced
   { id: 'excited', word: 'excited', level: 'advanced', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling very happy about something coming soon', exampleSentence: 'He was excited about his birthday party.', phonetic: '/ɪkˈsaɪtɪd/', hebrewTranslation: 'נרגש', imageUrl: '/images/excited.webp' },
-  { id: 'nervous', word: 'nervous', level: 'advanced', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling worried about something that might happen', exampleSentence: 'She felt nervous before the big test.', phonetic: '/ˈnɜːrvəs/', hebrewTranslation: 'עצבני', imageUrl: '/images/nervous.webp' },
+  { id: 'nervous', word: 'nervous', level: 'advanced', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling worried about something that might happen', exampleSentence: 'She felt nervous before the big test.', phonetic: '/ˈnɜːrvəs/', hebrewTranslation: 'לחוץ', imageUrl: '/images/nervous.webp' },
   { id: 'lonely', word: 'lonely', level: 'advanced', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling sad because you are alone', exampleSentence: 'The new student felt lonely at first.', phonetic: '/ˈloʊnli/', hebrewTranslation: 'בודד', imageUrl: '/images/lonely.webp' },
 
   // === EVERYDAY ===
@@ -718,6 +718,8 @@ export const CONFUSABLE_PAIRS = [
   // batch-2 review 2026-10-11: an alligator IS a crocodile to a child; the generated
   // colour spheres for silver/lime/scarlet are indistinguishable from gray/green/red
   ['alligator', 'crocodile'], ['silver', 'gray'], ['lime', 'green'], ['scarlet', 'red'],
+  // batch-3 review: nervous is DEFINED as 'feeling worried'; frustrated vs angry is one emoji apart
+  ['nervous', 'worried'], ['frustrated', 'angry'],
 ];
 const CONFUSABLE = new Map();
 for (const [a, b] of CONFUSABLE_PAIRS) { (CONFUSABLE.get(a) || CONFUSABLE.set(a, new Set()).get(a)).add(b); (CONFUSABLE.get(b) || CONFUSABLE.set(b, new Set()).get(b)).add(a); }

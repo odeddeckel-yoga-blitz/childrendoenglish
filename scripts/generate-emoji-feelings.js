@@ -17,7 +17,7 @@ const feelingEmojis = {
   brave:        '1f4aa',       // 💪
   proud:        '1f979',       // 🥹
   excited:      '1f929',       // 🤩
-  nervous:      '1f62c',       // 😬
+  nervous:      '1f630',       // 😰 anxious face with sweat (😬 grimace read as 'scared/awkward', batch-3 review 2026-10-11)
   lonely:       '1f97a',       // 🥺
   confused:     '1f635-200d-1f4ab', // 😵‍💫
   shy:          '1fae3',       // 🫣
