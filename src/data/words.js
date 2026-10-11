@@ -715,6 +715,9 @@ export const CONFUSABLE_PAIRS = [
   ['gloves', 'mittens'], ['taxi', 'cab'], ['run', 'running'], ['fries', 'potato'],
   // image review 2026-10-11: a jet IS an airplane and a jeep IS a car to a 6-year-old
   ['jet', 'airplane'], ['jeep', 'car'], ['jeep', 'truck'],
+  // batch-2 review 2026-10-11: an alligator IS a crocodile to a child; the generated
+  // colour spheres for silver/lime/scarlet are indistinguishable from gray/green/red
+  ['alligator', 'crocodile'], ['silver', 'gray'], ['lime', 'green'], ['scarlet', 'red'],
 ];
 const CONFUSABLE = new Map();
 for (const [a, b] of CONFUSABLE_PAIRS) { (CONFUSABLE.get(a) || CONFUSABLE.set(a, new Set()).get(a)).add(b); (CONFUSABLE.get(b) || CONFUSABLE.set(b, new Set()).get(b)).add(a); }
