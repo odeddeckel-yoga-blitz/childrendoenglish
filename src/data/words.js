@@ -29,7 +29,7 @@ export const WORDS = [
   { id: 'mouse', word: 'mouse', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A very small animal with a long tail', exampleSentence: 'A little mouse ran across the floor.', phonetic: '/maʊs/', hebrewTranslation: 'עכבר', imageUrl: '/images/mouse.webp' },
   // Intermediate (new)
   { id: 'snake', word: 'snake', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A long animal with no legs that slithers on the ground', exampleSentence: 'The snake slid through the grass.', phonetic: '/sneɪk/', hebrewTranslation: 'נחש', imageUrl: '/images/snake.webp' },
-  { id: 'tiger', word: 'tiger', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A big wild cat with orange and black stripes', exampleSentence: 'The tiger rested under a tree.', phonetic: '/ˈtaɪɡər/', hebrewTranslation: 'נמר', imageUrl: '/images/tiger.webp' },
+  { id: 'tiger', word: 'tiger', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A big wild cat with orange and black stripes', exampleSentence: 'The tiger rested under a tree.', phonetic: '/ˈtaɪɡər/', hebrewTranslation: 'טיגריס', imageUrl: '/images/tiger.webp' },
   { id: 'zebra', word: 'zebra', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A horse-like animal with black and white stripes', exampleSentence: 'The zebra ran across the savanna.', phonetic: '/ˈziːbrə/', hebrewTranslation: 'זברה', imageUrl: '/images/zebra.webp' },
   { id: 'deer', word: 'deer', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A gentle forest animal with big antlers', exampleSentence: 'A deer stood quietly in the woods.', phonetic: '/dɪr/', hebrewTranslation: 'אייל', imageUrl: '/images/deer.webp' },
   { id: 'goat', word: 'goat', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A farm animal with horns that climbs well', exampleSentence: 'The goat climbed up the rocky hill.', phonetic: '/ɡoʊt/', hebrewTranslation: 'עז', imageUrl: '/images/goat.webp' },
@@ -115,7 +115,7 @@ export const WORDS = [
   { id: 'ambulance', word: 'ambulance', level: 'advanced', partOfSpeech: 'noun', category: 'transport', definition: 'A vehicle that takes sick people to the hospital', exampleSentence: 'The ambulance rushed to help the hurt man.', phonetic: '/ˈæmbjələns/', hebrewTranslation: 'אמבולנס', imageUrl: '/images/ambulance.webp' },
   { id: 'tractor', word: 'tractor', level: 'advanced', partOfSpeech: 'noun', category: 'transport', definition: 'A strong farm vehicle used to pull heavy things', exampleSentence: 'The farmer drove the tractor across the field.', phonetic: '/ˈtræktər/', hebrewTranslation: 'טרקטור', imageUrl: '/images/tractor.webp' },
   { id: 'rocket', word: 'rocket', level: 'advanced', partOfSpeech: 'noun', category: 'transport', definition: 'A vehicle that flies into space', exampleSentence: 'The rocket blasted off into space.', phonetic: '/ˈrɒkɪt/', hebrewTranslation: 'רקטה', imageUrl: '/images/rocket.webp' },
-  { id: 'van', word: 'van', level: 'intermediate', partOfSpeech: 'noun', category: 'transport', definition: 'A big vehicle used to carry people or things', exampleSentence: 'The family drove to the beach in a van.', phonetic: '/væn/', hebrewTranslation: 'טנדר', imageUrl: '/images/van.webp' },
+  { id: 'van', word: 'van', level: 'intermediate', partOfSpeech: 'noun', category: 'transport', definition: 'A big vehicle used to carry people or things', exampleSentence: 'The family drove to the beach in a van.', phonetic: '/væn/', hebrewTranslation: 'ואן', imageUrl: '/images/van.webp' },
   { id: 'kayak', word: 'kayak', level: 'advanced', partOfSpeech: 'noun', category: 'transport', definition: 'A small narrow boat you paddle with a double paddle', exampleSentence: 'She paddled the kayak down the river.', phonetic: '/ˈkaɪæk/', hebrewTranslation: 'קייאק', imageUrl: '/images/kayak.webp' },
 
   // === NATURE ===
@@ -157,8 +157,8 @@ export const WORDS = [
 
   // === NUMBERS ===
   // Beginner
-  { id: 'one', word: 'one', level: 'beginner', partOfSpeech: 'noun', category: 'numbers', definition: 'The first number, a single thing', exampleSentence: 'I have one brother.', phonetic: '/wʌn/', hebrewTranslation: 'אחד', imageUrl: '/images/one.webp' },
-  { id: 'two', word: 'two', level: 'beginner', partOfSpeech: 'noun', category: 'numbers', definition: 'The number after one', exampleSentence: 'She has two cats at home.', phonetic: '/tuː/', hebrewTranslation: 'שניים', imageUrl: '/images/two.webp' },
+  { id: 'one', word: 'one', level: 'beginner', partOfSpeech: 'noun', category: 'numbers', definition: 'The first number, a single thing', exampleSentence: 'I have one brother.', phonetic: '/wʌn/', hebrewTranslation: 'אחת', imageUrl: '/images/one.webp' },
+  { id: 'two', word: 'two', level: 'beginner', partOfSpeech: 'noun', category: 'numbers', definition: 'The number after one', exampleSentence: 'She has two cats at home.', phonetic: '/tuː/', hebrewTranslation: 'שתיים', imageUrl: '/images/two.webp' },
   { id: 'three', word: 'three', level: 'beginner', partOfSpeech: 'noun', category: 'numbers', definition: 'The number after two', exampleSentence: 'There are three birds on the tree.', phonetic: '/θriː/', hebrewTranslation: 'שלוש', imageUrl: '/images/three.webp' },
   { id: 'four', word: 'four', level: 'beginner', partOfSpeech: 'noun', category: 'numbers', definition: 'The number after three', exampleSentence: 'A dog has four legs.', phonetic: '/fɔːr/', hebrewTranslation: 'ארבע', imageUrl: '/images/four.webp' },
   { id: 'five', word: 'five', level: 'beginner', partOfSpeech: 'noun', category: 'numbers', definition: 'The number of fingers on one hand', exampleSentence: 'I have five fingers on each hand.', phonetic: '/faɪv/', hebrewTranslation: 'חמש', imageUrl: '/images/five.webp' },
@@ -235,7 +235,7 @@ export const WORDS = [
   { id: 'volleyball', word: 'volleyball', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'A game where teams hit a ball over a high net', exampleSentence: 'We played volleyball on the beach.', phonetic: '/ˈvɒliˌbɔːl/', hebrewTranslation: 'כדורעף', imageUrl: '/images/volleyball.webp' },
   { id: 'gymnastics', word: 'gymnastics', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'A sport with jumping, flipping, and balancing', exampleSentence: 'She does gymnastics after school.', phonetic: '/dʒɪmˈnæstɪks/', hebrewTranslation: 'התעמלות', imageUrl: '/images/gymnastics.webp' },
   { id: 'surfing', word: 'surfing', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'Riding waves in the ocean on a board', exampleSentence: 'He learned surfing on his vacation.', phonetic: '/ˈsɜːrfɪŋ/', hebrewTranslation: 'גלישה', imageUrl: '/images/surfing.webp' },
-  { id: 'archery', word: 'archery', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'A sport where you shoot arrows at a target', exampleSentence: 'She practiced archery every afternoon.', phonetic: '/ˈɑːrtʃəri/', hebrewTranslation: 'קשתות', imageUrl: '/images/archery.webp' },
+  { id: 'archery', word: 'archery', level: 'advanced', partOfSpeech: 'noun', category: 'sports', definition: 'A sport where you shoot arrows at a target', exampleSentence: 'She practiced archery every afternoon.', phonetic: '/ˈɑːrtʃəri/', hebrewTranslation: 'קליעה בקשת', imageUrl: '/images/archery.webp' },
 
   // === FEELINGS ===
   // Beginner
@@ -320,7 +320,7 @@ export const WORDS = [
   { id: 'beige', word: 'beige', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'A light sandy brown color', exampleSentence: 'She wore a beige sweater.', phonetic: '/beɪʒ/', hebrewTranslation: 'בז\'', imageUrl: '/images/beige.webp' },
   { id: 'turquoise', word: 'turquoise', level: 'advanced', partOfSpeech: 'adjective', category: 'colors', definition: 'A blue-green color like the sea', exampleSentence: 'The turquoise water was beautiful.', phonetic: '/ˈtɜːrkwɔɪz/', hebrewTranslation: 'טורקיז', imageUrl: '/images/turquoise.webp' },
   { id: 'maroon', word: 'maroon', level: 'advanced', partOfSpeech: 'adjective', category: 'colors', definition: 'A dark reddish-brown color', exampleSentence: 'He wore a maroon jacket.', phonetic: '/məˈruːn/', hebrewTranslation: 'חום-אדמדם', imageUrl: '/images/maroon.webp' },
-  { id: 'cream', word: 'cream', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'A pale yellowish-white color', exampleSentence: 'The walls are painted cream.', phonetic: '/kriːm/', hebrewTranslation: 'שמנת', imageUrl: '/images/cream.webp' },
+  { id: 'cream', word: 'cream', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'A pale yellowish-white color', exampleSentence: 'The walls are painted cream.', phonetic: '/kriːm/', hebrewTranslation: 'קרם', imageUrl: '/images/cream.webp' },
   { id: 'navy', word: 'navy', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'A very dark blue color', exampleSentence: 'She wore a navy blue dress.', phonetic: '/ˈneɪvi/', hebrewTranslation: 'כחול כהה', imageUrl: '/images/navy.webp' },
   { id: 'peach', word: 'peach', level: 'beginner', partOfSpeech: 'adjective', category: 'colors', definition: 'A soft pinkish-orange color', exampleSentence: 'The sunset was a lovely peach color.', phonetic: '/piːtʃ/', hebrewTranslation: 'אפרסק', imageUrl: '/images/peach.webp' },
   { id: 'violet', word: 'violet', level: 'intermediate', partOfSpeech: 'adjective', category: 'colors', definition: 'A blue-purple color', exampleSentence: 'She picked a bunch of violet flowers.', phonetic: '/ˈvaɪələt/', hebrewTranslation: 'סגול', imageUrl: '/images/violet.webp' },
@@ -367,7 +367,7 @@ export const WORDS = [
   { id: 'surprised', word: 'surprised', level: 'beginner', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling amazed because something unexpected happened', exampleSentence: 'She was surprised by the birthday party.', phonetic: '/sərˈpraɪzd/', hebrewTranslation: 'מופתע', imageUrl: '/images/surprised.webp' },
   { id: 'calm', word: 'calm', level: 'beginner', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling peaceful and relaxed', exampleSentence: 'She felt calm after taking a deep breath.', phonetic: '/kɑːm/', hebrewTranslation: 'רגוע', imageUrl: '/images/calm.webp' },
   { id: 'bored', word: 'bored', level: 'intermediate', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling tired because nothing interesting is happening', exampleSentence: 'He was bored on the rainy afternoon.', phonetic: '/bɔːrd/', hebrewTranslation: 'משועמם', imageUrl: '/images/bored.webp' },
-  { id: 'jealous', word: 'jealous', level: 'intermediate', partOfSpeech: 'adjective', category: 'feelings', definition: 'Wanting what someone else has', exampleSentence: 'She felt jealous of her friend\'s new toy.', phonetic: '/ˈdʒɛləs/', hebrewTranslation: 'קנאי', imageUrl: '/images/jealous.webp' },
+  { id: 'jealous', word: 'jealous', level: 'intermediate', partOfSpeech: 'adjective', category: 'feelings', definition: 'Wanting what someone else has', exampleSentence: 'She felt jealous of her friend\'s new toy.', phonetic: '/ˈdʒɛləs/', hebrewTranslation: 'מקנא', imageUrl: '/images/jealous.webp' },
   { id: 'grateful', word: 'grateful', level: 'intermediate', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling thankful for something', exampleSentence: 'I am grateful for my wonderful friends.', phonetic: '/ˈɡreɪtfʊl/', hebrewTranslation: 'אסיר תודה', imageUrl: '/images/grateful.webp' },
   { id: 'embarrassed', word: 'embarrassed', level: 'advanced', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling awkward or ashamed in front of others', exampleSentence: 'He was embarrassed when he tripped.', phonetic: '/ɪmˈbærəst/', hebrewTranslation: 'נבוך', imageUrl: '/images/embarrassed.webp' },
   { id: 'frustrated', word: 'frustrated', level: 'advanced', partOfSpeech: 'adjective', category: 'feelings', definition: 'Feeling upset because you cannot do something', exampleSentence: 'She felt frustrated by the difficult puzzle.', phonetic: '/ˈfrʌstreɪtɪd/', hebrewTranslation: 'מתוסכל', imageUrl: '/images/frustrated.webp' },
@@ -473,7 +473,7 @@ export const WORDS = [
   { id: 'muffin', word: 'muffin', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'A small sweet cake baked in a cup shape', exampleSentence: 'She had a blueberry muffin for breakfast.', phonetic: '/ˈmʌfɪn/', hebrewTranslation: 'מאפין', imageUrl: '/images/muffin.webp' },
 
   // COLORS +2
-  { id: 'scarlet', word: 'scarlet', level: 'advanced', partOfSpeech: 'adjective', category: 'colors', definition: 'A bright vivid red color', exampleSentence: 'The scarlet leaves fell from the tree.', phonetic: '/ˈskɑːrlɪt/', hebrewTranslation: 'שני', imageUrl: '/images/scarlet.webp' },
+  { id: 'scarlet', word: 'scarlet', level: 'advanced', partOfSpeech: 'adjective', category: 'colors', definition: 'A bright vivid red color', exampleSentence: 'The scarlet leaves fell from the tree.', phonetic: '/ˈskɑːrlɪt/', hebrewTranslation: 'אדום עז', imageUrl: '/images/scarlet.webp' },
   { id: 'magenta', word: 'magenta', level: 'advanced', partOfSpeech: 'adjective', category: 'colors', definition: 'A bright pinkish-purple color', exampleSentence: 'She colored the flower magenta.', phonetic: '/məˈdʒɛntə/', hebrewTranslation: 'מג\'נטה', imageUrl: '/images/magenta.webp' },
 
   // ANIMALS +2
@@ -579,7 +579,7 @@ export const WORDS = [
   { id: 'cannon', word: 'cannon', level: 'advanced', partOfSpeech: 'noun', category: 'toys', definition: 'A big old gun on wheels that shoots heavy balls', exampleSentence: 'An old cannon stood by the castle wall.', phonetic: '/ˈkænən/', hebrewTranslation: 'תותח', imageUrl: '/images/cannon.webp' },
 
   // === USER-REQUESTED B-WORDS (letter-B school list) 2026-09-20 ===
-  { id: 'bag', word: 'bag', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'A soft container for carrying things', exampleSentence: 'She put the apples in a bag.', phonetic: '/bæɡ/', hebrewTranslation: 'שקית', imageUrl: '/images/bag.webp' },
+  { id: 'bag', word: 'bag', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'A soft container for carrying things', exampleSentence: 'She put the apples in a bag.', phonetic: '/bæɡ/', hebrewTranslation: 'תיק', imageUrl: '/images/bag.webp' },
   { id: 'box', word: 'box', level: 'beginner', partOfSpeech: 'noun', category: 'home', definition: 'A container with straight sides, often made of cardboard', exampleSentence: 'The toys are in the big box.', phonetic: '/bɒks/', hebrewTranslation: 'קופסה', imageUrl: '/images/box.webp' },
   { id: 'boy', word: 'boy', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'A male child', exampleSentence: 'The boy kicked the ball.', phonetic: '/bɔɪ/', hebrewTranslation: 'ילד', imageUrl: '/images/boy.webp' },
   { id: 'bell', word: 'bell', level: 'beginner', partOfSpeech: 'noun', category: 'school', definition: 'A metal object that rings when you shake or hit it', exampleSentence: 'The school bell rang at nine.', phonetic: '/bɛl/', hebrewTranslation: 'פעמון', imageUrl: '/images/bell.webp' },
@@ -729,6 +729,8 @@ export const CONFUSABLE_PAIRS = [
   ['tennis', 'badminton'], ['climb_verb', 'climbing'], ['paint_verb', 'paintbrush'],
   ['goal', 'soccer'], ['goal', 'net'], ['curtain', 'window'],
   ['mirror', 'vase'], // mirror photo reflects a vase; no clean replacement on Commons
+  // gloss pass: Spanish 'chimenea'/'escalera' cover both words; a child calls a rooster a chicken
+  ['chimney', 'fireplace'], ['ladder', 'staircase'], ['ladder', 'stairs'], ['hen', 'rooster'], ['glasses', 'sunglasses'],
 ];
 const CONFUSABLE = new Map();
 for (const [a, b] of CONFUSABLE_PAIRS) { (CONFUSABLE.get(a) || CONFUSABLE.set(a, new Set()).get(a)).add(b); (CONFUSABLE.get(b) || CONFUSABLE.set(b, new Set()).get(b)).add(a); }

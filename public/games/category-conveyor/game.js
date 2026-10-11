@@ -39,7 +39,7 @@ const WORDS = [
   {id:'penguin',en:'penguin',he:'פינגווין',es:'pingüino',cat:'animals'},{id:'duck',en:'duck',he:'ברווז',es:'pato',cat:'animals'},
   {id:'pig',en:'pig',he:'חזיר',es:'cerdo',cat:'animals'},{id:'bee',en:'bee',he:'דבורה',es:'abeja',cat:'animals'},
   {id:'mouse',en:'mouse',he:'עכבר',es:'ratón',cat:'animals'},{id:'snake',en:'snake',he:'נחש',es:'serpiente',cat:'animals'},
-  {id:'tiger',en:'tiger',he:'נמר',es:'tigre',cat:'animals'},{id:'zebra',en:'zebra',he:'זברה',es:'cebra',cat:'animals'},
+  {id:'tiger',en:'tiger',he:'טיגריס',es:'tigre',cat:'animals'},{id:'zebra',en:'zebra',he:'זברה',es:'cebra',cat:'animals'},
   {id:'shark',en:'shark',he:'כריש',es:'tiburón',cat:'animals'},{id:'lion',en:'lion',he:'אריה',es:'león',cat:'animals'},
   {id:'frog',en:'frog',he:'צפרדע',es:'rana',cat:'animals'},{id:'bear',en:'bear',he:'דוב',es:'oso',cat:'animals'},
   {id:'monkey',en:'monkey',he:'קוף',es:'mono',cat:'animals'},
@@ -90,7 +90,7 @@ const WORDS = [
   {id:'brown',en:'brown',he:'חום',es:'marrón',cat:'colors'},{id:'gray',en:'gray',he:'אפור',es:'gris',cat:'colors'},
   {id:'lime',en:'lime',he:'ירוק ליים',es:'verde limón',cat:'colors',tricky:'🎨 lime is a COLOR here — look at the picture!'},
   {id:'peach',en:'peach',he:'אפרסק',es:'durazno',cat:'colors',tricky:'🎨 peach is a COLOR here — look at the picture!'},
-  {id:'cream',en:'cream',he:'שמנת',es:'crema',cat:'colors',tricky:'🎨 cream is a COLOR here — look at the picture!'},
+  {id:'cream',en:'cream',he:'קרם',es:'crema',cat:'colors',tricky:'🎨 cream is a COLOR here — look at the picture!'},
 ];
 
 /* Practice-ladder scoping (2026-10-07): ?words=id,id,... restricts the pool to
