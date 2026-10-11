@@ -7,7 +7,7 @@
     "category": "nature",
     "he": "גשם",
     "image": "/images/rain.webp",
-    "ans": 7,
+    "ans": 8,
     "ok": 7,
     "since": "2026-10-10T20:50:00.000Z"
   },
@@ -15,9 +15,9 @@
     "id": "category-conveyor",
     "name": "Category Conveyor",
     "emoji": "📦",
-    "opens": 3,
-    "lvl": 1,
-    "cmp": 0,
+    "opens": 5,
+    "lvl": 27,
+    "cmp": 4,
     "since": "2026-10-10T20:50:00.000Z"
   },
   "history": []
