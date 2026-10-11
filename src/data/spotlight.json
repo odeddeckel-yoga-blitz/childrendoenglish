@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-10-09T00:00:00.000Z",
+  "statsFrom": "2026-10-11T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "rain",
@@ -7,16 +7,16 @@
     "category": "nature",
     "he": "גשם",
     "image": "/images/rain.webp",
-    "ans": 0,
-    "ok": 0,
+    "ans": 7,
+    "ok": 7,
     "since": "2026-10-10T20:50:00.000Z"
   },
   "game": {
     "id": "category-conveyor",
     "name": "Category Conveyor",
     "emoji": "📦",
-    "opens": 0,
-    "lvl": 0,
+    "opens": 3,
+    "lvl": 1,
     "cmp": 0,
     "since": "2026-10-10T20:50:00.000Z"
   },
