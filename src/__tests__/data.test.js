@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { WORDS, CATEGORIES, getWordsByLevel, getWordsByCategory, getDistractors } from '../data/words';
+import { WORDS, CATEGORIES, getWordsByLevel, getWordsByCategory, getDistractors, collides, CONFUSABLE_PAIRS } from '../data/words';
 import { LEVELS } from '../data/levels';
 import { BADGES } from '../data/badges';
 
@@ -98,5 +98,25 @@ describe('Badges', () => {
   it('has unique badge IDs', () => {
     const ids = BADGES.map(b => b.id);
     expect(new Set(ids).size).toBe(ids.length);
+  });
+});
+
+describe('distractor collisions (same meaning never co-appears)', () => {
+  const byId = (id) => WORDS.find((w) => w.id === id);
+  it('excludes same-Hebrew-gloss and gloss-prefix words, and listed confusable pairs', () => {
+    expect(collides(byId('taxi'), byId('cab'))).toBe(true);      // same Hebrew gloss
+    expect(collides(byId('cap'), byId('hat'))).toBe(true);        // כובע מצחייה vs כובע
+    expect(collides(byId('jam'), byId('jelly'))).toBe(true);      // confusable pair
+    expect(collides(byId('cat'), byId('dog'))).toBe(false);
+    for (const [a, b] of CONFUSABLE_PAIRS) if (byId(a) && byId(b)) expect(collides(byId(a), byId(b))).toBe(true);
+  });
+  it('getDistractors never returns a colliding word, in any language', () => {
+    const es = { taxi: 'taxi', cab: 'taxi' };
+    for (let i = 0; i < 30; i++) {
+      for (const id of ['taxi', 'cap', 'jam', 'stairs', 'purple']) {
+        const w = byId(id); if (!w) continue;
+        for (const d of getDistractors(w, 3, null, (x) => es[x.id] || '')) expect(collides(w, d, (x) => es[x.id] || '')).toBe(false);
+      }
+    }
   });
 });

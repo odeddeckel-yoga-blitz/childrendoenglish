@@ -25,6 +25,10 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
 
     const { getWordsByLevel, getDistractors, WORDS } = await import('../data/words');
     const { filterByKnownLetters } = await import('../utils/letterFilter');
+    const { gloss } = await import('../utils/i18n');
+    // Distractors must not share a meaning with the target in the learner's language
+    const uiLang = stats.uiLanguage || 'en';
+    const glossOf = uiLang === 'en' ? null : (x) => gloss(x, uiLang);
     // Custom word lists (personal list) are parent-picked — never filtered.
     const pool = words || filterByKnownLetters(getWordsByLevel(level), knownLetters);
     // Distractor options must be readable too — restrict them to known letters
@@ -41,7 +45,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     const wordDistractions = new Map();
     const allWordsNeeded = new Set();
     selected.forEach(w => {
-      const distractors = getDistractors(w, 3, restrict);
+      const distractors = getDistractors(w, 3, restrict, glossOf);
       wordDistractions.set(w.id, distractors);
       allWordsNeeded.add(w);
       distractors.forEach(d => allWordsNeeded.add(d));
@@ -81,7 +85,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     sendLearn('quiz_start', mode || 'unknown');
     const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
     navigate(stateMap[mode] || 'imageQuiz');
-  }, [navigate, stats.wordProgress, knownLetters]);
+  }, [navigate, stats.wordProgress, stats.uiLanguage, knownLetters]);
 
   const handleQuizComplete = useCallback((results) => {
     const { score, total, answers, mode, quit } = results;

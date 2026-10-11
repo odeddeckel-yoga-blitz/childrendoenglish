@@ -706,14 +706,37 @@ export const getWordByName = (name) => WORD_NAME_MAP.get(name?.toLowerCase());
 // restrictTo: optional word subset (e.g. known-letters pool) that distractors
 // should come from, so a kid limited to letter C sees only readable options.
 // Tops up from the full vocabulary only if the restricted pool runs dry.
-export const getDistractors = (word, count = 3, restrictTo = null) => {
+// Pairs a child cannot be expected to tell apart from a gloss/picture alone —
+// never show one as a distractor for the other (optimizer 2026-10-11: jam 60%
+// wrong, cap 46% wrong under Hebrew while 0% under English = the OTHER word
+// was among the options with the same meaning).
+export const CONFUSABLE_PAIRS = [
+  ['jam', 'jelly'], ['cap', 'hat'], ['stairs', 'staircase'], ['purple', 'violet'],
+  ['gloves', 'mittens'], ['taxi', 'cab'], ['run', 'running'], ['fries', 'potato'],
+];
+const CONFUSABLE = new Map();
+for (const [a, b] of CONFUSABLE_PAIRS) { (CONFUSABLE.get(a) || CONFUSABLE.set(a, new Set()).get(a)).add(b); (CONFUSABLE.get(b) || CONFUSABLE.set(b, new Set()).get(b)).add(a); }
+
+// A distractor "collides" with the target when the learner would see the same
+// meaning twice: same English word (orange homographs), same Hebrew gloss or one
+// gloss extending the other (כובע / כובע מצחייה), same gloss in the active
+// interface language (glossOf), or a listed confusable pair.
+export const collides = (word, w, glossOf = null) => {
+  if (w.id === word.id) return true;
+  if (w.word.toLowerCase() === word.word.toLowerCase()) return true;
+  const ha = (word.hebrewTranslation || '').trim(), hb = (w.hebrewTranslation || '').trim();
+  if (ha && hb && (ha === hb || ha.startsWith(hb + ' ') || hb.startsWith(ha + ' '))) return true;
+  if (glossOf) { const ga = (glossOf(word) || '').trim().toLowerCase(), gb = (glossOf(w) || '').trim().toLowerCase(); if (ga && gb && ga === gb) return true; }
+  return !!CONFUSABLE.get(word.id)?.has(w.id);
+};
+
+export const getDistractors = (word, count = 3, restrictTo = null, glossOf = null) => {
   const picked = [];
   const used = new Set([word.id]);
   const take = (candidates) => {
     for (const w of fisherYatesShuffleInline(candidates)) {
       if (picked.length >= count) return;
-      // w.word check: the two "orange" homographs must never co-appear
-      if (!used.has(w.id) && w.word.toLowerCase() !== word.word.toLowerCase()) {
+      if (!used.has(w.id) && !collides(word, w, glossOf)) {
         picked.push(w);
         used.add(w.id);
       }

@@ -30,7 +30,8 @@ export default function WordCheck({ word, lang = 'en', canRead = true, onDone })
   const [results, setResults] = useState([]);
   const [fb, setFb] = useState(null);
   const rtl = isRTL(lang);
-  const options = useMemo(() => steps.map(() => shuffle([word, ...getDistractors(word, 3)])), [word, steps]);
+  const glossOf = lang === 'en' ? null : (x) => gloss(x, lang);
+  const options = useMemo(() => steps.map(() => shuffle([word, ...getDistractors(word, 3, null, glossOf)])), [word, steps, lang]); // eslint-disable-line react-hooks/exhaustive-deps
   const done = i >= steps.length;
   const step = steps[i];
 
