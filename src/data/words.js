@@ -720,6 +720,8 @@ export const CONFUSABLE_PAIRS = [
   ['alligator', 'crocodile'], ['silver', 'gray'], ['lime', 'green'], ['scarlet', 'red'],
   // batch-3 review: nervous is DEFINED as 'feeling worried'; frustrated vs angry is one emoji apart
   ['nervous', 'worried'], ['frustrated', 'angry'],
+  // batch-4 review: a shopping cart and a kids' wagon are both 'עגלה'; white vs cream spheres
+  ['cart', 'wagon'], ['white', 'cream'],
 ];
 const CONFUSABLE = new Map();
 for (const [a, b] of CONFUSABLE_PAIRS) { (CONFUSABLE.get(a) || CONFUSABLE.set(a, new Set()).get(a)).add(b); (CONFUSABLE.get(b) || CONFUSABLE.set(b, new Set()).get(b)).add(a); }
