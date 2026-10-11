@@ -25,6 +25,16 @@ are known STT limits; verify by ear before re-rendering.
 """
 import os, sys, json, re
 from faster_whisper import WhisperModel
+import subprocess, numpy as np
+
+def load_audio(path):
+    """Decode via ffmpeg to 16 kHz mono float32. faster-whisper's own decoder calls
+    av.open(..., metadata_errors=) which PyAV >= 14 removed (TypeError, 2026-10-11);
+    feeding the array sidesteps the PyAV version entirely."""
+    out = subprocess.run(['ffmpeg', '-v', 'quiet', '-i', path, '-f', 'f32le', '-ac', '1', '-ar', '16000', '-'],
+                         capture_output=True, check=True).stdout
+    return np.frombuffer(out, dtype=np.float32)
+
 
 audio_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'public', 'audio')
 model = WhisperModel('small.en', device='cpu', compute_type='int8')
@@ -46,7 +56,7 @@ files = sorted(f for f in os.listdir(audio_dir) if f.endswith('.mp3')
 results = []
 for i, f in enumerate(files):
     expected = f[:-4].replace('-', ' ')
-    segs, _ = model.transcribe(os.path.join(audio_dir, f), vad_filter=False,
+    segs, _ = model.transcribe(load_audio(os.path.join(audio_dir, f)), vad_filter=False,
                                initial_prompt='A single English word:')
     heard = norm(' '.join(s.text for s in segs))
     ok = (expected in heard or heard == expected

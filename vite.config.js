@@ -23,7 +23,7 @@ export default defineConfig({
             urlPattern: /\/images\/.*\.webp$/,
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'word-images-v3',
+              cacheName: 'word-images-v4',
               expiration: {
                 // Must exceed the full image set (409 words + numbers/colors
                 // ≈470 files) or the cache thrashes and quizzes re-fetch.

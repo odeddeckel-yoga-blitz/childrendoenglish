@@ -713,6 +713,8 @@ export const getWordByName = (name) => WORD_NAME_MAP.get(name?.toLowerCase());
 export const CONFUSABLE_PAIRS = [
   ['jam', 'jelly'], ['cap', 'hat'], ['stairs', 'staircase'], ['purple', 'violet'],
   ['gloves', 'mittens'], ['taxi', 'cab'], ['run', 'running'], ['fries', 'potato'],
+  // image review 2026-10-11: a jet IS an airplane and a jeep IS a car to a 6-year-old
+  ['jet', 'airplane'], ['jeep', 'car'], ['jeep', 'truck'],
 ];
 const CONFUSABLE = new Map();
 for (const [a, b] of CONFUSABLE_PAIRS) { (CONFUSABLE.get(a) || CONFUSABLE.set(a, new Set()).get(a)).add(b); (CONFUSABLE.get(b) || CONFUSABLE.set(b, new Set()).get(b)).add(a); }
