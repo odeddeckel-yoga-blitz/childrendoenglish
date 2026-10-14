@@ -7,17 +7,17 @@
     "category": "nature",
     "he": "גשם",
     "image": "/images/rain.webp",
-    "ans": 21,
-    "ok": 18,
+    "ans": 28,
+    "ok": 21,
     "since": "2026-10-10T20:50:00.000Z"
   },
   "game": {
     "id": "category-conveyor",
     "name": "Category Conveyor",
     "emoji": "📦",
-    "opens": 11,
-    "lvl": 57,
-    "cmp": 10,
+    "opens": 15,
+    "lvl": 77,
+    "cmp": 15,
     "since": "2026-10-10T20:50:00.000Z"
   },
   "history": []
