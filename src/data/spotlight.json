@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-10-14T00:00:00.000Z",
+  "statsFrom": "2026-10-15T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "rain",
@@ -15,7 +15,7 @@
     "id": "category-conveyor",
     "name": "Category Conveyor",
     "emoji": "📦",
-    "opens": 15,
+    "opens": 16,
     "lvl": 77,
     "cmp": 15,
     "since": "2026-10-10T20:50:00.000Z"
