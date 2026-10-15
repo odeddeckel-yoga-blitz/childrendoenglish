@@ -2,23 +2,31 @@
   "statsFrom": "2026-10-15T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
-    "id": "rain",
-    "word": "rain",
-    "category": "nature",
-    "he": "גשם",
-    "image": "/images/rain.webp",
-    "ans": 28,
-    "ok": 21,
-    "since": "2026-10-10T20:50:00.000Z"
+    "id": "pizza",
+    "word": "pizza",
+    "category": "food",
+    "he": "פיצה",
+    "image": "/images/pizza.webp",
+    "ans": 0,
+    "ok": 0,
+    "since": "2026-10-15T18:17:50.121Z"
   },
   "game": {
     "id": "category-conveyor",
     "name": "Category Conveyor",
     "emoji": "📦",
-    "opens": 16,
-    "lvl": 77,
-    "cmp": 15,
+    "opens": 20,
+    "lvl": 88,
+    "cmp": 17,
     "since": "2026-10-10T20:50:00.000Z"
   },
-  "history": []
+  "history": [
+    {
+      "lane": "word",
+      "from": "rain",
+      "to": "pizza",
+      "reason": "graduated (ans≥30, acc≥0.7)",
+      "at": "2026-10-15T18:17:50.121Z"
+    }
+  ]
 }
