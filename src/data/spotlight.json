@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-10-15T00:00:00.000Z",
+  "statsFrom": "2026-10-16T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "pizza",
