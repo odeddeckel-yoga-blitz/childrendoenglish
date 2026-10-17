@@ -44,7 +44,7 @@ const days = Math.min(365, Math.max(1, Number(process.argv[2]) || 28));
 const top = Number((process.argv.find(a => a.startsWith('--top=')) || '').split('=')[1]) || 15;
 const doRivals = process.argv.includes('--rivals');
 
-const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+const url = process.env.CDE_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL;
 if (!url) { console.error('Set DATABASE_URL (vercel env pull — see header).'); process.exit(2); }
 const q = neon(url);
 

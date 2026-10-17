@@ -366,7 +366,7 @@ let storeInstance = null;
  */
 export function getBattleStore() {
   if (storeInstance) return storeInstance;
-  const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+  const url = process.env.CDE_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL;
   if (url) {
     storeInstance = new PgBattleStore(url);
   } else {

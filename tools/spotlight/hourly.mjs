@@ -25,7 +25,7 @@ const dry = process.argv.includes('--dry-run');
 // On-demand optimizer run regardless of the traffic bar (workflow_dispatch input / --optimizer)
 const force = process.env.FORCE_OPTIMIZER === '1' || process.argv.includes('--optimizer');
 
-const url = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+const url = process.env.CDE_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL;
 if (!url) { console.log('spotlight-hourly: DATABASE_URL not set — nothing to do (add the repo secret to enable).'); process.exit(0); }
 if (!/^postgres(ql)?:\/\/[^\s'"]+$/.test(url)) {
   // Soft-fail: an hourly RED run would mail the owner 24×/day. Say exactly what is wrong instead.
