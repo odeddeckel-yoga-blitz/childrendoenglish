@@ -18,6 +18,22 @@ const imagesDir = join(__dirname, '..', 'public', 'images');
 const bgRect = (color) => `<rect x="8" y="8" width="496" height="496" rx="64" fill="${color}"/>`;
 
 const ILLUSTRATIONS = {
+  // arrow: Commons only offers targets/road signs (2026-10-17). Definition is "flies from a bow",
+  // so draw the archery arrow itself — wooden shaft, metal point, feathered fletching + nock.
+  arrow: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEF3C7')}
+    <g transform="rotate(-35 256 256)">
+      <rect x="96" y="248" width="300" height="16" rx="6" fill="#A16207"/>
+      <rect x="96" y="250" width="300" height="4" rx="2" fill="#CA8A04"/>
+      <polygon points="392,226 470,256 392,286 404,256" fill="#64748B"/>
+      <polygon points="392,226 470,256 404,256" fill="#94A3B8"/>
+      <path d="M100 252 L150 252 L128 206 L84 206 Z" fill="#DC2626"/>
+      <path d="M100 260 L150 260 L128 306 L84 306 Z" fill="#DC2626"/>
+      <path d="M150 252 L190 252 L172 216 L134 216 Z" fill="#F8FAFC"/>
+      <path d="M150 260 L190 260 L172 296 L134 296 Z" fill="#F8FAFC"/>
+      <rect x="70" y="244" width="30" height="24" rx="6" fill="#1E293B"/>
+    </g>
+  </svg>`,
   oven: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#F1F5F9')}
     <rect x="106" y="96" width="300" height="330" rx="18" fill="#64748B"/>
