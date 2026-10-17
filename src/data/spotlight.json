@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-10-16T00:00:00.000Z",
+  "statsFrom": "2026-10-17T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "pizza",
@@ -7,17 +7,17 @@
     "category": "food",
     "he": "פיצה",
     "image": "/images/pizza.webp",
-    "ans": 0,
-    "ok": 0,
+    "ans": 3,
+    "ok": 3,
     "since": "2026-10-15T18:17:50.121Z"
   },
   "game": {
     "id": "category-conveyor",
     "name": "Category Conveyor",
     "emoji": "📦",
-    "opens": 21,
-    "lvl": 88,
-    "cmp": 17,
+    "opens": 22,
+    "lvl": 91,
+    "cmp": 18,
     "since": "2026-10-10T20:50:00.000Z"
   },
   "history": [
