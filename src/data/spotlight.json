@@ -7,16 +7,16 @@
     "category": "food",
     "he": "פיצה",
     "image": "/images/pizza.webp",
-    "ans": 3,
-    "ok": 3,
+    "ans": 6,
+    "ok": 6,
     "since": "2026-10-15T18:17:50.121Z"
   },
   "game": {
     "id": "category-conveyor",
     "name": "Category Conveyor",
     "emoji": "📦",
-    "opens": 22,
-    "lvl": 91,
+    "opens": 24,
+    "lvl": 94,
     "cmp": 18,
     "since": "2026-10-10T20:50:00.000Z"
   },
