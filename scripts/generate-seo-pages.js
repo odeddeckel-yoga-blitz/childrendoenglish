@@ -53,7 +53,7 @@ function buildCrawlMesh() {
     row('Vocabulary in Hebrew', cats.map((c) => [`/vocabulary/${c}/hebrew/`, `${label(c)} עברית`])) +
     row('Vocabulary in Spanish', cats.map((c) => [`/vocabulary/${c}/spanish/`, `${label(c)} español`])) +
     row('Play Games', [['/games/', 'All games'], ['/games/word-zapper/', 'Word Zapper'], ['/games/spelling-forge/', 'Spelling Forge'], ['/games/category-conveyor/', 'Category Conveyor'], ['/app', 'Practice app']]) +
-    row('Learn by Topic', [['/vocabulary/', 'All vocabulary'], ...cats.map((c) => [`/vocabulary/${c}/`, label(c)]), ['/guides/', 'Parent guides']]) +
+    row('Learn by Topic', [['/free-english-practice/', 'Free practice — no sign-up'], ['/vocabulary/', 'All vocabulary'], ...cats.map((c) => [`/vocabulary/${c}/`, label(c)]), ['/guides/', 'Parent guides']]) +
     `</nav>\n`;
   return _meshCache;
 }
@@ -168,8 +168,10 @@ function levelTable(words, caption) {
 function buildCategoryPage(slug, displayName, words) {
   const url = `${SITE}/vocabulary/${slug}/`;
   const wordCount = words.length;
-  const title = `${displayName} - English Vocabulary for Kids | Children Do English`;
-  const description = `Learn ${wordCount} ${displayName.toLowerCase()} words in English with definitions, example sentences, phonetics, and Hebrew translations. Free for kids ages 6-12.`;
+  // No-sign-up positioning (Oct 2026, site-factory Round 13): Duolingo/Busuu gate
+  // signup on "practice … no sign up" queries; CDE is no-login, so lead with it.
+  const title = `${displayName}: English Vocabulary for Kids — Free, No Sign-Up`;
+  const description = `Practice ${wordCount} ${displayName.toLowerCase()} words in English with real photos, tap-to-hear audio and a quick picture quiz. Free in the browser — no sign-up, no app, no ads. Ages 6-12.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -652,8 +654,8 @@ const AGE_BRACKETS = [
 function buildAgeBracketPage(bracket, allWords) {
   const words = allWords.filter((w) => w.level === bracket.level);
   const url = `${SITE}/vocabulary/${bracket.slug}/`;
-  const title = `English Vocabulary for Kids ${bracket.label} | Children Do English`;
-  const description = `${words.length} ${bracket.description} English vocabulary words for kids ${bracket.ageRange}. With definitions, example sentences, phonetics, and Hebrew translations. Free for kids.`;
+  const title = `English Vocabulary for Kids ${bracket.label} — Free Practice, No Sign-Up`;
+  const description = `${words.length} ${bracket.description} English words for kids ${bracket.ageRange}, each with a real photo, native audio and a picture quiz. Free practice in the browser — no sign-up, no app, no ads.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -2660,8 +2662,8 @@ console.log(`  Total word pages: ${wordPagesGenerated}`);
 mkdirSync(join(distDir, 'vocabulary'), { recursive: true });
 
 const vocabIndexUrl = `${SITE}/vocabulary/`;
-const vocabIndexTitle = 'English Vocabulary for Kids - All Categories | Children Do English';
-const vocabIndexDesc = `Browse ${WORDS.length} English vocabulary words across ${CATEGORIES.length} categories. Free definitions, example sentences, phonetics, and Hebrew translations for kids ages 6-12.`;
+const vocabIndexTitle = 'Free English Vocabulary Practice for Kids — No Sign-Up, No App';
+const vocabIndexDesc = `Practice ${WORDS.length} English words in ${CATEGORIES.length} topics with real photos, native audio and picture quizzes. Free online — no sign-up, no app, no ads. Ages 6-12.`;
 
 const vocabIndexBreadcrumb = JSON.stringify({
   '@context': 'https://schema.org',
@@ -2847,6 +2849,131 @@ const wordEntries = CATEGORIES.flatMap((slug) =>
     <priority>0.5</priority>
   </url>`)
 ).join('\n');
+
+// --- No-sign-up practice landing (Oct 2026, site-factory Round 13 Pack A) ---
+// Targets "english practice no sign up" / "english vocabulary practice online
+// free": the top results gate signup despite the query; CDE has no account at all.
+{
+  const url = `${SITE}/free-english-practice/`;
+  const title = 'Free English Practice Online — No Sign-Up, No App, No Ads';
+  const desc = `Start practising English words in one tap: real photos, native audio and 10-word picture quizzes. No account, no email, no download — ${WORDS.length} words, free in the browser.`;
+  const byLevel = AGE_BRACKETS.map((b) => ({ ...b, n: WORDS.filter((w) => w.level === b.level).length }));
+  const cats = CATEGORIES.map((c) => ({ c, name: CATEGORY_NAMES[c] || c, n: WORDS.filter((w) => w.category === c).length })).sort((a, b) => b.n - a.n);
+  const cta = (where) => `/app?utm_source=seo&utm_medium=cta&utm_content=no_signup_${where}`;
+  const faq = [
+    { q: 'Can I practise English online for free without signing up?', a: `Yes. Children Do English needs no account, no email and no password. Open the page, type a nickname (it stays on your device) and the first 10-word picture quiz starts. All ${WORDS.length} words, ${CATEGORIES.length} topics and the games are free, with no ads.` },
+    { q: 'Do I need to download an app?', a: 'No. Everything runs in the web browser on a phone, tablet or computer. If you want, you can add it to your home screen, and it then also works offline — but that is optional.' },
+    { q: 'How is progress saved without an account?', a: 'Progress is saved in the browser on your device, never on our servers. Several kids can share one device with their own nicknames. Clearing the browser data erases the progress.' },
+    { q: 'Who is it for?', a: `Kids aged 6-12 and other beginners. There are three levels: beginner (${byLevel[0].n} words), intermediate (${byLevel[1].n}) and advanced (${byLevel[2].n}). Translations and menus are available in Hebrew and Spanish.` },
+    { q: 'How long does one practice take?', a: 'A quiz is 10 words and takes about 2-3 minutes. Words a child gets wrong come back sooner (spaced repetition), so short daily practice works best.' },
+  ];
+  const breadcrumb = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
+    { '@type': 'ListItem', position: 2, name: 'Free English practice', item: url },
+  ] });
+  const td = 'padding:0.5rem 0.75rem;border-top:1px solid #e2e8f0';
+  const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${escapeHtml(title)}</title>
+  <meta name="description" content="${escapeHtml(desc)}" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="${url}" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <meta property="og:locale" content="en_US" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Children Do English" />
+  <meta property="og:url" content="${url}" />
+  <meta property="og:title" content="${escapeHtml(title)}" />
+  <meta property="og:description" content="${escapeHtml(desc)}" />
+  <meta property="og:image" content="${SITE}/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json">${breadcrumb}</script>
+  <script type="application/ld+json">${faqSchemaFor(faq)}</script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; }
+    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
+    .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
+    .header p { opacity: 0.9; font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 720px; margin: 0 auto; }
+    .breadcrumb a, .section a { color: #2563eb; text-decoration: none; }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
+    .section { background: #fff; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .section h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .section p { margin-bottom: 0.75rem; color: #475569; }
+    .section ul { margin: 0.5rem 0 0.75rem 1.25rem; color: #475569; }
+    .answer { font-size: 1.05rem; color: #1e293b !important; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+    th { text-align: start; padding: 0.5rem 0.75rem; background: #eff6ff; color: #1e3a8a; }
+    .cta { text-align: center; margin: 1.25rem 0; }
+    .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; }
+    .topics a { display: inline-block; margin: 0 0.6rem 0.4rem 0; white-space: nowrap; }
+    .faq h3 { font-size: 1rem; margin: 0.9rem 0 0.25rem; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Free English Practice Online — No Sign-Up</h1>
+    <p>No account · no email · no app download · no ads</p>
+  </div>
+  <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Free English practice</div>
+  <div class="container">
+    <div class="section">
+      <p class="answer">You can practise English vocabulary here right now, with no sign-up: open the practice, type a nickname, and a 10-word picture quiz starts. ${WORDS.length} words in ${CATEGORIES.length} topics, each with a real photo and native-speaker audio. It is free, has no ads, and progress stays on your device.</p>
+      <div class="cta"><a href="${cta('top')}">Start practising — no sign-up &rarr;</a></div>
+    </div>
+
+    <div class="section">
+      <h2>What you need before the first question</h2>
+      <table>
+        <thead><tr><th>Step</th><th>Here</th></tr></thead>
+        <tbody>
+          <tr><td style="${td}">Create an account</td><td style="${td}">Not needed</td></tr>
+          <tr><td style="${td}">Give an email or phone number</td><td style="${td}">Not needed</td></tr>
+          <tr><td style="${td}">Download an app</td><td style="${td}">Not needed (runs in the browser)</td></tr>
+          <tr><td style="${td}">Pay or start a trial</td><td style="${td}">Not needed — everything is free</td></tr>
+          <tr><td style="${td}">Type a nickname</td><td style="${td}">Yes — saved only on this device</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>Practise by level</h2>
+      <ul>
+        ${byLevel.map((b) => `<li><a href="/vocabulary/${b.slug}/">${b.level.charAt(0).toUpperCase() + b.level.slice(1)} — ages ${b.ageRange}</a>: ${b.n} words</li>`).join('\n        ')}
+      </ul>
+      <p>New to English? Start with the beginner level. Words a child misses come back sooner, so a few minutes a day is enough.</p>
+    </div>
+
+    <div class="section">
+      <h2>Practise by topic</h2>
+      <p class="topics">${cats.map((x) => `<a href="/vocabulary/${x.c}/">${escapeHtml(x.name)} (${x.n})</a>`).join(' ')}</p>
+    </div>
+
+    <div class="section">
+      <h2>Other free ways to practise</h2>
+      <ul>
+        <li><a href="/games/">English vocabulary games</a> — Word Zapper, Spelling Forge and Category Conveyor, playable in the browser.</li>
+        <li><a href="/printable-flashcards/">Printable flashcards</a> — every topic as a photo card set, also <a href="/printable-flashcards/spanish/">in English and Spanish</a>.</li>
+        <li><a href="/he/">עברית</a> and <a href="/es/">Español</a> — the same practice with Hebrew or Spanish menus and translations.</li>
+      </ul>
+    </div>
+
+    <div class="section faq">
+      <h2>Questions</h2>
+      ${faq.map((x) => `<h3>${escapeHtml(x.q)}</h3><p>${escapeHtml(x.a)}</p>`).join('\n      ')}
+      <div class="cta"><a href="${cta('bottom')}">Start practising &rarr;</a></div>
+    </div>
+  </div>
+</body>
+</html>`;
+  mkdirSync(join(distDir, 'free-english-practice'), { recursive: true });
+  writePage(join(distDir, 'free-english-practice', 'index.html'), html);
+  console.log('  ✓ /free-english-practice/ (no-sign-up landing)');
+}
 
 // --- Generate About page ---
 

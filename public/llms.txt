@@ -36,6 +36,9 @@ with pronunciation, an example sentence, and the Hebrew translation.
   with spaced repetition until mastery. Quizzes are listen-first (for
   pre-readers), flashcards, letter-by-letter practice, parent dashboard. Works
   offline; nothing to install or sign up for.
+- [Free English practice, no sign-up](https://childrendoenglish.com/free-english-practice/):
+  practise English vocabulary in the browser with no account, email or app
+  download — a nickname saved on the device starts a 10-word picture quiz.
 - [Spanish landing page](https://childrendoenglish.com/es/): the app for
   Spanish-speaking kids — English vocabulary with photos, native English
   pronunciation, and Spanish translations (interface available in Spanish).
