@@ -47,6 +47,9 @@ function buildCrawlMesh() {
       ...HE_GAMES_TOPICS.map((t) => [`/he/english-games/${t}/`, `אנגלית לילדים — ${CATEGORY_NAMES_HE[t] || t}`]),
     ]) +
     row('Printable Flashcards', [['/tools/flashcard-maker/', 'Flashcard maker (free tool)'], ['/printable-flashcards/', 'All flashcards'], ...cats.map((c) => [`/printable-flashcards/${c}/`, label(c)])]) +
+    // Spanish printable sets (Oct 2026): they draw shared/direct visitors but
+    // were linked only from their two sibling pages → "unknown to Google".
+    row('Tarjetas imprimibles (inglés y español)', [['/printable-flashcards/spanish/', 'Todas las tarjetas'], ...cats.map((c) => [`/printable-flashcards/${c}/spanish/`, CATEGORY_NAMES_ES[c] || label(c)])]) +
     row('Vocabulary in Hebrew', cats.map((c) => [`/vocabulary/${c}/hebrew/`, `${label(c)} עברית`])) +
     row('Vocabulary in Spanish', cats.map((c) => [`/vocabulary/${c}/spanish/`, `${label(c)} español`])) +
     row('Play Games', [['/games/', 'All games'], ['/games/word-zapper/', 'Word Zapper'], ['/games/spelling-forge/', 'Spelling Forge'], ['/games/category-conveyor/', 'Category Conveyor'], ['/app', 'Practice app']]) +
