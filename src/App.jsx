@@ -563,6 +563,7 @@ export default function App() {
           <PlayerCreate
             lang={lang}
             onCreatePlayer={handleCreatePlayer}
+            first={!playerRegistry?.players?.length}
             onBack={playerRegistry?.players.length > 0 ? () => navigate('playerSelect', 'back') : () => navigate('landing', 'back')}
           />
         );

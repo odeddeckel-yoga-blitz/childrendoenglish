@@ -7,6 +7,10 @@ import { playSound } from '../utils/sound';
 import { analytics } from '../utils/analytics';
 import { sendLearn, sendLearnBatch } from '../utils/learnBeacon';
 
+// A player who has never finished a quiz nor answered a word (a quit keeps its
+// word progress, so this stays true only until the first real answer).
+const isFreshPlayer = (s) => !s?.totalQuizzes && !Object.keys(s?.wordProgress || {}).length;
+
 export default function useQuizFlow({ stats, setStats, navigate, knownLetters = null }) {
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedMode, setSelectedMode] = useState(null);
@@ -83,9 +87,10 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     setQuizWords(wordsWithDistractors);
     analytics.quizStart(mode, level);
     sendLearn('quiz_start', mode || 'unknown');
+    if (isFreshPlayer(stats)) sendLearn('onb', 'q1_start');
     const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
     navigate(stateMap[mode] || 'imageQuiz');
-  }, [navigate, stats.wordProgress, stats.uiLanguage, knownLetters]);
+  }, [navigate, stats, knownLetters]);
 
   const handleQuizComplete = useCallback((results) => {
     const { score, total, answers, mode, quit } = results;
@@ -197,6 +202,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
 
     setStats(prev => completeQuiz(prev).updated);
     setQuizResults({ ...results, arcadeNewBest });
+    if (isFreshPlayer(stats)) sendLearn('onb', quit ? 'q1_quit' : 'q1_done');
     if (quit) {
       analytics.quizQuit(mode, selectedLevel, answers?.length ?? 0);
       sendLearn('quiz_quit', mode || 'unknown');

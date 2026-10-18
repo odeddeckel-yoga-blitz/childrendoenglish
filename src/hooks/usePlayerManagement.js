@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { loadStats, loadPlayerRegistry, savePlayerRegistry, addPlayer, removePlayer, resetPlayerProgress, updatePlayerProfile } from '../utils/storage';
 import { analytics } from '../utils/analytics';
+import { sendLearn } from '../utils/learnBeacon';
 
 export default function usePlayerManagement({ navigate, setStats }) {
   const [playerRegistry, setPlayerRegistry] = useState(() => {
@@ -13,6 +14,7 @@ export default function usePlayerManagement({ navigate, setStats }) {
   const handleCreatePlayer = useCallback((name, avatar, canRead) => {
     const id = addPlayer(name, avatar, canRead);
     const reg = loadPlayerRegistry();
+    if (reg.players.length === 1) sendLearn('onb', 'create_done');
     reg.activePlayerId = id;
     savePlayerRegistry(reg);
     setPlayerRegistry({ ...reg });

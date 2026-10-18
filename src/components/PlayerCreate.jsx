@@ -1,10 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { t } from '../utils/i18n';
+import { sendLearn } from '../utils/learnBeacon';
 
 const AVATARS = ['🦊', '🐱', '🦁', '🐶', '🦄', '🐼', '🐸', '🦋', '🌟', '🚀', '🎨', '🎵'];
 
-export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack }) {
+export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack, first = false }) {
+  // First-visit funnel (cookieless onb tally): screen shown → player created
+  // → first quiz started/finished. Only the FIRST player counts — adding a
+  // sibling is not onboarding.
+  useEffect(() => { if (first) sendLearn('onb', 'create_view'); }, [first]);
   const [name, setName] = useState('');
   const [avatar, setAvatar] = useState('🦊');
   const [canRead, setCanRead] = useState(true);

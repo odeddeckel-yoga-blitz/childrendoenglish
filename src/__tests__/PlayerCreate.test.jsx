@@ -1,6 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import PlayerCreate from '../components/PlayerCreate';
+import { sendLearn } from '../utils/learnBeacon';
+
+vi.mock('../utils/learnBeacon', () => ({ sendLearn: vi.fn() }));
 
 const defaultProps = {
   lang: 'en',
@@ -38,5 +41,13 @@ describe('PlayerCreate', () => {
     const createBtns = screen.getAllByText('Create Player');
     fireEvent.click(createBtns[createBtns.length - 1]);
     expect(defaultProps.onCreatePlayer).toHaveBeenCalledWith('TestKid', '🦊', true);
+  });
+  it('counts the first-player screen (onb create_view), not later players', () => {
+    sendLearn.mockClear();
+    render(<PlayerCreate {...defaultProps} first />);
+    expect(sendLearn).toHaveBeenCalledWith('onb', 'create_view');
+    sendLearn.mockClear();
+    render(<PlayerCreate {...defaultProps} />);
+    expect(sendLearn).not.toHaveBeenCalled();
   });
 });

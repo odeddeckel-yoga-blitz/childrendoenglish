@@ -1,4 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
+import { sendLearn } from '../utils/learnBeacon';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('../utils/sound', () => ({
@@ -7,6 +8,8 @@ vi.mock('../utils/sound', () => ({
   isTTSAvailable: () => true,
   initTTS: vi.fn(),
 }));
+
+vi.mock('../utils/learnBeacon', () => ({ sendLearn: vi.fn(), sendLearnBatch: vi.fn() }));
 
 vi.mock('../utils/analytics', () => ({
   analytics: {
@@ -370,5 +373,36 @@ describe('useQuizFlow', () => {
 
     expect(result.current.selectedMode).toBe('image');
     expect(navigate).toHaveBeenCalledWith('loading');
+  });
+  describe('first-visit funnel (onb)', () => {
+    const onb = () => sendLearn.mock.calls.filter(([e]) => e === 'onb').map(([, i]) => i);
+    beforeEach(() => sendLearn.mockClear());
+
+    it('fresh player: q1_start then q1_done', async () => {
+      const { result } = renderFlow();
+      await act(async () => { await result.current.startQuiz('beginner', 'image'); });
+      act(() => { result.current.handleQuizComplete({ score: 8, total: 10, mode: 'image', answers: [] }); });
+      expect(onb()).toEqual(['q1_start', 'q1_done']);
+    });
+
+    it('fresh player who quits: q1_quit', async () => {
+      const { result } = renderFlow();
+      await act(async () => { await result.current.startQuiz('beginner', 'image'); });
+      act(() => { result.current.handleQuizComplete({ score: 1, total: 10, mode: 'image', answers: [], quit: true }); });
+      expect(onb()).toEqual(['q1_start', 'q1_quit']);
+    });
+
+    it('player with history: no onb events', async () => {
+      const { result } = renderFlow({ totalQuizzes: 2 });
+      await act(async () => { await result.current.startQuiz('beginner', 'image'); });
+      act(() => { result.current.handleQuizComplete({ score: 8, total: 10, mode: 'image', answers: [] }); });
+      expect(onb()).toEqual([]);
+    });
+
+    it('player with word progress from a quit: no onb events', async () => {
+      const { result } = renderFlow({ wordProgress: { cat: { seen: 1 } } });
+      await act(async () => { await result.current.startQuiz('beginner', 'image'); });
+      expect(onb()).toEqual([]);
+    });
   });
 });
