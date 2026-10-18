@@ -260,13 +260,13 @@ const translations = {
 
     // Privacy policy
     privacyTitle: 'Privacy Policy',
-    privacyUpdated: 'Last updated: March 14, 2026',
+    privacyUpdated: 'Last updated: October 18, 2026',
     privacyDataTitle: 'What data we collect',
     privacyDataDesc: 'Children Do English does not collect personal information. We do not ask for names or any identifying details. An optional parent email field is shown during onboarding — if provided, it is saved only in your browser\'s local storage and is never sent to any server.',
     privacyCookieTitle: 'Cookies & tracking',
     privacyCookieDesc: 'We use Google Analytics to understand how the app is used (page views, feature usage, basic device information). In the app, analytics loads only after you give consent via the cookie banner. On our static content pages (vocabulary, guides, printable flashcards), analytics runs in cookieless mode — no cookies or identifiers are stored unless you have opted in, and if you declined, analytics does not load at all. We do not use any advertising services.',
     privacyStorageTitle: 'What is stored on your device',
-    privacyStorageDesc: 'Your learning progress (quiz scores, word progress, streak, badges, and preferences like dark mode and sound) is saved in your browser\'s local storage. This data never leaves your device and is not sent to any server.',
+    privacyStorageDesc: 'Your learning progress (quiz scores, word progress, streak, badges, and preferences like dark mode and sound) is saved in your browser\'s local storage. This data never leaves your device and is not sent to any server. We also save the date of your last visit, so we can count how many visits are return visits — as an anonymous total, with no identifier and without sending the date.',
     privacyThirdPartyTitle: 'Third-party services',
     privacyThirdPartyDesc: 'The app uses Google Analytics for usage statistics (loaded only after consent). We use Sentry for error monitoring in production — it may collect error reports, browser metadata, and device information to help us fix bugs and improve app stability (see sentry.io/privacy). The browser\'s built-in speech synthesis may connect to your device\'s speech engine for word pronunciation. All word data and images are bundled with the app.',
     privacyChildrenTitle: 'Children\'s privacy',

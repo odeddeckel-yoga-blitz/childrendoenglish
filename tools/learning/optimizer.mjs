@@ -4,10 +4,15 @@
  * Ranks the WORDS (not games) that need work, from the cookieless cde_learn
  * beacon, so the image/voice improver loops work real deficits, not intuition.
  *
- * Run:
- *   vercel env pull /tmp/cde.env --environment=production
- *   export DATABASE_URL=$(grep ^DATABASE_URL= /tmp/cde.env | cut -d= -f2- | tr -d '"')
+ * Run (DB = own Neon project 'childrendoenglish', delicate-hat-45485476, since
+ * 2026-10-17; the Vercel copy is a SENSITIVE env var, so `vercel env pull` can't
+ * read it):
+ *   neonctl auth   # once
+ *   export CDE_DATABASE_URL=$(neonctl connection-string --project-id delicate-hat-45485476)
+ *   npm run engagement                              # = optimizer.mjs 28 --rivals
  *   node tools/learning/optimizer.mjs 28            # rank on a 28-day window
+ * No local creds? GitHub → Actions → spotlight-hourly → Run workflow with
+ * force_optimizer=true prints this same report in the job log.
  *   node tools/learning/optimizer.mjs 28 --rivals   # + same-category rival check per word
  *   node tools/learning/optimizer.mjs 28 --top=25
  *
@@ -45,7 +50,7 @@ const top = Number((process.argv.find(a => a.startsWith('--top=')) || '').split(
 const doRivals = process.argv.includes('--rivals');
 
 const url = process.env.CDE_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL;
-if (!url) { console.error('Set DATABASE_URL (vercel env pull — see header).'); process.exit(2); }
+if (!url) { console.error('Set CDE_DATABASE_URL (neonctl connection-string — see header).'); process.exit(2); }
 const q = neon(url);
 
 const rows = await q`SELECT ev, item, sum(n)::int AS n, min(day) AS first, max(day) AS last
@@ -164,32 +169,69 @@ if (cyc.length > 0) {
   if (stepLine) console.log(`  step completions: ${stepLine}  (a step-down along the ladder = the drop-off step)`);
 }
 
-// --- games: play depth (KDM parity — levelups ÷ opens per game) ---
-// Opens come from cde_land page pings (/games/<id>), level-ups and completed
-// runs from the g_lvl/g_cmp learn events the games fire (webdriver-excluded).
-// depth ≈ 0 on real opens = the game loses visitors → rebuild/fix candidate.
+// --- games: play depth per game (KDM parity — levelups ÷ opens) ---
+// Opens = g_open learn events the games fire per game id on a real
+// (non-webdriver, non-internal) page load; level-ups/completes = g_lvl/g_cmp.
+// cde_land only has the catalog-level 'games' page class — kept as a cross-check.
+// depth ≈ 0 on ≥10 opens = the game loses kids before level 1 → fix
+// first-play UX / rebuild candidate.
+// g_open shipped 2026-10-10 (67e869d) — level-ups before that have no opens,
+// so all three counts start there or the depth is inflated (word-zapper read 24.5).
+const G_OPEN_SINCE = '2026-10-10';
 const gameEv = {};
-for (const r of rows) {
-  if (r.ev !== 'g_lvl' && r.ev !== 'g_cmp') continue;
-  const g = (gameEv[r.item] = gameEv[r.item] || { lvl: 0, cmp: 0 });
-  g[r.ev === 'g_lvl' ? 'lvl' : 'cmp'] += r.n;
+for (const r of await q`SELECT ev, item, sum(n)::int AS n FROM cde_learn
+  WHERE day >= GREATEST(CURRENT_DATE - ${days}::int, ${G_OPEN_SINCE}::date)
+    AND ev IN ('g_open', 'g_lvl', 'g_cmp') GROUP BY ev, item`) {
+  const g = (gameEv[r.item] = gameEv[r.item] || { open: 0, lvl: 0, cmp: 0 });
+  g[r.ev === 'g_lvl' ? 'lvl' : r.ev === 'g_cmp' ? 'cmp' : 'open'] += r.n;
 }
-// cde_land stores page CLASSES (the 'games' class covers all /games/* pages),
-// never paths — so opens are catalog-level; per-game splits come from the
-// g_lvl/g_cmp items. (A per-game LIKE query here silently matched nothing.)
 const landRows = await q`SELECT sum(n)::int AS n FROM cde_land
-  WHERE day >= CURRENT_DATE - ${days}::int AND page = 'games'`;
-const gamesOpens = landRows[0]?.n || 0;
-const gameIds = Object.keys(gameEv).sort();
-if (gamesOpens > 0 || gameIds.length > 0) {
-  const totLvl = gameIds.reduce((a, id) => a + gameEv[id].lvl, 0);
-  const depth = gamesOpens ? (totLvl / gamesOpens).toFixed(2) : '—';
-  console.log(`\n— games: ${gamesOpens} opens (catalog-level), ${totLvl} level-ups, depth ${depth}` +
-    (gamesOpens >= 10 && totLvl / gamesOpens < 0.2 ? '  ⚠ opens don’t convert to play — check first-play UX' : ''));
+  WHERE day >= GREATEST(CURRENT_DATE - ${days}::int, ${G_OPEN_SINCE}::date) AND page = 'games'`;
+const pageOpens = landRows[0]?.n || 0;
+const gameIds = Object.keys(gameEv).sort((a, b) => gameEv[b].open - gameEv[a].open);
+if (pageOpens > 0 || gameIds.length > 0) {
+  const tot = gameIds.reduce((a, id) => ({ open: a.open + gameEv[id].open, lvl: a.lvl + gameEv[id].lvl, cmp: a.cmp + gameEv[id].cmp }), { open: 0, lvl: 0, cmp: 0 });
+  console.log(`\n— games: ${tot.open} game opens · ${tot.lvl} level-ups · ${tot.cmp} completes` +
+    `  (games/* page loads ${pageOpens} incl. the hub; counted from ${G_OPEN_SINCE})`);
   for (const id of gameIds) {
-    console.log(`  ${id.padEnd(20)} levelups ${String(gameEv[id].lvl).padStart(4)}  completes ${String(gameEv[id].cmp).padStart(3)}`);
+    const g = gameEv[id];
+    const depth = g.open ? g.lvl / g.open : null;
+    const flag = g.open >= 10 && depth < 0.2 ? '  ⚠ opens don’t convert to play — check first-play UX'
+      : g.open >= 10 && depth < 0.5 ? '  watch' : g.open < 10 ? '  (insufficient data)' : '';
+    console.log(`  ${id.padEnd(20)} opens ${String(g.open).padStart(4)}  levelups ${String(g.lvl).padStart(4)}  completes ${String(g.cmp).padStart(3)}  depth ${depth == null ? '—' : depth.toFixed(2)}${flag}`);
   }
-  console.log('  (games page-class ships 2026-10-03 — opens before that date landed in \'other\')');
+}
+
+// --- return visits (vis buckets, once per browser per local day; ships 2026-10-18) ---
+// The engagement number that matters most: do kids come BACK. Sum of vis per
+// day ≈ daily unique browsers (cookieless; excludes internal/webdriver).
+// rpre = had app state from before 2026-10-18 but no date yet (gap unknown),
+// so in the first ~week every pre-existing visitor reads as rpre or new:
+// trust the returning share only once rpre has faded (~Oct 25+).
+{
+  const B = ['new', 'r1', 'r2-7', 'r8-30', 'r31p', 'rpre'];
+  const vis = Object.fromEntries(B.map((b) => [b, 0]));
+  for (const r of rows) if (r.ev === 'vis' && r.item in vis) vis[r.item] += r.n;
+  const total = B.reduce((a, b) => a + vis[b], 0);
+  if (total > 0) {
+    const ret = total - vis.new;
+    const pct = (n) => `${Math.round((100 * n) / total)}%`;
+    console.log(`\n— return visits: ${total} browser-days · returning ${ret} (${pct(ret)}) · new ${vis.new} (${pct(vis.new)})`);
+    console.log(`  next day ${vis.r1} · 2–7d ${vis['r2-7']} · 8–30d ${vis['r8-30']} · 31d+ ${vis.r31p} · pre-launch state (gap unknown) ${vis.rpre}`);
+    const visDays = await q`SELECT min(day) AS first FROM cde_learn WHERE ev = 'vis'`;
+    const age = visDays[0]?.first ? Math.round((Date.now() - new Date(visDays[0].first)) / 86400000) : 0;
+    if (age < 7) console.log(`  ⚠ signal is ${age}d old — returning share is meaningless until it has ≥7 days (re-read ~Oct 25)`);
+    const byLang = {};
+    for (const r of await q`SELECT lang, item, sum(n)::int AS n FROM cde_learn
+      WHERE ev = 'vis' AND day >= CURRENT_DATE - ${days}::int GROUP BY lang, item`) {
+      const x = (byLang[r.lang] = byLang[r.lang] || { t: 0, nw: 0 });
+      x.t += r.n; if (r.item === 'new') x.nw += r.n;
+    }
+    console.log('  by interface language: ' + Object.entries(byLang).sort((a, b) => b[1].t - a[1].t)
+      .map(([lg, x]) => `${lg} ${x.t} (${Math.round((100 * (x.t - x.nw)) / x.t)}% returning)`).join(' · '));
+  } else {
+    console.log('\n— return visits: no vis data yet (return bucket ships 2026-10-18)');
+  }
 }
 
 // --- per-asset diagnosis (ansm_* probe split + wfb parent taps; WordCheck + quizzes) ---

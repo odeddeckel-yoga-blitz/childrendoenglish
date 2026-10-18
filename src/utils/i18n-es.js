@@ -258,13 +258,13 @@ export default {
 
   // Privacy policy
   privacyTitle: 'Política de Privacidad',
-  privacyUpdated: 'Última actualización: 14 de marzo de 2026',
+  privacyUpdated: 'Última actualización: 18 de octubre de 2026',
   privacyDataTitle: 'Qué datos recopilamos',
   privacyDataDesc: 'Children Do English no recopila información personal. No pedimos nombres ni ningún dato identificable. Durante la introducción se muestra un campo opcional de correo electrónico para los padres — si lo completas, se guarda solo en el almacenamiento local de tu navegador y nunca se envía a ningún servidor.',
   privacyCookieTitle: 'Cookies y rastreo',
   privacyCookieDesc: 'Usamos Google Analytics para entender cómo se usa la app (vistas de página, uso de funciones, información básica del dispositivo). En la app, las analíticas se cargan solo después de dar tu consentimiento a través del aviso de cookies. En nuestras páginas de contenido estático (vocabulario, guías, tarjetas para imprimir), las analíticas funcionan en modo sin cookies — no se guarda ninguna cookie ni identificador a menos que hayas dado tu consentimiento, y si lo rechazaste, las analíticas no se cargan en absoluto. No usamos ningún servicio de publicidad.',
   privacyStorageTitle: 'Qué se guarda en tu dispositivo',
-  privacyStorageDesc: 'Tu progreso de aprendizaje (puntajes de quizzes, progreso de palabras, racha, insignias y preferencias como el modo oscuro y el sonido) se guarda en el almacenamiento local de tu navegador. Estos datos nunca salen de tu dispositivo y no se envían a ningún servidor.',
+  privacyStorageDesc: 'Tu progreso de aprendizaje (puntajes de quizzes, progreso de palabras, racha, insignias y preferencias como el modo oscuro y el sonido) se guarda en el almacenamiento local de tu navegador. Estos datos nunca salen de tu dispositivo y no se envían a ningún servidor. También guardamos la fecha de tu última visita para contar cuántas visitas son de regreso, como un total anónimo, sin ningún identificador y sin enviar la fecha.',
   privacyThirdPartyTitle: 'Servicios de terceros',
   privacyThirdPartyDesc: 'La app usa Google Analytics para estadísticas de uso (se carga solo después de dar el consentimiento). Usamos Sentry para el monitoreo de errores en producción — puede recopilar reportes de errores, metadatos del navegador e información del dispositivo para ayudarnos a corregir errores y mejorar la estabilidad de la app (ver sentry.io/privacy). La síntesis de voz integrada del navegador puede conectarse al motor de voz de tu dispositivo para la pronunciación de las palabras. Todos los datos de palabras e imágenes vienen incluidos con la app.',
   privacyChildrenTitle: 'Privacidad de los niños',

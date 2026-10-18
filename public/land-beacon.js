@@ -1,7 +1,7 @@
 /* Cookieless no-PII landing beacon — one aggregate ping per page load with
  * {page-class, source-class} only. Independent of the analytics consent gate
- * by design: it is a turnstile count, not tracking (no cookie, no storage,
- * no identifier). See /api/land. */
+ * by design: it is a turnstile count, not tracking (no cookie, no identifier;
+ * the only storage is the last-visit DATE for the return bucket below). See /api/land. */
 (function () {
   try {
     // Owner opt-out: visiting any page once with ?internal=1 marks THIS browser
@@ -55,5 +55,30 @@
       else if (h) s = 'external';
     }
     navigator.sendBeacon('/api/land', JSON.stringify({ g: g, s: s, l: l }));
+    /* Return-visit bucket (Engagement Optimizer) — once per local day per
+       browser. Stores ONLY the last visit date ('cde_seen', YYYY-MM-DD) and
+       sends ONLY a coarse bucket as an aggregate tally — never the date, never
+       an identifier. Buckets: new · r1 (yesterday) · r2-7 · r8-30 · r31p ·
+       rpre = no date yet but earlier app state exists (visitors from before
+       this shipped, 2026-10-18; gap unknown). */
+    try {
+      var d = new Date(), pad = function (n) { return (n < 10 ? '0' : '') + n; };
+      var today = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+      var seen = localStorage.getItem('cde_seen');
+      if (seen !== today) {
+        var b = 'new';
+        if (/^\d{4}-\d\d-\d\d$/.test(seen || '')) {
+          var gap = Math.round((Date.parse(today) - Date.parse(seen)) / 86400000);
+          b = gap <= 1 ? 'r1' : gap <= 7 ? 'r2-7' : gap <= 30 ? 'r8-30' : 'r31p';
+        } else {
+          for (var k = 0; k < localStorage.length; k++) {
+            var key = localStorage.key(k) || '';
+            if (key.indexOf('childrendoenglish-') === 0 || key === 'cde_lang' || key === 'cde-lang-suggest-done') { b = 'rpre'; break; }
+          }
+        }
+        localStorage.setItem('cde_seen', today);
+        navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: 'vis', i: b }], l: l }));
+      }
+    } catch (e) { /* storage unavailable — no return signal */ }
   } catch (e) { /* never break the page */ }
 })();

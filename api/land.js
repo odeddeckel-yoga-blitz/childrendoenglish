@@ -3,7 +3,7 @@
 // bounce before consenting are invisible — and ChatGPT is this site's largest
 // external channel. Stores ONLY { day, page-class, source-class, n } tallies:
 // no identifier, no IP, no device storage. Table: cde_land (shared Neon
-// project with kidsdomath, separate table).
+// project childrendoenglish, CDE_DATABASE_URL — own project since 2026-10-17).
 import { neon } from '@neondatabase/serverless';
 
 const PAGES = new Set(['home', 'vocab', 'hebrew', 'spanish', 'games', 'tool', 'flashcards', 'guide', 'app', 'other']);
@@ -15,8 +15,9 @@ const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 // mode name, never anything about the visitor. g_open = a real (non-webdriver)
 // game page open per game id; spot = a home-spotlight card click (w_<word>|g_<game>);
 // ansm_ok/ansm_no = an answer split by probe (<word>@aud|img|txt) so the asset at
-// fault is identifiable; wfb = explicit word feedback tap (<word>@img|aud|hard|ok).
-const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done']);
+// fault is identifiable; wfb = explicit word feedback tap (<word>@img|aud|hard|ok);
+// vis = once-per-day return bucket (new|r1|r2-7|r8-30|r31p|rpre — public/land-beacon.js).
+const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis']);
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
 
 let ready = null;
