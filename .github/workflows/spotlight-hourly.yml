@@ -1,12 +1,14 @@
-name: Spotlight hourly
+name: Spotlight daily
 
-# Hourly keep-or-swap loop for the home "Today's picks" (tools/spotlight/hourly.mjs).
+# Daily keep-or-swap loop (was hourly until 2026-10-18 — every rule is in days
+# (14d tenure, 7d no-traffic, 30d cooldown) and each run wakes the Neon compute;
+# file name kept so links/docs stay valid) for the home "Today's picks" (tools/spotlight/hourly.mjs).
 # Needs the DATABASE_URL repo secret (Neon); without it the script exits 0 and
 # does nothing. Commits only when the snapshot/spotlight/flags changed, which
 # triggers CI + the Vercel deploy that rotates the cards.
 on:
   schedule:
-    - cron: '17 * * * *'
+    - cron: '17 3 * * *'   # 03:17 UTC ≈ 06:17 Israel — cards rotate before the school day
   workflow_dispatch:
     inputs:
       force_optimizer:
@@ -41,6 +43,6 @@ jobs:
           if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git config user.name "spotlight-bot"
           git config user.email "spotlight-bot@users.noreply.github.com"
-          git commit -m "spotlight: hourly keep/swap ($(date -u +%Y-%m-%dT%H:%MZ))"
+          git commit -m "spotlight: daily keep/swap ($(date -u +%Y-%m-%dT%H:%MZ))"
           git pull --rebase origin main
           git push origin HEAD:main
