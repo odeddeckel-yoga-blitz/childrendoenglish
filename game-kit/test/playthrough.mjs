@@ -20,6 +20,10 @@ import { chromium } from 'playwright'
 import { pathToFileURL } from 'node:url'
 import { existsSync } from 'node:fs'
 
+// Watchdog: a game whose generator never terminates (tally-tower's cap-bump loop, 2026-10-11) hung a
+// catalogue sweep for an hour. Fail loudly instead; the game is the bug, not the test.
+const WATCHDOG_MS = Number(process.env.KDM_PLAYTHROUGH_TIMEOUT_MS) || 150000
+setTimeout(() => { console.log(`✖ FAIL: watchdog — no verdict after ${WATCHDOG_MS / 1000}s (hung generator or event loop?)`); process.exit(1) }, WATCHDOG_MS).unref()
 const file = process.argv[2] || new URL('../index.html', import.meta.url).pathname
 if (!existsSync(file)) { console.error('✖ file not found:', file); process.exit(2) }
 const url = pathToFileURL(file).href
@@ -86,8 +90,12 @@ try {
   await m.goto(url, { waitUntil: 'networkidle' })
   await m.evaluate(() => Game.start())
   await m.waitForTimeout(300)
-  const mob = await m.evaluate(() => ({ cv: !!document.querySelector('#cv'), act: !!document.querySelector('#actBtn') }))
-  if (!mob.cv || !mob.act) fail('mobile layout missing #cv/#actBtn', mob)
+  // Choice games (angle-aim, pattern-parade, shape-sort-shack) have no #actBtn — their tap targets ARE the
+  // commit (#choices). Accept either primary control; the point is that the phone layout rendered one.
+  // Tap-decision games whose canvas IS the control (gator-gulp: tap a gator) export Line.choose — accept that too.
+  // Custom (non-template) games mark their primary control with data-kdm-primary (vector-vanguard's FIRE key).
+  const mob = await m.evaluate(() => ({ cv: !!document.querySelector('#cv'), act: !!document.querySelector('#actBtn, #choices, #tiles, #ctlBox, [data-kdm-primary]') || typeof (window.Line && window.Line.choose) === 'function' }))
+  if (!mob.cv || !mob.act) fail('mobile layout missing #cv or a primary control (#actBtn/#choices/#tiles/#ctlBox, or Line.choose)', mob)
   if (mErr.length) fail('mobile page errors', mErr)
   await m.close()
 

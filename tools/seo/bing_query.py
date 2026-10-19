@@ -36,6 +36,24 @@ def ctr(c, i):
     return f'{100 * c / i:4.1f}%' if i else '  -'
 
 
+def agg(rows, key='Query'):
+    """Bing GetQueryStats/GetPageStats return one row per key x DATE — you MUST aggregate by key
+    or the same query/page appears many times with per-day fragments (cross-site gotcha, 2026-10).
+    Also note the API window is ~3 months, not whatever you request. Sums impr/clicks; position is
+    impression-weighted."""
+    g = {}
+    for x in rows:
+        k = x.get(key, '') or ''
+        a = g.setdefault(k, {key: k, 'Impressions': 0, 'Clicks': 0, '_posw': 0.0})
+        i = x.get('Impressions', 0)
+        a['Impressions'] += i
+        a['Clicks'] += x.get('Clicks', 0)
+        a['_posw'] += i * x.get('AvgImpressionPosition', 0)
+    for a in g.values():
+        a['AvgImpressionPosition'] = round(a['_posw'] / a['Impressions'], 1) if a['Impressions'] else 0
+    return list(g.values())
+
+
 # ---- overall traffic ----
 rt = call('GetRankAndTrafficStats')
 tc = sum(x.get('Clicks', 0) for x in rt)
@@ -43,7 +61,7 @@ ti = sum(x.get('Impressions', 0) for x in rt)
 print(f'Bing — {SITE}  ·  {len(rt)} days  ·  {tc} clicks / {ti} impressions (all data)')
 
 # ---- queries ----
-q = sorted(call('GetQueryStats'), key=lambda x: -x.get('Impressions', 0))
+q = sorted(agg(call('GetQueryStats'), 'Query'), key=lambda x: -x.get('Impressions', 0))
 print(f'\n## Top queries (by impressions) — {len(q)} total')
 print(f'{"query":36s} {"impr":>6} {"clk":>4} {"ctr":>6} {"pos":>4}')
 for x in q[:20]:
@@ -51,7 +69,7 @@ for x in q[:20]:
           f'{ctr(x.get("Clicks",0),x.get("Impressions",0)):>6} {x.get("AvgImpressionPosition",0):>4}')
 
 # ---- pages ----
-p = sorted(call('GetPageStats'), key=lambda x: -x.get('Impressions', 0))
+p = sorted(agg(call('GetPageStats'), 'Query'), key=lambda x: -x.get('Impressions', 0))
 print(f'\n## Top pages (by impressions) — {len(p)} total')
 print(f'{"page":46s} {"impr":>6} {"clk":>4} {"ctr":>6} {"pos":>4}')
 for x in p[:20]:

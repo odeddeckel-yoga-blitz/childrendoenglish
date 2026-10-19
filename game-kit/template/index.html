@@ -47,7 +47,10 @@
   .btn.act{background:linear-gradient(180deg,var(--acc2),#1593c0);color:#04161c;border-color:#b0f2ff;font-size:20px;padding:16px;}
   .pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:rgba(8,12,30,.72);border:1px solid var(--line);font-size:14px;font-weight:bold;}
 
-  #menu{align-items:center;justify-content:center;text-align:center;gap:18px;padding:24px;}
+  /* start-aligned + scrollable: a CENTRED column taller than a phone overflows upward where nothing can scroll, and PLAY
+     disappears above the screen (kidsdomath 10-17: 483 of 497 games at 375×667). Auto margins keep a short menu centred. */
+  #menu{align-items:center;justify-content:flex-start;text-align:center;gap:18px;padding:24px;overflow-y:auto;overscroll-behavior:contain;}
+  #menu>*{flex-shrink:0;} #menu>:first-child{margin-top:auto;} #menu>:last-child{margin-bottom:auto;}
   #menu h1{font-size:clamp(30px,6.6vw,66px);margin:0;letter-spacing:2px;
     background:linear-gradient(90deg,var(--acc),var(--acc2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:0 0 40px rgba(124,156,255,.25);}
   #menu .sub{color:var(--acc);font-size:clamp(14px,2.4vw,20px);max-width:660px;line-height:1.5;}

@@ -14,7 +14,7 @@ the existing games and pass review. Starter code: `templates/game-template/index
 
 ## PROMPT (paste this, fill the ⟨blanks⟩)
 
-> You are building one more single-file math game for the KidsDoMath hub. Topic: **⟨topic, e.g. measurement & unit conversion⟩**, target **Grade ⟨2–7⟩**, ages ~8–11 (assume a **pre/early reader** — clarity beats prose).
+> You are building one more single-file math game for the KidsDoMath hub. Topic: **⟨topic, e.g. measurement & unit conversion⟩**, target **Grade ⟨2–8⟩**, ages ~8–11 (assume a **pre/early reader** — clarity beats prose).
 >
 > **Core rule: the math IS the mechanic, never a quiz gate.** Manipulating the game *is* doing the math. Design ONE tactile mechanic where the visual/physical action embodies the concept (like the reactor tubes = equivalent fractions, the spinner sectors = probability, the fill bar = decimal magnitude). Reject any design that pops a "what is X?" question.
 >
@@ -96,7 +96,9 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
   via the miss-3 / 14s-idle scaffold path (`droneShown`), never the default render.
 - **Answer-key hints.** The drone rescue must be TWO-STAGE (the template ships it): stage 1 (3 misses or 14s
   idle) teaches the METHOD with the live puzzle's numbers — 'change = paid − price' + LED `10 − 7` — and
-  NEVER contains the final answer; stage 2 (`droneFull`, 3 further misses) appends the `🎯 answer` LED as the
+  NEVER contains the final answer — and CHECK that it doesn't by construction: if your "collected form" or
+  "worked step" reduces to the answer itself (e.g. `x + 30 = 2x → x = 30`), stage 1 must show the equation plus
+  the move to make, not the result (angle-equation-arena, 2026-10-10); stage 2 (`droneFull`, 3 further misses) appends the `🎯 answer` LED as the
   last resort. The IDLE path never escalates past stage 1 (an idle spoiler costs the kid their first attempt).
   Write one method sentence per mode. Numeric-dial games also give a commit-gated directional nudge
   (`st_low`/`st_high` — on wrong COMMIT only, never live in refresh(), or the S1 oracle returns as bisection).
@@ -273,6 +275,44 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
   best-streak badge or unlockable cosmetic theme is still the biggest untapped lever for deeper repeat play;
   add deliberately, don't bloat.
 
+## Learning-science design rules (evidence-based — enforce these)
+
+The fun doctrine makes a game engaging; these make it *teach*. Each rule has research behind it;
+a game-generation pass should satisfy all ten.
+
+1. **Retrieval every item** — the core loop must make the learner *produce* an answer
+   (type/select/drag/construct), not watch an explanation then confirm. No passive pre-attempt
+   screens. (Testing effect — Roediger & Karpicke 2006.)
+2. **Prefer generation over recognition** — fill-in / build / estimate-then-check beats
+   pick-from-a-list where feasible; even partial generation (first digit, a guess) helps.
+   (Generation effect — Slamecka & Graf 1978.)
+3. **Worked example first, then FADE** — a brand-new skill opens with 1–2 worked/guided items;
+   remove hints and scaffolding as accuracy rises. A static difficulty/hint level is wrong for
+   both ends. (Worked-example + expertise-reversal — Sweller & Cooper 1985; Kalyuga 2003.)
+4. **Immediate, informational feedback** — on each item, right/wrong *plus the correct answer and
+   why* ("6, because 2×3"), never a bare buzzer; no long delay for young learners. (Shute 2008;
+   Hattie & Timperley 2007.)
+5. **One concept per screen; the prompt is the hero** — kill decorative media/animation/sound that
+   competes with the task (extraneous cognitive load); put prompt, input, and feedback in one
+   place (no split-attention). (Cognitive load theory — Sweller 1988.)
+6. **Dual-code the concept** — show it as symbol *and* a manipulable quantity/visual (ten-frame,
+   number line, area model) and let the kid act on it; never gratuitous imagery. (Paivio; Mayer.)
+7. **Space and re-surface** — missed and mastered items reappear after a gap (later in the session
+   and in a later session); the item pool is not one-and-done. (Spacing — Cepeda 2006.)
+8. **Interleave once basics land** — shuffle problem types so the learner must first choose the
+   strategy; introduce each type blocked first, then mix. (Rohrer & Taylor 2007.)
+9. **Add germane difficulty, never extraneous** — spacing/interleaving/generation are *desirable*
+   difficulties (keep them); confusing UI, split attention, and over-tight timers are extraneous
+   (remove them). If a novice's in-session accuracy falls below ~50–60%, you've overshot.
+   (Bjork & Bjork 2011.)
+10. **Fail → instruct, by level** — ready learners may attempt a *conceptual* item before the
+    explanation (productive failure), but ALWAYS pair failure with corrective instruction; a true
+    novice on a procedural fact gets worked-examples/errorless, not open-ended struggle (which just
+    encodes the error). (Kapur 2008.)
+
+Bonus: citing the principle on the page (and shipping genuinely research-grounded content) is also
+a GEO "original/authoritative source" signal — see the playbook's distribution section.
+
 ## KOC onboarding kit (REQUIRED — this is what separates a 5/10 game from an 8/10)
 
 Pre-readers can't parse instructions. Every game must have:
@@ -335,6 +375,127 @@ Pre-readers can't parse instructions. Every game must have:
 
 (`.koc-ready` / `.koc-cue` CSS is auto-injected by `scripts/normalize-games.mjs`; the JS hooks are in the
 template. See `plans/games-koc-improvement-2026-06-30.md` for the per-dimension rubric.)
+
+## Workload check (before you call a game "done")
+Count the ACTIONS a player needs per level-up: load the game, `Game.start(1)`, and sum the required moves across
+the quota (3 rounds × moves per round). The exemplars that hold depth ≥ 3 (pattern-parade, gator-gulp) need a
+handful; number-detective needed ~57 stamps per level and sat at 0.23 level-ups/open until its boards shrank
+(2026-10-10). If a level-up costs more than ~15 deliberate actions, cut the board/quota/steps — nothing else you
+polish will matter.
+
+**Calibrated 2026-10-11b (20-game wave + catalogue scan):** games at ≤ ~30–40 taps per level-up hold depth 2+
+(integer-island 27 → 2.24, subtract-squad 39 → 2.15); games at 50–120 sat at 0.3–0.9 (recipe-rescale 0.34 at up to
+120, pictograph-pier, factor-forge, angle-pairs-post 96 → 0.44). Measure it: `node tools/game-review/workload-scan.mjs
+<id>` clicks every stepper, reads the real change in `dbg.o` and samples 12 rounds per level. Fix it in this order:
+1. **Step by the unit the math is about** — one icon = the key (pictograph-pier), one row (times-table-tower), the
+   larger number (factor-forge LCM), one pen (division-remainder-ranch), one 10% crate (percent-change-port), 45° = half
+   a right angle (angle-pairs-post), $100 notes, bundles of 5 tallies. The step itself teaches.
+2. A bigger ± pair that appears only on rounds whose range needs it (hide it at L1).
+3. Hold-to-run on − / + (420 ms, then 120 ms repeat; the held press swallows its click) for fine adjustment.
+4. Start the dial where the math starts (the base price, the double), not at 0, when 0 is never the answer.
+5. Only then cut the quota (`need` 3 → 2). A board game can also auto-consequence moves (logic-grid: a ✓ crosses out
+   its row and column) — half the taps, no pedagogy lost.
+Never add a step that lands on the answer, and keep `reachable()` true for every generated round.
+
+## Readout honesty (before you call a game "done")
+- A readout that shows a value the child has NOT entered must either stay hidden until they stage one or carry
+  the caption "you wrote" — an untouched "0 / 2" under a lit bar reads as the bar's value (fraction-fill).
+- A progress % counts matches against the TARGET set, not against every cell (mirror-lab read 84% untouched).
+- Every verb in the copy ("drag", "slide", "tap the pan") has a live handler on the thing named; prove it with a
+  headless drag/tap that changes `dbg.o`.
+- Directional feedback (`st_low` / `st_high`) is tested in every mode — subtract/reverse modes invert the sign.
+- Pieces that the child must COUNT use ONE colour; separate neighbours with spokes/gaps, never with a second hue
+  (alternating pink/purple read as "not lit").
+
+## Arcade addendum (endless real-time games — Vector Vanguard is the reference)
+Arcades (Space Invaders / Tetris / Breakout loops) are welcome — Add Attack is #4 all-time with depth 2.21 —
+but they bend three contracts, so do this explicitly (see kidsdomath `plans/arcade-classics-brief.md`):
+- **Soft lives, not game-over.** Shields deplete on misses; at zero the SECTOR restarts (same difficulty,
+  score kept, one-line teach of the fact that broke the shield). Never eject the child from the run.
+- **Teach inside the loop.** The missed fact becomes the next target (Vector Vanguard: `recordFact` → drill route).
+- **A terminal state for the hub contract.** Report `KDMProgress.played({completed:true})` at a sector cap and
+  make the harness-facing `Game.screen` return `'win'` past it, so Continue/mastery and the playthrough work.
+- **Harness shim is mandatory**: `window.Game` (`screen`/`level`/`start`) + `window.Line` (`build`/`commit`/
+  `dbg` with the full contract), stage-only `solveForTest`, `commit()` auto-dismisses any between-wave
+  overlay, and the fire control carries `data-kdm-primary` so the mobile smoke test finds it.
+- **Progress survives a restart** (Game of the Day review, 2026-10-13 — prime-chomp, 27% of opens reached L2): a sector
+  restart resets the board and shields, NEVER the level quota. Zeroing `made` on three ghost catches erased the
+  child's work and re-walled level 1. Keep `made`; generate only the targets still owed.
+- **Grid-steering games: a tap on a cell WALKS there** (one square per ~150 ms, ghosts still live, any d-pad/key/swipe
+  cancels), and **a tap on the player's own cell commits** (CHOMP/ENGULF). Moving one square per tap made a phone child
+  tap 5× to reach a number and then hunt for a separate button. The commit stays a deliberate second tap — never
+  auto-eat on arrival (that would be a tap-the-choice quiz). First-play copy says it: "Tap a number to walk there, then CHOMP."
+
+## PLAY must be reachable by a real tap (2026-10-17 — kidsdomath, catalogue-wide)
+- **Never centre a full-screen, possibly-tall column with `justify-content:center`.** Overflow goes UP as well as down, and
+  the part above scroll position 0 can't be scrolled to. Injected SEO/FAQ/"More games" blocks made kidsdomath menus taller
+  than a phone: ▶ PLAY was above the screen in 483 of 497 games at 375×667 (ten-frog: 17 opens, 0 level-ups). Start-align,
+  `overflow-y:auto`, auto margins on first/last child to centre when it fits (the template now does this).
+- **Test the entry path a child uses.** Harnesses that call `Game.start()` skip the menu entirely. Run
+  `tools/game-review/play-reach.mjs` (kidsdomath): webdriver spoofed false, 375×667 + 390×844 + desktop, PLAY must be on
+  screen AND be the element a tap at its centre hits.
+
+## Say what a child can't see (2026-10-17 — kidsdomath, 6-game cliff round + catalogue scans)
+- **A round that doesn't count must say so.** The clean-quota gate (≤2 misses) is right, but silent: a celebration while ⭐
+  stays put reads as broken (131 games). Call the shared `kdmNoCount(misses)` (or say it in the status line).
+- **A miss message must name the real cause and the control.** circuit-lemmings said "Short circuit … gap ?" for a
+  bulb shortcut — children were stuck until the answer hint. Test every miss path's text, not just that it fires.
+- **Teach the new idea where phones can see it.** 34 games hid the panel `.hint` on phones to save space, so new modes were
+  never explained there (shared fix shows it on the first level of each new mode). Don't hide the only teach line.
+- **The first-play finger must point at something tappable** (13 games pointed at a read-only #ctlBox).
+- **Cliffs are read one level early by mistake:** the level-up beacon fires on NEXT, so a drop "L2→L3" is children failing L2.
+
+## Commit button & meters (2026-10-11b)
+- **The commit button brightens on STAGING, never on correctness.** The injected `kdm-cta-emphasis` dims `.btn.act`
+  until `.koc-ready`; a game that sets `koc-ready` only on `locked && solved()` leaves LOCK IN looking disabled for the
+  whole round (~100 games shipped that way). `readyPulse(ok || (!locked && staged))`, where staged = the child changed
+  anything this round. Glowing on a CORRECT staged value would be an answer oracle — never.
+- **No decorative meters.** A lives/shield pill that never moves (forgiving games where misses cost nothing) is a
+  dishonest readout: hide it. Show shields only where they really drop (Vector Vanguard). Same for "3 shields" copy.
+- **Status line before input = a first-action prompt** ("👆 Tap + to set your count."), never "count: 0".
+- **Wrong-answer copy cites the child's own value AND names the control**: "📉 10 is too low — tap + (one 🐟 = 5)".
+- **Canvas text is drawn upright in world space** — labels drawn after `ctx.rotate` tilt with the beam and collide with
+  rims (balance-bay). `restore()` first, then draw.
+- **A panel hint and the drone must name the same target** (logic-grid said "Start with clue 1" while the drone said
+  "re-read clue 3"). Derive both from one picker.
+
+## No answer oracles before commit (2026-10-11c — found in 11 games)
+Anything that changes when the STAGED answer becomes correct tells the child the answer before they commit:
+- a commit button that glows only when right (`readyPulse(sv)` / `readyPulse(!locked && solved())`);
+- a status line that says "✅ Just right — LOCK IT!" while they are still dialing (`sv ? L('st_ok') : …` without `locked`);
+- live "too low / too high" while staging (its silence = correct) — show the child's own value/equation neutrally, judge on commit;
+- a stage-1 hint whose worked chain ends on the answer ("count 1 hour BACK: 8 → 7") — stage 1 shows the method's first step + "…";
+- chips/answers that appear only once a construction step is exactly right (a deliberate scaffold — judge case by case).
+Gate verdicts on `locked`. `tools/game-review/contract-lint.mjs` (status-oracle) and `cta-probe.mjs` (glow on a correct vs wrong staged
+value) catch the first two mechanically. Deliberate live-feedback builders (mirror-lab) mark the line `LIVE-FEEDBACK`.
+
+## Round flow (2026-10-11c)
+- **Scaffolds fade by level, never by a one-way switch.** mean-machine showed its sum ÷ count working only until the first solve
+  ever (`proactive=false` forever) — round 2 was suddenly mental arithmetic; depth 0.16. Keep the working visible through level 1
+  and the first round of each new mode.
+- **Multi-phase rounds:** name the step ("Step 1 of 2"), celebrate only the ROUND (a full confetti on a phase reads as "done" while
+  the quota doesn't move — mental-math-mesa), and make an early commit press a gentle next-step hint, not a miss.
+- **Board/puzzle games count MOVES, not taps:** moves × quota per level ≤ ~15; vary `need` per level by move count
+  (tower-of-hanoi: 3 towers × 7–15 moves = depth 0.21 → NEED=[2,2,1,1,2,1,1,1]). The stepper workload scan can't see these.
+- **`showDrone()` must redraw the canvas** (`pushFX()`) when the canvas reads the hint flag — on the idle path the guide never appeared.
+- **Respawn ≥ ~900 ms after `celebrate()` and clear particles in respawn** — 360 ms left the burst over the next board (the source of
+  the "leftover confetti" vision noise in every wave).
+- **Reset the status line in build()/respawn()** — a stale "✅ Tower rebuilt in 15 moves" sat beside a fresh puzzle.
+- **Tap-to-commit games** (tapping the answer commits) keep `#actBtn` only as a hidden contract stub; the probes skip it.
+- **Every wait is announced and looks disabled** (arcade vision + model playtest, 2026-10-12 — 7 of 9 playtest stalls):
+  between waves/boards, ball in flight, caught/home beats and the level-clear delay show a "⏳ Wait — next … coming"
+  line (short countdown where it helps) and grey the controls with `disabled` + a `.waiting` class (opacity ~.4,
+  grayscale). The shared quiet-CTA dim alone still reads as pressable. Drive it from `refresh()` off the lock/phase,
+  never as a one-off toggle.
+- **Status copy comes from LIVE state, not the event:** "Find 2 — bonk again!" with no 2 on screen, "FIRE again" after
+  the launcher reloaded, a "✅ done" line beside a fresh board. Reset the line in build()/respawn, keep a miss teach only
+  as "↩ Last shot: …", give hit notes a ~1.3 s life, and beware soft-status guards (skipped for ~2.5 s) that outlast a
+  1–2 s respawn. When the copy asks for a new choice after a miss, clear the staged value.
+- **Placeholder copy is a stuck state:** "🚀 …", "🛰 …" read as frozen. Name the wait.
+- **Neutral visuals must not pre-solve:** idle ships drawn in rows of 5 answered "÷5"; fixed-position 👇 cues read as
+  pointing at an answer. Arrange idle visuals by a non-answer unit; use one uniform cue on every option.
+- **One flash label at a time, anchored to its object**; label every non-answer prop on the board (a safety net read as
+  "the bridge", a power-up pellet read as a trap).
 
 ## Design-review lens — the 3 personas (quick pre-ship check)
 
@@ -449,10 +610,21 @@ The harness lives in `templates/game-template/test/`; see `README.md` there for 
   already-solved ones.
 - `solveForTest()` — snaps `O` to a solved state without touching the DOM. Single-stepper games may omit it
   (the playthrough dials `dbg.o` to the target directly); any multi-control layout must provide it.
+  **It STAGES, it never commits**: no `commit()`, `resolve()`, `choose()`-that-locks, `finishTower()`, last
+  `doCross()`. The harness runs stage → `solved()` → `commit()`; a helper that resolves the round respawns it
+  before `solved()` is read and the playthrough FAILS at HEAD silently — six games shipped that way
+  (river-crossing, angle-aim, pattern-parade, shape-sort-shack, gator-gulp, tower-of-hanoi, 2026-10-11).
+  `tools/game-review/contract-lint.mjs` flags it statically; a multi-move puzzle drives all moves but the
+  last and stages the last (note "STAGE" in the body so the lint knows).
+- **Generators must terminate.** A `while(duplicates)` that bumps a value with `Math.min(hi, m+1)` is a no-op
+  at the cap → infinite loop for a real player (tally-tower hung 60 min). Bound every repair loop by the
+  range, push the duplicate the OTHER way at a cap, and never loop on a condition the bump can fail to change.
 - `wrongForTest()` — drives a deliberate WRONG answer (the opposite tap / a value nudged off the answer) so the
   review tool's feedback-frame capture lands on a real miss+teach state instead of a leftover success. Without
   it, the wrong-answer frame commits from the already-advanced state and shows a WIN — a false "no feedback"
-  reading. Ship it.
+  reading. Ship it. Staging-only is fine (set the wrong value + `onInput()`, like `solveForTest`): the review
+  harness commits for you when no miss registered (it hooks `FX.setShake` / the red `#statusLine`). If the
+  game commits inside `wrongForTest` itself, `return true` so the intent is explicit.
 - `jumpToLevel(n)` — jump straight to a deep level so deep-level clarity checks (`hud-logic-mismatch.mjs`) can
   reach a round where the mode has shifted. Steppers get it free (`Game.start(n)`; the template delegates to
   it). A **real-time game** (belt/wave/lap) whose `start()` ignores levels MUST implement it: set the level,
@@ -536,3 +708,32 @@ the round differs from the previous). If your round object contains ANY per-roun
 isn't part of the question's identity (layout seeds, `token:Math.random()`, shuffled decoy order),
 you MUST also set `qkey` — a stable string naming the question (e.g. `'sides:'+shape.name`,
 `mode+':'+start+':'+dur`) — or the guard silently never rerolls and kids see the same question twice.
+
+## Cross-app harvest — content integrity + i18n (2026-10-19, CDE + yoga-bits)
+
+**Content integrity:**
+- **NO invented social proof.** Generators MUST NOT write testimonials, quotes, ratings, or "X
+  parents trust us" text. CI-grep for named-quote patterns (`testimonial`, "What Parents Say",
+  `— Name X., City`). CDE had shipped 6 invented named parent/teacher quotes (EN + HE) since March —
+  an FTC fake-review risk, and it directly undercuts a "no sign-up / trustworthy" positioning. (⚠ KDM
+  `src/lib/i18n.js` ~L666–673 has the same Sarah/David/Rachel pattern — appears unrendered/dead, but
+  owner's call to delete.)
+- **Composite titles must check containment.** When a title/description template concatenates fields
+  (`"{name} ({canonical})"`), SKIP the parenthetical when one field already contains the other —
+  else you ship "Nadi Shodhana (Nadi Shodhana Pranayama)" across every locale for weeks (yoga-bits).
+
+**i18n (any multi-locale site):**
+- **ASCII-stripped locale files are a silent, title-level defect.** A locale validator must reject any
+  Latin-with-diacritics language (de/es/fr/pt/it/nl…) whose file has implausibly few non-ASCII chars —
+  AND run the same check on the UI string table (those strings feed every title/description). yoga-bits
+  shipped "Anfanger"/"Respiracao"/"Debutant" across ~1,900 strings + 35 UI keys, uncaught for weeks.
+- **English-leak heuristic for non-Latin locales.** In ja/ko/zh/hi files, any pure-ASCII value (beyond
+  a whitelist of proper nouns/numbers) is an untranslated leak → fail the merge. Cheap; catches the
+  most common worker failure.
+- **Localized templates need language-aware fill.** Run `fill(s, vars, lang)`; for Korean, resolve
+  hedged particles 은(는)/이(가)/을(를) by the batchim of the substituted value's last syllable (skip a
+  trailing parenthetical). Workers emit the hedged form, which native readers flag instantly; the
+  resolver is ~10 lines.
+- **Native-review pass contract.** For ko/ja (any language with a reader), a second worker pass
+  outputs ONLY changed entries, and an apply script enforces key set + array lengths + placeholder
+  preservation — full-file reviewer rewrites reintroduce drift; diff-only + validator stays auto-merge-safe.
