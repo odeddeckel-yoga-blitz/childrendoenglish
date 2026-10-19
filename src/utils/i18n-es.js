@@ -251,7 +251,6 @@ export default {
   methodologyDesc: 'La repetición espaciada, la asociación de imágenes con palabras y la práctica multimodal ayudan a los niños a construir un vocabulario duradero.',
 
   // Testimonials
-  testimonialsLabel: 'Lo que dicen los padres',
 
   // Edit player
   editPlayer: 'Editar jugador',
@@ -454,13 +453,6 @@ export default {
   trustHebrewDesc: 'Interfaz completa en español y traducciones de cada palabra.',
 
   // Testimonials
-  testimonialsTitle: 'Lo que dicen los padres',
-  testimonial1Quote: 'Mi hija de 7 años pide jugar esto todos los días después de la escuela. Pasó de saber unas 20 palabras en inglés a más de 150 en tres meses. Los quizzes de imágenes hacen que se sienta como un juego, no como tarea.',
-  testimonial1Author: 'Michal R. — Madre de dos, Tel Aviv',
-  testimonial2Quote: 'Por fin una app de inglés que no bombardea a mis hijos con anuncios ni intenta vendernos una suscripción. Mis dos hijos la usan en la misma tablet con sus propios perfiles. La repetición espaciada realmente funciona — de verdad recuerdan las palabras.',
-  testimonial2Author: 'David K. — Padre de dos, Haifa',
-  testimonial3Quote: 'Como maestra de inglés de tercer grado, se la recomiendo a todos los padres de mis alumnos. Las traducciones son precisas, las palabras son apropiadas para la edad, y el modo sin conexión permite que los niños practiquen incluso sin internet.',
-  testimonial3Author: 'Yael S. — Profesora de inglés, Jerusalén',
 
   // App preview
   appPreviewTitle: 'Míralo en acción',

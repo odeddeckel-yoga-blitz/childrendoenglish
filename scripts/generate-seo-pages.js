@@ -1376,10 +1376,6 @@ function buildHebrewLandingPage() {
     .cat-count { font-size: 0.8rem; color: #2563eb; font-weight: 600; direction: ltr; }
 
     /* Testimonials */
-    .testimonials { display: flex; flex-direction: column; gap: 0.75rem; max-width: 640px; margin: 0 auto; }
-    .testimonial { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    .testimonial p { font-size: 0.9rem; color: #334155; font-style: italic; margin-bottom: 0.5rem; line-height: 1.6; }
-    .testimonial .author { font-size: 0.8rem; color: #94a3b8; font-weight: 600; font-style: normal; }
 
     /* FAQ */
     .faq-list { max-width: 700px; margin: 0 auto; }
@@ -1499,26 +1495,6 @@ function buildHebrewLandingPage() {
     </div>
   </div>
 
-  <!-- Testimonials -->
-  <div class="section" style="background:#f8fafc">
-    <div class="container">
-      <h2 class="section-title">מה הורים אומרים?</h2>
-      <div class="testimonials">
-        <div class="testimonial">
-          <p>&ldquo;הילדים שלי מכורים לחידוני התמונות! הם מבקשים לשחק כל יום אחרי בית הספר.&rdquo;</p>
-          <span class="author">— שרה מ.</span>
-        </div>
-        <div class="testimonial">
-          <p>&ldquo;סוף סוף אפליקציה ללימוד אנגלית שעובדת גם בעברית. מושלם למשפחה הדו-לשונית שלנו.&rdquo;</p>
-          <span class="author">— יעל כ.</span>
-        </div>
-        <div class="testimonial">
-          <p>&ldquo;פשוט, חינם, בלי פרסומות — בדיוק מה שחיפשתי. הבן שלי בן 7 למד 50 מילים חדשות בשבועיים.&rdquo;</p>
-          <span class="author">— דוד ר.</span>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- FAQ -->
   <div class="section">
@@ -3140,23 +3116,6 @@ const aboutHtml = `<!DOCTYPE html>
       <p style="font-size:0.9rem;color:#64748b">Also from me: <a href="https://www.kidsdomath.com" rel="me">KidsDoMath</a> &mdash; 200 free math games for kids, built on the same no-ads, privacy-first principles.</p>
     </div>
 
-    <div class="section">
-      <h2>What Parents Say</h2>
-      <div style="display:grid;gap:1rem">
-        <div style="background:#f8fafc;border-radius:0.75rem;padding:1.25rem;border-left:3px solid #2563eb">
-          <p style="font-style:italic;color:#475569;margin-bottom:0.5rem">&ldquo;My 7-year-old asks to play this every day after school. She went from knowing about 20 English words to over 150 in three months. The image quizzes make it feel like a game, not homework.&rdquo;</p>
-          <p style="font-weight:600;color:#1e293b;font-size:0.9rem">Michal R. &mdash; Mother of two, Tel Aviv</p>
-        </div>
-        <div style="background:#f8fafc;border-radius:0.75rem;padding:1.25rem;border-left:3px solid #2563eb">
-          <p style="font-style:italic;color:#475569;margin-bottom:0.5rem">&ldquo;Finally an English app that doesn&rsquo;t bombard my kids with ads or try to sell us a subscription. Both my boys (ages 8 and 10) use it on the same tablet with their own profiles. The spaced repetition really works &mdash; they actually remember the words.&rdquo;</p>
-          <p style="font-weight:600;color:#1e293b;font-size:0.9rem">David K. &mdash; Father of two, Haifa</p>
-        </div>
-        <div style="background:#f8fafc;border-radius:0.75rem;padding:1.25rem;border-left:3px solid #2563eb">
-          <p style="font-style:italic;color:#475569;margin-bottom:0.5rem">&ldquo;As a 3rd-grade English teacher, I recommend this to all my students&rsquo; parents. The Hebrew translations are accurate, the words are age-appropriate, and the offline mode means kids can practice even without internet. It&rsquo;s exactly what was missing in our toolkit.&rdquo;</p>
-          <p style="font-weight:600;color:#1e293b;font-size:0.9rem">Yael S. &mdash; English Teacher, Jerusalem</p>
-        </div>
-      </div>
-    </div>
 
     <div class="cta">
       <a href="/?utm_source=seo&utm_medium=cta&utm_content=about">Start Learning &rarr;</a>
