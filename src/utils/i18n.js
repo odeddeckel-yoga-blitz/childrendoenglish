@@ -379,7 +379,7 @@ const translations = {
     wordsReviewed: 'Words reviewed',
 
     // Landing page
-    landingHeroTitle: 'Learn English — The Fun Way!',
+    landingHeroTitle: 'English Vocabulary for Kids — Free & Fun',
     landingHeroDesc: 'Free vocabulary app for kids ages 6-12. No ads, no signup.',
     getStarted: "Let's Get Started",
     welcomeBack: 'Welcome back, {{name}}!',

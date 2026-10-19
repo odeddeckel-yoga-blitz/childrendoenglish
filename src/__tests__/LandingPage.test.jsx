@@ -20,7 +20,7 @@ const defaultProps = {
 describe('LandingPage', () => {
   it('renders hero with language selection', () => {
     render(<LandingPage {...defaultProps} />);
-    expect(screen.getByText('Learn English — The Fun Way!')).toBeInTheDocument();
+    expect(screen.getByText('English Vocabulary for Kids — Free & Fun')).toBeInTheDocument();
     // "English" appears in both the top-bar picker and the hero tile
     expect(screen.getAllByText('English').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('עברית').length).toBeGreaterThanOrEqual(1);

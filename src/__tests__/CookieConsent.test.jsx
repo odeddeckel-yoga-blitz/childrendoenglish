@@ -31,4 +31,12 @@ describe('CookieConsent', () => {
     fireEvent.click(screen.getByText('Decline'));
     expect(defaultProps.onDecline).toHaveBeenCalled();
   });
+
+  it('reserves its height at the bottom of the page and releases it on unmount', () => {
+    document.body.style.paddingBottom = '';
+    const { unmount } = render(<CookieConsent {...defaultProps} />);
+    expect(document.body.style.paddingBottom).toMatch(/px$/);
+    unmount();
+    expect(document.body.style.paddingBottom).toBe('');
+  });
 });
