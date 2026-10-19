@@ -129,7 +129,7 @@ test.describe('Landing Page', () => {
     await page.goto('/');
     await page.waitForSelector('#root > *', { timeout: 10000 });
     // Should see the landing page hero
-    await expect(page.locator('text=Learn English')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('text=English Vocabulary for Kids')).toBeVisible({ timeout: 5000 });
   });
 
   test('brand new user can pick English and reach player create', async ({ page }) => {
