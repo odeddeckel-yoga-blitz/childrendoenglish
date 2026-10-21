@@ -42,19 +42,46 @@ const generateId = () => 'player_' + Math.random().toString(36).slice(2, 10) + D
 // --- Player Registry ---
 
 /** Load the player registry, auto-migrating from legacy single-player format if needed. */
+// Real learning in a stats blob (vs. just a saved language preference).
+const hasProgress = (s) => !!(s && (s.totalQuizzes > 0 || Object.keys(s.wordProgress || {}).length || (s.badges || []).length));
+
+const readJSON = (key) => {
+  try { return JSON.parse(localStorage.getItem(key)); } catch { return null; }
+};
+
+// Until 2026-10-21 the pre-player language pick (saved to the legacy key)
+// was "migrated" into an empty 'Player 1' the moment the first real player
+// was created — every new family got a stranger profile and the "who's
+// playing?" picker on return. Drop that phantom: migrated shape, never played,
+// never the active player.
+const dropPhantomPlayer = (registry) => {
+  if (!registry?.players || registry.players.length < 2) return registry;
+  const players = registry.players.filter((p) => !(
+    p.name === 'Player 1' && p.avatar === '⭐' && p.id !== registry.activePlayerId
+    && !hasProgress(readJSON(PLAYER_PREFIX + p.id))
+  ));
+  if (players.length === registry.players.length) return registry;
+  registry.players.forEach((p) => {
+    if (!players.includes(p)) { try { localStorage.removeItem(PLAYER_PREFIX + p.id); } catch { /* ignore */ } }
+  });
+  const healed = { ...registry, players };
+  savePlayerRegistry(healed);
+  return healed;
+};
+
 export const loadPlayerRegistry = () => {
   try {
     const saved = localStorage.getItem(PLAYERS_KEY);
-    if (saved) return JSON.parse(saved);
+    if (saved) return dropPhantomPlayer(JSON.parse(saved));
   } catch (e) {
     console.warn('Failed to load player registry:', e);
   }
 
-  // Check for legacy stats that need migration
+  // Check for legacy stats that need migration — only real pre-multiplayer
+  // progress; a bare language preference saved before the first player is not one.
   try {
     const legacy = localStorage.getItem(LEGACY_STATS_KEY);
-    if (legacy) {
-      JSON.parse(legacy); // validate JSON before migrating
+    if (legacy && hasProgress(JSON.parse(legacy))) {
       const id = generateId();
       const registry = {
         schemaVersion: 2,

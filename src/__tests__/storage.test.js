@@ -258,3 +258,45 @@ describe('shouldResumeActivePlayer (skip "who\'s playing?" on a quick return)', 
     expect(shouldResumeActivePlayer(reg, 123456 + 1000)).toBe(true);
   });
 });
+
+describe('first player on a fresh device (no phantom "Player 1")', () => {
+  it('a language pick saved before any player does not become a player', () => {
+    saveStats({ ...loadStats(), uiLanguage: 'he' }); // no registry → legacy key
+    addPlayer('Dana', '🦊', true);
+    const reg = loadPlayerRegistry();
+    expect(reg.players.map(p => p.name)).toEqual(['Dana']);
+  });
+
+  it('real pre-multiplayer progress is still migrated', () => {
+    localStorage.setItem('childrendoenglish-stats', JSON.stringify({ totalQuizzes: 3, wordProgress: {}, badges: [] }));
+    const reg = loadPlayerRegistry();
+    expect(reg.players).toHaveLength(1);
+    expect(loadStats(reg.activePlayerId).totalQuizzes).toBe(3);
+  });
+
+  it('heals a device that already got the empty phantom', () => {
+    const reg = {
+      schemaVersion: 2, activePlayerId: 'player_real',
+      players: [
+        { id: 'player_ghost', name: 'Player 1', avatar: '⭐', canRead: true },
+        { id: 'player_real', name: 'Dana', avatar: '🦊', canRead: true },
+      ],
+    };
+    savePlayerRegistry(reg);
+    localStorage.setItem('childrendoenglish-player-player_ghost', JSON.stringify({ totalQuizzes: 0, wordProgress: {} }));
+    expect(loadPlayerRegistry().players.map(p => p.id)).toEqual(['player_real']);
+    expect(localStorage.getItem('childrendoenglish-player-player_ghost')).toBeNull();
+  });
+
+  it('keeps a migrated "Player 1" that has played', () => {
+    savePlayerRegistry({
+      schemaVersion: 2, activePlayerId: 'player_real',
+      players: [
+        { id: 'player_old', name: 'Player 1', avatar: '⭐', canRead: true },
+        { id: 'player_real', name: 'Dana', avatar: '🦊', canRead: true },
+      ],
+    });
+    localStorage.setItem('childrendoenglish-player-player_old', JSON.stringify({ totalQuizzes: 2, wordProgress: {} }));
+    expect(loadPlayerRegistry().players).toHaveLength(2);
+  });
+});
