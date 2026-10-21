@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-10-20T00:00:00.000Z",
+  "statsFrom": "2026-10-21T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "globe",
@@ -7,8 +7,8 @@
     "category": "school",
     "he": "גלובוס",
     "image": "/images/globe.webp",
-    "ans": 6,
-    "ok": 2,
+    "ans": 9,
+    "ok": 3,
     "since": "2026-10-19T08:47:38.177Z"
   },
   "game": {
