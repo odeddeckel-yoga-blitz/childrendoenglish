@@ -374,6 +374,16 @@ describe('useQuizFlow', () => {
     expect(result.current.selectedMode).toBe('image');
     expect(navigate).toHaveBeenCalledWith('loading');
   });
+  it('a brand-new player gets a short first quiz; later quizzes are full length', async () => {
+    const fresh = renderFlow();
+    await act(async () => { await fresh.result.current.startQuiz('beginner', 'image'); });
+    expect(fresh.result.current.quizWords).toHaveLength(5);
+
+    const returning = renderFlow({ totalQuizzes: 1 });
+    await act(async () => { await returning.result.current.startQuiz('intermediate', 'image'); });
+    expect(returning.result.current.quizWords).toHaveLength(7); // all 7 intermediate mock words
+  });
+
   describe('first-visit funnel (onb)', () => {
     const onb = () => sendLearn.mock.calls.filter(([e]) => e === 'onb').map(([, i]) => i);
     beforeEach(() => sendLearn.mockClear());

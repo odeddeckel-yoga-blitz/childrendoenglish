@@ -4437,6 +4437,58 @@ const GUIDE_GEO = {
   },
 };
 
+// Guides were pure exits (Vercel 28d ≈1.0 pageviews/visitor). A 10-second
+// "try it" — the same listen-and-tap widget as the word pages (vocab-quiz.js,
+// CSP-safe, answers feed cde_learn) — lets a parent see the product instead of
+// reading about it. Easy, unambiguous beginner animals; deterministic per guide.
+const GUIDE_QUIZ_POOL = ['dog', 'fish', 'bird', 'rabbit', 'horse', 'cow']
+  .map((id) => WORDS.find((w) => w.id === id)).filter(Boolean);
+const GUIDE_QUIZ_CSS = `
+    .mini-quiz{background:#fff;border-radius:0.75rem;padding:1.4rem;margin:0 0 1rem;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+    .mini-quiz h2{font-size:1.1rem;margin:0 0 0.3rem;color:#1e293b}
+    .mini-quiz .mq-sub{font-size:0.85rem;color:#64748b;margin:0 0 0.8rem}
+    .say-btn{display:inline-block;margin:0 0 0.9rem;padding:0.55rem 1.2rem;border:0;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:700;font-size:1rem;cursor:pointer}
+    .say-btn.say-active{transform:scale(0.97)}
+    .mq-options{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap}
+    .mq-opt{border:3px solid #e2e8f0;border-radius:0.9rem;padding:0;background:#fff;cursor:pointer;overflow:hidden;transition:transform .12s}
+    .mq-opt img{display:block;width:112px;height:112px;object-fit:cover}
+    @media (max-width:420px){.mq-options{gap:0.5rem}.mq-opt img{width:84px;height:84px}}
+    .mq-opt:hover{transform:translateY(-2px)}
+    .mq-opt.mq-right{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.3)}
+    .mq-opt.mq-wrong{border-color:#ef4444;animation:mqshake .5s}
+    .mq-opt.mq-dim{opacity:.45}
+    @keyframes mqshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+    .mq-result{margin-top:1rem}
+    .mq-yay{font-size:1.15rem;font-weight:800;color:#059669;margin:0 0 0.6rem}
+    .mq-cta{display:inline-block;padding:0.75rem 1.5rem;background:#2563eb;color:#fff !important;border-radius:999px;font-weight:700;text-decoration:none}`;
+function guideQuizHtml(slug) {
+  const pool = GUIDE_QUIZ_POOL;
+  if (pool.length < 3) return '';
+  const hash = [...slug].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+  const word = pool[hash % pool.length];
+  const others = pool.filter((w) => w.id !== word.id);
+  const d1 = others[hash % others.length];
+  const d2 = others[(hash + 1) % others.length];
+  const opts = [word, d1, d2];
+  const rot = hash % 3;
+  const ordered = opts.slice(rot).concat(opts.slice(0, rot));
+  const audioFile = word.word.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-') + '.mp3';
+  return `
+    <div class="mini-quiz" data-answer="${word.id}">
+      <h2>🎮 Try it in 10 seconds</h2>
+      <p class="mq-sub">This is how the app works: listen, then tap the right picture.</p>
+      <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear the word">🔊 Listen</button>
+      <div class="mq-options">
+        ${ordered.map((w) => `<button class="mq-opt" data-k="${w.id}" aria-label="picture option"><img src="/images/${w.id}.webp" alt="" width="112" height="112" loading="lazy" /></button>`).join('\n        ')}
+      </div>
+      <div class="mq-result" hidden>
+        <p class="mq-yay">🎉 That&rsquo;s right &mdash; it was &ldquo;${escapeHtml(word.word)}&rdquo;!</p>
+        <a class="mq-cta" href="/?utm_source=seo&utm_medium=miniquiz&utm_content=guide">Play 5 more free &mdash; no sign-up &rarr;</a>
+      </div>
+    </div>
+    <script defer src="/vocab-quiz.js"></script>`;
+}
+
 for (const guide of GUIDES) {
   const geo = GUIDE_GEO[guide.slug] || {};
   const guideUrl = `${SITE}/guides/${guide.slug}/`;
@@ -4578,6 +4630,7 @@ for (const guide of GUIDES) {
     .mid-cta a:hover { background: #1d4ed8; }
     .mid-cta p { margin-top: 0.4rem; font-size: 0.8rem; color: #64748b; }
     .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+${GUIDE_QUIZ_CSS}
   </style>
 </head>
 <body>
@@ -4599,6 +4652,8 @@ for (const guide of GUIDES) {
         <div>Software developer &amp; parent &middot; Creator of Children Do English</div>
       </div>
     </div>
+
+    ${guideQuizHtml(guide.slug)}
 
     ${tocHtml}
 

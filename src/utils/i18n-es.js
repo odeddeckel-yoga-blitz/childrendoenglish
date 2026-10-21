@@ -434,6 +434,11 @@ export default {
 
   // UX improvements
   playerNameHint: 'Escribe un nombre para continuar',
+  playerNameOptional: 'No hace falta un nombre — puedes añadirlo después',
+  startPlaying: 'Empezar a jugar',
+  defaultPlayerName: 'Jugador 1',
+  nameAfterQuiz: '¡Muy bien! ¿Cómo te llamas?',
+  nameAfterQuizSave: 'Guardar',
   learnMoreToUnlock: '¡Aprende más palabras para desbloquear!',
   badgeProgressQuizzes: '{{done}}/{{total}} quizzes',
   badgeProgressWords: '{{done}}/{{total}} palabras aprendidas',

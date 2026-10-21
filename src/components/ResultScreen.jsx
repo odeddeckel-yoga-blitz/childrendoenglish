@@ -1,10 +1,11 @@
+import { useState } from 'react';
 import { Play, ArrowLeft, Check, X as XIcon, Zap, Flame } from 'lucide-react';
 import { getWordById } from '../data/words';
 import { LIGHTNING_SECS } from '../utils/arcade';
 import { t } from '../utils/i18n';
 import { ARCADE } from '../data/arcadeGames';
 
-export default function ResultScreen({ cycleNext, cycleRepeats, results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onMenu, onLightning }) {
+export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onMenu, onLightning }) {
   const { score, total, answers = [], arcade, arcadeNewBest, quit } = results;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const showLightning = !!onLightning && canRead && !quit && total > 0;
@@ -18,6 +19,14 @@ export default function ResultScreen({ cycleNext, cycleRepeats, results, lang = 
     : percentage >= 70 ? 'text-blue-600'
     : percentage >= 50 ? 'text-amber-600'
     : 'text-rose-500';
+
+  const [nameDraft, setNameDraft] = useState('');
+  const [nameSaved, setNameSaved] = useState(false);
+  const saveName = () => {
+    if (!nameDraft.trim()) return;
+    namePrompt.onSave(nameDraft.trim());
+    setNameSaved(true);
+  };
 
   return (
     <div className="animate-fade-in space-y-4">
@@ -37,6 +46,37 @@ export default function ResultScreen({ cycleNext, cycleRepeats, results, lang = 
           />
         </div>
       </div>
+
+      {/* Play-first rename: a player who skipped the name gets asked once they've played */}
+      {namePrompt && !quit && !nameSaved && (
+        <form
+          className="glass rounded-2xl p-4 space-y-2"
+          onSubmit={(e) => { e.preventDefault(); saveName(); }}
+        >
+          <label htmlFor="result-name" className="block text-sm font-bold text-slate-700 dark:text-slate-200">
+            {t('nameAfterQuiz', lang)}
+          </label>
+          <div className="flex gap-2">
+            <input
+              id="result-name"
+              type="text"
+              value={nameDraft}
+              onChange={(e) => setNameDraft(e.target.value)}
+              maxLength={20}
+              className="flex-1 min-w-0 px-3 py-2 rounded-xl bg-white/70 border border-slate-200 text-slate-700
+                         dark:text-slate-200 focus:outline-hidden focus:ring-2 focus:ring-blue-400"
+              placeholder={t('playerNamePlaceholder', lang)}
+            />
+            <button
+              type="submit"
+              disabled={!nameDraft.trim()}
+              className="px-4 py-2 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 disabled:opacity-40"
+            >
+              {t('nameAfterQuizSave', lang)}
+            </button>
+          </div>
+        </form>
+      )}
 
       {/* This-run arcade stats (kidsdomath crossover) */}
       {arcade && arcade.score > 0 && (

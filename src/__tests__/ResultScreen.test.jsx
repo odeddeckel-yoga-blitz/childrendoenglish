@@ -129,4 +129,18 @@ describe('ResultScreen arcade layer', () => {
     expect(screen.getByText('Play Again')).toBeInTheDocument();
     expect(screen.queryByText('★ NEW BEST SCORE!')).not.toBeInTheDocument();
   });
+
+  it('offers a rename to a player who skipped the name, then hides it', () => {
+    const onSave = vi.fn();
+    render(<ResultScreen {...defaultProps} namePrompt={{ onSave }} />);
+    fireEvent.change(screen.getByLabelText('Nice playing! What’s your name?'), { target: { value: 'Dana' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(onSave).toHaveBeenCalledWith('Dana');
+    expect(screen.queryByLabelText('Nice playing! What’s your name?')).toBeNull();
+  });
+
+  it('no rename offer after a quit', () => {
+    render(<ResultScreen {...defaultProps} results={{ score: 1, total: 10, answers: [], quit: true }} namePrompt={{ onSave: vi.fn() }} />);
+    expect(screen.queryByLabelText('Nice playing! What’s your name?')).toBeNull();
+  });
 });

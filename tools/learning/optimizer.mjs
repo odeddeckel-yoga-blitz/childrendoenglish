@@ -235,19 +235,26 @@ if (pageOpens > 0 || gameIds.length > 0) {
 }
 
 // --- first-visit funnel (onb tallies; ships 2026-10-18) ---
-// create_view = first-player screen shown (Start stays disabled until a name is
-// typed) → create_done → q1_start → q1_done | q1_quit. A big view→done drop =
-// the name wall; done→q1_start drop = the menu loses new players.
+// create_view = first-player screen shown → create_done (typed a name) |
+// create_noname (play-first, 2026-10-21: skipped it, default name) → q1_start
+// → q1_done | q1_quit; name_later = renamed on a result screen afterwards.
+// ⚠ create_done never fired before 2026-10-21 (phantom 'Player 1' bug made
+// every first player the SECOND) — read view→created only from 10-22 on.
+// The first quiz is 5 questions since 2026-10-21 (was 10).
 {
-  const S = ['create_view', 'create_done', 'q1_start', 'q1_done', 'q1_quit'];
+  const S = ['create_view', 'create_done', 'create_noname', 'name_later', 'q1_start', 'q1_done', 'q1_quit'];
   const onb = Object.fromEntries(S.map((k) => [k, 0]));
   for (const r of rows) if (r.ev === 'onb' && r.item in onb) onb[r.item] += r.n;
   if (onb.create_view > 0) {
     const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '—');
-    console.log(`\n— first visit: create-player shown ${onb.create_view} → created ${onb.create_done} (${pct(onb.create_done, onb.create_view)})` +
-      ` → 1st quiz started ${onb.q1_start} (${pct(onb.q1_start, onb.create_done)}) → finished ${onb.q1_done} / quit ${onb.q1_quit}`);
-    if (onb.create_view >= 15 && onb.create_done / onb.create_view < 0.6)
-      console.log('  ⚠ the name screen loses ≥40% — ship play-first (empty name → "Player 1", rename later)');
+    const created = onb.create_done + onb.create_noname;
+    console.log(`\n— first visit: create-player shown ${onb.create_view} → created ${created} (${pct(created, onb.create_view)};` +
+      ` ${onb.create_noname} skipped the name, ${onb.name_later} named later)` +
+      ` → 1st quiz started ${onb.q1_start} (${pct(onb.q1_start, created)}) → finished ${onb.q1_done} (${pct(onb.q1_done, onb.q1_start)}) / quit ${onb.q1_quit}`);
+    if (onb.create_view >= 15 && created / onb.create_view < 0.6)
+      console.log('  ⚠ the create-player screen still loses ≥40% even with the name optional — consider auto-creating the first player');
+    if (onb.q1_start >= 15 && onb.q1_done / onb.q1_start < 0.5)
+      console.log('  ⚠ under half finish the (5-question) first quiz — look at the first quiz itself');
   } else {
     console.log('\n— first visit: no onb data yet (funnel ships 2026-10-18)');
   }

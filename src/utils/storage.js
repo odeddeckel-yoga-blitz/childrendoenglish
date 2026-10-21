@@ -111,7 +111,7 @@ export const savePlayerRegistry = (registry) => {
   }
 };
 
-export const addPlayer = (name, avatar, canRead) => {
+export const addPlayer = (name, avatar, canRead, autoName = false) => {
   const registry = loadPlayerRegistry() || {
     schemaVersion: 2,
     activePlayerId: null,
@@ -119,6 +119,7 @@ export const addPlayer = (name, avatar, canRead) => {
   };
   const id = generateId();
   const player = { id, name, avatar, canRead, createdAt: new Date().toISOString() };
+  if (autoName) player.autoName = true; // play-first: default name, offered a rename after the first quiz
   registry.players.push(player);
   if (!registry.activePlayerId) registry.activePlayerId = id;
   // Initialize empty stats for new player
@@ -155,10 +156,14 @@ export const updatePlayerProfile = (id, updates) => {
   if (!registry) return;
   const player = registry.players.find(p => p.id === id);
   if (!player) return;
-  if (updates.name !== undefined) player.name = updates.name;
+  if (updates.name !== undefined) {
+    player.name = updates.name;
+    if (updates.autoName === undefined) delete player.autoName; // renamed anywhere = named
+  }
   if (updates.avatar !== undefined) player.avatar = updates.avatar;
   if (updates.canRead !== undefined) player.canRead = updates.canRead;
   if (updates.knownLetters !== undefined) player.knownLetters = updates.knownLetters;
+  if (updates.autoName !== undefined) player.autoName = updates.autoName;
   savePlayerRegistry(registry);
 };
 

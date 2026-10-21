@@ -42,6 +42,24 @@ describe('PlayerCreate', () => {
     fireEvent.click(createBtns[createBtns.length - 1]);
     expect(defaultProps.onCreatePlayer).toHaveBeenCalledWith('TestKid', '🦊', true);
   });
+  it('first player can start without a name (play-first) and gets a default name', () => {
+    const onCreatePlayer = vi.fn();
+    render(<PlayerCreate {...defaultProps} onCreatePlayer={onCreatePlayer} first />);
+    const btn = screen.getByRole('button', { name: 'Start playing' });
+    expect(btn).not.toBeDisabled();
+    expect(screen.getByText('No name needed — you can add one later')).toBeInTheDocument();
+    fireEvent.click(btn);
+    expect(onCreatePlayer).toHaveBeenCalledWith('Player 1', '🦊', true, true);
+  });
+
+  it('first player who types a name is created with it', () => {
+    const onCreatePlayer = vi.fn();
+    render(<PlayerCreate {...defaultProps} onCreatePlayer={onCreatePlayer} first />);
+    fireEvent.change(screen.getByPlaceholderText('Emma'), { target: { value: 'Dana' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Start playing' }));
+    expect(onCreatePlayer).toHaveBeenCalledWith('Dana', '🦊', true);
+  });
+
   it('counts the first-player screen (onb create_view), not later players', () => {
     sendLearn.mockClear();
     render(<PlayerCreate {...defaultProps} first />);

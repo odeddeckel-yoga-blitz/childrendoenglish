@@ -434,6 +434,11 @@ export default {
 
   // UX improvements
   playerNameHint: 'הכניסו שם כדי להמשיך',
+  playerNameOptional: 'לא צריך שם — אפשר להוסיף אחר כך',
+  startPlaying: 'מתחילים לשחק',
+  defaultPlayerName: 'שחקן 1',
+  nameAfterQuiz: 'כל הכבוד! איך קוראים לך?',
+  nameAfterQuizSave: 'שמירה',
   learnMoreToUnlock: 'למדו עוד מילים כדי לפתוח!',
   badgeProgressQuizzes: '{{done}}/{{total}} חידונים',
   badgeProgressWords: '{{done}}/{{total}} מילים נלמדו',

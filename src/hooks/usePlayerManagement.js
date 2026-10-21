@@ -11,10 +11,10 @@ export default function usePlayerManagement({ navigate, setStats }) {
 
   const activePlayer = playerRegistry?.players.find(p => p.id === playerRegistry.activePlayerId) || null;
 
-  const handleCreatePlayer = useCallback((name, avatar, canRead) => {
-    const id = addPlayer(name, avatar, canRead);
+  const handleCreatePlayer = useCallback((name, avatar, canRead, autoName = false) => {
+    const id = addPlayer(name, avatar, canRead, autoName);
     const reg = loadPlayerRegistry();
-    if (reg.players.length === 1) sendLearn('onb', 'create_done');
+    if (reg.players.length === 1) sendLearn('onb', autoName ? 'create_noname' : 'create_done');
     reg.activePlayerId = id;
     savePlayerRegistry(reg);
     setPlayerRegistry({ ...reg });

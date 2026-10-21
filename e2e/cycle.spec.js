@@ -17,11 +17,28 @@ async function reachMenu(page, { canRead = true } = {}) {
   const nameInput = page.locator('input[type="text"]').first();
   await nameInput.waitFor({ timeout: 8000 });
   await nameInput.fill('CycleKid');
-  await page.locator('button:has-text("Create")').first().click();
+  await page.locator('button:has-text("Start playing")').first().click();
   const readBtn = page.locator(canRead ? 'text=I can read!' : 'text=Not yet');
   if (await readBtn.count()) await readBtn.click();
   await page.waitForTimeout(800);
 }
+
+test('play-first: a new player can start without typing a name', async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
+  });
+  await page.goto('/');
+  await page.waitForSelector('#root > *', { timeout: 10000 });
+  const enTile = page.locator('button', { hasText: 'Learn vocabulary in English' });
+  await enTile.scrollIntoViewIfNeeded();
+  await enTile.click();
+  await expect(page.getByText('No name needed — you can add one later')).toBeVisible({ timeout: 8000 });
+  await page.getByRole('button', { name: 'Start playing' }).click();
+  await expect(page.getByText(/Word batch 1/)).toBeVisible({ timeout: 8000 });
+  const players = await page.evaluate(() => JSON.parse(localStorage.getItem('childrendoenglish-players')).players);
+  expect(players).toHaveLength(1);
+  expect(players[0]).toMatchObject({ name: 'Player 1', autoName: true });
+});
 
 async function openLadder(page) {
   await page.getByText(/Word batch 1/).click();

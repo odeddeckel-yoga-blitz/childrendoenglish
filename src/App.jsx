@@ -715,6 +715,13 @@ export default function App() {
       case 'finished':
         return (
           <ResultScreen
+            // Asked after each of the first 3 quizzes only — an offer, not a nag.
+            namePrompt={activePlayer?.autoName && (stats.totalQuizzes || 0) <= 3 ? {
+              onSave: (name) => {
+                handleUpdatePlayer(activePlayer.id, { name, autoName: false });
+                sendLearn('onb', 'name_later');
+              },
+            } : null}
             results={quizFlow.quizResults}
             stats={stats}
             lang={lang}

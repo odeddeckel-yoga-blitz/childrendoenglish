@@ -14,9 +14,16 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack, firs
   const [avatar, setAvatar] = useState('🦊');
   const [canRead, setCanRead] = useState(true);
 
+  // Play-first: the FIRST player may skip the name (a typed name was the
+  // first wall) — they get a default name and a rename offer after their
+  // first quiz. Adding a sibling still needs a name to tell profiles apart.
+  const nameOptional = first;
+  const canCreate = nameOptional || !!name.trim();
+
   const handleCreate = () => {
-    if (!name.trim()) return;
-    onCreatePlayer(name.trim(), avatar, canRead);
+    if (!canCreate) return;
+    if (name.trim()) onCreatePlayer(name.trim(), avatar, canRead);
+    else onCreatePlayer(t('defaultPlayerName', lang), avatar, canRead, true);
   };
 
   return (
@@ -101,16 +108,16 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack, firs
       {/* Create button */}
       <button
         onClick={handleCreate}
-        disabled={!name.trim()}
+        disabled={!canCreate}
         className="w-full py-3.5 px-6 bg-blue-600 text-white rounded-xl font-semibold text-lg
                    hover:bg-blue-700 active:scale-95 transition-all
                    disabled:opacity-40 disabled:active:scale-100"
       >
-        {t('createPlayer', lang)}
+        {nameOptional ? t('startPlaying', lang) : t('createPlayer', lang)}
       </button>
       {!name.trim() && (
         <p className="text-center text-sm text-slate-400">
-          {t('playerNameHint', lang)}
+          {t(nameOptional ? 'playerNameOptional' : 'playerNameHint', lang)}
         </p>
       )}
     </div>

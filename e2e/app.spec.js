@@ -520,7 +520,7 @@ test.describe('Onboarding Full Flow', () => {
     await nameInput.waitFor({ timeout: 15000 });
     await nameInput.fill('Test');
     // Click create button
-    const createBtn = page.locator('button:has-text("יצירת שחקן"), button:has-text("Create Player")').first();
+    const createBtn = page.locator('button:has-text("מתחילים לשחק"), button:has-text("Start playing")').first();
     await createBtn.click();
 
     // Should go to menu — verify Hebrew RTL applied

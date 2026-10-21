@@ -436,6 +436,11 @@ const translations = {
 
     // UX improvements
     playerNameHint: 'Enter a name to continue',
+    playerNameOptional: 'No name needed — you can add one later',
+    startPlaying: 'Start playing',
+    defaultPlayerName: 'Player 1',
+    nameAfterQuiz: 'Nice playing! What’s your name?',
+    nameAfterQuizSave: 'Save',
     learnMoreToUnlock: 'Learn more words to unlock!',
     badgeProgressQuizzes: '{{done}}/{{total}} quizzes',
     badgeProgressWords: '{{done}}/{{total}} words learned',

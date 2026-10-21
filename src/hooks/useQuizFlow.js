@@ -11,6 +11,13 @@ import { sendLearn, sendLearnBatch } from '../utils/learnBeacon';
 // word progress, so this stays true only until the first real answer).
 const isFreshPlayer = (s) => !s?.totalQuizzes && !Object.keys(s?.wordProgress || {}).length;
 
+// A brand-new player's first quiz is short: only ~1/3 finished the 10-question
+// first quiz (onb funnel 10-18→21: 28 started, 9 done, 6 quit, 13 vanished).
+// Reaching the result screen fast matters more than covering the whole set —
+// the ladder's later steps revisit the same words anyway.
+export const FIRST_QUIZ_LEN = 5;
+export const QUIZ_LEN = 10;
+
 export default function useQuizFlow({ stats, setStats, navigate, knownLetters = null }) {
   const [selectedLevel, setSelectedLevel] = useState(null);
   const [selectedMode, setSelectedMode] = useState(null);
@@ -38,7 +45,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     // Distractor options must be readable too — restrict them to known letters
     // (getDistractors tops up from the full vocabulary only if it runs dry).
     const restrict = knownLetters?.length ? filterByKnownLetters(WORDS, knownLetters) : null;
-    const selected = selectQuizWords(pool, stats.wordProgress, 10);
+    const selected = selectQuizWords(pool, stats.wordProgress, isFreshPlayer(stats) ? FIRST_QUIZ_LEN : QUIZ_LEN);
 
     if (selected.length === 0) {
       navigate('menu');
@@ -133,7 +140,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
         }
 
         // Unlock next level
-        if (selectedLevel && score >= 7 && total === 10) {
+        if (selectedLevel && score >= 7 && total === QUIZ_LEN) {
           const levels = ['beginner', 'intermediate', 'advanced'];
           const idx = levels.indexOf(selectedLevel);
           if (idx < levels.length - 1) {
