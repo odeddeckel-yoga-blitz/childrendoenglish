@@ -62,6 +62,41 @@ const langRows = await q`SELECT lang, ev, item, sum(n)::int AS n
   FROM cde_learn WHERE day >= CURRENT_DATE - ${days}::int AND ev IN ('ans_ok','ans_no')
   GROUP BY lang, ev, item`;
 
+// --- recording health (2026-10-23) ---
+// The beacon fails QUIET by design, so a Neon outage/quota shows up only as a
+// hole in the data. KDM silently lost ~2h on 2026-10-22. Each recent full day is
+// compared with the median of the 14 days before it: <30% (or zero) = a likely
+// recording gap; >4× = a bot/test burst (cde_learn 2026-10-21 = 6,726). Either
+// way, investigate before trusting a read that spans that day.
+{
+  const daily = await q`SELECT to_char(d, 'YYYY-MM-DD') AS day,
+      COALESCE((SELECT sum(n) FROM cde_learn WHERE day = d::date), 0)::int AS learn,
+      COALESCE((SELECT sum(n) FROM cde_land  WHERE day = d::date), 0)::int AS land
+    FROM generate_series(CURRENT_DATE - 21, CURRENT_DATE - 1, interval '1 day') d ORDER BY d`;
+  const median = (xs) => { const s = [...xs].sort((a, b) => a - b); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : 0; };
+  const flags = [];
+  for (let i = daily.length - 7; i < daily.length; i++) {
+    if (i < 7) continue;
+    const prior = daily.slice(Math.max(0, i - 14), i);
+    for (const t of ['learn', 'land']) {
+      const med = median(prior.map((r) => r[t]));
+      const v = daily[i][t];
+      const day = daily[i].day;
+      // Both tables are written by the same endpoint: if the OTHER one is normal
+      // that day, the DB was accepting writes — a dip is low activity, not lost data.
+      const o = t === 'learn' ? 'land' : 'learn';
+      const otherOk = daily[i][o] >= 0.5 * median(prior.map((r) => r[o]));
+      if (med >= 20 && v < 0.3 * med) flags.push(otherOk
+        ? `  · ${day} cde_${t} ${v} vs median ${med} — low, but cde_${o} was normal (DB accepting writes) → low activity, not a recording gap`
+        : `  ⚠ ${day} cde_${t} ${v} vs median ${med} — possible RECORDING GAP (Neon quota/outage? check Vercel logs for "[land] … cause=") — investigate, don't trust`);
+      else if (med >= 20 && v > 4 * med) flags.push(`  ⚠ ${day} cde_${t} ${v} vs median ${med} — BURST (bot/test?) — exclude from reads unless explained`);
+    }
+  }
+  console.log('— recording health (last 7 full days vs trailing 14-day median):');
+  console.log(flags.length ? flags.join('\n') : '  ok — no gaps or bursts');
+  console.log('');
+}
+
 if (rows.length === 0) {
   console.log(`No learning events in the last ${days}d — the beacon ships with this commit; give it traffic.`);
   process.exit(0);

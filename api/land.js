@@ -21,10 +21,28 @@ const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb']);
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
 
+// Classify a DB failure so the function log names the REAL cause — the beacon
+// itself must stay silent (204), and a silent beacon + a Neon quota = invisible
+// data loss (KDM lost ~2h of events on 2026-10-22 that way).
+function failCause(err) {
+  const m = String(err?.message || err || '');
+  if (/\b402\b|quota|exceeded|compute time|data transfer limit/i.test(m)) return 'neon-quota';
+  if (/\b40[13]\b|password authentication|authentication failed|invalid.*(token|credential)|role .* does not exist/i.test(m)) return 'bad-credentials';
+  if (/fetch failed|ECONN|ETIMEDOUT|ENOTFOUND|timeout|\b5\d\d\b/i.test(m)) return 'neon-unreachable';
+  return 'other';
+}
+function logFail(where, err) {
+  console.error(`[land] ${where} failed — cause=${failCause(err)} status=${err?.status ?? err?.code ?? '-'} msg=${String(err?.message || err).slice(0, 300)}`);
+}
+
 let ready = null;
+let warnedNoUrl = false;
 function sql() {
   const url = process.env.CDE_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL;
-  if (!url) return null;
+  if (!url) {
+    if (!warnedNoUrl) { warnedNoUrl = true; console.error('[land] no database URL configured — events are being DROPPED (cause=no-db-url)'); }
+    return null;
+  }
   const q = neon(url);
   if (!ready) {
     ready = Promise.all([
@@ -36,7 +54,7 @@ function sql() {
         day date NOT NULL, ev text NOT NULL, item text NOT NULL,
         lang text NOT NULL DEFAULT 'en', n bigint NOT NULL DEFAULT 0,
         PRIMARY KEY (day, ev, item, lang))`,
-    ]);
+    ]).catch((err) => { ready = null; throw err; }); // don't cache a failed init — it would drop every event until the next cold start
   }
   return q;
 }
@@ -86,13 +104,19 @@ export default async function handler(req, res) {
       const days = Math.min(365, Math.max(1, Number(req.query.days) || 30));
       const q = sql();
       if (!q) return res.status(200).json({ days, rows: [], note: 'no database configured' });
-      await ready;
-      const rows = await q`SELECT day, page, src, lang, sum(n)::int AS n FROM cde_land
-        WHERE day >= CURRENT_DATE - ${days}::int GROUP BY day, page, src, lang ORDER BY day DESC`;
-      return res.status(200).json({ days, rows });
+      try {
+        await ready;
+        const rows = await q`SELECT day, page, src, lang, sum(n)::int AS n FROM cde_land
+          WHERE day >= CURRENT_DATE - ${days}::int GROUP BY day, page, src, lang ORDER BY day DESC`;
+        return res.status(200).json({ days, rows });
+      } catch (err) {
+        logFail('report read', err);
+        return res.status(503).json({ error: 'database read failed', cause: failCause(err) });
+      }
     }
     return res.status(405).end();
-  } catch {
+  } catch (err) {
+    logFail(req.method === 'POST' ? 'beacon write' : 'request', err);
     return res.status(204).end(); // a beacon endpoint must never surface an error
   }
 }
