@@ -48,5 +48,23 @@
   "/vocabulary/everyday/candle/": {
     "description": "A real photo, native-speaker audio, a 30-second quiz and the Hebrew word (נר) — the fun way for kids to learn \"candle\" in English. Free, no ads, no sign-up.",
     "added": "2026-10-10"
+  },
+  "/vocabulary/sports/spanish/": {
+    "title": "{n} Sports & Activities in Spanish and English, with Pictures",
+    "description": "Deportes en inglés y español para niños: {n} sports and activities side by side, each with a picture, English pronunciation and a kid-friendly definition. Free, no ads, no sign-up.",
+    "added": "2026-10-24",
+    "note": "ES step 2 — count-led short title (queries '20 sports in spanish', '30 deportes en ingles y español'); Spanish-parent phrase leads the description. Other 10 /spanish/ pages = control"
+  },
+  "/vocabulary/food/spanish/": {
+    "title": "{n} Foods & Drinks in Spanish and English, with Pictures",
+    "description": "Comidas y bebidas en inglés y español para niños: {n} foods and drinks side by side, each with a picture, English pronunciation and a kid-friendly definition. Free, no ads, no sign-up.",
+    "added": "2026-10-24",
+    "note": "ES step 2 — count-led short title (queries '20 sports in spanish', '30 deportes en ingles y español'); Spanish-parent phrase leads the description. Other 10 /spanish/ pages = control"
+  },
+  "/vocabulary/transport/spanish/": {
+    "title": "{n} Transport & Vehicle Words in Spanish and English",
+    "description": "Transporte y vehículos en inglés y español para niños: {n} vehicles side by side, each with a picture, English pronunciation and a kid-friendly definition. Free, no ads, no sign-up.",
+    "added": "2026-10-24",
+    "note": "ES step 2 — count-led short title (queries '20 sports in spanish', '30 deportes en ingles y español'); Spanish-parent phrase leads the description. Other 10 /spanish/ pages = control"
   }
 }

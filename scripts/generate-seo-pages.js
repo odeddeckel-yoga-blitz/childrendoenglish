@@ -1022,8 +1022,11 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
 
 function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words) {
   const url = `${SITE}/vocabulary/${slug}/spanish/`;
-  const title = `${displayName} in Spanish and English — Vocabulario bilingüe para niños | Children Do English`;
-  const description = `Learn ${words.length} ${displayName.toLowerCase()} words in English and Spanish side by side — ${spanishName.toLowerCase()} en inglés para niños. With pictures, English pronunciation, and definitions. Free bilingual vocabulary for kids ages 6-12.`;
+  // Per-page overrides (seo-title-overrides.json); {n} = word count so the number never drifts
+  const override = TITLE_OVERRIDES[`/vocabulary/${slug}/spanish/`] || {};
+  const fill = (s) => s && s.replaceAll('{n}', words.length);
+  const title = fill(override.title) || `${displayName} in Spanish and English — Vocabulario bilingüe para niños | Children Do English`;
+  const description = fill(override.description) || `Learn ${words.length} ${displayName.toLowerCase()} words in English and Spanish side by side — ${spanishName.toLowerCase()} en inglés para niños. With pictures, English pronunciation, and definitions. Free bilingual vocabulary for kids ages 6-12.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -1272,6 +1275,14 @@ function buildHebrewLandingPage() {
       },
       {
         '@type': 'Question',
+        name: 'אפשר ללמוד אנגלית במחשב?',
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: 'כן. האתר עובד בדפדפן — במחשב, בטאבלט ובטלפון — בלי להוריד ובלי להתקין כלום. במחשב רואים את התמונות בגדול ושומעים את ההגייה ברמקולים.',
+        },
+      },
+      {
+        '@type': 'Question',
         name: 'האם כמה ילדים יכולים להשתמש באותו מכשיר?',
         acceptedAnswer: {
           '@type': 'Answer',
@@ -1281,11 +1292,13 @@ function buildHebrewLandingPage() {
     ],
   });
 
+  // Hebrew twins (/vocabulary/<c>/hebrew/), not the English category pages —
+  // keeps a Hebrew-speaking visitor inside the Hebrew cluster.
   const categoryGrid = CATEGORIES.map((slug) => {
     const hebrewName = CATEGORY_NAMES_HE[slug] || slug;
     const words = getWordsByCategory(slug);
     return `
-        <a href="/vocabulary/${slug}/" class="cat-item">
+        <a href="/vocabulary/${slug}/hebrew/" class="cat-item">
           <span class="cat-name">${hebrewName}</span>
           <span class="cat-count">${words.length} מילים</span>
         </a>`;
@@ -1485,6 +1498,28 @@ function buildHebrewLandingPage() {
     </div>
   </div>
 
+  <!-- By age -->
+  <div class="section">
+    <div class="container">
+      <h2 class="section-title">אנגלית לילדים לפי גיל</h2>
+      <div class="cat-grid">
+        ${HE_GAMES_AGES.map((a) => `
+        <a href="/he/english-games/${a.slug}/" class="cat-item">
+          <span class="cat-name">גילאי ${a.ages}</span>
+          <span class="cat-count">כיתות ${a.grades}</span>
+        </a>`).join('\n')}
+      </div>
+    </div>
+  </div>
+
+  <!-- Computer / tablet / phone -->
+  <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">לימוד אנגלית לילדים במחשב, בטאבלט ובטלפון</h2>
+      <p style="max-width:640px;margin:0 auto;text-align:center;line-height:1.7">האתר עובד ישר מהדפדפן — בלי להוריד אפליקציה ובלי להתקין כלום. במחשב הילדים רואים את התמונות בגדול ושומעים את ההגייה ברמקולים; בטלפון ובטאבלט נוגעים בתמונה כדי לשמוע את המילה. ההתקדמות נשמרת במכשיר, ואחרי הביקור הראשון אפשר להמשיך גם בלי אינטרנט.</p>
+    </div>
+  </div>
+
   <!-- Category grid -->
   <div class="section">
     <div class="container">
@@ -1526,6 +1561,10 @@ function buildHebrewLandingPage() {
           <div class="faq-a">כן! האפליקציה היא Progressive Web App ושומרת את התוכן במטמון לאחר הביקור הראשון, כך שהילדים יכולים ללמוד גם בלי חיבור לאינטרנט.</div>
         </div>
         <div class="faq-item">
+          <div class="faq-q">אפשר ללמוד אנגלית במחשב?</div>
+          <div class="faq-a">כן. האתר עובד בדפדפן — במחשב, בטאבלט ובטלפון — בלי להוריד ובלי להתקין כלום. במחשב רואים את התמונות בגדול ושומעים את ההגייה ברמקולים.</div>
+        </div>
+        <div class="faq-item">
           <div class="faq-q">האם כמה ילדים יכולים להשתמש באותו מכשיר?</div>
           <div class="faq-a">כן! האפליקציה תומכת בפרופילים מרובים כך שכל אח או אחות יכולים לעקוב אחרי ההתקדמות שלהם בנפרד באותו מכשיר.</div>
         </div>
@@ -1536,7 +1575,7 @@ function buildHebrewLandingPage() {
   <!-- Final CTA -->
   <div class="final-cta">
     <h2>מוכנים להתחיל?</h2>
-    <p>הצטרפו לאלפי ילדים שכבר לומדים אנגלית בכיף!</p>
+    <p>אפשר להתחיל עכשיו — בלי הרשמה ובלי להוריד כלום.</p>
     <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=hebrew_landing" class="cta-btn">התחילו ללמוד בחינם &#8592;</a>
   </div>
 
@@ -1866,7 +1905,7 @@ function buildSpanishLandingPage() {
   <!-- Final CTA -->
   <div class="final-cta">
     <h2>¿Listos para empezar?</h2>
-    <p>¡Únete a los miles de niños que ya aprenden inglés jugando!</p>
+    <p>Empieza ahora — sin registro y sin descargar nada.</p>
     <a href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=spanish_landing" class="cta-btn">Empieza a aprender gratis &rarr;</a>
   </div>
 
