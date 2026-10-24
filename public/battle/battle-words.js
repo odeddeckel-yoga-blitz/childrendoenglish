@@ -137,7 +137,7 @@ export const BATTLE_WORDS = {
   {
    "id": "tiger",
    "w": "tiger",
-   "he": "נמר",
+   "he": "טיגריס",
    "img": "/images/tiger.webp"
   },
   {
@@ -397,6 +397,24 @@ export const BATTLE_WORDS = {
    "w": "worm",
    "he": "תולעת",
    "img": "/images/worm.webp"
+  },
+  {
+   "id": "donkey",
+   "w": "donkey",
+   "he": "חמור",
+   "img": "/images/donkey.webp"
+  },
+  {
+   "id": "polar-bear",
+   "w": "polar bear",
+   "he": "דוב קוטב",
+   "img": "/images/polar-bear.webp"
+  },
+  {
+   "id": "spider",
+   "w": "spider",
+   "he": "עכביש",
+   "img": "/images/spider.webp"
   }
  ],
  "food": [
@@ -747,6 +765,72 @@ export const BATTLE_WORDS = {
    "w": "pumpkin",
    "he": "דלעת",
    "img": "/images/pumpkin.webp"
+  },
+  {
+   "id": "burger",
+   "w": "burger",
+   "he": "המבורגר",
+   "img": "/images/burger.webp"
+  },
+  {
+   "id": "chicken",
+   "w": "chicken",
+   "he": "עוף",
+   "img": "/images/chicken.webp"
+  },
+  {
+   "id": "coconut",
+   "w": "coconut",
+   "he": "קוקוס",
+   "img": "/images/coconut.webp"
+  },
+  {
+   "id": "lemonade",
+   "w": "lemonade",
+   "he": "לימונדה",
+   "img": "/images/lemonade.webp"
+  },
+  {
+   "id": "meat",
+   "w": "meat",
+   "he": "בשר",
+   "img": "/images/meat.webp"
+  },
+  {
+   "id": "meatballs",
+   "w": "meatballs",
+   "he": "קציצות",
+   "img": "/images/meatballs.webp"
+  },
+  {
+   "id": "pea",
+   "w": "pea",
+   "he": "אפונה",
+   "img": "/images/pea.webp"
+  },
+  {
+   "id": "pear",
+   "w": "pear",
+   "he": "אגס",
+   "img": "/images/pear.webp"
+  },
+  {
+   "id": "pie",
+   "w": "pie",
+   "he": "פאי",
+   "img": "/images/pie.webp"
+  },
+  {
+   "id": "sausage",
+   "w": "sausage",
+   "he": "נקניק",
+   "img": "/images/sausage.webp"
+  },
+  {
+   "id": "water",
+   "w": "water",
+   "he": "מים",
+   "img": "/images/water.webp"
   }
  ],
  "home": [
@@ -1037,6 +1121,48 @@ export const BATTLE_WORDS = {
    "w": "oven",
    "he": "תנור",
    "img": "/images/oven.webp"
+  },
+  {
+   "id": "apartment",
+   "w": "apartment",
+   "he": "דירה",
+   "img": "/images/apartment.webp"
+  },
+  {
+   "id": "armchair",
+   "w": "armchair",
+   "he": "כורסה",
+   "img": "/images/armchair.webp"
+  },
+  {
+   "id": "bathroom",
+   "w": "bathroom",
+   "he": "חדר אמבטיה",
+   "img": "/images/bathroom.webp"
+  },
+  {
+   "id": "bedroom",
+   "w": "bedroom",
+   "he": "חדר שינה",
+   "img": "/images/bedroom.webp"
+  },
+  {
+   "id": "dining-room",
+   "w": "dining room",
+   "he": "חדר אוכל",
+   "img": "/images/dining-room.webp"
+  },
+  {
+   "id": "living-room",
+   "w": "living room",
+   "he": "סלון",
+   "img": "/images/living-room.webp"
+  },
+  {
+   "id": "sofa",
+   "w": "sofa",
+   "he": "ספה",
+   "img": "/images/sofa.webp"
   }
  ],
  "transport": [
@@ -1121,7 +1247,7 @@ export const BATTLE_WORDS = {
   {
    "id": "van",
    "w": "van",
-   "he": "טנדר",
+   "he": "ואן",
    "img": "/images/van.webp"
   },
   {
@@ -1395,6 +1521,12 @@ export const BATTLE_WORDS = {
    "w": "ocean",
    "he": "אוקיינוס",
    "img": "/images/ocean.webp"
+  },
+  {
+   "id": "sand",
+   "w": "sand",
+   "he": "חול",
+   "img": "/images/sand.webp"
   }
  ],
  "colors": [
@@ -1509,7 +1641,7 @@ export const BATTLE_WORDS = {
   {
    "id": "cream",
    "w": "cream",
-   "he": "שמנת",
+   "he": "קרם",
    "img": "/images/cream.webp"
   },
   {
@@ -1533,7 +1665,7 @@ export const BATTLE_WORDS = {
   {
    "id": "scarlet",
    "w": "scarlet",
-   "he": "שני",
+   "he": "אדום עז",
    "img": "/images/scarlet.webp"
   },
   {
@@ -1547,13 +1679,13 @@ export const BATTLE_WORDS = {
   {
    "id": "one",
    "w": "one",
-   "he": "אחד",
+   "he": "אחת",
    "img": "/images/one.webp"
   },
   {
    "id": "two",
    "w": "two",
-   "he": "שניים",
+   "he": "שתיים",
    "img": "/images/two.webp"
   },
   {
@@ -1687,6 +1819,716 @@ export const BATTLE_WORDS = {
    "w": "sixty",
    "he": "שישים",
    "img": "/images/sixty.webp"
+  }
+ ],
+ "clothing": [
+  {
+   "id": "hat",
+   "w": "hat",
+   "he": "כובע",
+   "img": "/images/hat.webp"
+  },
+  {
+   "id": "shirt",
+   "w": "shirt",
+   "he": "חולצה",
+   "img": "/images/shirt.webp"
+  },
+  {
+   "id": "shoes",
+   "w": "shoes",
+   "he": "נעליים",
+   "img": "/images/shoes.webp"
+  },
+  {
+   "id": "dress",
+   "w": "dress",
+   "he": "שמלה",
+   "img": "/images/dress.webp"
+  },
+  {
+   "id": "jacket",
+   "w": "jacket",
+   "he": "ז'קט",
+   "img": "/images/jacket.webp"
+  },
+  {
+   "id": "gloves",
+   "w": "gloves",
+   "he": "כפפות",
+   "img": "/images/gloves.webp"
+  },
+  {
+   "id": "scarf",
+   "w": "scarf",
+   "he": "צעיף",
+   "img": "/images/scarf.webp"
+  },
+  {
+   "id": "sweater",
+   "w": "sweater",
+   "he": "סוודר",
+   "img": "/images/sweater.webp"
+  },
+  {
+   "id": "umbrella",
+   "w": "umbrella",
+   "he": "מטריה",
+   "img": "/images/umbrella.webp"
+  },
+  {
+   "id": "backpack",
+   "w": "backpack",
+   "he": "תיק גב",
+   "img": "/images/backpack.webp"
+  },
+  {
+   "id": "sunglasses",
+   "w": "sunglasses",
+   "he": "משקפי שמש",
+   "img": "/images/sunglasses.webp"
+  },
+  {
+   "id": "helmet",
+   "w": "helmet",
+   "he": "קסדה",
+   "img": "/images/helmet.webp"
+  },
+  {
+   "id": "belt",
+   "w": "belt",
+   "he": "חגורה",
+   "img": "/images/belt.webp"
+  },
+  {
+   "id": "socks",
+   "w": "socks",
+   "he": "גרביים",
+   "img": "/images/socks.webp"
+  },
+  {
+   "id": "tie",
+   "w": "tie",
+   "he": "עניבה",
+   "img": "/images/tie.webp"
+  },
+  {
+   "id": "hoodie",
+   "w": "hoodie",
+   "he": "קפוצ'ון",
+   "img": "/images/hoodie.webp"
+  },
+  {
+   "id": "raincoat",
+   "w": "raincoat",
+   "he": "מעיל גשם",
+   "img": "/images/raincoat.webp"
+  },
+  {
+   "id": "vest",
+   "w": "vest",
+   "he": "אפודה",
+   "img": "/images/vest.webp"
+  },
+  {
+   "id": "mittens",
+   "w": "mittens",
+   "he": "כפפות",
+   "img": "/images/mittens.webp"
+  },
+  {
+   "id": "sandals",
+   "w": "sandals",
+   "he": "סנדלים",
+   "img": "/images/sandals.webp"
+  },
+  {
+   "id": "zipper",
+   "w": "zipper",
+   "he": "רוכסן",
+   "img": "/images/zipper.webp"
+  },
+  {
+   "id": "uniform",
+   "w": "uniform",
+   "he": "מדים",
+   "img": "/images/uniform.webp"
+  },
+  {
+   "id": "ring",
+   "w": "ring",
+   "he": "טבעת",
+   "img": "/images/ring.webp"
+  },
+  {
+   "id": "cap",
+   "w": "cap",
+   "he": "כובע מצחייה",
+   "img": "/images/cap.webp"
+  },
+  {
+   "id": "boot",
+   "w": "boot",
+   "he": "מגף",
+   "img": "/images/boot.webp"
+  },
+  {
+   "id": "button",
+   "w": "button",
+   "he": "כפתור",
+   "img": "/images/button.webp"
+  },
+  {
+   "id": "apron",
+   "w": "apron",
+   "he": "סינר",
+   "img": "/images/apron.webp"
+  },
+  {
+   "id": "jeans",
+   "w": "jeans",
+   "he": "ג'ינס",
+   "img": "/images/jeans.webp"
+  },
+  {
+   "id": "necklace",
+   "w": "necklace",
+   "he": "שרשרת",
+   "img": "/images/necklace.webp"
+  },
+  {
+   "id": "underwear",
+   "w": "underwear",
+   "he": "תחתונים",
+   "img": "/images/underwear.webp"
+  },
+  {
+   "id": "shorts",
+   "w": "shorts",
+   "he": "מכנסיים קצרים",
+   "img": "/images/shorts.webp"
+  },
+  {
+   "id": "pants",
+   "w": "pants",
+   "he": "מכנסיים",
+   "img": "/images/pants.webp"
+  }
+ ],
+ "school": [
+  {
+   "id": "book",
+   "w": "book",
+   "he": "ספר",
+   "img": "/images/book.webp"
+  },
+  {
+   "id": "pen",
+   "w": "pen",
+   "he": "עט",
+   "img": "/images/pen.webp"
+  },
+  {
+   "id": "ruler",
+   "w": "ruler",
+   "he": "סרגל",
+   "img": "/images/ruler.webp"
+  },
+  {
+   "id": "pencil",
+   "w": "pencil",
+   "he": "עיפרון",
+   "img": "/images/pencil.webp"
+  },
+  {
+   "id": "eraser",
+   "w": "eraser",
+   "he": "מחק",
+   "img": "/images/eraser.webp"
+  },
+  {
+   "id": "crayon",
+   "w": "crayon",
+   "he": "צבע שעווה",
+   "img": "/images/crayon.webp"
+  },
+  {
+   "id": "notebook",
+   "w": "notebook",
+   "he": "מחברת",
+   "img": "/images/notebook.webp"
+  },
+  {
+   "id": "scissors",
+   "w": "scissors",
+   "he": "מספריים",
+   "img": "/images/scissors.webp"
+  },
+  {
+   "id": "calculator",
+   "w": "calculator",
+   "he": "מחשבון",
+   "img": "/images/calculator.webp"
+  },
+  {
+   "id": "globe",
+   "w": "globe",
+   "he": "גלובוס",
+   "img": "/images/globe.webp"
+  },
+  {
+   "id": "microscope",
+   "w": "microscope",
+   "he": "מיקרוסקופ",
+   "img": "/images/microscope.webp"
+  },
+  {
+   "id": "stapler",
+   "w": "stapler",
+   "he": "מהדק",
+   "img": "/images/stapler.webp"
+  },
+  {
+   "id": "paintbrush",
+   "w": "paintbrush",
+   "he": "מכחול",
+   "img": "/images/paintbrush.webp"
+  },
+  {
+   "id": "compass",
+   "w": "compass",
+   "he": "מצפן",
+   "img": "/images/compass.webp"
+  },
+  {
+   "id": "teacher",
+   "w": "teacher",
+   "he": "מורה",
+   "img": "/images/teacher.webp"
+  },
+  {
+   "id": "whiteboard",
+   "w": "whiteboard",
+   "he": "לוח לבן",
+   "img": "/images/whiteboard.webp"
+  },
+  {
+   "id": "library",
+   "w": "library",
+   "he": "ספרייה",
+   "img": "/images/library.webp"
+  },
+  {
+   "id": "classroom",
+   "w": "classroom",
+   "he": "כיתה",
+   "img": "/images/classroom.webp"
+  },
+  {
+   "id": "crayons",
+   "w": "crayons",
+   "he": "צבעי שעווה",
+   "img": "/images/crayons.webp"
+  },
+  {
+   "id": "folder",
+   "w": "folder",
+   "he": "תיקייה",
+   "img": "/images/folder.webp"
+  },
+  {
+   "id": "locker",
+   "w": "locker",
+   "he": "לוקר",
+   "img": "/images/locker.webp"
+  },
+  {
+   "id": "violin",
+   "w": "violin",
+   "he": "כינור",
+   "img": "/images/violin.webp"
+  },
+  {
+   "id": "xylophone",
+   "w": "xylophone",
+   "he": "קסילופון",
+   "img": "/images/xylophone.webp"
+  },
+  {
+   "id": "newspaper",
+   "w": "newspaper",
+   "he": "עיתון",
+   "img": "/images/newspaper.webp"
+  },
+  {
+   "id": "question",
+   "w": "question",
+   "he": "שאלה",
+   "img": "/images/question.webp"
+  },
+  {
+   "id": "bell",
+   "w": "bell",
+   "he": "פעמון",
+   "img": "/images/bell.webp"
+  },
+  {
+   "id": "glue",
+   "w": "glue",
+   "he": "דבק",
+   "img": "/images/glue.webp"
+  },
+  {
+   "id": "map",
+   "w": "map",
+   "he": "מפה",
+   "img": "/images/map.webp"
+  },
+  {
+   "id": "alphabet",
+   "w": "alphabet",
+   "he": "אלפבית",
+   "img": "/images/alphabet.webp"
+  },
+  {
+   "id": "drawing",
+   "w": "drawing",
+   "he": "ציור",
+   "img": "/images/drawing.webp"
+  },
+  {
+   "id": "painting",
+   "w": "painting",
+   "he": "ציור בצבע",
+   "img": "/images/painting.webp"
+  }
+ ],
+ "sports": [
+  {
+   "id": "ball",
+   "w": "ball",
+   "he": "כדור",
+   "img": "/images/ball.webp"
+  },
+  {
+   "id": "bat",
+   "w": "bat",
+   "he": "מחבט",
+   "img": "/images/bat.webp"
+  },
+  {
+   "id": "rope",
+   "w": "rope",
+   "he": "חבל",
+   "img": "/images/rope.webp"
+  },
+  {
+   "id": "net",
+   "w": "net",
+   "he": "רשת",
+   "img": "/images/net.webp"
+  },
+  {
+   "id": "goal",
+   "w": "goal",
+   "he": "שער",
+   "img": "/images/goal.webp"
+  },
+  {
+   "id": "soccer",
+   "w": "soccer",
+   "he": "כדורגל",
+   "img": "/images/soccer.webp"
+  },
+  {
+   "id": "basketball",
+   "w": "basketball",
+   "he": "כדורסל",
+   "img": "/images/basketball.webp"
+  },
+  {
+   "id": "tennis",
+   "w": "tennis",
+   "he": "טניס",
+   "img": "/images/tennis.webp"
+  },
+  {
+   "id": "swimming",
+   "w": "swimming",
+   "he": "שחייה",
+   "img": "/images/swimming.webp"
+  },
+  {
+   "id": "volleyball",
+   "w": "volleyball",
+   "he": "כדורעף",
+   "img": "/images/volleyball.webp"
+  },
+  {
+   "id": "gymnastics",
+   "w": "gymnastics",
+   "he": "התעמלות",
+   "img": "/images/gymnastics.webp"
+  },
+  {
+   "id": "surfing",
+   "w": "surfing",
+   "he": "גלישה",
+   "img": "/images/surfing.webp"
+  },
+  {
+   "id": "archery",
+   "w": "archery",
+   "he": "קליעה בקשת",
+   "img": "/images/archery.webp"
+  },
+  {
+   "id": "whistle",
+   "w": "whistle",
+   "he": "משרוקית",
+   "img": "/images/whistle.webp"
+  },
+  {
+   "id": "trophy",
+   "w": "trophy",
+   "he": "גביע",
+   "img": "/images/trophy.webp"
+  },
+  {
+   "id": "hockey",
+   "w": "hockey",
+   "he": "הוקי",
+   "img": "/images/hockey.webp"
+  },
+  {
+   "id": "badminton",
+   "w": "badminton",
+   "he": "בדמינטון",
+   "img": "/images/badminton.webp"
+  },
+  {
+   "id": "skiing",
+   "w": "skiing",
+   "he": "סקי",
+   "img": "/images/skiing.webp"
+  },
+  {
+   "id": "running",
+   "w": "running",
+   "he": "ריצה",
+   "img": "/images/running.webp"
+  },
+  {
+   "id": "bowling",
+   "w": "bowling",
+   "he": "באולינג",
+   "img": "/images/bowling.webp"
+  },
+  {
+   "id": "climbing",
+   "w": "climbing",
+   "he": "טיפוס",
+   "img": "/images/climbing.webp"
+  },
+  {
+   "id": "medal",
+   "w": "medal",
+   "he": "מדליה",
+   "img": "/images/medal.webp"
+  },
+  {
+   "id": "skates",
+   "w": "skates",
+   "he": "גלגיליות",
+   "img": "/images/skates.webp"
+  },
+  {
+   "id": "yoga",
+   "w": "yoga",
+   "he": "יוגה",
+   "img": "/images/yoga.webp"
+  },
+  {
+   "id": "baseball",
+   "w": "baseball",
+   "he": "בייסבול",
+   "img": "/images/baseball.webp"
+  },
+  {
+   "id": "fishing",
+   "w": "fishing",
+   "he": "דיג",
+   "img": "/images/fishing.webp"
+  },
+  {
+   "id": "skateboarding",
+   "w": "skateboarding",
+   "he": "רכיבה על סקייטבורד",
+   "img": "/images/skateboarding.webp"
+  },
+  {
+   "id": "table-tennis",
+   "w": "table tennis",
+   "he": "טניס שולחן",
+   "img": "/images/table-tennis.webp"
+  },
+  {
+   "id": "tennis-racket",
+   "w": "tennis racket",
+   "he": "מחבט טניס",
+   "img": "/images/tennis-racket.webp"
+  }
+ ],
+ "feelings": [
+  {
+   "id": "happy",
+   "w": "happy",
+   "he": "שמח",
+   "img": "/images/happy.webp"
+  },
+  {
+   "id": "sad",
+   "w": "sad",
+   "he": "עצוב",
+   "img": "/images/sad.webp"
+  },
+  {
+   "id": "angry",
+   "w": "angry",
+   "he": "כועס",
+   "img": "/images/angry.webp"
+  },
+  {
+   "id": "tired",
+   "w": "tired",
+   "he": "עייף",
+   "img": "/images/tired.webp"
+  },
+  {
+   "id": "hungry",
+   "w": "hungry",
+   "he": "רעב",
+   "img": "/images/hungry.webp"
+  },
+  {
+   "id": "brave",
+   "w": "brave",
+   "he": "אמיץ",
+   "img": "/images/brave.webp"
+  },
+  {
+   "id": "proud",
+   "w": "proud",
+   "he": "גאה",
+   "img": "/images/proud.webp"
+  },
+  {
+   "id": "excited",
+   "w": "excited",
+   "he": "נרגש",
+   "img": "/images/excited.webp"
+  },
+  {
+   "id": "nervous",
+   "w": "nervous",
+   "he": "לחוץ",
+   "img": "/images/nervous.webp"
+  },
+  {
+   "id": "lonely",
+   "w": "lonely",
+   "he": "בודד",
+   "img": "/images/lonely.webp"
+  },
+  {
+   "id": "shy",
+   "w": "shy",
+   "he": "ביישן",
+   "img": "/images/shy.webp"
+  },
+  {
+   "id": "surprised",
+   "w": "surprised",
+   "he": "מופתע",
+   "img": "/images/surprised.webp"
+  },
+  {
+   "id": "calm",
+   "w": "calm",
+   "he": "רגוע",
+   "img": "/images/calm.webp"
+  },
+  {
+   "id": "bored",
+   "w": "bored",
+   "he": "משועמם",
+   "img": "/images/bored.webp"
+  },
+  {
+   "id": "jealous",
+   "w": "jealous",
+   "he": "מקנא",
+   "img": "/images/jealous.webp"
+  },
+  {
+   "id": "grateful",
+   "w": "grateful",
+   "he": "אסיר תודה",
+   "img": "/images/grateful.webp"
+  },
+  {
+   "id": "embarrassed",
+   "w": "embarrassed",
+   "he": "נבוך",
+   "img": "/images/embarrassed.webp"
+  },
+  {
+   "id": "frustrated",
+   "w": "frustrated",
+   "he": "מתוסכל",
+   "img": "/images/frustrated.webp"
+  },
+  {
+   "id": "scared",
+   "w": "scared",
+   "he": "מפוחד",
+   "img": "/images/scared.webp"
+  },
+  {
+   "id": "confused",
+   "w": "confused",
+   "he": "מבולבל",
+   "img": "/images/confused.webp"
+  },
+  {
+   "id": "curious",
+   "w": "curious",
+   "he": "סקרן",
+   "img": "/images/curious.webp"
+  },
+  {
+   "id": "worried",
+   "w": "worried",
+   "he": "מודאג",
+   "img": "/images/worried.webp"
+  },
+  {
+   "id": "quiet",
+   "w": "quiet",
+   "he": "שקט",
+   "img": "/images/quiet.webp"
+  },
+  {
+   "id": "yawn",
+   "w": "yawn",
+   "he": "פיהוק",
+   "img": "/images/yawn.webp"
+  },
+  {
+   "id": "smile",
+   "w": "smile",
+   "he": "חיוך",
+   "img": "/images/smile.webp"
   }
  ],
  "everyday": [
@@ -1969,7 +2811,7 @@ export const BATTLE_WORDS = {
   {
    "id": "bag",
    "w": "bag",
-   "he": "שקית",
+   "he": "תיק",
    "img": "/images/bag.webp"
   },
   {
@@ -2103,665 +2945,63 @@ export const BATTLE_WORDS = {
    "w": "vet",
    "he": "וטרינר",
    "img": "/images/vet.webp"
-  }
- ],
- "clothing": [
-  {
-   "id": "underwear",
-   "w": "underwear",
-   "he": "תחתונים",
-   "img": "/images/underwear.webp"
-  },
-  {
-   "id": "hat",
-   "w": "hat",
-   "he": "כובע",
-   "img": "/images/hat.webp"
-  },
-  {
-   "id": "shirt",
-   "w": "shirt",
-   "he": "חולצה",
-   "img": "/images/shirt.webp"
-  },
-  {
-   "id": "shoes",
-   "w": "shoes",
-   "he": "נעליים",
-   "img": "/images/shoes.webp"
-  },
-  {
-   "id": "dress",
-   "w": "dress",
-   "he": "שמלה",
-   "img": "/images/dress.webp"
-  },
-  {
-   "id": "jacket",
-   "w": "jacket",
-   "he": "ז'קט",
-   "img": "/images/jacket.webp"
-  },
-  {
-   "id": "gloves",
-   "w": "gloves",
-   "he": "כפפות",
-   "img": "/images/gloves.webp"
-  },
-  {
-   "id": "scarf",
-   "w": "scarf",
-   "he": "צעיף",
-   "img": "/images/scarf.webp"
-  },
-  {
-   "id": "sweater",
-   "w": "sweater",
-   "he": "סוודר",
-   "img": "/images/sweater.webp"
-  },
-  {
-   "id": "umbrella",
-   "w": "umbrella",
-   "he": "מטריה",
-   "img": "/images/umbrella.webp"
-  },
-  {
-   "id": "backpack",
-   "w": "backpack",
-   "he": "תיק גב",
-   "img": "/images/backpack.webp"
-  },
-  {
-   "id": "sunglasses",
-   "w": "sunglasses",
-   "he": "משקפי שמש",
-   "img": "/images/sunglasses.webp"
-  },
-  {
-   "id": "helmet",
-   "w": "helmet",
-   "he": "קסדה",
-   "img": "/images/helmet.webp"
-  },
-  {
-   "id": "belt",
-   "w": "belt",
-   "he": "חגורה",
-   "img": "/images/belt.webp"
-  },
-  {
-   "id": "socks",
-   "w": "socks",
-   "he": "גרביים",
-   "img": "/images/socks.webp"
-  },
-  {
-   "id": "tie",
-   "w": "tie",
-   "he": "עניבה",
-   "img": "/images/tie.webp"
-  },
-  {
-   "id": "hoodie",
-   "w": "hoodie",
-   "he": "קפוצ'ון",
-   "img": "/images/hoodie.webp"
-  },
-  {
-   "id": "raincoat",
-   "w": "raincoat",
-   "he": "מעיל גשם",
-   "img": "/images/raincoat.webp"
-  },
-  {
-   "id": "vest",
-   "w": "vest",
-   "he": "אפודה",
-   "img": "/images/vest.webp"
-  },
-  {
-   "id": "mittens",
-   "w": "mittens",
-   "he": "כפפות",
-   "img": "/images/mittens.webp"
-  },
-  {
-   "id": "sandals",
-   "w": "sandals",
-   "he": "סנדלים",
-   "img": "/images/sandals.webp"
-  },
-  {
-   "id": "zipper",
-   "w": "zipper",
-   "he": "רוכסן",
-   "img": "/images/zipper.webp"
-  },
-  {
-   "id": "uniform",
-   "w": "uniform",
-   "he": "מדים",
-   "img": "/images/uniform.webp"
-  },
-  {
-   "id": "ring",
-   "w": "ring",
-   "he": "טבעת",
-   "img": "/images/ring.webp"
-  },
-  {
-   "id": "cap",
-   "w": "cap",
-   "he": "כובע מצחייה",
-   "img": "/images/cap.webp"
-  },
-  {
-   "id": "boot",
-   "w": "boot",
-   "he": "מגף",
-   "img": "/images/boot.webp"
-  },
-  {
-   "id": "button",
-   "w": "button",
-   "he": "כפתור",
-   "img": "/images/button.webp"
-  },
-  {
-   "id": "apron",
-   "w": "apron",
-   "he": "סינר",
-   "img": "/images/apron.webp"
-  },
-  {
-   "id": "jeans",
-   "w": "jeans",
-   "he": "ג'ינס",
-   "img": "/images/jeans.webp"
-  },
-  {
-   "id": "necklace",
-   "w": "necklace",
-   "he": "שרשרת",
-   "img": "/images/necklace.webp"
-  }
- ],
- "school": [
-  {
-   "id": "book",
-   "w": "book",
-   "he": "ספר",
-   "img": "/images/book.webp"
-  },
-  {
-   "id": "pen",
-   "w": "pen",
-   "he": "עט",
-   "img": "/images/pen.webp"
-  },
-  {
-   "id": "ruler",
-   "w": "ruler",
-   "he": "סרגל",
-   "img": "/images/ruler.webp"
-  },
-  {
-   "id": "pencil",
-   "w": "pencil",
-   "he": "עיפרון",
-   "img": "/images/pencil.webp"
-  },
-  {
-   "id": "eraser",
-   "w": "eraser",
-   "he": "מחק",
-   "img": "/images/eraser.webp"
-  },
-  {
-   "id": "crayon",
-   "w": "crayon",
-   "he": "צבע",
-   "img": "/images/crayon.webp"
-  },
-  {
-   "id": "notebook",
-   "w": "notebook",
-   "he": "מחברת",
-   "img": "/images/notebook.webp"
-  },
-  {
-   "id": "scissors",
-   "w": "scissors",
-   "he": "מספריים",
-   "img": "/images/scissors.webp"
-  },
-  {
-   "id": "calculator",
-   "w": "calculator",
-   "he": "מחשבון",
-   "img": "/images/calculator.webp"
-  },
-  {
-   "id": "globe",
-   "w": "globe",
-   "he": "גלובוס",
-   "img": "/images/globe.webp"
-  },
-  {
-   "id": "microscope",
-   "w": "microscope",
-   "he": "מיקרוסקופ",
-   "img": "/images/microscope.webp"
-  },
-  {
-   "id": "stapler",
-   "w": "stapler",
-   "he": "מהדק",
-   "img": "/images/stapler.webp"
-  },
-  {
-   "id": "paintbrush",
-   "w": "paintbrush",
-   "he": "מכחול",
-   "img": "/images/paintbrush.webp"
-  },
-  {
-   "id": "compass",
-   "w": "compass",
-   "he": "מצפן",
-   "img": "/images/compass.webp"
-  },
-  {
-   "id": "teacher",
-   "w": "teacher",
-   "he": "מורה",
-   "img": "/images/teacher.webp"
-  },
-  {
-   "id": "whiteboard",
-   "w": "whiteboard",
-   "he": "לוח לבן",
-   "img": "/images/whiteboard.webp"
-  },
-  {
-   "id": "library",
-   "w": "library",
-   "he": "ספרייה",
-   "img": "/images/library.webp"
-  },
-  {
-   "id": "classroom",
-   "w": "classroom",
-   "he": "כיתה",
-   "img": "/images/classroom.webp"
-  },
-  {
-   "id": "crayons",
-   "w": "crayons",
-   "he": "צבעי שעווה",
-   "img": "/images/crayons.webp"
-  },
-  {
-   "id": "folder",
-   "w": "folder",
-   "he": "תיקייה",
-   "img": "/images/folder.webp"
-  },
-  {
-   "id": "locker",
-   "w": "locker",
-   "he": "לוקר",
-   "img": "/images/locker.webp"
-  },
-  {
-   "id": "violin",
-   "w": "violin",
-   "he": "כינור",
-   "img": "/images/violin.webp"
-  },
-  {
-   "id": "xylophone",
-   "w": "xylophone",
-   "he": "קסילופון",
-   "img": "/images/xylophone.webp"
-  },
-  {
-   "id": "newspaper",
-   "w": "newspaper",
-   "he": "עיתון",
-   "img": "/images/newspaper.webp"
-  },
-  {
-   "id": "question",
-   "w": "question",
-   "he": "שאלה",
-   "img": "/images/question.webp"
-  },
-  {
-   "id": "bell",
-   "w": "bell",
-   "he": "פעמון",
-   "img": "/images/bell.webp"
-  },
-  {
-   "id": "glue",
-   "w": "glue",
-   "he": "דבק",
-   "img": "/images/glue.webp"
-  },
-  {
-   "id": "map",
-   "w": "map",
-   "he": "מפה",
-   "img": "/images/map.webp"
-  }
- ],
- "sports": [
-  {
-   "id": "yoga",
-   "w": "yoga",
-   "he": "יוגה",
-   "img": "/images/yoga.webp"
-  },
-  {
-   "id": "skates",
-   "w": "skates",
-   "he": "גלגיליות",
-   "img": "/images/skates.webp"
-  },
-  {
-   "id": "medal",
-   "w": "medal",
-   "he": "מדליה",
-   "img": "/images/medal.webp"
-  },
-  {
-   "id": "ball",
-   "w": "ball",
-   "he": "כדור",
-   "img": "/images/ball.webp"
-  },
-  {
-   "id": "bat",
-   "w": "bat",
-   "he": "מחבט",
-   "img": "/images/bat.webp"
-  },
-  {
-   "id": "rope",
-   "w": "rope",
-   "he": "חבל",
-   "img": "/images/rope.webp"
-  },
-  {
-   "id": "net",
-   "w": "net",
-   "he": "רשת",
-   "img": "/images/net.webp"
-  },
-  {
-   "id": "goal",
-   "w": "goal",
-   "he": "שער",
-   "img": "/images/goal.webp"
-  },
-  {
-   "id": "soccer",
-   "w": "soccer",
-   "he": "כדורגל",
-   "img": "/images/soccer.webp"
-  },
-  {
-   "id": "basketball",
-   "w": "basketball",
-   "he": "כדורסל",
-   "img": "/images/basketball.webp"
-  },
-  {
-   "id": "tennis",
-   "w": "tennis",
-   "he": "טניס",
-   "img": "/images/tennis.webp"
-  },
-  {
-   "id": "swimming",
-   "w": "swimming",
-   "he": "שחייה",
-   "img": "/images/swimming.webp"
-  },
-  {
-   "id": "volleyball",
-   "w": "volleyball",
-   "he": "כדורעף",
-   "img": "/images/volleyball.webp"
-  },
-  {
-   "id": "gymnastics",
-   "w": "gymnastics",
-   "he": "התעמלות",
-   "img": "/images/gymnastics.webp"
-  },
-  {
-   "id": "surfing",
-   "w": "surfing",
-   "he": "גלישה",
-   "img": "/images/surfing.webp"
-  },
-  {
-   "id": "archery",
-   "w": "archery",
-   "he": "קשתות",
-   "img": "/images/archery.webp"
-  },
-  {
-   "id": "whistle",
-   "w": "whistle",
-   "he": "משרוקית",
-   "img": "/images/whistle.webp"
-  },
-  {
-   "id": "trophy",
-   "w": "trophy",
-   "he": "גביע",
-   "img": "/images/trophy.webp"
-  },
-  {
-   "id": "hockey",
-   "w": "hockey",
-   "he": "הוקי",
-   "img": "/images/hockey.webp"
-  },
-  {
-   "id": "badminton",
-   "w": "badminton",
-   "he": "בדמינטון",
-   "img": "/images/badminton.webp"
-  },
-  {
-   "id": "skiing",
-   "w": "skiing",
-   "he": "סקי",
-   "img": "/images/skiing.webp"
-  },
-  {
-   "id": "running",
-   "w": "running",
-   "he": "ריצה",
-   "img": "/images/running.webp"
-  },
-  {
-   "id": "bowling",
-   "w": "bowling",
-   "he": "באולינג",
-   "img": "/images/bowling.webp"
-  },
-  {
-   "id": "climbing",
-   "w": "climbing",
-   "he": "טיפוס",
-   "img": "/images/climbing.webp"
-  }
- ],
- "feelings": [
-  {
-   "id": "yawn",
-   "w": "yawn",
-   "he": "פיהוק",
-   "img": "/images/yawn.webp"
-  },
-  {
-   "id": "quiet",
-   "w": "quiet",
-   "he": "שקט",
-   "img": "/images/quiet.webp"
-  },
-  {
-   "id": "happy",
-   "w": "happy",
-   "he": "שמח",
-   "img": "/images/happy.webp"
-  },
-  {
-   "id": "sad",
-   "w": "sad",
-   "he": "עצוב",
-   "img": "/images/sad.webp"
-  },
-  {
-   "id": "angry",
-   "w": "angry",
-   "he": "כועס",
-   "img": "/images/angry.webp"
-  },
-  {
-   "id": "tired",
-   "w": "tired",
-   "he": "עייף",
-   "img": "/images/tired.webp"
-  },
-  {
-   "id": "hungry",
-   "w": "hungry",
-   "he": "רעב",
-   "img": "/images/hungry.webp"
-  },
-  {
-   "id": "brave",
-   "w": "brave",
-   "he": "אמיץ",
-   "img": "/images/brave.webp"
-  },
-  {
-   "id": "proud",
-   "w": "proud",
-   "he": "גאה",
-   "img": "/images/proud.webp"
-  },
-  {
-   "id": "excited",
-   "w": "excited",
-   "he": "נרגש",
-   "img": "/images/excited.webp"
-  },
-  {
-   "id": "nervous",
-   "w": "nervous",
-   "he": "עצבני",
-   "img": "/images/nervous.webp"
-  },
-  {
-   "id": "lonely",
-   "w": "lonely",
-   "he": "בודד",
-   "img": "/images/lonely.webp"
-  },
-  {
-   "id": "shy",
-   "w": "shy",
-   "he": "ביישן",
-   "img": "/images/shy.webp"
-  },
-  {
-   "id": "surprised",
-   "w": "surprised",
-   "he": "מופתע",
-   "img": "/images/surprised.webp"
-  },
-  {
-   "id": "calm",
-   "w": "calm",
-   "he": "רגוע",
-   "img": "/images/calm.webp"
   },
   {
-   "id": "bored",
-   "w": "bored",
-   "he": "משועמם",
-   "img": "/images/bored.webp"
+   "id": "computer",
+   "w": "computer",
+   "he": "מחשב",
+   "img": "/images/computer.webp"
   },
   {
-   "id": "jealous",
-   "w": "jealous",
-   "he": "קנאי",
-   "img": "/images/jealous.webp"
+   "id": "keyboard",
+   "w": "keyboard",
+   "he": "מקלדת",
+   "img": "/images/keyboard.webp"
   },
   {
-   "id": "grateful",
-   "w": "grateful",
-   "he": "אסיר תודה",
-   "img": "/images/grateful.webp"
+   "id": "tablet",
+   "w": "tablet",
+   "he": "טאבלט",
+   "img": "/images/tablet.webp"
   },
   {
-   "id": "embarrassed",
-   "w": "embarrassed",
-   "he": "נבוך",
-   "img": "/images/embarrassed.webp"
+   "id": "radio",
+   "w": "radio",
+   "he": "רדיו",
+   "img": "/images/radio.webp"
   },
   {
-   "id": "frustrated",
-   "w": "frustrated",
-   "he": "מתוסכל",
-   "img": "/images/frustrated.webp"
+   "id": "watch",
+   "w": "watch",
+   "he": "שעון יד",
+   "img": "/images/watch.webp"
   },
   {
-   "id": "scared",
-   "w": "scared",
-   "he": "מפוחד",
-   "img": "/images/scared.webp"
+   "id": "bookstore",
+   "w": "bookstore",
+   "he": "חנות ספרים",
+   "img": "/images/bookstore.webp"
   },
   {
-   "id": "confused",
-   "w": "confused",
-   "he": "מבולבל",
-   "img": "/images/confused.webp"
+   "id": "street",
+   "w": "street",
+   "he": "רחוב",
+   "img": "/images/street.webp"
   },
   {
-   "id": "curious",
-   "w": "curious",
-   "he": "סקרן",
-   "img": "/images/curious.webp"
+   "id": "park",
+   "w": "park",
+   "he": "פארק",
+   "img": "/images/park.webp"
   },
   {
-   "id": "worried",
-   "w": "worried",
-   "he": "מודאג",
-   "img": "/images/worried.webp"
+   "id": "playground",
+   "w": "playground",
+   "he": "גן שעשועים",
+   "img": "/images/playground.webp"
   }
  ],
  "toys": [
-  {
-   "id": "seesaw",
-   "w": "seesaw",
-   "he": "נדנדת מאזניים",
-   "img": "/images/seesaw.webp"
-  },
-  {
-   "id": "ukulele",
-   "w": "ukulele",
-   "he": "יוקוללה",
-   "img": "/images/ukulele.webp"
-  },
   {
    "id": "skateboard",
    "w": "skateboard",
@@ -2953,6 +3193,24 @@ export const BATTLE_WORDS = {
    "w": "wizard",
    "he": "קוסם",
    "img": "/images/wizard.webp"
+  },
+  {
+   "id": "ukulele",
+   "w": "ukulele",
+   "he": "יוקוללה",
+   "img": "/images/ukulele.webp"
+  },
+  {
+   "id": "seesaw",
+   "w": "seesaw",
+   "he": "נדנדת מאזניים",
+   "img": "/images/seesaw.webp"
+  },
+  {
+   "id": "board-game",
+   "w": "board game",
+   "he": "משחק קופסה",
+   "img": "/images/board-game.webp"
   }
  ]
 };

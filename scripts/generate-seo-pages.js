@@ -72,6 +72,16 @@ try {
   console.warn('No word-enrichments.js found, word pages will render without enrichments');
 }
 
+// Words added 2026-10-24 (Starters nouns, Phase 0) are held off pages under a running SEO
+// test until its read: the 13 /spanish/ category pages (count-led title test + its control)
+// and the /he/ landing's word counts (head-term test). Delete after the Nov 7–14 read.
+const SEO_TEST_HOLDOUT = new Set([
+  'donkey', 'polar-bear', 'spider', 'burger', 'chicken', 'coconut', 'lemonade', 'meat', 'meatballs',
+  'pea', 'pear', 'pie', 'sausage', 'water', 'apartment', 'armchair', 'bathroom', 'bedroom',
+  'dining-room', 'living-room', 'sofa', 'computer', 'keyboard', 'tablet', 'radio', 'watch', 'bookstore',
+  'street', 'park', 'playground', 'shorts', 'pants', 'alphabet', 'drawing', 'painting', 'baseball',
+  'fishing', 'skateboarding', 'table-tennis', 'tennis-racket', 'board-game', 'sand', 'smile',
+]);
 const TITLE_OVERRIDES = JSON.parse(readFileSync(new URL('./seo-title-overrides.json', import.meta.url), 'utf8'));
 // Pages the SEO optimizer's link advisor wants boosted (rendered on /vocabulary/)
 const SEO_FEATURED = JSON.parse(readFileSync(new URL('./seo-featured.json', import.meta.url), 'utf8'));
@@ -1296,7 +1306,7 @@ function buildHebrewLandingPage() {
   // keeps a Hebrew-speaking visitor inside the Hebrew cluster.
   const categoryGrid = CATEGORIES.map((slug) => {
     const hebrewName = CATEGORY_NAMES_HE[slug] || slug;
-    const words = getWordsByCategory(slug);
+    const words = getWordsByCategory(slug).filter((w) => !SEO_TEST_HOLDOUT.has(w.id));
     return `
         <a href="/vocabulary/${slug}/hebrew/" class="cat-item">
           <span class="cat-name">${hebrewName}</span>
@@ -1418,7 +1428,7 @@ function buildHebrewLandingPage() {
 
   <!-- Stats bar -->
   <div class="stats-bar">
-    <div class="stat"><div class="stat-num">${WORDS.length}+</div><div class="stat-label">מילים</div></div>
+    <div class="stat"><div class="stat-num">${WORDS.length - SEO_TEST_HOLDOUT.size}+</div><div class="stat-label">מילים</div></div>
     <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">קטגוריות</div></div>
     <div class="stat"><div class="stat-num">4</div><div class="stat-label">סוגי חידונים</div></div>
     <div class="stat"><div class="stat-num">3</div><div class="stat-label">רמות קושי</div></div>
@@ -4862,7 +4872,7 @@ let spanishBilingualGenerated = 0;
 for (const slug of CATEGORIES) {
   const displayName = CATEGORY_NAMES[slug] || slug;
   const spanishName = CATEGORY_NAMES_ES[slug] || slug;
-  const words = getWordsByCategory(slug);
+  const words = getWordsByCategory(slug).filter((w) => !SEO_TEST_HOLDOUT.has(w.id));
   if (words.length === 0) continue;
 
   const esCatDir = join(distDir, 'vocabulary', slug, 'spanish');
