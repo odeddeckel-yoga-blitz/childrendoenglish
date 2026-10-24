@@ -54,6 +54,14 @@
       else if (/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|yandex|baidu|startpage|brave)\./.test(h)) s = 'seo';
       else if (h) s = 'external';
     }
+    // AI assistants often strip the referrer but tag the link (?utm_source=chatgpt.com) —
+    // referrer-only classification read CDE+KDM AI arrivals as ~0 from 2026-10-08.
+    if (s !== 'internal') {
+      try {
+        var um = location.search.match(/[?&]utm_source=([^&#]*)/i);
+        if (um && /(chatgpt|openai|perplexity|copilot|gemini|bard|claude|poe\.com|you\.com|phind)/.test(decodeURIComponent(um[1]).toLowerCase())) s = 'ai';
+      } catch (e) { /* malformed utm — keep referrer class */ }
+    }
     navigator.sendBeacon('/api/land', JSON.stringify({ g: g, s: s, l: l }));
     /* Return-visit bucket (Engagement Optimizer) — once per local day per
        browser. Stores ONLY the last visit date ('cde_seen', YYYY-MM-DD) and
