@@ -1,22 +1,22 @@
 {
-  "statsFrom": "2026-10-23T00:00:00.000Z",
+  "statsFrom": "2026-10-24T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
-    "id": "globe",
-    "word": "globe",
-    "category": "school",
-    "he": "גלובוס",
-    "image": "/images/globe.webp",
-    "ans": 25,
-    "ok": 16,
-    "since": "2026-10-19T08:47:38.177Z"
+    "id": "tennis",
+    "word": "tennis",
+    "category": "sports",
+    "he": "טניס",
+    "image": "/images/tennis.webp",
+    "ans": 0,
+    "ok": 0,
+    "since": "2026-10-24T08:04:26.383Z"
   },
   "game": {
     "id": "category-conveyor",
     "name": "Category Conveyor",
     "emoji": "📦",
-    "opens": 26,
-    "lvl": 95,
+    "opens": 27,
+    "lvl": 102,
     "cmp": 18,
     "since": "2026-10-10T20:50:00.000Z"
   },
@@ -34,6 +34,13 @@
       "to": "globe",
       "reason": "graduated (ans≥30, acc≥0.7)",
       "at": "2026-10-19T08:47:38.177Z"
+    },
+    {
+      "lane": "word",
+      "from": "globe",
+      "to": "tennis",
+      "reason": "graduated (ans≥30, acc≥0.7)",
+      "at": "2026-10-24T08:04:26.383Z"
     }
   ]
 }
