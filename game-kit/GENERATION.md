@@ -497,6 +497,23 @@ value) catch the first two mechanically. Deliberate live-feedback builders (mirr
 - **One flash label at a time, anchored to its object**; label every non-answer prop on the board (a safety net read as
   "the bridge", a power-up pellet read as a trap).
 
+## Level-1 kid traps (2026-10-23 — kidsdomath, ~45 games fixed; see PATTERNS §2 + §5.9–5.12)
+Build these into the generator, not into a later fix pass:
+- **Not-ready commit = gold nudge, not a miss.** In commit(): if nothing is picked / the dial is untouched / the
+  answer is incomplete, set a gold "what's left" status and return BEFORE any `missSince++`.
+- **Level 1 is never luck.** If later steps depend on earlier choices, generate the last step from the earlier ones so
+  every route a careful child takes can finish.
+- **Level 1 never has one answer.** Open with the canonical case, then mix contrast cases whose correct answer is a
+  different option (≤70% of L1 rounds may share an answer). Every contrast item gets its own explanation.
+- **Decoys are certainly wrong** (exclude each item's secondary truths) and items are never degenerate (the two things
+  compared actually differ).
+- **Nothing on screen answers the question before the prediction** — reveal-only labels after LOCK IN.
+- **Name every wrong part after a wrong commit; show a method after the first miss on any answer a child can't do in
+  their head** (count-by ladder, first rungs only).
+- **Copy is tier-aware**: never name a control that's hidden at this level; say how many to find.
+- **Anything drawn like a button responds** (pick it, or nudge toward the real control).
+- **Emit the funnel events**: open, play, tap1, clear1 (even without a result card — reaching L2 implies it), levelup.
+
 ## Design-review lens — the 3 personas (quick pre-ship check)
 
 Sanity-check the finished game against three players (from the original X-EEE prompt; they map to the KOC
@@ -709,6 +726,12 @@ isn't part of the question's identity (layout seeds, `token:Math.random()`, shuf
 you MUST also set `qkey` — a stable string naming the question (e.g. `'sides:'+shape.name`,
 `mode+':'+start+':'+dur`) — or the guard silently never rerolls and kids see the same question twice.
 
+- **kdm-norepeat-stem v1 (2026-10-23)** wraps the generator: the qkey alone missed repeats when it carried incidental
+  parts (the shuffled decoy set), so "Cat + new decoys" looked new. The wrapper compares the question STEM (round object
+  minus choices, picks, qkey and random floats) and regenerates a back-to-back repeat (≤24 extra calls per round).
+  Two-question levels keep a natural order (never 3 in a row) — strict no-repeat there forced A,B,A,B, which gives the
+  answer away. The template ships it; consumers inject it with a retrofit + a `--check` in prebuild.
+
 ## Cross-app harvest — content integrity + i18n (2026-10-19, CDE + yoga-bits)
 
 **Content integrity:**
@@ -737,3 +760,22 @@ you MUST also set `qkey` — a stable string naming the question (e.g. `'sides:'
 - **Native-review pass contract.** For ko/ja (any language with a reader), a second worker pass
   outputs ONLY changed entries, and an apply script enforces key set + array lengths + placeholder
   preservation — full-file reviewer rewrites reintroduce drift; diff-only + validator stays auto-merge-safe.
+- **English-leak validators must be CASE-SENSITIVE for marker words** (yoga-bits, 2026-10-20): a
+  case-insensitive "TODO" check false-positived on Spanish "todo" (= "all/every"). Match marker words
+  (TODO/FIXME/English stopwords) case-sensitively, or whitelist the target-language homographs.
+- **Diff the full expected SLUG LIST against the OUTPUTS, never trust worker reports** (yoga-bits): a
+  slug dropped from a batch prompt was silently missing in all 3 languages; the workers reported
+  success for what they DID do. Reconcile `expected_slugs − produced_slugs` after every batch.
+- **Calibrate length gates PER LANGUAGE** (yoga-bits): ja runs ~25% longer per English word than ko,
+  so a single CJK length divisor flags real ja translations as too-long. Set the acceptable
+  length-ratio band per target language, not one global divisor.
+- **A quiz distractor label must be the FULL distinguishing feature, not a shared sub-feature**
+  (yoga-bits mudra quiz, 2026-10-20): Gyan and Chin mudra both "index + thumb" and differ only by palm
+  direction — distractors labeled by the finger pair were indistinguishable (two "correct" options).
+  Assert UNIQUENESS on the rendered option labels; if two options collapse to the same string, the
+  label is describing a shared sub-feature, not the discriminator. (Text-only form of the §3b
+  same-category-rivals-are-fatal rule.)
+- **Strip `{placeholders}` before measuring script-share / length ratios** (yoga-bits, 2026-10-20): a
+  zh FAQ answer with 6 `{placeholders}` failed the Han-character-ratio validator — the Latin-script
+  placeholder tokens dragged the ratio down. Remove template tokens (and URLs, numbers, proper-noun
+  whitelist) before computing any script-share or length metric on translated strings.

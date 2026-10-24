@@ -32,6 +32,51 @@ calls (winGame inside next) can NOT be intercepted — design accordingly.
   a red "the beat is off"). After a wrong commit, mark the wrong parts (red ring) so the child fixes
   those, not the whole row. Post-commit, so it is feedback, not an oracle. (pattern-picnic build L8–10.)
 
+- **A not-ready commit is not a miss** (KDM 2026-10-22/23, found in ~40 games by kid-play + a behavioural probe):
+  LOCK IN / GO / FIRE pressed before the answer exists (nothing picked, dial untouched, cards still waiting, step 1
+  not done) must show a gold "what's left" nudge and return — never `missSince++`. With the clean-quota gate, 3 such
+  taps silently voided a correct round ("It took 7 tries"). Only an EVALUATED wrong answer is a miss. Arcade games
+  whose button IS the move (drop, fire) are exempt.
+- **Every level-1 route must be finishable** (ten-frog, integer-crossing): if a careful child's early choice can leave
+  no way to finish, the round is luck (ten-frog L1: 53% of first picks could reach 10). Generate the last step FROM the
+  earlier ones ("full" rule: the last lane holds a finishing option for every reachable total).
+- **No level where every round has the same correct answer** (KDM scan: ~70 science games' level 1): after round 1 the
+  child just taps the same option; rounds 2–3 teach nothing. Keep the opener, then mix ≥1 contrast case whose right
+  answer is a DIFFERENT option (chemical-reactions: baking soda → reaction, then sugar/salt in water → no reaction).
+- **Wrong options must be unambiguously wrong** (forms-of-energy: "Heat" offered as WRONG for the Sun; energy-
+  transformations: "Heat" wrong for a bulb whose own reveal says "light (plus some heat)"): model each item's secondary
+  truths and exclude them from the decoys.
+- **No degenerate items** (compare-fraction-cliff: 57% of L1 compared a fraction with ITSELF, always "="): assert the
+  generator's items actually differ along the dimension being taught.
+- **The scene, labels and subtitle must not carry the answer before the prediction** (viruses: the subtitle explained
+  the answer and the bacterium was labelled "living"; mars-rover: "thin air / months away" tags answered 2 of 4
+  questions). Reveal-only tags appear after LOCK IN.
+- **A failed commit names EVERY wrong part** (box-plot-builder, coordinate-rule-reactor): naming one at a time turns 3
+  wrong parts into 3 misses → no star, though each fix was right. Mark all wrong parts; say "Also off: …".
+- **Big-number answers need a method after the first miss** (map-scale-ruler L2: 7 × 25 with "Multiply" as the only
+  hint, answer revealed after 6 misses = round already void): show the first rungs of a method ("count by 25s: 25, 50,
+  75 … — 5 jumps"), never the answer.
+- **Copy must match the board at that level** (triangle-builder L1 said "or flag it" with the flag button hidden;
+  distributive-depot "any cut works!" vs "≥2 columns each side"; transversal-trail never said HOW MANY to find;
+  science wrong-pick text said "LOCK IN again" after the button had become NEXT). Make copy tier-aware.
+- **Whatever looks tappable must be tappable** (classification bins, crystals board cards, pattern-simon's "?" — a
+  young child's first tap goes where they look; silence there reads as broken). Either wire it (pick / nudge) or make it
+  look inert.
+- **A distractor must never share the target's colour** (protractor-port 2026-10-23: the inner scale was drawn from L1 in
+  the same pink as the target arm — "read to the pink arm" → children read the pink numbers, 180 − θ; 5 tried L1, 0
+  cleared). Show a second scale / readout only from the level that needs it, in a neutral colour, and print nothing
+  under a start flag ("0" + "0°" read as "00°").
+- **Copy must describe the order things happen in** (elements: "Zoom in on water, then LOCK IN" — the zoom IS the
+  reveal after LOCK IN, so children hunted for a zoom control): "Make your guess, then LOCK IN to zoom in."
+- **Categories a child must tell apart need icons that look different** (frequency-forge: 🤚 Left-handed vs ✋
+  Right-handed, 👧 vs 🧒 — matching a card to its row by icon was impossible). Use contrasting glyphs (👈 / 👉).
+- **Count L1 work in placements, not taps** (frequency-forge L1 = 6 + 8 + 8 = 22 cards to sort for one level; 23
+  tried, 4 reached L2). A sorting/placing game's first level: ≤ ~15 placements in total.
+- **Reveal animations must be identity at rest** (soil-layers: the settle-slide offset applied in PREDICT too, so
+  every slab sat 30 px high — the top one under the header, the '?' marks on the slab edges).
+- **A first level asks for few wins, without a tight clock** (orbit-rider L1: 5 timed bursts at 16 s each, 3 tried / 0
+  cleared; 450 games ask for 3). Keep L1 at ≤ 3 wins; if a level has a timer, give L1 the longest fuse.
+
 ## 3. The fun doctrine (gamability review, 81 games tiered)
 The disease is the **answer-box dial**: computing mentally and dialing a number into a stepper
 while the artwork sits as decoration. A stepper is FINE when the dial visibly drives the scene
@@ -65,6 +110,10 @@ When content needs a per-item image (vocabulary words, game icons, category art)
 - **Illustration fallback** (CDE `scripts/generate-illustrations.mjs`): abstract concepts
   and photo-impossible items get hand-authored flat SVG → sharp → webp in a consistent
   pastel style — judged by the SAME metrics (a 2-peak zigzag read as the letter "M").
+  **Rasterise generated SVG and LOOK at it before shipping** (yoga-bits chakra symbols, 2026-10-20):
+  programmatic SVG art passes its generator and its unit tests while being visually broken — yoga's
+  first pass had the lotus petals detached from the ring. Render SVG→PNG (sharp) and eyeball every
+  generated asset; "the code ran" is not "the picture is right."
 - **CI guard**: a unit test asserting every content item's image exists on disk and is
   non-trivial; same pattern for per-item audio if the product ships it (CDE pre-renders
   all word audio with Piper TTS — one consistent voice beats device TTS roulette).
@@ -98,6 +147,14 @@ surfacing the cold inventory to the traffic you already have — NOT more games.
   spotlight to USE traffic, never to justify more inventory ahead of validated demand.
 
 ## 4. Robustness contracts (each was a shipped bug)
+- **Touch drag needs `touch-action:none` on the drag source** (kidsdomath 2026-10-20). The template's
+  `*{touch-action:manipulation}` (double-tap-zoom guard) lets the browser treat a finger-drag as a
+  pan: the element gets 1–2 `pointermove`s, then `pointercancel` and **no `pointerup`** — every drag
+  dies on phones/tablets while mouse play is fine. coordinate-rule-reactor had 0 level-ups from 16
+  opens; a real-touch CDP probe found the same cancel in 78 drag games. The harness never saw it
+  (solveForTest + mouse). Rule: any element with a drag `pointerdown` gets `touch-action:none`
+  (`FX.enableDrag` does it), and treat `pointercancel` like `pointerup`. Verify with a real
+  `Input.dispatchTouchEvent` drag (hasTouch context), not `page.mouse`.
 - **kdm-no-repeat v2**: generator calls wrapped in `window.__kdmFreshO(...)`; if the round object
   contains ANY non-identity randomness (layout seeds, `token:Math.random()`, shuffled decoys) you
   MUST set `o.qkey` (stable question-identity string) or the guard silently never rerolls.
@@ -244,12 +301,42 @@ surfacing the cold inventory to the traffic you already have — NOT more games.
    badge/star-pill collisions, a stage-1 hint leaking the answer values, white-on-white text. Automated
    playthrough proves REACHABILITY, not VISUAL correctness; for label/table/multi-panel/image-dense
    games a human-eye vision pass catches the class playthrough can't see. Don't defer it.
+8. **For any PRINT page, screenshot `emulateMedia('print')` at page (A4) pixel size before ship**
+   (yoga-bits flashcards, 2026-10-20): print-media bugs are invisible on screen — the first pass had
+   5:7 cards overflowing to a 3rd row (breaking duplex back-sheet alignment) and text hugging the top
+   margin, neither visible in the normal viewport. Generators that print (flashcards, worksheets,
+   certificates) must be verified in print emulation at real page size, and duplex back-sheets checked
+   for row-by-row mirror alignment.
+
+9. **Play level 1 as KIDS, not as a solver** (KDM 2026-10-22/23 — every real L1 blocker this week was found this way;
+   the gates and vision review missed all of them): real taps over HTTP at 390×844 as a careful kid, a slip kid (one
+   wrong answer per round), an early-tap kid (presses the big button first), a slow kid (3–5 s per decision), a
+   guesser and a pre-reader. Measure taps / time / stars to clear L1. Science (P-O-E) rounds wait for NEXT after the
+   explain beat — press it; a probe that waits on a timer sees the SAME round and "finds" a repeat that isn't there.
+10. **Behavioural probes in the gate** (KDM `tools/game-review/early-commit-probe.mjs`, `repeat-probe.mjs`; validate
+    each probe on a known-bad old version AND the fix before trusting it): early-commit (3 commits before answering,
+    then a correct answer — the round must still count; skip games with no commit button, where `Line.commit` is a
+    harness shortcut that ANSWERS); repeat (60 builds through the no-repeat guard; compare the question STEM, not ids
+    like o0/o1 that are slots); same-answer level (choice games whose L1 answer never varies).
+11. **Review findings are leads, not facts.** Several "high" vision findings were wrong (orbit-rider's "orbit on the
+    wrong side" was correct physics; "tile vs pieces" was the game's theme; confetti = after-frame residue). Verify
+    each before changing a game; a reviewer that can't drag reports "the obvious tap did nothing" on drag games.
+12. **Sample before you sweep.** Three 10-game samples of low-traffic games found 0 L1 blockers in 30 but real bugs that
+    were PATTERNS shared by dozens of games — so the scalable move was a catalogue probe per pattern, not a full review
+    of every game.
 
 ## 6. Multi-agent workflow rules
 - One agent per game file; agents never touch sibling games or revert anything beyond
   build churn (`sw.js`, `version.json` ONLY — a `git checkout --` on a sibling's file once wiped
   an in-flight redesign).
 - Agents report, the coordinating session commits (scoped `git add`).
+- **Validate the INPUT you hand workers, not only their output** (yoga-bits, 2026-10-20): a
+  list-extraction regex left a `- "` wrapper on the first item of each batch; all 10 workers noticed
+  and silently dropped it, so the OUTPUT looked clean while the fed data was malformed. Gate the
+  worker INPUT (the prompt payload) the same way you gate the output. (Pairs with "diff expected
+  slugs vs outputs" — workers absorb upstream defects invisibly.)
+- **One scratchpad SUBFOLDER per worker** (yoga-bits): two workers sharing one scratch dir collided
+  on same-named helper scripts and re-ran each other's generator. Give each worker an isolated subdir.
 - On transient API drops/stalls: resume-from-transcript with "re-read your files from disk first —
   trust the disk, not memory."
 - **Write briefs and handoffs in Simplified Technical English (ASD-STE100 spirit)**: short
@@ -257,6 +344,13 @@ surfacing the cold inventory to the traffic you already have — NOT more games.
   are read under context-switching across many sessions — they must land in one pass. Lead with the
   task and the acceptance test; put the "why" in one line, not a paragraph. (Keep rich prose for
   genuine analysis/tradeoffs — STE is for instructions, not for thinking out loud.)
+
+- **Agent worktrees inside the project folder break the build** (KDM 2026-10-22): Turbopack/PostCSS globbed
+  `.claude/worktrees/*/node_modules` → a `node_modules/node_modules` symlink loop → TurbopackInternalError. Merge the
+  fork's commits, `git worktree remove` it, THEN build. Never symlink node_modules into a worktree (use NODE_PATH).
+- **Shared machine: one browser per agent**; seven parallel play-testers pushed load to ~23 and stalled runs.
+- **A shared-script change rewrites hundreds of games** (e.g. a no-repeat wrapper in 492 files): forks branched before
+  it must cherry-pick only their own files; check the wrapper's marker is still present after merging.
 
 ## 6b. Model routing (cost + correctness — route every Claude task by complexity)
 
@@ -317,6 +411,19 @@ with no home recurs):
 is not a regression — read the new findings and keep the game unless a finding is caused by the edit. Score
 before AND after, but decide on findings, not on the number. Also: run the playthrough BEFORE reading engagement
 depth — river-crossing was failing it at HEAD and would have read as a UX problem.
+
+**Measurement calibration (2026-10-23, KDM optimizer passes — the data pointed at games that weren't broken):**
+- **One window per rate.** A 7-day "L1 clear" beside a "tried" that existed for 1.5 days said "3 in 4 triers fail
+  pattern-simon"; the clean window said 85% clear. Compute every rate in the window where ALL its events exist.
+- **Split the funnel**: opened → pressed PLAY → touched the board → cleared L1 → reached L2. "Never tried" (bounce)
+  and "tried but stuck" are different failures with different fixes; cleared = max(L1-clear event, reached L2).
+- **Rank by the cautious end of a Wilson range** (count × lower bound) — 0-of-3 must not outrank 40-of-100.
+- **Instrumentation is a suspect first**: a new client event under-counts for days (cached old script: 141 first taps
+  for 1,735 opens the next day); an event tied to a UI element (the result card) silently never fires in games that
+  skip it (9 games had no L1-clear event); a fail-quiet beacon hides a DB outage (2 h lost to a Neon quota). Show
+  per-day event volumes and per-game coverage before reading any game.
+- **Reset to a baseline after a big pass** — save the optimizer output + raw aggregates + a git tag, then compare per
+  game with a noise test. Changing ~45 games and two shared systems in two days is otherwise unreadable.
 
 ## 7. Consuming this kit
 Each consumer repo carries `scripts/sync-game-kit.mjs` (copies kit files in, stamps

@@ -124,7 +124,7 @@
     background:#ff5d6c;color:#fff;font:bold 13px/1 system-ui,sans-serif;padding:10px 16px;border-radius:999px;cursor:pointer;box-shadow:0 6px 24px rgba(0,0,0,.5);}
 </style>
 <!-- kdm-progress v1 --><script src="/games/_shared/kdm-progress.js"></script>
-<script>/* kdm-no-repeat v2 */window.__kdmFreshO=function(gen){var p=window.__kdmPrevQ,o,t=0,s=null;do{o=gen();try{s=(o&&o.qkey!=null)?'q:'+o.qkey:JSON.stringify(o)}catch(e){s=null}}while(++t<9&&p&&s&&s===p);window.__kdmPrevQ=s;return o};</script>
+<script>/* kdm-no-repeat v2 */window.__kdmFreshO=function(gen){var p=window.__kdmPrevQ,o,t=0,s=null;do{o=gen();try{s=(o&&o.qkey!=null)?'q:'+o.qkey:JSON.stringify(o)}catch(e){s=null}}while(++t<9&&p&&s&&s===p);window.__kdmPrevQ=s;return o};</script><script>/* kdm-norepeat-stem v1 */(function(){var f=window.__kdmFreshO;if(!f)return;var X={choices:1,opts:1,options:1,qkey:1,pick:1,phase:1,sel:1,seed:1,first:1,t:1,anim:1,locked:1,k:1,filled:1,moved:1,cue:1};function n(v,d){if(d>4)return null;if(typeof v==='number')return v%1===0?v:null;if(Array.isArray(v))return v.map(function(x){return n(x,d+1)});if(v&&typeof v==='object'){var o={};Object.keys(v).sort().forEach(function(k){if(!X[k])o[k]=n(v[k],d+1)});return o}return v}function st(o){try{return JSON.stringify(n(o,0))}catch(e){return null}}var H=[];function bad(s){var n=H.length;if(!n||s===null)return false;var u={};H.forEach(function(x){u[x]=1});var d=Object.keys(u).length;return s===H[n-1]&&(d>=3||(n>1&&s===H[n-2]))}window.__kdmFreshO=function(g){var b=24,G=function(){var o,s;do{o=g();s=st(o)}while(--b>0&&bad(s));return o};var r=f(G);H.push(st(r));if(H.length>8)H.shift();return r}})();</script>
 </head>
 <body>
 <div id="stage">
@@ -289,13 +289,16 @@ const FX=(()=>{
   // Touching an object moves it immediately (no separate select step — avoids the hidden-multi-
   // select bug). Works for mouse + touch; sets cursor:grab/grabbing.
   function enableDrag({hit, valueAt, onDrag, onEnd}){
-    let id=null; cv.style.cursor='grab';
+    // touch-action:none — the global *{touch-action:manipulation} lets the browser claim a finger-drag as a
+    // pan: 1–2 pointermoves, then pointercancel and NO pointerup, so on phones/tablets the drag never lands.
+    let id=null; cv.style.cursor='grab'; cv.style.touchAction='none';
     const rel=e=>{ const r=cv.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; };
     cv.addEventListener('pointerdown',e=>{ if(Game.screen!=='play')return; const p=rel(e); const h=hit(p.x,p.y);
       if(h==null)return; id=h; try{cv.setPointerCapture(e.pointerId);}catch(_){} cv.style.cursor='grabbing';
       if(valueAt) onDrag(id, valueAt(p.x,p.y)); });
     window.addEventListener('pointermove',e=>{ if(id==null||Game.screen!=='play')return; const p=rel(e); onDrag(id, valueAt?valueAt(p.x,p.y):p); });
-    window.addEventListener('pointerup',()=>{ if(id==null)return; const done=id; id=null; cv.style.cursor='grab'; onEnd&&onEnd(done); });
+    const end=()=>{ if(id==null)return; const done=id; id=null; cv.style.cursor='grab'; onEnd&&onEnd(done); };
+    window.addEventListener('pointerup',end); window.addEventListener('pointercancel',end);
   }
   return {resize,setConfig,setShake,burst,celebrate,enableDrag,geo, get W(){return W;}, get H(){return H;}};
 })();
@@ -355,6 +358,8 @@ const Line=(()=>{
   function commit(){
     if(locked) return;                                               // commit-lock: ignore taps until the next target spawns
     clearIdle();
+    // A commit before the answer is complete (nothing picked, cards still waiting, step 1 not done) is NOT a miss:
+    // say what's left in gold and return. Only an evaluated wrong answer may missSince++ (clean-quota drops the star).
     if(solved()){
       locked=true; FX.celebrate(); /* kdm-clean-quota v1 */if(missSince<=2)made++; refresh();
       if(made>=need) setTimeout(()=>Game.roundClear(usedScaffold>0),520);
