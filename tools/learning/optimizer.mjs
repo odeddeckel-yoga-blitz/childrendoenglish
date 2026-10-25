@@ -276,22 +276,43 @@ if (pageOpens > 0 || gameIds.length > 0) {
 // ⚠ create_done never fired before 2026-10-21 (phantom 'Player 1' bug made
 // every first player the SECOND) — read view→created only from 10-22 on.
 // The first quiz is 5 questions since 2026-10-21 (was 10).
+// Since 2026-10-25 each first-quiz answer fires q1_a<n>_<ok|no|skip>, so a quiz
+// that ends with neither done nor quit ("vanished") shows how far it got.
+// Counted from 2026-10-22 only (first full day of the 5-question first quiz) and
+// split by interface language — 10-25 read: he 8/14 finished, en 5/19.
 {
   const S = ['create_view', 'create_done', 'create_noname', 'name_later', 'q1_start', 'q1_done', 'q1_quit'];
-  const onb = Object.fromEntries(S.map((k) => [k, 0]));
-  for (const r of rows) if (r.ev === 'onb' && r.item in onb) onb[r.item] += r.n;
+  const onbRows = await q`SELECT lang, item, sum(n)::int AS n FROM cde_learn
+    WHERE ev = 'onb' AND day >= GREATEST(CURRENT_DATE - ${days}::int, DATE '2026-10-22') GROUP BY lang, item`;
+  const tally = (rs) => {
+    const t = Object.fromEntries(S.map((k) => [k, 0]));
+    t.reach = [0, 0, 0, 0, 0, 0]; t.firstWrong = 0;
+    for (const r of rs) {
+      if (r.item in t) t[r.item] += r.n;
+      const m = /^q1_a(\d)_(ok|no|skip)$/.exec(r.item);
+      if (m) { t.reach[+m[1]] += r.n; if (m[1] === '1' && m[2] !== 'ok') t.firstWrong += r.n; }
+    }
+    return t;
+  };
+  const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '—');
+  const onb = tally(onbRows);
   if (onb.create_view > 0) {
-    const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '—');
     const created = onb.create_done + onb.create_noname;
-    console.log(`\n— first visit: create-player shown ${onb.create_view} → created ${created} (${pct(created, onb.create_view)};` +
+    console.log(`\n— first visit (since 2026-10-22): create-player shown ${onb.create_view} → created ${created} (${pct(created, onb.create_view)};` +
       ` ${onb.create_noname} skipped the name, ${onb.name_later} named later)` +
-      ` → 1st quiz started ${onb.q1_start} (${pct(onb.q1_start, created)}) → finished ${onb.q1_done} (${pct(onb.q1_done, onb.q1_start)}) / quit ${onb.q1_quit}`);
+      ` → 1st quiz started ${onb.q1_start} (${pct(onb.q1_start, created)}) → finished ${onb.q1_done} (${pct(onb.q1_done, onb.q1_start)}) / quit ${onb.q1_quit}` +
+      ` / vanished ${Math.max(0, onb.q1_start - onb.q1_done - onb.q1_quit)}`);
+    for (const lang of [...new Set(onbRows.map((r) => r.lang))].sort()) {
+      const t = tally(onbRows.filter((r) => r.lang === lang));
+      if (t.q1_start) console.log(`    ${lang}: 1st quiz ${t.q1_done}/${t.q1_start} finished (${pct(t.q1_done, t.q1_start)}), quit ${t.q1_quit}`);
+    }
+    if (onb.reach[1]) console.log(`  answered Q1..Q5: ${onb.reach.slice(1).join(' → ')} (of ${onb.q1_start} started since the per-answer beacon; Q1 wrong/skipped ${onb.firstWrong})`);
     if (onb.create_view >= 15 && created / onb.create_view < 0.6)
       console.log('  ⚠ the create-player screen still loses ≥40% even with the name optional — consider auto-creating the first player');
     if (onb.q1_start >= 15 && onb.q1_done / onb.q1_start < 0.5)
       console.log('  ⚠ under half finish the (5-question) first quiz — look at the first quiz itself');
   } else {
-    console.log('\n— first visit: no onb data yet (funnel ships 2026-10-18)');
+    console.log('\n— first visit: no onb data in the window');
   }
 }
 

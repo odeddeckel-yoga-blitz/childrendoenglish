@@ -672,6 +672,7 @@ export default function App() {
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
+            onAnswer={quizFlow.handleQuizAnswer}
             onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );
@@ -684,6 +685,7 @@ export default function App() {
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
+            onAnswer={quizFlow.handleQuizAnswer}
             onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );
@@ -696,6 +698,7 @@ export default function App() {
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
+            onAnswer={quizFlow.handleQuizAnswer}
             onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );
@@ -708,6 +711,7 @@ export default function App() {
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
+            onAnswer={quizFlow.handleQuizAnswer}
             onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
           />
         );

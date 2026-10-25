@@ -99,6 +99,13 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     navigate(stateMap[mode] || 'imageQuiz');
   }, [navigate, stats, knownLetters]);
 
+  // Where in the first quiz does a brand-new player stop? q1_start/done/quit
+  // can't tell (2026-10-25: 16 of 34 first quizzes ended with neither), so
+  // each first-quiz answer fires onb q1_a<n>_<ok|no|skip>.
+  const handleQuizAnswer = useCallback((index, result) => {
+    if (isFreshPlayer(stats)) sendLearn('onb', `q1_a${index + 1}_${result}`);
+  }, [stats]);
+
   const handleQuizComplete = useCallback((results) => {
     const { score, total, answers, mode, quit } = results;
 
@@ -234,6 +241,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     customWords,
     loadingProgress,
     startQuiz,
+    handleQuizAnswer,
     handleQuizComplete,
     handleStartPersonalQuiz,
   };

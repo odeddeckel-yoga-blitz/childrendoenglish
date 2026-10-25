@@ -13,11 +13,11 @@ import { t } from '../utils/i18n';
 // playable as a read-the-clue exercise.
 const IMAGE_STALL_MS = 7000;
 
-export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit: _onQuit }) {
+export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onAnswer, onQuit: _onQuit }) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [imgFailed, setImgFailed] = useState(false);
 
-  const quiz = useQuizState({ words, mode: 'image', lang, onComplete, speakOnCorrect: true, speakDelay: 600 });
+  const quiz = useQuizState({ words, mode: 'image', lang, onComplete, onAnswer, speakOnCorrect: true, speakDelay: 600 });
 
   // Reset image loaded state when question changes
   const [prevIndex, setPrevIndex] = useState(0);

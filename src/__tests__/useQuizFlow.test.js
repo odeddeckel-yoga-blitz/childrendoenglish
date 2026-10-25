@@ -414,5 +414,22 @@ describe('useQuizFlow', () => {
       await act(async () => { await result.current.startQuiz('beginner', 'image'); });
       expect(onb()).toEqual([]);
     });
+
+    it('fresh player: each first-quiz answer reports its position and result', async () => {
+      const { result } = renderFlow();
+      await act(async () => { await result.current.startQuiz('beginner', 'listen'); });
+      act(() => {
+        result.current.handleQuizAnswer(0, 'ok');
+        result.current.handleQuizAnswer(1, 'no');
+        result.current.handleQuizAnswer(2, 'skip');
+      });
+      expect(onb()).toEqual(['q1_start', 'q1_a1_ok', 'q1_a2_no', 'q1_a3_skip']);
+    });
+
+    it('player with history: answers send no onb events', async () => {
+      const { result } = renderFlow({ totalQuizzes: 2 });
+      act(() => { result.current.handleQuizAnswer(0, 'ok'); });
+      expect(onb()).toEqual([]);
+    });
   });
 });

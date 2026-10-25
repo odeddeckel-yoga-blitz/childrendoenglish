@@ -7,7 +7,7 @@ import { t } from '../utils/i18n';
 import { analytics } from '../utils/analytics';
 import { computeGain, FAST_ANSWER_MS } from '../utils/arcade';
 
-export default function useQuizState({ words, mode, lang = 'en', onComplete, speakOnCorrect = true, speakDelay = 0 }) {
+export default function useQuizState({ words, mode, lang = 'en', onComplete, onAnswer, speakOnCorrect = true, speakDelay = 0 }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [streak, setStreak] = useState(0);
@@ -51,6 +51,7 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, spe
     setAnswered(correct ? 'correct' : 'wrong');
     setAnswers(prev => [...prev, { wordId: currentWord.id, correct, selected: option.id }]);
     analytics.quizAnswer(currentWord.id, correct, mode);
+    onAnswer?.(currentIndex, correct ? 'ok' : 'no');
 
     if (correct) {
       setScore(s => s + 1);
@@ -93,7 +94,7 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, spe
         setCurrentIndex(i => i + 1);
       }
     }, 1200);
-  }, [answered, currentWord, currentIndex, total, score, streak, answers, onComplete, mode, lang, speakOnCorrect, speakDelay]);
+  }, [answered, currentWord, currentIndex, total, score, streak, answers, onComplete, onAnswer, mode, lang, speakOnCorrect, speakDelay]);
 
   const handleSkip = useCallback(() => {
     if (answered) return;
@@ -101,6 +102,7 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, spe
     setAnswered('wrong');
     setFeedbackMessage(t('feedbackSkipped', lang, { word: currentWord.word }));
     setAnswers(prev => [...prev, { wordId: currentWord.id, correct: false, selected: null }]);
+    onAnswer?.(currentIndex, 'skip');
     setStreak(0);
     speakWord(currentWord.word);
 
@@ -117,7 +119,7 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, spe
         setCurrentIndex(i => i + 1);
       }
     }, 1200);
-  }, [answered, currentWord, currentIndex, total, score, answers, onComplete, mode, lang]);
+  }, [answered, currentWord, currentIndex, total, score, answers, onComplete, onAnswer, mode, lang]);
 
   const handleQuit = useCallback(() => {
     clearTimeout(feedbackTimeout.current);

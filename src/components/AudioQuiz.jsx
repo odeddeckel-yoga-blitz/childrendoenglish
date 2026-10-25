@@ -7,7 +7,7 @@ import QuizOptionGrid from './QuizOptionGrid';
 import { speakWord, isTTSAvailable } from '../utils/sound';
 import { t } from '../utils/i18n';
 
-export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onQuit: _onQuit }) {
+export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onAnswer, onQuit: _onQuit }) {
   const [loadedImages, setLoadedImages] = useState(new Set());
   const [ttsUnavailableToast, setTtsUnavailableToast] = useState(false);
 
@@ -18,6 +18,7 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
     mode: 'audio',
     lang,
     onComplete,
+    onAnswer,
     speakOnCorrect: false,
     speakDelay: 600,
   });
