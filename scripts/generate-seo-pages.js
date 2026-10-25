@@ -4987,6 +4987,19 @@ const ageBracketEntries = AGE_BRACKETS.map(
   </url>`
 ).join('\n');
 
+// --- Textbook-unit pages (/units/…) — test units are built but noindex + left out here ---
+const { BOOKS, UNITS } = await import(join(ROOT, 'src', 'data', 'units.js'));
+const { collides } = await import(join(ROOT, 'src', 'data', 'words.js'));
+const { buildUnitPages } = await import(join(ROOT, 'scripts', 'build-unit-pages.mjs'));
+const unitUrls = buildUnitPages({ SITE, distDir, publicDir: join(ROOT, 'public'), writePage, escapeHtml, WORDS, collides, BOOKS, UNITS });
+const unitEntries = unitUrls.map((u) => `  <url>
+    <loc>${SITE}${u}</loc>
+    <lastmod>${today}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>`).join('\n');
+console.log(`  ✓ /units/: ${UNITS.length} unit page(s), ${unitUrls.length} in the sitemap (test units are noindex)`);
+
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${spaEntries}
@@ -5003,12 +5016,13 @@ ${guideEntries}
 ${ageBracketEntries}
 ${bilingualEntries}
 ${spanishBilingualEntries}
+${unitEntries}
 </urlset>
 `;
 
 writeFileSync(join(distDir, 'sitemap.xml'), sitemap, 'utf-8');
 
-const totalUrls = 1 + 1 + 1 + 1 + CATEGORIES.length + WORDS.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length + AGE_BRACKETS.length + CATEGORIES.length + CATEGORIES.length;
+const totalUrls = 1 + 1 + 1 + 1 + CATEGORIES.length + WORDS.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length + AGE_BRACKETS.length + CATEGORIES.length + CATEGORIES.length + unitUrls.length;
 console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about + Hebrew landing + Spanish landing + ${spanishBilingualGenerated} Spanish bilingual pages`);
 console.log(`Sitemap: ${totalUrls} URLs`);
 

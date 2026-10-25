@@ -6,7 +6,7 @@
 // project childrendoenglish, CDE_DATABASE_URL — own project since 2026-10-17).
 import { neon } from '@neondatabase/serverless';
 
-const PAGES = new Set(['home', 'vocab', 'hebrew', 'spanish', 'games', 'tool', 'flashcards', 'guide', 'app', 'other']);
+const PAGES = new Set(['home', 'vocab', 'hebrew', 'spanish', 'games', 'tool', 'flashcards', 'guide', 'app', 'unit', 'other']);
 const LANGS_OK = new Set(['en', 'he', 'es', 'ar']);
 const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 

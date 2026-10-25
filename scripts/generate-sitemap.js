@@ -5,7 +5,7 @@
  * Run AFTER vite build + generate-seo-pages.js so all static pages exist.
  */
 
-import { readdirSync, statSync, writeFileSync } from 'fs';
+import { readdirSync, statSync, writeFileSync, readFileSync } from 'fs';
 import { join, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -50,7 +50,12 @@ function getChangefreq(urlPath) {
 
 const htmlFiles = findHtmlFiles(DIST);
 
+// A page that tells search engines not to index it (e.g. a /units/ template-test
+// page) must not be offered in the sitemap either.
+const isNoindex = (f) => /<meta name="robots" content="noindex/.test(readFileSync(f, 'utf-8'));
+
 const urlPaths = htmlFiles
+  .filter((f) => !isNoindex(f))
   .map((f) => {
     const rel = relative(DIST, dirname(f));
     return rel === '' ? '/' : `/${rel.replace(/\\/g, '/')}/`;
