@@ -445,8 +445,12 @@ async function joinAs(nickname) {
 
 async function resume() {
   // 1) #host=CODE.HOSTKEY lets a teacher reopen the projector screen.
-  //    #join=CODE prefills the code for kids (e.g. from a shared link).
+  //    #join=CODE prefills the code for kids (e.g. from a shared link) —
+  //    unless this tab already joined that room, so a reload mid-battle
+  //    resumes the same player instead of dropping back to the join screen.
   const hash = location.hash.slice(1);
+  let saved = null;
+  try { saved = JSON.parse(sessionStorage.getItem(SS_KEY) || 'null'); } catch { /* ignore */ }
   if (hash.startsWith('host=')) {
     const [code, hostKey] = hash.slice(5).split('.');
     const norm = normalizeCode(code);
@@ -461,7 +465,7 @@ async function resume() {
   }
   if (hash.startsWith('join=')) {
     const norm = normalizeCode(hash.slice(5));
-    if (norm) {
+    if (norm && !(saved && saved.role === 'kid' && saved.code === norm)) {
       $('codeInput').value = norm;
       show('sJoin');
       return;
@@ -469,8 +473,6 @@ async function resume() {
   }
 
   // 2) sessionStorage resume (page reload mid-battle).
-  let saved = null;
-  try { saved = JSON.parse(sessionStorage.getItem(SS_KEY) || 'null'); } catch { /* ignore */ }
   if (saved && saved.code && saved.role) {
     const room = await apiState(saved.code);
     if (room) { // includes 'offline' — assume the room is still alive

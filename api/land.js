@@ -6,7 +6,7 @@
 // project childrendoenglish, CDE_DATABASE_URL — own project since 2026-10-17).
 import { neon } from '@neondatabase/serverless';
 
-const PAGES = new Set(['home', 'vocab', 'hebrew', 'spanish', 'games', 'tool', 'flashcards', 'guide', 'app', 'unit', 'other']);
+const PAGES = new Set(['home', 'vocab', 'hebrew', 'spanish', 'games', 'tool', 'flashcards', 'guide', 'app', 'unit', 'battle', 'other']);
 const LANGS_OK = new Set(['en', 'he', 'es', 'ar']);
 const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 
@@ -59,6 +59,18 @@ function sql() {
   return q;
 }
 
+// Class Battle promises a room is deleted ~30 min after creation, but its store
+// (api/_lib/battleStore.js) only sweeps when someone touches battle. Every page
+// view lands here, so an abandoned room goes with the next visitor anywhere on
+// the site. Throttled per instance; a missing table (no battle yet) is fine.
+let lastBattleSweep = 0;
+async function sweepBattleRooms(q) {
+  const now = Date.now();
+  if (now - lastBattleSweep < 60_000) return;
+  lastBattleSweep = now;
+  try { await q`DELETE FROM cde_battle_rooms WHERE expires_at <= ${now}`; } catch { /* table not created yet */ }
+}
+
 export default async function handler(req, res) {
   try {
     if (req.method === 'POST') {
@@ -95,6 +107,7 @@ export default async function handler(req, res) {
         await ready;
         await q`INSERT INTO cde_land (day, page, src, lang, n) VALUES (CURRENT_DATE, ${g}, ${s}, ${l}, 1)
                 ON CONFLICT (day, page, src, lang) DO UPDATE SET n = cde_land.n + 1`;
+        await sweepBattleRooms(q);
       }
       return res.status(204).end();
     }
