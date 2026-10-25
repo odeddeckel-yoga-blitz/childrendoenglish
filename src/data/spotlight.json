@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-10-24T00:00:00.000Z",
+  "statsFrom": "2026-10-25T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "tennis",
@@ -12,13 +12,13 @@
     "since": "2026-10-24T08:04:26.383Z"
   },
   "game": {
-    "id": "category-conveyor",
-    "name": "Category Conveyor",
-    "emoji": "📦",
-    "opens": 27,
-    "lvl": 102,
-    "cmp": 18,
-    "since": "2026-10-10T20:50:00.000Z"
+    "id": "spelling-forge",
+    "name": "Spelling Forge",
+    "emoji": "🔨",
+    "opens": 25,
+    "lvl": 43,
+    "cmp": 0,
+    "since": "2026-10-25T08:21:30.744Z"
   },
   "history": [
     {
@@ -41,6 +41,13 @@
       "to": "tennis",
       "reason": "graduated (ans≥30, acc≥0.7)",
       "at": "2026-10-24T08:04:26.383Z"
+    },
+    {
+      "lane": "game",
+      "from": "category-conveyor",
+      "to": "spelling-forge",
+      "reason": "max tenure 14d",
+      "at": "2026-10-25T08:21:30.744Z"
     }
   ]
 }
