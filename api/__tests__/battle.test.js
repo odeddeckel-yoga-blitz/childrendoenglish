@@ -41,6 +41,8 @@ import {
   suggestNicknames as clientSuggest,
 } from '../../public/battle/battle-core.js';
 import { BATTLE_WORDS } from '../../public/battle/battle-words.js';
+import { WORDS, collides } from '../../src/data/words.js';
+import { buildBattleWords } from '../../scripts/gen-battle-words.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 
@@ -165,6 +167,26 @@ describe('question generation (client-side)', () => {
         const pool = wordPool(cat);
         for (const c of q.choices) {
           expect(pool.some((w) => w.id === c.id && w.img === c.img)).toBe(true);
+        }
+      }
+    }
+  });
+
+  it('battle-words.js is fresh (node scripts/gen-battle-words.mjs)', () => {
+    const file = fs.readFileSync(path.join(repoRoot, 'public', 'battle', 'battle-words.js'), 'utf-8');
+    expect(file === buildBattleWords()).toBe(true);
+  });
+
+  it('never offers a second right answer as a distractor (collides())', () => {
+    const byId = new Map(WORDS.map((w) => [w.id, w]));
+    const chair = wordPool('home').find((w) => w.id === 'chair');
+    expect(chair).toBeTruthy();
+    for (const cat of [...Object.keys(BATTLE_WORDS), 'mix']) {
+      for (let i = 0; i < 60; i++) {
+        const q = makeQuestion(cat);
+        const target = byId.get(q.id);
+        for (const c of q.choices) {
+          if (c.id !== q.id) expect(collides(target, byId.get(c.id)), `${q.id} vs ${c.id}`).toBe(false);
         }
       }
     }

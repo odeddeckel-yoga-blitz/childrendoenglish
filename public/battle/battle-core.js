@@ -8,7 +8,7 @@
  * server only ever sees a picked nickname + clamped score.
  */
 
-import { BATTLE_WORDS } from './battle-words.js';
+import { BATTLE_WORDS, BATTLE_AVOID } from './battle-words.js';
 
 /* ---- categories & durations (teacher setup) ---- */
 
@@ -105,11 +105,13 @@ export function makeQuestion(categoryId, recentIds = []) {
   if (candidates.length === 0) candidates = pool; // window larger than pool
   const target = candidates[Math.floor(Math.random() * candidates.length)];
 
-  // 3 distractor photos from the same pool (distinct words & images).
+  // 3 distractor photos from the same pool (distinct words & images), never a
+  // word that would also be a right answer (armchair for "chair" — BATTLE_AVOID).
   const usedImgs = new Set([target.img]);
+  const avoid = new Set(BATTLE_AVOID[target.id] || []);
   const distractors = [];
   for (const w of shuffled(pool)) {
-    if (w.id === target.id || usedImgs.has(w.img)) continue;
+    if (w.id === target.id || usedImgs.has(w.img) || avoid.has(w.id)) continue;
     usedImgs.add(w.img);
     distractors.push(w);
     if (distractors.length === 3) break;
