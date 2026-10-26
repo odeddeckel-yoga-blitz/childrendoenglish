@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-10-25T00:00:00.000Z",
+  "statsFrom": "2026-10-26T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "tennis",
@@ -7,16 +7,16 @@
     "category": "sports",
     "he": "טניס",
     "image": "/images/tennis.webp",
-    "ans": 0,
-    "ok": 0,
+    "ans": 12,
+    "ok": 8,
     "since": "2026-10-24T08:04:26.383Z"
   },
   "game": {
     "id": "spelling-forge",
     "name": "Spelling Forge",
     "emoji": "🔨",
-    "opens": 25,
-    "lvl": 43,
+    "opens": 43,
+    "lvl": 60,
     "cmp": 0,
     "since": "2026-10-25T08:21:30.744Z"
   },
