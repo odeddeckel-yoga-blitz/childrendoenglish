@@ -59,7 +59,7 @@ const rows = await q`SELECT ev, item, sum(n)::int AS n, min(day) AS first, max(d
 // Diagnostic per the amber lesson: a word hard under ONE language = that language's
 // GLOSS problem; hard under every language = image/audio/word-selection problem.
 const langRows = await q`SELECT lang, ev, item, sum(n)::int AS n
-  FROM cde_learn WHERE day >= CURRENT_DATE - ${days}::int AND ev IN ('ans_ok','ans_no')
+  FROM cde_learn WHERE day >= CURRENT_DATE - ${days}::int AND ev IN ('ans_ok','ans_no','quiz_start','quiz_done')
   GROUP BY lang, ev, item`;
 
 // --- recording health (2026-10-23) ---
@@ -143,6 +143,7 @@ if (thin.length > 0) {
 // --- per-language wrong-rates (only shown once non-en volume exists) ---
 const byLangWord = {};
 for (const r of langRows) {
+  if (r.ev !== 'ans_ok' && r.ev !== 'ans_no') continue;
   const k = r.lang;
   const w = ((byLangWord[k] = byLangWord[k] || {})[r.item] = byLangWord[k][r.item] || { ok: 0, no: 0 });
   w[r.ev === 'ans_ok' ? 'ok' : 'no'] += r.n;
@@ -159,9 +160,21 @@ if (nonEn.length > 0) {
       const e = byLangWord.en?.[id];
       return e ? `${Math.round((100 * e.no) / Math.max(1, e.ok + e.no))}%` : '—';
     };
-    console.log(`  [${lg}] ${hard.length ? '' : 'no words above target'}`);
+    // Learners vs natives (10-28): he-UI kids are learning English, en-UI kids mostly
+    // know the words, so every word is harder under he. A gloss flag needs the word's
+    // gap to exceed the language-wide gap by 15 points, not just 15 points raw.
+// 10-28 check: hammer/bear/archery/bone he misses were ALL listen (aud) — the gloss
+// isn't on screen there, so the old "GLOSS issue" label pointed the wrong way.
+    const base = (l) => {
+      const v = Object.values(byLangWord[l] || {});
+      const no = v.reduce((a, x) => a + x.no, 0);
+      return no / Math.max(1, v.reduce((a, x) => a + x.ok + x.no, 0));
+    };
+    const langGap = 100 * (base(lg) - base('en'));
+    console.log(`  [${lg}] baseline wrong ${Math.round(100 * base(lg))}% vs en ${Math.round(100 * base('en'))}%  ${hard.length ? '' : 'no words above target'}`);
     for (const x of hard.slice(0, 8)) {
-      console.log(`    ${x.id.padEnd(16)} wrong ${(x.w * 100).toFixed(0)}% × ${x.a}  (en: ${enW(x.id)})  ${enW(x.id) !== '—' && x.w * 100 - parseInt(enW(x.id)) > 15 ? '→ likely ' + lg.toUpperCase() + ' GLOSS issue' : ''}`);
+      const gap = enW(x.id) !== '—' ? x.w * 100 - parseInt(enW(x.id)) - langGap : null;
+      console.log(`    ${x.id.padEnd(16)} wrong ${(x.w * 100).toFixed(0)}% × ${x.a}  (en: ${enW(x.id)})  ${gap != null && gap > 15 ? '→ ' + lg + '-only gap: a gloss issue ONLY if the misses are txt-probe; aud/img misses = learner difficulty (see wrong picks)' : ''}`);
     }
   }
 }
@@ -177,6 +190,16 @@ console.log('\n— mode funnel (done ÷ start):');
 for (const [m, v] of Object.entries(modes).sort((a, b) => b[1].start - a[1].start)) {
   const rate = v.start ? Math.round((100 * v.done) / v.start) : 0;
   console.log(`  ${m.padEnd(10)} start ${String(v.start).padStart(4)}  done ${String(v.done).padStart(4)} (${rate}%)  quit ${v.quit}`);
+}
+// Per language (10-28: image mode en 7/34 done vs he 36/53 — en kids leave image quizzes).
+const ml = {};
+for (const r of langRows) {
+  if (!['quiz_start', 'quiz_done'].includes(r.ev)) continue;
+  const m = ((ml[r.item] ||= {})[r.lang] ||= { start: 0, done: 0 });
+  m[r.ev === 'quiz_start' ? 'start' : 'done'] += r.n;
+}
+for (const [m, byL] of Object.entries(ml)) {
+  console.log(`    ${m.padEnd(8)} ` + Object.entries(byL).map(([l, v]) => `${l} ${v.done}/${v.start}`).join('  '));
 }
 
 // --- letter practice ---
