@@ -146,6 +146,29 @@ surfacing the cold inventory to the traffic you already have — NOT more games.
   Catalog size is never the arrival lever; distribution (backlinks/referrals) is. Build a
   spotlight to USE traffic, never to justify more inventory ahead of validated demand.
 
+## 3d. Engagement & sharing guardrails — kids' audience (research round, 2026-10-24)
+Every retention or virality feature (daily challenge, share result, class rooms, streaks, assignment
+links) must pass these. They come from what drives complaints about competitors and from the kids'-privacy
+rules. A feature that needs to break one is out, not "careful".
+- **No upsell, store or paid tier shown to a child.** Prodigy's membership ads to kids (16 in 19 min,
+  Fairplay) and "kids who pay advance faster" are its top complaints. Free, no-ads, no-cap is the brand.
+- **No student email or account to play.** Asking students for an email is the COPPA problem flagged at
+  Blooket. Teachers name logins as a top friction; no-login is the strongest asset — keep it.
+- **Share text carries no name and no free text** — emoji + a day/level number + the URL only
+  (`KidsDoMath Daily #142 ⭐⭐⭐ 🟩🟩🟨 kidsdomath.com/daily`). A typed name in shared text is personal data.
+- **Live-room nicknames live for the session only** — never persisted, never in a URL, never in the beacon.
+  Results and podiums are wiped when the room ends; no cross-session leaderboard (needs identity).
+- **No push notifications, countdown nags or guilt copy** ("your streak will die!"). The amended COPPA rule
+  (compliance 2026-04-22) dropped the push-notification ban but the FTC says it remains "concerned" about
+  engagement prompts aimed at children; the UK Age Appropriate Design Code (std 13) bans nudges.
+- **No streak a child can lose.** Use "days played this week" (resets weekly, never shows a loss) or a
+  personal best. Duolingo itself: fear of losing a streak can stop learners starting one. A within-game
+  best-streak/personal-best badge is fine — it can only go up.
+- **Teacher-facing proof without student data.** "Show your teacher" = an on-screen/printable card (game,
+  skill, score, date, short check code) generated in the browser; nothing about the child is sent anywhere.
+- **Third-party share widgets load third-party script** (Google Classroom's `platform.js`) → prefer the plain
+  share URL (`classroom.google.com/share?url=…`, as kidsdomath ships) so the CSP and privacy notice stay unchanged.
+
 ## 4. Robustness contracts (each was a shipped bug)
 - **Touch drag needs `touch-action:none` on the drag source** (kidsdomath 2026-10-20). The template's
   `*{touch-action:manipulation}` (double-tap-zoom guard) lets the browser treat a finger-drag as a
@@ -274,6 +297,13 @@ surfacing the cold inventory to the traffic you already have — NOT more games.
   action AT that spot through the same snap/validity path as the drag (tap = a cut through that point,
   oriented by the mode), or name the gesture in the status line ("👉 drag the cut line") — never silence.
   Signature to grep: a pointerup that measures the travel and `return`s below a threshold.
+- **Controls fit the level's answer range** (KDM snack-bar-tapper 2026-10-25: L1 orders were 3–8 but the
+  leftmost, biggest chip was +10 — grade-1 spotlight kids tapped (8/8) yet only 2 served a tray). Hide a
+  builder/step control that can only overshoot every answer at this level, and drop it from the hint text in
+  the same change ("tap +5 or +1"). A tester solving by API never sees this — kid-sim clears L1 in 13 s.
+- **Ring budget on canvas targets** (KDM place-value-centipede 2026-10-25): a pulse/aim ring drawn at
+  `r+7` around targets spaced `cw` apart overlaps unless `r ≤ cw/2 − ring_extra`; size the target from
+  the ring, not the disc (`r = min(cw/2 − 8, …)`), which also keeps the end target's ring off the board edge.
 
 ## 5. Verification protocol (non-negotiable, per game)
 1. `node test/playthrough.mjs <game>` — dbg contract, 560-round reachability sweep, win flow,
@@ -456,5 +486,30 @@ The kit was game-catalogue-centric; yoga-bits is the first content→app site. I
   committing a stale pick over the bot's (CDE).
 - **Astro scoped `<style>` doesn't reach script-created DOM** → use `is:global` for client-rendered rows.
 - **Vitest under jsdom rejects `new URL(import.meta.url)`** → `path.resolve(process.cwd(), …)`.
-- **Vercel preview deployments are SSO-protected** (the Vercel MCP access-url tool 403s on scope) →
-  verify on PRODUCTION ~40s after push, not on the preview URL.
+- **Vercel preview deployments are SSO-protected** (the Vercel MCP access-url tool 403s on scope).
+  Reach them with `vercel curl`, or in Playwright with the `x-vercel-trusted-oidc-idp-token` header; still
+  re-verify on PRODUCTION ~40s after push.
+- **Preview must not write to the production DB** (KDM + CDE, 2026-10-25). Vercel DB vars are often ONE
+  entry shared by Production + Preview (DATABASE_URL, POSTGRES_*, PG*), so previews wrote real rows to prod.
+  Fix: a Neon branch `preview`; Preview-only DB vars point at it; switch the shared entries to Production-only
+  (PATCH target, values untouched); prove it with a row diff of main vs the branch after a test run. Never
+  test a writing preview before this is true.
+- **Same-site checks read Host / X-Forwarded-Host, not a fixed host list.** A fixed allowlist 403'd every
+  preview host (a full class-set simulation counted 0), and Vercel's request.url host can differ.
+
+## 8b. Class features: live rooms + class sets (KDM + CDE, 2026-10-25)
+
+Both sites' Class Battle had the same bugs, found only by a teacher + 5 simulated students run (phones +
+desktops, a late join, a reload mid-battle). Required:
+- **Reload resumes the same player with the same score and tally**, on every entry path (lobby join AND a
+  `#join=CODE` link). Seed the client tally from the server row; never restart it at 0 (KDM lost answers;
+  CDE lost the player).
+- **Rooms expire when the page says they do.** Sweep expired rooms on regular traffic (throttled, e.g.
+  once a minute per instance), not only when a room is created (CDE still held a room from a month earlier).
+- **Battle distractors pass the same `collides()` rule as the games** (CDE: 149 words had a same-answer
+  partner, e.g. grape/grapes). Generate the battle list from the shared data + a test that fails if stale.
+- **Counting hits retry once** (after ~2 s on a network error or 5xx). An occasional double count beats
+  an undercount a teacher sees.
+- **The e2e is the gate:** teacher + 5 students, a late join, a reload, a join after the end (refused),
+  TTL expiry (404 + rows gone), totals equal to the server, logs clean, then one tagged live smoke.
+  Re-run it whenever battle, set or beacon code changes.

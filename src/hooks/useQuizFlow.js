@@ -117,6 +117,11 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
       // problem — image / audio / the word itself). Separate batch (30-event cap).
       const probe = { image: 'img', word: 'txt', listen: 'aud', audio: 'aud' }[mode];
       if (probe) sendLearnBatch(answers.map(a => ({ e: a.correct ? 'ansm_ok' : 'ansm_no', i: `${a.wordId}@${probe}` })));
+      // What a wrong answer picked instead (target@chosen): a word that's hard
+      // under one probe could be a bad asset, or one distractor that reads as a
+      // second right answer — only the pick tells them apart (arrow, 10-28).
+      const picks = answers.filter(a => !a.correct && a.selected != null);
+      if (picks.length > 0) sendLearnBatch(picks.map(a => ({ e: 'ansx', i: `${a.wordId}@${a.selected}` })));
     }
 
     // Pure completion routine: applied inside the functional setStats updater

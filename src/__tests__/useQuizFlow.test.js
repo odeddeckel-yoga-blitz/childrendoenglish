@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { sendLearn } from '../utils/learnBeacon';
+import { sendLearn, sendLearnBatch } from '../utils/learnBeacon';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 vi.mock('../utils/sound', () => ({
@@ -153,6 +153,24 @@ describe('useQuizFlow', () => {
     expect(setStats).toHaveBeenCalled();
     expect(navigate).toHaveBeenCalledWith('finished');
     expect(analytics.quizComplete).toHaveBeenCalledWith('image', 'beginner', 8, 10);
+  });
+
+  it('a wrong answer reports what was picked instead (ansx target@chosen); skips and right answers do not', async () => {
+    const { result } = renderFlow();
+    await act(async () => { await result.current.startQuiz('beginner', 'image'); });
+    sendLearnBatch.mockClear();
+    act(() => {
+      result.current.handleQuizComplete({
+        score: 1, total: 3, mode: 'image',
+        answers: [
+          { wordId: 'word_0', correct: true, selected: 'word_0' },
+          { wordId: 'word_1', correct: false, selected: 'word_2' },
+          { wordId: 'word_3', correct: false, selected: null },
+        ],
+      });
+    });
+    const ansx = sendLearnBatch.mock.calls.map((c) => c[0]).find((b) => b.some((x) => x.e === 'ansx'));
+    expect(ansx).toEqual([{ e: 'ansx', i: 'word_1@word_2' }]);
   });
 
   it('handleQuizComplete unlocks next level at 7/10', async () => {

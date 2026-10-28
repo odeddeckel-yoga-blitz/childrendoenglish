@@ -34,6 +34,16 @@ const ILLUSTRATIONS = {
       <rect x="70" y="244" width="30" height="24" rx="6" fill="#1E293B"/>
     </g>
   </svg>`,
+  // balloon: the photo was a bunch of round balloons under a text-covered foil one — next to
+  // "ball" (round, and its spelling starts "balloon") it read as balls: img 44% (8/18) since
+  // 10-18, worst of its letter-path cohort (2026-10-28). One balloon, knot + curly string.
+  balloon: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#E0F2FE')}
+    <path d="M256 352 C 236 384, 280 404, 256 432 C 236 456, 270 470, 258 494" fill="none" stroke="#475569" stroke-width="5" stroke-linecap="round"/>
+    <ellipse cx="256" cy="200" rx="118" ry="142" fill="#EF4444"/>
+    <ellipse cx="214" cy="140" rx="30" ry="48" fill="#FCA5A5" opacity="0.75" transform="rotate(-24 214 140)"/>
+    <polygon points="256,338 240,358 272,358" fill="#DC2626"/>
+  </svg>`,
   oven: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#F1F5F9')}
     <rect x="106" y="96" width="300" height="330" rx="18" fill="#64748B"/>

@@ -273,7 +273,8 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
 - **Replay hooks (partly shipped).** The template menu now shows a **▶ Continue · LV n** button driven by
   `KDMProgress` (`maxLevel`) — `Game.start(lvl)` resumes there; this hook ships by default. A persisted
   best-streak badge or unlockable cosmetic theme is still the biggest untapped lever for deeper repeat play;
-  add deliberately, don't bloat.
+  add deliberately, don't bloat. A best-streak is a personal best (can only rise) — never a daily streak a
+  child can lose; see PATTERNS §3d guardrails.
 
 ## Learning-science design rules (evidence-based — enforce these)
 

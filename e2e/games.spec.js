@@ -105,3 +105,20 @@ test('game chrome follows the interface language (he / es), English stays defaul
   await page.goto('/games/category-conveyor/index.html');
   await expect(page.locator('#startBtn')).toHaveText('▶ START SORTING');
 });
+
+// 10-28: kids stalled in Spelling Forge (61 opens → 1.4 level-ups each); the
+// FORGE button sat below the fold on 360×640 phones. The kid's own last letter
+// now strikes the forge — no FORGE tap needed.
+test('spelling-forge: tapping the last letter forges the word on a small phone', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await page.goto('/games/spelling-forge/index.html');
+  await page.click('#startBtn');
+  await page.waitForFunction(() => window.SF && !!SF.dbg.word);
+  const letters = await page.evaluate(() => SF.dbg.word.en.split(''));
+  for (const ch of letters) {
+    const i = await page.evaluate((c) => SF.state.tiles.findIndex((t) => !t.used && t.ch === c), ch);
+    await page.click(`.tile[data-tile="${i}"]`);
+  }
+  await expect.poll(() => page.evaluate(() => SF.dbg.score)).toBeGreaterThan(0);
+  expect(await page.evaluate(() => SF.state.forged)).toBe(1);
+});

@@ -247,6 +247,10 @@ function tapTile(i,silent){
   clink();
   renderSlots(); refreshForge(); updateHintGlow();
   const padBtn=document.querySelector('.tile[data-tile="'+i+'"]'); if(padBtn) padBtn.classList.add('used');
+  /* the kid's last letter strikes the forge by itself (10-28: 61 opens → 1.4
+     level-ups each; FORGE sat below the fold on 360×640 and the play prompt
+     never mentions it). The button stays for re-striking. */
+  if(!silent&&S.slots.every(s=>s.ch!==null)) setTimeout(()=>{ if(S.slots.every(s=>s.ch!==null)) forge(); },280);
 }
 function tapSlot(j){
   if(S.screen!=='play'||S.locked||S.autoFilling) return;
@@ -402,6 +406,7 @@ function start(){
   ac();
   show('play'); buildRound();
   track('game_start',{});
+  learnBeacon('g_start'); /* opens fire on page load; this separates menu exits from play exits */
 }
 function winGame(){
   const isBest=S.score>0&&S.score>S.runStartBest;

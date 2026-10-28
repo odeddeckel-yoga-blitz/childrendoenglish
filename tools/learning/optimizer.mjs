@@ -216,9 +216,9 @@ const G_OPEN_SINCE = '2026-10-10';
 const gameEv = {};
 for (const r of await q`SELECT ev, item, sum(n)::int AS n FROM cde_learn
   WHERE day >= GREATEST(CURRENT_DATE - ${days}::int, ${G_OPEN_SINCE}::date)
-    AND ev IN ('g_open', 'g_lvl', 'g_cmp') GROUP BY ev, item`) {
-  const g = (gameEv[r.item] = gameEv[r.item] || { open: 0, lvl: 0, cmp: 0 });
-  g[r.ev === 'g_lvl' ? 'lvl' : r.ev === 'g_cmp' ? 'cmp' : 'open'] += r.n;
+    AND ev IN ('g_open', 'g_start', 'g_lvl', 'g_cmp') GROUP BY ev, item`) {
+  const g = (gameEv[r.item] = gameEv[r.item] || { open: 0, start: 0, lvl: 0, cmp: 0 });
+  g[{ g_lvl: 'lvl', g_cmp: 'cmp', g_start: 'start' }[r.ev] || 'open'] += r.n;
 }
 const landRows = await q`SELECT sum(n)::int AS n FROM cde_land
   WHERE day >= GREATEST(CURRENT_DATE - ${days}::int, ${G_OPEN_SINCE}::date) AND page = 'games'`;
@@ -233,7 +233,22 @@ if (pageOpens > 0 || gameIds.length > 0) {
     const depth = g.open ? g.lvl / g.open : null;
     const flag = g.open >= 10 && depth < 0.2 ? '  ⚠ opens don’t convert to play — check first-play UX'
       : g.open >= 10 && depth < 0.5 ? '  watch' : g.open < 10 ? '  (insufficient data)' : '';
-    console.log(`  ${id.padEnd(20)} opens ${String(g.open).padStart(4)}  levelups ${String(g.lvl).padStart(4)}  completes ${String(g.cmp).padStart(3)}  depth ${depth == null ? '—' : depth.toFixed(2)}${flag}`);
+    // g_start (spelling-forge since 2026-10-28): runs actually started — opens minus starts = left on the menu
+    const starts = g.start ? `  starts ${String(g.start).padStart(4)}` : '';
+    console.log(`  ${id.padEnd(20)} opens ${String(g.open).padStart(4)}${starts}  levelups ${String(g.lvl).padStart(4)}  completes ${String(g.cmp).padStart(3)}  depth ${depth == null ? '—' : depth.toFixed(2)}${flag}`);
+  }
+}
+
+// --- wrong picks (ansx target@chosen, ships 2026-10-28) ---
+// A pair that keeps coming back = the chosen word reads as a second right
+// answer (→ CONFUSABLE_PAIRS) or one asset is ambiguous (→ re-shoot).
+const picks = await q`SELECT item, sum(n)::int AS n FROM cde_learn
+  WHERE day >= CURRENT_DATE - ${days}::int AND ev = 'ansx' GROUP BY item ORDER BY n DESC LIMIT 15`;
+if (picks.length > 0) {
+  console.log('\n— top wrong picks (target → picked instead):');
+  for (const r of picks) {
+    const [t, c] = r.item.split('@');
+    console.log(`  ${t.padEnd(16)} → ${c.padEnd(16)} ${r.n}`);
   }
 }
 
