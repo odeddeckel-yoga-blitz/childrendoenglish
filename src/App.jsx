@@ -374,6 +374,7 @@ export default function App() {
   const completeLadderStep = useCallback((stepKey) => {
     sendLearn('cyc_stage', `${activeSet.token}_${stepKey}`);
     setCycleRun(false);
+    setFocusedWords(null);
     if (activeSet.source === 'batch') {
       const { batch } = cycleState(stats);
       if (stepKey === ladderPos.currentKey) {
@@ -398,6 +399,19 @@ export default function App() {
     navigate('ladder');
    
   }, [activeSet, ladderPos, stats, canReadNow, adhocPos, ladderSteps, navigate, setStats]);
+
+  // Reaching the menu by any route (bottom nav, browser back) ends a ladder run.
+  useEffect(() => {
+    if (gameState === 'menu' && cycleRun) { setCycleRun(false); setFocusedWords(null); }
+  }, [gameState, cycleRun]);
+
+  // Back/quit from a step. A ladder step returns to the ladder: focusedWords is
+  // also the personal-list marker, so a stale ladder set used to send kids to
+  // the My Word List editor. A personal-list run returns to the list.
+  const leaveScreen = useCallback(() => {
+    if (cycleRun) { setCycleRun(false); setFocusedWords(null); navigate('ladder', 'back'); return; }
+    focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back');
+  }, [cycleRun, focusedWords, navigate]);
 
   // Per-step repeats: rerun the SAME step with a different or bigger draw.
   const repeatLadderStep = useCallback((kind) => {
@@ -673,7 +687,7 @@ export default function App() {
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
             onAnswer={quizFlow.handleQuizAnswer}
-            onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
+            onQuit={leaveScreen}
           />
         );
 
@@ -686,7 +700,7 @@ export default function App() {
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
             onAnswer={quizFlow.handleQuizAnswer}
-            onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
+            onQuit={leaveScreen}
           />
         );
 
@@ -699,7 +713,7 @@ export default function App() {
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
             onAnswer={quizFlow.handleQuizAnswer}
-            onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
+            onQuit={leaveScreen}
           />
         );
 
@@ -712,7 +726,7 @@ export default function App() {
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
             onAnswer={quizFlow.handleQuizAnswer}
-            onQuit={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
+            onQuit={leaveScreen}
           />
         );
 
@@ -748,7 +762,7 @@ export default function App() {
               { label: t('ladderAgainMore', lang), onClick: () => repeatLadderStep('more') },
             ] : null}
             onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords)}
-            onMenu={() => { setCycleRun(false); focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back'); }}
+            onMenu={() => { if (cycleRun) { setCycleRun(false); setFocusedWords(null); navigate('menu', 'back'); } else leaveScreen(); }}
             onLightning={quizFlow.quizWords.length > 0 ? () => navigate('lightning') : undefined}
           />
         );
@@ -868,8 +882,9 @@ export default function App() {
             knownLetters={activePlayer?.knownLetters}
             words={focusedWords}
             onUpdateStats={setStats}
-            onBack={() => focusedWords ? navigate('personalList', 'back') : navigate('menu', 'back')}
+            onBack={leaveScreen}
             onComplete={cycleRun && ladderStepKey === 'fc' ? () => completeLadderStep('fc') : undefined}
+            onReach={cycleRun && ladderStepKey === 'fc' ? (item) => sendLearn('fcr', item) : undefined}
           />
         );
 

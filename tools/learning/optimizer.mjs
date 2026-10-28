@@ -202,6 +202,45 @@ if (cyc.length > 0) {
     .sort((a, b) => STEP_ORDER.indexOf(a) - STEP_ORDER.indexOf(b))
     .map((k) => `${k}:${byStep[k]}`).join('  ');
   if (stepLine) console.log(`  step completions: ${stepLine}  (a step-down along the ladder = the drop-off step)`);
+  // Per language: starts → step 1 (flashcards) done. 10-28: en 27→7, es 7→0, he 23→19.
+  const cl = await q`SELECT lang, ev, sum(n)::int AS n FROM cde_learn
+    WHERE day >= CURRENT_DATE - ${days}::int AND (ev = 'cyc_start' OR (ev = 'cyc_stage' AND item LIKE '%\\_fc'))
+    GROUP BY lang, ev`;
+  const byLang = {};
+  for (const r of cl) (byLang[r.lang] ||= { start: 0, fc: 0 })[r.ev === 'cyc_start' ? 'start' : 'fc'] += r.n;
+  console.log('  by language, starts → flashcards done: ' + Object.entries(byLang)
+    .map(([l, v]) => `${l} ${v.start}→${v.fc}`).join('  '));
+}
+// Audio lead-in fix (2026-10-28): listen-probe wrong-rate on the padded words, before vs after.
+// Baseline as this section printed it on 10-28 (28d): padded 21% of 1548 (en-UI 16%) vs other 18% (en-UI 10%);
+// without the 10-18/10-21 bursts: 25.6% (en-UI 28.2%) vs 22.1% (18.4%). Judge the gap closing, ~Nov 11+.
+{
+  const { readFileSync } = await import('fs');
+  const padded = readFileSync(new URL('./audio-leadin-2026-10-28.txt', import.meta.url), 'utf-8')
+    .split('\n').filter((l) => l && !l.startsWith('#')).map((w) => `${w}@aud`);
+  const ar = await q`SELECT (day >= '2026-10-29') AS after, item = ANY(${padded}) AS padded, lang = 'en' AS en, ev, sum(n)::int AS n
+    FROM cde_learn WHERE day >= CURRENT_DATE - ${days}::int AND ev IN ('ansm_ok','ansm_no') AND item LIKE '%@aud'
+    GROUP BY 1, 2, 3, 4`;
+  const cell = (after, pad, en) => {
+    const m = ar.filter((r) => r.after === after && r.padded === pad && (en == null || r.en === en));
+    const no = m.filter((r) => r.ev === 'ansm_no').reduce((a, r) => a + r.n, 0);
+    const all = m.reduce((a, r) => a + r.n, 0);
+    return all ? `${Math.round(100 * no / all)}% of ${all}` : '—';
+  };
+  console.log('\n— audio lead-in fix (10-28): listen-probe wrong, before → after 10-29');
+  console.log(`  padded words: ${cell(false, true)} → ${cell(true, true)}  (en-UI ${cell(false, true, true)} → ${cell(true, true, true)})`);
+  console.log(`  other words:  ${cell(false, false)} → ${cell(true, false)}  (en-UI ${cell(false, false, true)} → ${cell(true, false, true)})`);
+}
+// Flashcards reach (fcr, from 2026-10-28): c<n> = card n shown in ladder step 1, done = deck finished.
+const fcr = await q`SELECT lang, item, sum(n)::int AS n FROM cde_learn
+  WHERE day >= CURRENT_DATE - ${days}::int AND ev = 'fcr' GROUP BY lang, item`;
+if (fcr.length > 0) {
+  const order = (i) => (i === 'done' ? 99 : Number(i.slice(1)));
+  const byL = {};
+  for (const r of fcr) (byL[r.lang] ||= {})[r.item] = r.n;
+  for (const [l, m] of Object.entries(byL)) {
+    console.log(`  flashcards reach (${l}): ` + Object.keys(m).sort((a, b) => order(a) - order(b)).map((k) => `${k}:${m[k]}`).join(' '));
+  }
 }
 
 // --- games: play depth per game (KDM parity — levelups ÷ opens) ---

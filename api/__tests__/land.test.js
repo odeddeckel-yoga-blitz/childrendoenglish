@@ -6,8 +6,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 let mode = 'ok';
+const calls = [];
 vi.mock('@neondatabase/serverless', () => ({
-  neon: () => async () => {
+  neon: () => async (strings, ...values) => {
+    calls.push({ sql: strings.join('?'), values });
     if (mode === 'quota') throw Object.assign(new Error('Server error (HTTP status 402): Your project has exceeded the compute time quota'), { status: 402 });
     if (mode === 'auth') throw new Error('password authentication failed for user "neondb_owner"');
     return [];
@@ -47,5 +49,21 @@ describe('api/land failure logging', () => {
     const r = res(); await handler(beacon, r);
     expect(r.code).toBe(204);
     expect(err).not.toHaveBeenCalled();
+  });
+});
+
+describe('api/land learn-event whitelist', () => {
+  it('records the newer learn events and drops unknown ones', async () => {
+    vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    const { default: handler } = await import('../land.js');
+    calls.length = 0;
+    const batch = [{ e: 'fcr', i: 'c3' }, { e: 'fcr', i: 'done' }, { e: 'ansx', i: 'arrow@airplane' }, { e: 'g_start', i: 'spelling-forge' }, { e: 'nope', i: 'x' }];
+    const r = res(); await handler({ method: 'POST', body: { batch, l: 'he' } }, r);
+    expect(r.code).toBe(204);
+    const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
+    expect(written).toEqual(expect.arrayContaining(['fcr:c3', 'fcr:done', 'ansx:arrow@airplane', 'g_start:spelling-forge']));
+    expect(written.some((w) => w.startsWith('nope'))).toBe(false);
   });
 });

@@ -112,3 +112,19 @@ test('arcade step navigates to a words-scoped game URL', async ({ page }) => {
   ]);
   expect(page.url()).toContain('words=');
 });
+
+test('back from a ladder step returns to the ladder, not the My Word List editor', async ({ page }) => {
+  await reachMenu(page);
+  await openLadder(page);
+  await page.getByText('Flashcards', { exact: true }).click();
+  await expect(page.getByText('Tap to flip')).toBeVisible({ timeout: 8000 });
+  await page.getByRole('button', { name: 'Back to menu' }).click();
+  await expect(page.getByText('Your practice ladder')).toBeVisible({ timeout: 8000 });
+  // ...and a later step's results "Back to Menu" reaches the menu (the flashcards set used to linger)
+  await page.getByText('Listen & Pick', { exact: true }).click();
+  await page.getByRole('button', { name: 'Quit quiz' }).click();
+  await page.getByRole('button', { name: 'End Quiz' }).click();
+  await page.getByRole('button', { name: 'Back to Menu' }).click();
+  await expect(page.getByText(/Word batch 1/)).toBeVisible({ timeout: 8000 });
+  await expect(page.getByText('My Word List')).toHaveCount(0);
+});

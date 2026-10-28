@@ -8,7 +8,7 @@ import { speakWord } from '../utils/sound';
 import { haptic } from '../utils/haptic';
 import { t, gloss } from '../utils/i18n';
 
-export default function FlashcardMode({ stats, lang = 'en', canRead = true, words: customWords, knownLetters = null, onUpdateStats, onBack, onComplete }) {
+export default function FlashcardMode({ stats, lang = 'en', canRead = true, words: customWords, knownLetters = null, onUpdateStats, onBack, onComplete, onReach }) {
   const sorted = spacedRepetitionSort(customWords || filterByKnownLetters(WORDS, knownLetters), stats.wordProgress || {});
   const [cards] = useState(sorted);
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -23,6 +23,12 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
   const swiping = useRef(false);
 
   const currentCard = cards[currentIdx];
+
+  // Ladder step 1 reach (c1..cN, then done): where in the deck kids leave.
+  useEffect(() => {
+    if (onReach && cards.length > 0) onReach(finished ? 'done' : `c${currentIdx + 1}`);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIdx, finished]);
 
   // Auto-TTS for pre-readers when card flips to back (reveals word)
   useEffect(() => {

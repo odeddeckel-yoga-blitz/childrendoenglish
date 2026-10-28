@@ -36,7 +36,7 @@ export default defineConfig({
             urlPattern: /\/audio\/.*\.mp3$/,
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'word-audio-v4',
+              cacheName: 'word-audio-v5',
               expiration: {
                 maxEntries: 800,
                 maxAgeSeconds: 30 * 24 * 60 * 60,
