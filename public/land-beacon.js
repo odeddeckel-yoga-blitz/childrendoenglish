@@ -65,6 +65,24 @@
       } catch (e) { /* malformed utm — keep referrer class */ }
     }
     navigator.sendBeacon('/api/land', JSON.stringify({ g: g, s: s, l: l }));
+    /* AI attribution v1 (game-kit infra/land-beacon.md, kit 1.37.0): the ai open
+       above stays exactly as it was; alongside it, aie = WHICH assistant, and aiv
+       once the page has been visible 5 s in total (clock paused while hidden,
+       fires once) — link previews and instant bounces never get there. */
+    if (s === 'ai') {
+      try {
+        var hint = ((ref ? new URL(ref).hostname : '') + ' ' + (location.search.match(/[?&]utm_source=([^&#]*)/i) || ['', ''])[1]).toLowerCase();
+        var eng = /chatgpt|openai/.test(hint) ? 'chatgpt' : /perplexity/.test(hint) ? 'perplexity' : /copilot/.test(hint) ? 'copilot'
+          : /gemini|bard/.test(hint) ? 'gemini' : /claude/.test(hint) ? 'claude' : 'other';
+        var ai = function (e) { navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: e, i: eng }], l: l })); };
+        ai('aie');
+        var left = 5000, t0 = 0, timer = null, fired = false;
+        var start = function () { if (fired || timer) return; t0 = Date.now(); timer = setTimeout(function () { fired = true; timer = null; ai('aiv'); }, left); };
+        var stop = function () { if (!timer) return; clearTimeout(timer); timer = null; left -= Date.now() - t0; };
+        document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') start(); else stop(); });
+        if (document.visibilityState === 'visible') start();
+      } catch (e) { /* attribution is optional */ }
+    }
     /* Per-page "went on to play" (static pages only — the SPA has #root): pg =
        a view, cta = a click on a link into the app or a game, mq = the first
        mini-quiz tap. Item = the page path as a key (all word pages share one),

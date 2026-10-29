@@ -23,9 +23,12 @@ const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 // mini-quiz tap, item = page-path key (public/land-beacon.js) → click-to-play rate;
 // onb = first-visit funnel step (create_view|create_done|q1_start|q1_done|q1_quit);
 // qs = quiz start-source funnel: [new-]<menu|ladder|shared|letter|mywords|learn|again|quick|other>_<start|done|quit> (useQuizFlow);
+// aie/aiv = AI attribution v1 (kit land-beacon.md): item = engine (chatgpt|perplexity|copilot|
+// gemini|claude|other); aie with every ai open, aiv once visible 5 s. Not opens.
 // bt = Class Battle use (create | start_p<1|2-5|6-15|16+> | join) — public/battle/battle.js.
-const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'g_start', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb', 'ansx', 'fcr', 'pg', 'cta', 'mq', 'bt', 'qs']);
+const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'g_start', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb', 'ansx', 'fcr', 'pg', 'cta', 'mq', 'bt', 'qs', 'aie', 'aiv']);
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
+const AI_ATTR_RE = /^ai[ev]_(chatgpt|perplexity|copilot|gemini|claude|other)$/; // fixed engine enum (kit spec)
 
 // Classify a DB failure so the function log names the REAL cause — the beacon
 // itself must stay silent (204), and a silent beacon + a Neon quota = invisible
@@ -89,6 +92,7 @@ export default async function handler(req, res) {
       if (Array.isArray(batch)) {
         const events = batch
           .filter(x => x && LEARN_EVS.has(x.e) && typeof x.i === 'string' && ITEM_RE.test(x.i))
+          .filter(x => (x.e !== 'aie' && x.e !== 'aiv') || AI_ATTR_RE.test(`${x.e}_${x.i}`))
           .slice(0, 30);
         const q = sql();
         if (q && events.length > 0) {

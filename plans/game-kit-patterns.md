@@ -305,6 +305,20 @@ rules. A feature that needs to break one is out, not "careful".
   `r+7` around targets spaced `cw` apart overlaps unless `r ≤ cw/2 − ring_extra`; size the target from
   the ring, not the disc (`r = min(cw/2 − 8, …)`), which also keeps the end target's ring off the board edge.
 
+- **Big media: a round can be NOT READY — expose `Line.dbg.busy`** (KDM real-or-ai 2026-10-29: ~2 MB photo pairs that may
+  not be re-encoded). While the picture loads: hide the answer controls and CHECK, show a spinner card, ignore
+  `commit()`, and after ~20 s (or a failed load) offer "⟳ Try another picture"; time it with `setInterval`, since
+  the harness fast-forwards `setTimeout`. Load BOTH sides of a real/fake pair before showing either (load time
+  must not hint the answer), preload only the next round, and pre-draw the first round while the menu shows.
+  `dbg.busy` is true until the round is playable, and playthrough, kid-sim, capture and playtest all wait on it.
+  Without it, every tool judged the loading frame: "blank picture" vision findings, a careful kid-sim stuck
+  at 1 commit, playthrough failing "did not reach win".
+- **Scrolling side panels: `#facRight>*{flex-shrink:0}` and a sticky commit button** (same game). In a flex-column
+  panel with `overflow:auto`, a multi-line feedback box shrinks to its `min-height` and its text spills over
+  CHECK. On phones, the answer feedback plus CHECK fell below the fold once an "investigate" box opened. Make
+  CHECK `position:sticky;bottom:…` and scroll the panel to the feedback after each answer. Verify with a
+  click-level phone run, not dbg: the API tester never scrolls.
+
 ## 5. Verification protocol (non-negotiable, per game)
 1. `node test/playthrough.mjs <game>` — dbg contract, 560-round reachability sweep, win flow,
    desktop+mobile shims, 0 errors. Custom endless arcades may fail the win-flow gate BY DESIGN —

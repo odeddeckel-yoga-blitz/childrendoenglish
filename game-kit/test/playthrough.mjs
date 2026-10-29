@@ -13,7 +13,7 @@
  *   4. Mobile smoke (390×844): loads clean, #cv + #actBtn present, no errors.
  *
  * REQUIRES the game to expose the dbg contract (the template ships it):
- *   Line.dbg = { o, solved, reachable(mode,target), solveForTest(), made, need }
+ *   Line.dbg = { o, solved, reachable(mode,target), solveForTest(), made, need }   (+ optional busy: round not ready)
  * Exits non-zero on the first failure. Pair with realinput.spec.mjs for the hit-tested check.
  */
 import { chromium } from 'playwright'
@@ -64,11 +64,19 @@ try {
   if (reach.bad > 0) fail('unreachable targets generated', reach)
 
   // --- win-flow via solveForTest ---
-  const win = await page.evaluate(() => {
+  const win = await page.evaluate(async () => {
+    const realST = window.setTimeout
     window.setTimeout = (f) => { f(); return 0 }
     const modes = new Set()
+    // a round may be not-ready (Line.dbg.busy: real-or-ai's picture still loading; CHECK is ignored meanwhile) —
+    // wait on a REAL timer, up to 90 s in total, without spending the 400-move budget
+    let busyMs = 0
     Game.start()
     for (let g = 0; g < 400 && Game.screen !== 'win'; g++) {
+      if (Game.screen === 'play' && Line.dbg.busy) {
+        if (busyMs > 90000) return { ok: false, why: 'dbg.busy never cleared (90 s)', level: Game.level }
+        await new Promise((r) => realST(r, 50)); busyMs += 50; g--; continue
+      }
       if (Game.screen === 'play') {
         modes.add(Line.dbg.o.mode); Line.dbg.solveForTest()
         if (!Line.dbg.solved()) return { ok: false, why: 'solveForTest did not solve', o: Line.dbg.o }

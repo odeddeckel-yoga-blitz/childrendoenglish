@@ -300,6 +300,19 @@ if (qs.length > 0) {
   }
 }
 
+// --- AI attribution v1 (aie/aiv, from the day it shipped — kit 1.37.0) ---
+// aie = which assistant sent the visit (with every ai open); aiv = the page was
+// visible 5 s. aiv ÷ aie per engine = AI arrivals a person actually looked at.
+// AI counts before this shipped aren't comparable (also: utm fix 10-24).
+const aiRows = await q`SELECT ev, item, sum(n)::int AS n FROM cde_learn
+  WHERE day >= CURRENT_DATE - ${days}::int AND ev IN ('aie', 'aiv') GROUP BY ev, item`;
+if (aiRows.length > 0) {
+  const by = {};
+  for (const r of aiRows) (by[r.item] ||= { aie: 0, aiv: 0 })[r.ev] = r.n;
+  console.log('\n— AI arrivals by engine (stayed 5 s / arrived): ' + Object.entries(by)
+    .sort((a, b) => b[1].aie - a[1].aie).map(([k, v]) => `${k} ${v.aiv}/${v.aie}`).join(' · '));
+}
+
 // --- Class Battle use (bt, from 2026-10-30) ---
 // create = a host made a room, start_p<size> = a battle started with that many
 // kids, join = a kid joined. A real classroom = starts in the 6-15 / 16+ buckets.

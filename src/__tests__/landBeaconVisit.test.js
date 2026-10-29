@@ -1,6 +1,6 @@
 // public/land-beacon.js return-visit bucket (Engagement Optimizer): once per
 // local day, stores only the last-visit date, sends only a coarse bucket.
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import fs from 'fs';
 import path from 'path';
 
@@ -79,5 +79,66 @@ describe('land-beacon per-page play clicks', () => {
   });
   it('the SPA (#root) sends no page key', () => {
     expect(load('/app', '<div id="root"></div>')).toEqual([]);
+  });
+});
+
+// AI attribution v1 (kit land-beacon.md): aie = engine with the ai open; aiv once
+// the page has been visible 5 s in total (paused while hidden), once.
+describe('land-beacon AI attribution', () => {
+  const ref = Object.getOwnPropertyDescriptor(Document.prototype, 'referrer');
+  const vis = Object.getOwnPropertyDescriptor(Document.prototype, 'visibilityState');
+  let state = 'visible';
+  function land(referrer, search = '') {
+    localStorage.clear();
+    localStorage.setItem('cde_seen', ymd(new Date()));
+    window.history.replaceState(null, '', '/' + search);
+    Object.defineProperty(document, 'referrer', { configurable: true, get: () => referrer });
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => state });
+    const sent = [];
+    navigator.sendBeacon = vi.fn((url, body) => { sent.push(JSON.parse(body)); return true; });
+    const add = vi.spyOn(document, 'addEventListener');
+    new Function(SRC)();
+    added.push(...add.mock.calls);
+    add.mockRestore();
+    return sent;
+  }
+  const added = []; // each load's listeners — removed after the test so loads don't leak into each other
+  const ai = (sent) => sent.filter((b) => b.batch && /^ai[ev]$/.test(b.batch[0].e)).map((b) => `${b.batch[0].e}_${b.batch[0].i}`);
+  beforeEach(() => { vi.useFakeTimers(); state = 'visible'; });
+  afterEach(() => {
+    for (const [type, fn, opt] of added.splice(0)) document.removeEventListener(type, fn, opt);
+    vi.useRealTimers();
+    delete document.referrer; delete document.visibilityState;
+    if (ref) Object.defineProperty(Document.prototype, 'referrer', ref);
+    if (vis) Object.defineProperty(Document.prototype, 'visibilityState', vis);
+  });
+
+  it('a 6 s ChatGPT visit: the ai open unchanged + aie + aiv', () => {
+    const sent = land('https://chatgpt.com/');
+    expect(sent[0]).toMatchObject({ s: 'ai' });
+    expect(ai(sent)).toEqual(['aie_chatgpt']);
+    vi.advanceTimersByTime(6000);
+    expect(ai(sent)).toEqual(['aie_chatgpt', 'aiv_chatgpt']);
+  });
+  it('engine from utm_source when the referrer is stripped; a 2 s bounce gets no aiv', () => {
+    const sent = land('', '?utm_source=perplexity.ai');
+    vi.advanceTimersByTime(2000);
+    expect(ai(sent)).toEqual(['aie_perplexity']);
+  });
+  it('hidden time does not count, and aiv fires once', () => {
+    const sent = land('https://gemini.google.com/');
+    vi.advanceTimersByTime(3000);
+    state = 'hidden'; document.dispatchEvent(new Event('visibilitychange'));
+    vi.advanceTimersByTime(60000);
+    expect(ai(sent)).toEqual(['aie_gemini']);
+    state = 'visible'; document.dispatchEvent(new Event('visibilitychange'));
+    vi.advanceTimersByTime(2100);
+    vi.advanceTimersByTime(60000);
+    expect(ai(sent)).toEqual(['aie_gemini', 'aiv_gemini']);
+  });
+  it('other assistants → other; search and direct visits send no AI tallies', () => {
+    expect(ai(land('https://www.phind.com/'))).toEqual(['aie_other']);
+    expect(ai(land('https://www.google.com/'))).toEqual([]);
+    expect(ai(land(''))).toEqual([]);
   });
 });
