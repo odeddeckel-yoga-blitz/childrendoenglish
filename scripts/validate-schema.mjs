@@ -74,6 +74,16 @@ for (const file of pages(DIST)) {
     }
   }
   if (hasAnswerSchema) c.answer++;
+  // CSP gate: script-src 'self' blocks inline handlers and inline scripts, silently.
+  // The printable pages' Print button (onclick="window.print()") was dead from
+  // launch until 2026-10-29 because of this.
+  const tags = html.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g, '');
+  const handler = tags.match(/<[a-z][^>]*\son[a-z]+\s*=/i);
+  if (handler) errors.push(`${rel}: inline event handler (blocked by CSP): ${handler[0].slice(0, 80)}`);
+  // Only executable blocks count — type="application/json" data islands never run.
+  const inline = [...tags.matchAll(/<script(?![^>]*\ssrc=)([^>]*)>\s*\S/gi)]
+    .filter((m) => !/\stype=["']?(?!text\/javascript|module|application\/javascript)[^"'\s>]+/i.test(m[1]));
+  if (inline.length) errors.push(`${rel}: inline <script> (blocked by CSP) — move it to an external file`);
 }
 
 const pct = (a, b) => (b ? Math.round((100 * a) / b) : 0);
@@ -89,4 +99,4 @@ if (errors.length) {
   for (const e of errors.slice(0, 30)) console.error('  ' + e);
   process.exit(1);
 }
-console.log('\n✓ every JSON-LD block parses and carries its required properties');
+console.log('\n✓ every JSON-LD block parses and carries its required properties; no CSP-blocked inline scripts or handlers');
