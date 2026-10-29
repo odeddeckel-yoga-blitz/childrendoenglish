@@ -3269,6 +3269,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
   <link rel="canonical" href="${url}" />
   <link rel="alternate" hreflang="en" href="${url}" />
   <link rel="alternate" hreflang="es" href="${SITE}/printable-flashcards/${slug}/spanish/" />
+  <link rel="alternate" hreflang="he" href="${SITE}/printable-flashcards/${slug}/hebrew/" />
   <link rel="alternate" hreflang="x-default" href="${url}" />
   ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
@@ -3440,6 +3441,7 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
   <link rel="canonical" href="${url}" />
   <link rel="alternate" hreflang="en" href="${enUrl}" />
   <link rel="alternate" hreflang="es" href="${url}" />
+  <link rel="alternate" hreflang="he" href="${SITE}/printable-flashcards/${slug}/hebrew/" />
   <link rel="alternate" hreflang="x-default" href="${enUrl}" />
   <link rel="icon" type="image/png" href="/favicon.png" />
 
@@ -3576,6 +3578,11 @@ for (const slug of CATEGORIES) {
   console.log(`  \u2713 /printable-flashcards/${slug}/spanish/ (${words.length} cards)`);
 }
 
+// --- Hebrew printable flashcards (per category + index) — scripts/build-he-flashcards.mjs ---
+const { buildHebrewFlashcards } = await import(join(ROOT, 'scripts', 'build-he-flashcards.mjs'));
+const heFlashcardsGenerated = buildHebrewFlashcards({ SITE, flashcardsDir, writePage, escapeHtml, CATEGORIES, CATEGORY_NAMES, CATEGORY_NAMES_HE, getWordsByCategory, howToSchemaFor, faqSchemaFor, FC_EAGER });
+console.log(`  \u2713 /printable-flashcards/*/hebrew/ (${heFlashcardsGenerated} pages)`);
+
 // Printable flashcards index page
 const fcIndexUrl = `${SITE}/printable-flashcards/`;
 const fcIndexTitle = 'Free Printable English Flashcards for Kids | Children Do English';
@@ -3628,6 +3635,7 @@ const fcIndexHtml = `<!DOCTYPE html>
   <link rel="canonical" href="${fcIndexUrl}" />
   <link rel="alternate" hreflang="en" href="${fcIndexUrl}" />
   <link rel="alternate" hreflang="es" href="${SITE}/printable-flashcards/spanish/" />
+  <link rel="alternate" hreflang="he" href="${SITE}/printable-flashcards/hebrew/" />
   <link rel="alternate" hreflang="x-default" href="${fcIndexUrl}" />
   ${HREFLANG_HE}
   <link rel="icon" type="image/png" href="/favicon.png" />
@@ -3761,6 +3769,7 @@ const esFcIndexHtml = `<!DOCTYPE html>
   <link rel="canonical" href="${esFcIndexUrl}" />
   <link rel="alternate" hreflang="en" href="${fcIndexUrl}" />
   <link rel="alternate" hreflang="es" href="${esFcIndexUrl}" />
+  <link rel="alternate" hreflang="he" href="${SITE}/printable-flashcards/hebrew/" />
   <link rel="alternate" hreflang="x-default" href="${fcIndexUrl}" />
   <link rel="icon" type="image/png" href="/favicon.png" />
 
