@@ -11,9 +11,24 @@ import { existsSync, readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { WORDS, collides } from '../src/data/words.js';
+import { BOOKS, UNITS } from '../src/data/units.js';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = join(ROOT, 'public', 'battle', 'battle-words.js');
+// Textbook units become battle topics when they have enough PHOTO words (a battle
+// question is "tap the right photo"); only those words are used. Unit page →
+// /battle/?unit=<id>. Unit-only words (no photo) can't be battled.
+export const MIN_UNIT_PHOTOS = 12;
+export function battleUnits() {
+  const byId = new Map(WORDS.map((w) => [w.id, w]));
+  const out = {};
+  for (const u of UNITS) {
+    if (u.test || BOOKS[u.book]?.test) continue;
+    const ids = [...new Set(u.words.map((w) => w.wordId).filter((id) => id && byId.get(id)?.imageUrl))];
+    if (ids.length >= MIN_UNIT_PHOTOS) out[`u-${u.book}-${u.unit}`] = { label: `${BOOKS[u.book].name} · Unit ${u.unit}`, ids };
+  }
+  return out;
+}
 const CATEGORY_ORDER = ['animals', 'food', 'home', 'transport', 'nature', 'colors', 'numbers', 'clothing', 'school', 'sports', 'feelings', 'everyday', 'toys'];
 
 export function buildBattleWords() {
@@ -32,7 +47,9 @@ export function buildBattleWords() {
   return '// GENERATED from src/data/words.js by scripts/gen-battle-words.mjs — do not edit.\n'
     + `export const BATTLE_WORDS = ${JSON.stringify(words, null, 1)};\n`
     + `\n// Per word: ids that would also be a right answer — never offered as a distractor.\n`
-    + `export const BATTLE_AVOID = ${JSON.stringify(avoid)};\n`;
+    + `export const BATTLE_AVOID = ${JSON.stringify(avoid)};\n`
+    + `\n// Textbook-unit topics (≥ ${MIN_UNIT_PHOTOS} photo words): id → { label, ids }.\n`
+    + `export const BATTLE_UNITS = ${JSON.stringify(battleUnits())};\n`;
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

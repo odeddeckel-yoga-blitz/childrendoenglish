@@ -8,7 +8,7 @@
  * server only ever sees a picked nickname + clamped score.
  */
 
-import { BATTLE_WORDS, BATTLE_AVOID } from './battle-words.js';
+import { BATTLE_WORDS, BATTLE_AVOID, BATTLE_UNITS } from './battle-words.js';
 
 /* ---- categories & durations (teacher setup) ---- */
 
@@ -29,6 +29,9 @@ export const BATTLE_CATEGORIES = [
   { id: 'toys', label: 'Toys', emoji: '🧸' },
 ];
 
+// Textbook units with enough photo words (generated): one chip per unit.
+export const BATTLE_UNIT_CATEGORIES = Object.entries(BATTLE_UNITS || {}).map(([id, u]) => ({ id, label: u.label, emoji: '📘' }));
+
 export const BATTLE_DURATIONS = [
   { sec: 120, label: '2 min' },
   { sec: 180, label: '3 min' },
@@ -37,6 +40,10 @@ export const BATTLE_DURATIONS = [
 
 /** Word pool for a category ('mix' = all categories combined). */
 export function wordPool(categoryId) {
+  if (BATTLE_UNITS && BATTLE_UNITS[categoryId]) {
+    const all = new Map(Object.values(BATTLE_WORDS).flat().map((w) => [w.id, w]));
+    return BATTLE_UNITS[categoryId].ids.map((id) => all.get(id)).filter(Boolean);
+  }
   if (categoryId !== 'mix' && BATTLE_WORDS[categoryId]) return BATTLE_WORDS[categoryId];
   return Object.values(BATTLE_WORDS).flat();
 }

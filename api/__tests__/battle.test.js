@@ -130,6 +130,28 @@ describe('battle rules', () => {
     expect(uiCats).toEqual(new Set(BATTLE_CATEGORY_IDS));
   });
 
+  it('textbook-unit topics: valid on the server, photo-only pools from the unit, never a lookalike as a wrong photo', async () => {
+    const { BATTLE_UNITS } = await import('../../public/battle/battle-words.js');
+    const { BATTLE_UNIT_CATEGORIES, wordPool, makeQuestion } = await import('../../public/battle/battle-core.js');
+    const ids = Object.keys(BATTLE_UNITS);
+    expect(ids.length).toBeGreaterThan(0);
+    expect(BATTLE_UNIT_CATEGORIES.map((c) => c.id)).toEqual(ids);
+    for (const id of ids) {
+      expect(isValidCategory(id)).toBe(true);
+      const pool = wordPool(id);
+      expect(pool.length).toBe(BATTLE_UNITS[id].ids.length);
+      expect(pool.length).toBeGreaterThanOrEqual(12);
+      for (let i = 0; i < 20; i++) {
+        const q = makeQuestion(id);
+        expect(q.choices).toHaveLength(4);
+        expect(q.choices.every((c) => BATTLE_UNITS[id].ids.includes(c.id))).toBe(true);
+      }
+    }
+    expect(isValidCategory('u-jet-2-3')).toBe(true);
+    expect(isValidCategory('u-<script>')).toBe(false);
+    expect(isValidCategory('unit')).toBe(false);
+  });
+
   it('validates durations and the UI durations pass', () => {
     for (const d of BATTLE_DURATIONS) expect(isValidDuration(d.sec)).toBe(true);
     expect(isValidDuration(9)).toBe(false);

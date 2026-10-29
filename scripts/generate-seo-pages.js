@@ -4945,7 +4945,8 @@ const { buildUnitPages } = await import(join(ROOT, 'scripts', 'build-unit-pages.
 const { BAND1_BY_ID, BAND1_BY_TEXT, BAND1_TOTAL } = await import(join(ROOT, 'src', 'data', 'band1.js'));
 const { buildBand1Pages, BAND_CHIPS } = await import(join(ROOT, 'scripts', 'build-band1-pages.mjs'));
 const band1ChipFor = (w) => BAND_CHIPS[(w.wordId && BAND1_BY_ID[w.wordId]) || BAND1_BY_TEXT[w.en.toLowerCase().trim()]] || null;
-const unitUrls = buildUnitPages({ SITE, distDir, publicDir: join(ROOT, 'public'), writePage, escapeHtml, WORDS, collides, BOOKS, UNITS, chipFor: band1ChipFor });
+const { battleUnits } = await import(join(ROOT, 'scripts', 'gen-battle-words.mjs'));
+const unitUrls = buildUnitPages({ SITE, distDir, publicDir: join(ROOT, 'public'), writePage, escapeHtml, WORDS, collides, BOOKS, UNITS, chipFor: band1ChipFor, battleUnitIds: new Set(Object.keys(battleUnits())) });
 const band1Pages = buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND1_TOTAL, CATEGORY_NAMES_HE });
 console.log(`  ✓ /band-1/: ${band1Pages} page(s)`);
 const unitEntries = unitUrls.map((u) => `  <url>

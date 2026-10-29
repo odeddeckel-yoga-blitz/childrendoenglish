@@ -94,7 +94,8 @@ ${body}
   });
 
   // navHtml/h1Html are trusted builder HTML; everything else is escaped here.
-  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote }) {
+  // battleHref → a one-click Class Battle with these words (units with enough photos).
+  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null }) {
     const items = words.map((w) => {
       const base = byId.get(w.wordId);
       return { en: w.en, he: w.he, ex: w.ex || null, chip: w.chip || null, id: w.wordId || null, audio: `/audio/${audioKey(w.en)}.mp3`, img: base?.imageUrl || null, ...hebrewOptions(w, words) };
@@ -161,6 +162,8 @@ ${body}
     </section>
     <section class="section share" aria-labelledby="share-h">
       <h2 id="share-h" class="section-title">שיתוף עם הכיתה</h2>
+      ${battleHref ? `<p class="center"><a class="cta battle-cta" href="${battleHref}">⚔️ קרב כיתתי עם המילים של היחידה</a></p>
+      <p class="center sheet-hint">המורה פותח/ת חדר על המקרן, והילדים מצטרפים מהטלפון או מהטאבלט עם קוד.</p>` : ''}
       <p class="center">
         <a class="share-btn" href="https://wa.me/?text=${shareText}%20${pageUrl}" target="_blank" rel="noopener">שליחה בוואטסאפ</a>
         <a class="share-btn" href="https://classroom.google.com/share?url=${pageUrl}" target="_blank" rel="noopener">שיתוף ב-Google Classroom</a>
@@ -188,7 +191,8 @@ ${body}
 }
 
 // chipFor(word) → optional { label, cls } shown by each word (the Band I level).
-export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml, WORDS, collides, BOOKS, UNITS, chipFor = () => null }) {
+// battleUnitIds: Set of 'u-<book>-<unit>' ids that Class Battle can run (gen-battle-words.mjs).
+export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml, WORDS, collides, BOOKS, UNITS, chipFor = () => null, battleUnitIds = new Set() }) {
   const kit = wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides });
   const { byId, crumbs } = kit;
   const isTest = (u) => !!(u.test || BOOKS[u.book]?.test);
@@ -250,6 +254,7 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
       sheetsName: unitName,
       shareTitle: `${unitName} — מילים באנגלית עם הגייה ותרגול`,
       ctaUtm: `utm_medium=unit&amp;utm_content=${u.book}-${u.unit}`,
+      battleHref: battleUnitIds.has(`u-${u.book}-${u.unit}`) ? `/battle/?unit=u-${u.book}-${u.unit}` : null,
     });
     if (!test) sitemapUrls.push(path);
   }

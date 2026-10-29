@@ -14,8 +14,12 @@ export const BATTLE_CATEGORY_IDS = [
 export const MIN_DURATION_SEC = 10; // low floor kept for tests/dev (UI offers 120/180/300)
 export const MAX_DURATION_SEC = 600;
 
+// Textbook-unit topics (u-<book>-<unit>, generated into battle-words.js). The
+// server stores the id only; questions are built client-side from the list.
+export const UNIT_CATEGORY_RE = /^u-[a-z0-9]+(?:-[a-z0-9]+)*-\d{1,2}$/;
+
 export function isValidCategory(id) {
-  return BATTLE_CATEGORY_IDS.includes(id);
+  return BATTLE_CATEGORY_IDS.includes(id) || (typeof id === 'string' && UNIT_CATEGORY_RE.test(id));
 }
 
 export function isValidDuration(sec) {

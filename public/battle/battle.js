@@ -10,7 +10,7 @@
  */
 
 import {
-  BATTLE_CATEGORIES, BATTLE_DURATIONS, normalizeCode, suggestNicknames,
+  BATTLE_CATEGORIES, BATTLE_UNIT_CATEGORIES, BATTLE_DURATIONS, normalizeCode, suggestNicknames,
   makeQuestion, pointsForAnswer,
 } from './battle-core.js';
 
@@ -198,7 +198,7 @@ function render() {
     } else if (room.status === 'running') {
       if (S.view !== 'sHostLive') {
         show('sHostLive');
-        const cat = BATTLE_CATEGORIES.find((c) => c.id === room.category);
+        const cat = [...BATTLE_CATEGORIES, ...BATTLE_UNIT_CATEGORIES].find((c) => c.id === room.category);
         $('hostTopic').textContent = cat ? `${cat.emoji} ${cat.label}` : '';
       }
       renderBoard($('hostBoard'), room.players);
@@ -343,7 +343,7 @@ function postScore() {
 /* ---------------- teacher: setup ---------------- */
 
 function renderSetup() {
-  $('catGrid').replaceChildren(...BATTLE_CATEGORIES.map((c) => {
+  $('catGrid').replaceChildren(...[...BATTLE_CATEGORIES, ...BATTLE_UNIT_CATEGORIES].map((c) => {
     const b = document.createElement('button');
     b.className = 'chip' + (c.id === S.category ? ' sel' : '');
     b.textContent = `${c.emoji} ${c.label}`;
@@ -520,7 +520,17 @@ function boot() {
     location.hash = '';
     location.reload();
   });
-  resume();
+  // A unit page's "battle these words" link: /battle/?unit=u-<book>-<unit> opens
+  // the teacher setup with that unit already picked — unless resume() put this
+  // tab back into a room it already belongs to.
+  const unit = new URLSearchParams(location.search).get('unit');
+  resume().then(() => {
+    if (S.view === 'sHome' && unit && BATTLE_UNIT_CATEGORIES.some((c) => c.id === unit)) {
+      S.category = unit;
+      renderSetup();
+      show('sSetup');
+    }
+  });
 }
 
 boot();
