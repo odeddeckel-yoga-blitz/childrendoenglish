@@ -3,6 +3,8 @@
  *   hear  — play the English word, pick its Hebrew meaning (options built at
  *           page-build time with the app's collides() rule, so no two share a meaning)
  *   spell — play the English word, type it
+ *   dict  — dictation (הכתבה): 10 words read one at a time, written in the
+ *           notebook, then checked against the list (self-marked; no ans events)
  * Plus 🔊 buttons in the word table (the print button is print-btn.js).
  * Answers feed the same cookieless cde_learn aggregate as the app (ans_ok/ans_no
  * @ CDE word id when the word has one); quiz_start/quiz_done @ unit-hear|unit-spell.
@@ -36,6 +38,13 @@
   document.addEventListener('click', function (ev) {
     var s = ev.target.closest('[data-say]');
     if (s) say(s.getAttribute('data-say'));
+    var c = ev.target.closest('[data-copy]');
+    if (c) {
+      var url = c.getAttribute('data-copy');
+      var ok = function () { c.textContent = 'הקישור הועתק ✓'; };
+      try { navigator.clipboard.writeText(url).then(ok, function () { window.prompt('העתיקו את הקישור:', url); }); }
+      catch (err) { window.prompt('העתיקו את הקישור:', url); }
+    }
     // [data-print] is print-btn.js's (it loads the lazy card images first).
   });
 
@@ -64,8 +73,10 @@
   // visitor sees round 1 rendered), and audio waits for the first tap.
   var mode = 'hear', order = [], pos = 0, score = 0, tries = 0, begun = false, interacted = false;
 
+  var DICT_N = 10;
   function start(m) {
     mode = m; order = shuffle(items); pos = 0; score = 0; begun = false;
+    if (m === 'dict') order = order.slice(0, DICT_N);
     var btns = document.querySelectorAll('.mode');
     for (var i = 0; i < btns.length; i++) {
       var on = btns[i].getAttribute('data-mode') === m;
@@ -86,7 +97,36 @@
     again.focus();
   }
 
-  function next() { pos += 1; if (pos >= order.length) finish(); else render(); }
+  function next() { pos += 1; if (pos >= order.length) (mode === 'dict' ? dictCheck : finish)(); else render(); }
+
+  // Dictation end: the answer list to check the notebook against; the child
+  // ticks what they got right, so the score is theirs (no per-word events).
+  function dictCheck() {
+    box.textContent = '';
+    box.appendChild(el('p', { class: 'feedback' }, 'בדקו את ההכתבה: סמנו כל מילה שכתבתם נכון'));
+    var list = el('ol', { class: 'dict-list' });
+    order.forEach(function (it, i) {
+      var li = el('li', {});
+      var lab = el('label', {});
+      var cb = el('input', { type: 'checkbox', id: 'dict-' + i });
+      lab.appendChild(el('span', { class: 'dict-n' }, (i + 1) + '.'));
+      lab.appendChild(cb);
+      lab.appendChild(el('span', { lang: 'en', dir: 'ltr', class: 'dict-en' }, it.en));
+      li.appendChild(lab);
+      var sb = el('button', { type: 'button', class: 'say', 'aria-label': 'השמעה: ' + it.en }, '🔊');
+      sb.addEventListener('click', function () { say(it.audio); });
+      li.appendChild(sb);
+      list.appendChild(li);
+    });
+    box.appendChild(list);
+    var done = el('button', { type: 'button', class: 'next' }, 'סיימתי לבדוק');
+    done.addEventListener('click', function () {
+      score = box.querySelectorAll('.dict-list input:checked').length;
+      finish();
+    });
+    box.appendChild(done);
+    announce('ההכתבה הסתיימה. בדקו את המילים ברשימה.');
+  }
 
   function record(it, ok) {
     if (!begun) { begun = true; beacon('quiz_start', 'unit-' + mode); }
@@ -104,7 +144,16 @@
     box.appendChild(big);
     var fb = el('p', { class: 'feedback', role: 'status' });
 
-    if (mode === 'hear') {
+    if (mode === 'dict') {
+      box.appendChild(el('p', { class: 'dict-hint' }, 'כתבו את המילה במחברת. אפשר לשמוע שוב ב-🔊.'));
+      var nx = el('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'המילה הבאה ←' : 'סיום ובדיקה');
+      nx.addEventListener('click', function () {
+        if (!begun) { begun = true; beacon('quiz_start', 'unit-dict'); }
+        next();
+      });
+      box.appendChild(nx);
+      if (interacted) nx.focus({ preventScroll: true });
+    } else if (mode === 'hear') {
       var grid = el('div', { class: 'opts' });
       it.opts.forEach(function (o, i) {
         var b = el('button', { type: 'button', class: 'opt' }, o);

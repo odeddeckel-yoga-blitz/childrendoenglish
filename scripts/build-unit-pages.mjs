@@ -147,7 +147,7 @@ ${body}
     const shareText = encodeURIComponent(`${unitName} — מילים באנגלית עם הגייה ותרגול`);
     const faqPairs = [
       [`אילו מילים יש ב-${unitName}?`, `ב-${unitName} יש ${u.words.length} מילים, למשל: ${u.words.slice(0, 8).map((w) => `${w.en} (${w.he})`).join(', ')}. הרשימה המלאה עם הגייה ותרגום נמצאת בטבלה בעמוד.`],
-      ['איך מתרגלים את המילים?', 'לוחצים על 🔊 כדי לשמוע כל מילה, ואז משחקים בשני תרגולים: "שומעים ובוחרים" — שומעים מילה באנגלית ובוחרים את הפירוש בעברית, ו"כותבים מה ששומעים" — מאייתים את המילה. אפשר גם להדפיס כרטיסיות.'],
+      ['איך מתרגלים את המילים?', 'לוחצים על 🔊 כדי לשמוע כל מילה, ואז בוחרים תרגול: "שומעים ובוחרים" — שומעים מילה באנגלית ובוחרים את הפירוש בעברית; "כותבים מה ששומעים" — מאייתים את המילה; ו"הכתבה" — 10 מילים בקול, כותבים במחברת ובודקים מול הרשימה. אפשר גם להדפיס כרטיסיות.'],
       ['האם זה בחינם?', 'כן. בלי הרשמה, בלי פרסומות ובלי להוריד אפליקציה — עובד בדפדפן במחשב, בטאבלט ובטלפון.'],
       [`האם האתר קשור להוצאת ${book.publisher}?`, `לא. Children Do English אינו קשור להוצאה. אנחנו מציגים רק את רשימת המילים לתרגול, בלי תרגילים, קטעים או מבחנים מהספר.`],
     ];
@@ -165,13 +165,14 @@ ${body}
         <tbody>${rows}
         </tbody>
       </table>
-      ${u.source ? `<p class="aligned">הרשימה תואמת לרשימת המילים של <span lang="en" dir="ltr">${escapeHtml(unitName)}</span>. התרגום לעברית, משפטי הדוגמה, ההקלטות והתמונות הם של Children Do English.</p>` : ''}
+      ${u.source ? `<p class="aligned">הרשימה תואמת לרשימת המילים של <span lang="en" dir="ltr">${escapeHtml(unitName)}</span>. התרגום לעברית, משפטי הדוגמה, ההקלטות והתמונות הם של <span lang="en" dir="ltr">Children Do English</span>.</p>` : ''}
     </section>
     <section class="section" aria-labelledby="practice-h">
       <h2 id="practice-h" class="section-title">תרגול</h2>
       <div class="modes" role="group" aria-label="סוג תרגול">
         <button type="button" class="mode on" data-mode="hear" aria-pressed="true">🎧 שומעים ובוחרים</button>
         <button type="button" class="mode" data-mode="spell" aria-pressed="false">✏️ כותבים מה ששומעים</button>
+        <button type="button" class="mode" data-mode="dict" aria-pressed="false">📝 הכתבה</button>
       </div>
       <div id="practice" class="practice" data-unit="${u.book}-${u.unit}">
         <noscript><p>התרגול צריך JavaScript. אפשר בינתיים ללמוד מהטבלה ומהכרטיסיות.</p></noscript>
@@ -188,8 +189,10 @@ ${body}
     <section class="section share" aria-labelledby="share-h">
       <h2 id="share-h" class="section-title">שיתוף עם הכיתה</h2>
       <p class="center">
+        <a class="share-btn" href="https://wa.me/?text=${shareText}%20${pageUrl}" target="_blank" rel="noopener">שליחה בוואטסאפ</a>
         <a class="share-btn" href="https://classroom.google.com/share?url=${pageUrl}" target="_blank" rel="noopener">שיתוף ב-Google Classroom</a>
         <a class="share-btn" href="https://teams.microsoft.com/share?href=${pageUrl}&amp;msgText=${shareText}" target="_blank" rel="noopener">שיתוף ב-Teams</a>
+        <button type="button" class="share-btn" data-copy="${SITE}${path}">העתקת קישור</button>
       </p>
     </section>
     <section class="section" aria-labelledby="faq-h">
@@ -306,7 +309,13 @@ const UNIT_CSS = `
     .fc-en { font-weight: 800; font-size: 1.15rem; } .fc-he { color: #475569; }
     .print-btn, .share-btn, .cta { display: inline-block; margin: 0.25rem; padding: 0.6rem 1.2rem; border-radius: 0.6rem; font-weight: 700; text-decoration: none; min-height: 44px; }
     .print-btn { border: 0; background: #0d9488; color: #fff; font-size: 1rem; cursor: pointer; }
-    .share-btn { background: #fff; color: #2563eb; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .share-btn { background: #fff; color: #2563eb; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 0; font-size: 1rem; cursor: pointer; font-family: inherit; }
+    .dict-hint { color: #475569; margin-bottom: 0.5rem; }
+    .dict-list { text-align: left; direction: ltr; max-width: 320px; margin: 0.5rem auto; list-style: none; }
+    .dict-list li { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.2rem 0; }
+    .dict-list label { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; cursor: pointer; }
+    .dict-list input { width: 22px; height: 22px; }
+    .dict-n { color: #64748b; font-weight: 400; min-width: 1.6rem; }
     .cta { background: #2563eb; color: #fff; }
     .faq { max-width: 700px; margin: 0 auto; }
     .faq-item { background: #fff; border-radius: 0.75rem; padding: 1rem 1.2rem; margin-bottom: 0.6rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }

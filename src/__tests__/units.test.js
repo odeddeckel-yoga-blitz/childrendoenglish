@@ -46,6 +46,9 @@ describe('textbook-unit pages', () => {
     expect(html).toContain('Eric Cohen Books');
     expect(html).toContain('classroom.google.com/share?url=');
     expect(html).toContain('teams.microsoft.com/share?href=');
+    expect(html).toContain('href="https://wa.me/?text=');
+    expect(html).toContain('data-copy="https://childrendoenglish.com/units/jet-2/unit-3/"');
+    expect(html).toContain('data-mode="dict"');
     // the card images are lazy: printing must go through print-btn.js, which loads them first
     expect(html).toContain('<script defer src="/print-btn.js"></script>');
   });
