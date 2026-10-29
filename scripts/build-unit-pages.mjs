@@ -186,6 +186,16 @@ ${body}
       <div class="cards">${cards}
       </div>
     </section>
+    <section class="section no-print" aria-labelledby="sheets-h">
+      <h2 id="sheets-h" class="section-title">דפי פעילות לכיתה</h2>
+      <p class="center sheet-row">
+        <label for="bingo-n">בינגו:</label>
+        <select id="bingo-n">${[10, 20, 30, 40].map((n) => `<option value="${n}"${n === 30 ? ' selected' : ''}>${n} כרטיסים</option>`).join('')}</select>
+        <button type="button" class="print-btn" data-sheet="bingo">🎲 הדפסת כרטיסי בינגו</button>
+      </p>
+      <p class="center sheet-row"><button type="button" class="print-btn" data-sheet="search">🔎 הדפסת תפזורת מילים (עם דף פתרון)</button></p>
+      <p class="center sheet-hint">בכל הדפסה נוצרים כרטיסים ותפזורת חדשים מהמילים של היחידה, כולל רשימת קריאה למורה.</p>
+    </section>
     <section class="section share" aria-labelledby="share-h">
       <h2 id="share-h" class="section-title">שיתוף עם הכיתה</h2>
       <p class="center">
@@ -203,8 +213,10 @@ ${body}
     </section>
     <p class="center more"><a class="cta" href="/?lang=he&amp;utm_source=seo&amp;utm_medium=unit&amp;utm_content=${u.book}-${u.unit}">עוד מילים ומשחקים באפליקציה ←</a></p>
   </main>
+  <div id="sheets-out" data-name="${escapeHtml(unitName)}" aria-hidden="true"></div>
   <script defer src="/unit-practice.js"></script>
-  <script defer src="/print-btn.js"></script>`;
+  <script defer src="/print-btn.js"></script>
+  <script defer src="/unit-sheets.js"></script>`;
     const dir = join(distDir, 'units', u.book, `unit-${u.unit}`);
     mkdirSync(dir, { recursive: true });
     writePage(join(dir, 'index.html'), shell({
@@ -327,7 +339,28 @@ const UNIT_CSS = `
     .footer { text-align: center; padding: 1.5rem 1rem; color: #64748b; font-size: 0.8rem; background: #f8fafc; }
     .footer a { color: #64748b; } .not-affiliated { max-width: 640px; margin: 0.5rem auto 0; }
     @media (max-width: 420px) { .hero h1 { font-size: 1.35rem; } .opts { grid-template-columns: 1fr; } }
+    #sheets-out { display: none; }
+    .sheet-row { margin-bottom: 0.4rem; } .sheet-row select { font-size: 1rem; padding: 0.35rem; border-radius: 0.4rem; margin: 0 0.25rem; font-family: inherit; }
+    .sheet-hint { font-size: 0.85rem; color: #475569; }
     @media print {
+      body.printing-sheets > *:not(#sheets-out) { display: none !important; }
+      body.printing-sheets #sheets-out { display: block; direction: ltr; text-align: left; }
+      .sheet-page { break-after: page; padding: 0.5cm 0; } .sheet-page:last-child { break-after: auto; }
+      .sheet-head { font-size: 16pt; font-weight: 800; text-align: center; margin-bottom: 0.4cm; }
+      .sheet-head:empty { display: none; }
+      .sheet-note { direction: rtl; text-align: center; font-size: 11pt; margin: 0.3cm 0; }
+      .bingo-card { border: 2px solid #000; border-radius: 8px; padding: 0.4cm; margin: 0 auto 0.8cm; width: 15cm; break-inside: avoid; }
+      .bingo-title { text-align: center; font-size: 16pt; font-weight: 900; }
+      .bingo-name { font-size: 11pt; margin: 0.15cm 0 0.3cm; }
+      .bingo-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #000; border-left: 1px solid #000; }
+      .bingo-cell { border-right: 1px solid #000; border-bottom: 1px solid #000; height: 2.4cm; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14pt; font-weight: 700; padding: 0.1cm; }
+      .call-list, .ws-list { columns: 3; font-size: 11pt; padding-left: 1.2cm; }
+      .ws-list { list-style: none; columns: 2; padding-left: 0; margin: 0.3cm auto; width: 14cm; }
+      .call-list li, .ws-list li { break-inside: avoid; margin-bottom: 0.1cm; }
+      .call-box { margin-right: 0.2cm; } .call-en { font-weight: 700; margin-right: 0.3cm; } .call-he { direction: rtl; unicode-bidi: isolate; color: #333; }
+      .ws-grid { display: grid; grid-template-columns: repeat(11, 1.2cm); justify-content: center; margin: 0 auto; }
+      .ws-cell { width: 1.2cm; height: 1.2cm; display: flex; align-items: center; justify-content: center; font: 700 16pt ui-monospace, Menlo, monospace; border: 1px solid #bbb; }
+      .ws-on { background: #ddd !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       body { background: #fff; }
       .breadcrumb, .hero, .section:not(:has(.cards)), .more, .footer, .crawl-mesh, .print-btn, #cards-h { display: none !important; }
       .cards { grid-template-columns: repeat(3, 1fr); }
