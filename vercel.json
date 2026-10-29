@@ -148,6 +148,16 @@
       "source": "/vocabulary/colors/amber/",
       "destination": "/vocabulary/colors/",
       "permanent": true
+    },
+    {
+      "source": "/guides/english-vocabulary-games-for-kids",
+      "destination": "/games/",
+      "permanent": true
+    },
+    {
+      "source": "/guides/english-vocabulary-games-for-kids/",
+      "destination": "/games/",
+      "permanent": true
     }
   ]
 }

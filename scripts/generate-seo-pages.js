@@ -655,16 +655,19 @@ ${wordNav}
 </html>`;
 }
 
+// years = how searchers phrase it ("words for 6 year olds" — pos 6, 0 clicks on the
+// old "English Vocabulary for Kids Ages 6-8" title, 2026-10). quiz = clear photos
+// for the top-of-page mini-quiz.
 const AGE_BRACKETS = [
-  { slug: 'ages-6-8', label: 'Ages 6-8', level: 'beginner', ageRange: '6-8', description: 'beginner-level' },
-  { slug: 'ages-9-10', label: 'Ages 9-10', level: 'intermediate', ageRange: '9-10', description: 'intermediate-level' },
-  { slug: 'ages-11-12', label: 'Ages 11-12', level: 'advanced', ageRange: '11-12', description: 'advanced-level' },
+  { slug: 'ages-6-8', label: 'Ages 6-8', level: 'beginner', ageRange: '6-8', description: 'beginner-level', years: '6, 7 & 8', quiz: ['dog', 'fish', 'bird', 'rabbit', 'horse', 'cow'] },
+  { slug: 'ages-9-10', label: 'Ages 9-10', level: 'intermediate', ageRange: '9-10', description: 'intermediate-level', years: '9 & 10', quiz: ['elephant', 'giraffe', 'penguin', 'zebra', 'tiger', 'dolphin'] },
+  { slug: 'ages-11-12', label: 'Ages 11-12', level: 'advanced', ageRange: '11-12', description: 'advanced-level', years: '11 & 12', quiz: ['kangaroo', 'flamingo', 'octopus', 'panda', 'camel', 'pineapple'] },
 ];
 
 function buildAgeBracketPage(bracket, allWords) {
   const words = allWords.filter((w) => w.level === bracket.level);
   const url = `${SITE}/vocabulary/${bracket.slug}/`;
-  const title = `English Vocabulary for Kids ${bracket.label} — Free Practice, No Sign-Up`;
+  const title = `Vocabulary Words for ${bracket.years} Year Olds — With Pictures & Meanings`;
   const description = `${words.length} ${bracket.description} English words for kids ${bracket.ageRange}, each with a real photo, native audio and a picture quiz. Free practice in the browser — no sign-up, no app, no ads.`;
 
   const breadcrumbSchema = JSON.stringify({
@@ -714,7 +717,8 @@ function buildAgeBracketPage(bracket, allWords) {
 
   const categoryBlocks = CATEGORIES
     .filter((slug) => wordsByCategory[slug] && wordsByCategory[slug].length > 0)
-    .map((slug) => {
+    .map((slug, idx) => {
+      const first = idx === 0;
       const catWords = wordsByCategory[slug];
       const catName = CATEGORY_NAMES[slug] || slug;
       const cards = catWords
@@ -730,9 +734,13 @@ function buildAgeBracketPage(bracket, allWords) {
           </a>`
         )
         .join('\n');
+      // Collapsed by default: the full card wall was ~70,000px on a phone with
+      // nothing to play above it. Google indexes <details> content.
       return `
-      <h2 class="cat-heading">${escapeHtml(catName)} <span class="cat-count">(${catWords.length})</span></h2>
-      <div class="grid">${cards}</div>`;
+      <details class="cat"${first ? ' open' : ''}>
+      <summary><h2 class="cat-heading">${escapeHtml(catName)} <span class="cat-count">(${catWords.length}) &middot; ${escapeHtml(listWords(catWords, 3))}</span></h2></summary>
+      <div class="grid">${cards}</div>
+      </details>`;
     })
     .join('\n');
 
@@ -794,6 +802,12 @@ function buildAgeBracketPage(bracket, allWords) {
     .card-pos { font-size: 0.7rem; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; }
     .card-def { font-size: 0.85rem; margin-bottom: 0.3rem; }
     .card-he { color: #475569; direction: rtl; font-size: 0.9rem; }
+    details.cat summary { cursor: pointer; list-style: none; }
+    details.cat summary::-webkit-details-marker { display: none; }
+    details.cat summary .cat-heading::before { content: '▸ '; color: #2563eb; }
+    details.cat[open] summary .cat-heading::before { content: '▾ '; }
+    .top-cta { display: block; text-align: center; background: #f59e0b; color: #fff; font-weight: 800; font-size: 1.1rem; padding: 0.85rem 1rem; border-radius: 999px; text-decoration: none; margin: 0 auto 1rem; max-width: 420px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+    ${GUIDE_QUIZ_CSS}
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
     .cta a:hover { background: #1d4ed8; }
@@ -817,9 +831,12 @@ function buildAgeBracketPage(bracket, allWords) {
   </div>
 
   <div class="container">
+    <a class="top-cta" href="/?utm_source=seo&utm_medium=cta&utm_content=age_bracket_top">▶ Play these words free &mdash; no sign-up</a>
+    ${miniQuizHtml(bracket.quiz.map((id) => allWords.find((w) => w.id === id)).filter(Boolean), bracket.slug, { title: `🎮 Try a word for ${bracket.ageRange} year olds`, sub: 'Listen, then tap the right picture.', cta: 'Play 10 more words like this free &rarr;', content: 'age_bracket' })}
     <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
     ${catTable}
 
+    <p class="intro">Tap a category to see its words &mdash; each card has a photo, meaning and Hebrew translation.</p>
     ${categoryBlocks}
 
     <div class="cta">
@@ -3290,6 +3307,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
     .lang-variant a:hover { text-decoration: underline; }
     .print-btn { display: inline-block; background: #2563eb; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; margin-bottom: 1.5rem; }
     .print-btn:hover { background: #1d4ed8; }
+    .play-online { display: inline-block; margin: 0 0 1.5rem 0.75rem; color: #0d9488; font-weight: 700; text-decoration: none; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
     .flashcard { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; border: 2px dashed #e2e8f0; page-break-inside: avoid; }
     .fc-img { width: 160px; height: 160px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 0.75rem; display: block; }
@@ -3327,9 +3345,11 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
 
   <div class="container">
     <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
+    <button class="print-btn" data-print>Print These Flashcards</button>
+    <a class="play-online no-print" href="/?utm_source=seo&utm_medium=cta&utm_content=flashcard_top">🎮 Or play these words online free &rarr;</a>
+    <script defer src="/print-btn.js"></script>
     ${howToHtml(`How to print the ${lower} flashcards`, steps)}
     <p class="lang-variant"><a href="/printable-flashcards/${slug}/spanish/">View these flashcards in English and Spanish &rarr;</a></p>
-    <button class="print-btn" onclick="window.print()">Print These Flashcards</button>
 
     <div class="grid">
       ${flashcardCards}
@@ -3457,6 +3477,7 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
     .lang-variant a:hover { text-decoration: underline; }
     .print-btn { display: inline-block; background: #2563eb; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; margin-bottom: 1.5rem; }
     .print-btn:hover { background: #1d4ed8; }
+    .play-online { display: inline-block; margin: 0 0 1.5rem 0.75rem; color: #0d9488; font-weight: 700; text-decoration: none; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
     .flashcard { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; border: 2px dashed #e2e8f0; page-break-inside: avoid; }
     .fc-img { width: 160px; height: 160px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 0.75rem; display: block; }
@@ -3493,9 +3514,11 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
 
   <div class="container">
     <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
+    <button class="print-btn" data-print>Print These Flashcards</button>
+    <a class="play-online no-print" href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=flashcard_top_es">🎮 ¿Prefieres jugar? Practica en línea gratis, en español &rarr;</a>
+    <script defer src="/print-btn.js"></script>
     ${howToHtml(`Cómo imprimir las tarjetas de ${lowerEs}`, steps)}
     <p class="lang-variant"><a href="/printable-flashcards/${slug}/">View the English-only version &rarr;</a></p>
-    <button class="print-btn" onclick="window.print()">Print These Flashcards</button>
 
     <div class="grid">
       ${flashcardCards}
@@ -4121,87 +4144,6 @@ const GUIDES = [
     ],
   },
   {
-    slug: 'english-vocabulary-games-for-kids',
-    heroImage: '/og/sports.png',
-    title: 'English Vocabulary Games for Kids — Fun Ways to Learn New Words',
-    description: 'Discover the best English vocabulary games for kids ages 6-12. Free word games, quizzes, and challenges that make learning fun. No ads, works offline.',
-    h1: 'English Vocabulary Games for Kids',
-    sections: [
-      {
-        h2: 'Why Games Work Better Than Worksheets',
-        content: `<p>When kids play games, their brains release dopamine &mdash; the same chemical that makes them want to play "just one more round." This isn't just fun; it's <strong>neurologically powerful</strong>. Dopamine strengthens memory formation, meaning words learned during a game are remembered better and longer.</p>
-<p>Games provide something worksheets can't: <strong>intrinsic motivation</strong>. Kids don't play games because they're told to &mdash; they play because they want to. When vocabulary practice feels like a game, you don't have to convince your child to study. They'll ask to play.</p>
-<p>Research shows that game-based learning improves vocabulary retention by 40-60% compared to traditional methods, while also reducing the anxiety many children feel around language learning.</p>`,
-      },
-      {
-        h2: 'Image Matching Games',
-        content: `<p>The simplest and most effective vocabulary game: show a picture and ask "What's this word?"</p>
-<p>Image matching games work because they test <strong>recognition and recall</strong> simultaneously. The child sees a visual cue and must connect it to the right English word &mdash; exactly the skill they need in real life.</p>
-<p><strong>How to play at home:</strong></p>
-<ul>
-  <li><strong>Digital version</strong> &mdash; Use the Image Quiz in <a href="/">Children Do English</a>: see a picture, pick from 4 word options</li>
-  <li><strong>Printable version</strong> &mdash; Spread out printed flashcards, call out a word, and race to find the matching picture</li>
-  <li><strong>Around-the-house version</strong> &mdash; Point to real objects and ask for the English word</li>
-</ul>
-<p>Start with high-interest categories like <a href="/vocabulary/animals/">animals</a> and <a href="/vocabulary/food/">food</a> &mdash; kids learn faster when they care about the subject.</p>`,
-      },
-      {
-        h2: 'Audio Challenge Games',
-        content: `<p>Audio games add a crucial dimension: <strong>listening skills</strong>. Kids hear a word pronounced correctly and must identify it &mdash; building the connection between sound and meaning.</p>
-<p><strong>Game ideas:</strong></p>
-<ul>
-  <li><strong>Audio Quiz</strong> &mdash; Hear a word, pick the matching picture from four options. Great for building listening comprehension.</li>
-  <li><strong>Repeat Race</strong> &mdash; Play an audio clip, both parent and child repeat it. Who can pronounce it more clearly?</li>
-  <li><strong>Sound Detective</strong> &mdash; Play the audio without showing any options. Can the child spell or draw the word they heard?</li>
-</ul>
-<p>Audio challenges are especially valuable for children who are visual learners &mdash; it forces the brain to build a different (auditory) pathway to the same vocabulary, making recall more robust.</p>`,
-      },
-      {
-        h2: 'Streak and Badge Challenges',
-        content: `<p>Consistency is more important than intensity when learning vocabulary. <strong>Streaks and badges</strong> turn consistency into a game.</p>
-<p><strong>How streak challenges work:</strong></p>
-<ul>
-  <li>Practice every day to build a streak (1 day, 3 days, 7 days, 30 days&hellip;)</li>
-  <li>Each milestone earns a badge or achievement</li>
-  <li>Missing a day resets the streak &mdash; creating gentle motivation to keep going</li>
-</ul>
-<p><strong>Family competition ideas:</strong></p>
-<ul>
-  <li><strong>Sibling streak race</strong> &mdash; Who can maintain the longest practice streak?</li>
-  <li><strong>Family word of the day</strong> &mdash; Everyone learns the same word; quiz each other at dinner</li>
-  <li><strong>Weekly vocabulary champion</strong> &mdash; Who scored highest on quizzes this week?</li>
-</ul>
-<p><a href="/">Children Do English</a> tracks streaks, badges, and progress automatically &mdash; with separate player profiles so siblings can compete on the same device.</p>`,
-      },
-      {
-        h2: 'Printable Word Games You Can Play Anywhere',
-        content: `<p>Screen-free games are perfect for car rides, waiting rooms, or quiet time. <a href="/printable-flashcards/">Download free printable flashcards</a> and try these games:</p>
-<ul>
-  <li><strong>Memory Match</strong> &mdash; Print two copies of a flashcard set. Place face down, flip pairs to match word + picture. Great for 2 players.</li>
-  <li><strong>Speed Naming</strong> &mdash; Shuffle a stack of picture flashcards. Flip one at a time and say the English word as fast as you can. Time yourself and try to beat your record.</li>
-  <li><strong>Category Race</strong> &mdash; Spread cards from 3 categories on a table. Call out a category and race to grab all the matching cards.</li>
-  <li><strong>Spelling Bee</strong> &mdash; One player shows a picture card. The other must say the word and spell it correctly.</li>
-</ul>
-<p>Printable games are especially useful for younger kids (<a href="/vocabulary/ages-6-8/">ages 6-8</a>) who benefit from tactile, hands-on practice.</p>`,
-      },
-      {
-        h2: 'The Best Free Vocabulary Game App for Kids',
-        content: `<p><a href="/">Children Do English</a> turns vocabulary learning into a game, with every feature designed for kids ages 6-12:</p>
-<ul>
-  <li><strong>${WORDS.length} words</strong> across ${CATEGORIES.length} categories &mdash; from animals to weather</li>
-  <li><strong>4 game modes</strong> &mdash; Image quiz, word quiz, audio challenge, and flashcard review</li>
-  <li><strong>Streaks &amp; badges</strong> &mdash; Kids earn achievements and compete with siblings</li>
-  <li><strong>Spaced repetition</strong> &mdash; Smart review system that focuses on words that need practice</li>
-  <li><strong>Hebrew translations</strong> &mdash; Built for bilingual Hebrew-English families</li>
-  <li><strong>Multiple profiles</strong> &mdash; Each child gets their own progress on the same device</li>
-  <li><strong>100% free, no ads</strong> &mdash; No paywalls, no in-app purchases, no distractions</li>
-  <li><strong>Works offline</strong> &mdash; Download once, play anywhere</li>
-</ul>
-<p>Give your child 5 minutes of vocabulary games today and watch how quickly they start asking for more.</p>`,
-      },
-    ],
-  },
-  {
     slug: 'english-vocabulary-for-bilingual-hebrew-english-kids',
     heroImage: '/og/feelings.png',
     title: 'English Vocabulary for Bilingual Hebrew-English Kids — A Parent\'s Guide',
@@ -4452,14 +4394,6 @@ const GUIDE_GEO = {
       { q: 'Is spaced repetition better than traditional flashcards?', a: 'Yes for long-term memory. Traditional flashcards are reviewed randomly or all at once in long cramming sessions; spaced repetition uses short, optimally timed daily sessions, builds stronger long-term memory and feels easier for kids.' },
     ],
   },
-  'english-vocabulary-games-for-kids': {
-    answer: 'The best English vocabulary games for kids are picture matching, audio "hear it, pick it" challenges, streak and badge challenges, and printable flashcard games like memory match. Games work better than worksheets because play releases dopamine, which strengthens memory formation.',
-    faq: [
-      { q: 'Why do games work better than worksheets for learning vocabulary?', a: 'Play releases dopamine, the chemical that makes kids want "one more round", and dopamine strengthens memory formation. Words met in a game stick better than words copied on a worksheet.' },
-      { q: 'What is the simplest vocabulary game for kids?', a: 'Image matching: show a picture and ask "what is this word?". It tests recognition and recall at the same time, because the child must connect a visual cue to the word.' },
-      { q: 'Which vocabulary games can kids play without a screen?', a: 'Printable flashcard games such as memory match (print two copies of a set, place them face down and flip pairs), plus speed rounds and category sorting. They work in the car, in waiting rooms and during quiet time.' },
-    ],
-  },
   'english-vocabulary-for-bilingual-hebrew-english-kids': {
     answer: 'Hebrew-speaking kids learn English vocabulary fastest when the Hebrew translation is used as a bridge at first and then gradually withdrawn, starting with cognates and loanwords for quick wins, in a 10-minute daily routine of review, new words and practice. The main hurdles are the switch in reading direction and English vowel sounds.',
     faq: [
@@ -4511,9 +4445,12 @@ const GUIDE_QUIZ_CSS = `
     .mq-yay{font-size:1.15rem;font-weight:800;color:#059669;margin:0 0 0.6rem}
     .mq-cta{display:inline-block;padding:0.75rem 1.5rem;background:#2563eb;color:#fff !important;border-radius:999px;font-weight:700;text-decoration:none}`;
 function guideQuizHtml(slug) {
-  const pool = GUIDE_QUIZ_POOL;
+  return miniQuizHtml(GUIDE_QUIZ_POOL, slug, { cta: 'Play 5 more free &mdash; no sign-up &rarr;', content: 'guide' });
+}
+// One listen-and-tap question from a pool, deterministic per seed (guides, age pages).
+function miniQuizHtml(pool, seed, { title = '🎮 Try it in 10 seconds', sub = 'This is how the app works: listen, then tap the right picture.', cta, content }) {
   if (pool.length < 3) return '';
-  const hash = [...slug].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+  const hash = [...seed].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
   const word = pool[hash % pool.length];
   const others = pool.filter((w) => w.id !== word.id);
   const d1 = others[hash % others.length];
@@ -4524,15 +4461,15 @@ function guideQuizHtml(slug) {
   const audioFile = word.word.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-') + '.mp3';
   return `
     <div class="mini-quiz" data-answer="${word.id}">
-      <h2>🎮 Try it in 10 seconds</h2>
-      <p class="mq-sub">This is how the app works: listen, then tap the right picture.</p>
+      <h2>${title}</h2>
+      <p class="mq-sub">${sub}</p>
       <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear the word">🔊 Listen</button>
       <div class="mq-options">
         ${ordered.map((w) => `<button class="mq-opt" data-k="${w.id}" aria-label="picture option"><img src="/images/${w.id}.webp" alt="" width="112" height="112" loading="lazy" /></button>`).join('\n        ')}
       </div>
       <div class="mq-result" hidden>
         <p class="mq-yay">🎉 That&rsquo;s right &mdash; it was &ldquo;${escapeHtml(word.word)}&rdquo;!</p>
-        <a class="mq-cta" href="/?utm_source=seo&utm_medium=miniquiz&utm_content=guide">Play 5 more free &mdash; no sign-up &rarr;</a>
+        <a class="mq-cta" href="/?utm_source=seo&utm_medium=miniquiz&utm_content=${content}">${cta}</a>
       </div>
     </div>
     <script defer src="/vocab-quiz.js"></script>`;
@@ -5066,44 +5003,83 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
 // in public/games/<id>/ copied into dist by Vite; this writes the index.
 // ---------------------------------------------------------------------------
 {
+  // Ordered by how far kids actually play (2026-10 g_lvl per open: Zapper ~17,
+  // Conveyor ~4, Forge ~1). Real gameplay thumbnails (public/games/<id>/shot.webp,
+  // .image-work/game-shots.mjs) replaced emoji cards; the hub absorbed the
+  // never-indexed /guides/english-vocabulary-games-for-kids/ (301 in vercel.json).
   const GAMES = [
-    { id: 'word-zapper', emoji: '⚡', name: 'Word Zapper', desc: 'Hear the word, zap the matching picture before it lands! An endless arcade with shields, combos and adaptive speed.' },
-    { id: 'spelling-forge', emoji: '🔨', name: 'Spelling Forge', desc: 'See the picture, hear the word, and forge its spelling letter by letter on the anvil. Watch out for tricky look-alike letters!' },
-    { id: 'category-conveyor', emoji: '📦', name: 'Category Conveyor', desc: 'Photos ride the conveyor belt — sort each one into the right category bin before it slides away!' },
+    { id: 'word-zapper', emoji: '⚡', name: 'Word Zapper', desc: 'Hear the word, zap the matching picture before it lands! An endless arcade with shields, combos and adaptive speed.', skill: 'Listening: hear a word, find its picture', who: 'Ages 6-12 · no reading needed', alt: 'Word Zapper: the word cow is spoken and a photo of a cow and an apple fall toward the ground' },
+    { id: 'category-conveyor', emoji: '📦', name: 'Category Conveyor', desc: 'Photos ride the conveyor belt — sort each one into the right category bin before it slides away!', skill: 'Word meaning: sort animals, food, clothes and more', who: 'Ages 6-12 · photos carry the meaning', alt: 'Category Conveyor: photos of a bear and a zebra on a belt above Animals and Food bins' },
+    { id: 'spelling-forge', emoji: '🔨', name: 'Spelling Forge', desc: 'See the picture, hear the word, and forge its spelling letter by letter on the anvil. Watch out for tricky look-alike letters!', skill: 'Spelling: build the word letter by letter', who: 'Ages 7-12 · for kids who know their letters', alt: 'Spelling Forge: a photo of baseball bats above empty letter slots for the word bat' },
+  ];
+  let todayId = null;
+  try { todayId = JSON.parse(readFileSync(join(ROOT, 'src', 'data', 'spotlight.json'), 'utf-8')).game?.id || null; } catch { /* no spotlight yet */ }
+  const today = GAMES.find((g) => g.id === todayId);
+  const gamesFaq = [
+    { q: 'Are these English games really free?', a: 'Yes. All three games are free, with no ads, no sign-up and nothing to install. They run in the browser on phones, tablets, Chromebooks and computers.' },
+    { q: 'Which game should a young child start with?', a: 'Word Zapper. The word is spoken aloud and the child taps the matching photo, so it works before a child can read. Category Conveyor is next; Spelling Forge suits kids who already know their letters.' },
+    { q: 'What do kids learn from these games?', a: `They practise the same ${WORDS.length} everyday English words as the rest of Children Do English, each with a real photo and native audio: listening (Word Zapper), word meaning and categories (Category Conveyor) and spelling (Spelling Forge).` },
+    { q: 'Can I use them in class?', a: 'Yes. Each game is a single page that works on a projector or on each child’s device. For a whole-class game, Class Battle lets kids join from their own devices with a room code.' },
   ];
   const gamesDir = join(ROOT, 'dist', 'games');
   mkdirSync(gamesDir, { recursive: true });
   const cards = GAMES.map((g) => `
     <a class="card" href="/games/${g.id}/">
-      <div class="emoji">${g.emoji}</div>
-      <h2>${g.name}</h2>
-      <p>${g.desc}</p>
-      <span class="play">Play free →</span>
+      <img class="shot" src="/games/${g.id}/shot.webp" alt="${escapeHtml(g.alt)}" width="480" height="300" loading="${g === GAMES[0] ? 'eager' : 'lazy'}">
+      <div class="body">
+        <h2>${g.emoji} ${g.name}${g.id === todayId ? ' <span class="today">Today’s game</span>' : ''}</h2>
+        <p class="skill">${g.skill}</p>
+        <p>${g.desc}</p>
+        <p class="who">${g.who}</p>
+        <span class="play">▶ Play free</span>
+      </div>
     </a>`).join('');
   const html = `<!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free English Vocabulary Games for Kids — Play Online | ChildrenDoEnglish</title>
-<meta name="description" content="Free English vocabulary arcade games for kids 6-12 — zap words, forge spellings, sort categories. Real photos, spoken words, no ads, no sign-up.">
+<title>Free English Vocabulary Games for Kids — Play Online, No Sign-Up | Children Do English</title>
+<meta name="description" content="Free English vocabulary games for kids 6-12: zap the word you hear, sort photos into categories, forge spellings. Real photos, spoken words, no ads, no sign-up.">
 <link rel="canonical" href="${SITE}/games/">
+<link rel="icon" type="image/png" href="/favicon.png">
 <meta property="og:title" content="Free English Vocabulary Games for Kids — Play Online">
-<meta property="og:description" content="Word Zapper, Spelling Forge and Category Conveyor — free English games with real photos and spoken words. No ads, no sign-up.">
+<meta property="og:description" content="Word Zapper, Category Conveyor and Spelling Forge — free English games with real photos and spoken words. No ads, no sign-up.">
 <meta property="og:url" content="${SITE}/games/"><meta property="og:type" content="website">
+<meta property="og:image" content="${SITE}/games/word-zapper/shot.webp">
 <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'ItemList', name: 'English vocabulary games for kids', itemListElement: GAMES.map((g, i) => ({ '@type': 'ListItem', position: i + 1, name: g.name, url: `${SITE}/games/${g.id}/` })) }).replace(/</g, '\\u003c')}</script>
+<script type="application/ld+json">${faqSchemaFor(gamesFaq).replace(/</g, '\\u003c')}</script>
 <style>
   body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;margin:0;background:#f0f6ff;color:#1e293b}
-  .wrap{max-width:860px;margin:0 auto;padding:2rem 1rem}
-  h1{font-size:1.9rem;color:#1d4ed8} .sub{color:#64748b;margin-bottom:1.6rem}
-  .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
-  .card{display:block;background:#fff;border-radius:1.2rem;padding:1.4rem;text-decoration:none;color:inherit;box-shadow:0 2px 10px rgba(30,64,175,.08);transition:transform .15s}
-  .card:hover{transform:translateY(-3px)} .emoji{font-size:2.6rem} .card h2{margin:.4rem 0;color:#1d4ed8;font-size:1.2rem}
-  .card p{font-size:.9rem;color:#475569;line-height:1.5} .play{color:#0d9488;font-weight:700}
-  .back{display:inline-block;margin-top:1.6rem;color:#0d9488;text-decoration:none;font-weight:600}
+  .wrap{max-width:960px;margin:0 auto;padding:1.5rem 1rem 2rem}
+  h1{font-size:1.75rem;color:#1d4ed8;margin:.2rem 0 .4rem} .sub{color:#475569;margin:0 0 1rem;line-height:1.5}
+  .today-cta{display:block;text-align:center;background:#f59e0b;color:#fff;font-weight:800;font-size:1.1rem;padding:.85rem 1rem;border-radius:999px;text-decoration:none;margin:0 auto 1.2rem;max-width:420px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+  .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .card{display:block;background:#fff;border-radius:1.2rem;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 2px 10px rgba(30,64,175,.08);transition:transform .15s}
+  .card:hover{transform:translateY(-3px)}
+  .shot{display:block;width:100%;height:auto;aspect-ratio:8/5;object-fit:cover;background:#e0e7ff}
+  .body{padding:1rem 1.2rem 1.2rem} .card h2{margin:0 0 .3rem;color:#1d4ed8;font-size:1.2rem}
+  .today{display:inline-block;vertical-align:middle;background:#fef3c7;color:#92400e;font-size:.72rem;font-weight:700;padding:.15rem .5rem;border-radius:999px;margin-inline-start:.3rem}
+  .skill{font-weight:700;color:#0f766e;font-size:.9rem;margin:0 0 .4rem}
+  .card p{font-size:.9rem;color:#475569;line-height:1.5;margin:0 0 .4rem} .card .who{font-size:.8rem;color:#64748b}
+  .play{display:inline-block;margin-top:.3rem;background:#0d9488;color:#fff;font-weight:700;padding:.45rem 1rem;border-radius:999px}
+  .more{background:#fff;border-radius:1.2rem;padding:1.2rem 1.4rem;margin-top:1.4rem;box-shadow:0 2px 10px rgba(30,64,175,.06)}
+  .more h2{font-size:1.15rem;margin:0 0 .5rem;color:#1e293b} .more p,.more li{color:#475569;line-height:1.55;font-size:.95rem}
+  .more a{color:#1d4ed8;font-weight:600}
+  .faq h3{font-size:1rem;margin:1rem 0 .2rem;color:#1e293b}
+  .back{display:inline-block;margin-top:1.4rem;color:#0d9488;text-decoration:none;font-weight:600}
 </style></head>
 <body><div class="wrap">
   <h1>Free English Vocabulary Games for Kids</h1>
-  <p class="sub">Real photos, spoken words, arcade fun — no ads, no sign-up, nothing to install. Just tap and play in the browser on any device.</p>
+  <p class="sub">Three quick arcade games with real photos and spoken words. No ads, no sign-up, nothing to install &mdash; tap and play in the browser on any device.</p>
+  ${today ? `<a class="today-cta" href="/games/${today.id}/">▶ Play today’s game: ${today.name}</a>` : ''}
   <div class="grid">${cards}</div>
-  <p><a class="back" href="/">← ChildrenDoEnglish home</a> · <a class="back" href="/app">Try the full practice app</a></p>
+  <section class="more">
+    <h2>Want step-by-step practice too?</h2>
+    <p>The free <a href="/app">practice app</a> takes each group of words up a ladder: flashcards first, then listening, picture quizzes, spelling and sentences. It remembers which words your child still mixes up and brings them back. Teachers can run a live <a href="/battle/">Class Battle</a> where kids join with a room code.</p>
+  </section>
+  <section class="more faq">
+    <h2>Questions parents and teachers ask</h2>
+    ${gamesFaq.map((f) => `<h3>${escapeHtml(f.q)}</h3><p>${escapeHtml(f.a)}</p>`).join('\n    ')}
+  </section>
+  <p><a class="back" href="/">← Children Do English home</a> · <a class="back" href="/vocabulary/">Browse all ${WORDS.length} words</a></p>
 </div></body></html>`;
   writePage(join(gamesDir, 'index.html'), html);
   console.log('Games hub written: /games/');

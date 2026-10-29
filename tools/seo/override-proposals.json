@@ -1,10 +1,12 @@
 {
-  "/vocabulary/food/spanish/": {
-    "title": "Spanish — Food And Drinks In Spanish | Children Do English",
-    "description": "Food and drinks in spanish? A free, kid-friendly page — no ads, no sign-up, works in any browser.",
+  "/vocabulary/food/": {
+    "title": "Food — Food And Drink Vocabulary For Kids | Children Do English",
+    "description": "Food and drink vocabulary for kids? A free, kid-friendly page — no ads, no sign-up, works in any browser.",
     "based_on_queries": [
-      "food and drinks in spanish"
+      "food and drink vocabulary for kids",
+      "food and drinks vocabulary for kids",
+      "food in english for kids"
     ],
-    "added": "2026-10-24"
+    "added": "2026-10-28"
   }
 }

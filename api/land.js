@@ -19,8 +19,10 @@ const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 // vis = once-per-day return bucket (new|r1|r2-7|r8-30|r31p|rpre — public/land-beacon.js);
 // ansx = a wrong quiz answer's pick (<target>@<chosen word id>);
 // fcr = ladder flashcards reach (c1..c10|done) — where in the deck kids leave;
+// pg/cta/mq = a static page's view / click into the app or a game / first
+// mini-quiz tap, item = page-path key (public/land-beacon.js) → click-to-play rate;
 // onb = first-visit funnel step (create_view|create_done|q1_start|q1_done|q1_quit).
-const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'g_start', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb', 'ansx', 'fcr']);
+const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'g_start', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb', 'ansx', 'fcr', 'pg', 'cta', 'mq']);
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
 
 // Classify a DB failure so the function log names the REAL cause — the beacon

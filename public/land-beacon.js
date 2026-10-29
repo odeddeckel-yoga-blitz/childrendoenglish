@@ -65,6 +65,30 @@
       } catch (e) { /* malformed utm — keep referrer class */ }
     }
     navigator.sendBeacon('/api/land', JSON.stringify({ g: g, s: s, l: l }));
+    /* Per-page "went on to play" (static pages only — the SPA has #root): pg =
+       a view, cta = a click on a link into the app or a game, mq = the first
+       mini-quiz tap. Item = the page path as a key (all word pages share one),
+       so cta/pg is each page's click-to-play rate. Aggregate tallies only. */
+    try {
+      if (!document.getElementById('root')) {
+        var seg = p.split('/').filter(Boolean), key;
+        if (seg[0] === 'vocabulary' && seg.length === 3 && seg[2] !== 'hebrew' && seg[2] !== 'spanish') key = 'vocabulary_word';
+        else key = (seg.join('_') || 'root').toLowerCase().replace(/[^a-z0-9_-]/g, '-').slice(0, 40);
+        var send = function (e) { navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: e, i: key }], l: l })); };
+        send('pg');
+        var PLAY = /^\/(app|play|learn|quiz|flashcards|new-player|players|my-words|letters|path|daily-review|battle|games\/[a-z0-9-]+)?\/?$/;
+        var clicked = false, tapped = false;
+        document.addEventListener('click', function (ev) {
+          var t = ev.target;
+          if (!t || !t.closest) return;
+          if (!tapped && t.closest('.mq-opt')) { tapped = true; send('mq'); return; }
+          var a = t.closest('a[href]');
+          if (!a || clicked) return;
+          var u = new URL(a.href, location.href);
+          if (u.hostname.replace(/^www\./, '') === self && PLAY.test(u.pathname)) { clicked = true; send('cta'); }
+        }, true);
+      }
+    } catch (e) { /* never break the page */ }
     /* Return-visit bucket (Engagement Optimizer) — once per local day per
        browser. Stores ONLY the last visit date ('cde_seen', YYYY-MM-DD) and
        sends ONLY a coarse bucket as an aggregate tally — never the date, never
