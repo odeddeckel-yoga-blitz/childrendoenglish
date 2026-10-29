@@ -35,7 +35,7 @@ describe('textbook-unit pages', () => {
   });
 
   it('a live unit is indexable and enters the sitemap with its book index and the hub', () => {
-    const live = { ...UNITS[0], book: 'jet-2', unit: 3, test: false };
+    const live = { ...UNITS[0], book: 'jet-2', unit: 3, test: false, source: 'https://example.com/list.pdf' };
     const { urls, read } = build([live]);
     expect(urls.sort()).toEqual(['/units/', '/units/jet-2/', '/units/jet-2/unit-3/']);
     const html = read('/units/jet-2/unit-3/');
@@ -46,6 +46,27 @@ describe('textbook-unit pages', () => {
     expect(html).toContain('Eric Cohen Books');
     expect(html).toContain('classroom.google.com/share?url=');
     expect(html).toContain('teams.microsoft.com/share?href=');
+    // the card images are lazy: printing must go through print-btn.js, which loads them first
+    expect(html).toContain('<script defer src="/print-btn.js"></script>');
+  });
+
+  it('a live unit needs its source URL; titles and example sentences render', () => {
+    const base = { book: 'jet-2', unit: 9, words: UNITS[0].words.slice(0, 4) };
+    expect(() => build([base])).toThrow(/needs source/);
+    const words = [{ ...base.words[0], ex: 'I eat an apple.' }, ...base.words.slice(1)];
+    const { read } = build([{ ...base, title: "Let's Play", source: 'https://example.com/u9.pdf', words }]);
+    const html = read('/units/jet-2/unit-9/');
+    expect(html).toContain("<title>Jet 2 Unit 9: Let's Play – ");
+    expect(html).toContain('<span class="ex">I eat an apple.</span>');
+    expect(html).toContain('class="aligned"');
+    expect(html).not.toContain('example.com');
+  });
+
+  it('every live unit: source recorded, and every word has our own example sentence', () => {
+    for (const u of UNITS.filter((x) => !(x.test || BOOKS[x.book].test))) {
+      expect(u.source).toMatch(/^https:\/\//);
+      for (const w of u.words) expect(w.ex, `${u.book} ${u.unit} ${w.en}`).toMatch(/\w/);
+    }
   });
 
   it('hear-and-pick options: 4 distinct Hebrew meanings, the answer correct, no colliding distractor', () => {
@@ -78,7 +99,7 @@ describe('textbook-unit pages', () => {
   });
 
   it('refuses a word with no rendered audio, and an unknown wordId', () => {
-    const base = { book: 'jet-2', unit: 1, words: UNITS[0].words.slice(0, 4) };
+    const base = { book: 'jet-2', unit: 1, source: 'https://example.com/u1.pdf', words: UNITS[0].words.slice(0, 4) };
     expect(() => build([{ ...base, words: [...base.words, { en: 'xyzzyword', he: 'בדיקה' }] }])).toThrow(/no audio/);
     expect(() => build([{ ...base, words: [...base.words, { en: 'cat', he: 'חתול', wordId: 'not-a-word' }] }])).toThrow(/not in words.js/);
   });

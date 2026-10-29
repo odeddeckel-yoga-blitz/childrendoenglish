@@ -3,7 +3,7 @@
  *   hear  — play the English word, pick its Hebrew meaning (options built at
  *           page-build time with the app's collides() rule, so no two share a meaning)
  *   spell — play the English word, type it
- * Plus 🔊 buttons in the word table and the print-flashcards button.
+ * Plus 🔊 buttons in the word table (the print button is print-btn.js).
  * Answers feed the same cookieless cde_learn aggregate as the app (ans_ok/ans_no
  * @ CDE word id when the word has one); quiz_start/quiz_done @ unit-hear|unit-spell.
  * Automation and owner devices are excluded, as everywhere else. */
@@ -35,8 +35,8 @@
 
   document.addEventListener('click', function (ev) {
     var s = ev.target.closest('[data-say]');
-    if (s) { say(s.getAttribute('data-say')); return; }
-    if (ev.target.closest('[data-print]')) { window.print(); }
+    if (s) say(s.getAttribute('data-say'));
+    // [data-print] is print-btn.js's (it loads the lazy card images first).
   });
 
   var dataEl = document.getElementById('unit-data');
@@ -134,9 +134,11 @@
       form.appendChild(label); form.appendChild(input); form.appendChild(el('br', {})); form.appendChild(go);
       form.addEventListener('submit', function (ev) {
         ev.preventDefault();
-        var guess = input.value.trim().toLowerCase().replace(/\s+/g, ' ');
+        // Letters only: phrases like "Say it again, please" shouldn't fail on a comma.
+        var letters = function (s) { return s.toLowerCase().replace(/[^a-z]+/g, ' ').trim(); };
+        var guess = letters(input.value);
         if (!guess) return;
-        var ok = guess === it.en.toLowerCase();
+        var ok = guess === letters(it.en);
         tries += 1;
         if (!ok && tries < 2) { fb.textContent = 'כמעט — נסו שוב (הקשיבו עוד פעם)'; announce(fb.textContent); input.select(); return; }
         record(it, ok);

@@ -27,11 +27,14 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
     if (!BOOKS[u.book]) throw new Error(`${where}: unknown book '${u.book}'`);
     if (!Number.isInteger(u.unit) || u.unit < 1) throw new Error(`${where}: unit must be a positive integer`);
     if (!Array.isArray(u.words) || u.words.length < 4) throw new Error(`${where}: needs at least 4 words`);
+    // Every live list must be re-checkable against the public source it came from.
+    if (!isTest(u) && !/^https:\/\/\S+$/.test(u.source || '')) throw new Error(`${where}: needs source (the public word-list URL)`);
     const seen = new Set();
     for (const w of u.words) {
       if (!w.en?.trim() || !w.he?.trim()) throw new Error(`${where}: every word needs en + he (${JSON.stringify(w)})`);
       if (seen.has(w.en.toLowerCase())) throw new Error(`${where}: duplicate word '${w.en}'`);
       seen.add(w.en.toLowerCase());
+      if (w.ex !== undefined && !(typeof w.ex === 'string' && w.ex.trim())) throw new Error(`${where}: ex must be a non-empty sentence (${w.en})`);
       if (w.wordId && !byId.has(w.wordId)) throw new Error(`${where}: wordId '${w.wordId}' is not in words.js`);
       if (!existsSync(join(publicDir, 'audio', `${audioKey(w.en)}.mp3`))) {
         throw new Error(`${where}: no audio for '${w.en}' — render public/audio/${audioKey(w.en)}.mp3 (Piper + whisper check) first`);
@@ -119,17 +122,18 @@ ${body}
     const test = isTest(u);
     const path = `/units/${u.book}/unit-${u.unit}/`;
     const unitName = `${book.name} Unit ${u.unit}`;
-    const title = `${unitName} – מילים באנגלית עם הגייה, תרגום ומשחקים`;
+    const fullName = u.title ? `${unitName}: ${u.title}` : unitName;
+    const title = `${fullName} – מילים באנגלית עם הגייה, תרגום ומשחקים`;
     const sample = u.words.slice(0, 6).map((w) => w.en).join(', ');
     const description = `כל ${u.words.length} המילים של ${unitName}: הגייה באנגלית, תרגום לעברית ומשחקי תרגול — ${sample}… חינם, בלי הרשמה.`;
     const items = u.words.map((w) => {
       const base = byId.get(w.wordId);
-      return { en: w.en, he: w.he, id: w.wordId || null, audio: `/audio/${audioKey(w.en)}.mp3`, img: base?.imageUrl || null, ...hebrewOptions(w, u.words) };
+      return { en: w.en, he: w.he, ex: w.ex || null, id: w.wordId || null, audio: `/audio/${audioKey(w.en)}.mp3`, img: base?.imageUrl || null, ...hebrewOptions(w, u.words) };
     });
     const rows = items.map((it) => `
           <tr>
             <td class="col-img">${it.img ? `<img src="${it.img}" alt="${escapeHtml(it.en)}" width="56" height="56" loading="lazy" />` : ''}</td>
-            <td class="col-en" lang="en" dir="ltr">${escapeHtml(it.en)}</td>
+            <td class="col-en" lang="en" dir="ltr">${escapeHtml(it.en)}${it.ex ? `<span class="ex">${escapeHtml(it.ex)}</span>` : ''}</td>
             <td class="col-say"><button type="button" class="say" data-say="${it.audio}" aria-label="השמעה: ${escapeHtml(it.en)}">🔊</button></td>
             <td class="col-he">${escapeHtml(it.he)}</td>
           </tr>`).join('');
@@ -150,7 +154,7 @@ ${body}
     const body = `
   <nav class="breadcrumb" aria-label="breadcrumb"><a href="/he/">עברית</a> › <a href="/units/">יחידות לימוד</a> › <a href="/units/${u.book}/">${escapeHtml(book.name)}</a> › Unit ${u.unit}</nav>
   <header class="hero">
-    <h1><span lang="en" dir="ltr">${escapeHtml(unitName)}</span> – מילים באנגלית עם הגייה, תרגום ומשחקים</h1>
+    <h1><span lang="en" dir="ltr">${escapeHtml(fullName)}</span> – מילים באנגלית עם הגייה, תרגום ומשחקים</h1>
     <p class="answer">כל ${u.words.length} המילים של היחידה עם הגייה באנגלית ותרגום לעברית${u.grade ? ` (כיתה ${escapeHtml(u.grade)})` : ''}. לוחצים 🔊 כדי לשמוע, ואז מתרגלים למטה.</p>
   </header>
   <main class="container">
@@ -161,6 +165,7 @@ ${body}
         <tbody>${rows}
         </tbody>
       </table>
+      ${u.source ? `<p class="aligned">הרשימה תואמת לרשימת המילים של <span lang="en" dir="ltr">${escapeHtml(unitName)}</span>. התרגום לעברית, משפטי הדוגמה, ההקלטות והתמונות הם של Children Do English.</p>` : ''}
     </section>
     <section class="section" aria-labelledby="practice-h">
       <h2 id="practice-h" class="section-title">תרגול</h2>
@@ -195,7 +200,8 @@ ${body}
     </section>
     <p class="center more"><a class="cta" href="/?lang=he&amp;utm_source=seo&amp;utm_medium=unit&amp;utm_content=${u.book}-${u.unit}">עוד מילים ומשחקים באפליקציה ←</a></p>
   </main>
-  <script defer src="/unit-practice.js"></script>`;
+  <script defer src="/unit-practice.js"></script>
+  <script defer src="/print-btn.js"></script>`;
     const dir = join(distDir, 'units', u.book, `unit-${u.unit}`);
     mkdirSync(dir, { recursive: true });
     writePage(join(dir, 'index.html'), shell({
@@ -216,7 +222,7 @@ ${body}
     const title = `${book.name} – מילים באנגלית לכל יחידה, עם הגייה ותרגום`;
     const description = `רשימות המילים של ${book.name} לפי יחידות, עם הגייה באנגלית, תרגום לעברית ומשחקי תרגול. חינם, בלי הרשמה.`;
     const list = units.map((u) => `
-        <a class="unit-card" href="/units/${b}/unit-${u.unit}/"><strong lang="en" dir="ltr">Unit ${u.unit}</strong><span>${u.words.length} מילים · ${escapeHtml(u.words.slice(0, 4).map((w) => w.en).join(', '))}…</span></a>`).join('');
+        <a class="unit-card" href="/units/${b}/unit-${u.unit}/"><strong lang="en" dir="ltr">Unit ${u.unit}${u.title ? `: ${escapeHtml(u.title)}` : ''}</strong><span>${u.words.length} מילים · ${escapeHtml(u.words.slice(0, 4).map((w) => w.en).join(', '))}…</span></a>`).join('');
     const dir = join(distDir, 'units', b);
     mkdirSync(dir, { recursive: true });
     writePage(join(dir, 'index.html'), shell({
@@ -275,6 +281,8 @@ const UNIT_CSS = `
     .words th { background: #f8fafc; font-size: 0.85rem; color: #475569; }
     .col-img { width: 64px; } .col-img img { border-radius: 0.5rem; object-fit: cover; display: block; }
     .col-en { font-weight: 800; font-size: 1.1rem; text-align: left; }
+    .col-en .ex { display: block; font-weight: 400; font-size: 0.85rem; color: #475569; }
+    .aligned { font-size: 0.85rem; color: #475569; margin-top: 0.6rem; text-align: center; }
     .col-say { width: 52px; text-align: center; }
     .say { font-size: 1.3rem; background: #eef2ff; border: 0; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; }
     .say:focus-visible, .mode:focus-visible, .opt:focus-visible, .print-btn:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
