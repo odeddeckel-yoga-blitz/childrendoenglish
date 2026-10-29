@@ -69,6 +69,18 @@ function clearSession() {
 
 /* ---------------- api ---------------- */
 
+/* Class Battle use as aggregate tallies in /api/land (cookieless, no
+   identifier, like the rest of the site): bt = create | start_p<size> | join.
+   Skips automation and the owner's ?internal=1 browser, as land-beacon.js does. */
+function track(item) {
+  try {
+    if (navigator.webdriver || !navigator.sendBeacon || localStorage.getItem('cde_internal') === '1') return;
+    const sl = localStorage.getItem('cde_lang');
+    navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: 'bt', i: item }], l: sl === 'he' || sl === 'es' ? sl : 'en' }));
+  } catch { /* never break the game */ }
+}
+const sizeBucket = (n) => (n <= 1 ? '1' : n <= 5 ? '2-5' : n <= 15 ? '6-15' : '16+');
+
 async function apiPost(body) {
   const r = await fetch(API, {
     method: 'POST',
@@ -355,6 +367,7 @@ async function createRoom() {
     S.code = code;
     S.hostKey = hostKey;
     saveSession();
+    track('create');
     show('sHostLobby');
     $('roomCode').textContent = code;
     startLoops();
@@ -367,6 +380,7 @@ async function startBattle() {
   $('hostErr').textContent = '';
   try {
     await apiPost({ action: 'start', code: S.code, hostKey: S.hostKey });
+    track('start_p' + sizeBucket((S.room && S.room.players || []).length));
     poll();
   } catch (e) {
     if (e.code !== 'already_started') {
@@ -426,6 +440,7 @@ async function joinAs(nickname) {
     S.nickname = nickname;
     S.score = S.streak = S.answered = S.correct = 0;
     saveSession();
+    track('join');
     startLoops();
   } catch (e) {
     if (e.code === 'nickname_taken') {

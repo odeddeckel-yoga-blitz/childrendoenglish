@@ -283,6 +283,32 @@ if (pages.length > 0) {
   }
 }
 
+// --- quiz start source (qs, from 2026-10-30) ---
+// item = [new-]<source>_<start|done|quit>; new- = a fresh player's first quiz.
+// done ÷ start per source says WHICH entry loses kids (vanished = start − done − quit).
+const qs = await q`SELECT item, sum(n)::int AS n FROM cde_learn
+  WHERE day >= CURRENT_DATE - ${days}::int AND ev = 'qs' GROUP BY item`;
+if (qs.length > 0) {
+  const by = {};
+  for (const r of qs) {
+    const m = r.item.match(/^(.*)_(start|done|quit)$/);
+    if (m) (by[m[1]] ||= { start: 0, done: 0, quit: 0 })[m[2]] += r.n;
+  }
+  console.log('\n— quiz start source (done / start · quit · vanished):');
+  for (const [k, v] of Object.entries(by).sort((a, b) => b[1].start - a[1].start)) {
+    console.log(`  ${k.padEnd(16)} ${v.done}/${v.start}  quit ${v.quit}  vanished ${Math.max(0, v.start - v.done - v.quit)}`);
+  }
+}
+
+// --- Class Battle use (bt, from 2026-10-30) ---
+// create = a host made a room, start_p<size> = a battle started with that many
+// kids, join = a kid joined. A real classroom = starts in the 6-15 / 16+ buckets.
+const bt = await q`SELECT item, sum(n)::int AS n FROM cde_learn
+  WHERE day >= CURRENT_DATE - ${days}::int AND ev = 'bt' GROUP BY item ORDER BY item`;
+if (bt.length > 0) {
+  console.log('\n— class battle: ' + bt.map((r) => `${r.item} ${r.n}`).join(' · '));
+}
+
 // --- games: play depth per game (KDM parity — levelups ÷ opens) ---
 // Opens = g_open learn events the games fire per game id on a real
 // (non-webdriver, non-internal) page load; level-ups/completes = g_lvl/g_cmp.

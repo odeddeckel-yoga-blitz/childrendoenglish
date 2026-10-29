@@ -354,7 +354,7 @@ export default function App() {
     if (step.kind === 'quiz') {
       const mode = canReadNow ? step.mode : (step.preReaderMode || step.mode);
       setCycleRun(true);
-      quizFlow.startQuiz(null, mode, words);
+      quizFlow.startQuiz(null, mode, words, 'ladder');
       return;
     }
     if (step.kind === 'flashcards') { setCycleRun(true); setFocusedWords(words); navigate('flashcards'); return; }
@@ -491,7 +491,7 @@ export default function App() {
         window.location.hash = '';
         if (words.length >= 4) {
           setFocusedWords(words);
-          quizFlow.startQuiz(null, mode, words);
+          quizFlow.startQuiz(null, mode, words, 'shared');
         }
         return;
       }
@@ -631,7 +631,7 @@ export default function App() {
             onInstall={handleInstall}
             onDismissInstall={dismissInstall}
             onNavigate={navigate}
-            onQuickStart={() => quizFlow.startQuiz('beginner', 'listen')}
+            onQuickStart={() => quizFlow.startQuiz('beginner', 'listen', null, 'quick')}
             onContinueCycle={() => openLadder('batch')}
             cycleInfo={(() => {
               const { batch, stage } = cycleState(stats);
@@ -662,7 +662,7 @@ export default function App() {
             knownLetters={activePlayer?.knownLetters}
             onChangeLetters={activePlayer ? (letters) => handleUpdatePlayer(activePlayer.id, { knownLetters: letters }) : undefined}
             onStartQuiz={(level, mode) => {
-              quizFlow.startQuiz(level, mode);
+              quizFlow.startQuiz(level, mode, null, 'menu');
             }}
             onBack={() => navigate('menu', 'back')}
           />
@@ -761,7 +761,7 @@ export default function App() {
               { label: t('ladderAgainDifferent', lang), onClick: () => repeatLadderStep('different') },
               { label: t('ladderAgainMore', lang), onClick: () => repeatLadderStep('more') },
             ] : null}
-            onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords)}
+            onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords, 'again')}
             onMenu={() => { if (cycleRun) { setCycleRun(false); setFocusedWords(null); navigate('menu', 'back'); } else leaveScreen(); }}
             onLightning={quizFlow.quizWords.length > 0 ? () => navigate('lightning') : undefined}
           />
@@ -846,7 +846,7 @@ export default function App() {
           <LetterPath
             stats={stats}
             lang={lang}
-            onPracticeLetter={(letter, words) => { sendLearn('letter', letter.toLowerCase()); quizFlow.handleStartPersonalQuiz(words, 'listen'); }}
+            onPracticeLetter={(letter, words) => { sendLearn('letter', letter.toLowerCase()); quizFlow.handleStartPersonalQuiz(words, 'listen', 'letter'); }}
             onBack={() => navigate('menu', 'back')}
           />
         );
@@ -910,7 +910,7 @@ export default function App() {
         return (
           <PersonalWordList
             lang={lang}
-            onStartQuiz={(words, mode) => { setFocusedWords(words); quizFlow.handleStartPersonalQuiz(words, mode); }}
+            onStartQuiz={(words, mode) => { setFocusedWords(words); quizFlow.handleStartPersonalQuiz(words, mode, 'mywords'); }}
             onLearn={(words) => { setFocusedWords(words); setLearnWords(words); navigate('learning'); }}
             onFlashcard={(words) => { setFocusedWords(words); navigate('flashcards'); }}
             onBack={() => { setSharedWords(null); setFocusedWords(null); navigate('menu', 'back'); }}
@@ -924,7 +924,7 @@ export default function App() {
             stats={stats}
             lang={lang}
             onBack={() => navigate('menu', 'back')}
-            onStartLesson={(words) => quizFlow.handleStartPersonalQuiz(filterByKnownLetters(words, activePlayer?.knownLetters), 'image')}
+            onStartLesson={(words) => quizFlow.handleStartPersonalQuiz(filterByKnownLetters(words, activePlayer?.knownLetters), 'image', 'learn')}
             onLearnLesson={(words) => { setLearnWords(filterByKnownLetters(words, activePlayer?.knownLetters)); navigate('learning'); }}
           />
         );

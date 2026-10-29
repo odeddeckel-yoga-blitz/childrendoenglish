@@ -155,6 +155,16 @@ describe('useQuizFlow', () => {
     expect(analytics.quizComplete).toHaveBeenCalledWith('image', 'beginner', 8, 10);
   });
 
+  it('tags the quiz with where it was started (qs) on start and finish; a retry keeps the source', async () => {
+    const { result } = renderFlow();
+    sendLearn.mockClear();
+    await act(async () => { await result.current.startQuiz('beginner', 'listen', null, 'menu'); });
+    await act(async () => { await result.current.startQuiz('beginner', 'listen'); }); // loading-screen retry
+    act(() => { result.current.handleQuizComplete({ score: 1, total: 1, mode: 'listen', answers: [] }); });
+    const qs = sendLearn.mock.calls.filter((c) => c[0] === 'qs').map((c) => c[1].replace(/^new-/, ''));
+    expect(qs).toEqual(['menu_start', 'menu_start', 'menu_done']);
+  });
+
   it('a wrong answer reports what was picked instead (ansx target@chosen); skips and right answers do not', async () => {
     const { result } = renderFlow();
     await act(async () => { await result.current.startQuiz('beginner', 'image'); });

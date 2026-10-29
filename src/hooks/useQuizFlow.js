@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { selectQuizWords, updateWordSR } from '../utils/spaced-repetition';
 import { preloadImages } from '../utils/images';
 import { updateStreak, updateDailyGoal } from '../utils/storage';
@@ -26,7 +26,12 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
   const [customWords, setCustomWords] = useState(null);
   const [loadingProgress, setLoadingProgress] = useState(0);
 
-  const startQuiz = useCallback(async (level, mode, words = null) => {
+  // Where the running quiz was started from (qs learn event): menu | ladder |
+  // shared | letter | mywords | learn | again | quick | other. A retry keeps the original.
+  const srcRef = useRef('other');
+
+  const startQuiz = useCallback(async (level, mode, words = null, src) => {
+    if (src) srcRef.current = src;
     setSelectedLevel(level);
     setSelectedMode(mode);
     if (level) analytics.quizFunnelLevel(level);
@@ -94,6 +99,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     setQuizWords(wordsWithDistractors);
     analytics.quizStart(mode, level);
     sendLearn('quiz_start', mode || 'unknown');
+    sendLearn('qs', `${isFreshPlayer(stats) ? 'new-' : ''}${srcRef.current}_start`);
     if (isFreshPlayer(stats)) sendLearn('onb', 'q1_start');
     const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
     navigate(stateMap[mode] || 'imageQuiz');
@@ -222,6 +228,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     setStats(prev => completeQuiz(prev).updated);
     setQuizResults({ ...results, arcadeNewBest });
     if (isFreshPlayer(stats)) sendLearn('onb', quit ? 'q1_quit' : 'q1_done');
+    sendLearn('qs', `${isFreshPlayer(stats) ? 'new-' : ''}${srcRef.current}_${quit ? 'quit' : 'done'}`);
     if (quit) {
       analytics.quizQuit(mode, selectedLevel, answers?.length ?? 0);
       sendLearn('quiz_quit', mode || 'unknown');
@@ -232,10 +239,10 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     navigate('finished');
   }, [selectedLevel, navigate, setStats, stats, quizWords]);
 
-  const handleStartPersonalQuiz = useCallback((words, mode) => {
+  const handleStartPersonalQuiz = useCallback((words, mode, src = 'personal') => {
     setCustomWords(words);
     setSelectedMode(mode);
-    startQuiz(null, mode, words);
+    startQuiz(null, mode, words, src);
   }, [startQuiz]);
 
   return {
