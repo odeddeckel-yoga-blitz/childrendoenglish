@@ -4941,7 +4941,13 @@ const ageBracketEntries = AGE_BRACKETS.map(
 const { BOOKS, UNITS } = await import(join(ROOT, 'src', 'data', 'units.js'));
 const { collides } = await import(join(ROOT, 'src', 'data', 'words.js'));
 const { buildUnitPages } = await import(join(ROOT, 'scripts', 'build-unit-pages.mjs'));
-const unitUrls = buildUnitPages({ SITE, distDir, publicDir: join(ROOT, 'public'), writePage, escapeHtml, WORDS, collides, BOOKS, UNITS });
+// Band I level chips (a mapping of OUR words — src/data/band1.js, tools/band1/map-band1.py)
+const { BAND1_BY_ID, BAND1_BY_TEXT, BAND1_TOTAL } = await import(join(ROOT, 'src', 'data', 'band1.js'));
+const { buildBand1Pages, BAND_CHIPS } = await import(join(ROOT, 'scripts', 'build-band1-pages.mjs'));
+const band1ChipFor = (w) => BAND_CHIPS[(w.wordId && BAND1_BY_ID[w.wordId]) || BAND1_BY_TEXT[w.en.toLowerCase().trim()]] || null;
+const unitUrls = buildUnitPages({ SITE, distDir, publicDir: join(ROOT, 'public'), writePage, escapeHtml, WORDS, collides, BOOKS, UNITS, chipFor: band1ChipFor });
+const band1Pages = buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND1_TOTAL, CATEGORY_NAMES_HE });
+console.log(`  ✓ /band-1/: ${band1Pages} page(s)`);
 const unitEntries = unitUrls.map((u) => `  <url>
     <loc>${SITE}${u}</loc>
     <lastmod>${today}</lastmod>

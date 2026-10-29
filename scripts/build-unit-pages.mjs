@@ -1,9 +1,12 @@
 // Textbook-unit pages: /units/ hub → /units/<book>/ → /units/<book>/unit-<n>/.
 // Hebrew body, answer-first: the unit's word table (English · Hebrew · audio ·
 // photo when CDE has a vetted one), practice that works for any word (hear →
-// pick the Hebrew meaning; spell what you hear), printable flashcards, plain
-// Classroom/Teams share links, FAQPage + breadcrumbs, a not-affiliated footer.
+// pick the Hebrew meaning; spell what you hear; dictation), printable
+// flashcards + bingo/word-search sheets, share links, FAQPage + breadcrumbs,
+// a not-affiliated footer.
 // Data: src/data/units.js. Practice runtime: public/unit-practice.js (CSP-safe).
+// The page body is wordSetKit().setPage — also used by the Band I pages
+// (scripts/build-band1-pages.mjs), so any word set gets the same tools.
 //
 // A unit marked test: true (or any unit of a test book) is built for checking
 // the template but is noindex,nofollow, left out of the sitemap, and a hub or
@@ -13,40 +16,19 @@ import { existsSync } from 'fs';
 import { join } from 'path';
 import { mkdirSync } from 'fs';
 
-const audioKey = (en) => en.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
+export const audioKey = (en) => en.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
 // Deterministic so a rebuild doesn't reshuffle every page's options.
 const hashOf = (s) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 
-export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml, WORDS, collides, BOOKS, UNITS }) {
+// One Hebrew word-set page (table → practice → cards → sheets → share → FAQ).
+// words: [{ en, he, wordId?, ex?, chip? }] — chip = { label, cls } shown by the word.
+export function wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides }) {
   const byId = new Map(WORDS.map((w) => [w.id, w]));
-  const isTest = (u) => !!(u.test || BOOKS[u.book]?.test);
-
-  // --- validate the data before writing anything ---
-  for (const u of UNITS) {
-    const where = `units.js ${u.book} unit ${u.unit}`;
-    if (!BOOKS[u.book]) throw new Error(`${where}: unknown book '${u.book}'`);
-    if (!Number.isInteger(u.unit) || u.unit < 1) throw new Error(`${where}: unit must be a positive integer`);
-    if (!Array.isArray(u.words) || u.words.length < 4) throw new Error(`${where}: needs at least 4 words`);
-    // Every live list must be re-checkable against the public source it came from.
-    if (!isTest(u) && !/^https:\/\/\S+$/.test(u.source || '')) throw new Error(`${where}: needs source (the public word-list URL)`);
-    const seen = new Set();
-    for (const w of u.words) {
-      if (!w.en?.trim() || !w.he?.trim()) throw new Error(`${where}: every word needs en + he (${JSON.stringify(w)})`);
-      if (seen.has(w.en.toLowerCase())) throw new Error(`${where}: duplicate word '${w.en}'`);
-      seen.add(w.en.toLowerCase());
-      if (w.ex !== undefined && !(typeof w.ex === 'string' && w.ex.trim())) throw new Error(`${where}: ex must be a non-empty sentence (${w.en})`);
-      if (w.wordId && !byId.has(w.wordId)) throw new Error(`${where}: wordId '${w.wordId}' is not in words.js`);
-      if (!existsSync(join(publicDir, 'audio', `${audioKey(w.en)}.mp3`))) {
-        throw new Error(`${where}: no audio for '${w.en}' — render public/audio/${audioKey(w.en)}.mp3 (Piper + whisper check) first`);
-      }
-    }
-  }
-
-  // Unit words as word-like objects so collides() (same English, same/prefix
+  // Set words as word-like objects so collides() (same English, same/prefix
   // Hebrew gloss, CONFUSABLE_PAIRS) guards the options exactly as in the app.
   const asWord = (w) => (w.wordId ? byId.get(w.wordId) : { id: `u-${audioKey(w.en)}`, word: w.en, hebrewTranslation: w.he });
 
-  function hebrewOptions(w, unitWords) {
+  function hebrewOptions(w, setWords) {
     const target = asWord(w);
     const picked = [];
     const take = (pool) => {
@@ -58,8 +40,8 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
         picked.push(c);
       }
     };
-    take(unitWords.filter((c) => c !== w));
-    // Small unit: top up from CDE beginner words in the same category as the target
+    take(setWords.filter((c) => c !== w));
+    // Small set: top up from CDE beginner words in the same category as the target
     if (picked.length < 3) {
       const cat = target.category;
       take(WORDS.filter((x) => x.level === 'beginner' && (!cat || x.category === cat)).map((x) => ({ en: x.word, he: x.hebrewTranslation, wordId: x.id })));
@@ -71,10 +53,7 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
   }
 
   const robots = (test) => (test ? 'noindex, nofollow' : 'index, follow');
-  const publishers = [...new Set(Object.values(BOOKS).map((b) => b.publisher).filter(Boolean))].join(' / ');
-  const sitemapUrls = [];
-
-  const shell = ({ path, title, description, test, schemas, body }) => `<!DOCTYPE html>
+  const shell = ({ path, title, description, test, schemas, body, footerNote }) => `<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -98,7 +77,7 @@ ${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join(
 ${body}
   <footer class="footer">
     &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/he/">עברית</a> &middot; <a href="/about/">אודות</a> &middot; <a href="/privacy">פרטיות</a>
-    <p class="not-affiliated">האתר אינו קשור להוצאת ${escapeHtml(publishers)} ואינו מטעמה. רשימות המילים משמשות לתרגול בלבד; תרגילים, קטעי קריאה ומבחנים מהספר אינם מועתקים לכאן.</p>
+    ${footerNote ? `<p class="not-affiliated">${escapeHtml(footerNote)}</p>` : ''}
   </footer>
 </body>
 </html>`;
@@ -114,26 +93,16 @@ ${body}
     mainEntity: pairs.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })),
   });
 
-  // --- unit pages ---
-  const books = Object.keys(BOOKS);
-  const liveUnitsOf = (b) => UNITS.filter((u) => u.book === b && !isTest(u));
-  for (const u of UNITS) {
-    const book = BOOKS[u.book];
-    const test = isTest(u);
-    const path = `/units/${u.book}/unit-${u.unit}/`;
-    const unitName = `${book.name} Unit ${u.unit}`;
-    const fullName = u.title ? `${unitName}: ${u.title}` : unitName;
-    const title = `${fullName} – מילים באנגלית עם הגייה, תרגום ומשחקים`;
-    const sample = u.words.slice(0, 6).map((w) => w.en).join(', ');
-    const description = `כל ${u.words.length} המילים של ${unitName}: הגייה באנגלית, תרגום לעברית ומשחקי תרגול — ${sample}… חינם, בלי הרשמה.`;
-    const items = u.words.map((w) => {
+  // navHtml/h1Html are trusted builder HTML; everything else is escaped here.
+  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote }) {
+    const items = words.map((w) => {
       const base = byId.get(w.wordId);
-      return { en: w.en, he: w.he, ex: w.ex || null, id: w.wordId || null, audio: `/audio/${audioKey(w.en)}.mp3`, img: base?.imageUrl || null, ...hebrewOptions(w, u.words) };
+      return { en: w.en, he: w.he, ex: w.ex || null, chip: w.chip || null, id: w.wordId || null, audio: `/audio/${audioKey(w.en)}.mp3`, img: base?.imageUrl || null, ...hebrewOptions(w, words) };
     });
     const rows = items.map((it) => `
           <tr>
             <td class="col-img">${it.img ? `<img src="${it.img}" alt="${escapeHtml(it.en)}" width="56" height="56" loading="lazy" />` : ''}</td>
-            <td class="col-en" lang="en" dir="ltr">${escapeHtml(it.en)}${it.ex ? `<span class="ex">${escapeHtml(it.ex)}</span>` : ''}</td>
+            <td class="col-en" lang="en" dir="ltr">${escapeHtml(it.en)}${it.chip ? ` <span class="chip ${it.chip.cls}" lang="he" dir="rtl">${escapeHtml(it.chip.label)}</span>` : ''}${it.ex ? `<span class="ex">${escapeHtml(it.ex)}</span>` : ''}</td>
             <td class="col-say"><button type="button" class="say" data-say="${it.audio}" aria-label="השמעה: ${escapeHtml(it.en)}">🔊</button></td>
             <td class="col-he">${escapeHtml(it.he)}</td>
           </tr>`).join('');
@@ -144,28 +113,22 @@ ${body}
           <div class="fc-he">${escapeHtml(it.he)}</div>
         </div>`).join('');
     const pageUrl = encodeURIComponent(`${SITE}${path}`);
-    const shareText = encodeURIComponent(`${unitName} — מילים באנגלית עם הגייה ותרגול`);
-    const faqPairs = [
-      [`אילו מילים יש ב-${unitName}?`, `ב-${unitName} יש ${u.words.length} מילים, למשל: ${u.words.slice(0, 8).map((w) => `${w.en} (${w.he})`).join(', ')}. הרשימה המלאה עם הגייה ותרגום נמצאת בטבלה בעמוד.`],
-      ['איך מתרגלים את המילים?', 'לוחצים על 🔊 כדי לשמוע כל מילה, ואז בוחרים תרגול: "שומעים ובוחרים" — שומעים מילה באנגלית ובוחרים את הפירוש בעברית; "כותבים מה ששומעים" — מאייתים את המילה; ו"הכתבה" — 10 מילים בקול, כותבים במחברת ובודקים מול הרשימה. אפשר גם להדפיס כרטיסיות.'],
-      ['האם זה בחינם?', 'כן. בלי הרשמה, בלי פרסומות ובלי להוריד אפליקציה — עובד בדפדפן במחשב, בטאבלט ובטלפון.'],
-      [`האם האתר קשור להוצאת ${book.publisher}?`, `לא. Children Do English אינו קשור להוצאה. אנחנו מציגים רק את רשימת המילים לתרגול, בלי תרגילים, קטעים או מבחנים מהספר.`],
-    ];
+    const shareText = encodeURIComponent(shareTitle);
     const body = `
-  <nav class="breadcrumb" aria-label="breadcrumb"><a href="/he/">עברית</a> › <a href="/units/">יחידות לימוד</a> › <a href="/units/${u.book}/">${escapeHtml(book.name)}</a> › Unit ${u.unit}</nav>
+  <nav class="breadcrumb" aria-label="breadcrumb">${navHtml}</nav>
   <header class="hero">
-    <h1><span lang="en" dir="ltr">${escapeHtml(fullName)}</span> – מילים באנגלית עם הגייה, תרגום ומשחקים</h1>
-    <p class="answer">כל ${u.words.length} המילים של היחידה עם הגייה באנגלית ותרגום לעברית${u.grade ? ` (כיתה ${escapeHtml(u.grade)})` : ''}. לוחצים 🔊 כדי לשמוע, ואז מתרגלים למטה.</p>
+    <h1>${h1Html}</h1>
+    <p class="answer">${escapeHtml(answer)}</p>
   </header>
   <main class="container">
     <section class="section" aria-labelledby="words-h">
-      <h2 id="words-h" class="section-title">המילים של היחידה</h2>
+      <h2 id="words-h" class="section-title">${escapeHtml(listHeading)}</h2>
       <table class="words">
         <thead><tr><th scope="col"><span class="sr">תמונה</span></th><th scope="col">English</th><th scope="col"><span class="sr">השמעה</span></th><th scope="col">עברית</th></tr></thead>
         <tbody>${rows}
         </tbody>
       </table>
-      ${u.source ? `<p class="aligned">הרשימה תואמת לרשימת המילים של <span lang="en" dir="ltr">${escapeHtml(unitName)}</span>. התרגום לעברית, משפטי הדוגמה, ההקלטות והתמונות הם של <span lang="en" dir="ltr">Children Do English</span>.</p>` : ''}
+      ${afterTable}
     </section>
     <section class="section" aria-labelledby="practice-h">
       <h2 id="practice-h" class="section-title">תרגול</h2>
@@ -174,7 +137,7 @@ ${body}
         <button type="button" class="mode" data-mode="spell" aria-pressed="false">✏️ כותבים מה ששומעים</button>
         <button type="button" class="mode" data-mode="dict" aria-pressed="false">📝 הכתבה</button>
       </div>
-      <div id="practice" class="practice" data-unit="${u.book}-${u.unit}">
+      <div id="practice" class="practice" data-unit="${practiceKey}">
         <noscript><p>התרגול צריך JavaScript. אפשר בינתיים ללמוד מהטבלה ומהכרטיסיות.</p></noscript>
       </div>
       <p id="practice-live" class="sr" aria-live="polite"></p>
@@ -194,7 +157,7 @@ ${body}
         <button type="button" class="print-btn" data-sheet="bingo">🎲 הדפסת כרטיסי בינגו</button>
       </p>
       <p class="center sheet-row"><button type="button" class="print-btn" data-sheet="search">🔎 הדפסת תפזורת מילים (עם דף פתרון)</button></p>
-      <p class="center sheet-hint">בכל הדפסה נוצרים כרטיסים ותפזורת חדשים מהמילים של היחידה, כולל רשימת קריאה למורה.</p>
+      <p class="center sheet-hint">בכל הדפסה נוצרים כרטיסים ותפזורת חדשים מהמילים שבעמוד, כולל רשימת קריאה למורה.</p>
     </section>
     <section class="section share" aria-labelledby="share-h">
       <h2 id="share-h" class="section-title">שיתוף עם הכיתה</h2>
@@ -211,19 +174,83 @@ ${body}
         <div class="faq-item"><h3>${escapeHtml(q)}</h3><p>${escapeHtml(a)}</p></div>`).join('')}
       </div>
     </section>
-    <p class="center more"><a class="cta" href="/?lang=he&amp;utm_source=seo&amp;utm_medium=unit&amp;utm_content=${u.book}-${u.unit}">עוד מילים ומשחקים באפליקציה ←</a></p>
+    <p class="center more"><a class="cta" href="/?lang=he&amp;utm_source=seo&amp;${ctaUtm}">עוד מילים ומשחקים באפליקציה ←</a></p>
   </main>
-  <div id="sheets-out" data-name="${escapeHtml(unitName)}" aria-hidden="true"></div>
+  <div id="sheets-out" data-name="${escapeHtml(sheetsName)}" aria-hidden="true"></div>
   <script defer src="/unit-practice.js"></script>
   <script defer src="/print-btn.js"></script>
   <script defer src="/unit-sheets.js"></script>`;
-    const dir = join(distDir, 'units', u.book, `unit-${u.unit}`);
     mkdirSync(dir, { recursive: true });
-    writePage(join(dir, 'index.html'), shell({
-      path, title, description, test,
-      schemas: [crumbs([['עברית', '/he/'], ['יחידות לימוד', '/units/'], [book.name, `/units/${u.book}/`], [`Unit ${u.unit}`, path]]), faq(faqPairs)],
-      body,
-    }));
+    writePage(join(dir, 'index.html'), shell({ path, title, description, test, footerNote, schemas: [crumbs(crumbItems), faq(faqPairs)], body }));
+  }
+
+  return { byId, shell, crumbs, faq, setPage };
+}
+
+// chipFor(word) → optional { label, cls } shown by each word (the Band I level).
+export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml, WORDS, collides, BOOKS, UNITS, chipFor = () => null }) {
+  const kit = wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides });
+  const { byId, crumbs } = kit;
+  const isTest = (u) => !!(u.test || BOOKS[u.book]?.test);
+
+  // --- validate the data before writing anything ---
+  for (const u of UNITS) {
+    const where = `units.js ${u.book} unit ${u.unit}`;
+    if (!BOOKS[u.book]) throw new Error(`${where}: unknown book '${u.book}'`);
+    if (!Number.isInteger(u.unit) || u.unit < 1) throw new Error(`${where}: unit must be a positive integer`);
+    if (!Array.isArray(u.words) || u.words.length < 4) throw new Error(`${where}: needs at least 4 words`);
+    // Every live list must be re-checkable against the public source it came from.
+    if (!isTest(u) && !/^https:\/\/\S+$/.test(u.source || '')) throw new Error(`${where}: needs source (the public word-list URL)`);
+    const seen = new Set();
+    for (const w of u.words) {
+      if (!w.en?.trim() || !w.he?.trim()) throw new Error(`${where}: every word needs en + he (${JSON.stringify(w)})`);
+      if (seen.has(w.en.toLowerCase())) throw new Error(`${where}: duplicate word '${w.en}'`);
+      seen.add(w.en.toLowerCase());
+      if (w.ex !== undefined && !(typeof w.ex === 'string' && w.ex.trim())) throw new Error(`${where}: ex must be a non-empty sentence (${w.en})`);
+      if (w.wordId && !byId.has(w.wordId)) throw new Error(`${where}: wordId '${w.wordId}' is not in words.js`);
+      if (!existsSync(join(publicDir, 'audio', `${audioKey(w.en)}.mp3`))) {
+        throw new Error(`${where}: no audio for '${w.en}' — render public/audio/${audioKey(w.en)}.mp3 (Piper + whisper check) first`);
+      }
+    }
+  }
+
+  const publishers = [...new Set(Object.values(BOOKS).map((b) => b.publisher).filter(Boolean))].join(' / ');
+  const footerNote = `האתר אינו קשור להוצאת ${publishers} ואינו מטעמה. רשימות המילים משמשות לתרגול בלבד; תרגילים, קטעי קריאה ומבחנים מהספר אינם מועתקים לכאן.`;
+  const shell = (o) => kit.shell({ ...o, footerNote });
+  const sitemapUrls = [];
+
+  // --- unit pages ---
+  const books = Object.keys(BOOKS);
+  const liveUnitsOf = (b) => UNITS.filter((u) => u.book === b && !isTest(u));
+  for (const u of UNITS) {
+    const book = BOOKS[u.book];
+    const test = isTest(u);
+    const path = `/units/${u.book}/unit-${u.unit}/`;
+    const unitName = `${book.name} Unit ${u.unit}`;
+    const fullName = u.title ? `${unitName}: ${u.title}` : unitName;
+    const sample = u.words.slice(0, 6).map((w) => w.en).join(', ');
+    kit.setPage({
+      dir: join(distDir, 'units', u.book, `unit-${u.unit}`), path, test, footerNote,
+      title: `${fullName} – מילים באנגלית עם הגייה, תרגום ומשחקים`,
+      description: `כל ${u.words.length} המילים של ${unitName}: הגייה באנגלית, תרגום לעברית ומשחקי תרגול — ${sample}… חינם, בלי הרשמה.`,
+      crumbItems: [['עברית', '/he/'], ['יחידות לימוד', '/units/'], [book.name, `/units/${u.book}/`], [`Unit ${u.unit}`, path]],
+      navHtml: `<a href="/he/">עברית</a> › <a href="/units/">יחידות לימוד</a> › <a href="/units/${u.book}/">${escapeHtml(book.name)}</a> › Unit ${u.unit}`,
+      h1Html: `<span lang="en" dir="ltr">${escapeHtml(fullName)}</span> – מילים באנגלית עם הגייה, תרגום ומשחקים`,
+      answer: `כל ${u.words.length} המילים של היחידה עם הגייה באנגלית ותרגום לעברית${u.grade ? ` (כיתה ${u.grade})` : ''}. לוחצים 🔊 כדי לשמוע, ואז מתרגלים למטה.`,
+      listHeading: 'המילים של היחידה',
+      words: u.words.map((w) => ({ ...w, chip: chipFor(w) })),
+      afterTable: u.source ? `<p class="aligned">הרשימה תואמת לרשימת המילים של <span lang="en" dir="ltr">${escapeHtml(unitName)}</span>. התרגום לעברית, משפטי הדוגמה, ההקלטות והתמונות הם של <span lang="en" dir="ltr">Children Do English</span>.</p>` : '',
+      practiceKey: `${u.book}-${u.unit}`,
+      faqPairs: [
+        [`אילו מילים יש ב-${unitName}?`, `ב-${unitName} יש ${u.words.length} מילים, למשל: ${u.words.slice(0, 8).map((w) => `${w.en} (${w.he})`).join(', ')}. הרשימה המלאה עם הגייה ותרגום נמצאת בטבלה בעמוד.`],
+        ['איך מתרגלים את המילים?', 'לוחצים על 🔊 כדי לשמוע כל מילה, ואז בוחרים תרגול: "שומעים ובוחרים" — שומעים מילה באנגלית ובוחרים את הפירוש בעברית; "כותבים מה ששומעים" — מאייתים את המילה; ו"הכתבה" — 10 מילים בקול, כותבים במחברת ובודקים מול הרשימה. אפשר גם להדפיס כרטיסיות.'],
+        ['האם זה בחינם?', 'כן. בלי הרשמה, בלי פרסומות ובלי להוריד אפליקציה — עובד בדפדפן במחשב, בטאבלט ובטלפון.'],
+        [`האם האתר קשור להוצאת ${book.publisher}?`, `לא. Children Do English אינו קשור להוצאה. אנחנו מציגים רק את רשימת המילים לתרגול, בלי תרגילים, קטעים או מבחנים מהספר.`],
+      ],
+      sheetsName: unitName,
+      shareTitle: `${unitName} — מילים באנגלית עם הגייה ותרגול`,
+      ctaUtm: `utm_medium=unit&amp;utm_content=${u.book}-${u.unit}`,
+    });
     if (!test) sitemapUrls.push(path);
   }
 
@@ -298,6 +325,8 @@ const UNIT_CSS = `
     .col-en { font-weight: 800; font-size: 1.1rem; text-align: left; }
     .col-en .ex { display: block; font-weight: 400; font-size: 0.85rem; color: #475569; }
     .aligned { font-size: 0.85rem; color: #475569; margin-top: 0.6rem; text-align: center; }
+    .chip { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 0.05rem 0.45rem; border-radius: 1rem; vertical-align: middle; margin: 0 0.3rem; white-space: nowrap; }
+    .chip-pre { background: #e0f2fe; color: #075985; } .chip-c1 { background: #dcfce7; color: #166534; } .chip-c2 { background: #fef9c3; color: #854d0e; } .chip-extra { background: #f3e8ff; color: #6b21a8; }
     .col-say { width: 52px; text-align: center; }
     .say { font-size: 1.3rem; background: #eef2ff; border: 0; border-radius: 50%; width: 44px; height: 44px; cursor: pointer; }
     .say:focus-visible, .mode:focus-visible, .opt:focus-visible, .print-btn:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
