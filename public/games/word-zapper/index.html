@@ -50,6 +50,10 @@
   #topbar.show{display:flex;}
   @media(max-width:600px){ #topbar{padding-top:52px;} }   /* HUD pills clear the top-left home pill on phones */
   .hudrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  .variants{display:flex;flex-direction:column;gap:8px;align-items:center;margin:4px 0 6px;max-width:560px;}
+  .vrow{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;}
+  .vchip{min-height:40px;padding:7px 12px;border-radius:999px;border:2px solid rgba(99,102,241,.45);background:rgba(255,255,255,.92);color:#312e81;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;}
+  .vchip.on{background:#4f46e5;border-color:#4f46e5;color:#fff;}
   .pill{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,.92);
     border:1.5px solid var(--line);font-size:14px;font-weight:800;color:var(--ink);box-shadow:0 2px 8px rgba(79,70,229,.12);}
   #mutePill{pointer-events:auto;cursor:pointer;min-width:48px;min-height:38px;justify-content:center;}

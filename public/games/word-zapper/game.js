@@ -26,51 +26,51 @@ const RM=(()=>{ try{ return matchMedia('(prefers-reduced-motion:reduce)').matche
    grp: visually-confusable group — two words sharing a grp never fall together. */
 const WORDS=[
   /* animals */
-  {id:'cat',en:'cat',he:'חתול',es:'gato',lv:1},{id:'dog',en:'dog',he:'כלב',es:'perro',lv:1},{id:'fish',en:'fish',he:'דג',es:'pez',lv:1},
-  {id:'bird',en:'bird',he:'ציפור',es:'pájaro',lv:1,grp:'bird'},{id:'duck',en:'duck',he:'ברווז',es:'pato',lv:1,grp:'bird'},
-  {id:'rabbit',en:'rabbit',he:'ארנב',es:'conejo',lv:1},{id:'horse',en:'horse',he:'סוס',es:'caballo',lv:1},{id:'cow',en:'cow',he:'פרה',es:'vaca',lv:1},
-  {id:'pig',en:'pig',he:'חזיר',es:'cerdo',lv:1},{id:'bee',en:'bee',he:'דבורה',es:'abeja',lv:1},{id:'mouse',en:'mouse',he:'עכבר',es:'ratón',lv:1},
-  {id:'frog',en:'frog',he:'צפרדע',es:'rana',lv:1},{id:'bear',en:'bear',he:'דוב',es:'oso',lv:1},
-  {id:'elephant',en:'elephant',he:'פיל',es:'elefante',lv:2},{id:'penguin',en:'penguin',he:'פינגווין',es:'pingüino',lv:2},
-  {id:'giraffe',en:'giraffe',he:"ג'ירפה",es:'jirafa',lv:2},{id:'lion',en:'lion',he:'אריה',es:'león',lv:2},{id:'turtle',en:'turtle',he:'צב',es:'tortuga',lv:2},
+  {id:'cat',en:'cat',he:'חתול',es:'gato',lv:1,topic:'animals'},{id:'dog',en:'dog',he:'כלב',es:'perro',lv:1,topic:'animals'},{id:'fish',en:'fish',he:'דג',es:'pez',lv:1,topic:'animals'},
+  {id:'bird',en:'bird',he:'ציפור',es:'pájaro',lv:1,grp:'bird',topic:'animals'},{id:'duck',en:'duck',he:'ברווז',es:'pato',lv:1,grp:'bird',topic:'animals'},
+  {id:'rabbit',en:'rabbit',he:'ארנב',es:'conejo',lv:1,topic:'animals'},{id:'horse',en:'horse',he:'סוס',es:'caballo',lv:1,topic:'animals'},{id:'cow',en:'cow',he:'פרה',es:'vaca',lv:1,topic:'animals'},
+  {id:'pig',en:'pig',he:'חזיר',es:'cerdo',lv:1,topic:'animals'},{id:'bee',en:'bee',he:'דבורה',es:'abeja',lv:1,topic:'animals'},{id:'mouse',en:'mouse',he:'עכבר',es:'ratón',lv:1,topic:'animals'},
+  {id:'frog',en:'frog',he:'צפרדע',es:'rana',lv:1,topic:'animals'},{id:'bear',en:'bear',he:'דוב',es:'oso',lv:1,topic:'animals'},
+  {id:'elephant',en:'elephant',he:'פיל',es:'elefante',lv:2,topic:'animals'},{id:'penguin',en:'penguin',he:'פינגווין',es:'pingüino',lv:2,topic:'animals'},
+  {id:'giraffe',en:'giraffe',he:"ג'ירפה",es:'jirafa',lv:2,topic:'animals'},{id:'lion',en:'lion',he:'אריה',es:'león',lv:2,topic:'animals'},{id:'turtle',en:'turtle',he:'צב',es:'tortuga',lv:2,topic:'animals'},
   /* food */
-  {id:'apple',en:'apple',he:'תפוח',es:'manzana',lv:1},{id:'banana',en:'banana',he:'בננה',es:'banana',lv:1},{id:'bread',en:'bread',he:'לחם',es:'pan',lv:1},
-  {id:'milk',en:'milk',he:'חלב',es:'leche',lv:1},{id:'egg',en:'egg',he:'ביצה',es:'huevo',lv:1},{id:'orange',en:'orange',he:'תפוז',es:'naranja',lv:1},
-  {id:'cake',en:'cake',he:'עוגה',es:'pastel',lv:1},{id:'cheese',en:'cheese',he:'גבינה',es:'queso',lv:1},
-  {id:'pizza',en:'pizza',he:'פיצה',es:'pizza',lv:2},{id:'watermelon',en:'watermelon',he:'אבטיח',es:'sandía',lv:2},
-  {id:'carrot',en:'carrot',he:'גזר',es:'zanahoria',lv:2},{id:'icecream',en:'ice cream',he:'גלידה',es:'helado',lv:2},
-  {id:'strawberry',en:'strawberry',he:'תות',es:'fresa',lv:3},
+  {id:'apple',en:'apple',he:'תפוח',es:'manzana',lv:1,topic:'food'},{id:'banana',en:'banana',he:'בננה',es:'banana',lv:1,topic:'food'},{id:'bread',en:'bread',he:'לחם',es:'pan',lv:1,topic:'food'},
+  {id:'milk',en:'milk',he:'חלב',es:'leche',lv:1,topic:'food'},{id:'egg',en:'egg',he:'ביצה',es:'huevo',lv:1,topic:'food'},{id:'orange',en:'orange',he:'תפוז',es:'naranja',lv:1,topic:'food'},
+  {id:'cake',en:'cake',he:'עוגה',es:'pastel',lv:1,topic:'food'},{id:'cheese',en:'cheese',he:'גבינה',es:'queso',lv:1,topic:'food'},
+  {id:'pizza',en:'pizza',he:'פיצה',es:'pizza',lv:2,topic:'food'},{id:'watermelon',en:'watermelon',he:'אבטיח',es:'sandía',lv:2,topic:'food'},
+  {id:'carrot',en:'carrot',he:'גזר',es:'zanahoria',lv:2,topic:'food'},{id:'icecream',en:'ice cream',he:'גלידה',es:'helado',lv:2,topic:'food'},
+  {id:'strawberry',en:'strawberry',he:'תות',es:'fresa',lv:3,topic:'food'},
   /* transport */
-  {id:'car',en:'car',he:'מכונית',es:'carro',lv:1},{id:'bus',en:'bus',he:'אוטובוס',es:'autobús',lv:1},{id:'bicycle',en:'bicycle',he:'אופניים',es:'bicicleta',lv:1},
-  {id:'airplane',en:'airplane',he:'מטוס',es:'avión',lv:1},{id:'train',en:'train',he:'רכבת',es:'tren',lv:1},{id:'truck',en:'truck',he:'משאית',es:'camión',lv:1},
-  {id:'ship',en:'ship',he:'ספינה',es:'barco',lv:1,grp:'boat'},{id:'boat',en:'boat',he:'סירה',es:'bote',lv:2,grp:'boat'},
-  {id:'helicopter',en:'helicopter',he:'מסוק',es:'helicóptero',lv:2},{id:'rocket',en:'rocket',he:'רקטה',es:'cohete',lv:3},
+  {id:'car',en:'car',he:'מכונית',es:'carro',lv:1,topic:'transport'},{id:'bus',en:'bus',he:'אוטובוס',es:'autobús',lv:1,topic:'transport'},{id:'bicycle',en:'bicycle',he:'אופניים',es:'bicicleta',lv:1,topic:'transport'},
+  {id:'airplane',en:'airplane',he:'מטוס',es:'avión',lv:1,topic:'transport'},{id:'train',en:'train',he:'רכבת',es:'tren',lv:1,topic:'transport'},{id:'truck',en:'truck',he:'משאית',es:'camión',lv:1,topic:'transport'},
+  {id:'ship',en:'ship',he:'ספינה',es:'barco',lv:1,grp:'boat',topic:'transport'},{id:'boat',en:'boat',he:'סירה',es:'bote',lv:2,grp:'boat',topic:'transport'},
+  {id:'helicopter',en:'helicopter',he:'מסוק',es:'helicóptero',lv:2,topic:'transport'},{id:'rocket',en:'rocket',he:'רקטה',es:'cohete',lv:3,topic:'transport'},
   /* home */
-  {id:'house',en:'house',he:'בית',es:'casa',lv:1},{id:'bed',en:'bed',he:'מיטה',es:'cama',lv:1},{id:'chair',en:'chair',he:'כיסא',es:'silla',lv:1},
-  {id:'table',en:'table',he:'שולחן',es:'mesa',lv:1},{id:'door',en:'door',he:'דלת',es:'puerta',lv:1},
-  {id:'window',en:'window',he:'חלון',es:'ventana',lv:2},{id:'lamp',en:'lamp',he:'מנורה',es:'lámpara',lv:2},{id:'clock',en:'clock',he:'שעון',es:'reloj',lv:2},
+  {id:'house',en:'house',he:'בית',es:'casa',lv:1,topic:'things'},{id:'bed',en:'bed',he:'מיטה',es:'cama',lv:1,topic:'things'},{id:'chair',en:'chair',he:'כיסא',es:'silla',lv:1,topic:'things'},
+  {id:'table',en:'table',he:'שולחן',es:'mesa',lv:1,topic:'things'},{id:'door',en:'door',he:'דלת',es:'puerta',lv:1,topic:'things'},
+  {id:'window',en:'window',he:'חלון',es:'ventana',lv:2,topic:'things'},{id:'lamp',en:'lamp',he:'מנורה',es:'lámpara',lv:2,topic:'things'},{id:'clock',en:'clock',he:'שעון',es:'reloj',lv:2,topic:'things'},
   /* colors — one color card on screen at a time (they all look alike in shape) */
-  {id:'red',en:'red',he:'אדום',es:'rojo',lv:1,grp:'color'},{id:'blue',en:'blue',he:'כחול',es:'azul',lv:1,grp:'color'},
-  {id:'green',en:'green',he:'ירוק',es:'verde',lv:1,grp:'color'},{id:'yellow',en:'yellow',he:'צהוב',es:'amarillo',lv:1,grp:'color'},
-  {id:'black',en:'black',he:'שחור',es:'negro',lv:1,grp:'color'},{id:'white',en:'white',he:'לבן',es:'blanco',lv:1,grp:'color'},
-  {id:'purple',en:'purple',he:'סגול',es:'morado',lv:2,grp:'color'},{id:'pink',en:'pink',he:'ורוד',es:'rosado',lv:2,grp:'color'},
+  {id:'red',en:'red',he:'אדום',es:'rojo',lv:1,grp:'color',topic:'nature'},{id:'blue',en:'blue',he:'כחול',es:'azul',lv:1,grp:'color',topic:'nature'},
+  {id:'green',en:'green',he:'ירוק',es:'verde',lv:1,grp:'color',topic:'nature'},{id:'yellow',en:'yellow',he:'צהוב',es:'amarillo',lv:1,grp:'color',topic:'nature'},
+  {id:'black',en:'black',he:'שחור',es:'negro',lv:1,grp:'color',topic:'nature'},{id:'white',en:'white',he:'לבן',es:'blanco',lv:1,grp:'color',topic:'nature'},
+  {id:'purple',en:'purple',he:'סגול',es:'morado',lv:2,grp:'color',topic:'nature'},{id:'pink',en:'pink',he:'ורוד',es:'rosado',lv:2,grp:'color',topic:'nature'},
   /* nature */
-  {id:'sun',en:'sun',he:'שמש',es:'sol',lv:1,grp:'sky'},{id:'star',en:'star',he:'כוכב',es:'estrella',lv:1,grp:'sky'},
-  {id:'tree',en:'tree',he:'עץ',es:'árbol',lv:1},{id:'flower',en:'flower',he:'פרח',es:'flor',lv:1},{id:'rain',en:'rain',he:'גשם',es:'lluvia',lv:1},
-  {id:'moon',en:'moon',he:'ירח',es:'luna',lv:1},{id:'rainbow',en:'rainbow',he:'קשת בענן',es:'arcoíris',lv:2},
+  {id:'sun',en:'sun',he:'שמש',es:'sol',lv:1,grp:'sky',topic:'nature'},{id:'star',en:'star',he:'כוכב',es:'estrella',lv:1,grp:'sky',topic:'nature'},
+  {id:'tree',en:'tree',he:'עץ',es:'árbol',lv:1,topic:'nature'},{id:'flower',en:'flower',he:'פרח',es:'flor',lv:1,topic:'nature'},{id:'rain',en:'rain',he:'גשם',es:'lluvia',lv:1,topic:'nature'},
+  {id:'moon',en:'moon',he:'ירח',es:'luna',lv:1,topic:'nature'},{id:'rainbow',en:'rainbow',he:'קשת בענן',es:'arcoíris',lv:2,topic:'nature'},
   /* clothing */
-  {id:'hat',en:'hat',he:'כובע',es:'sombrero',lv:1},{id:'shirt',en:'shirt',he:'חולצה',es:'camisa',lv:1},{id:'dress',en:'dress',he:'שמלה',es:'vestido',lv:1},
-  {id:'shoes',en:'shoes',he:'נעליים',es:'zapatos',lv:1,grp:'feet'},{id:'socks',en:'socks',he:'גרביים',es:'calcetines',lv:1,grp:'feet'},
-  {id:'umbrella',en:'umbrella',he:'מטריה',es:'paraguas',lv:3},
+  {id:'hat',en:'hat',he:'כובע',es:'sombrero',lv:1,topic:'things'},{id:'shirt',en:'shirt',he:'חולצה',es:'camisa',lv:1,topic:'things'},{id:'dress',en:'dress',he:'שמלה',es:'vestido',lv:1,topic:'things'},
+  {id:'shoes',en:'shoes',he:'נעליים',es:'zapatos',lv:1,grp:'feet',topic:'things'},{id:'socks',en:'socks',he:'גרביים',es:'calcetines',lv:1,grp:'feet',topic:'things'},
+  {id:'umbrella',en:'umbrella',he:'מטריה',es:'paraguas',lv:3,topic:'things'},
   /* school */
-  {id:'book',en:'book',he:'ספר',es:'libro',lv:1},{id:'ruler',en:'ruler',he:'סרגל',es:'regla',lv:1},
-  {id:'pen',en:'pen',he:'עט',es:'bolígrafo',lv:1,grp:'pen'},{id:'pencil',en:'pencil',he:'עיפרון',es:'lápiz',lv:2,grp:'pen'},
+  {id:'book',en:'book',he:'ספר',es:'libro',lv:1,topic:'things'},{id:'ruler',en:'ruler',he:'סרגל',es:'regla',lv:1,topic:'things'},
+  {id:'pen',en:'pen',he:'עט',es:'bolígrafo',lv:1,grp:'pen',topic:'things'},{id:'pencil',en:'pencil',he:'עיפרון',es:'lápiz',lv:2,grp:'pen',topic:'things'},
   /* toys */
-  {id:'kite',en:'kite',he:'עפיפון',es:'cometa',lv:1},{id:'doll',en:'doll',he:'בובה',es:'muñeca',lv:1},
-  {id:'balloon',en:'balloon',he:'בלון',es:'globo',lv:1,grp:'ball'},{id:'robot',en:'robot',he:'רובוט',es:'robot',lv:2},
+  {id:'kite',en:'kite',he:'עפיפון',es:'cometa',lv:1,topic:'things'},{id:'doll',en:'doll',he:'בובה',es:'muñeca',lv:1,topic:'things'},
+  {id:'balloon',en:'balloon',he:'בלון',es:'globo',lv:1,grp:'ball',topic:'things'},{id:'robot',en:'robot',he:'רובוט',es:'robot',lv:2,topic:'things'},
   /* everyday */
-  {id:'cup',en:'cup',he:'כוס',es:'taza',lv:1},{id:'key',en:'key',he:'מפתח',es:'llave',lv:1},{id:'phone',en:'phone',he:'טלפון',es:'teléfono',lv:1},
-  {id:'ball',en:'ball',he:'כדור',es:'pelota',lv:1,grp:'ball'},
+  {id:'cup',en:'cup',he:'כוס',es:'taza',lv:1,topic:'things'},{id:'key',en:'key',he:'מפתח',es:'llave',lv:1,topic:'things'},{id:'phone',en:'phone',he:'טלפון',es:'teléfono',lv:1,topic:'things'},
+  {id:'ball',en:'ball',he:'כדור',es:'pelota',lv:1,grp:'ball',topic:'things'},
 ];
 
 /* Practice-ladder scoping (2026-10-07): ?words=id,id,... restricts the pool to
@@ -91,6 +91,27 @@ const WORDS=[
   } catch(e) { /* never break the game */ }
 })();
 
+
+/* ---------------- variants (C1, 2026-10-29) ----------------
+   topic: all | animals | food | transport | things | nature — the pool for the run.
+   mode:  pics  = hear/read the word → zap its PHOTO (the original game)
+          words = cards show English WORDS; the cue is the meaning in the
+                  interface language (he/es) or the spoken word (en) → reading.
+   From the menu chips or ?topic=&mode= (deep links). Counted as zv @ <mode>-<topic>. */
+const TOPICS=['all','animals','food','transport','things','nature'];
+const V={ topic:'all', mode:'pics' };
+(function(){ try{
+  const q=new URLSearchParams(location.search);
+  if(TOPICS.includes(q.get('topic'))) V.topic=q.get('topic');
+  if(q.get('mode')==='words') V.mode='words';
+}catch(e){} })();
+let POOL=WORDS;
+function applyVariant(){
+  const p=V.topic==='all'?WORDS:WORDS.filter(w=>w.topic===V.topic);
+  POOL=p.length>=6?p:WORDS;
+}
+applyVariant();
+const WORDMODE=()=>V.mode==='words';
 
 /* ---------------- image loading (real site photos, lazy by level) ---------------- */
 for(const w of WORDS){ w.img=null; w.ready=false; w.broken=false; }
@@ -186,14 +207,16 @@ function onScreenGrps(){ const g=new Set(); for(const s of S.sprites) if(s.word.
 function pickWord(opts){
   const {asTarget}=opts||{};
   const maxLv=levelsForTier(S.tier), ids=onScreenIds(), grps=onScreenGrps();
+  /* word cards need no photo; a photo card needs its image loaded */
+  const ok=w=>(WORDMODE()||w.ready)&&!w.broken;
   /* progressively relax: strict (level+grp) → ignore level → ignore grp */
   const passes=[
-    w=>w.ready&&!w.broken&&w.lv<=maxLv&&!ids.has(w.id)&&(!w.grp||!grps.has(w.grp))&&(!asTarget||w.id!==lastTargetId),
-    w=>w.ready&&!w.broken&&!ids.has(w.id)&&(!w.grp||!grps.has(w.grp))&&(!asTarget||w.id!==lastTargetId),
-    w=>w.ready&&!w.broken&&!ids.has(w.id)&&(!asTarget||w.id!==lastTargetId),
+    w=>ok(w)&&w.lv<=maxLv&&!ids.has(w.id)&&(!w.grp||!grps.has(w.grp))&&(!asTarget||w.id!==lastTargetId),
+    w=>ok(w)&&!ids.has(w.id)&&(!w.grp||!grps.has(w.grp))&&(!asTarget||w.id!==lastTargetId),
+    w=>ok(w)&&!ids.has(w.id)&&(!asTarget||w.id!==lastTargetId),
   ];
   for(const pass of passes){
-    const c=WORDS.filter(pass);
+    const c=POOL.filter(pass);
     if(c.length) return c[Math.floor(Math.random()*c.length)];
   }
   return null;
@@ -222,8 +245,15 @@ function spawnSprite(word,isTarget){
 function announce(word){
   S.target=word; S.targetAt=performance.now(); lastTargetId=word.id;
   const en=$('targetEn'), he=$('targetHe');
+  const lang=window.CDE_LANG||'en', meaning=(window.CDE_GLOSS?CDE_GLOSS(word):word.he);
+  if(WORDMODE()){
+    /* reading: never show the English — he/es see the meaning, en hears it */
+    if(lang==='en'){ if(en) en.textContent='🔊 ?'; if(he) he.textContent=L10N('findWord','Find the word you hear'); speak(word.en); }
+    else { if(en) en.textContent=meaning; if(he) he.textContent=L10N('findWord','Find the word you hear'); }
+    return;
+  }
   if(en) en.textContent=word.en;
-  if(he) he.textContent=(window.CDE_GLOSS?CDE_GLOSS(word):word.he);
+  if(he) he.textContent=meaning;
   speak(word.en);
 }
 function newRound(){
@@ -263,6 +293,7 @@ function zap(sp){
   S.score+=pts; S.zapped++;
   if(S.score>S.best){ S.best=S.score; writeBest(S.best); }
   S.sprites=S.sprites.filter(s=>s!==sp);
+  if(WORDMODE()) speak(sp.word.en,true);          // reading mode: hear the word you found
   burst(sp.x,sp.y,26,'#6366f1',5,0.9);
   burst(sp.x,sp.y,12,'#f59e0b',4,0.7);
   S.parts.push({txt:'+'+pts,x:sp.x,y:sp.y-sp.size/2-8,vx:0,vy:-46,life:0.9,max:0.9,color:'#f59e0b'});
@@ -296,12 +327,12 @@ cv.addEventListener('pointerdown',e=>{
 
 /* play-depth beacon (cde_learn channel) — same guards as land-beacon.js:
    automation (navigator.webdriver) and owner devices (cde_internal) never count */
-function learnBeacon(ev){
+function learnBeacon(ev,item){
   try{
     if(navigator.webdriver) return;
     if(localStorage.getItem('cde_internal')==='1') return;
     var l = 'en'; try { var sl = localStorage.getItem('cde_lang'); if (['he','es','ar'].indexOf(sl) >= 0) l = sl; } catch(e) {}
-    if(navigator.sendBeacon) navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:ev,i:'word-zapper'}], l:l}));
+    if(navigator.sendBeacon) navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:ev,i:item||'word-zapper'}], l:l}));
   }catch(e){}
 }
 learnBeacon('g_open'); /* per-game opens (cde_land only knows the 'games' class) */
@@ -398,6 +429,16 @@ function drawSprite(s){
   ctx.shadowColor='transparent'; ctx.shadowBlur=0; ctx.shadowOffsetY=0;
   ctx.strokeStyle=flash?'#ef4444':'rgba(99,102,241,.55)'; ctx.lineWidth=flash?4:2.5;
   roundRect(x,y,sz,sz,16); ctx.stroke();
+  /* word-card mode: the English word, sized to fit the card */
+  if(WORDMODE()){
+    const txt=s.word.en; let fs=Math.min(sz*0.34, 30);
+    ctx.font='900 '+fs+'px system-ui,-apple-system,sans-serif';
+    while(ctx.measureText(txt).width>sz-14 && fs>10){ fs-=1; ctx.font='900 '+fs+'px system-ui,-apple-system,sans-serif'; }
+    ctx.fillStyle=flash?'#ef4444':'#312e81'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(txt, s.x, s.y);
+    ctx.restore();
+    return;
+  }
   /* the photo, cover-cropped into the card */
   const im=s.word.img, pad=6;
   if(im&&s.word.ready){
@@ -447,6 +488,8 @@ function show(s){
   resize();
 }
 function start(){
+  applyVariant();
+  learnBeacon('zv', V.mode+'-'+V.topic);
   Object.assign(S,{ playing:true, sprites:[], parts:[], shake:0,
     score:0, shields:3, tier:1, streak:0, combo:0, fastStreak:0,
     speedMul:1, spawnT:0, spawnInt:2.6, target:null, targetAt:0, zapped:0 });
@@ -480,6 +523,8 @@ const WZ={
     get score(){ return S.score; }, get shields(){ return S.shields; },
     get tier(){ return S.tier; }, get spriteCount(){ return S.sprites.length; },
     get streak(){ return S.streak; },
+    get variant(){ return V.mode+'-'+V.topic; },
+    spriteTopics(){ return S.sprites.map(s=>s.word.topic); },
     targetWord(){ return S.target?S.target.id:null; },
     hasTargetSprite(){ return !!targetSprite(); },
     targetPos(){ const t=targetSprite(); return t?{x:t.x,y:t.y}:null; },
@@ -526,4 +571,24 @@ $('sayBtn').addEventListener('click',()=>WZ.say());
     clearTimeout(timer);
     timer=setTimeout(function(){armedUntil=0;pill.textContent=orig;pill.classList.remove('leave');},3000);
   });
+})();
+
+/* ---- variant chips on the menu (topic + picture/word cards) ---- */
+(function(){
+  var menu=document.getElementById('menu'), btn=document.getElementById('startBtn');
+  if(!menu||!btn) return;
+  var box=document.createElement('div'); box.className='variants';
+  function row(items, key, label){
+    var r=document.createElement('div'); r.className='vrow'; r.setAttribute('role','group'); r.setAttribute('aria-label',label);
+    items.forEach(function(it){
+      var b=document.createElement('button'); b.type='button'; b.className='vchip'+(V[key]===it[0]?' on':'');
+      b.dataset[key]=it[0]; b.setAttribute('aria-pressed',V[key]===it[0]?'true':'false'); b.textContent=it[1];
+      b.addEventListener('click',function(){ V[key]=it[0]; r.querySelectorAll('.vchip').forEach(function(x){ var on=x.dataset[key]===it[0]; x.classList.toggle('on',on); x.setAttribute('aria-pressed',on?'true':'false'); }); });
+      r.appendChild(b);
+    });
+    return r;
+  }
+  box.appendChild(row([['pics',L10N('modePics','🖼 Pictures')],['words',L10N('modeWords','🔤 Word cards')]],'mode',L10N('modeLabel','Cards')));
+  box.appendChild(row([['all',L10N('tAll','🌈 All')],['animals',L10N('tAnimals','🐾 Animals')],['food',L10N('tFood','🍎 Food')],['transport',L10N('tTransport','🚗 Transport')],['things',L10N('tThings','🏠 Things')],['nature',L10N('tNature','🌳 Colors & nature')]],'topic',L10N('topicLabel','Topic')));
+  menu.insertBefore(box, btn);
 })();
