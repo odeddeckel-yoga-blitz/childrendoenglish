@@ -10,8 +10,7 @@ import { isRTL, t, loadLocale } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
 import usePlayerManagement from './hooks/usePlayerManagement';
 import useInstallPrompt from './hooks/useInstallPrompt';
-import CookieConsent from './components/CookieConsent';
-import { needsConsentPrompt, setAnalyticsConsent, analytics } from './utils/analytics';
+import { analytics } from './utils/analytics';
 import { checkStreakReminder } from './utils/notifications';
 import { getDueWords } from './utils/spaced-repetition';
 import { filterByKnownLetters } from './utils/letterFilter';
@@ -124,7 +123,6 @@ export default function App() {
   const [soundEnabled, setSoundEnabled] = useState(() => isSoundEnabled());
 
   const [showProfilePicker, setShowProfilePicker] = useState(false);
-  const [showConsent, setShowConsent] = useState(() => needsConsentPrompt());
   const [learnWords, setLearnWords] = useState(null);
   const [checkWord, setCheckWord] = useState(null); // word-of-the-day check target
   const [sharedWords, setSharedWords] = useState(null);
@@ -1011,13 +1009,6 @@ export default function App() {
       <Suspense fallback={null}>
         <UpdatePrompt lang={lang} />
       </Suspense>
-      {showConsent && (
-        <CookieConsent
-          lang={lang}
-          onAccept={() => { setAnalyticsConsent(true); setShowConsent(false); }}
-          onDecline={() => { setAnalyticsConsent(false); setShowConsent(false); }}
-        />
-      )}
       <Suspense fallback={null}>
         <ProfilePicker
           open={showProfilePicker}

@@ -206,10 +206,6 @@ export default {
   shareTextPerfect: '¡Obtuve {{score}}/{{total}} en Children Do English! ¡Puntaje perfecto!',
   shareQuizTitle: 'Quiz de Inglés',
 
-  // Cookie consent
-  cookieConsent: 'Usamos Google Analytics para entender el uso de la app. Las analíticas se cargan solo después de tu consentimiento.',
-  accept: 'Aceptar',
-  decline: 'Rechazar',
 
   // Notifications
   enableReminders: 'Activar recordatorios de racha',
@@ -261,11 +257,11 @@ export default {
   privacyDataTitle: 'Qué datos recopilamos',
   privacyDataDesc: 'Children Do English no recopila información personal. No pedimos nombres ni ningún dato identificable. Durante la introducción se muestra un campo opcional de correo electrónico para los padres — si lo completas, se guarda solo en el almacenamiento local de tu navegador y nunca se envía a ningún servidor.',
   privacyCookieTitle: 'Cookies y rastreo',
-  privacyCookieDesc: 'Usamos Google Analytics para entender cómo se usa la app (vistas de página, uso de funciones, información básica del dispositivo). En la app, las analíticas se cargan solo después de dar tu consentimiento a través del aviso de cookies. En nuestras páginas de contenido estático (vocabulario, guías, tarjetas para imprimir), las analíticas funcionan en modo sin cookies — no se guarda ninguna cookie ni identificador a menos que hayas dado tu consentimiento, y si lo rechazaste, las analíticas no se cargan en absoluto. No usamos ningún servicio de publicidad.',
+  privacyCookieDesc: 'No usamos cookies ni servicios de publicidad. Para entender cómo se usa el sitio contamos las visitas con Vercel Web Analytics, que funciona sin cookies y no guarda ningún identificador en tu dispositivo, y guardamos totales anónimos (por ejemplo, cuántas respuestas fueron correctas para cada palabra, o cuántas veces se toca el botón de jugar de una página). Estos totales no contienen ninguna información sobre quién eres.',
   privacyStorageTitle: 'Qué se guarda en tu dispositivo',
   privacyStorageDesc: 'Tu progreso de aprendizaje (puntajes de quizzes, progreso de palabras, racha, insignias y preferencias como el modo oscuro y el sonido) se guarda en el almacenamiento local de tu navegador. Estos datos nunca salen de tu dispositivo y no se envían a ningún servidor. También guardamos la fecha de tu última visita para contar cuántas visitas son de regreso, como un total anónimo, sin ningún identificador y sin enviar la fecha.',
   privacyThirdPartyTitle: 'Servicios de terceros',
-  privacyThirdPartyDesc: 'La app usa Google Analytics para estadísticas de uso (se carga solo después de dar el consentimiento). Usamos Sentry para el monitoreo de errores en producción — puede recopilar reportes de errores, metadatos del navegador e información del dispositivo para ayudarnos a corregir errores y mejorar la estabilidad de la app (ver sentry.io/privacy). La síntesis de voz integrada del navegador puede conectarse al motor de voz de tu dispositivo para la pronunciación de las palabras. Todos los datos de palabras e imágenes vienen incluidos con la app.',
+  privacyThirdPartyDesc: 'Usamos Vercel Web Analytics (sin cookies ni identificadores) para contar visitas a las páginas. Usamos Sentry para el monitoreo de errores en producción — puede recopilar reportes de errores, metadatos del navegador e información del dispositivo para ayudarnos a corregir errores y mejorar la estabilidad de la app (ver sentry.io/privacy). La síntesis de voz integrada del navegador puede conectarse al motor de voz de tu dispositivo para la pronunciación de las palabras. Todos los datos de palabras e imágenes vienen incluidos con la app.',
   privacyChildrenTitle: 'Privacidad de los niños',
   privacyChildrenDesc: 'Esta app está diseñada para niños de 6 a 12 años. Como no recopilamos ni transmitimos ningún dato personal, no existe riesgo de que la información de los niños sea compartida o utilizada indebidamente.',
   privacyDeleteTitle: 'Eliminar tus datos',
@@ -449,7 +445,7 @@ export default {
   // Trust signals
   trustTitle: 'Diseñado para familias',
   trustNoAds: 'Sin anuncios ni rastreo',
-  trustNoAdsDesc: 'Cero anuncios. Analíticas solo con tu consentimiento. Solo aprendizaje.',
+  trustNoAdsDesc: 'Cero anuncios. Sin cookies ni rastreo. Solo aprendizaje.',
   trustOffline: 'Funciona sin conexión',
   trustOfflineDesc: 'Instálala una vez, úsala donde quieras — sin necesidad de internet.',
   trustProfiles: 'Múltiples perfiles',

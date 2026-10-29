@@ -208,10 +208,6 @@ const translations = {
     shareTextPerfect: 'I scored {{score}}/{{total}} on Children Do English! Perfect score!',
     shareQuizTitle: 'English Quiz',
 
-    // Cookie consent
-    cookieConsent: 'We use Google Analytics to understand app usage. Analytics load only after your consent.',
-    accept: 'Accept',
-    decline: 'Decline',
 
     // Notifications
     enableReminders: 'Enable streak reminders',
@@ -263,11 +259,11 @@ const translations = {
     privacyDataTitle: 'What data we collect',
     privacyDataDesc: 'Children Do English does not collect personal information. We do not ask for names or any identifying details. An optional parent email field is shown during onboarding — if provided, it is saved only in your browser\'s local storage and is never sent to any server.',
     privacyCookieTitle: 'Cookies & tracking',
-    privacyCookieDesc: 'We use Google Analytics to understand how the app is used (page views, feature usage, basic device information). In the app, analytics loads only after you give consent via the cookie banner. On our static content pages (vocabulary, guides, printable flashcards), analytics runs in cookieless mode — no cookies or identifiers are stored unless you have opted in, and if you declined, analytics does not load at all. We do not use any advertising services.',
+    privacyCookieDesc: 'We do not use cookies or advertising services. To understand how the site is used we count page visits with Vercel Web Analytics, which is cookieless and stores no identifier on your device, and we keep anonymous totals (for example, how many quiz answers were right for each word, or how often a page\'s play button is tapped). These totals contain no information about who you are.',
     privacyStorageTitle: 'What is stored on your device',
     privacyStorageDesc: 'Your learning progress (quiz scores, word progress, streak, badges, and preferences like dark mode and sound) is saved in your browser\'s local storage. This data never leaves your device and is not sent to any server. We also save the date of your last visit, so we can count how many visits are return visits — as an anonymous total, with no identifier and without sending the date.',
     privacyThirdPartyTitle: 'Third-party services',
-    privacyThirdPartyDesc: 'The app uses Google Analytics for usage statistics (loaded only after consent). We use Sentry for error monitoring in production — it may collect error reports, browser metadata, and device information to help us fix bugs and improve app stability (see sentry.io/privacy). The browser\'s built-in speech synthesis may connect to your device\'s speech engine for word pronunciation. All word data and images are bundled with the app.',
+    privacyThirdPartyDesc: 'We use Vercel Web Analytics (cookieless, no identifiers) for page-visit counts. We use Sentry for error monitoring in production — it may collect error reports, browser metadata, and device information to help us fix bugs and improve app stability (see sentry.io/privacy). The browser\'s built-in speech synthesis may connect to your device\'s speech engine for word pronunciation. All word data and images are bundled with the app.',
     privacyChildrenTitle: 'Children\'s privacy',
     privacyChildrenDesc: 'This app is designed for children ages 6-12. Because we do not collect or transmit any personal data, there is no risk of children\'s information being shared or misused.',
     privacyDeleteTitle: 'Deleting your data',
@@ -451,7 +447,7 @@ const translations = {
     // Trust signals
     trustTitle: 'Built for families',
     trustNoAds: 'No ads or tracking',
-    trustNoAdsDesc: 'Zero ads. Analytics only with your consent. Just learning.',
+    trustNoAdsDesc: 'Zero ads. No cookies, no tracking. Just learning.',
     trustOffline: 'Works offline',
     trustOfflineDesc: 'Install once, use anywhere — no internet needed.',
     trustProfiles: 'Multiple profiles',

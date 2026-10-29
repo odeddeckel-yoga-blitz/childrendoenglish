@@ -6,9 +6,8 @@ import ES_GLOSSES from '../src/data/word-glosses-es.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 
-// Every generated HTML page gets the consent-aware analytics loader
-// (public/static-analytics.js): cookieless by default, honors the app's
-// stored consent choice, no-op if the visitor declined.
+// Every generated HTML page gets the cookieless land beacon (public/land-beacon.js:
+// page counts, Vercel Web Analytics, per-page click-to-play).
 //
 // It also gets the crawl-mesh footer (buildCrawlMesh below): server-rendered
 // links from EVERY static page to the flashcards + Hebrew + category pages.
@@ -18,7 +17,7 @@ const ROOT = join(__dirname, '..');
 // pos 7.5), so the content works; the crawl equity wasn't reaching the rest.
 // Same fix that took kidsdomath from 11 to 67 indexed pages.
 function writePage(path, html) {
-  let out = html.replace('</head>', '  <script defer src="/static-analytics.js"></script>\n  <script defer src="/land-beacon.js"></script>\n</head>');
+  let out = html.replace('</head>', '  <script defer src="/land-beacon.js"></script>\n</head>');
   if (out.includes('</body>') && !out.includes('crawl-mesh')) {
     out = out.replace('</body>', buildCrawlMesh() + '</body>');
   }

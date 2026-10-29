@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
-import { initAnalytics, trackEvent } from './utils/analytics';
 
 // Lazy-load Sentry after initial render to reduce main bundle.
 // Errors only — no performance tracing — so crash reporting stays anonymous
@@ -15,27 +14,6 @@ if (import.meta.env.PROD) {
     setTag('appVersion', '1.0.0');
   });
   (typeof requestIdleCallback === 'function' ? requestIdleCallback : (fn) => setTimeout(fn, 3000))(initSentry);
-}
-
-// Initialize analytics (loads GA if consent already given)
-initAnalytics();
-
-// Report web vitals to GA
-if (import.meta.env.PROD) {
-  import('web-vitals').then(({ onCLS, onINP, onLCP }) => {
-    const sendToGA = ({ name, delta, id }) => {
-      trackEvent('web_vitals', {
-        event_category: 'Web Vitals',
-        event_label: id,
-        value: Math.round(name === 'CLS' ? delta * 1000 : delta),
-        metric_name: name,
-        non_interaction: true,
-      });
-    };
-    onCLS(sendToGA);
-    onINP(sendToGA);
-    onLCP(sendToGA);
-  });
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(
