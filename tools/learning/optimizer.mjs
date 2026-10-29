@@ -266,6 +266,23 @@ if (fcr.length > 0) {
   }
 }
 
+// --- static pages: click-to-play (pg/cta/mq, from 2026-10-29, a648829) ---
+// pg = page view, cta = a click into the app or a game, mq = first mini-quiz tap,
+// item = page-path key. Baselines before the change don't exist: judge the
+// redesigned pages (vocabulary_ages-*, games, printable-flashcards_*) against
+// each other and against untouched pages (vocabulary_<category>, guides_*).
+const pages = await q`SELECT item, ev, sum(n)::int AS n FROM cde_learn
+  WHERE day >= CURRENT_DATE - ${days}::int AND ev IN ('pg', 'cta', 'mq') GROUP BY item, ev`;
+if (pages.length > 0) {
+  const by = {};
+  const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '—');
+  for (const r of pages) (by[r.item] ||= { pg: 0, cta: 0, mq: 0 })[r.ev] = r.n;
+  console.log('\n— static pages: click-to-play (views ≥ 10) —');
+  for (const [k, v] of Object.entries(by).filter(([, v]) => v.pg >= 10).sort((a, b) => b[1].pg - a[1].pg).slice(0, 25)) {
+    console.log(`  ${k.padEnd(42)} views ${String(v.pg).padStart(5)}  play-click ${pct(v.cta, v.pg).padStart(4)}  quiz-tap ${pct(v.mq, v.pg).padStart(4)}`);
+  }
+}
+
 // --- games: play depth per game (KDM parity — levelups ÷ opens) ---
 // Opens = g_open learn events the games fire per game id on a real
 // (non-webdriver, non-internal) page load; level-ups/completes = g_lvl/g_cmp.
