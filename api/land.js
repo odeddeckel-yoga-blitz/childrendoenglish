@@ -25,9 +25,10 @@ const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 // qs = quiz start-source funnel: [new-]<menu|ladder|shared|letter|mywords|learn|again|quick|other>_<start|done|quit> (useQuizFlow);
 // aie/aiv = AI attribution v1 (kit land-beacon.md): item = engine (chatgpt|perplexity|copilot|
 // gemini|claude|other); aie with every ai open, aiv once visible 5 s. Not opens.
+// mp = Sound Pairs answer per sound contrast (<p-b|a-u|e-a|th|ee-i>_<ok|no>) — public/games/sound-pairs;
 // sheet = a unit-page activity sheet printed (bingo|search) — public/unit-sheets.js;
 // bt = Class Battle use (create | start_p<1|2-5|6-15|16+> | join) — public/battle/battle.js.
-const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'g_start', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb', 'ansx', 'fcr', 'pg', 'cta', 'mq', 'bt', 'qs', 'aie', 'aiv', 'sheet']);
+const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'g_start', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb', 'ansx', 'fcr', 'pg', 'cta', 'mq', 'bt', 'qs', 'aie', 'aiv', 'sheet', 'mp']);
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
 const AI_ATTR_RE = /^ai[ev]_(chatgpt|perplexity|copilot|gemini|claude|other)$/; // fixed engine enum (kit spec)
 

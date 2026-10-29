@@ -23,6 +23,16 @@ describe('recorded word audio coverage', () => {
     expect(fs.readFileSync(path.join(ROOT, 'public/games', g, 'index.html'), 'utf8')).toMatch(/<script src="\.\.\/word-audio\.js" defer><\/script>\s*<script src="\.\/game\.js"/);
   });
 
+  it('every Sound Pairs word has its own partner-checked recording in /audio/pairs/', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'public/games/sound-pairs/game.js'), 'utf8');
+    const pairs = [...src.matchAll(/\['([a-z]+)','([a-z]+)'\]/g)].map((m) => [m[1], m[2]]);
+    expect(pairs.length).toBeGreaterThanOrEqual(25);
+    const words = [...new Set(pairs.flat())];
+    expect(words.filter((w) => !fs.existsSync(path.join(ROOT, 'public/audio/pairs', `${w}.mp3`)))).toEqual([]);
+    // every word has a meaning line (he + es) in the game's W table
+    for (const w of words) expect(src).toMatch(new RegExp(`\\b${w}:\\['`));
+  });
+
   it('Class Battle loads word-audio.js before its module', () => {
     expect(fs.readFileSync(path.join(ROOT, 'public/battle/index.html'), 'utf8')).toMatch(/word-audio\.js"><\/script>\s*<script type="module" src="\/battle\/battle\.js"/);
   });
