@@ -132,6 +132,9 @@ function pickVoice(){
 try{ if('speechSynthesis' in window){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; } }catch(e){}
 function speak(text,force){
   if(muted&&!force) return;
+  if(window.cdeSay) window.cdeSay(text, () => tts(text)); else tts(text);
+}
+function tts(text){
   try{
     if(!('speechSynthesis' in window)) return;
     speechSynthesis.cancel();

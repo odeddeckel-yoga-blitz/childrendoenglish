@@ -161,7 +161,11 @@ try{
   }
 }catch(e){}
 function speak(txt){
-  if(muted || !voicesReady) return;
+  if(muted) return;
+  if(window.cdeSay) window.cdeSay(txt, () => tts(txt)); else tts(txt);
+}
+function tts(txt){
+  if(!voicesReady) return;
   try{
     /* same guard as the site's land-beacon.js: automation (incl. headless
        browsers) must not reach the TTS engine — it can stall the page there */

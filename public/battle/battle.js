@@ -107,6 +107,10 @@ async function apiState(code) {
 /* ---------------- speech (guarded) ---------------- */
 
 function speak(word) {
+  // the site's recorded voice (public/games/word-audio.js); device TTS if the file fails
+  if (window.cdeSay) window.cdeSay(word, () => tts(word)); else tts(word);
+}
+function tts(word) {
   try {
     if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') return;
     window.speechSynthesis.cancel();

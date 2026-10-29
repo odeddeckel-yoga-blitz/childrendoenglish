@@ -107,6 +107,9 @@ function thud(){ beep(140,0.28,'sawtooth',0.15,60); }
 /* ---------- speech (guarded for headless/unsupported browsers) ---------- */
 function say(text){
   if(muted) return;
+  if(window.cdeSay) window.cdeSay(text, () => tts(text)); else tts(text);
+}
+function tts(text){
   try{
     if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined') return;
     speechSynthesis.cancel();
