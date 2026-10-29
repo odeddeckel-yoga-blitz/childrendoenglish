@@ -13,6 +13,7 @@ import useInstallPrompt from './hooks/useInstallPrompt';
 import { analytics } from './utils/analytics';
 import { checkStreakReminder } from './utils/notifications';
 import { getDueWords } from './utils/spaced-repetition';
+import { pickTodayWords, TODAY_SIZE } from './utils/todayRun';
 import { filterByKnownLetters } from './utils/letterFilter';
 import { sendLearn } from './utils/learnBeacon';
 import { WORDS } from './data/words';
@@ -48,6 +49,7 @@ const ProfilePicker = lazy(() => import('./components/ProfilePicker'));
 const LearningPath = lazy(() => import('./components/LearningPath'));
 const ParentDashboard = lazy(() => import('./components/ParentDashboard'));
 const DailyReview = lazy(() => import('./components/DailyReview'));
+const TodayRun = lazy(() => import('./components/TodayRun'));
 const LightningRound = lazy(() => import('./components/LightningRound'));
 const LetterPath = lazy(() => import('./components/LetterPath'));
 const WordCheck = lazy(() => import('./components/WordCheck'));
@@ -71,6 +73,7 @@ const STATE_TO_PATH = {
   letterPath: '/letters',
   terms: '/terms',
   dailyReview: '/daily-review',
+  today: '/today',
 };
 
 const PATH_TO_STATE = Object.fromEntries(
@@ -119,6 +122,10 @@ export default function App() {
 
   const [stats, setStats] = useState(() => initial.current.stats || loadStats());
   const [gameState, setGameState] = useState(() => initial.current.gameState);
+  // The day's "Today" words are picked once per visit to the screen (picking
+  // is random — a re-render must not swap the words mid-run).
+  const todayWords = useRef(null);
+  useEffect(() => { if (gameState !== 'today') todayWords.current = null; }, [gameState]);
   const [darkMode, setDarkMode] = useState(() => isDarkMode());
   const [soundEnabled, setSoundEnabled] = useState(() => isSoundEnabled());
 
@@ -626,6 +633,7 @@ export default function App() {
             showInstallBanner={showInstallBanner}
             isIOS={isIOS}
             dueCount={getDueWords(WORDS, stats.wordProgress || {}).length}
+            todayCount={TODAY_SIZE}
             onInstall={handleInstall}
             onDismissInstall={dismissInstall}
             onNavigate={navigate}
@@ -924,6 +932,28 @@ export default function App() {
             onBack={() => navigate('menu', 'back')}
             onStartLesson={(words) => quizFlow.handleStartPersonalQuiz(filterByKnownLetters(words, activePlayer?.knownLetters), 'image', 'learn')}
             onLearnLesson={(words) => { setLearnWords(filterByKnownLetters(words, activePlayer?.knownLetters)); navigate('learning'); }}
+          />
+        );
+
+      case 'today':
+        if (!todayWords.current) {
+          todayWords.current = pickTodayWords(filterByKnownLetters(WORDS, activePlayer?.knownLetters), stats.wordProgress || {}, { unlockedLevels: stats.unlockedLevels });
+        }
+        return (
+          <TodayRun
+            words={todayWords.current}
+            stats={stats}
+            lang={lang}
+            canRead={activePlayer?.canRead ?? true}
+            onComplete={(results) => {
+              setStats(prev => {
+                let updated = { ...prev, wordProgress: results.wordProgress };
+                updated = updateStreak(updated);
+                updated = updateDailyGoal(updated, results.answers?.length || results.total);
+                return updated;
+              });
+            }}
+            onBack={() => navigate('menu', 'back')}
           />
         );
 

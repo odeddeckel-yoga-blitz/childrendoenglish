@@ -1,10 +1,10 @@
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck, RotateCcw } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck } from 'lucide-react';
 import SpotlightCards from './SpotlightCards';
 import { t } from '../utils/i18n';
 
 import LanguagePicker from './LanguagePicker';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart: _onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage, onContinueCycle, cycleInfo, onOpenSpotlightWord }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount: _dueCount = 0, todayCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart: _onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage, onContinueCycle, cycleInfo, onOpenSpotlightWord }) {
 
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
   const isNewUser = stats.totalQuizzes === 0 && wordsLearned === 0;
@@ -196,23 +196,21 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
         {!isNewUser && (
           <>
-            {/* Daily Review — only surfaced when words are actually due */}
-            {dueCount > 0 && (
+            {/* Today — the day's ~5-minute run (due + missed + a few new words), always on top */}
+            {todayCount > 0 && (
               <button
-                onClick={() => onNavigate('dailyReview')}
+                onClick={() => onNavigate('today')}
+                data-testid="today-card"
                 className="w-full glass rounded-2xl p-4 flex items-center gap-4 transition-all text-start
-                           hover:shadow-lg active:scale-[0.98] border border-orange-200 bg-orange-50/50"
+                           hover:shadow-lg active:scale-[0.98] border border-amber-200 bg-amber-50/60"
               >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-linear-to-br from-orange-500 to-orange-600">
-                  <RotateCcw className="w-6 h-6 text-white" />
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-linear-to-br from-amber-400 to-orange-500">
+                  <Sun className="w-6 h-6 text-white" />
                 </div>
                 <div className="flex-1">
-                  <p className="font-bold text-slate-800 dark:text-slate-100">{t('dailyReview', lang)}</p>
-                  <p className="text-slate-500 text-sm">{t('dailyReviewDesc', lang)}</p>
+                  <p className="font-bold text-slate-800 dark:text-slate-100">{t('today', lang)}</p>
+                  <p className="text-slate-500 text-sm">{t('todayDesc', lang, { count: todayCount })}</p>
                 </div>
-                <span className="px-2.5 py-1 rounded-full bg-orange-500 text-white text-xs font-bold shrink-0">
-                  {t('wordsDue', lang, { count: dueCount })}
-                </span>
               </button>
             )}
 

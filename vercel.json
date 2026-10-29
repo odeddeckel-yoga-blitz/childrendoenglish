@@ -67,6 +67,10 @@
       "destination": "/"
     },
     {
+      "source": "/today",
+      "destination": "/"
+    },
+    {
       "source": "/terms",
       "destination": "/"
     },
