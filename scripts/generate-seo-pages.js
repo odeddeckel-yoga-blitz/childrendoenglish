@@ -5032,14 +5032,15 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
     { id: 'category-conveyor', emoji: '📦', name: 'Category Conveyor', desc: 'Photos ride the conveyor belt — sort each one into the right category bin before it slides away!', skill: 'Word meaning: sort animals, food, clothes and more', who: 'Ages 6-12 · photos carry the meaning', alt: 'Category Conveyor: photos of a bear and a zebra on a belt above Animals and Food bins' },
     { id: 'spelling-forge', emoji: '🔨', name: 'Spelling Forge', desc: 'See the picture, hear the word, and forge its spelling letter by letter on the anvil. Watch out for tricky look-alike letters!', skill: 'Spelling: build the word letter by letter', who: 'Ages 7-12 · for kids who know their letters', alt: 'Spelling Forge: a photo of baseball bats above empty letter slots for the word bat' },
     { id: 'sound-pairs', emoji: '👂', name: 'Sound Pairs', desc: 'Ship or sheep? Pen or pan? Hear one word and tap which of two almost-identical words it was. A wrong tap plays both so the difference is easy to hear.', skill: 'Listening: tell apart sounds that learners mix up (p/b, a/u, e/a, th, ee/i)', who: 'Ages 7-12 · for kids who can read short words', alt: 'Sound Pairs: a speaker button above two word cards, park and bark' },
+    { id: 'read-it', emoji: '📖', name: 'Read It!', desc: 'Phonics for new readers: read short words like cat, pig and bed and tap the picture, then hear a word and pick its spelling from three words one letter apart.', skill: 'Reading: decode short-vowel words letter by letter', who: 'Ages 6-10 · for kids starting to read English', alt: 'Read It!: the word cat above three photos to choose from' },
   ];
   let todayId = null;
   try { todayId = JSON.parse(readFileSync(join(ROOT, 'src', 'data', 'spotlight.json'), 'utf-8')).game?.id || null; } catch { /* no spotlight yet */ }
   const today = GAMES.find((g) => g.id === todayId);
   const gamesFaq = [
-    { q: 'Are these English games really free?', a: 'Yes. All four games are free, with no ads, no sign-up and nothing to install. They run in the browser on phones, tablets, Chromebooks and computers.' },
+    { q: 'Are these English games really free?', a: 'Yes. All five games are free, with no ads, no sign-up and nothing to install. They run in the browser on phones, tablets, Chromebooks and computers.' },
     { q: 'Which game should a young child start with?', a: 'Word Zapper. The word is spoken aloud and the child taps the matching photo, so it works before a child can read. Category Conveyor is next; Spelling Forge suits kids who already know their letters.' },
-    { q: 'What do kids learn from these games?', a: `They practise the same ${WORDS.length} everyday English words as the rest of Children Do English, each with a real photo and spoken audio: listening (Word Zapper), word meaning and categories (Category Conveyor) and spelling (Spelling Forge). Sound Pairs trains the ear on sounds learners confuse, like ship / sheep and pen / pan.` },
+    { q: 'What do kids learn from these games?', a: `They practise the same ${WORDS.length} everyday English words as the rest of Children Do English, each with a real photo and spoken audio: listening (Word Zapper), word meaning and categories (Category Conveyor) and spelling (Spelling Forge). Sound Pairs trains the ear on sounds learners confuse, like ship / sheep and pen / pan, and Read It! practises reading short words one sound at a time.` },
     { q: 'Can I use them in class?', a: 'Yes. Each game is a single page that works on a projector or on each child’s device. For a whole-class game, Class Battle lets kids join from their own devices with a room code.' },
   ];
   const gamesDir = join(ROOT, 'dist', 'games');
@@ -5089,7 +5090,7 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
 </style></head>
 <body><div class="wrap">
   <h1>Free English Vocabulary Games for Kids</h1>
-  <p class="sub">Four quick games with real photos and spoken words. No ads, no sign-up, nothing to install &mdash; tap and play in the browser on any device.</p>
+  <p class="sub">Five quick games with real photos and spoken words. No ads, no sign-up, nothing to install &mdash; tap and play in the browser on any device.</p>
   ${today ? `<a class="today-cta" href="/games/${today.id}/">▶ Play today’s game: ${today.name}</a>` : ''}
   <div class="grid">${cards}</div>
   <section class="more">

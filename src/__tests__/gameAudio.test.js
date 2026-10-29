@@ -33,6 +33,16 @@ describe('recorded word audio coverage', () => {
     for (const w of words) expect(src).toMatch(new RegExp(`\\b${w}:\\['`));
   });
 
+  it('every Read It! word has its own neighbour-checked recording in /audio/cvc/, and every picture exists', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'public/games/read-it/game.js'), 'utf8');
+    const block = src.slice(src.indexOf('var LEVELS=['), src.indexOf('];', src.indexOf('var LEVELS=[')));
+    const words = [...new Set([...block.matchAll(/'([a-z]{3})'/g)].map((m) => m[1]))];
+    expect(words.length).toBeGreaterThanOrEqual(80);
+    expect(words.filter((w) => !fs.existsSync(path.join(ROOT, 'public/audio/cvc', `${w}.mp3`)))).toEqual([]);
+    const reads = [...block.matchAll(/read:\[([^\]]*)\]/g)].flatMap((m) => [...m[1].matchAll(/'([a-z]+)'/g)].map((x) => x[1]));
+    expect(reads.filter((w) => !fs.existsSync(path.join(ROOT, 'public/images', `${w}.webp`)))).toEqual([]);
+  });
+
   it('Class Battle loads word-audio.js before its module', () => {
     expect(fs.readFileSync(path.join(ROOT, 'public/battle/index.html'), 'utf8')).toMatch(/word-audio\.js"><\/script>\s*<script type="module" src="\/battle\/battle\.js"/);
   });
