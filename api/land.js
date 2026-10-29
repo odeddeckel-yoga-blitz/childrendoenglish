@@ -25,7 +25,7 @@ const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 // qs = quiz start-source funnel: [new-]<menu|ladder|shared|letter|mywords|learn|again|quick|other>_<start|done|quit> (useQuizFlow);
 // aie/aiv = AI attribution v1 (kit land-beacon.md): item = engine (chatgpt|perplexity|copilot|
 // gemini|claude|other); aie with every ai open, aiv once visible 5 s. Not opens.
-// mp = Sound Pairs answer per sound contrast (<p-b|a-u|e-a|th|ee-i>_<ok|no>) — public/games/sound-pairs;
+// mp = Sound Pairs answer per sound contrast (<p-b|a-u|e-a|th|ee-i|v-w>_<ok|no>) — public/games/sound-pairs;
 // cvc = Read It! answer per short vowel and activity (<a|i|o|u|e>_<r|h>_<ok|no>) — public/games/read-it;
 // sheet = a unit-page activity sheet printed (bingo|search) — public/unit-sheets.js;
 // bt = Class Battle use (create | start_p<1|2-5|6-15|16+> | join) — public/battle/battle.js.

@@ -4,7 +4,8 @@
    ee/i). A wrong tap replays the heard word and its partner so the difference
    is audible. Audio = /audio/pairs/<word>.mp3, rendered for this game and
    whisper-checked to be heard as itself and never as its partner (2026-10-29).
-   v/w is held: whisper can't confirm a clear "v" (vest/vet) — needs an ear-check.
+   v/w: whisper can't confirm a clear "v", so vest/vet/vent are the clips the
+   owner confirmed by ear (2026-10-29: vest amy 1.2, vet + vent amy 1.5).
    Beacons (cookieless aggregates, same guards as land-beacon.js): g_open /
    g_start / g_lvl / g_cmp @ sound-pairs, and mp @ <contrast>_<ok|no>. */
 (function(){
@@ -23,14 +24,16 @@ var W={
   three:['שלוש','tres'],tree:['עץ','árbol'],thin:['רזה','delgado'],tin:['פח','lata'],think:['לחשוב','pensar'],sink:['כיור','fregadero'],
   mouth:['פה','boca'],mouse:['עכבר','ratón'],thank:['להודות','agradecer'],tank:['טנק','tanque'],path:['שביל','sendero'],pass:['לעבור','pasar'],
   sheep:['כבשה','oveja'],ship:['ספינה','barco'],seat:['מושב','asiento'],sit:['לשבת','sentarse'],feet:['כפות רגליים','pies'],fit:['להתאים','quedar bien'],
-  heel:['עקב','talón'],hill:['גבעה','colina'],eat:['לאכול','comer'],it:['זה','eso']
+  heel:['עקב','talón'],hill:['גבעה','colina'],eat:['לאכול','comer'],it:['זה','eso'],
+  vest:['אפוד','chaleco'],west:['מערב','oeste'],vet:['וטרינר','veterinario'],wet:['רטוב','mojado'],vent:['פתח אוורור','rejilla'],went:['הלך (בעבר)','fue']
 };
 var LEVELS=[
   {id:'p-b', label:{en:'P or B?',he:'P או B',es:'¿P o B?'}, pairs:[['pear','bear'],['pea','bee'],['pig','big'],['pack','back'],['park','bark']]},
   {id:'a-u', label:{en:'a (cat) or u (cut)?',he:'a (cat) או u (cut)',es:'¿a (cat) o u (cut)?'}, pairs:[['cat','cut'],['cap','cup'],['bag','bug'],['hat','hut'],['fan','fun'],['ran','run']]},
   {id:'e-a', label:{en:'e (pen) or a (pan)?',he:'e (pen) או a (pan)',es:'¿e (pen) o a (pan)?'}, pairs:[['pen','pan'],['bed','bad'],['ten','tan'],['men','man'],['pet','pat']]},
   {id:'th', label:{en:'th (three) or t/s (tree)?',he:'th (three) או t/s (tree)',es:'¿th (three) o t/s (tree)?'}, pairs:[['three','tree'],['thin','tin'],['think','sink'],['mouth','mouse'],['thank','tank'],['path','pass']]},
-  {id:'ee-i', label:{en:'ee (sheep) or i (ship)?',he:'ee (sheep) או i (ship)',es:'¿ee (sheep) o i (ship)?'}, pairs:[['sheep','ship'],['seat','sit'],['feet','fit'],['heel','hill'],['eat','it']]}
+  {id:'ee-i', label:{en:'ee (sheep) or i (ship)?',he:'ee (sheep) או i (ship)',es:'¿ee (sheep) o i (ship)?'}, pairs:[['sheep','ship'],['seat','sit'],['feet','fit'],['heel','hill'],['eat','it']]},
+  {id:'v-w', label:{en:'v (vest) or w (west)?',he:'v (vest) או w (west)',es:'¿v (vest) o w (west)?'}, pairs:[['vest','west'],['vet','wet'],['vent','went']]}
 ];
 var ROUNDS=8;
 window.SP_LEVELS=LEVELS; // read by the audio-coverage test harness
