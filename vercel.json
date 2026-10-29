@@ -69,6 +69,10 @@
     {
       "source": "/terms",
       "destination": "/"
+    },
+    {
+      "source": "/letters",
+      "destination": "/"
     }
   ],
   "headers": [
