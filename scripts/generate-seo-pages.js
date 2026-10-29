@@ -87,6 +87,10 @@ const TITLE_OVERRIDES = JSON.parse(readFileSync(new URL('./seo-title-overrides.j
 const SEO_FEATURED = JSON.parse(readFileSync(new URL('./seo-featured.json', import.meta.url), 'utf8'));
 const SITE = 'https://childrendoenglish.com';
 
+// Printable flashcards: the first two rows load at once, the rest lazily (a
+// 78-card page was 2 MB on a phone). print-btn.js loads them all before printing.
+const FC_EAGER = 6;
+
 const CATEGORY_NAMES = {
   animals: 'Animals',
   food: 'Food & Drinks',
@@ -3238,9 +3242,9 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
 
   const flashcardCards = words
     .map(
-      (w) => `
+      (w, i) => `
       <div class="flashcard">
-        <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="fc-img" width="160" height="160" />
+        <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="fc-img" width="160" height="160"${i >= FC_EAGER ? ' loading="lazy"' : ''} />
         <div class="fc-word">${escapeHtml(w.word)}</div>
         <div class="fc-phonetic">${escapeHtml(w.phonetic)}</div>
         <div class="fc-def">${escapeHtml(w.definition)}</div>
@@ -3410,9 +3414,9 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
 
   const flashcardCards = words
     .map(
-      (w) => `
+      (w, i) => `
       <div class="flashcard">
-        <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="fc-img" width="160" height="160" />
+        <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="fc-img" width="160" height="160"${i >= FC_EAGER ? ' loading="lazy"' : ''} />
         <div class="fc-word">${escapeHtml(w.word)}</div>
         <div class="fc-phonetic">${escapeHtml(w.phonetic)}</div>
         <div class="fc-es">${escapeHtml(ES_GLOSSES[w.id] || '')}</div>
