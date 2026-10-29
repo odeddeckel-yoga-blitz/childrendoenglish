@@ -87,8 +87,12 @@ function header(){
   return h;
 }
 
+// Each round gets a token: delayed audio (the both-words replay after a wrong
+// tap) checks it, so leaving the round early never plays over the next word.
+var roundId=0;
 function renderRound(){
-  var r=S.rounds[S.round], lv=LEVELS[S.lvl];
+  var r=S.rounds[S.round], lv=LEVELS[S.lvl], my=++roundId;
+  var live=function(){ return my===roundId; };
   app.textContent='';
   app.appendChild(header());
   var say=el('button','big-say','🔊'); say.id='sayBtn'; say.type='button'; say.setAttribute('aria-label',T('again'));
@@ -107,7 +111,7 @@ function renderRound(){
       if(ok){
         S.score++; b.classList.add('ok');
         fb.textContent=T('right');
-        setTimeout(nextRound, 900);
+        setTimeout(function(){ if(live()) nextRound(); }, 900);
       } else {
         S.misses[lv.id]=(S.misses[lv.id]||0)+1;
         b.classList.add('no');
@@ -118,7 +122,16 @@ function renderRound(){
         fb.appendChild(document.createTextNode(' — '+T('notWord')+' '));
         fb.appendChild(el('b','en',r.other));
         var both=el('button','ghost',T('listenBoth')); both.type='button';
-        var hearBoth=function(){ right.classList.add('pulse'); play(r.target,function(){ right.classList.remove('pulse'); b.classList.add('pulse'); setTimeout(function(){ play(r.other,function(){ b.classList.remove('pulse'); }); },350); }); };
+        var hearBoth=function(){
+          if(!live()) return;
+          right.classList.add('pulse');
+          play(r.target,function(){
+            right.classList.remove('pulse');
+            if(!live()) return;
+            b.classList.add('pulse');
+            setTimeout(function(){ if(live()) play(r.other,function(){ b.classList.remove('pulse'); }); },350);
+          });
+        };
         both.addEventListener('click',hearBoth);
         var nx=el('button','next',T('next')); nx.type='button';
         nx.addEventListener('click',nextRound);
@@ -132,10 +145,12 @@ function renderRound(){
   var fb=el('p','feedback'); fb.setAttribute('role','status'); app.appendChild(fb);
   var row=el('div','row'); app.appendChild(row);
   if(S.round===0) app.appendChild(el('p','tip',T('tip')));
-  setTimeout(function(){ play(r.target); }, 250);
+  setTimeout(function(){ if(live()) play(r.target); }, 250);
 }
 
 function nextRound(){
+  roundId++; // cancel anything still scheduled for the round being left
+  if(clip){ clip.onended=null; clip.pause(); }
   S.round++;
   if(S.round<ROUNDS) return renderRound();
   beacon('g_lvl','sound-pairs');
