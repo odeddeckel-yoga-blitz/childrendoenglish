@@ -219,7 +219,7 @@ function buildCategoryPage(slug, displayName, words) {
   const answerFirst = `${displayName} words in English for kids: ${wordCount} words`
     + (beg.length ? `, from beginner words like ${listWords(beg, 3)}` : '')
     + (adv.length ? ` to advanced words like ${listWords(adv, 2)}` : '')
-    + `. Every word has a real photo, native audio, a kid-friendly definition, an example sentence and a Hebrew translation.`;
+    + `. Every word has a real photo, recorded audio, a kid-friendly definition, an example sentence and a Hebrew translation.`;
   const faqSchema = faqSchemaFor([
     { q: `How many ${lower} words in English should a child learn?`, a: `This list has ${wordCount} ${lower} words for kids ages 6-12: ${beg.length} beginner (ages 6-8), ${byLevel('intermediate').length} intermediate (ages 9-10) and ${adv.length} advanced (ages 11-12). Start with the beginner words and add 3-5 new words a day.` },
     beg.length ? { q: `Which ${lower} words should a beginner (ages 6-8) learn first?`, a: `Start with concrete ${lower} words a child can see and point to: ${listWords(beg, 12)}. Each one has a picture and audio on this page.` } : null,
@@ -424,7 +424,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
   const faqSchema = faqSchemaFor([
     { q: `What does "${word.word}" mean?`, a: `"${capitalWord}" means: ${word.definition}. Example: "${word.exampleSentence}"` },
     { q: `How do you say ${word.word} in Hebrew${esGloss ? ' and Spanish' : ''}?`, a: `In Hebrew, ${word.word} is ${word.hebrewTranslation}.${esGloss ? ` In Spanish, it is ${esGloss}.` : ''}` },
-    { q: `How do you pronounce "${word.word}"?`, a: `${capitalWord} is pronounced ${word.phonetic}. It is a ${word.partOfSpeech}. You can hear a native speaker say it on this page.` },
+    { q: `How do you pronounce "${word.word}"?`, a: `${capitalWord} is pronounced ${word.phonetic}. It is a ${word.partOfSpeech}. You can hear it said aloud on this page.` },
   ]);
   const answerFirst = `"${capitalWord}" means: ${word.definition}. In Hebrew: ${word.hebrewTranslation}.`;
 
@@ -671,7 +671,7 @@ function buildAgeBracketPage(bracket, allWords) {
   const words = allWords.filter((w) => w.level === bracket.level);
   const url = `${SITE}/vocabulary/${bracket.slug}/`;
   const title = `Vocabulary Words for ${bracket.years} Year Olds — With Pictures & Meanings`;
-  const description = `${words.length} ${bracket.description} English words for kids ${bracket.ageRange}, each with a real photo, native audio and a picture quiz. Free practice in the browser — no sign-up, no app, no ads.`;
+  const description = `${words.length} ${bracket.description} English words for kids ${bracket.ageRange}, each with a real photo, recorded audio and a picture quiz. Free practice in the browser — no sign-up, no app, no ads.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -706,7 +706,7 @@ function buildAgeBracketPage(bracket, allWords) {
   }
   // Answer-first opening + FAQ + category-count table (GEO)
   const catCounts = CATEGORIES.filter((c) => wordsByCategory[c]).map((c) => ({ c, name: CATEGORY_NAMES[c] || c, n: wordsByCategory[c].length })).sort((a, b) => b.n - a.n);
-  const answerFirst = `English words for kids ages ${bracket.ageRange}: ${words.length} ${bracket.description} words across ${catCounts.length} categories, such as ${listWords(words.slice(0, 5), 5)}. The biggest groups are ${catCounts.slice(0, 3).map((x) => `${x.name.toLowerCase()} (${x.n})`).join(', ')}. Every word has a real photo, native audio, an example sentence and a Hebrew translation.`;
+  const answerFirst = `English words for kids ages ${bracket.ageRange}: ${words.length} ${bracket.description} words across ${catCounts.length} categories, such as ${listWords(words.slice(0, 5), 5)}. The biggest groups are ${catCounts.slice(0, 3).map((x) => `${x.name.toLowerCase()} (${x.n})`).join(', ')}. Every word has a real photo, recorded audio, an example sentence and a Hebrew translation.`;
   const faqSchema = faqSchemaFor([
     { q: `How many English words should a child aged ${bracket.ageRange} learn?`, a: `This ${bracket.description} list has ${words.length} English words for ages ${bracket.ageRange}, spread over ${catCounts.length} categories. Learning 3-5 new words a day with a picture and an example sentence, then reviewing them on a spaced schedule, covers it in a few months.` },
     { q: `Which English word categories are best for ages ${bracket.ageRange}?`, a: `For ages ${bracket.ageRange} the largest ${bracket.description} categories are ${catCounts.slice(0, 5).map((x) => `${x.name.toLowerCase()} (${x.n} words)`).join(', ')}.` },
@@ -2039,7 +2039,7 @@ const HE_GAMES_AGES = [
     grades: 'א׳-ב׳',
     levelHe: 'מתחילים',
     pitch:
-      'הצעדים הראשונים באנגלית, בדיוק בקצב של כיתות א׳-ב׳: מילים בסיסיות כמו חיות, צבעים ומספרים, עם תמונות אמיתיות והגייה של דוברי שפת אם. החידונים מתחילים בהאזנה — כך שגם ילדים שעוד לא קוראים באנגלית יכולים לשחק ולהצליח.',
+      'הצעדים הראשונים באנגלית, בדיוק בקצב של כיתות א׳-ב׳: מילים בסיסיות כמו חיות, צבעים ומספרים, עם תמונות אמיתיות והקלטה של ההגייה. החידונים מתחילים בהאזנה — כך שגם ילדים שעוד לא קוראים באנגלית יכולים לשחק ולהצליח.',
   },
   {
     slug: 'ages-9-10',
@@ -2048,7 +2048,7 @@ const HE_GAMES_AGES = [
     grades: 'ג׳-ד׳',
     levelHe: 'ביניים',
     pitch:
-      'בדיוק כשמתחילים אנגלית ברצינות בכיתות ג׳-ד׳: אוצר מילים רחב יותר, חידוני קריאה והאזנה, ומשחקי איות עם אותיות חסרות שמחזקים את הכתיבה. כל מילה עם תמונה אמיתית, הגייה של דוברי שפת אם ותרגום לעברית.',
+      'בדיוק כשמתחילים אנגלית ברצינות בכיתות ג׳-ד׳: אוצר מילים רחב יותר, חידוני קריאה והאזנה, ומשחקי איות עם אותיות חסרות שמחזקים את הכתיבה. כל מילה עם תמונה אמיתית, הקלטה של ההגייה ותרגום לעברית.',
   },
   {
     slug: 'ages-11-12',
@@ -2057,7 +2057,7 @@ const HE_GAMES_AGES = [
     grades: 'ה׳-ו׳',
     levelHe: 'מתקדמים',
     pitch:
-      'אתגר אמיתי לכיתות ה׳-ו׳: מילים מתקדמות, תרגול משפטים שלמים ומשחקי איות — הכנה מצוינת לקראת חטיבת הביניים. ההגייה מוקלטת על ידי דוברי אנגלית שפת אם, כך שהאוזן מתרגלת לאנגלית אמיתית.',
+      'אתגר אמיתי לכיתות ה׳-ו׳: מילים מתקדמות, תרגול משפטים שלמים ומשחקי איות — הכנה מצוינת לקראת חטיבת הביניים. כל מילה מגיעה עם הקלטה של ההגייה, כך שהאוזן מתרגלת לשמוע אנגלית.',
   },
 ];
 
@@ -2071,7 +2071,7 @@ const HE_GAMES_TOPIC_INTROS = {
   numbers:
     'מספרים באנגלית הם בסיס שכל ילד צריך. המשחקים משלבים האזנה, קריאה ואיות של המספרים, עם חזרה מרווחת שדואגת שהמילים באמת נשארות בזיכרון.',
   school:
-    'מילות בית הספר — עיפרון, מחברת, ילקוט — הן מילים שילדים משתמשים בהן כל יום. המשחקים הופכים אותן לטבעיות באנגלית, עם תמונות אמיתיות והגייה של דוברי שפת אם.',
+    'מילות בית הספר — עיפרון, מחברת, ילקוט — הן מילים שילדים משתמשים בהן כל יום. המשחקים הופכים אותן לטבעיות באנגלית, עם תמונות אמיתיות והקלטה של ההגייה.',
   home:
     'הבית הוא סביבת המילים הקרובה ביותר לילד: רהיטים, חדרים וחפצים יומיומיים. במשחקים לומדים אותם באנגלית דרך תמונות, שמע וחידונים — והתרגום לעברית תמיד שם לעזרה.',
 };
@@ -2188,7 +2188,7 @@ function heGamesWordCard(w) {
 function buildHebrewGamesHubPage() {
   const path = '/he/english-games/';
   const title = 'משחקים ללימוד אנגלית לילדים — חינם, בלי פרסומות ובלי הרשמה | Children Do English';
-  const description = `משחקים ללימוד אנגלית לילדים בחינם: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים עם תמונות אמיתיות, הגייה של דוברי שפת אם וסולם תרגול בן 11 שלבים. בלי פרסומות ובלי הרשמה — פשוט משחקים ולומדים.`;
+  const description = `משחקים ללימוד אנגלית לילדים בחינם: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים עם תמונות אמיתיות, הקלטה של ההגייה וסולם תרגול בן 11 שלבים. בלי פרסומות ובלי הרשמה — פשוט משחקים ולומדים.`;
 
   const faq = [
     {
@@ -2268,10 +2268,10 @@ function buildHebrewGamesHubPage() {
   const body = `
   <div class="hero">
     <h1>משחקים ללימוד אנגלית לילדים</h1>
-    <p class="subtitle">חינם, בלי פרסומות ובלי הרשמה: הילדים לומדים אנגלית דרך משחק — עם תמונות אמיתיות, הגייה של דוברי שפת אם וממשק בעברית.</p>
+    <p class="subtitle">חינם, בלי פרסומות ובלי הרשמה: הילדים לומדים אנגלית דרך משחק — עם תמונות אמיתיות, הקלטה של ההגייה וממשק בעברית.</p>
     <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_hub" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
     <p class="cta-sub">בלי פרסומות &middot; בלי הרשמה &middot; חינם לגמרי</p>
-    <p class="hero-cite">Children Do English מציע משחקים חינמיים ללימוד אנגלית לילדים בגילאי 6-12: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים באנגלית עם תמונות אמיתיות, הגייה של דוברי שפת אם, סולם תרגול בן 11 שלבים ותרגום לעברית — בלי פרסומות ובלי הרשמה.</p>
+    <p class="hero-cite">Children Do English מציע משחקים חינמיים ללימוד אנגלית לילדים בגילאי 6-12: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים באנגלית עם תמונות אמיתיות, הקלטה של ההגייה, סולם תרגול בן 11 שלבים ותרגום לעברית — בלי פרסומות ובלי הרשמה.</p>
   </div>
 
   <div class="stats-bar">
@@ -2284,8 +2284,8 @@ function buildHebrewGamesHubPage() {
   <div class="section">
     <div class="container prose">
       <h2 class="section-title">מה זה Children Do English?</h2>
-      <p>אתר חינמי שבו ילדים לומדים אנגלית דרך משחק. יש בו יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים באנגלית, וכל מילה מגיעה עם תמונה אמיתית (לא איור), הגייה מוקלטת של דוברי אנגלית שפת אם, הגדרה פשוטה, משפט לדוגמה ותרגום לעברית.</p>
-      <p>העיקרון פשוט: הממשק בעברית, הלימוד באנגלית אמיתית. הילד שומע אנגלית של דוברי שפת אם מהרגע הראשון, וההוראות וההסברים בעברית — כך שהוא אף פעם לא הולך לאיבוד.</p>
+      <p>אתר חינמי שבו ילדים לומדים אנגלית דרך משחק. יש בו יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים באנגלית, וכל מילה מגיעה עם תמונה אמיתית (לא איור), הקלטה של ההגייה, הגדרה פשוטה, משפט לדוגמה ותרגום לעברית.</p>
+      <p>העיקרון פשוט: הממשק בעברית, הלימוד באנגלית אמיתית. הילד שומע את המילים באנגלית מהרגע הראשון, וההוראות וההסברים בעברית — כך שהוא אף פעם לא הולך לאיבוד.</p>
       <p>מה שמייחד את האתר הוא סולם התרגול בן 11 השלבים: כל קבוצה של 10 מילים עוברת דרך כרטיסיות, חידוני האזנה, חידוני קריאה, משחקי איות עם אותיות חסרות, תרגול משפטים ומשחקי ארקייד — עם חזרה מרווחת שמוודאת שהמילים נשארות בזיכרון לטווח ארוך. זה לא עוד דף תרגול: זה מסלול שלם, מהמפגש הראשון עם המילה ועד שליטה מלאה.</p>
       <p>והכי חשוב: הכול בחינם, בלי פרסומות, בלי הרשמה ובלי איסוף מידע. נכנסים — ומשחקים.</p>
     </div>
@@ -2352,7 +2352,7 @@ function buildHebrewGamesAgePage(age) {
   const path = `/he/english-games/${age.slug}/`;
   const levelWords = WORDS.filter((w) => w.level === age.level);
   const title = `משחקים ללימוד אנגלית לילדים בגילאי ${age.ages} (${age.grades}) — חינם | Children Do English`;
-  const description = `משחקים ללימוד אנגלית לילדים בגילאי ${age.ages}, מותאמים לכיתות ${age.grades}: ${levelWords.length} מילים ברמת ${age.levelHe} עם תמונות אמיתיות, הגייה של דוברי שפת אם ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
+  const description = `משחקים ללימוד אנגלית לילדים בגילאי ${age.ages}, מותאמים לכיתות ${age.grades}: ${levelWords.length} מילים ברמת ${age.levelHe} עם תמונות אמיתיות, הקלטה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -2462,7 +2462,7 @@ function buildHebrewGamesTopicPage(slug) {
   const displayName = CATEGORY_NAMES[slug] || slug;
   const words = getWordsByCategory(slug);
   const title = `אנגלית לילדים — ${hebrewName}: משחקים ללימוד המילים בחינם | Children Do English`;
-  const description = `משחקים ללימוד אנגלית לילדים בנושא ${hebrewName}: ${words.length} מילים עם תמונות אמיתיות, הגייה של דוברי שפת אם ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
+  const description = `משחקים ללימוד אנגלית לילדים בנושא ${hebrewName}: ${words.length} מילים עם תמונות אמיתיות, הקלטה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -2801,7 +2801,7 @@ mkdirSync(join(distDir, 'vocabulary'), { recursive: true });
 
 const vocabIndexUrl = `${SITE}/vocabulary/`;
 const vocabIndexTitle = 'Free English Vocabulary Practice for Kids — No Sign-Up, No App';
-const vocabIndexDesc = `Practice ${WORDS.length} English words in ${CATEGORIES.length} topics with real photos, native audio and picture quizzes. Free online — no sign-up, no app, no ads. Ages 6-12.`;
+const vocabIndexDesc = `Practice ${WORDS.length} English words in ${CATEGORIES.length} topics with real photos, recorded audio and picture quizzes. Free online — no sign-up, no app, no ads. Ages 6-12.`;
 
 const vocabIndexBreadcrumb = JSON.stringify({
   '@context': 'https://schema.org',
@@ -2994,7 +2994,7 @@ const wordEntries = CATEGORIES.flatMap((slug) =>
 {
   const url = `${SITE}/free-english-practice/`;
   const title = 'Free English Practice Online — No Sign-Up, No App, No Ads';
-  const desc = `Start practising English words in one tap: real photos, native audio and 10-word picture quizzes. No account, no email, no download — ${WORDS.length} words, free in the browser.`;
+  const desc = `Start practising English words in one tap: real photos, recorded audio and 10-word picture quizzes. No account, no email, no download — ${WORDS.length} words, free in the browser.`;
   const byLevel = AGE_BRACKETS.map((b) => ({ ...b, n: WORDS.filter((w) => w.level === b.level).length }));
   const cats = CATEGORIES.map((c) => ({ c, name: CATEGORY_NAMES[c] || c, n: WORDS.filter((w) => w.category === c).length })).sort((a, b) => b.n - a.n);
   const cta = (where) => `/app?utm_source=seo&utm_medium=cta&utm_content=no_signup_${where}`;
@@ -3060,7 +3060,7 @@ const wordEntries = CATEGORIES.flatMap((slug) =>
   <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Free English practice</div>
   <div class="container">
     <div class="section">
-      <p class="answer">You can practise English vocabulary here right now, with no sign-up: open the practice, type a nickname, and a 10-word picture quiz starts. ${WORDS.length} words in ${CATEGORIES.length} topics, each with a real photo and native-speaker audio. It is free, has no ads, and progress stays on your device.</p>
+      <p class="answer">You can practise English vocabulary here right now, with no sign-up: open the practice, type a nickname, and a 10-word picture quiz starts. ${WORDS.length} words in ${CATEGORIES.length} topics, each with a real photo and recorded audio. It is free, has no ads, and progress stays on your device.</p>
       <div class="cta"><a href="${cta('top')}">Start practising — no sign-up &rarr;</a></div>
     </div>
 
@@ -4518,7 +4518,7 @@ const GUIDE_GEO = {
   'best-english-learning-apps-for-kids': {
     answer: 'For Hebrew-English families, Children Do English is the only completely free, ad-free vocabulary app with full Hebrew support and offline access; Duolingo has the broadest curriculum but shows ads on its free tier, and Lingokids and Khan Academy Kids suit ages 2-8. The deciding factor is consistency: ten minutes a day on any good app beats an hour of sporadic use.',
     faq: [
-      { q: 'What is the best free English learning app for kids?', a: 'For vocabulary, Children Do English: free, no ads, 488 words with real photos, native audio, Hebrew and Spanish translations, and it works offline. For a broad language course, Duolingo’s free tier is the most popular but includes ads.' },
+      { q: 'What is the best free English learning app for kids?', a: 'For vocabulary, Children Do English: free, no ads, 488 words with real photos, recorded audio, Hebrew and Spanish translations, and it works offline. For a broad language course, Duolingo’s free tier is the most popular but includes ads.' },
       { q: 'Is Duolingo good for kids learning English?', a: 'It is the most downloaded language app and its gamified lessons build a daily habit, with a comprehensive curriculum. The downsides for kids are ads on the free tier and only partial Hebrew support; the ad-free version is paid.' },
       { q: 'Which English app is best for ages 2-8?', a: 'Lingokids (songs, animated characters and mini-games, but a limited free tier) and Khan Academy Kids (free, about 500 words, no Hebrew). Starfall is a strong free option for early reading.' },
     ],
