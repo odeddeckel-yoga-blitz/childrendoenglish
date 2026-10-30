@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import asyncCss from './vite-plugin-async-css.js';
+import { SW_FALLBACK_ALLOW } from './sw-routes.js';
 
 export default defineConfig({
   plugins: [
@@ -17,6 +18,7 @@ export default defineConfig({
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         clientsClaim: true,
         skipWaiting: true,
+        navigateFallbackAllowlist: [SW_FALLBACK_ALLOW],
         navigateFallbackDenylist: [/\/images\//, /\/api\//, /\/battle\//, /\/vocabulary\//, /\/printable-flashcards\//, /\/guides\//, /\/about\//, /\/he\//, /\.webp$/, /\.png$/, /\.js$/, /\.css$/],
         runtimeCaching: [
           {
