@@ -24,6 +24,7 @@
     --ink:#1e1b4b; --dim:#6b7280; --gold:#f59e0b; --grn:#10b981; --red:#ef4444;
     --card:#ffffff; --line:rgba(79,70,229,.25);
   }
+  [hidden]{display:none!important;}
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
   html,body{margin:0;min-height:100%;background:var(--sky);
     font-family:'Segoe UI','Arial Hebrew','Noto Sans Hebrew',system-ui,-apple-system,sans-serif;
@@ -102,6 +103,19 @@
   .pstep.p1 .block{height:110px;background:linear-gradient(180deg,#fbbf24,var(--gold));}
   .pstep.p2 .block{height:80px;}
   .pstep.p3 .block{height:56px;background:linear-gradient(180deg,#a5b4fc,#818cf8);}
+  /* team / class modes (RL13): colour = the team's identity on the projector */
+  .chip.t0{border-color:#3b82f6;} .chip.t1{border-color:#f97316;}
+  .brow.team{grid-template-columns:1fr auto;font-size:clamp(17px,3.4vw,24px);padding:14px 18px;}
+  @media(max-width:520px){ .brow.team{grid-template-columns:1fr;gap:2px;font-size:17px;text-align:center;} .brow.team .sc{text-align:center;} }
+  .brow.t0 .bar{background:#dbeafe;} .brow.t1 .bar{background:#ffedd5;}
+  .brow.t0{border-color:#3b82f6;} .brow.t1{border-color:#f97316;}
+  .goal{position:relative;height:64px;border-radius:18px;background:#fff;border:2px solid var(--line);overflow:hidden;}
+  .gbar{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#34d399,var(--grn));transition:width .5s;}
+  .gtxt{position:relative;z-index:1;display:flex;height:100%;align-items:center;justify-content:center;font-weight:900;font-size:clamp(20px,4vw,30px);}
+  .targetrow{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:800;}
+  .targetrow .btn{min-width:48px;padding:6px 14px;font-size:24px;}
+  .teamline{font-size:clamp(20px,4.5vw,28px);font-weight:900;}
+  @media(prefers-reduced-motion:reduce){ .gbar{transition:none;} }
   @media(prefers-reduced-motion:reduce){ .brow .bar,.choice{transition:none;} }
 </style>
 </head>
@@ -134,6 +148,9 @@
 
 <!-- teacher: setup -->
 <section id="sSetup" class="screen">
+  <h2>How do you want to play?</h2>
+  <div id="modeGrid" class="grid"></div>
+  <p id="modeHint" class="sub"></p>
   <h2>Pick a word category</h2>
   <div id="catGrid" class="grid"></div>
   <h2>Battle length</h2>
@@ -148,7 +165,14 @@
   <div id="roomCode"></div>
   <div class="card">
     <h2 id="hostCount">Waiting for players…</h2>
+    <p id="hostMode" class="sub" style="margin:8px auto 0"></p>
     <div id="hostPlayers" style="margin-top:12px"></div>
+  </div>
+  <div id="targetRow" class="targetrow" hidden>
+    <span>🎯 Class goal:</span>
+    <button id="targetDown" class="btn ghost" aria-label="Lower the class goal">−</button>
+    <b id="targetVal">0</b> <span>words</span>
+    <button id="targetUp" class="btn ghost" aria-label="Raise the class goal">+</button>
   </div>
   <button id="btnStart" class="btn green" disabled>Start the Battle! 🚀</button>
   <p id="hostErr" class="err"></p>
@@ -181,6 +205,7 @@
 <!-- kid: lobby -->
 <section id="sKidLobby" class="screen">
   <h2 id="kidHello"></h2>
+  <p id="kidTeam" class="sub teamline"></p>
   <p class="sub">You're in! 👀 Watch the big screen — the battle starts when your teacher presses Start.</p>
   <div class="card"><div id="kidLobbyPlayers" class="grid"></div></div>
 </section>
@@ -189,7 +214,8 @@
 <section id="sPlay" class="screen">
   <div class="hud">
     <span class="pill">⏱ <span id="kidClock">--:--</span></span>
-    <span class="pill">⭐ <span id="kidScore">0</span></span>
+    <span class="pill" id="kidGroup" hidden></span>
+    <span class="pill"><span id="kidScoreIcon">⭐</span> <span id="kidScore">0</span></span>
     <span class="pill">🔥 <span id="kidStreak">0</span></span>
   </div>
   <div class="card" style="max-width:620px">
@@ -206,7 +232,7 @@
 
 <!-- podium (both roles) -->
 <section id="sPodium" class="screen">
-  <h2 style="font-size:clamp(28px,6vw,44px)">🏆 Battle over!</h2>
+  <h2 id="podiumTitle" style="font-size:clamp(28px,6vw,44px)">🏆 Battle over!</h2>
   <p class="sub" id="podiumSelf"></p>
   <div class="podium" id="podiumTop"></div>
   <div class="card"><div class="board" id="podiumList" style="flex-direction:column"></div></div>

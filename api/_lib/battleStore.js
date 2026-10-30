@@ -5,8 +5,8 @@
  * free-tier project.
  *
  * Privacy contract (keep it true — it is stated on /battle/):
- *   - No accounts. A room stores ONLY: category, duration, status, timestamps,
- *     random keys, and per-player { generated nickname, score, streak,
+ *   - No accounts. A room stores ONLY: category, duration, mode, class target,
+ *     status, timestamps, random keys, and per-player { generated nickname, score, streak,
  *     answered, correct }. Nothing else. No free-text ever reaches storage
  *     (nicknames are validated against the fixed generated list).
  *   - Rooms auto-expire 30 minutes after creation and are deleted lazily on
@@ -26,7 +26,8 @@
  */
 
 import { isValidNickname } from './battleNames.js';
-import { maxPlausibleScore } from './battleRules.js';
+import { maxPlausibleScore, isGroupMode, defaultTarget, isValidTarget } from './battleRules.js';
+import { teamOf, teamTotals, teamWinner } from './battleTeams.js';
 
 export const ROOM_TTL_MS = 30 * 60 * 1000; // 30 minutes
 export const MAX_PLAYERS = 60;
@@ -66,14 +67,35 @@ function effectiveStatus(room, now) {
 }
 
 function publicState(room, players, now) {
-  return {
+  const base = {
     code: room.code,
     category: room.category,
     durationSec: room.durationSec,
+    mode: room.mode || 'solo',
     status: effectiveStatus(room, now),
     startedAt: room.startedAt || null,
     endsAt: endsAtOf(room),
     now,
+  };
+  if (isGroupMode(base.mode)) {
+    // Team / class battle: the board never carries a per-player score. Players
+    // go out as { id, nickname, team } (nicknames for the lobby join check).
+    const tm = teamOf(players);
+    const totals = teamTotals(players);
+    return {
+      ...base,
+      target: room.target || null,
+      classTotal: players.reduce((n, p) => n + (p.correct || 0), 0),
+      teams: totals,
+      winner: teamWinner(totals),
+      players: players
+        .slice()
+        .sort((a, b) => a.joinedAt - b.joinedAt || String(a.id).localeCompare(String(b.id)))
+        .map((p) => ({ id: p.id, nickname: p.nickname, team: tm.get(p.id) })),
+    };
+  }
+  return {
+    ...base,
     players: players
       .slice()
       .sort((a, b) => b.score - a.score || a.joinedAt - b.joinedAt)
@@ -86,6 +108,12 @@ function publicState(room, players, now) {
         correct: p.correct,
       })),
   };
+}
+
+/** The class target, fixed at start: the teacher's nudged number, or the default. */
+function targetAtStart(room, nPlayers, requested) {
+  if (room.mode !== 'class') return null;
+  return isValidTarget(requested) ? requested : defaultTarget(nPlayers, room.durationSec);
 }
 
 /* ------------------------------------------------------------------------- *
@@ -115,7 +143,7 @@ class MemoryBattleStore {
     return entry;
   }
 
-  async createRoom({ category, durationSec }) {
+  async createRoom({ category, durationSec, mode = 'solo' }) {
     const now = Date.now();
     this._sweep(now);
     if (this.rooms.size >= MAX_MEMORY_ROOMS) return { error: 'too_many_rooms' };
@@ -126,6 +154,8 @@ class MemoryBattleStore {
       code,
       category,
       durationSec,
+      mode,
+      target: null,
       status: 'lobby',
       hostKey: randomKey(),
       startedAt: null,
@@ -143,12 +173,13 @@ class MemoryBattleStore {
     return publicState(entry.room, [...entry.players.values()], now);
   }
 
-  async startRoom(code, hostKey) {
+  async startRoom(code, hostKey, target) {
     const now = Date.now();
     const entry = this._get(code, now);
     if (!entry) return { error: 'room_not_found' };
     if (entry.room.hostKey !== hostKey) return { error: 'forbidden' };
     if (entry.room.status !== 'lobby') return { error: 'already_started' };
+    entry.room.target = targetAtStart(entry.room, entry.players.size, target);
     entry.room.status = 'running';
     entry.room.startedAt = now;
     return { ok: true };
@@ -220,6 +251,9 @@ class PgBattleStore {
             created_at BIGINT NOT NULL,
             expires_at BIGINT NOT NULL
           )`;
+        // RL13 (2026-10-30): grouping mode + the class target fixed at start.
+        await sql`ALTER TABLE cde_battle_rooms ADD COLUMN IF NOT EXISTS mode TEXT NOT NULL DEFAULT 'solo'`;
+        await sql`ALTER TABLE cde_battle_rooms ADD COLUMN IF NOT EXISTS target INT`;
         await sql`
           CREATE TABLE IF NOT EXISTS cde_battle_players (
             id TEXT PRIMARY KEY,
@@ -248,6 +282,8 @@ class PgBattleStore {
       code: row.code,
       category: row.category,
       durationSec: row.duration_sec,
+      mode: row.mode || 'solo',
+      target: row.target == null ? null : Number(row.target),
       status: row.status,
       hostKey: row.host_key,
       startedAt: row.started_at ? Number(row.started_at) : null,
@@ -267,7 +303,7 @@ class PgBattleStore {
     return room;
   }
 
-  async createRoom({ category, durationSec }) {
+  async createRoom({ category, durationSec, mode = 'solo' }) {
     const sql = await this._sql();
     const now = Date.now();
     await this._sweep(sql, now); // lazy TTL cleanup on access
@@ -276,8 +312,8 @@ class PgBattleStore {
       const code = generateRoomCode();
       try {
         await sql`
-          INSERT INTO cde_battle_rooms (code, category, duration_sec, status, host_key, created_at, expires_at)
-          VALUES (${code}, ${category}, ${durationSec}, 'lobby', ${hostKey}, ${now}, ${now + ROOM_TTL_MS})`;
+          INSERT INTO cde_battle_rooms (code, category, duration_sec, mode, status, host_key, created_at, expires_at)
+          VALUES (${code}, ${category}, ${durationSec}, ${mode}, 'lobby', ${hostKey}, ${now}, ${now + ROOM_TTL_MS})`;
         return { code, hostKey };
       } catch (e) {
         if (attempt === 4) throw e; // code collision is ~impossible 5x in a row
@@ -301,15 +337,21 @@ class PgBattleStore {
     );
   }
 
-  async startRoom(code, hostKey) {
+  async startRoom(code, hostKey, target) {
     const sql = await this._sql();
     const now = Date.now();
     const room = await this._getRoomRow(sql, code, now);
     if (!room) return { error: 'room_not_found' };
     if (room.hostKey !== hostKey) return { error: 'forbidden' };
     if (room.status !== 'lobby') return { error: 'already_started' };
+    let fixed = null;
+    if (room.mode === 'class') {
+      const [{ count }] = await sql`
+        SELECT COUNT(*)::int AS count FROM cde_battle_players WHERE room_code = ${code}`;
+      fixed = targetAtStart(room, count, target);
+    }
     await sql`
-      UPDATE cde_battle_rooms SET status = 'running', started_at = ${now}
+      UPDATE cde_battle_rooms SET status = 'running', started_at = ${now}, target = ${fixed}
       WHERE code = ${code} AND status = 'lobby'`;
     return { ok: true };
   }

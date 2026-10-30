@@ -43,3 +43,26 @@ export function pointsForAnswer(streakBefore = 0) {
 export function maxPlausibleScore(durationSec) {
   return durationSec * 20;
 }
+
+/*
+ * Grouping modes (roadmap RL13, kit PATTERNS §8c, agreed with KDM 2026-10-29).
+ * Cooperative beats competitive for a class (Roseth 2008); individual
+ * leaderboards lowered scores (Hanus & Fox 2015).
+ *   solo  — the original race: everyone on one leaderboard.
+ *   team  — two teams by join order; winner = average per member.
+ *   class — the whole class vs a target fixed at start.
+ * team and class never show a per-player score. CDE counts WORDS RIGHT
+ * (correct) toward a team or the class, not points: "our class got 80 words"
+ * reads better on a projector than streak-weighted points.
+ */
+export const BATTLE_MODES = ['solo', 'team', 'class'];
+export const isValidMode = (m) => BATTLE_MODES.includes(m);
+export const isGroupMode = (m) => m === 'team' || m === 'class';
+
+// class target = players × minutes × k (CDE k = 6 words right per kid-minute).
+export const TARGET_K = 6;
+export const MAX_TARGET = 5000;
+export function defaultTarget(nPlayers, durationSec) {
+  return Math.max(1, Math.round(Math.max(1, nPlayers) * (durationSec / 60) * TARGET_K));
+}
+export const isValidTarget = (t) => Number.isInteger(t) && t >= 1 && t <= MAX_TARGET;

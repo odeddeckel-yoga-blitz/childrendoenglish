@@ -38,6 +38,25 @@ export const BATTLE_DURATIONS = [
   { sec: 300, label: '5 min' },
 ];
 
+/* ---- grouping modes (RL13, kit PATTERNS §8c) ---- */
+
+// Team is the default: cooperative beats competitive for a class (Roseth 2008).
+export const BATTLE_MODES = [
+  { id: 'team', label: 'Two teams', emoji: '🔵🟠', hint: 'Comets vs Rockets. The best average per player wins.' },
+  { id: 'class', label: 'Whole class vs a goal', emoji: '🎯', hint: 'Everyone works together to reach one class goal.' },
+  { id: 'solo', label: 'Everyone for themselves', emoji: '🏆', hint: 'One leaderboard with every player’s points.' },
+];
+// The team colour is its identity on the projector (same names/colours as KDM).
+export const TEAM_NAMES = [
+  { name: 'Comets', icon: '🔵', color: '#3b82f6' },
+  { name: 'Rockets', icon: '🟠', color: '#f97316' },
+];
+// Class goal = players × minutes × k words right (copy of api/_lib/battleRules.js; parity-tested).
+export const TARGET_K = 6;
+export function defaultTarget(nPlayers, durationSec) {
+  return Math.max(1, Math.round(Math.max(1, nPlayers) * (durationSec / 60) * TARGET_K));
+}
+
 /** Word pool for a category ('mix' = all categories combined). */
 export function wordPool(categoryId) {
   if (BATTLE_UNITS && BATTLE_UNITS[categoryId]) {

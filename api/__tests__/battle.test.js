@@ -326,3 +326,100 @@ describe('memory battle store (dev fallback)', () => {
     expect(await store.startRoom('BCDFG', 'k')).toEqual({ error: 'room_not_found' });
   });
 });
+
+/* ---- RL13: team battle + class target (kit PATTERNS §8c) ---- */
+import { teamOf, teamTotals, teamWinner } from '../_lib/battleTeams.js';
+import { defaultTarget, isValidMode, TARGET_K } from '../_lib/battleRules.js';
+import { defaultTarget as clientDefaultTarget, TEAM_NAMES } from '../../public/battle/battle-core.js';
+import liveHandler from '../live.js';
+
+describe('team maths', () => {
+  const P = (id, joinedAt, correct = 0) => ({ id, joinedAt, correct });
+
+  it('teamOf: alternating by join order, ties broken by id, stable under reordering', () => {
+    const ps = [P('c', 30), P('a', 10), P('b', 20), P('e', 20), P('d', 40)];
+    const tm = teamOf(ps);
+    expect(['a', 'b', 'e', 'c', 'd'].map((id) => tm.get(id))).toEqual([0, 1, 0, 1, 0]);
+    expect(teamOf(ps.slice().reverse())).toEqual(tm);
+  });
+
+  it('teamTotals: totals + average per member (odd team sizes); winner on the average', () => {
+    // team 0: a(4) c(2) e(0) → 6 / 3 = 2 · team 1: b(3) d(3) → 6 / 2 = 3
+    const ps = [P('a', 1, 4), P('b', 2, 3), P('c', 3, 2), P('d', 4, 3), P('e', 5, 0)];
+    const t = teamTotals(ps);
+    expect(t).toEqual([{ team: 0, members: 3, total: 6, avg: 2 }, { team: 1, members: 2, total: 6, avg: 3 }]);
+    expect(teamWinner(t)).toBe(1);
+    expect(teamWinner(teamTotals([P('a', 1, 2), P('b', 2, 2)]))).toBeNull(); // tie
+    expect(teamWinner(teamTotals([P('a', 1, 5)]))).toBeNull(); // nobody on team 1
+  });
+
+  it('defaultTarget = players × minutes × k, same on server and client', () => {
+    expect(TARGET_K).toBe(6);
+    expect(defaultTarget(10, 180)).toBe(180);
+    expect(defaultTarget(0, 120)).toBe(12); // never below one player
+    for (const [n, d] of [[1, 120], [7, 180], [25, 300]]) expect(clientDefaultTarget(n, d)).toBe(defaultTarget(n, d));
+    expect(isValidMode('team')).toBe(true);
+    expect(isValidMode('ffa')).toBe(false);
+    expect(TEAM_NAMES.map((t) => t.color)).toEqual(['#3b82f6', '#f97316']);
+  });
+});
+
+describe('team / class rooms (memory store)', () => {
+  // join times 1 ms apart, so join order (not the random player id) sets the teams
+  beforeEach(() => { __resetBattleStoreForTests(); vi.useFakeTimers(); vi.setSystemTime(new Date('2026-10-30T10:00:00Z')); });
+  afterEach(() => { vi.useRealTimers(); __resetBattleStoreForTests(); });
+  const names = ['Brave Otter', 'Clever Fox', 'Swift Panda', 'Mighty Tiger', 'Sunny Eagle'];
+
+  async function room(mode, durationSec = 120) {
+    const store = getBattleStore();
+    const { code, hostKey } = await store.createRoom({ category: 'animals', durationSec, mode });
+    const kids = [];
+    for (const n of names) { vi.advanceTimersByTime(1); kids.push(await store.joinRoom(code, n)); }
+    return { store, code, hostKey, kids };
+  }
+
+  it('team: the board carries no per-player score; teams + totals instead', async () => {
+    const { store, code, hostKey, kids } = await room('team');
+    await store.startRoom(code, hostKey);
+    await store.updateScore(code, kids[0].playerId, kids[0].playerKey, { score: 40, streak: 2, answered: 4, correct: 4 });
+    await store.updateScore(code, kids[1].playerId, kids[1].playerKey, { score: 30, streak: 1, answered: 3, correct: 3 });
+    const st = await store.getRoomState(code);
+    expect(st.mode).toBe('team');
+    for (const p of st.players) expect(Object.keys(p).sort()).toEqual(['id', 'nickname', 'team']);
+    expect(st.players.map((p) => p.team)).toEqual([0, 1, 0, 1, 0]);
+    expect(st.teams).toEqual([{ team: 0, members: 3, total: 4, avg: 1.3 }, { team: 1, members: 2, total: 3, avg: 1.5 }]);
+    expect(st.winner).toBe(1);
+    expect(st.classTotal).toBe(7);
+    expect(JSON.stringify(st)).not.toMatch(/"score"|"streak"|"correct"/);
+  });
+
+  it('class: target fixed at start (default or the teacher’s), unchanged by a late join', async () => {
+    const a = await room('class', 120);
+    await a.store.startRoom(a.code, a.hostKey);
+    expect((await a.store.getRoomState(a.code)).target).toBe(defaultTarget(5, 120)); // 60
+    await a.store.joinRoom(a.code, 'Cosmic Wolf');
+    expect((await a.store.getRoomState(a.code)).target).toBe(60);
+
+    __resetBattleStoreForTests();
+    const b = await room('class', 120);
+    await b.store.startRoom(b.code, b.hostKey, 75);
+    expect((await b.store.getRoomState(b.code)).target).toBe(75);
+
+    __resetBattleStoreForTests();
+    const c = await room('class', 120);
+    await c.store.startRoom(c.code, c.hostKey, 999999); // out of range → default
+    expect((await c.store.getRoomState(c.code)).target).toBe(60);
+  });
+
+  it('solo rooms are unchanged (scores on the board), and the API rejects an unknown mode', async () => {
+    const { store, code } = await room('solo');
+    const st = await store.getRoomState(code);
+    expect(st.mode).toBe('solo');
+    expect(st.players[0]).toHaveProperty('score');
+    const res = { code: 0, body: null, setHeader() {}, status(c) { this.code = c; return this; }, json(b) { this.body = b; return this; } };
+    await liveHandler({ method: 'POST', body: { action: 'create', category: 'animals', durationSec: 120, mode: 'ffa' } }, res);
+    expect(res.code).toBe(400);
+    await liveHandler({ method: 'POST', body: { action: 'create', category: 'animals', durationSec: 120 } }, res);
+    expect(res.code).toBe(200);
+  });
+});

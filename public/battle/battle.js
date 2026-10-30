@@ -7,11 +7,14 @@
  * projector → kids join by code + picked nickname → host-key-gated start →
  * kids answer client-generated word→photo questions → everyone polls room
  * state every 2s → server-clock countdown → podium.
+ * Modes (RL13): team (Comets vs Rockets, average per player wins) and class
+ * (everyone vs one goal) show NO per-player score — the server doesn't even
+ * send one; solo is the original leaderboard race.
  */
 
 import {
-  BATTLE_CATEGORIES, BATTLE_UNIT_CATEGORIES, BATTLE_DURATIONS, normalizeCode, suggestNicknames,
-  makeQuestion, pointsForAnswer,
+  BATTLE_CATEGORIES, BATTLE_UNIT_CATEGORIES, BATTLE_DURATIONS, BATTLE_MODES, TEAM_NAMES, defaultTarget,
+  normalizeCode, suggestNicknames, makeQuestion, pointsForAnswer,
 } from './battle-core.js';
 
 const API = '/api/live';
@@ -34,6 +37,8 @@ const S = {
   nickname: null,
   category: 'mix',
   durationSec: 120,
+  mode: 'team',
+  targetNudge: 0,        // class mode: teacher's ± steps on the default goal
   room: null,            // last polled server state
   clockOffset: 0,        // serverNow - clientNow
   q: null,               // current question
@@ -193,15 +198,20 @@ function render() {
       const n = room.players.length;
       $('hostCount').textContent = n === 0 ? 'Waiting for players…'
         : `${n} player${n === 1 ? '' : 's'} in — waiting for more!`;
-      $('hostPlayers').replaceChildren(...room.players.map((p) => chip(p.nickname)));
+      $('hostPlayers').replaceChildren(...room.players.map((p) => chip(p.nickname, room.mode === 'team' ? p.team : null)));
       $('btnStart').disabled = n === 0;
+      $('hostMode').textContent = modeLine(room.mode);
+      $('targetRow').hidden = room.mode !== 'class';
+      if (room.mode === 'class') $('targetVal').textContent = String(lobbyTarget(n));
     } else if (room.status === 'running') {
       if (S.view !== 'sHostLive') {
         show('sHostLive');
         const cat = [...BATTLE_CATEGORIES, ...BATTLE_UNIT_CATEGORIES].find((c) => c.id === room.category);
         $('hostTopic').textContent = cat ? `${cat.emoji} ${cat.label}` : '';
       }
-      renderBoard($('hostBoard'), room.players);
+      if (room.mode === 'team') renderTeams($('hostBoard'), room);
+      else if (room.mode === 'class') renderGoal($('hostBoard'), room);
+      else renderBoard($('hostBoard'), room.players);
       tickClock();
     }
   } else if (S.role === 'kid') {
@@ -210,24 +220,98 @@ function render() {
         show('sKidLobby');
         $('kidHello').textContent = `Hi, ${S.nickname}! ⚡`;
       }
-      $('kidLobbyPlayers').replaceChildren(...room.players.map((p) => chip(p.nickname)));
+      $('kidLobbyPlayers').replaceChildren(...room.players.map((p) => chip(p.nickname, room.mode === 'team' ? p.team : null)));
+      const t = myTeam();
+      $('kidTeam').textContent = room.mode === 'team' && t !== null ? `You're on the ${teamLabel(t)}!`
+        : room.mode === 'class' ? '🎯 Your whole class has one goal together!' : '';
     } else if (room.status === 'running') {
       if (S.view !== 'sPlay') {
         show('sPlay');
         nextQuestion();
       }
-      $('kidScore').textContent = String(S.score);
-      $('kidStreak').textContent = String(S.streak);
+      renderKidHud();
       tickClock();
     }
   }
 }
 
-function chip(text) {
+function modeLine(mode) {
+  const m = BATTLE_MODES.find((x) => x.id === mode);
+  return m ? `${m.emoji} ${m.label}: ${m.hint}` : '';
+}
+
+/** Kid HUD: points in solo; in team/class the words they got right, plus their team or the class goal. */
+function renderKidHud() {
+  const group = isGroup(S.room);
+  $('kidScoreIcon').textContent = group ? '✅' : '⭐';
+  $('kidScore').textContent = String(group ? S.correct : S.score);
+  $('kidStreak').textContent = String(S.streak);
+  const pill = $('kidGroup');
+  const t = myTeam();
+  if (S.room && S.room.mode === 'team' && t !== null) {
+    pill.hidden = false;
+    pill.style.borderColor = TEAM_NAMES[t].color;
+    pill.textContent = teamLabel(t);
+  } else if (S.room && S.room.mode === 'class') {
+    pill.hidden = false;
+    pill.style.borderColor = '';
+    pill.textContent = `🎯 ${S.room.classTotal} / ${S.room.target}`;
+  } else {
+    pill.hidden = true;
+  }
+}
+
+function chip(text, team = null) {
   const el = document.createElement('span');
-  el.className = 'chip';
-  el.textContent = text;
+  el.className = 'chip' + (team === null || team === undefined ? '' : ` t${team}`);
+  el.textContent = team === null || team === undefined ? text : `${TEAM_NAMES[team].icon} ${text}`;
   return el;
+}
+
+const isGroup = (room) => room && (room.mode === 'team' || room.mode === 'class');
+const teamLabel = (t) => `${TEAM_NAMES[t].icon} ${TEAM_NAMES[t].name}`;
+const myTeam = () => {
+  const me = S.room && S.room.players.find((p) => p.id === S.playerId);
+  return me ? me.team : null;
+};
+const TARGET_STEP = 5;
+const words = (n) => `${n} word${n === 1 ? '' : 's'}`;
+function lobbyTarget(n) {
+  return Math.max(TARGET_STEP, defaultTarget(n, S.room ? S.room.durationSec : S.durationSec) + TARGET_STEP * S.targetNudge);
+}
+
+/** Team board: per team the average per player (what wins) and the total — no names, no player scores. */
+function renderTeams(el, room) {
+  const max = Math.max(1, ...room.teams.map((t) => t.avg));
+  el.replaceChildren(...room.teams.map((t) => {
+    const row = document.createElement('div');
+    row.className = `brow team t${t.team}`;
+    row.dataset.team = String(t.team);
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+    bar.style.width = `${Math.round((t.avg / max) * 100)}%`;
+    const name = document.createElement('span');
+    name.textContent = `${teamLabel(t.team)} · ${t.members} player${t.members === 1 ? '' : 's'}`;
+    const sc = document.createElement('span');
+    sc.className = 'sc';
+    sc.textContent = `${t.avg} per player · ${words(t.total)}`;
+    row.append(bar, name, sc);
+    return row;
+  }));
+}
+
+/** Class goal: one bar for the whole class. */
+function renderGoal(el, room) {
+  const row = document.createElement('div');
+  row.className = 'goal';
+  const bar = document.createElement('div');
+  bar.className = 'gbar';
+  bar.style.width = `${Math.min(100, Math.round((room.classTotal / Math.max(1, room.target || 1)) * 100))}%`;
+  const txt = document.createElement('span');
+  txt.className = 'gtxt';
+  txt.textContent = `🎯 ${room.classTotal} / ${words(room.target)}`;
+  row.append(bar, txt);
+  el.replaceChildren(row);
 }
 
 function renderBoard(el, players) {
@@ -250,8 +334,30 @@ function renderBoard(el, players) {
   }));
 }
 
+function renderGroupPodium() {
+  const room = S.room;
+  $('podiumTop').replaceChildren();
+  if (room.mode === 'team') {
+    $('podiumTitle').textContent = room.winner === null ? '🤝 It’s a tie!' : `🏆 The ${teamLabel(room.winner)} win!`;
+    renderTeams($('podiumList'), room);
+  } else {
+    const hit = room.classTotal >= room.target;
+    $('podiumTitle').textContent = hit ? '🎉 Class goal reached!' : '💪 So close! Try again?';
+    renderGoal($('podiumList'), room);
+  }
+  if (S.role === 'kid') {
+    const t = myTeam();
+    const forWhom = room.mode === 'team' && t !== null ? `the ${teamLabel(t)}` : 'your class';
+    $('podiumSelf').textContent = `${S.nickname}, you got ${words(S.correct)} right for ${forWhom}!`;
+  } else {
+    $('podiumSelf').textContent = 'Great teamwork, everyone! 🎉';
+  }
+}
+
 function renderPodium() {
   if (S.view !== 'sPodium') show('sPodium');
+  if (isGroup(S.room)) { renderGroupPodium(); return; }
+  $('podiumTitle').textContent = '🏆 Battle over!';
   const players = S.room.players;
   const medals = ['🥇', '🥈', '🥉'];
   const order = [1, 0, 2]; // 2nd — 1st — 3rd visual layout
@@ -326,8 +432,7 @@ function answer(btn, chosenId) {
     if (right) right.classList.add('good');
   }
   for (const b of $('choices').querySelectorAll('button')) b.disabled = true;
-  $('kidScore').textContent = String(S.score);
-  $('kidStreak').textContent = String(S.streak);
+  renderKidHud();
   saveSession();
   postScore();
   setTimeout(nextQuestion, good ? 550 : 1100);
@@ -343,6 +448,16 @@ function postScore() {
 /* ---------------- teacher: setup ---------------- */
 
 function renderSetup() {
+  $('modeGrid').replaceChildren(...BATTLE_MODES.map((m) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (m.id === S.mode ? ' sel' : '');
+    b.textContent = `${m.emoji} ${m.label}`;
+    b.dataset.mode = m.id;
+    b.setAttribute('aria-pressed', m.id === S.mode ? 'true' : 'false');
+    b.addEventListener('click', () => { S.mode = m.id; renderSetup(); });
+    return b;
+  }));
+  $('modeHint').textContent = BATTLE_MODES.find((m) => m.id === S.mode).hint;
   $('catGrid').replaceChildren(...[...BATTLE_CATEGORIES, ...BATTLE_UNIT_CATEGORIES].map((c) => {
     const b = document.createElement('button');
     b.className = 'chip' + (c.id === S.category ? ' sel' : '');
@@ -365,13 +480,14 @@ async function createRoom() {
   $('setupErr').textContent = '';
   try {
     const { code, hostKey } = await apiPost({
-      action: 'create', category: S.category, durationSec: S.durationSec,
+      action: 'create', category: S.category, durationSec: S.durationSec, mode: S.mode,
     });
     S.role = 'host';
     S.code = code;
     S.hostKey = hostKey;
     saveSession();
     track('create');
+    track('mode_' + S.mode);
     show('sHostLobby');
     $('roomCode').textContent = code;
     startLoops();
@@ -383,7 +499,11 @@ async function createRoom() {
 async function startBattle() {
   $('hostErr').textContent = '';
   try {
-    await apiPost({ action: 'start', code: S.code, hostKey: S.hostKey });
+    const n = (S.room && S.room.players || []).length;
+    await apiPost({
+      action: 'start', code: S.code, hostKey: S.hostKey,
+      ...(S.room && S.room.mode === 'class' ? { target: lobbyTarget(n) } : {}),
+    });
     track('start_p' + sizeBucket((S.room && S.room.players || []).length));
     poll();
   } catch (e) {
@@ -510,6 +630,8 @@ function boot() {
   $('btnKid').addEventListener('click', () => show('sJoin'));
   $('btnCreate').addEventListener('click', createRoom);
   $('btnStart').addEventListener('click', startBattle);
+  $('targetDown').addEventListener('click', () => { S.targetNudge--; render(); });
+  $('targetUp').addEventListener('click', () => { S.targetNudge++; render(); });
   $('btnCheckCode').addEventListener('click', checkCode);
   $('codeInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') checkCode(); });
   $('btnMoreNames').addEventListener('click', renderNamePicker);

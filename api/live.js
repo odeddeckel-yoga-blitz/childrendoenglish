@@ -7,10 +7,12 @@
  *   GET  /api/live?code=XXXXX                     → room state + leaderboard
  *                                                   (polled every 2s by every
  *                                                   screen in the room)
- *   POST /api/live {action:'create', category, durationSec}
+ *   POST /api/live {action:'create', category, durationSec, mode?}
+ *                                                 mode: solo (default) | team | class
  *                                                 → { code, hostKey }
  *   POST /api/live {action:'join', code, nickname}→ { playerId, playerKey }
- *   POST /api/live {action:'start', code, hostKey}→ { ok }
+ *   POST /api/live {action:'start', code, hostKey, target?}→ { ok }
+ *                                                 (class mode: the teacher's target, else default)
  *   POST /api/live {action:'score', code, playerId, playerKey,
  *                   score, streak, answered, correct} → { ok }
  *
@@ -19,7 +21,7 @@
  */
 
 import { getBattleStore, normalizeRoomCode } from './_lib/battleStore.js';
-import { isValidCategory, isValidDuration } from './_lib/battleRules.js';
+import { isValidCategory, isValidDuration, isValidMode } from './_lib/battleRules.js';
 
 const STATUS_BY_ERROR = {
   room_not_found: 404,
@@ -71,8 +73,9 @@ export default async function handler(req, res) {
       case 'create': {
         const category = isValidCategory(body.category) ? body.category : null;
         const durationSec = isValidDuration(body.durationSec) ? body.durationSec : null;
-        if (!category || !durationSec) return send(res, { error: 'bad_request' });
-        return send(res, await store.createRoom({ category, durationSec }));
+        const mode = body.mode === undefined ? 'solo' : body.mode;
+        if (!category || !durationSec || !isValidMode(mode)) return send(res, { error: 'bad_request' });
+        return send(res, await store.createRoom({ category, durationSec, mode }));
       }
       case 'join': {
         const code = normalizeRoomCode(body.code);
@@ -82,7 +85,7 @@ export default async function handler(req, res) {
       case 'start': {
         const code = normalizeRoomCode(body.code);
         if (!code || typeof body.hostKey !== 'string') return send(res, { error: 'bad_request' });
-        return send(res, await store.startRoom(code, body.hostKey));
+        return send(res, await store.startRoom(code, body.hostKey, body.target));
       }
       case 'score': {
         const code = normalizeRoomCode(body.code);
