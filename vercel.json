@@ -148,12 +148,22 @@
   ],
   "redirects": [
     {
-      "source": "/units/template-test/:path*",
+      "source": "/units/template-test",
       "destination": "/units/",
       "permanent": true
     },
     {
-      "source": "/units/template-test",
+      "source": "/units/template-test/",
+      "destination": "/units/",
+      "permanent": true
+    },
+    {
+      "source": "/units/template-test/unit-1",
+      "destination": "/units/",
+      "permanent": true
+    },
+    {
+      "source": "/units/template-test/unit-1/",
       "destination": "/units/",
       "permanent": true
     },
