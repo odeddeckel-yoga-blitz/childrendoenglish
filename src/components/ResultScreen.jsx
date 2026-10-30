@@ -5,9 +5,18 @@ import { LIGHTNING_SECS } from '../utils/arcade';
 import { t } from '../utils/i18n';
 import { ARCADE } from '../data/arcadeGames';
 
-export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onMenu, onLightning }) {
+// PASS_PCT: the ladder's bar to move on (7 of 10), the same bar as level unlocks.
+export const PASS_PCT = 70;
+
+// One primary action, picked by the score (persona standard P1): under the bar →
+// the same words again; at or over it → the next ladder step (or a new quiz).
+// Everything else sits behind one "More choices" disclosure.
+export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onRetrySame, onMenu, onLightning }) {
   const { score, total, answers = [], arcade, arcadeNewBest, quit } = results;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
+  const passed = !quit && percentage >= PASS_PCT;
+  const praise = percentage >= 50;
+  const primaryIsPlayAgain = passed ? !cycleNext : !onRetrySame;
   const showLightning = !!onLightning && canRead && !quit && total > 0;
 
   const headline = percentage >= 90 ? t('amazing', lang)
@@ -48,7 +57,7 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
       </div>
 
       {/* Play-first rename: a player who skipped the name gets asked once they've played */}
-      {namePrompt && !quit && !nameSaved && (
+      {namePrompt && !quit && praise && !nameSaved && (
         <form
           className="glass rounded-2xl p-4 space-y-2"
           onSubmit={(e) => { e.preventDefault(); saveName(); }}
@@ -85,7 +94,7 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
             <div>
               <p className="text-lg font-black text-amber-600 dark:text-amber-400" dir="ltr">⭐ {arcade.score}</p>
               <p className="text-[11px] text-slate-500 font-medium">
-                {arcadeNewBest ? t('newBest', lang) : t('runScore', lang)}
+                {arcadeNewBest && praise ? t('newBest', lang) : t('runScore', lang)}
               </p>
             </div>
             <div>
@@ -101,7 +110,7 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
               <p className="text-[11px] text-slate-500 font-medium">{t('runFastAnswers', lang)}</p>
             </div>
           </div>
-          {arcadeNewBest && (
+          {arcadeNewBest && praise && (
             <p className="text-center text-sm font-black text-emerald-600 mt-2 animate-badge-pop">
               {t('newBestBanner', lang)}
             </p>
@@ -110,75 +119,88 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
       )}
 
 
-      {/* Learning-cycle continuation — primary when a cycle stage just finished */}
-      {cycleNext && (
-        <button
-          onClick={cycleNext.onClick}
-          className="w-full py-4 px-4 rounded-xl font-black text-white bg-blue-600 hover:bg-blue-700
-                     active:scale-95 transition-all shadow-md text-lg"
-        >
-          {cycleNext.label}
-        </button>
-      )}
-      {cycleRepeats && (
-        <div className="flex gap-2">
-          {cycleRepeats.map((r) => (
+      {/* The one primary action */}
+      {(() => {
+        const primary = passed
+          ? (cycleNext || { label: t('nextQuiz', lang), onClick: onPlayAgain })
+          : onRetrySame ? { label: t('retrySameWords', lang), onClick: onRetrySame }
+          : { label: t('playAgain', lang), onClick: onPlayAgain };
+        return (
+          <>
+            <button
+              data-kdm-primary=""
+              onClick={primary.onClick}
+              className="w-full py-4 px-4 rounded-xl font-black text-white bg-blue-600 hover:bg-blue-700
+                         active:scale-95 transition-all shadow-md text-lg flex items-center justify-center gap-2"
+            >
+              {!passed && !onRetrySame && <Play className="w-4 h-4" />} {primary.label}
+            </button>
+            {cycleNext && !passed && !quit && (
+              <p className="text-center text-sm font-semibold text-slate-500">
+                {t('ladderPassHint', lang, { need: Math.ceil((total * PASS_PCT) / 100), total })}
+              </p>
+            )}
+          </>
+        );
+      })()}
+
+      <details className="glass rounded-xl group">
+        <summary className="cursor-pointer list-none py-2.5 px-3 text-center text-sm font-bold text-slate-600 dark:text-slate-300">
+          {t('moreChoices', lang)} <span aria-hidden="true" className="inline-block transition-transform group-open:rotate-180">▾</span>
+        </summary>
+        <div className="space-y-2 p-3 pt-0">
+          {passed && onRetrySame && (
+            <button onClick={onRetrySame}
+              className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 active:scale-95 transition-all">
+              {t('retrySameWords', lang)}
+            </button>
+          )}
+          {!primaryIsPlayAgain && (
+            <button onClick={onPlayAgain}
+              className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2">
+              <Play className="w-4 h-4" /> {t('playAgain', lang)}
+            </button>
+          )}
+          {cycleRepeats && cycleRepeats.map((r) => (
             <button key={r.label} onClick={r.onClick}
-              className="flex-1 py-2.5 px-2 rounded-xl text-sm font-bold text-blue-700 dark:text-blue-300
-                         bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700
-                         hover:shadow-sm active:scale-95 transition-all">
+              className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 active:scale-95 transition-all">
               {r.label}
             </button>
           ))}
-        </div>
-      )}
-
-      {/* Action buttons — Play Again is primary */}
-      <div className="space-y-3">
-        <button
-          onClick={onPlayAgain}
-          className="w-full py-3.5 px-4 bg-blue-600 text-white rounded-xl font-semibold
-                     hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
-        >
-          <Play className="w-4 h-4" /> {t('playAgain', lang)}
-        </button>
-
-        {showLightning && (
-          <button
-            onClick={onLightning}
-            className="w-full py-3.5 px-4 rounded-xl font-bold text-amber-700 dark:text-amber-300
-                       bg-linear-to-b from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/40
-                       border border-amber-300 dark:border-amber-700
-                       hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2"
-          >
-            <Zap className="w-4 h-4" /> {t('lightningCta', lang, { secs: LIGHTNING_SECS })}
-          </button>
-        )}
-
-        <button
-          onClick={onMenu}
-          className="w-full py-2.5 px-3 glass rounded-xl font-semibold text-slate-500 text-sm
-                     hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-1.5"
-        >
-          <ArrowLeft className="w-4 h-4" /> {t('backToMenuBtn', lang)}
-        </button>
-
-        {/* Rotating arcade suggestion — the post-quiz "what next" moment is the
-            one natural door to the standalone games (they live outside the SPA). */}
-        {(() => {
-          const g = ARCADE[new Date().getDate() % ARCADE.length];
-          return (
-            <a
-              href={`/games/${g.id}/`}
-              className="w-full py-3 px-4 rounded-xl font-bold text-emerald-700 dark:text-emerald-300
-                         bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700
-                         hover:shadow-md active:scale-95 transition-all flex items-center justify-center gap-2 text-sm"
+          {showLightning && (
+            <button
+              onClick={onLightning}
+              className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-amber-700 dark:text-amber-300
+                         bg-linear-to-b from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/40
+                         border border-amber-300 dark:border-amber-700 active:scale-95 transition-all flex items-center justify-center gap-2"
             >
-              <span aria-hidden="true">{g.emoji}</span> {t('resultTryGame', lang, { name: g.name })}
-            </a>
-          );
-        })()}
-      </div>
+              <Zap className="w-4 h-4" /> {t('lightningCta', lang, { secs: LIGHTNING_SECS })}
+            </button>
+          )}
+          {/* Rotating arcade suggestion — the standalone games live outside the SPA. */}
+          {(() => {
+            const g = ARCADE[new Date().getDate() % ARCADE.length];
+            return (
+              <a
+                href={`/games/${g.id}/`}
+                className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-emerald-700 dark:text-emerald-300
+                           bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700
+                           active:scale-95 transition-all flex items-center justify-center gap-2"
+              >
+                <span aria-hidden="true">{g.emoji}</span> {t('resultTryGame', lang, { name: g.name })}
+              </a>
+            );
+          })()}
+        </div>
+      </details>
+
+      <button
+        onClick={onMenu}
+        className="w-full py-2 px-3 rounded-xl font-semibold text-slate-500 text-sm
+                   hover:underline flex items-center justify-center gap-1.5"
+      >
+        <ArrowLeft className="w-4 h-4 rtl:rotate-180" /> {t('backToMenuBtn', lang)}
+      </button>
 
       {/* Answer review */}
       {answers.length > 0 && (

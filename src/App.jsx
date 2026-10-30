@@ -19,10 +19,15 @@ import { sendLearn } from './utils/learnBeacon';
 import { WORDS } from './data/words';
 import { cycleState, advanceCycle, batchLabel, batchCount, stepsFor, LADDER, buildSet, repeatSet, masteredCount } from './utils/learningCycle';
 import LadderMap from './components/LadderMap';
+import LadderStrip from './components/LadderStrip';
+
 import SetPicker from './components/SetPicker';
 import LetterFix from './components/LetterFix';
 import SentenceGap from './components/SentenceGap';
 import BatchComplete from './components/BatchComplete';
+
+// Screens that show the ladder progress strip while a ladder step runs.
+const LADDER_STRIP_STATES = new Set(['imageQuiz', 'wordQuiz', 'audioQuiz', 'listenMatchQuiz', 'flashcards', 'letterFix', 'sentenceGap']);
 
 
 const Onboarding = lazy(() => import('./components/Onboarding'));
@@ -141,6 +146,9 @@ export default function App() {
   const [batchDoneNum, setBatchDoneNum] = useState(null);
   const [ladderSet, setLadderSet] = useState(null);
   const [ladderStepKey, setLadderStepKey] = useState(null);
+  // Start/Continue launch the next step directly (persona P2); the step map is a
+  // side door. Set → the effect below starts the current step once state settles.
+  const [pendingStart, setPendingStart] = useState(false);
   const [adhocPos, setAdhocPos] = useState({ done: [] });
   const [extraDone, setExtraDone] = useState([]); // batch steps completed out of order
   const sessionSeed = useMemo(() => Math.floor(Date.now() / 3600000), []);
@@ -334,7 +342,7 @@ export default function App() {
     return { currentKey: remaining?.key, doneKeys: adhocPos.done };
   }, [activeSet, stats, ladderSteps, adhocPos, extraDone]);
 
-  const openLadder = useCallback((source = 'batch', letters = null) => {
+  const openLadder = useCallback((source = 'batch', letters = null, start = false) => {
     if (source === 'batch') {
       setLadderSet(null);
     } else {
@@ -344,7 +352,8 @@ export default function App() {
       setAdhocPos({ done: [] });
     }
     setExtraDone([]);
-    navigate('ladder');
+    if (start) setPendingStart(true);
+    else navigate('ladder');
   }, [stats, klNow, sessionSeed, lang, navigate]);
 
   // Launch a step (any step — free navigation). Fires cyc_start on a set's first step.
@@ -368,7 +377,7 @@ export default function App() {
     if (step.kind === 'arcade') {
       // Mark-on-launch (cross-page completion isn't trackable in v1; g_lvl/g_cmp
       // beacons measure real play). Then a full navigation out of the SPA.
-      completeLadderStep(stepKey);
+      completeLadderStep(stepKey, true);
       const ids = words.map((w) => w.id).join(',');
       window.location.href = `/games/${step.game}/?words=${encodeURIComponent(ids)}&from=ladder`;
     }
@@ -376,7 +385,7 @@ export default function App() {
   }, [activeSet, ladderPos, canReadNow, quizFlow, navigate]);
 
   // Record a completed step; advance position; celebrate batch completion.
-  const completeLadderStep = useCallback((stepKey) => {
+  const completeLadderStep = useCallback((stepKey, leaving = false) => {
     sendLearn('cyc_stage', `${activeSet.token}_${stepKey}`);
     setCycleRun(false);
     setFocusedWords(null);
@@ -395,15 +404,22 @@ export default function App() {
       } else if (!ladderPos.doneKeys.includes(stepKey)) {
         setExtraDone((cur) => [...cur, stepKey]);
       }
-      navigate('ladder');
+      if (!leaving) setPendingStart(true);
       return;
     }
     const done = adhocPos.done.includes(stepKey) ? adhocPos.done : [...adhocPos.done, stepKey];
     setAdhocPos({ done });
-    if (done.length >= ladderSteps.length) sendLearn('cyc_done', activeSet.token);
-    navigate('ladder');
+    if (done.length >= ladderSteps.length) { sendLearn('cyc_done', activeSet.token); navigate('ladder'); return; }
+    if (!leaving) setPendingStart(true);
    
   }, [activeSet, ladderPos, stats, canReadNow, adhocPos, ladderSteps, navigate, setStats]);
+
+  useEffect(() => {
+    if (!pendingStart) return;
+    setPendingStart(false);
+    if (ladderPos.currentKey) startLadderStep(ladderPos.currentKey);
+    else navigate('ladder');
+  }, [pendingStart, ladderPos, startLadderStep, navigate]);
 
   // Reaching the menu by any route (bottom nav, browser back) ends a ladder run.
   useEffect(() => {
@@ -638,7 +654,7 @@ export default function App() {
             onDismissInstall={dismissInstall}
             onNavigate={navigate}
             onQuickStart={() => quizFlow.startQuiz('beginner', 'listen', null, 'quick')}
-            onContinueCycle={() => openLadder('batch')}
+            onContinueCycle={() => openLadder('batch', null, true)}
             cycleInfo={(() => {
               const { batch, stage } = cycleState(stats);
               const kl = activePlayer?.knownLetters;
@@ -768,6 +784,12 @@ export default function App() {
               { label: t('ladderAgainMore', lang), onClick: () => repeatLadderStep('more') },
             ] : null}
             onPlayAgain={() => quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, quizFlow.customWords, 'again')}
+            // Same words again: a ladder step reruns itself (not marked done); a free quiz keeps its words.
+            onRetrySame={quizFlow.quizWords.length > 0 && !quizFlow.quizResults?.quit ? () => {
+              const same = quizFlow.quizWords.map(({ _distractors, ...w }) => w);
+              if (cycleRun && ladderStepKey) startLadderStep(ladderStepKey, same);
+              else quizFlow.startQuiz(quizFlow.selectedLevel, quizFlow.selectedMode, same);
+            } : undefined}
             onMenu={() => { if (cycleRun) { setCycleRun(false); setFocusedWords(null); navigate('menu', 'back'); } else leaveScreen(); }}
             onLightning={quizFlow.quizWords.length > 0 ? () => navigate('lightning') : undefined}
           />
@@ -828,7 +850,7 @@ export default function App() {
             stats={stats}
             lang={lang}
             batchJustDone={batchDoneNum || 1}
-            onNextBatch={() => openLadder('batch')}
+            onNextBatch={() => openLadder('batch', null, true)}
             onBackToMenu={() => navigate('menu', 'back')}
           />
         );
@@ -1014,7 +1036,9 @@ export default function App() {
 
   return (
     <div className="app-bg min-h-screen pb-safe">
-      <Confetti active={showConfetti} />
+      {/* No confetti over a low score (a badge can land on a 2/10 quiz). */}
+      <Confetti active={showConfetti && !(gameState === 'finished' && quizFlow.quizResults?.total > 0
+        && quizFlow.quizResults.score / quizFlow.quizResults.total < 0.5)} />
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold">
         Skip to content
       </a>
@@ -1032,6 +1056,15 @@ export default function App() {
       <main id="main-content" ref={mainRef} tabIndex={-1} className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg md:max-w-2xl'} mx-auto px-4 py-6 outline-hidden`}>
         <Suspense fallback={<SuspenseFallback lang={lang} />}>
           <ErrorBoundary key={gameState} onReset={resetToMenu} lang={lang}>
+            {cycleRun && LADDER_STRIP_STATES.has(gameState) && (
+              <LadderStrip
+                lang={lang}
+                steps={ladderSteps}
+                currentKey={ladderStepKey}
+                doneKeys={ladderPos.doneKeys}
+                onOpen={() => { setCycleRun(false); setFocusedWords(null); navigate('ladder'); }}
+              />
+            )}
             {renderState()}
           </ErrorBoundary>
         </Suspense>

@@ -169,6 +169,45 @@ rules. A feature that needs to break one is out, not "careful".
 - **Third-party share widgets load third-party script** (Google Classroom's `platform.js`) → prefer the plain
   share URL (`classroom.google.com/share?url=…`, as kidsdomath ships) so the CSP and privacy notice stay unchanged.
 
+## 3e. Persona standard — kids, teachers, parents on every site (UX audit 2026-10-30; owner GO)
+Three people use these sites and each needs a different first move: the **child** wants to play, the **teacher** wants
+to set up a class in under a minute, the **parent** wants to know "is it safe, free, and what do I pick?". The KDM
+audit (`~/projects/shared/ux-audit-2026-10-30/kdm.md`) found an end screen with 13 actions + a toast for 3 audiences,
+"Play" buttons that only scrolled, teacher menus in the kid's path, and four different game counts. These five rules
+are the contract; each site builds against them. Checks: `test/persona-check.mjs` (P1/P2/P4 on game pages, phone size)
+and `test/persona-counts.mjs` (P5, static) — run from the site root; both exit 1 on a breach.
+
+- **P1 · End screen = ONE primary button.** The next step is picked by the result: a low score → retry the same
+  content (or the easier step); a good score → the next game/lesson. Mark it `data-kdm-primary`. "Play again" is
+  secondary. Everything else (harder mode, lightning round, more like this, popular, home) goes behind one
+  "More choices" disclosure. Nothing may cover the primary: a site-wide toast/pill/banner hides while an end screen is
+  open (KDM's "Nice! Next" toast covered the summary's buttons on phones). No game listed twice on one screen.
+  *Check:* exactly one visible `[data-kdm-primary]` in the end screen, and `elementFromPoint` at its centre hits it.
+- **P2 · Every Play/Start button starts play.** It opens the game (or the first question) in one tap — never a
+  scroll-to, never an extra menu, never a language/grade question on a page that is already localized or graded.
+  A list-jump is a secondary text link ("See all 24 games ↓"), not the green button. The big label says PLAY (▶);
+  a themed verb may sit under it for flavour. Mark it `data-kdm-play`.
+  *Check:* tapping the menu's play button puts `Game.screen` on 'play' within 2 s without just scrolling.
+- **P3 · Teacher front door.** A "Teachers" link in the header/nav and on the home page (a one-line
+  "Teacher? → · Parent? →" strip is enough) leads to ONE teacher page whose first screen shows **≤ 3 big actions**
+  (e.g. start a class battle · make a set/choice board · "safe for school" to forward to IT). Essays go below.
+  Every page has the same header with a way home — including tool pages (/live, /join, safe-for-school).
+- **P4 · Kid screens stay adult-free.** Teacher/parent items — class codes, "show your teacher" work codes, Class
+  Battle cards, "Use in class", share-to-Classroom — are **not shown in the kid play path** (game menu, play screen,
+  end screen, the kids' hub) unless the child arrived from a teacher link (a set/battle link or `?class=1`), or they sit
+  behind one small "For grown-ups" disclosure. Mark such elements `data-kdm-audience="teacher"` so the check can see
+  them. Grown-up prompts on kid screens must read as a person wrote them (no "one one more one less problem").
+  *Check:* no visible `[data-kdm-audience=teacher]` on menu/play/end without a teacher arrival.
+- **P5 · One name and one count per thing, from one data source.** One label for "home" (KDM: "🏠 All games") on
+  pills, summaries, toasts and headers. One grade scheme and one difficulty scheme site-wide. Catalogue counts come
+  from the registry through one shared rounding helper ("500+ math & science games") — never typed into a page.
+  Zero-value stats are hidden, not shown as "0 flawless".
+  *Check:* `persona-counts.mjs` flags string literals with a number next to a catalogue noun (comments and
+  `persona-ok` lines pass).
+
+Adoption order that worked for KDM: P1 toast fix (1 h, visible bug) → P1 end screen → P2 Play buttons → P4 markers →
+P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page before trusting a green run.
+
 ## 4. Robustness contracts (each was a shipped bug)
 - **Touch drag needs `touch-action:none` on the drag source** (kidsdomath 2026-10-20). The template's
   `*{touch-action:manipulation}` (double-tap-zoom guard) lets the browser treat a finger-drag as a
@@ -215,8 +254,17 @@ rules. A feature that needs to break one is out, not "careful".
   `navigator.webdriver` skip (headless TTS can stall the main thread ~14s).
 - **Stale-deploy chunks** (SPA hosts): error boundaries detect chunk-load failure signatures and
   reload once (sessionStorage guard).
-- **PWA**: add game/battle routes to `navigateFallbackDenylist`; remember `prompt`-mode SW keeps
-  old shells alive across deploys.
+- **PWA = allowlist, never a denylist** (CDE 2026-10-30; yoga had the same bug). With
+  vite-plugin-pwa, set `navigateFallbackAllowlist` to the app's OWN routes only, built from the
+  same source the host uses (CDE: `sw-routes.js` reads vercel.json `rewrites` → `/` +
+  `/play`, `/today`…), plus a unit test that static sections are NOT matched. A
+  `navigateFallbackDenylist` silently rots: every static section added later (CDE /games/ /units/
+  /band-1/ /es/ …; yoga /mudras/ /chair-yoga/ /ytt/) was served the APP SHELL to anyone who had
+  the SW installed. That means returning visitors, so first-visit tests and SEO crawls never see
+  it. Check: load `/` until the SW controls the page, then navigate to each static
+  section and assert its own `<title>`. A network-first navigation SW (KDM `public/sw.js`,
+  offline page only when offline) is not affected. Also remember that a `prompt`-mode SW
+  keeps old shells alive across deploys.
 - **Inner-scroll ≠ overlap fix** (flaky-CI class, recurred across several science games): resolving
   a crowded mobile panel with `#choices{overflow-y:auto}` does NOT satisfy the overlap detector —
   scrolled-off buttons keep their geometric rects and intermittently overlap the footer/actBtn, so
@@ -368,6 +416,51 @@ rules. A feature that needs to break one is out, not "careful".
 12. **Sample before you sweep.** Three 10-game samples of low-traffic games found 0 L1 blockers in 30 but real bugs that
     were PATTERNS shared by dozens of games — so the scalable move was a catalogue probe per pattern, not a full review
     of every game.
+
+13. **Tap-reach: can a real finger reach every control, round after round, on a SMALL phone?** (KDM 2026-10-30,
+    `test/tap-reach.mjs`; found by the owner's own Real or AI? playthrough, which every dbg-driven gate had passed). The
+    harness drives games through `Line.dbg` — it never taps, so it can't see a control a child can't reach. Checks the
+    PLAY screen at 320×568 and 390×664 (VISIBLE area, browser bars excluded — full-screen sizes hid the bug), level 1 AND
+    the top level, round 1 AND round 2 (stale panel scroll only shows after a round). Each visible enabled control must be
+    on screen, inside its scroller's visible box, and be what `elementFromPoint` hits at its centre; nothing is scrolled
+    for the child. Primary button blocked or a control covered/clipped = exit 1; "scroll to reach" is soft. Also reports
+    page errors at phone sizes (error-smoke runs one desktop size; a short canvas made a negative `arc()` radius).
+    Calibrated on the bad version before trusting it. A game it never got into (no `Game.start`, load failed) is
+    reported NOT CHECKED and fails the run — other sites need an adapter (CDE wrote one: real taps menu → r1 → r2). KDM catalogue (508 games): 1 primary + 16 covered/clipped + 259
+    CHECK-below-the-fold → fixed with `kdm-pinned-act` (phones: controls in a scroll box, CHECK pinned below it, box
+    scrolls to top each round; a 7% "tap here" scale pulse clipped inside the box → pulse brightness instead) and a 46px
+    strip under the fixed "← Games" pill. Lesson: **a scroller must reset per round, a sticky button must never sit ON
+    TOP of controls, and anything fixed (back pill, toasts) needs its own strip on short screens.**
+
+14. **Presolved deals: does a round ever START solved?** (KDM 2026-10-30, `tools/game-review/presolved-probe.mjs`; found
+    when kid-sim's careful persona stalled on clock-climb, whose hands start at 12:00 and 1 round in 12 asked for 12:00).
+    Deal 20 rounds per level via `Line.build(L)` and count `Line.dbg.solved()` at deal. A ready/early-tap guard that lets
+    a commit through when `solved()` is true does NOT catch this — CHECK untouched simply wins. KDM catalogue: 16 hits.
+    Fixes, by shape — and never one that makes the START an oracle ("the start is always wrong" names the answer when
+    there are two): **dial/stepper** → start on a neutral value that is never an answer (estimate-quantity-quay's
+    closer/farther marker starts ON the midpoint, nim-nook's take starts at 0 = "nothing chosen", and CHECK with
+    nothing chosen is a nudge, not a miss); **target vs start** → never target the start (temp-trek, clock-climb);
+    **drop/aim arcades** → slide the spawn/launcher off a scoring spot, never once the child has aimed (a few deals keep
+    every spot scoring — fine, no wrong answer exists). Triage first: a round whose answer IS "nothing to do"
+    (already simplest, no line of symmetry, already a function, a safe hop) is a real question — allowlist it with the
+    reason, don't "fix" it.
+15. **Tools that drive a browser need a per-item hang cap and a progress line.** A kid-sim run hung silently for 4 h
+    (38 s CPU) on one game; it now races each play against a cap (6 min, 9 for the slow persona), marks it `hung`,
+    closes that context and moves on, printing `n/N id` to stderr. A probe with no progress output is
+    indistinguishable from a probe that's working.
+16. **Generated multiple choice: fuzz the option LENGTHS, not just the answer slot.** KDM spot-the-mistake (R2K1):
+    8,000 generated cards showed the correct diagnosis was the LONGEST option 100% of the time in two games and 0% in
+    another — a child picks by length. Fix: several phrasings of the right answer at different lengths, chosen so it is
+    longest about 1 time in N options; gate on the measured rate (~33% for 3 options), not on inspection.
+17. **Test hooks must take the same path as play.** `Line.build` calling the raw generator (not the no-repeat
+    guard real play uses) made repeat-probe flag 5 KDM games for repeats children never saw — and would equally hide a
+    real one. Route the hook through the same wrapper; scan the catalogue when one game shows it. Likewise a
+    `Line.dbg.o` GETTER returns a fresh object per read: harness "same round?" checks must fall back to `qkey`, not
+    identity (kid-sim saw a new round every tick in reaction-lab and never pressed DROP).
+18. **Calm mode (pressure timers off) is one gate per timer line** — `if(!window.KDM_CALM) x+=dt…` plus the speed bonus
+    (`fast=…&&!KDM_CALM`), a shared script that defaults ON for the youngest grades (`data-grade-lo ≤ 2`) with a menu
+    switch, and a state hook (`window.__kdmCalm`). Don't gate games where motion IS the game (lanes, snakes) or where
+    the timer is the skill being practised (a times-tables check). KDM R2K24, 16 K–2 games, 2026-10-30.
 
 ## 6. Multi-agent workflow rules
 - One agent per game file; agents never touch sibling games or revert anything beyond
@@ -527,3 +620,21 @@ desktops, a late join, a reload mid-battle). Required:
 - **The e2e is the gate:** teacher + 5 students, a late join, a reload, a join after the end (refused),
   TTL expiry (404 + rows gone), totals equal to the server, logs clean, then one tagged live smoke.
   Re-run it whenever battle, set or beacon code changes.
+
+## 8c. Team battle + class target (KDM RL13, agreed with CDE 2026-10-29; shipped KDM 2026-10-30)
+
+Cooperative beats competitive for a class (Roseth 2008); individual leaderboards lowered scores (Hanus & Fox 2015).
+Two grouping modes sit next to the existing scoring modes; scoring underneath stays Standard.
+- **`team`: 2 teams by join order** (1st, 3rd, 5th… player → team 0, ties by id). Kids choose nothing, and a reload
+  or rejoin keeps the team because it is derived from the player's own join time (§8b: reload resumes the same player).
+  **Winner = average per member**: teams can differ by one player. Show the totals too.
+- **`class`: the whole class vs a target** = players × minutes × k (k: facts 8, game 2 rounds cleared). The teacher
+  can nudge it ± in the lobby. The target is stored on the room **at start**, so a late join doesn't move the goal.
+- **No individual score on the board in either mode.** Nicknames appear only in the lobby (the "did I join?" check).
+  The room payload sends players as `{id, nickname, team}`, never a per-player score.
+- **No new data:** team = derived, target = one integer on the room row (KDM: `live_rooms.target`).
+- **Names + colours per language** (the colour is the team's identity on the projector):
+  en Comets 🔵 / Rockets 🟠 · he שביטים / טילים · es Cometas / Cohetes (#3b82f6 / #f97316).
+- **Gate:** a unit test for teamOf/teamTotals/defaultTarget, plus an e2e: teacher + 5 students, an odd team size, a
+  reload mid-battle (same team), team board shows no per-player scores, and the target is fixed at start.
+  KDM reference: `src/lib/liveTeams.js`, `e2e/live-team-battle.spec.ts`.

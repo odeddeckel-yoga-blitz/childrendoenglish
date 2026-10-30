@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 // Practice ladder (plans/learning-cycle + full-ladder expansion 2026-10-07):
-// the menu leads with one Continue card; it opens the 11-step LadderMap with
-// free navigation; steps dispatch to flashcards / quizzes / Letter Fix /
+// the menu leads with one Continue card; it starts the current step, and the
+// step strip opens the 11-step LadderMap with free navigation; steps dispatch to flashcards / quizzes / Letter Fix /
 // Sentence Gap / scoped arcade URLs.
 
 async function reachMenu(page, { canRead = true } = {}) {
@@ -40,8 +40,12 @@ test('play-first: a new player can start without typing a name', async ({ page }
   expect(players[0]).toMatchObject({ name: 'Player 1', autoName: true });
 });
 
+// Continue starts the current step directly (persona P2); the progress strip
+// above the step is the door to the full map.
 async function openLadder(page) {
   await page.getByText(/Word batch 1/).click();
+  await expect(page.getByText('Tap to flip')).toBeVisible({ timeout: 8000 });
+  await page.getByTestId('ladder-strip').click();
   await expect(page.getByText('Your practice ladder')).toBeVisible({ timeout: 8000 });
 }
 
@@ -50,7 +54,33 @@ test('menu leads with the cycle Continue card for a new player', async ({ page }
   await expect(page.getByText(/Word batch 1/)).toBeVisible({ timeout: 8000 });
 });
 
-test('Continue opens the 11-step ladder map; Flashcards is the current step', async ({ page }) => {
+test('Continue starts Flashcards (the current step) at once, with a step strip on top', async ({ page }) => {
+  await reachMenu(page);
+  await page.getByText(/Word batch 1/).click();
+  await expect(page.getByText('Tap to flip')).toBeVisible({ timeout: 8000 });
+  await expect(page.getByTestId('ladder-strip')).toContainText(/Step 1 of \d+/);
+});
+
+test('finishing Flashcards goes straight into the next step, not back to the map', async ({ page }) => {
+  await reachMenu(page);
+  await page.getByText(/Word batch 1/).click();
+  await expect(page.getByText('Tap to flip')).toBeVisible({ timeout: 8000 });
+  const cont = page.getByRole('button', { name: /^Continue/ });
+  const flip = page.getByRole('button', { name: 'Flip card to see answer' });
+  for (let i = 0; i < 15; i++) {
+    await expect(flip.or(cont)).toBeVisible({ timeout: 5000 });
+    if (await cont.count()) break;
+    await flip.click();
+    await page.getByRole('button', { name: 'Know It' }).click();
+    await page.waitForTimeout(400);
+  }
+  await cont.click();
+  await expect(page.getByRole('button', { name: 'Quit quiz' })).toBeVisible({ timeout: 10000 });
+  await expect(page.getByTestId('ladder-strip')).toContainText(/Step 2 of \d+/);
+  await expect(page.getByText('Your practice ladder')).toHaveCount(0);
+});
+
+test('the strip opens the 11-step ladder map', async ({ page }) => {
   await reachMenu(page);
   await openLadder(page);
   for (const label of ['Flashcards', 'Listen & Pick', 'Word Quiz', 'Image Quiz',

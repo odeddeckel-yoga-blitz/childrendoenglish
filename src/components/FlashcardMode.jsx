@@ -156,10 +156,11 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
         {onComplete && cards.length > 0 && (
           <button
             onClick={onComplete}
+            data-kdm-primary=""
             className="w-full py-3.5 px-6 bg-blue-600 text-white rounded-xl font-black text-lg
                        hover:bg-blue-700 active:scale-95 transition-all shadow-md"
           >
-            {t('continue', lang)} →
+            {t('continue', lang)} <span aria-hidden="true" className="inline-block rtl:-scale-x-100">→</span>
           </button>
         )}
         <button
