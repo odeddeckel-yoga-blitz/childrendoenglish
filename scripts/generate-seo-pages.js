@@ -2029,7 +2029,29 @@ function heGamesCommonFaq(flashHref, flashLabel) {
   ];
 }
 
-const HE_GAMES_TOPICS = ['animals', 'food', 'colors', 'numbers', 'school', 'home'];
+const HE_GAMES_TOPICS = ['animals', 'food', 'colors', 'numbers', 'school', 'home', 'clothing', 'transport', 'feelings', 'sports', 'toys', 'nature', 'everyday'];
+
+// S1 (10-30): the topics added after the first six get a title and H1 in the
+// shape Hebrew searches use ("בגדים באנגלית"); the first six keep theirs, so
+// colors (position ~7) isn't disturbed and the two shapes can be compared.
+const HE_TOPIC_QUERY = {
+  clothing: 'בגדים',
+  transport: 'כלי תחבורה',
+  feelings: 'רגשות',
+  sports: 'ספורט',
+  toys: 'צעצועים',
+  nature: 'טבע',
+  everyday: 'חפצים יומיומיים',
+};
+
+// Standalone arcade games (public/games/), listed on the hub; ?lang=he opens them in Hebrew.
+const HE_ARCADE_GAMES = [
+  { slug: 'read-it', name: 'Read It!', desc: 'קוראים מילים קצרות צליל אחרי צליל ומקישים על התמונה הנכונה — תרגול קריאה ראשון.' },
+  { slug: 'sound-pairs', name: 'Sound Pairs', desc: 'שתי מילים שנשמעות כמעט אותו דבר: מקשיבים ובוחרים את המילה ששמעתם. מאמן את האוזן לצלילים שקשים לדוברי עברית.' },
+  { slug: 'word-zapper', name: 'Word Zapper', desc: 'שומעים מילה באנגלית ותופסים את התמונה הנכונה לפני שהיא חומקת.' },
+  { slug: 'spelling-forge', name: 'Spelling Forge', desc: 'שומעים מילה ובונים אותה אות אחרי אות, בזהירות מאותיות מטעות.' },
+  { slug: 'category-conveyor', name: 'Category Conveyor', desc: 'תמונות נוסעות על מסוע, ומכניסים כל אחת לפח הנכון: חיות, אוכל, תחבורה ועוד.' },
+];
 
 const HE_GAMES_AGES = [
   {
@@ -2063,7 +2085,7 @@ const HE_GAMES_AGES = [
 
 const HE_GAMES_TOPIC_INTROS = {
   animals:
-    'חיות הן כמעט תמיד המילים הראשונות שילדים אוהבים ללמוד באנגלית. במשחקים כאן הילדים שומעים את שם החיה באנגלית מפי דובר שפת אם, רואים תמונה אמיתית, ובוחרים את התשובה הנכונה — בלי שינון משעמם.',
+    'חיות הן כמעט תמיד המילים הראשונות שילדים אוהבים ללמוד באנגלית. במשחקים כאן הילדים שומעים את שם החיה באנגלית בהקלטה ברורה, רואים תמונה אמיתית, ובוחרים את התשובה הנכונה — בלי שינון משעמם.',
   food:
     'אוכל ושתייה הם אוצר מילים שילדים פוגשים כל יום — בבית, בגן ובמסעדה. המשחקים מלמדים את המילים דרך תמונות אמיתיות של מאכלים, הגייה מוקלטת וחידונים קצרים וכיפיים.',
   colors:
@@ -2074,6 +2096,20 @@ const HE_GAMES_TOPIC_INTROS = {
     'מילות בית הספר — עיפרון, מחברת, ילקוט — הן מילים שילדים משתמשים בהן כל יום. המשחקים הופכים אותן לטבעיות באנגלית, עם תמונות אמיתיות והקלטה של ההגייה.',
   home:
     'הבית הוא סביבת המילים הקרובה ביותר לילד: רהיטים, חדרים וחפצים יומיומיים. במשחקים לומדים אותם באנגלית דרך תמונות, שמע וחידונים — והתרגום לעברית תמיד שם לעזרה.',
+  clothing:
+    'בגדים הם מילים שילדים משתמשים בהן כל בוקר: חולצה, מכנסיים, נעליים, כובע. במשחקים רואים כל פריט בתמונה אמיתית, שומעים איך אומרים אותו באנגלית ובוחרים נכון — וכך המילים עוברות מהארון לאנגלית.',
+  transport:
+    'מכונית, אוטובוס, רכבת ומטוס — כלי תחבורה הם נושא שילדים אוהבים במיוחד. המשחקים מלמדים את שמות כלי התחבורה באנגלית עם תמונות אמיתיות, הגייה מוקלטת ותרגום לעברית.',
+  feelings:
+    'לדעת להגיד שמח, עצוב, כועס או עייף באנגלית זה הרבה יותר מאוצר מילים: זה לדבר על עצמך. כאן לומדים את מילות הרגשות דרך ציורים של פרצופים, עם הקלטה של כל מילה.',
+  sports:
+    'כדורגל, שחייה, ריצה וקפיצה — מילות הספורט והפעילות באנגלית קשורות לדברים שילדים עושים בהפסקה ובחוג. המשחקים מחברים כל מילה לתמונה ולהגייה שלה.',
+  toys:
+    'כדור, בובה, קוביות ופאזל: מילות הצעצועים הן מהמילים הראשונות שילדים רוצים לדעת באנגלית. המשחקים מלמדים אותן עם תמונות אמיתיות, שמע ותרגום לעברית.',
+  nature:
+    'שמש, עץ, פרח, ים — מילות הטבע באנגלית מופיעות בכל ספר ושיר לילדים. כאן לומדים אותן דרך תמונות אמיתיות מהטבע, הקלטה של ההגייה וחידונים קצרים.',
+  everyday:
+    'מפתח, תיק, שעון, מטרייה: חפצים יומיומיים שילדים רואים בכל מקום. המשחקים הופכים אותם למילים מוכרות באנגלית, עם תמונה, הגייה ותרגום לעברית לכל מילה.',
 };
 
 // "480+" style rounded count, derived from WORDS (never hardcoded).
@@ -2205,7 +2241,7 @@ function buildHebrewGamesHubPage() {
     },
     {
       q: 'האם הילד צריך לדעת לקרוא באנגלית?',
-      a: 'לא. החידונים מתחילים בהאזנה — הילד שומע את המילה באנגלית מפי דובר שפת אם ובוחר תמונה — כך שגם ילדים שעוד לא קוראים באנגלית יכולים לשחק. הממשק כולו זמין בעברית, והלימוד עצמו הוא באנגלית אמיתית.',
+      a: 'לא. החידונים מתחילים בהאזנה — הילד שומע את המילה באנגלית ובוחר תמונה — כך שגם ילדים שעוד לא קוראים באנגלית יכולים לשחק. הממשק כולו זמין בעברית, והלימוד עצמו הוא באנגלית אמיתית.',
     },
   ];
 
@@ -2246,6 +2282,12 @@ function buildHebrewGamesHubPage() {
           <p>${CATEGORY_NAMES[t] || t} &middot; <span style="direction:ltr;display:inline-block">${words.length}</span> מילים</p>
         </a>`;
   }).join('\n');
+
+  const arcadeCards = HE_ARCADE_GAMES.map((g) => `
+        <a href="/games/${g.slug}/?lang=he" class="cluster-card">
+          <h3 dir="ltr" style="text-align:right">${g.name}</h3>
+          <p>${g.desc}</p>
+        </a>`).join('\n');
 
   const bilingualLinks = CATEGORIES.map(
     (c) => `<a href="/vocabulary/${c}/hebrew/">${escapeHtml(CATEGORY_NAMES_HE[c] || c)}</a>`
@@ -2310,6 +2352,17 @@ function buildHebrewGamesHubPage() {
   </div>
 
   <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">משחקי אנגלית קצרים</h2>
+      <p style="text-align:center;color:#475569;margin-bottom:0.9rem">משחקים של כמה דקות, כל אחד מתרגל מיומנות אחת. ההוראות בעברית, המילים באנגלית.</p>
+      <div class="topic-grid">
+        ${arcadeCards}
+      </div>
+      <p style="text-align:center;margin-top:1.1rem"><a href="/band-1/" style="text-decoration:underline">אוצר המילים של Band I לפי נושאים</a> &middot; <a href="/games/" style="text-decoration:underline">כל המשחקים</a></p>
+    </div>
+  </div>
+
+  <div class="section">
     <div class="container">
       <h2 class="section-title">עוד חומרי לימוד בחינם</h2>
       <p style="text-align:center;color:#475569;margin-bottom:0.9rem">רשימות מילים דו-לשוניות אנגלית-עברית, לכל קטגוריה:</p>
@@ -2461,7 +2514,11 @@ function buildHebrewGamesTopicPage(slug) {
   const hebrewName = CATEGORY_NAMES_HE[slug] || slug;
   const displayName = CATEGORY_NAMES[slug] || slug;
   const words = getWordsByCategory(slug);
-  const title = `אנגלית לילדים — ${hebrewName}: משחקים ללימוד המילים בחינם | Children Do English`;
+  const query = HE_TOPIC_QUERY[slug];
+  const heading = query ? `${query} באנגלית לילדים` : `אנגלית לילדים — ${hebrewName}`;
+  const title = query
+    ? `${query} באנגלית לילדים — ${words.length} מילים עם תמונות, הגייה ותרגום | Children Do English`
+    : `אנגלית לילדים — ${hebrewName}: משחקים ללימוד המילים בחינם | Children Do English`;
   const description = `משחקים ללימוד אנגלית לילדים בנושא ${hebrewName}: ${words.length} מילים עם תמונות אמיתיות, הקלטה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
 
   const breadcrumbSchema = JSON.stringify({
@@ -2488,8 +2545,8 @@ function buildHebrewGamesTopicPage(slug) {
 
   const body = `
   <div class="hero">
-    <h1>אנגלית לילדים — ${hebrewName}</h1>
-    <p class="subtitle">משחקים ללימוד <span style="direction:ltr;display:inline-block">${words.length}</span> מילות ${hebrewName} באנגלית (${escapeHtml(displayName)}) — עם תמונות אמיתיות, שמע ותרגום לעברית.</p>
+    <h1>${heading}</h1>
+    <p class="subtitle">משחקים ללימוד <span style="direction:ltr;display:inline-block">${words.length}</span> מילות ${hebrewName} באנגלית (${escapeHtml(displayName)}) — עם תמונות, שמע ותרגום לעברית.</p>
     <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${slug}" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
     <p class="cta-sub">בלי פרסומות &middot; בלי הרשמה &middot; חינם לגמרי</p>
   </div>
@@ -2506,9 +2563,9 @@ function buildHebrewGamesTopicPage(slug) {
 
   <div class="section" style="background:#f8fafc">
     <div class="container">
-      <h2 class="section-title">טעימה מהמילים בנושא ${hebrewName}</h2>
+      <h2 class="section-title">המילים בנושא ${hebrewName}: <span style="direction:ltr;display:inline-block">${words.length}</span> מילים באנגלית</h2>
       <div class="word-grid">
-        ${preview.map(heGamesWordCard).join('\n')}
+        ${words.map(heGamesWordCard).join('\n')}
       </div>
       <p style="text-align:center;margin-top:1.25rem"><a href="/vocabulary/${slug}/hebrew/">לרשימה המלאה: כל <span style="direction:ltr;display:inline-block">${words.length}</span> מילות ה${hebrewName} באנגלית ובעברית</a></p>
     </div>
