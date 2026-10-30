@@ -1,13 +1,27 @@
 name: CI
 
+# Docs/notes-only commits skip CI; a newer push cancels the older run on the same ref.
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - 'plans/**'
+      - 'docs/**'
   pull_request:
+    paths-ignore:
+      - '**/*.md'
+      - 'plans/**'
+      - 'docs/**'
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   ci:
     runs-on: ubuntu-latest
+    timeout-minutes: 25
 
     steps:
       - uses: actions/checkout@v4
