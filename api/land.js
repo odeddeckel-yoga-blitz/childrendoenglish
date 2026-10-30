@@ -22,7 +22,7 @@ const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 // pg/cta/mq = a static page's view / click into the app or a game / first
 // mini-quiz tap, item = page-path key (public/land-beacon.js) → click-to-play rate;
 // onb = first-visit funnel step (create_view|create_done|q1_start|q1_done|q1_quit);
-// qs = quiz start-source funnel: [new-]<menu|ladder|shared|letter|mywords|learn|again|quick|other>_<start|done|quit> (useQuizFlow);
+// qs = quiz start-source funnel: [new-]<menu|ladder|shared|letter|mywords|learn|again|quick|topic|other>_<start|done|quit> (useQuizFlow);
 // aie/aiv = AI attribution v1 (kit land-beacon.md): item = engine (chatgpt|perplexity|copilot|
 // gemini|claude|other); aie with every ai open, aiv once visible 5 s. Not opens.
 // mp = Sound Pairs answer per sound contrast (<p-b|a-u|e-a|th|th-d|ee-i|v-w>_<ok|no>) — public/games/sound-pairs;

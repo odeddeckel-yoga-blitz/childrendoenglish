@@ -929,7 +929,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
     )
     .join('\n');
 
-  const faq = bilingualFaq(slug, displayName, words, { langName: "Hebrew", gloss: (w) => w.hebrewTranslation, flashHref: `/printable-flashcards/${slug}/hebrew/`, appHref: "/?lang=he&utm_source=seo&utm_medium=faq&utm_content=bilingual_category" });
+  const faq = bilingualFaq(slug, displayName, words, { langName: "Hebrew", gloss: (w) => w.hebrewTranslation, flashHref: `/printable-flashcards/${slug}/hebrew/`, appHref: "/new-player?lang=he&utm_source=seo&utm_medium=faq&utm_content=bilingual_category" });
 
   const otherCategoryLinks = CATEGORIES.filter((c) => c !== slug)
     .map(
@@ -1454,7 +1454,7 @@ function buildHebrewLandingPage() {
   <div class="hero">
     <h1>לימוד אנגלית לילדים — בחינם ובכיף!</h1>
     <p class="subtitle">אפליקציה חינמית ללימוד אוצר מילים באנגלית לילדים בגילאי 6-12. עם תמונות, הגייה, משפטים לדוגמה ותרגום לעברית.</p>
-    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=hebrew_landing" class="cta-btn">התחילו ללמוד עכשיו &#8592;</a>
+    <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=hebrew_landing" class="cta-btn">התחילו ללמוד עכשיו &#8592;</a>
     <p class="cta-sub">ללא פרסומות &middot; ללא רישום &middot; חינם לגמרי</p>
   </div>
 
@@ -1630,7 +1630,7 @@ function buildHebrewLandingPage() {
   <div class="final-cta">
     <h2>מוכנים להתחיל?</h2>
     <p>אפשר להתחיל עכשיו — בלי הרשמה ובלי להוריד כלום.</p>
-    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=hebrew_landing" class="cta-btn">התחילו ללמוד בחינם &#8592;</a>
+    <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=hebrew_landing" class="cta-btn">התחילו ללמוד בחינם &#8592;</a>
   </div>
 
   <!-- Footer -->
@@ -2311,7 +2311,7 @@ function buildHebrewGamesHubPage() {
   <div class="hero">
     <h1>משחקים ללימוד אנגלית לילדים</h1>
     <p class="subtitle">חינם, בלי פרסומות ובלי הרשמה: הילדים לומדים אנגלית דרך משחק — עם תמונות אמיתיות, הקלטה של ההגייה וממשק בעברית.</p>
-    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_hub" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
+    <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_hub" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
     <p class="cta-sub">בלי פרסומות &middot; בלי הרשמה &middot; חינם לגמרי</p>
     <p class="hero-cite">Children Do English מציע משחקים חינמיים ללימוד אנגלית לילדים בגילאי 6-12: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים באנגלית עם תמונות אמיתיות, הקלטה של ההגייה, סולם תרגול בן 11 שלבים ותרגום לעברית — בלי פרסומות ובלי הרשמה.</p>
   </div>
@@ -2388,7 +2388,7 @@ function buildHebrewGamesHubPage() {
   <div class="final-cta">
     <h2>מוכנים לשחק?</h2>
     <p>כל המשחקים פתוחים עכשיו, בחינם ובלי הרשמה.</p>
-    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_hub" class="cta-btn">התחילו לשחק בחינם &#8592;</a>
+    <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_hub" class="cta-btn">התחילו לשחק בחינם &#8592;</a>
   </div>`;
 
   return buildHeGamesShell({
@@ -2449,7 +2449,7 @@ function buildHebrewGamesAgePage(age) {
   <div class="hero">
     <h1>משחקים ללימוד אנגלית לילדים בגילאי ${age.ages}</h1>
     <p class="subtitle">רמת ${age.levelHe}, מותאם לכיתות ${age.grades} — <span style="direction:ltr;display:inline-block">${levelWords.length}</span> מילים באנגלית עם תמונות, שמע ותרגום לעברית.</p>
-    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${age.slug.replace(/-/g, '_')}" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
+    <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${age.slug.replace(/-/g, '_')}" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
     <p class="cta-sub">בלי פרסומות &middot; בלי הרשמה &middot; חינם לגמרי</p>
   </div>
 
@@ -2496,7 +2496,7 @@ function buildHebrewGamesAgePage(age) {
   <div class="final-cta">
     <h2>מוכנים לשחק?</h2>
     <p>המשחקים מחכים — מותאמים בדיוק לגילאי ${age.ages}.</p>
-    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${age.slug.replace(/-/g, '_')}" class="cta-btn">התחילו לשחק בחינם &#8592;</a>
+    <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${age.slug.replace(/-/g, '_')}" class="cta-btn">התחילו לשחק בחינם &#8592;</a>
   </div>`;
 
   return buildHeGamesShell({
@@ -2547,7 +2547,7 @@ function buildHebrewGamesTopicPage(slug) {
   <div class="hero">
     <h1>${heading}</h1>
     <p class="subtitle">משחקים ללימוד <span style="direction:ltr;display:inline-block">${words.length}</span> מילות ${hebrewName} באנגלית (${escapeHtml(displayName)}) — עם תמונות, שמע ותרגום לעברית.</p>
-    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${slug}" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
+    <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${slug}&topic=${slug}" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
     <p class="cta-sub">בלי פרסומות &middot; בלי הרשמה &middot; חינם לגמרי</p>
   </div>
 
@@ -2592,7 +2592,7 @@ function buildHebrewGamesTopicPage(slug) {
   <div class="final-cta">
     <h2>מוכנים לשחק?</h2>
     <p>כל מילות ה${hebrewName} מחכות במשחק — בחינם ובלי הרשמה.</p>
-    <a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${slug}" class="cta-btn">התחילו לשחק בחינם &#8592;</a>
+    <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${slug}&topic=${slug}" class="cta-btn">התחילו לשחק בחינם &#8592;</a>
   </div>`;
 
   return buildHeGamesShell({

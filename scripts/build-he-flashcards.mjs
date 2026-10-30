@@ -143,13 +143,13 @@ ${body}
   <div class="container">
     <p class="intro answer-first">${escapeHtml(answer)}</p>
     <button type="button" class="print-btn" data-print>🖨️ הדפסת הכרטיסיות</button>
-    <a class="play-online no-print" href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_top_he">🎮 מעדיפים לשחק? תרגול באנגלית בחינם, בעברית ←</a>
+    <a class="play-online no-print" href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_top_he&topic=${c.slug}">🎮 מעדיפים לשחק? תרגול באנגלית בחינם, בעברית ←</a>
     <script defer src="/print-btn.js"></script>
     ${howToHtml(`איך מדפיסים את כרטיסיות ה${c.he}`, steps)}
     <div class="grid">${cards}
     </div>
     ${faqHtml(faq)}
-    <div class="cta no-print"><a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_category_he">מתרגלים את המילים האלה באפליקציה ←</a>
+    <div class="cta no-print"><a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_category_he&topic=${c.slug}">מתרגלים את המילים האלה באפליקציה ←</a>
       <p style="margin-top:0.5rem;font-size:0.8rem;color:#4b5a6e">חינם &middot; בלי פרסומות &middot; בלי הרשמה</p></div>
     <div class="categories">
       <h2>עוד כרטיסיות להדפסה</h2>
@@ -196,7 +196,7 @@ ${body}
     <div class="cat-grid">${grid}
     </div>
     ${faqHtml(faq)}
-    <div class="cta no-print"><a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_index_he">תרגול באנגלית בחינם, בעברית ←</a></div>
+    <div class="cta no-print"><a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_index_he">תרגול באנגלית בחינם, בעברית ←</a></div>
   </div>`,
   }));
   return sets.length + 1;

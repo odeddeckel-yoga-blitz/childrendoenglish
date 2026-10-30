@@ -16,7 +16,7 @@ import { getDueWords } from './utils/spaced-repetition';
 import { pickTodayWords, TODAY_SIZE } from './utils/todayRun';
 import { filterByKnownLetters } from './utils/letterFilter';
 import { sendLearn } from './utils/learnBeacon';
-import { WORDS } from './data/words';
+import { WORDS, CATEGORIES } from './data/words';
 import { cycleState, advanceCycle, batchLabel, batchCount, stepsFor, LADDER, buildSet, repeatSet, masteredCount } from './utils/learningCycle';
 import LadderMap from './components/LadderMap';
 import LadderStrip from './components/LadderStrip';
@@ -119,11 +119,25 @@ function getInitialState() {
   if (registry?.players?.length === 1) {
     return { gameState: 'menu', registry, stats };
   }
+  // A localized "start" button (e.g. /he/ → /new-player?lang=he) goes straight to
+  // create-player in that language: no second landing, no language question.
+  const urlLang = new URLSearchParams(window.location.search).get('lang');
+  if (window.location.pathname === '/new-player') {
+    return { gameState: 'playerCreate', registry, stats: ['he', 'es', 'ar'].includes(urlLang) ? { ...stats, uiLanguage: urlLang } : stats };
+  }
   return { gameState: 'landing', registry, stats };
+}
+
+// ?topic=<category> from a topic page (/he/english-games/animals/): the first
+// quiz uses that topic instead of the default batch.
+function initialTopic() {
+  const topic = new URLSearchParams(window.location.search).get('topic');
+  return CATEGORIES.includes(topic) ? topic : null;
 }
 
 export default function App() {
   const initial = useRef(getInitialState());
+  const pendingTopic = useRef(initialTopic());
 
   const [stats, setStats] = useState(() => initial.current.stats || loadStats());
   const [gameState, setGameState] = useState(() => initial.current.gameState);
@@ -420,6 +434,17 @@ export default function App() {
     if (ladderPos.currentKey) startLadderStep(ladderPos.currentKey);
     else navigate('ladder');
   }, [pendingStart, ladderPos, startLadderStep, navigate]);
+
+  // Carry a topic page's topic into the first quiz once the child reaches the menu
+  // (after create-player, or at once for a returning child).
+  useEffect(() => {
+    if (gameState !== 'menu' || !pendingTopic.current) return;
+    const topic = pendingTopic.current;
+    pendingTopic.current = null;
+    const inTopic = WORDS.filter((w) => w.category === topic);
+    const easy = inTopic.filter((w) => w.level === 'beginner');
+    quizFlow.startQuiz(null, 'audio', easy.length >= 8 ? easy : inTopic, 'topic');
+  }, [gameState, quizFlow]);
 
   // Reaching the menu by any route (bottom nav, browser back) ends a ladder run.
   useEffect(() => {

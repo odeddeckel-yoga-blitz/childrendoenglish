@@ -182,7 +182,7 @@ ${body}
         <div class="faq-item"><h3>${escapeHtml(q)}</h3><p>${escapeHtml(a)}</p></div>`).join('')}
       </div>
     </section>
-    <p class="center more"><a class="cta" href="/?lang=he&amp;utm_source=seo&amp;${ctaUtm}">עוד מילים ומשחקים באפליקציה ←</a></p>
+    <p class="center more"><a class="cta" href="/new-player?lang=he&amp;utm_source=seo&amp;${ctaUtm}">עוד מילים ומשחקים באפליקציה ←</a></p>
   </main>
   <div id="sheets-out" data-name="${escapeHtml(sheetsName)}" aria-hidden="true"></div>
   <script defer src="/unit-practice.js"></script>

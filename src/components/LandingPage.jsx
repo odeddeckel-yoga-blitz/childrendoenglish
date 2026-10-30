@@ -121,7 +121,8 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
   const [suggest, setSuggest] = useState(null);
   useEffect(() => {
     try {
-      if (lang !== 'en' || localStorage.getItem('cde-lang-suggest-done')) return;
+      // ?lang= already chose the language: never ask again.
+      if (lang !== 'en' || new URLSearchParams(window.location.search).get('lang') || localStorage.getItem('cde-lang-suggest-done')) return;
       const nav = (navigator.language || '').slice(0, 2);
       const match = LANGS.find((l) => l.ready !== false && l.code !== 'en' && l.code === nav);
       if (match) setSuggest(match);
@@ -152,7 +153,7 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
             onClick={() => { dismissSuggest(); onSelectLanguage(suggest.code); }}
             className="px-3 py-1.5 rounded-lg bg-blue-600 text-white font-semibold"
           >
-            {suggest.code === 'es' ? 'Sí' : suggest.code === 'ar' ? 'نعم' : 'Yes'}
+            {suggest.code === 'es' ? 'Sí' : suggest.code === 'ar' ? 'نعم' : suggest.code === 'he' ? 'כן' : 'Yes'}
           </button>
           <button onClick={dismissSuggest} className="px-2 py-1.5 text-slate-400 hover:text-slate-600" aria-label="No">
             ✕
