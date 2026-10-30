@@ -4,7 +4,8 @@
  *   1. due words (most overdue first) — the spaced-repetition ladder
  *   2. recently missed words (wrong in the last 3 days, even if not due yet)
  *   3. at most `maxNew` unseen words from the child's highest unlocked level
- *   4. top-up with the least-settled seen words
+ *   4. top-up with the least-settled seen words, then more new words if the
+ *      child has little history yet (the run is always full)
  * Each word's question type follows how many times it has been retrieved
  * correctly, so one word meets ~10 retrievals across visits in three forms:
  *   picture → pick the English word   (0–1 correct so far)
@@ -31,6 +32,8 @@ export function pickTodayWords(allWords, wordProgress = {}, { unlockedLevels = [
   // With nothing seen yet, the whole run is new words (still capped by size)
   take(fresh, seen.length ? maxNew : size);
   take(seen.slice().sort((a, b) => card(a).interval - card(b).interval || card(a).lastSeen - card(b).lastSeen));
+  // Little history yet: fill the rest of the run with more new words
+  take(fresh);
   return shuffle(picked, rand);
 }
 

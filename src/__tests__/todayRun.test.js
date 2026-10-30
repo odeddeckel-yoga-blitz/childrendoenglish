@@ -24,6 +24,8 @@ describe('pickTodayWords', () => {
       b1: { lastSeen: NOW - 2 * DAY, interval: 1, correct: 1, wrong: 0 }, // overdue 1
       b2: { lastSeen: NOW - 0.5 * DAY, interval: 1, correct: 0, wrong: 2 }, // missed, not due
       b3: { lastSeen: NOW - 1 * DAY, interval: 7, correct: 3, wrong: 0 }, // settled, not due
+      // enough other history to fill the run, so the new-word cap applies
+      ...Object.fromEntries([4, 5, 6, 7, 8, 9, 10].map((n) => [`b${n}`, { lastSeen: NOW - DAY, interval: 14, correct: 4, wrong: 0 }])),
     };
     const run = pickTodayWords(words, wp, { now: NOW, rand, unlockedLevels: ['beginner', 'intermediate'] });
     const ids = run.map((w) => w.id);
@@ -31,6 +33,13 @@ describe('pickTodayWords', () => {
     const fresh = run.filter((w) => !wp[w.id]);
     expect(fresh).toHaveLength(3); // capped, and from the highest unlocked level
     expect(fresh.every((w) => w.level === 'intermediate')).toBe(true);
+  });
+
+  it('a child with little history still gets a full run (more new words fill the gap)', () => {
+    const wp = { b0: { lastSeen: NOW - 9 * DAY, interval: 3, correct: 2, wrong: 0 }, b1: { lastSeen: NOW - 9 * DAY, interval: 3, correct: 1, wrong: 0 } };
+    const run = pickTodayWords(words, wp, { now: NOW, rand });
+    expect(run).toHaveLength(TODAY_SIZE);
+    expect(run.map((w) => w.id)).toEqual(expect.arrayContaining(['b0', 'b1']));
   });
 
   it('never repeats a word in one run', () => {
