@@ -1,22 +1,22 @@
 {
-  "statsFrom": "2026-10-29T00:00:00.000Z",
+  "statsFrom": "2026-10-30T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
-    "id": "tennis",
-    "word": "tennis",
+    "id": "fishing",
+    "word": "fishing",
     "category": "sports",
-    "he": "טניס",
-    "image": "/images/tennis.webp",
-    "ans": 56,
-    "ok": 38,
-    "since": "2026-10-24T08:04:26.383Z"
+    "he": "דיג",
+    "image": "/images/fishing.webp",
+    "ans": 0,
+    "ok": 0,
+    "since": "2026-10-30T09:56:43.153Z"
   },
   "game": {
     "id": "spelling-forge",
     "name": "Spelling Forge",
     "emoji": "🔨",
-    "opens": 67,
-    "lvl": 94,
+    "opens": 76,
+    "lvl": 106,
     "cmp": 2,
     "since": "2026-10-25T08:21:30.744Z"
   },
@@ -48,6 +48,13 @@
       "to": "spelling-forge",
       "reason": "max tenure 14d",
       "at": "2026-10-25T08:21:30.744Z"
+    },
+    {
+      "lane": "word",
+      "from": "tennis",
+      "to": "fishing",
+      "reason": "graduated (ans≥30, acc≥0.7)",
+      "at": "2026-10-30T09:56:43.153Z"
     }
   ]
 }
