@@ -93,9 +93,14 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
         <span class="chip chip-pre">Pre-Band I</span> <span class="chip chip-c1">Band I · Core I</span> <span class="chip chip-c2">Band I · Core II</span>.
         מילים עם <span class="chip chip-extra">בונוס · מחוץ לרשימה</span> הן תוספת שלנו מאותו נושא.</p>`;
 
-  for (const t of topics) {
+  topics.forEach((t, ti) => {
     const path = `/band-1/${t.slug}/`;
     const name = t.short || t.he;
+    // CUX9: end the practice with the next topic (review sets already do "לסט 2")
+    const nt = topics[ti + 1];
+    const nextTopic = nt
+      ? `<p class="center"><a class="cta" href="/band-1/${nt.slug}/">הנושא הבא: ${escapeHtml(nt.short || nt.he)} ←</a></p>`
+      : `<p class="center"><a class="cta" href="/band-1/review/">סיימתם את כל הנושאים! למסלול החזרה ←</a></p>`;
     const sample = t.words.filter((w) => w.tag !== 'extra').slice(0, 6).map((w) => w.en).join(', ');
     kit.setPage({
       dir: join(distDir, 'band-1', t.slug), path, test: false, footerNote,
@@ -118,8 +123,9 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
       sheetsName: `Band I · ${t.slug === 'more' ? 'More topics' : t.slug}`,
       shareTitle: `Band I — ${name}: מילים באנגלית עם הגייה ותרגול`,
       ctaUtm: `utm_medium=band1&amp;utm_content=${t.slug}`,
+      afterPractice: nextTopic,
     });
-  }
+  });
 
   // --- hub ---
   const path = '/band-1/';

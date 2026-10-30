@@ -1438,6 +1438,8 @@ function buildHebrewLandingPage() {
     .faq-q { font-weight: 700; font-size: 1rem; margin-bottom: 0.35rem; color: #1e293b; }
     .faq-a { font-size: 0.9rem; color: #475569; line-height: 1.6; }
 
+    .teacher-row { text-align: center; padding: 0.75rem 1rem; background: #fff; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; line-height: 1.9; }
+    .teacher-row a { color: #1d4ed8; font-weight: 600; }
     /* Final CTA */
     .final-cta { text-align: center; padding: 2.5rem 1rem; background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; }
     .final-cta h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
@@ -1457,6 +1459,9 @@ function buildHebrewLandingPage() {
     <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=hebrew_landing" class="cta-btn">התחילו ללמוד עכשיו &#8592;</a>
     <p class="cta-sub">ללא פרסומות &middot; ללא רישום &middot; חינם לגמרי</p>
   </div>
+
+  <!-- Teacher door (UX audit CUX8, persona P3): one line right under the hero -->
+  <nav class="teacher-row" aria-label="למורים"><strong>למורים:</strong> <a href="/band-1/">רשימת <bdi>Band I</bdi></a> &middot; <a href="/units/">יחידות לימוד</a> &middot; <a href="/battle/">קרב כיתתי</a> &middot; <a href="/printable-flashcards/hebrew/">כרטיסיות להדפסה</a></nav>
 
   <!-- Stats bar -->
   <div class="stats-bar">

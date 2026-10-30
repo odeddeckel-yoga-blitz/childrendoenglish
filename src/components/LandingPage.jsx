@@ -214,6 +214,15 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
             </button>
           ))}
         </div>
+
+        {/* Teacher door (UX audit CUX8, persona P3): one line, under the start tiles */}
+        <nav aria-label={t('forTeachers', lang)} className="text-sm text-slate-500 dark:text-slate-300 leading-7">
+          <strong>{t('forTeachers', lang)}:</strong>{' '}
+          {[['/band-1/', 'teacherBand1'], ['/units/', 'teacherUnits'], ['/battle/', 'teacherBattle'], [lang === 'he' ? '/printable-flashcards/hebrew/' : '/printable-flashcards/', 'teacherPrint']]
+            .map(([href, key], i) => (
+              <span key={href}>{i > 0 && ' · '}<a href={href} className="font-semibold text-blue-700 dark:text-blue-300 underline">{t(key, lang)}</a></span>
+            ))}
+        </nav>
       </section>
 
       {/* Today's picks — same build-time spotlight as the home menu, so first

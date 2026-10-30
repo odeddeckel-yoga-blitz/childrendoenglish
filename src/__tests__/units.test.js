@@ -59,6 +59,8 @@ describe('textbook-unit pages', () => {
     expect(html).toContain('href="https://wa.me/?text=');
     expect(html).toContain('data-copy="https://childrendoenglish.com/units/jet-2/unit-3/"');
     expect(html).toContain('data-mode="dict"');
+    // CUX9: a '▶ Practise' jump in the hero (practice sits below a long table)
+    expect(html).toContain('<a class="jump-btn" href="#practice-h">');
     expect(html).toContain('data-sheet="bingo"');
     expect(html).toContain('data-sheet="search"');
     expect(html).toContain('<div id="sheets-out" data-name="Jet 2 Unit 3" aria-hidden="true"></div>');

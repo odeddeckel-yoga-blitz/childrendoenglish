@@ -98,7 +98,7 @@ ${body}
   // step → a set on the Band I review path: finishing a round ticks it off on this device.
   // pin → "this week in class" (RC12): the unit name; the button saves the page on this
   // device and the app's home then opens with a one-tap card to it.
-  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null, step = null, pin = null }) {
+  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null, step = null, pin = null, afterPractice = '' }) {
     const items = words.map((w) => {
       const base = byId.get(w.wordId);
       return { en: w.en, he: w.he, ex: w.ex || null, chip: w.chip || null, id: w.wordId || null, audio: `/audio/${audioKey(w.en)}.mp3`, img: base?.imageUrl || null, ...hebrewOptions(w, words) };
@@ -123,6 +123,7 @@ ${body}
   <header class="hero">
     <h1>${h1Html}</h1>
     <p class="answer">${escapeHtml(answer)}</p>
+    <p class="jump-row"><a class="jump-btn" href="#practice-h">▶ תרגול</a></p>
     ${pin ? `<p class="pin-row"><button type="button" class="pin-btn" data-pin-unit="${path}" data-pin-name="${escapeHtml(pin)}" aria-pressed="false">📌 זו היחידה שלנו השבוע</button></p>
     <p class="pin-hint" hidden>נשמר במכשיר הזה: האפליקציה תיפתח עם כרטיס ליחידה הזו.</p>` : ''}
   </header>
@@ -149,6 +150,7 @@ ${body}
       <p id="practice-live" class="sr" aria-live="polite"></p>
       <script type="application/json" id="unit-data">${JSON.stringify(items.map(({ en, id, audio, opts, ans }) => ({ en, id, audio, opts, ans }))).replace(/</g, '\\u003c')}</script>
     </section>
+    ${afterPractice}
     <section class="section" aria-labelledby="cards-h">
       <h2 id="cards-h" class="section-title">כרטיסיות להדפסה</h2>
       <p class="center"><button type="button" class="print-btn" data-print>🖨️ הדפסת הכרטיסיות</button></p>
@@ -327,6 +329,8 @@ const UNIT_CSS = `
     body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; direction: rtl; text-align: right; }
     a { color: #2563eb; }
     .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .jump-row { margin-top: 0.9rem; }
+    .jump-btn { display: inline-block; background: #fff; color: #1e40af; font-weight: 900; font-size: 1.1rem; padding: 0.6rem 1.6rem; border-radius: 999px; text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
     .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
     .hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; padding: 2rem 1rem 1.75rem; text-align: center; }
     .hero h1 { font-size: 1.6rem; font-weight: 900; line-height: 1.35; margin-bottom: 0.5rem; }
