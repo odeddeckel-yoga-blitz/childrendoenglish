@@ -52,7 +52,9 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     const restrict = knownLetters?.length ? filterByKnownLetters(WORDS, knownLetters) : null;
     let selected = selectQuizWords(pool, stats.wordProgress, isFreshPlayer(stats) ? FIRST_QUIZ_LEN : QUIZ_LEN);
     // A brand-new player's first question is one most kids get right (U2).
-    if (isFreshPlayer(stats) && !words) {
+    // `pool` is the given set when there is one (ladder batch, shared list), so
+    // the swap never brings in a word from outside it.
+    if (isFreshPlayer(stats)) {
       const [{ easyFirst }, { default: cdeStats }] = await Promise.all([
         import('../utils/easyFirst'), import('../data/cde-stats.json'),
       ]);
