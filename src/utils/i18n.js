@@ -36,6 +36,7 @@ const translations = {
     playAgain: 'Play Again',
     backToMenuBtn: 'Back to Menu',
     question: 'Question',
+    quizRetry: 'One more try',
     of: 'of',
 
     // Menu extras (install banner, dark mode, streak)

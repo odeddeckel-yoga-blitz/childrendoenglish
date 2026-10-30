@@ -41,6 +41,8 @@ export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSo
       <QuizHeader
         score={quiz.score}
         total={quiz.total}
+        scoreTotal={quiz.scoreTotal}
+        isRetry={quiz.isRetry}
         streak={quiz.streak}
         arcadeScore={quiz.arcadeScore}
         soundEnabled={soundEnabled}
@@ -103,6 +105,7 @@ export default function ImageQuiz({ words, lang = 'en', soundEnabled, onToggleSo
           return (
             <button
               key={option.id}
+              data-word={option.id}
               onClick={() => quiz.handleAnswer(option)}
               disabled={!!quiz.answered}
               className={btnClass}

@@ -44,6 +44,8 @@ export default function ListenMatchQuiz({ words, lang = 'en', soundEnabled, onTo
       <QuizHeader
         score={quiz.score}
         total={quiz.total}
+        scoreTotal={quiz.scoreTotal}
+        isRetry={quiz.isRetry}
         streak={quiz.streak}
         arcadeScore={quiz.arcadeScore}
         soundEnabled={soundEnabled}

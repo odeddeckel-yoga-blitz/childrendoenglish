@@ -34,6 +34,7 @@ export default {
   playAgain: 'Jugar de Nuevo',
   backToMenuBtn: 'Volver al Menú',
   question: 'Pregunta',
+  quizRetry: 'Otra vez',
   of: 'de',
 
   // Menu extras

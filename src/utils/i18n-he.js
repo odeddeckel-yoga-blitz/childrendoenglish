@@ -34,6 +34,7 @@ export default {
   playAgain: 'שחקו שוב',
   backToMenuBtn: 'חזרה לתפריט',
   question: 'שאלה',
+  quizRetry: 'ניסיון נוסף',
   of: 'מתוך',
 
   // Menu extras

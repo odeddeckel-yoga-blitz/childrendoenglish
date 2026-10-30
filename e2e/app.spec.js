@@ -48,15 +48,20 @@ async function setupHebrewUser(page, overrides = {}) {
   await page.waitForSelector('#root > *', { timeout: 10000 });
 }
 
-// Helper: complete quiz by clicking first answer for each question
+// Helper: complete quiz by clicking first answer for each question. A wrong
+// pick brings the word back later (utils/reask.js), so a 10-word quiz can run
+// up to 16 questions: keep answering until the result screen ("/ 10") shows.
 async function completeQuiz(page, numQuestions = 10) {
-  for (let i = 0; i < numQuestions; i++) {
+  const result = page.locator(`span:text-is("/ ${numQuestions}")`);
+  for (let i = 0; i < numQuestions + 6; i++) {
+    if (await result.isVisible()) break;
     // Wait for answer options to appear
     const answerBtns = page.locator('.grid.grid-cols-2 button').first();
     await answerBtns.waitFor({ timeout: 5000 });
     await answerBtns.click();
     await page.waitForTimeout(1400); // wait for auto-advance
   }
+  await expect(result).toBeVisible({ timeout: 5000 });
 }
 
 // Helper: set localStorage to simulate a returning user (with player registry)
@@ -274,6 +279,36 @@ test.describe('Quiz Flow', () => {
     // Should see results screen (.first(): the arcade "★ NEW BEST SCORE!"
     // banner also matches /score/i, which would trip strict mode)
     await expect(page.locator('text=/\\d+.*\\/.*10|score|result/i').first()).toBeVisible({ timeout: 10000 });
+  });
+
+  test('a missed word comes back 2 and 5 questions later; only first tries score', async ({ page }) => {
+    await setupReturningUser(page);
+    await page.locator('text=Play Quiz').click();
+    await page.locator('button:has-text("Beginner")').click();
+    await page.locator('text=Image Quiz').or(page.locator('text=Picture Quiz')).click();
+    const img = page.locator('img[src*="/images/"]').first();
+    const answerRight = async () => {
+      const id = (await img.getAttribute('src')).match(/\/images\/([^/.]+)\./)[1];
+      await page.locator(`button[data-word="${id}"]`).click();
+    };
+    await img.waitFor({ timeout: 10000 });
+    const missed = (await img.getAttribute('src')).match(/\/images\/([^/.]+)\./)[1];
+    await page.getByText('Skip this word').click(); // Q1 missed → back at Q4 and Q7
+    const retryTag = page.getByText('One more try');
+    const bar = page.locator('[role="progressbar"]');
+    for (let q = 2; q <= 12; q++) {
+      await expect(bar).toHaveAttribute('aria-valuenow', String(q - 1), { timeout: 6000 });
+      await expect(bar).toHaveAttribute('aria-valuemax', '12');
+      if (q === 4 || q === 7) {
+        await expect(retryTag).toBeVisible();
+        await expect(img).toHaveAttribute('src', new RegExp(`/images/${missed}\\.`));
+      } else {
+        await expect(retryTag).toBeHidden();
+      }
+      await answerRight();
+    }
+    await expect(page.locator('span:text-is("/ 10")')).toBeVisible({ timeout: 6000 });
+    await expect(page.locator('span.text-5xl')).toHaveText('9');
   });
 
   test('image quiz shows image and 4 answer buttons', async ({ page }) => {

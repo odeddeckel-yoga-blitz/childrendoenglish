@@ -129,6 +129,12 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
       const picks = answers.filter(a => !a.correct && a.selected != null);
       if (picks.length > 0) sendLearnBatch(picks.map(a => ({ e: 'ansx', i: `${a.wordId}@${a.selected}` })));
     }
+    // Re-asks of first-try misses (utils/reask.js, roadmap RL1): did the word
+    // come back right 2–5 questions later? Kept out of ans_* so first-try stats
+    // stay comparable with before.
+    if (Array.isArray(results.retries) && results.retries.length > 0) {
+      sendLearnBatch(results.retries.map(r => ({ e: r.correct ? 'rq_ok' : 'rq_no', i: String(r.wordId) })));
+    }
 
     // Pure completion routine: applied inside the functional setStats updater
     // (safe against concurrent updates, StrictMode-friendly) AND once against
