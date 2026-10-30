@@ -50,7 +50,14 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     // Distractor options must be readable too — restrict them to known letters
     // (getDistractors tops up from the full vocabulary only if it runs dry).
     const restrict = knownLetters?.length ? filterByKnownLetters(WORDS, knownLetters) : null;
-    const selected = selectQuizWords(pool, stats.wordProgress, isFreshPlayer(stats) ? FIRST_QUIZ_LEN : QUIZ_LEN);
+    let selected = selectQuizWords(pool, stats.wordProgress, isFreshPlayer(stats) ? FIRST_QUIZ_LEN : QUIZ_LEN);
+    // A brand-new player's first question is one most kids get right (U2).
+    if (isFreshPlayer(stats) && !words) {
+      const [{ easyFirst }, { default: cdeStats }] = await Promise.all([
+        import('../utils/easyFirst'), import('../data/cde-stats.json'),
+      ]);
+      selected = easyFirst(selected, pool, cdeStats.words);
+    }
 
     if (selected.length === 0) {
       navigate('menu');
