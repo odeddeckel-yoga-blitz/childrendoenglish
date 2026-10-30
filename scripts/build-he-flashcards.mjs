@@ -20,8 +20,8 @@ const CSS = `
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; line-height: 1.35; }
     .header p { opacity: 0.92; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1rem; color: #475569; }
     .print-btn { display: inline-block; background: #2563eb; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; font-weight: 700; font-size: 1rem; cursor: pointer; border: none; margin-bottom: 1.25rem; font-family: inherit; }
@@ -47,8 +47,8 @@ const CSS = `
     .cat-card { display: flex; gap: 0.75rem; align-items: center; background: #fff; border-radius: 0.75rem; padding: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-decoration: none; color: inherit; }
     .cat-card img { border-radius: 0.5rem; object-fit: cover; }
     .cat-card strong { display: block; color: #2563eb; } .cat-card span { font-size: 0.85rem; color: #475569; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #64748b; font-size: 0.8rem; }
-    .footer a { color: #64748b; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #4b5a6e; font-size: 0.8rem; }
+    .footer a { color: #4b5a6e; }
     @media print {
       .header, .breadcrumb, .print-btn, .cta, .categories, .footer, .no-print, .faq, .crawl-mesh { display: none !important; }
       body { background: #fff; }
@@ -150,7 +150,7 @@ ${body}
     </div>
     ${faqHtml(faq)}
     <div class="cta no-print"><a href="/?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_category_he">מתרגלים את המילים האלה באפליקציה ←</a>
-      <p style="margin-top:0.5rem;font-size:0.8rem;color:#64748b">חינם &middot; בלי פרסומות &middot; בלי הרשמה</p></div>
+      <p style="margin-top:0.5rem;font-size:0.8rem;color:#4b5a6e">חינם &middot; בלי פרסומות &middot; בלי הרשמה</p></div>
     <div class="categories">
       <h2>עוד כרטיסיות להדפסה</h2>
       <div class="cat-links">

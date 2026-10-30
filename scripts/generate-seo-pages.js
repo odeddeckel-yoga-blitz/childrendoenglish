@@ -32,10 +32,10 @@ function buildCrawlMesh() {
   const row = (title, links) =>
     `<h2>${title}</h2><p>` + links.map(([href, text]) => `<a href="${href}">${text}</a>`).join(' ') + `</p>`;
   _meshCache = `\n<nav class="crawl-mesh" aria-label="Explore ChildrenDoEnglish">` +
-    `<style>.crawl-mesh{max-width:960px;margin:2rem auto 0;padding:1.2rem 1rem 2.2rem;font-size:.78rem;color:#64748b;border-top:1px solid #e2e8f0}` +
+    `<style>.crawl-mesh{max-width:960px;margin:2rem auto 0;padding:1.2rem 1rem 2.2rem;font-size:.78rem;color:#4b5a6e;border-top:1px solid #e2e8f0}` +
     `.crawl-mesh h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;margin:.8rem 0 .25rem;color:#475569}` +
     `.crawl-mesh p{margin:0;line-height:1.9}` +
-    `.crawl-mesh a{color:#0d9488;text-decoration:none;margin-right:.7rem;white-space:nowrap}.crawl-mesh a:hover{text-decoration:underline}</style>` +
+    `.crawl-mesh a{color:#0f766e;text-decoration:none;margin-right:.7rem;white-space:nowrap}.crawl-mesh a:hover{text-decoration:underline}</style>` +
     // Language landings FIRST — hreflang alone gave /he/ zero link equity for
     // months (pos ~21); every generated page now links each language's front door.
     row('Languages · שפות · Idiomas', [['/', 'English'], ['/he/', 'עברית — לימוד אנגלית לילדים'], ['/es/', 'Español — vocabulario en inglés para niños']]) +
@@ -292,9 +292,9 @@ function buildCategoryPage(slug, displayName, words) {
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1.5rem; color: #475569; }
@@ -303,21 +303,21 @@ function buildCategoryPage(slug, displayName, words) {
     .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); transform: translateY(-2px); }
     .card-img { width: 128px; height: 128px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 0.75rem; display: block; }
     .card-word { font-size: 1.35rem; font-weight: 700; color: #1e293b; }
-    .card-phonetic { font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.25rem; }
+    .card-phonetic { font-size: 0.85rem; color: #5b6779; margin-bottom: 0.25rem; }
     .card-pos { font-size: 0.75rem; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
     .card-def { margin-bottom: 0.4rem; }
-    .card-ex { font-style: italic; color: #64748b; font-size: 0.9rem; margin-bottom: 0.4rem; }
+    .card-ex { font-style: italic; color: #4b5a6e; font-size: 0.9rem; margin-bottom: 0.4rem; }
     .card-he { color: #475569; direction: rtl; font-size: 0.95rem; }
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
     .cta a:hover { background: #1d4ed8; }
-    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; }
+    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #4b5a6e; }
     .categories { margin-top: 2rem; }
     .categories h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
     .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .cat-links a:hover { background: #2563eb; color: #fff; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -345,7 +345,7 @@ function buildCategoryPage(slug, displayName, words) {
 
     <p style="margin-bottom:1.5rem"><a href="/vocabulary/${slug}/hebrew/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">View ${escapeHtml(displayName)} in Hebrew and English &rarr;</a> &middot; <a href="/vocabulary/${slug}/spanish/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">View ${escapeHtml(displayName)} in Spanish and English &rarr;</a> &middot; <a href="/printable-flashcards/${slug}/" style="color:#2563eb;text-decoration:none;font-size:0.9rem">Printable ${escapeHtml(displayName)} flashcards &rarr;</a></p>
 
-    <p style="margin-bottom:1.5rem;font-size:0.9rem;color:#64748b">Browse by age: <a href="/vocabulary/ages-6-8/" style="color:#2563eb;text-decoration:none">Ages 6-8</a> &middot; <a href="/vocabulary/ages-9-10/" style="color:#2563eb;text-decoration:none">Ages 9-10</a> &middot; <a href="/vocabulary/ages-11-12/" style="color:#2563eb;text-decoration:none">Ages 11-12</a></p>
+    <p style="margin-bottom:1.5rem;font-size:0.9rem;color:#4b5a6e">Browse by age: <a href="/vocabulary/ages-6-8/" style="color:#2563eb;text-decoration:none">Ages 6-8</a> &middot; <a href="/vocabulary/ages-9-10/" style="color:#2563eb;text-decoration:none">Ages 9-10</a> &middot; <a href="/vocabulary/ages-11-12/" style="color:#2563eb;text-decoration:none">Ages 11-12</a></p>
 
     <div class="categories">
       <h2>Explore More Categories</h2>
@@ -356,7 +356,7 @@ function buildCategoryPage(slug, displayName, words) {
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -514,23 +514,23 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .word-hero { background: #fff; border-radius: 0.75rem; padding: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; max-width: 480px; margin: 0 auto 2rem; }
     .word-hero img { width: 192px; height: 192px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 1rem; display: block; }
     .word-hero .hero-word { font-size: 2rem; font-weight: 800; color: #1e293b; }
-    .word-hero .hero-phonetic { font-size: 1rem; color: #94a3b8; margin-bottom: 0.25rem; }
+    .word-hero .hero-phonetic { font-size: 1rem; color: #5b6779; margin-bottom: 0.25rem; }
     .word-hero .hero-pos { font-size: 0.8rem; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem; }
     .word-hero .hero-def { font-size: 1.05rem; margin-bottom: 0.5rem; }
-    .word-hero .hero-ex { font-style: italic; color: #64748b; font-size: 0.95rem; margin-bottom: 0.5rem; }
+    .word-hero .hero-ex { font-style: italic; color: #4b5a6e; font-size: 0.95rem; margin-bottom: 0.5rem; }
     .word-hero .hero-he { color: #475569; direction: rtl; font-size: 1rem; }
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
     .cta a:hover { background: #1d4ed8; }
-    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; }
+    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #4b5a6e; }
     .section-title { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
     .related-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; margin-bottom: 2rem; }
     .related-card { display: block; background: #fff; border-radius: 0.75rem; padding: 0.85rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
@@ -554,7 +554,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .cat-links a:hover { background: #2563eb; color: #fff; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -609,7 +609,7 @@ ${wordNav}
       .mq-cta{display:inline-block;padding:0.8rem 1.6rem;background:#2563eb;color:#fff;border-radius:999px;font-weight:700;text-decoration:none}
       .cta-top{display:block;text-align:center;margin:1.2rem 0}
       .cta-top a{display:inline-block;padding:0.85rem 1.7rem;background:#2563eb;color:#fff;border-radius:999px;font-weight:800;text-decoration:none;font-size:1.02rem;box-shadow:0 2px 10px rgba(37,99,235,.35)}
-      .cta-top p{font-size:.8rem;color:#64748b;margin:.45rem 0 0}
+      .cta-top p{font-size:.8rem;color:#4b5a6e;margin:.45rem 0 0}
     </style>
 
     <div class="mini-quiz" data-answer="${word.id}">
@@ -651,7 +651,7 @@ ${wordNav}
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
   <script defer src="/vocab-quiz.js"></script>
 </body>
@@ -788,20 +788,20 @@ function buildAgeBracketPage(bracket, allWords) {
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1.5rem; color: #475569; }
     .cat-heading { font-size: 1.2rem; font-weight: 700; color: #1e293b; margin: 1.5rem 0 0.75rem; padding-bottom: 0.4rem; border-bottom: 2px solid #dbeafe; }
-    .cat-heading .cat-count { font-weight: 400; color: #64748b; font-size: 0.9rem; }
+    .cat-heading .cat-count { font-weight: 400; color: #4b5a6e; font-size: 0.9rem; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
     .card { display: block; background: #fff; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
     .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); transform: translateY(-2px); }
     .card-img { width: 128px; height: 128px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 0.5rem; display: block; }
     .card-word { font-size: 1.2rem; font-weight: 700; color: #1e293b; }
-    .card-phonetic { font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.2rem; }
+    .card-phonetic { font-size: 0.8rem; color: #5b6779; margin-bottom: 0.2rem; }
     .card-pos { font-size: 0.7rem; color: #2563eb; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.35rem; }
     .card-def { font-size: 0.85rem; margin-bottom: 0.3rem; }
     .card-he { color: #475569; direction: rtl; font-size: 0.9rem; }
@@ -809,18 +809,18 @@ function buildAgeBracketPage(bracket, allWords) {
     details.cat summary::-webkit-details-marker { display: none; }
     details.cat summary .cat-heading::before { content: '▸ '; color: #2563eb; }
     details.cat[open] summary .cat-heading::before { content: '▾ '; }
-    .top-cta { display: block; text-align: center; background: #f59e0b; color: #fff; font-weight: 800; font-size: 1.1rem; padding: 0.85rem 1rem; border-radius: 999px; text-decoration: none; margin: 0 auto 1rem; max-width: 420px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+    .top-cta { display: block; text-align: center; background: #b45309; color: #fff; font-weight: 800; font-size: 1.1rem; padding: 0.85rem 1rem; border-radius: 999px; text-decoration: none; margin: 0 auto 1rem; max-width: 420px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
     ${GUIDE_QUIZ_CSS}
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
     .cta a:hover { background: #1d4ed8; }
-    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; }
+    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #4b5a6e; }
     .age-links { margin-top: 2rem; }
     .age-links h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
     .age-links-row { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .age-links-row a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .age-links-row a:hover { background: #2563eb; color: #fff; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -856,7 +856,7 @@ function buildAgeBracketPage(bracket, allWords) {
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -929,6 +929,8 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
     )
     .join('\n');
 
+  const faq = bilingualFaq(slug, displayName, words, { langName: "Hebrew", gloss: (w) => w.hebrewTranslation, flashHref: `/printable-flashcards/${slug}/hebrew/`, appHref: "/?lang=he&utm_source=seo&utm_medium=faq&utm_content=bilingual_category" });
+
   const otherCategoryLinks = CATEGORIES.filter((c) => c !== slug)
     .map(
       (c) =>
@@ -967,15 +969,16 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
   <meta name="twitter:image" content="${SITE}/og/${slug}.png" />
 
   <script type="application/ld+json">${breadcrumbSchema}</script>
+  <script type="application/ld+json">${faq.schema}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1.5rem; color: #475569; }
@@ -986,14 +989,14 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
     .bi-en { flex: 1; min-width: 200px; }
     .bi-word { font-size: 1.15rem; font-weight: 700; color: #1e293b; text-decoration: none; }
     .bi-word:hover { text-decoration: underline; color: #2563eb; }
-    .bi-phonetic { font-size: 0.8rem; color: #94a3b8; }
+    .bi-phonetic { font-size: 0.8rem; color: #5b6779; }
     .bi-def { font-size: 0.85rem; color: #475569; margin-top: 0.2rem; }
     .bi-he { text-align: right; direction: rtl; min-width: 100px; }
     .bi-he-word { font-size: 1.3rem; font-weight: 700; color: #1e293b; }
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
     .cta a:hover { background: #1d4ed8; }
-    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; }
+    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #4b5a6e; }
     .back-link { display: inline-block; margin-bottom: 1rem; color: #2563eb; text-decoration: none; font-size: 0.9rem; }
     .back-link:hover { text-decoration: underline; }
     .categories { margin-top: 2rem; }
@@ -1001,7 +1004,8 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
     .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .cat-links a:hover { background: #2563eb; color: #fff; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
+    ${FAQ_CSS}
     @media (max-width: 600px) {
       .bilingual-card { flex-direction: column; text-align: center; }
       .bi-content { flex-direction: column; align-items: center; }
@@ -1026,6 +1030,8 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
       ${wordRows}
     </div>
 
+    ${faq.html}
+
     <div class="cta">
       <a href="/?utm_source=seo&utm_medium=cta&utm_content=bilingual_category">Practice These Words in the App &rarr;</a>
       <p class="cta-sub">Free &middot; No ads &middot; Full Hebrew support &middot; Works offline</p>
@@ -1044,7 +1050,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -1088,6 +1094,8 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
     )
     .join('\n');
 
+  const faq = bilingualFaq(slug, displayName, words, { langName: "Spanish", gloss: (w) => ES_GLOSSES[w.id], flashHref: `/printable-flashcards/${slug}/spanish/`, appHref: "/?lang=es&utm_source=seo&utm_medium=faq&utm_content=bilingual_category_es" });
+
   const otherCategoryLinks = CATEGORIES.filter((c) => c !== slug)
     .map(
       (c) =>
@@ -1126,15 +1134,16 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
   <meta name="twitter:image" content="${SITE}/og/${slug}.png" />
 
   <script type="application/ld+json">${breadcrumbSchema}</script>
+  <script type="application/ld+json">${faq.schema}</script>
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1.5rem; color: #475569; }
@@ -1145,14 +1154,14 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
     .bi-en { flex: 1; min-width: 200px; }
     .bi-word { font-size: 1.15rem; font-weight: 700; color: #1e293b; text-decoration: none; }
     .bi-word:hover { text-decoration: underline; color: #2563eb; }
-    .bi-phonetic { font-size: 0.8rem; color: #94a3b8; }
+    .bi-phonetic { font-size: 0.8rem; color: #5b6779; }
     .bi-def { font-size: 0.85rem; color: #475569; margin-top: 0.2rem; }
     .bi-es { text-align: right; min-width: 100px; }
     .bi-es-word { font-size: 1.3rem; font-weight: 700; color: #1e293b; }
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
     .cta a:hover { background: #1d4ed8; }
-    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #64748b; }
+    .cta-sub { margin-top: 0.5rem; font-size: 0.8rem; color: #4b5a6e; }
     .back-link { display: inline-block; margin-bottom: 1rem; color: #2563eb; text-decoration: none; font-size: 0.9rem; }
     .back-link:hover { text-decoration: underline; }
     .categories { margin-top: 2rem; }
@@ -1160,7 +1169,8 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
     .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .cat-links a:hover { background: #2563eb; color: #fff; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
+    ${FAQ_CSS}
     @media (max-width: 600px) {
       .bilingual-card { flex-direction: column; text-align: center; }
       .bi-content { flex-direction: column; align-items: center; }
@@ -1185,6 +1195,8 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
       ${wordRows}
     </div>
 
+    ${faq.html}
+
     <div class="cta">
       <a href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=bilingual_category_es">Practica estas palabras en la app &rarr;</a>
       <p class="cta-sub">Gratis &middot; Sin anuncios &middot; Interfaz en español &middot; Funciona sin conexión</p>
@@ -1202,7 +1214,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -1390,7 +1402,7 @@ function buildHebrewLandingPage() {
     .stats-bar { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; background: #fff; padding: 1rem; border-bottom: 1px solid #e2e8f0; }
     .stat { text-align: center; }
     .stat-num { font-size: 1.25rem; font-weight: 800; color: #2563eb; direction: ltr; display: inline-block; }
-    .stat-label { font-size: 0.8rem; color: #64748b; }
+    .stat-label { font-size: 0.8rem; color: #4b5a6e; }
 
     /* Sections */
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem; }
@@ -1432,9 +1444,9 @@ function buildHebrewLandingPage() {
     .final-cta p { opacity: 0.9; margin-bottom: 1.25rem; }
 
     /* Footer */
-    .footer { text-align: center; padding: 1.5rem 1rem; color: #94a3b8; font-size: 0.8rem; background: #f8fafc; }
-    .footer a { color: #94a3b8; }
-    .footer a:hover { color: #64748b; }
+    .footer { text-align: center; padding: 1.5rem 1rem; color: #5b6779; font-size: 0.8rem; background: #f8fafc; }
+    .footer a { color: #5b6779; }
+    .footer a:hover { color: #4b5a6e; }
   </style>
 </head>
 <body>
@@ -1777,7 +1789,7 @@ function buildSpanishLandingPage() {
     .stats-bar { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; background: #fff; padding: 1rem; border-bottom: 1px solid #e2e8f0; }
     .stat { text-align: center; }
     .stat-num { font-size: 1.25rem; font-weight: 800; color: #2563eb; }
-    .stat-label { font-size: 0.8rem; color: #64748b; }
+    .stat-label { font-size: 0.8rem; color: #4b5a6e; }
 
     /* Sections */
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem; }
@@ -1817,9 +1829,9 @@ function buildSpanishLandingPage() {
     .final-cta p { opacity: 0.9; margin-bottom: 1.25rem; }
 
     /* Footer */
-    .footer { text-align: center; padding: 1.5rem 1rem; color: #94a3b8; font-size: 0.8rem; background: #f8fafc; }
-    .footer a { color: #94a3b8; }
-    .footer a:hover { color: #64748b; }
+    .footer { text-align: center; padding: 1.5rem 1rem; color: #5b6779; font-size: 0.8rem; background: #f8fafc; }
+    .footer a { color: #5b6779; }
+    .footer a:hover { color: #4b5a6e; }
   </style>
 </head>
 <body>
@@ -1968,6 +1980,55 @@ function buildSpanishLandingPage() {
 // so writePage() alone puts these in the sitemap.
 // ---------------------------------------------------------------------------
 
+// Visible FAQ + its FAQPage schema from the SAME pairs (Google only honours FAQ
+// markup whose text is on the page). Pairs carry HTML; the schema gets plain text.
+// Uses the .faq-list/.faq-item/.faq-q/.faq-a classes (FAQ_CSS on pages without them).
+const FAQ_CSS = `.faq-list { max-width: 700px; margin: 0 auto 2rem; }
+    .faq-list h2 { font-size: 1.1rem; margin-bottom: 0.75rem; color: #334155; }
+    .faq-item { background: #fff; border-radius: 0.75rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .faq-q { font-weight: 700; font-size: 1rem; margin-bottom: 0.35rem; color: #1e293b; }
+    .faq-a { font-size: 0.9rem; color: #475569; line-height: 1.6; }
+    .faq-a a { text-decoration: underline; }`;
+function faqBlock(pairs, heading) {
+  const items = pairs.filter(Boolean).map((p) => `
+        <div class="faq-item">
+          <h3 class="faq-q">${p.q}</h3>
+          <p class="faq-a">${p.a}</p>
+        </div>`).join('');
+  return { schema: faqSchemaFor(pairs), html: `<div class="faq-list">
+      <h2 class="section-title">${heading}</h2>${items}
+    </div>` };
+}
+const levelSplit = (words) => ['beginner', 'intermediate', 'advanced']
+  .map((l) => [l, words.filter((w) => w.level === l).length]).filter(([, n]) => n > 0);
+
+// FAQ for /vocabulary/<cat>/hebrew/ and /spanish/ (English pages for parents).
+function bilingualFaq(slug, displayName, words, { langName, gloss, flashHref, appHref }) {
+  const lower = displayName.toLowerCase();
+  const pairs = words.filter((w) => gloss(w)).slice(0, 6)
+    .map((w) => `${escapeHtml(w.word)} = ${escapeHtml(gloss(w))}`).join(', ');
+  const split = levelSplit(words).map(([l, n]) => `${n} ${LEVEL_LABEL[l].toLowerCase()}`).join(', ');
+  return faqBlock([
+    pairs ? { q: `What are the words for ${lower} in ${langName}?`, a: `Here are a few: ${pairs}. All ${words.length} words are listed above, each with a photo, an English definition and the ${langName} word.` } : null,
+    { q: 'How many words are on this list?', a: `${words.length} words: ${split}.` },
+    { q: 'Is there a game to practise these words?', a: `Yes. <a href="${appHref}">The free Children Do English app</a> turns every word into picture quizzes, listening and spelling practice, with recorded English audio. No ads and no sign-up.` },
+    { q: `Are there printable flashcards for these words in ${langName}?`, a: `Yes: <a href="${flashHref}">${escapeHtml(displayName)} flashcards in English and ${langName}</a>, free to print with photos.` },
+  ], 'Questions parents ask');
+}
+
+// Hebrew FAQ for /he/english-games/<age>/ and /<topic>/. English words sit in
+// LTR spans so a mixed list doesn't reorder.
+const ltr = (s) => `<span dir="ltr">${escapeHtml(s)}</span>`;
+const heWordList = (ws) => ws.map((w) => `${escapeHtml(w.hebrewTranslation)} – ${ltr(w.word)}`).join(', ');
+const HE_LEVEL = { beginner: 'מתחילים', intermediate: 'ביניים', advanced: 'מתקדמים' };
+function heGamesCommonFaq(flashHref, flashLabel) {
+  return [
+    { q: 'כמה זה עולה?', a: 'כלום. כל המשחקים, החידונים והכרטיסיות חינמיים לגמרי, בלי פרסומות ובלי הרשמה.' },
+    { q: 'צריך לדעת לקרוא באנגלית כדי לשחק?', a: 'לא. לכל מילה יש תמונה והקלטה של המילה באנגלית, והממשק כולו בעברית, כך שאפשר להתחיל מהאזנה ומתמונות ולהגיע לאיות בהמשך.' },
+    { q: 'יש גם חומרים להדפסה?', a: `כן: <a href="${flashHref}">${flashLabel}</a>, עם תמונות ותרגום לעברית, להדפסה בחינם.` },
+  ];
+}
+
 const HE_GAMES_TOPICS = ['animals', 'food', 'colors', 'numbers', 'school', 'home'];
 
 const HE_GAMES_AGES = [
@@ -2022,6 +2083,7 @@ const HE_GAMES_CSS = `
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; direction: rtl; text-align: right; }
     a { color: #2563eb; text-decoration: none; }
+    .faq-a a, .prose a { text-decoration: underline; }
     a:hover { text-decoration: underline; }
     .hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; padding: 2.75rem 1rem 2.25rem; text-align: center; }
     .hero h1 { font-size: 1.8rem; font-weight: 900; margin-bottom: 0.5rem; line-height: 1.3; }
@@ -2030,11 +2092,11 @@ const HE_GAMES_CSS = `
     .cta-btn { display: inline-block; background: #fff; color: #2563eb; padding: 0.85rem 2.25rem; border-radius: 0.6rem; font-weight: 700; font-size: 1.1rem; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
     .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); text-decoration: none; }
     .cta-sub { margin-top: 0.75rem; font-size: 0.8rem; opacity: 0.8; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
     .stats-bar { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; background: #fff; padding: 1rem; border-bottom: 1px solid #e2e8f0; }
     .stat { text-align: center; }
     .stat-num { font-size: 1.25rem; font-weight: 800; color: #2563eb; direction: ltr; display: inline-block; }
-    .stat-label { font-size: 0.8rem; color: #64748b; }
+    .stat-label { font-size: 0.8rem; color: #4b5a6e; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem; }
     .section { padding: 2.25rem 0; }
     .section-title { font-size: 1.35rem; font-weight: 800; text-align: center; margin-bottom: 1.25rem; color: #1e293b; }
@@ -2060,8 +2122,8 @@ const HE_GAMES_CSS = `
     .final-cta { text-align: center; padding: 2.25rem 1rem; background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; }
     .final-cta h2 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; }
     .final-cta p { opacity: 0.9; margin-bottom: 1.1rem; }
-    .footer { text-align: center; padding: 1.5rem 1rem; color: #94a3b8; font-size: 0.8rem; background: #f8fafc; }
-    .footer a { color: #94a3b8; }
+    .footer { text-align: center; padding: 1.5rem 1rem; color: #5b6779; font-size: 0.8rem; background: #f8fafc; }
+    .footer a { color: #5b6779; }
 `;
 
 // Shared <head> + shell for the Hebrew games cluster pages.
@@ -2254,7 +2316,7 @@ function buildHebrewGamesHubPage() {
       <div class="res-links">
         ${bilingualLinks}
       </div>
-      <p style="text-align:center;color:#475569;margin:1.4rem 0 0.9rem">כרטיסיות להדפסה (באנגלית): <a href="/printable-flashcards/">כל הכרטיסיות</a></p>
+      <p style="text-align:center;color:#475569;margin:1.4rem 0 0.9rem">כרטיסיות להדפסה (באנגלית): <a href="/printable-flashcards/" style="text-decoration:underline">כל הכרטיסיות</a></p>
       <div class="res-links">
         ${flashcardLinks}
       </div>
@@ -2313,6 +2375,11 @@ function buildHebrewGamesAgePage(age) {
     }
   }
 
+  const faq = faqBlock([
+    { q: `אילו מילים באנגלית מתאימות לילדים בגילאי ${age.ages}?`, a: `ברמת ${age.levelHe} יש <span dir="ltr">${levelWords.length}</span> מילים, למשל: ${heWordList(samples)}. כולן עם תמונה, הקלטה ותרגום לעברית.` },
+    ...heGamesCommonFaq("/printable-flashcards/hebrew/", "כרטיסיות באנגלית להדפסה עם תרגום לעברית"),
+  ], "שאלות של הורים");
+
   const otherAges = HE_GAMES_AGES.filter((a) => a.slug !== age.slug)
     .map((a) => `<a href="/he/english-games/${a.slug}/">גילאי ${a.ages} (${a.grades})</a>`)
     .join('\n        ');
@@ -2369,6 +2436,10 @@ function buildHebrewGamesAgePage(age) {
     </div>
   </div>
 
+  <div class="section" style="background:#f8fafc">
+    ${faq.html}
+  </div>
+
   <div class="final-cta">
     <h2>מוכנים לשחק?</h2>
     <p>המשחקים מחכים — מותאמים בדיוק לגילאי ${age.ages}.</p>
@@ -2380,7 +2451,7 @@ function buildHebrewGamesAgePage(age) {
     title,
     description,
     enUrl: `${SITE}/vocabulary/${age.slug}/`,
-    schemas: [breadcrumbSchema],
+    schemas: [breadcrumbSchema, faq.schema],
     body,
   });
 }
@@ -2404,6 +2475,12 @@ function buildHebrewGamesTopicPage(slug) {
   });
 
   const preview = words.slice(0, 8);
+
+  const faq = faqBlock([
+    { q: `איך אומרים ${hebrewName} באנגלית?`, a: `${escapeHtml(hebrewName)} באנגלית: ${ltr(displayName)}. וכמה מילים מהנושא: ${heWordList(preview.slice(0, 6))}. הרשימה המלאה של <span dir="ltr">${words.length}</span> המילים נמצאת ב<a href="/vocabulary/${slug}/hebrew/">רשימת המילים באנגלית ובעברית</a>.` },
+    { q: `כמה מילים יש בנושא ${hebrewName}?`, a: `<span dir="ltr">${words.length}</span> מילים: ${levelSplit(words).map(([l, n]) => `<span dir="ltr">${n}</span> ברמת ${HE_LEVEL[l]}`).join(", ")}.` },
+    ...heGamesCommonFaq(`/printable-flashcards/${slug}/hebrew/`, `כרטיסיות ${escapeHtml(hebrewName)} באנגלית להדפסה`),
+  ], "שאלות של הורים");
 
   const otherTopics = HE_GAMES_TOPICS.filter((t) => t !== slug)
     .map((t) => `<a href="/he/english-games/${t}/">${escapeHtml(CATEGORY_NAMES_HE[t] || t)}</a>`)
@@ -2451,6 +2528,10 @@ function buildHebrewGamesTopicPage(slug) {
     </div>
   </div>
 
+  <div class="section" style="background:#f8fafc">
+    ${faq.html}
+  </div>
+
   <div class="final-cta">
     <h2>מוכנים לשחק?</h2>
     <p>כל מילות ה${hebrewName} מחכות במשחק — בחינם ובלי הרשמה.</p>
@@ -2463,7 +2544,7 @@ function buildHebrewGamesTopicPage(slug) {
     description,
     enUrl: `${SITE}/vocabulary/${slug}/`,
     esUrl: `${SITE}/vocabulary/${slug}/spanish/`,
-    schemas: [breadcrumbSchema],
+    schemas: [breadcrumbSchema, faq.schema],
     body,
   });
 }
@@ -2598,14 +2679,14 @@ function buildFlashcardMakerPage() {
 <style>
   *{box-sizing:border-box} [hidden]{display:none!important} body{font-family:system-ui,sans-serif;margin:0;background:#f8fafc;color:#1e293b}
   .wrap{max-width:900px;margin:0 auto;padding:1.5rem 1rem}
-  h1{font-size:1.7rem} .sub{color:#64748b}
+  h1{font-size:1.7rem} .sub{color:#4b5a6e}
   .panel{background:#fff;border-radius:1rem;padding:1.2rem;box-shadow:0 1px 4px rgba(15,23,42,.08);margin:1rem 0}
   .row{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin:.5rem 0}
   label{font-weight:600;font-size:.95rem} select,textarea{padding:.5rem;border:1px solid #cbd5e1;border-radius:.5rem;font-size:1rem}
   textarea{width:100%;min-height:90px}
   .btn{padding:.8rem 1.6rem;border:0;border-radius:999px;background:#2563eb;color:#fff;font-weight:800;font-size:1rem;cursor:pointer}
   .btn[disabled]{opacity:.4;cursor:not-allowed} .btn.ghost{background:#eff6ff;color:#1d4ed8}
-  .hero-cite{font-size:.9rem;color:#64748b;max-width:40rem}
+  .hero-cite{font-size:.9rem;color:#4b5a6e;max-width:40rem}
   .sheet{display:grid;gap:4mm;background:#fff;margin:1rem auto;padding:8mm;box-shadow:0 1px 6px rgba(15,23,42,.12);width:100%;max-width:210mm}
   .per4{grid-template-columns:1fr 1fr;grid-template-rows:repeat(2,1fr)}
   .per6{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr)}
@@ -2616,7 +2697,7 @@ function buildFlashcardMakerPage() {
   .per9 .card img{max-height:24mm}
   .cw{font-size:1.25rem;font-weight:800;margin:.4rem 0 0} .cg{font-size:1.35rem;font-weight:700;margin:0}
   .rtl{direction:rtl} .card.empty{border-style:dotted}
-  footer{color:#94a3b8;font-size:.85rem;text-align:center;padding:1.5rem}
+  footer{color:#5b6779;font-size:.85rem;text-align:center;padding:1.5rem}
   @media print{
     body{background:#fff} .wrap .panel,.wrap h1,.wrap .sub,.wrap .hero-cite,.no-print,footer{display:none!important}
     .sheet{box-shadow:none;margin:0;padding:6mm;width:auto;max-width:none;page-break-after:always;height:96vh}
@@ -2808,9 +2889,9 @@ const vocabIndexHtml = `<!DOCTYPE html>
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1.5rem; color: #475569; }
@@ -2821,11 +2902,11 @@ const vocabIndexHtml = `<!DOCTYPE html>
     .cat-preview-img { width: 48px; height: 48px; border-radius: 0.5rem; object-fit: cover; }
     .cat-card h2 { font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.25rem; }
     .cat-card .word-count { font-size: 0.8rem; color: #2563eb; font-weight: 600; margin-bottom: 0.5rem; }
-    .cat-card .sample { font-size: 0.85rem; color: #64748b; }
+    .cat-card .sample { font-size: 0.85rem; color: #4b5a6e; }
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
     .cta a:hover { background: #1d4ed8; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -2852,17 +2933,17 @@ const vocabIndexHtml = `<!DOCTYPE html>
 
     <p style="text-align:center;margin-bottom:1rem;font-size:0.9rem"><a href="/printable-flashcards/" style="color:#2563eb;text-decoration:none">Printable flashcards for every category &rarr;</a></p>
 
-    <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:1rem">Hebrew word lists:
+    <p style="text-align:center;color:#4b5a6e;font-size:0.85rem;margin-bottom:1rem">Hebrew word lists:
       ${CATEGORIES.map((slug) => `<a href="/vocabulary/${slug}/hebrew/" style="color:#2563eb;text-decoration:none">${escapeHtml(CATEGORY_NAMES[slug] || slug)}</a>`).join(' &middot; ')}
     </p>
 
-    <p style="text-align:center;color:#64748b;font-size:0.85rem;margin-bottom:1.5rem">Spanish word lists:
+    <p style="text-align:center;color:#4b5a6e;font-size:0.85rem;margin-bottom:1.5rem">Spanish word lists:
       ${CATEGORIES.map((slug) => `<a href="/vocabulary/${slug}/spanish/" style="color:#2563eb;text-decoration:none">${escapeHtml(CATEGORY_NAMES[slug] || slug)}</a>`).join(' &middot; ')}
     </p>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -2954,8 +3035,8 @@ const wordEntries = CATEGORIES.flatMap((slug) =>
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 720px; margin: 0 auto; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 720px; margin: 0 auto; }
     .breadcrumb a, .section a { color: #2563eb; text-decoration: none; }
     .container { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
     .section { background: #fff; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
@@ -3128,9 +3209,9 @@ const aboutHtml = `<!DOCTYPE html>
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 720px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 720px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
     .section { background: #fff; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
@@ -3141,11 +3222,11 @@ const aboutHtml = `<!DOCTYPE html>
     .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
     .stat { background: #f0f9ff; border-radius: 0.5rem; padding: 1rem; text-align: center; }
     .stat-num { font-size: 1.5rem; font-weight: 800; color: #2563eb; }
-    .stat-label { font-size: 0.8rem; color: #64748b; margin-top: 0.25rem; }
+    .stat-label { font-size: 0.8rem; color: #4b5a6e; margin-top: 0.25rem; }
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
     .cta a:hover { background: #1d4ed8; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -3194,7 +3275,7 @@ const aboutHtml = `<!DOCTYPE html>
     <div class="section">
       <h2>About the Creator</h2>
       <p>Children Do English is built and maintained by me, <strong>Oded Deckelbaum</strong> &mdash; a software engineer and parent who couldn&rsquo;t find an English vocabulary app for my own kids that was genuinely free, ad-free, and focused on real learning. I design and build everything myself, and I stand behind every activity and every privacy claim on this site. Questions or ideas? Reach me at <a href="mailto:info@childrendoenglish.com">info@childrendoenglish.com</a>.</p>
-      <p style="font-size:0.9rem;color:#64748b">Also from me: <a href="https://www.kidsdomath.com" rel="me">KidsDoMath</a> &mdash; 200 free math games for kids, built on the same no-ads, privacy-first principles.</p>
+      <p style="font-size:0.9rem;color:#4b5a6e">Also from me: <a href="https://www.kidsdomath.com" rel="me">KidsDoMath</a> &mdash; 200 free math games for kids, built on the same no-ads, privacy-first principles.</p>
     </div>
 
 
@@ -3204,7 +3285,7 @@ const aboutHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/privacy" style="color:#94a3b8">Privacy Policy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/privacy" style="color:#5b6779">Privacy Policy</a>
   </div>
 </body>
 </html>`;
@@ -3312,9 +3393,9 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1rem; color: #475569; }
@@ -3323,12 +3404,12 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
     .lang-variant a:hover { text-decoration: underline; }
     .print-btn { display: inline-block; background: #2563eb; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; margin-bottom: 1.5rem; }
     .print-btn:hover { background: #1d4ed8; }
-    .play-online { display: inline-block; margin: 0 0 1.5rem 0.75rem; color: #0d9488; font-weight: 700; text-decoration: none; }
+    .play-online { display: inline-block; margin: 0 0 1.5rem 0.75rem; color: #0f766e; font-weight: 700; text-decoration: none; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
     .flashcard { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; border: 2px dashed #e2e8f0; page-break-inside: avoid; }
     .fc-img { width: 160px; height: 160px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 0.75rem; display: block; }
     .fc-word { font-size: 1.4rem; font-weight: 800; color: #1e293b; margin-bottom: 0.15rem; }
-    .fc-phonetic { font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.35rem; }
+    .fc-phonetic { font-size: 0.8rem; color: #5b6779; margin-bottom: 0.35rem; }
     .fc-def { font-size: 0.85rem; color: #475569; margin-bottom: 0.25rem; }
     .fc-he { color: #475569; direction: rtl; font-size: 0.9rem; font-weight: 600; }
     .cta { text-align: center; margin: 2rem 0; }
@@ -3339,7 +3420,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
     .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .cat-links a:hover { background: #2563eb; color: #fff; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
     @media print {
       .header, .breadcrumb, .print-btn, .cta, .categories, .footer, .no-print { display: none !important; }
       body { background: #fff; }
@@ -3373,7 +3454,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
 
     <div class="cta">
       <a href="/?utm_source=seo&utm_medium=cta&utm_content=flashcard_category">Practice These Words in the App &rarr;</a>
-      <p style="margin-top:0.5rem;font-size:0.8rem;color:#64748b">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
+      <p style="margin-top:0.5rem;font-size:0.8rem;color:#4b5a6e">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
 
     <div class="categories">
@@ -3385,7 +3466,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -3483,9 +3564,9 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.65rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1rem; color: #475569; }
@@ -3494,12 +3575,12 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
     .lang-variant a:hover { text-decoration: underline; }
     .print-btn { display: inline-block; background: #2563eb; color: #fff; padding: 0.6rem 1.5rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; cursor: pointer; border: none; margin-bottom: 1.5rem; }
     .print-btn:hover { background: #1d4ed8; }
-    .play-online { display: inline-block; margin: 0 0 1.5rem 0.75rem; color: #0d9488; font-weight: 700; text-decoration: none; }
+    .play-online { display: inline-block; margin: 0 0 1.5rem 0.75rem; color: #0f766e; font-weight: 700; text-decoration: none; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
     .flashcard { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; border: 2px dashed #e2e8f0; page-break-inside: avoid; }
     .fc-img { width: 160px; height: 160px; border-radius: 0.75rem; object-fit: cover; margin: 0 auto 0.75rem; display: block; }
     .fc-word { font-size: 1.4rem; font-weight: 800; color: #1e293b; margin-bottom: 0.15rem; }
-    .fc-phonetic { font-size: 0.8rem; color: #94a3b8; margin-bottom: 0.35rem; }
+    .fc-phonetic { font-size: 0.8rem; color: #5b6779; margin-bottom: 0.35rem; }
     .fc-es { color: #475569; font-size: 0.95rem; font-weight: 600; }
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
@@ -3509,7 +3590,7 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
     .cat-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .cat-links a:hover { background: #2563eb; color: #fff; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
     @media print {
       .header, .breadcrumb, .print-btn, .cta, .categories, .footer, .lang-variant, .no-print { display: none !important; }
       body { background: #fff; }
@@ -3543,7 +3624,7 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
 
     <div class="cta">
       <a href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=flashcard_category_es">Practica estas palabras en la app &rarr;</a>
-      <p style="margin-top:0.5rem;font-size:0.8rem;color:#64748b">Gratis &middot; Sin anuncios &middot; Funciona sin conexión &middot; Sin registro</p>
+      <p style="margin-top:0.5rem;font-size:0.8rem;color:#4b5a6e">Gratis &middot; Sin anuncios &middot; Funciona sin conexión &middot; Sin registro</p>
     </div>
 
     <div class="categories">
@@ -3555,7 +3636,7 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -3675,9 +3756,9 @@ const fcIndexHtml = `<!DOCTYPE html>
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1.5rem; color: #475569; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
@@ -3688,7 +3769,7 @@ const fcIndexHtml = `<!DOCTYPE html>
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; }
     .cta a:hover { background: #1d4ed8; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -3716,7 +3797,7 @@ const fcIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -3808,9 +3889,9 @@ const esFcIndexHtml = `<!DOCTYPE html>
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .container { max-width: 960px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1.5rem; color: #475569; }
     .lang-variant { font-size: 0.9rem; margin-bottom: 1.5rem; }
@@ -3824,7 +3905,7 @@ const esFcIndexHtml = `<!DOCTYPE html>
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; }
     .cta a:hover { background: #1d4ed8; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -3852,7 +3933,7 @@ const esFcIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/es/" style="color:#94a3b8">Espa\u00f1ol</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/es/" style="color:#5b6779">Espa\u00f1ol</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -4453,7 +4534,7 @@ const GUIDE_QUIZ_POOL = ['dog', 'fish', 'bird', 'rabbit', 'horse', 'cow']
 const GUIDE_QUIZ_CSS = `
     .mini-quiz{background:#fff;border-radius:0.75rem;padding:1.4rem;margin:0 0 1rem;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
     .mini-quiz h2{font-size:1.1rem;margin:0 0 0.3rem;color:#1e293b}
-    .mini-quiz .mq-sub{font-size:0.85rem;color:#64748b;margin:0 0 0.8rem}
+    .mini-quiz .mq-sub{font-size:0.85rem;color:#4b5a6e;margin:0 0 0.8rem}
     .say-btn{display:inline-block;margin:0 0 0.9rem;padding:0.55rem 1.2rem;border:0;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:700;font-size:1rem;cursor:pointer}
     .say-btn.say-active{transform:scale(0.97)}
     .mq-options{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap}
@@ -4603,9 +4684,9 @@ for (const guide of GUIDES) {
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 720px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 720px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .breadcrumb a:hover { text-decoration: underline; }
     .container { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
     .section { background: #fff; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
@@ -4638,8 +4719,8 @@ for (const guide of GUIDES) {
     .mid-cta { text-align: center; margin: 1.5rem 0; padding: 1.25rem; background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%); border-radius: 0.75rem; border: 1px solid #bfdbfe; }
     .mid-cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.65rem 1.75rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
     .mid-cta a:hover { background: #1d4ed8; }
-    .mid-cta p { margin-top: 0.4rem; font-size: 0.8rem; color: #64748b; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .mid-cta p { margin-top: 0.4rem; font-size: 0.8rem; color: #4b5a6e; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
 ${GUIDE_QUIZ_CSS}
   </style>
 </head>
@@ -4671,7 +4752,7 @@ ${GUIDE_QUIZ_CSS}
 
     <div class="cta">
       <a href="/?utm_source=seo&utm_medium=cta&utm_content=guide">Try Children Do English &mdash; Free &rarr;</a>
-      <p style="margin-top:0.5rem;font-size:0.8rem;color:#64748b">No ads &middot; No account needed &middot; Works offline</p>
+      <p style="margin-top:0.5rem;font-size:0.8rem;color:#4b5a6e">No ads &middot; No account needed &middot; Works offline</p>
     </div>
 
     <div class="guides-nav">
@@ -4683,7 +4764,7 @@ ${GUIDE_QUIZ_CSS}
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -4750,16 +4831,16 @@ const guidesIndexHtml = `<!DOCTYPE html>
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
     .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
     .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { opacity: 0.9; font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 720px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: none; }
+    .header p { font-size: 0.95rem; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 720px; margin: 0 auto; }
+    .breadcrumb a { color: #2563eb; text-decoration: underline; }
     .container { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
     .intro { margin-bottom: 1.5rem; color: #475569; }
     .guide-card { display: block; background: #fff; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-decoration: none; color: inherit; transition: box-shadow 0.2s, transform 0.2s; }
     .guide-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.12); transform: translateY(-2px); }
     .guide-card h2 { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 0.5rem; }
-    .guide-card p { font-size: 0.9rem; color: #64748b; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #94a3b8; font-size: 0.8rem; }
+    .guide-card p { font-size: 0.9rem; color: #4b5a6e; }
+    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
   </style>
 </head>
 <body>
@@ -4779,7 +4860,7 @@ const guidesIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#94a3b8">About</a> &middot; <a href="/privacy" style="color:#94a3b8">Privacy</a>
+    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -5083,7 +5164,7 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
   body{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;margin:0;background:#f0f6ff;color:#1e293b}
   .wrap{max-width:960px;margin:0 auto;padding:1.5rem 1rem 2rem}
   h1{font-size:1.75rem;color:#1d4ed8;margin:.2rem 0 .4rem} .sub{color:#475569;margin:0 0 1rem;line-height:1.5}
-  .today-cta{display:block;text-align:center;background:#f59e0b;color:#fff;font-weight:800;font-size:1.1rem;padding:.85rem 1rem;border-radius:999px;text-decoration:none;margin:0 auto 1.2rem;max-width:420px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+  .today-cta{display:block;text-align:center;background:#b45309;color:#fff;font-weight:800;font-size:1.1rem;padding:.85rem 1rem;border-radius:999px;text-decoration:none;margin:0 auto 1.2rem;max-width:420px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
   .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
   .card{display:block;background:#fff;border-radius:1.2rem;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 2px 10px rgba(30,64,175,.08);transition:transform .15s}
   .card:hover{transform:translateY(-3px)}
@@ -5091,13 +5172,13 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
   .body{padding:1rem 1.2rem 1.2rem} .card h2{margin:0 0 .3rem;color:#1d4ed8;font-size:1.2rem}
   .today{display:inline-block;vertical-align:middle;background:#fef3c7;color:#92400e;font-size:.72rem;font-weight:700;padding:.15rem .5rem;border-radius:999px;margin-inline-start:.3rem}
   .skill{font-weight:700;color:#0f766e;font-size:.9rem;margin:0 0 .4rem}
-  .card p{font-size:.9rem;color:#475569;line-height:1.5;margin:0 0 .4rem} .card .who{font-size:.8rem;color:#64748b}
-  .play{display:inline-block;margin-top:.3rem;background:#0d9488;color:#fff;font-weight:700;padding:.45rem 1rem;border-radius:999px}
+  .card p{font-size:.9rem;color:#475569;line-height:1.5;margin:0 0 .4rem} .card .who{font-size:.8rem;color:#4b5a6e}
+  .play{display:inline-block;margin-top:.3rem;background:#0f766e;color:#fff;font-weight:700;padding:.45rem 1rem;border-radius:999px}
   .more{background:#fff;border-radius:1.2rem;padding:1.2rem 1.4rem;margin-top:1.4rem;box-shadow:0 2px 10px rgba(30,64,175,.06)}
   .more h2{font-size:1.15rem;margin:0 0 .5rem;color:#1e293b} .more p,.more li{color:#475569;line-height:1.55;font-size:.95rem}
   .more a{color:#1d4ed8;font-weight:600}
   .faq h3{font-size:1rem;margin:1rem 0 .2rem;color:#1e293b}
-  .back{display:inline-block;margin-top:1.4rem;color:#0d9488;text-decoration:none;font-weight:600}
+  .back{display:inline-block;margin-top:1.4rem;color:#0f766e;text-decoration:none;font-weight:600}
 </style></head>
 <body><div class="wrap">
   <h1>Free English Vocabulary Games for Kids</h1>

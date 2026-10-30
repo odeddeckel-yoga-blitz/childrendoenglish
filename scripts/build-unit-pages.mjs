@@ -315,7 +315,7 @@ const UNIT_CSS = `
     body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; direction: rtl; text-align: right; }
     a { color: #2563eb; }
     .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #64748b; max-width: 960px; margin: 0 auto; }
+    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
     .hero { background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; padding: 2rem 1rem 1.75rem; text-align: center; }
     .hero h1 { font-size: 1.6rem; font-weight: 900; line-height: 1.35; margin-bottom: 0.5rem; }
     .hero .answer { max-width: 600px; margin: 0 auto; opacity: 0.95; }
@@ -346,7 +346,7 @@ const UNIT_CSS = `
     .spell input { font-size: 1.3rem; padding: 0.55rem 0.75rem; border: 2px solid #cbd5e1; border-radius: 0.6rem; width: 100%; max-width: 280px; text-align: center; direction: ltr; }
     .spell button[type=submit] { margin-top: 0.6rem; min-height: 44px; padding: 0 1.4rem; border: 0; border-radius: 0.6rem; background: #2563eb; color: #fff; font-weight: 700; font-size: 1rem; cursor: pointer; }
     .feedback { min-height: 1.6rem; margin-top: 0.7rem; font-weight: 700; }
-    .progress { font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem; }
+    .progress { font-size: 0.85rem; color: #4b5a6e; margin-bottom: 0.5rem; }
     .next { margin-top: 0.75rem; min-height: 44px; padding: 0 1.4rem; border-radius: 0.6rem; border: 2px solid #2563eb; background: #fff; color: #2563eb; font-weight: 700; cursor: pointer; }
     .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.75rem; }
     .fc { background: #fff; border: 2px dashed #cbd5e1; border-radius: 0.75rem; padding: 0.75rem; text-align: center; }
@@ -354,14 +354,14 @@ const UNIT_CSS = `
     .fc-noimg { font-size: 2.5rem; height: 120px; display: flex; align-items: center; justify-content: center; }
     .fc-en { font-weight: 800; font-size: 1.15rem; } .fc-he { color: #475569; }
     .print-btn, .share-btn, .cta { display: inline-block; margin: 0.25rem; padding: 0.6rem 1.2rem; border-radius: 0.6rem; font-weight: 700; text-decoration: none; min-height: 44px; }
-    .print-btn { border: 0; background: #0d9488; color: #fff; font-size: 1rem; cursor: pointer; }
+    .print-btn { border: 0; background: #0f766e; color: #fff; font-size: 1rem; cursor: pointer; }
     .share-btn { background: #fff; color: #2563eb; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 0; font-size: 1rem; cursor: pointer; font-family: inherit; }
     .dict-hint { color: #475569; margin-bottom: 0.5rem; }
     .dict-list { text-align: left; direction: ltr; max-width: 320px; margin: 0.5rem auto; list-style: none; }
     .dict-list li { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; padding: 0.2rem 0; }
     .dict-list label { display: flex; align-items: center; gap: 0.5rem; font-weight: 700; font-size: 1.1rem; cursor: pointer; }
     .dict-list input { width: 22px; height: 22px; }
-    .dict-n { color: #64748b; font-weight: 400; min-width: 1.6rem; }
+    .dict-n { color: #4b5a6e; font-weight: 400; min-width: 1.6rem; }
     .cta { background: #2563eb; color: #fff; }
     .faq { max-width: 700px; margin: 0 auto; }
     .faq-item { background: #fff; border-radius: 0.75rem; padding: 1rem 1.2rem; margin-bottom: 0.6rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
@@ -370,8 +370,8 @@ const UNIT_CSS = `
     .unit-card { display: block; background: #fff; border-radius: 0.75rem; padding: 1rem 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-decoration: none; color: inherit; }
     .unit-card strong { display: block; color: #2563eb; font-size: 1.1rem; } .unit-card span { font-size: 0.85rem; color: #475569; }
     .more { padding-bottom: 2rem; }
-    .footer { text-align: center; padding: 1.5rem 1rem; color: #64748b; font-size: 0.8rem; background: #f8fafc; }
-    .footer a { color: #64748b; } .not-affiliated { max-width: 640px; margin: 0.5rem auto 0; }
+    .footer { text-align: center; padding: 1.5rem 1rem; color: #4b5a6e; font-size: 0.8rem; background: #f8fafc; }
+    .footer a { color: #4b5a6e; } .not-affiliated { max-width: 640px; margin: 0.5rem auto 0; }
     @media (max-width: 420px) { .hero h1 { font-size: 1.35rem; } .opts { grid-template-columns: 1fr; } }
     #sheets-out { display: none; }
     .sheet-row { margin-bottom: 0.4rem; } .sheet-row select { font-size: 1rem; padding: 0.35rem; border-radius: 0.4rem; margin: 0 0.25rem; font-family: inherit; }
