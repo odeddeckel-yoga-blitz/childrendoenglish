@@ -17,7 +17,7 @@ const MAP = {
   'GENERATION.md': 'game-kit/GENERATION.md',
   'PATTERNS.md': 'plans/game-kit-patterns.md',
   // Persona standard checks (PATTERNS §3e). persona-check needs Game.start, so CDE runs it
-  // through .image-work/cde-persona.mjs; persona-counts runs as-is.
+  // through tools/persona/cde-persona.mjs; persona-counts runs as-is.
   'test/persona-check.mjs': 'tools/persona/persona-check.mjs',
   'test/persona-counts.mjs': 'tools/persona/persona-counts.mjs',
   // Growth-infra syncable code (env-configured per site — see kit infra/seo/README.md).

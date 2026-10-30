@@ -159,9 +159,10 @@ function renderEnd(){
   else box.appendChild(el('p',null,T('allRight')));
   var again=el('button','primary',T('playAgain')); again.type='button';
   again.addEventListener('click',function(){ S.misses={}; startLevel(0); });
-  var more=el('a','ghost',T('moreGames')); more.href='/games/';
-  box.appendChild(again); box.appendChild(more);
-  app.appendChild(box); again.focus();
+  box.appendChild(again);
+  app.appendChild(box);
+  if(window.CDE_END) CDE_END({game:'read-it',again:again,good:true}); // all levels done → next game leads
+  (box.querySelector('[data-kdm-primary]')||again).focus();
 }
 
 document.getElementById('startBtn').addEventListener('click',function(){

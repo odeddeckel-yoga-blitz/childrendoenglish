@@ -508,8 +508,10 @@ function gameOver(){
   const c=$('overCard');
   if(c) c.innerHTML=L10N('lbScore','⭐ Score')+' <b>'+S.score+'</b>'
     +(isBest?' · <span class="newbest">'+L10N('lbNewBest','★ NEW BEST!')+'</span>':' · '+L10N('lbBest','best')+' <b>'+S.best+'</b>')
-    +'<br>'+L10N('lbReached','⚡ Reached')+' <b>LV '+S.tier+'</b> · '+L10N('lbZapped','zapped')+' <b>'+S.zapped+'</b>'+(window.CDE_LANG&&window.CDE_LANG!=='en'?'':' word'+(S.zapped===1?'':'s'));
+    +'<br>'+L10N('lbReached','⚡ Reached')+' <b><bdi>LV '+S.tier+'</bdi></b> · <span style="white-space:nowrap">'+L10N('lbZapped','zapped')+' <b>'+S.zapped+'</b>'+(window.CDE_LANG&&window.CDE_LANG!=='en'?'':' word'+(S.zapped===1?'':'s'))+'</span>';
   show('over');
+  // a good run (level 3+ or a new best) → the next game leads; else play again
+  if(window.CDE_END) CDE_END({game:'word-zapper',again:$('againBtn'),good:S.tier>=3||isBest,hide:[$('overHome')]});
   beep(120,0.6,'sawtooth',0.16,60);
 }
 

@@ -418,6 +418,7 @@ function winGame(){
     +'<br>'+L10N('lbForged','⚒️ Forged')+' <b>'+S.forged+'</b> '+L10N('lbWordsAcross','words across all')+' <b>'+MAXLV+'</b> '+L10N('lbLevels','levels')
     +'<br>'+L10N('lbPerfect','✨ First-strike words (no misses, no hints):')+' <b>'+S.perfect+'</b>';
   show('win');
+  if(window.CDE_END) CDE_END({game:'spelling-forge',again:$('againBtn'),good:true,hide:[document.querySelector('#win a[data-l10n=home]')]});
   chord(659); setTimeout(()=>chord(784),220);
   try{ const r=$('winTitle').getBoundingClientRect(); FX.burst(r.left+r.width/2,r.bottom,40,'#fbbf24',8,1.2); }catch(e){}
   track('game_complete',{score:S.score,perfect:S.perfect});

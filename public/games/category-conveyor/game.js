@@ -377,8 +377,10 @@ function gameOver(){
   $('overCard').innerHTML =
     L10N('lbScore','⭐ Score') + ' <b>' + S.score + '</b>' +
     (isBest ? ' · <span class="newbest">' + L10N('lbNewBest','★ NEW BEST!') + '</span>' : ' · ' + L10N('lbBest','best') + ' <b>' + S.best + '</b>') +
-    '<br>' + L10N('lbSorted','📦 Sorted') + ' <b>' + S.sorted + '</b> ' + L10N('lbWords','words') + ' · ' + L10N('lbReached','reached') + ' <b>LV ' + S.level + '</b>';
+    '<br>' + L10N('lbSorted','📦 Sorted') + ' <b>' + S.sorted + '</b> ' + L10N('lbWords','words') + ' · ' + L10N('lbReached','reached') + ' <b><bdi>LV ' + S.level + '</bdi></b>';
   show('over');
+  // a good run (level 3+ or a new best) → the next game leads; else play again
+  if(window.CDE_END) CDE_END({game:'category-conveyor',again:$('againBtn'),good:S.level>=3||isBest,hide:[$('overHome')]});
   beep(140,0.5,'sawtooth',0.16,60);
 }
 
