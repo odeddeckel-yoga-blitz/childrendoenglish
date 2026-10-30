@@ -110,6 +110,31 @@
   #homePill:hover{background:rgba(11,18,48,.96);}
   #homePill.leave{background:#dc2626;color:#fff;border-color:#f87171;}
   @media(max-width:640px){ #stage{padding-top:60px;} }  /* content clears the top-left home pill on phones */
+  /* Short phones (tap-reach probe 10-30: on 320×568 the last tile row and FORGE sat
+     below the screen, on 360×640 FORGE was cut): tighter column, photo capped by
+     screen height, tiles ≥48px so they stay finger-sized. */
+  @media(max-height:760px){
+    #play{gap:7px;}
+    .pill{padding:4px 9px;font-size:13px;}
+    #photo,#photoMyst{height:min(46vw,210px,22dvh);}
+    #photoMyst{font-size:40px;}
+    #sayBtn{width:46px;height:46px;font-size:21px;}
+    #slots{gap:5px;min-height:48px;padding:2px;}
+    .slot{width:clamp(32px,9.5vw,52px);height:clamp(44px,11vw,56px);font-size:clamp(20px,5.5vw,28px);}
+    #pad{gap:7px;padding:9px;}
+    .tile{width:clamp(48px,14vw,60px);height:clamp(48px,14vw,60px);min-width:48px;min-height:48px;font-size:26px;}
+    #statusLine{font-size:14px;min-height:20px;}
+    #forgeBtn{font-size:19px;padding:11px 36px;}
+  }
+  @media(max-width:640px) and (max-height:760px){ #stage{padding-top:52px;} }
+  @media(max-height:600px){  /* 320×568 with an 8-letter word: 3 tile rows */
+    #play{gap:5px;}
+    #photo,#photoMyst{height:min(46vw,210px,16dvh);}
+    #photoMyst small{display:none;}
+    #pad{gap:6px;padding:6px;}
+    #statusLine{font-size:13px;min-height:18px;}
+    #forgeBtn{padding:10px 34px;}
+  }
   @media(prefers-reduced-motion:reduce){
     .tile.glow,#forgeBtn.ready,.slot.bad{animation:none!important;}
     .fly{transition:none!important;}
