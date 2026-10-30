@@ -25,14 +25,18 @@ var W={
   mouth:['פה','boca'],mouse:['עכבר','ratón'],thank:['להודות','agradecer'],tank:['טנק','tanque'],path:['שביל','sendero'],pass:['לעבור','pasar'],
   sheep:['כבשה','oveja'],ship:['ספינה','barco'],seat:['מושב','asiento'],sit:['לשבת','sentarse'],feet:['כפות רגליים','pies'],fit:['להתאים','quedar bien'],
   heel:['עקב','talón'],hill:['גבעה','colina'],eat:['לאכול','comer'],it:['זה','eso'],
-  vest:['אפוד','chaleco'],west:['מערב','oeste'],vet:['וטרינר','veterinario'],wet:['רטוב','mojado'],vent:['פתח אוורור','rejilla'],went:['הלך (בעבר)','fue']
+  vest:['אפוד','chaleco'],west:['מערב','oeste'],vet:['וטרינר','veterinario'],wet:['רטוב','mojado'],vent:['פתח אוורור','rejilla'],went:['הלך (בעבר)','fue'],
+  they:['הם','ellos'],day:['יום','día'],then:['אז','entonces'],den:['מאורה','guarida'],though:['למרות','aunque'],dough:['בצק','masa'],
+  those:['ההם','esos'],doze:['לנמנם','dormitar'],breathe:['לנשום','respirar'],breed:['גזע','raza'],
+  leave:['לעזוב','irse'],live:['לגור','vivir'],sleep:['לישון','dormir'],slip:['להחליק','resbalar'],cheek:['לחי','mejilla'],chick:['אפרוח','pollito']
 };
 var LEVELS=[
   {id:'p-b', label:{en:'P or B?',he:'P או B',es:'¿P o B?'}, pairs:[['pear','bear'],['pea','bee'],['pig','big'],['pack','back'],['park','bark']]},
   {id:'a-u', label:{en:'a (cat) or u (cut)?',he:'a (cat) או u (cut)',es:'¿a (cat) o u (cut)?'}, pairs:[['cat','cut'],['cap','cup'],['bag','bug'],['hat','hut'],['fan','fun'],['ran','run']]},
   {id:'e-a', label:{en:'e (pen) or a (pan)?',he:'e (pen) או a (pan)',es:'¿e (pen) o a (pan)?'}, pairs:[['pen','pan'],['bed','bad'],['ten','tan'],['men','man'],['pet','pat']]},
   {id:'th', label:{en:'th (three) or t/s (tree)?',he:'th (three) או t/s (tree)',es:'¿th (three) o t/s (tree)?'}, pairs:[['three','tree'],['thin','tin'],['think','sink'],['mouth','mouse'],['thank','tank'],['path','pass']]},
-  {id:'ee-i', label:{en:'ee (sheep) or i (ship)?',he:'ee (sheep) או i (ship)',es:'¿ee (sheep) o i (ship)?'}, pairs:[['sheep','ship'],['seat','sit'],['feet','fit'],['heel','hill'],['eat','it']]},
+  {id:'th-d', label:{en:'th (they) or d (day)?',he:'th (they) או d (day)',es:'¿th (they) o d (day)?'}, pairs:[['they','day'],['then','den'],['though','dough'],['those','doze'],['breathe','breed']]},
+  {id:'ee-i', label:{en:'ee (sheep) or i (ship)?',he:'ee (sheep) או i (ship)',es:'¿ee (sheep) o i (ship)?'}, pairs:[['sheep','ship'],['seat','sit'],['feet','fit'],['heel','hill'],['eat','it'],['leave','live'],['sleep','slip'],['cheek','chick']]},
   {id:'v-w', label:{en:'v (vest) or w (west)?',he:'v (vest) או w (west)',es:'¿v (vest) o w (west)?'}, pairs:[['vest','west'],['vet','wet'],['vent','went']]}
 ];
 var ROUNDS=8;
