@@ -182,7 +182,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
         <button onClick={onBack} className="p-2.5 rounded-xl hover:bg-slate-100 transition-colors" aria-label={t('backToMenu', lang)}>
           <ArrowLeft className="w-5 h-5 text-slate-600 dark:text-slate-300" />
         </button>
-        <span className="text-sm text-slate-500">{currentIdx + 1} / {cards.length}</span>
+        <span className="text-sm text-slate-500" dir="ltr">{currentIdx + 1} / {cards.length}</span>
         <div className="flex gap-3 text-sm">
           <span className="text-emerald-600 font-semibold">{known} ✓</span>
           <span className="text-amber-600 font-semibold">{learning} ✗</span>
@@ -235,7 +235,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
                   height={512}
                 />
                 <span className="absolute top-3 left-3 px-2 py-1 rounded-full bg-black/40 text-white text-xs font-semibold capitalize">
-                  {currentCard.category}
+                  {t(`cat_${currentCard.category}`, lang)}
                 </span>
               </div>
               <div className="p-4 text-center shrink-0">
@@ -257,9 +257,9 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
                   <Volume2 className="w-5 h-5 text-blue-600" />
                 </button>
               </div>
-              <p className="text-center text-slate-500 font-mono text-sm">{currentCard.phonetic}</p>
-              <p className="text-center text-slate-600 dark:text-slate-300">{currentCard.definition}</p>
-              <p className="text-center text-sm text-slate-500 italic">"{currentCard.exampleSentence}"</p>
+              <p className="text-center text-slate-500 font-mono text-sm" dir="ltr">{currentCard.phonetic}</p>
+              <p className="text-center text-slate-600 dark:text-slate-300" dir="ltr" lang="en">{currentCard.definition}</p>
+              <p className="text-center text-sm text-slate-500 italic" dir="ltr" lang="en">"{currentCard.exampleSentence}"</p>
               <div className="pt-3 border-t border-slate-200">
                 <p className="text-xl text-center font-semibold text-blue-600" dir={(lang === 'es') ? 'ltr' : 'rtl'}>
                   {gloss(currentCard, lang === 'en' ? 'he' : lang) || currentCard.hebrewTranslation}

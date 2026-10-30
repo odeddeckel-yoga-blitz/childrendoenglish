@@ -37,6 +37,8 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, onA
   const isRetry = !!item?.retry;
   const total = queue.length;
   const scoreTotal = words.length;
+  // "Question n of 10": re-asks don't grow the total, they keep the last number.
+  const questionNum = queue.slice(0, currentIndex + 1).filter((q) => !q.retry).length;
 
   const advance = useCallback((finish) => {
     if (currentIndex + 1 >= queueRef.current.length) finish();
@@ -161,6 +163,7 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, onA
     currentWord,
     total,
     scoreTotal,
+    questionNum,
     isRetry,
     score,
     streak,

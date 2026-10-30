@@ -1,7 +1,7 @@
 import { X, Volume2, VolumeX, Flame } from 'lucide-react';
 import { t } from '../utils/i18n';
 
-export default function QuizHeader({ score, total, scoreTotal = total, isRetry = false, streak, arcadeScore, soundEnabled, onToggleSound, onQuit, gradientColor = 'from-blue-500 to-blue-600', currentIndex, lang = 'en' }) {
+export default function QuizHeader({ score, total, scoreTotal = total, isRetry = false, questionNum, streak, arcadeScore, soundEnabled, onToggleSound, onQuit, gradientColor = 'from-blue-500 to-blue-600', currentIndex, lang = 'en' }) {
   return (
     <>
       <div className="flex items-center justify-between">
@@ -37,7 +37,7 @@ export default function QuizHeader({ score, total, scoreTotal = total, isRetry =
               ⭐ {arcadeScore}
             </span>
           )}
-          <span className="text-sm font-semibold text-slate-600 dark:text-slate-300">{score}/{scoreTotal}</span>
+          <span className="text-sm font-semibold text-slate-600 dark:text-slate-300" dir="ltr">{score}/{scoreTotal}</span>
           <button
             onClick={onToggleSound}
             className="p-2.5 rounded-lg hover:bg-slate-100 transition-colors"
@@ -59,7 +59,7 @@ export default function QuizHeader({ score, total, scoreTotal = total, isRetry =
       </div>
 
       <p className="text-center text-sm text-slate-500 landscape:hidden">
-        {t('question', lang)} {currentIndex + 1} {t('of', lang)} {total}
+        {t('question', lang)} {questionNum ?? currentIndex + 1} {t('of', lang)} {scoreTotal}
       </p>
       {isRetry && (
         <p className="text-center">

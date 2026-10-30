@@ -24,6 +24,12 @@ describe('QuizHeader', () => {
     expect(screen.getByText(/Question 5 of 10/)).toBeInTheDocument();
   });
 
+  it('re-asked words keep the total at 10 (CUX13)', () => {
+    render(<QuizHeader {...defaultProps} total={16} scoreTotal={10} currentIndex={6} questionNum={5} isRetry />);
+    expect(screen.getByText(/Question 5 of 10/)).toBeInTheDocument();
+    expect(screen.queryByText(/of 16/)).toBeNull();
+  });
+
   it('renders a progressbar', () => {
     render(<QuizHeader {...defaultProps} />);
     expect(screen.getByRole('progressbar')).toBeInTheDocument();

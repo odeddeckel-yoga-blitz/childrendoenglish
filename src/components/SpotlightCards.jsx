@@ -66,7 +66,7 @@ export default function SpotlightCards({ lang = 'en', onOpenWord }) {
                              flex items-center justify-center text-3xl" aria-hidden="true">{g.emoji}</span>
             <p className={label}>{t('spotlightGame', lang)}</p>
             <p className="font-bold text-slate-800 dark:text-slate-100 leading-tight">{g.name}</p>
-            <p className="text-sm text-emerald-600 dark:text-emerald-300 leading-tight">{t('spotlightPlay', lang)} →</p>
+            <p className="text-sm text-emerald-600 dark:text-emerald-300 leading-tight">{t('spotlightPlay', lang)} <span aria-hidden="true" className="inline-block rtl:-scale-x-100">→</span></p>
           </a>
         )}
       </div>

@@ -27,6 +27,7 @@ export default function WordQuiz({ words, lang = 'en', soundEnabled, onToggleSou
         score={quiz.score}
         total={quiz.total}
         scoreTotal={quiz.scoreTotal}
+        questionNum={quiz.questionNum}
         isRetry={quiz.isRetry}
         streak={quiz.streak}
         arcadeScore={quiz.arcadeScore}
