@@ -148,6 +148,16 @@
   ],
   "redirects": [
     {
+      "source": "/units/template-test/:path*",
+      "destination": "/units/",
+      "permanent": true
+    },
+    {
+      "source": "/units/template-test",
+      "destination": "/units/",
+      "permanent": true
+    },
+    {
       "source": "/vocabulary/colors/amber",
       "destination": "/vocabulary/colors/",
       "permanent": true

@@ -34,8 +34,18 @@ describe('textbook-unit pages', () => {
     }
   });
 
-  it('a live unit is indexable and enters the sitemap with its book index and the hub', () => {
+  it('no test book in the shipped data, and the hub never lists one next to live books (CUX1)', () => {
+    expect(Object.values(BOOKS).some((b) => b.test)).toBe(false);
+    expect(UNITS.some((u) => u.test)).toBe(false);
+    const books = { ...BOOKS, 'tmpl': { name: 'Template Test', publisher: 'X', test: true } };
     const live = { ...UNITS[0], book: 'jet-2', unit: 3, test: false, source: 'https://example.com/list.pdf' };
+    const { read } = build([live, { ...UNITS[0], book: 'tmpl', unit: 1, test: true }], books);
+    expect(read('/units/')).not.toContain('Template Test');
+    expect(read('/units/')).toContain('href="/units/jet-2/"');
+  });
+
+  it('a live unit is indexable and enters the sitemap with its book index and the hub', () => {
+    const live = { ...UNITS[0], book: 'jet-2', unit: 3, title: undefined, test: false, source: 'https://example.com/list.pdf' };
     const { urls, read } = build([live]);
     expect(urls.sort()).toEqual(['/units/', '/units/jet-2/', '/units/jet-2/unit-3/']);
     const html = read('/units/jet-2/unit-3/');
@@ -99,13 +109,14 @@ describe('textbook-unit pages', () => {
 
   it('unit-only words get no photo; CDE words show theirs', () => {
     const { read } = build(UNITS);
-    const u = UNITS[0];
+    const u = UNITS.find((x) => x.words.some((w) => !w.wordId) && x.words.some((w) => w.wordId));
     const html = read(`/units/${u.book}/unit-${u.unit}/`);
     for (const w of u.words) {
       const img = w.wordId && WORDS.find((x) => x.id === w.wordId).imageUrl;
       if (img) expect(html).toContain(`src="${img}"`);
     }
-    expect(unitData(html).find((x) => x.en === 'quiet').id).toBeNull();
+    const only = u.words.find((w) => !w.wordId);
+    expect(unitData(html).find((x) => x.en === only.en).id).toBeNull();
   });
 
   it('refuses a word with no rendered audio, and an unknown wordId', () => {

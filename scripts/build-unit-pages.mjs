@@ -293,8 +293,10 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
 
   // --- hub ---
   {
-    const withUnits = books.filter((b) => UNITS.some((u) => u.book === b));
-    const test = !withUnits.some((b) => liveUnitsOf(b).length);
+    // The hub lists only books with a live unit (a test book never shows publicly).
+    const live = books.filter((b) => liveUnitsOf(b).length);
+    const withUnits = live.length ? live : books.filter((b) => UNITS.some((u) => u.book === b));
+    const test = !live.length;
     const path = '/units/';
     const dir = join(distDir, 'units');
     mkdirSync(dir, { recursive: true });
@@ -309,7 +311,7 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
   <main class="container"><section class="section">
   <p class="center week-unit" id="week-unit" hidden></p>
   <div class="unit-grid">${withUnits.map((b) => `
-        <a class="unit-card" href="/units/${b}/"><strong lang="en" dir="ltr">${escapeHtml(BOOKS[b].name)}</strong><span>${UNITS.filter((u) => u.book === b).length} יחידות</span></a>`).join('')}
+        <a class="unit-card" href="/units/${b}/"><strong lang="en" dir="ltr">${escapeHtml(BOOKS[b].name)}</strong><span>${(live.length ? liveUnitsOf(b) : UNITS.filter((u) => u.book === b)).length} יחידות</span></a>`).join('')}
   </div>
   <p class="center pin-hint">בעמוד של כל יחידה אפשר ללחוץ 📌 "זו היחידה שלנו השבוע", והאפליקציה תיפתח עם כרטיס אליה.</p></section></main>
   <script defer src="/unit-practice.js"></script>`,

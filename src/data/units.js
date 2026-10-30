@@ -24,30 +24,9 @@ export const BOOKS = {
   'jet-2': { name: 'Jet 2', publisher: 'Eric Cohen Books' },
   'fantastic-five': { name: 'Fantastic Five', publisher: 'Eric Cohen Books' },
   'think-about-it': { name: 'Think About It', publisher: 'Eric Cohen Books' },
-  'template-test': { name: 'Template Test', publisher: 'Eric Cohen Books', test: true },
 };
 
 export const UNITS = [
-  // TEMPLATE TEST — existing CDE words only. 'quiet' deliberately has no wordId
-  // so the unit-only path (audio by text key, no photo) is exercised. Never
-  // indexed or linked.
-  {
-    book: 'template-test', unit: 1, grade: 'ד׳', test: true,
-    words: [
-      { en: 'apple', he: 'תפוח', wordId: 'apple' },
-      { en: 'banana', he: 'בננה', wordId: 'banana' },
-      { en: 'bread', he: 'לחם', wordId: 'bread' },
-      { en: 'milk', he: 'חלב', wordId: 'milk' },
-      { en: 'egg', he: 'ביצה', wordId: 'egg' },
-      { en: 'water', he: 'מים', wordId: 'water' },
-      { en: 'kitchen', he: 'מטבח', wordId: 'kitchen' },
-      { en: 'table', he: 'שולחן', wordId: 'table' },
-      { en: 'chair', he: 'כיסא', wordId: 'chair' },
-      { en: 'family', he: 'משפחה', wordId: 'family' },
-      { en: 'happy', he: 'שמח', wordId: 'happy' },
-      { en: 'quiet', he: 'שקט' },
-    ],
-  },
   {
     book: 'jet-2', unit: 2, title: 'Let\'s Play', grade: 'ד׳',
     source: 'https://dqt7m27rg71w0.cloudfront.net/wp-content/uploads/2020/09/24065823/ELM_PDF_Jet_2_TG_U2.pdf',
