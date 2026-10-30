@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { sendLearn } from '../utils/learnBeacon';
 import { Play, ArrowLeft, Check, X as XIcon, Zap, Flame } from 'lucide-react';
 import { getWordById } from '../data/words';
 import { LIGHTNING_SECS } from '../utils/arcade';
@@ -17,6 +18,10 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
   const passed = !quit && percentage >= PASS_PCT;
   const praise = percentage >= 50;
   const primaryIsPlayAgain = passed ? !cycleNext : !onRetrySame;
+  // rs beacon: what a child does from here, by score band (UX baseline/after-read)
+  const band = quit ? 'quit' : passed ? 'hi' : 'lo';
+  const track = (action, fn) => (...a) => { sendLearn('rs', `${band}_${action}`); return fn?.(...a); };
+  useEffect(() => { sendLearn('rs', `${band}_view`); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const showLightning = !!onLightning && canRead && !quit && total > 0;
 
   const headline = percentage >= 90 ? t('amazing', lang)
@@ -122,9 +127,9 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
       {/* The one primary action */}
       {(() => {
         const primary = passed
-          ? (cycleNext || { label: t('nextQuiz', lang), onClick: onPlayAgain })
-          : onRetrySame ? { label: t('retrySameWords', lang), onClick: onRetrySame }
-          : { label: t('playAgain', lang), onClick: onPlayAgain };
+          ? (cycleNext ? { ...cycleNext, onClick: track('next', cycleNext.onClick) } : { label: t('nextQuiz', lang), onClick: track('nextquiz', onPlayAgain) })
+          : onRetrySame ? { label: t('retrySameWords', lang), onClick: track('retry', onRetrySame) }
+          : { label: t('playAgain', lang), onClick: track('again', onPlayAgain) };
         return (
           <>
             <button
@@ -150,26 +155,26 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
         </summary>
         <div className="space-y-2 p-3 pt-0">
           {passed && onRetrySame && (
-            <button onClick={onRetrySame}
+            <button onClick={track('retry', onRetrySame)}
               className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 active:scale-95 transition-all">
               {t('retrySameWords', lang)}
             </button>
           )}
           {!primaryIsPlayAgain && (
-            <button onClick={onPlayAgain}
+            <button onClick={track('again', onPlayAgain)}
               className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2">
               <Play className="w-4 h-4" /> {t('playAgain', lang)}
             </button>
           )}
           {cycleRepeats && cycleRepeats.map((r) => (
-            <button key={r.label} onClick={r.onClick}
+            <button key={r.label} onClick={track('more', r.onClick)}
               className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 active:scale-95 transition-all">
               {r.label}
             </button>
           ))}
           {showLightning && (
             <button
-              onClick={onLightning}
+              onClick={track('lightning', onLightning)}
               className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-amber-700 dark:text-amber-300
                          bg-linear-to-b from-amber-100 to-amber-200 dark:from-amber-900/40 dark:to-amber-800/40
                          border border-amber-300 dark:border-amber-700 active:scale-95 transition-all flex items-center justify-center gap-2"
@@ -183,6 +188,7 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
             return (
               <a
                 href={`/games/${g.id}/`}
+                onClick={track('game')}
                 className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-emerald-700 dark:text-emerald-300
                            bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700
                            active:scale-95 transition-all flex items-center justify-center gap-2"
@@ -195,7 +201,7 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
       </details>
 
       <button
-        onClick={onMenu}
+        onClick={track('menu', onMenu)}
         className="w-full py-2 px-3 rounded-xl font-semibold text-slate-500 text-sm
                    hover:underline flex items-center justify-center gap-1.5"
       >

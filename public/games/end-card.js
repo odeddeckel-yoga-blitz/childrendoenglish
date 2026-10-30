@@ -13,6 +13,15 @@
     he:{next:'▶ המשחק הבא: ',menu:'🏠 לתפריט שלי',start:'🏠 עוד תרגול באנגלית',home:'🏠 Children Do English'},
     es:{next:'▶ Siguiente juego: ',menu:'🏠 Mi menú',start:'🏠 Más práctica de inglés',home:'🏠 Children Do English'}
   };
+  // ge beacon (same cookieless tally as the games' own beacons): what a child does
+  // at the end card — <game>_<view-good|view-low|next|again|menu>.
+  function ge(item){
+    try{
+      if(navigator.webdriver||localStorage.getItem('cde_internal')==='1'||!navigator.sendBeacon) return;
+      var l=window.CDE_LANG==='he'||window.CDE_LANG==='es'?window.CDE_LANG:'en';
+      navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:'ge',i:item}], l:l}));
+    }catch(e){}
+  }
   function hasPlayer(){ try{ var r=JSON.parse(localStorage.getItem('childrendoenglish-players')||'null'); return !!(r&&r.players&&r.players.length); }catch(e){ return false; } }
   function primary(b){ b.setAttribute('data-kdm-primary',''); b.style.cssText=b.getAttribute('data-cde-css')||''; }
   function secondary(b){
@@ -43,6 +52,10 @@
     home.href=player?'/app':(lang==='en'?'/new-player':'/new-player?lang='+lang);
     home.textContent=player?L.menu:L.start;
     home.style.cssText='font-weight:700;text-decoration:underline;font-size:15px;color:inherit';
+    ge(o.game+(o.good?'_view-good':'_view-low'));
+    next.addEventListener('click',function(){ ge(o.game+'_next'); });
+    home.addEventListener('click',function(){ ge(o.game+'_menu'); });
+    if(!again.hasAttribute('data-cde-ge')){ again.setAttribute('data-cde-ge','1'); again.addEventListener('click',function(){ ge(o.game+'_again'); }); }
     if(o.good){ primary(next); wrap.appendChild(next); wrap.appendChild(again); secondary(again); }
     else { primary(again); wrap.appendChild(again); wrap.appendChild(next); secondary(next); }
     wrap.appendChild(home);
