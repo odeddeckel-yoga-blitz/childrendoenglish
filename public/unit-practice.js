@@ -48,6 +48,23 @@
     // [data-print] is print-btn.js's (it loads the lazy card images first).
   });
 
+  // Band I review path (/band-1/review/): sets finished on this device, kept
+  // only in this browser. The hub ticks them off; a set page records a finish.
+  var PATH_KEY = 'cde_b1review';
+  function pathDone() {
+    try { var v = JSON.parse(localStorage.getItem(PATH_KEY) || '[]'); return Array.isArray(v) ? v : []; }
+    catch (e) { return []; }
+  }
+  var stepCards = document.querySelectorAll('[data-step-card]');
+  if (stepCards.length) {
+    var done = pathDone(), n = 0;
+    for (var k = 0; k < stepCards.length; k++) {
+      if (done.indexOf(+stepCards[k].getAttribute('data-step-card')) >= 0) { stepCards[k].classList.add('done'); n++; }
+    }
+    var prog = document.getElementById('path-progress');
+    if (prog && n) { prog.textContent = 'סיימתם ' + n + ' מתוך ' + stepCards.length + ' סטים ✓'; prog.hidden = false; }
+  }
+
   var dataEl = document.getElementById('unit-data');
   var box = document.getElementById('practice');
   var live = document.getElementById('practice-live');
@@ -88,6 +105,12 @@
 
   function finish() {
     beacon('quiz_done', 'unit-' + mode);
+    var step = +box.getAttribute('data-step');
+    if (step) {
+      beacon('b1r', step + '-' + mode);
+      try { var d = pathDone(); if (d.indexOf(step) < 0) { d.push(step); localStorage.setItem(PATH_KEY, JSON.stringify(d)); } }
+      catch (e) { /* storage unavailable — the path just won't tick */ }
+    }
     box.textContent = '';
     box.appendChild(el('p', { class: 'feedback' }, 'סיימתם! ' + score + ' מתוך ' + order.length + ' ⭐'));
     var again = el('button', { type: 'button', class: 'next' }, 'עוד סיבוב');

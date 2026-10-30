@@ -95,7 +95,8 @@ ${body}
 
   // navHtml/h1Html are trusted builder HTML; everything else is escaped here.
   // battleHref → a one-click Class Battle with these words (units with enough photos).
-  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null }) {
+  // step → a set on the Band I review path: finishing a round ticks it off on this device.
+  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null, step = null }) {
     const items = words.map((w) => {
       const base = byId.get(w.wordId);
       return { en: w.en, he: w.he, ex: w.ex || null, chip: w.chip || null, id: w.wordId || null, audio: `/audio/${audioKey(w.en)}.mp3`, img: base?.imageUrl || null, ...hebrewOptions(w, words) };
@@ -138,7 +139,7 @@ ${body}
         <button type="button" class="mode" data-mode="spell" aria-pressed="false">✏️ כותבים מה ששומעים</button>
         <button type="button" class="mode" data-mode="dict" aria-pressed="false">📝 הכתבה</button>
       </div>
-      <div id="practice" class="practice" data-unit="${practiceKey}">
+      <div id="practice" class="practice" data-unit="${practiceKey}"${step ? ` data-step="${step}"` : ''}>
         <noscript><p>התרגול צריך JavaScript. אפשר בינתיים ללמוד מהטבלה ומהכרטיסיות.</p></noscript>
       </div>
       <p id="practice-live" class="sr" aria-live="polite"></p>
@@ -369,6 +370,7 @@ const UNIT_CSS = `
     .unit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; }
     .unit-card { display: block; background: #fff; border-radius: 0.75rem; padding: 1rem 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-decoration: none; color: inherit; }
     .unit-card strong { display: block; color: #2563eb; font-size: 1.1rem; } .unit-card span { font-size: 0.85rem; color: #475569; }
+    .step-card .step-done { display: none; } .step-card.done .step-done { display: inline; font-size: 1.1rem; color: #15803d; } .step-card.done { box-shadow: inset 0 0 0 2px #15803d; }
     .more { padding-bottom: 2rem; }
     .footer { text-align: center; padding: 1.5rem 1rem; color: #4b5a6e; font-size: 0.8rem; background: #f8fafc; }
     .footer a { color: #4b5a6e; } .not-affiliated { max-width: 640px; margin: 0.5rem auto 0; }

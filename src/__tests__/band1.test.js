@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import { WORDS } from '../data/words';
 import { UNITS } from '../data/units';
 import { BAND1_BY_ID, BAND1_BY_TEXT, BAND1_TOTAL } from '../data/band1';
-import { band1Topics } from '../../scripts/build-band1-pages.mjs';
+import { band1Topics, band1Path, PATH_SETS } from '../../scripts/build-band1-pages.mjs';
 
 const HE = { animals: 'חיות', food: 'אוכל ושתייה' };
 
@@ -50,5 +50,36 @@ describe('Band I topics', () => {
 
   it('every page word has audio-ready data (gloss + example sentence)', () => {
     for (const t of topics) for (const w of t.words) { expect(w.he).toBeTruthy(); expect(w.ex).toBeTruthy(); }
+  });
+});
+
+describe('Band I review path (RC4)', () => {
+  const sets = band1Path({ WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE: HE });
+  const bandOf = (s) => s.words.filter((w) => w.tag !== 'extra');
+
+  it('14 near-equal sets cover every Band I word exactly once', () => {
+    expect(sets).toHaveLength(PATH_SETS);
+    const ids = sets.flatMap((s) => bandOf(s).map((w) => w.wordId));
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(ids.length).toBe(Object.keys(BAND1_BY_ID).length);
+    const sizes = sets.map((s) => s.bandCount);
+    expect(Math.max(...sizes) - Math.min(...sizes)).toBeLessThanOrEqual(1);
+  });
+
+  it('easiest level first across the whole path', () => {
+    const rank = { pre: 0, c1: 1, c2: 2 };
+    const r = sets.flatMap((s) => bandOf(s).map((w) => rank[w.tag]));
+    expect(r).toEqual([...r].sort((a, b) => a - b));
+  });
+
+  it('one chipped bonus word per set, not on Band I, never repeated', () => {
+    const extras = sets.map((s) => s.words.filter((w) => w.tag === 'extra'));
+    for (const e of extras) {
+      expect(e).toHaveLength(1);
+      expect(BAND1_BY_ID[e[0].wordId]).toBeUndefined();
+      expect(e[0].chip.label).toMatch(/בונוס/);
+    }
+    const ids = extras.map((e) => e[0].wordId);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 });

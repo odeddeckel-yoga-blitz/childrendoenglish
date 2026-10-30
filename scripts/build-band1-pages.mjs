@@ -45,6 +45,45 @@ export function band1Topics({ WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE }) {
   return topics;
 }
 
+// RC4 review path ("Band I before junior high"): 14 short sets behind one link,
+// /band-1/review/. Our Band I words, easiest level first (Pre-Band I → Core I →
+// Core II), grouped by topic inside a level so each set feels like one or two
+// themes, split into 14 near-equal sets. One bonus non-Band-I word per set
+// (chipped, same topic as the set) keeps the ~10% rule from the topic pages.
+export const PATH_SETS = 14;
+export function band1Path({ WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE }) {
+  const catRank = new Map();
+  for (const w of WORDS) if (!catRank.has(w.category)) catRank.set(w.category, catRank.size);
+  const pos = new Map(WORDS.map((w, i) => [w.id, i]));
+  const band = WORDS.filter((w) => BAND1_BY_ID[w.id])
+    .sort((a, b) => ORDER[BAND1_BY_ID[a.id]] - ORDER[BAND1_BY_ID[b.id]] || catRank.get(a.category) - catRank.get(b.category) || pos.get(a.id) - pos.get(b.id));
+  const sets = [];
+  for (let n = 0, at = 0; n < PATH_SETS; n++) {
+    const size = Math.floor(band.length / PATH_SETS) + (n < band.length % PATH_SETS ? 1 : 0);
+    sets.push(band.slice(at, at + size));
+    at += size;
+  }
+  const lvl = { beginner: 0, intermediate: 1, advanced: 2 };
+  const usedExtra = new Set();
+  return sets.map((ws, i) => {
+    const cats = [...new Set(ws.map((w) => w.category))];
+    // the bonus word: the set's biggest topic, easiest non-Band-I word not used by an earlier set
+    const main = cats.map((c) => [c, ws.filter((w) => w.category === c).length]).sort((a, b) => b[1] - a[1])[0][0];
+    const extra = WORDS.filter((w) => w.category === main && !BAND1_BY_ID[w.id] && !usedExtra.has(w.id))
+      .sort((a, b) => lvl[a.level] - lvl[b.level] || pos.get(a.id) - pos.get(b.id))[0];
+    if (extra) usedExtra.add(extra.id);
+    const tagged = [...ws.map((w) => ({ w, tag: BAND1_BY_ID[w.id] })), ...(extra ? [{ w: extra, tag: 'extra' }] : [])];
+    const levels = [...new Set(ws.map((w) => BAND1_BY_ID[w.id]))];
+    return {
+      n: i + 1,
+      he: cats.slice(0, 3).map((c) => CATEGORY_NAMES_HE[c] || c).join(' · ') + (cats.length > 3 ? ' ועוד' : ''),
+      levels: levels.map((l) => BAND_CHIPS[l].label),
+      bandCount: ws.length,
+      words: tagged.map(({ w, tag }) => ({ en: w.word, he: w.hebrewTranslation, wordId: w.id, ex: w.exampleSentence, chip: BAND_CHIPS[tag], tag })),
+    };
+  });
+}
+
 export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND1_TOTAL, CATEGORY_NAMES_HE }) {
   const kit = wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides });
   const topics = band1Topics({ WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE });
@@ -103,11 +142,76 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
   <nav class="breadcrumb" aria-label="breadcrumb"><a href="/he/">עברית</a> › <span lang="en" dir="ltr">Band I</span> לפי נושאים</nav>
   <header class="hero"><h1>מילים באנגלית <span lang="en" dir="ltr">Band I</span> לפי נושאים</h1>
     <p class="answer">${covered} מילים מרשימת <span lang="en" dir="ltr">Band I</span> של משרד החינוך, עם תמונה, הגייה, תרגום ותרגול, מסודרות לפי ${topics.length} נושאים. בכל נושא נוספו גם כמה מילות בונוס מחוץ לרשימה, מסומנות.</p></header>
-  <main class="container"><section class="section"><div class="unit-grid">${cards}
+  <main class="container"><section class="section">
+  <p class="center"><a class="cta" href="/band-1/review/">🎒 מסלול חזרה: כל Band I ב-${PATH_SETS} סטים קצרים ←</a></p>
+  <div class="unit-grid">${cards}
   </div>
   ${legend}
   <p class="aligned">מילים נוספות מתוך <span lang="en" dir="ltr">Band I</span> מופיעות בעמודי <a href="/units/">יחידות הלימוד</a>, מסומנות באותו אופן.</p>
   </section></main>`,
   }));
-  return topics.length + 1;
+  return topics.length + 1 + buildReviewPath({ SITE, distDir, writePage, escapeHtml, kit, footerNote, legend, WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE });
+}
+
+function buildReviewPath({ distDir, writePage, escapeHtml, kit, footerNote, legend, WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE }) {
+  const sets = band1Path({ WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE });
+  const total = sets.reduce((n, s) => n + s.bandCount, 0);
+  const hubPath = '/band-1/review/';
+  const hubName = 'מסלול חזרה על Band I';
+  for (const s of sets) {
+    const path = `${hubPath}set-${s.n}/`;
+    const nextLink = s.n < sets.length
+      ? `<a class="cta" href="${hubPath}set-${s.n + 1}/">לסט ${s.n + 1} ←</a>`
+      : `<a class="cta" href="${hubPath}">סיימתם את כל ${sets.length} הסטים! חזרה למסלול ←</a>`;
+    kit.setPage({
+      dir: join(distDir, 'band-1', 'review', `set-${s.n}`), path, test: false, footerNote, step: s.n,
+      title: `חזרה על Band I, סט ${s.n} מתוך ${sets.length}: ${s.he}`,
+      description: `סט ${s.n} במסלול החזרה על Band I לפני חטיבת הביניים: ${s.bandCount} מילים (${s.words.filter((w) => w.tag !== 'extra').slice(0, 5).map((w) => w.en).join(', ')}…) עם תמונה, הגייה, תרגום ותרגול. חינם, בלי הרשמה.`,
+      crumbItems: [['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/'], [hubName, hubPath], [`סט ${s.n}`, path]],
+      navHtml: `<a href="/he/">עברית</a> › <a href="/band-1/"><span lang="en" dir="ltr">Band I</span> לפי נושאים</a> › <a href="${hubPath}">מסלול חזרה</a> › סט ${s.n}`,
+      h1Html: `חזרה על <span lang="en" dir="ltr">Band I</span>: סט ${s.n} מתוך ${sets.length}`,
+      answer: `${s.bandCount} מילים מתוך Band I (${s.he}) ועוד מילת בונוס אחת. מקשיבים לכל מילה ב-🔊, ואז עושים סבב "שומעים ובוחרים" למטה. סבב שהסתיים מסומן ✓ במסלול.`,
+      listHeading: `המילים בסט ${s.n}`,
+      words: s.words,
+      afterTable: `${legend}
+      <p class="center">${nextLink}</p>`,
+      practiceKey: `band1-review-${s.n}`,
+      faqPairs: [
+        [`אילו מילים יש בסט ${s.n}?`, `${s.words.filter((w) => w.tag !== 'extra').map((w) => `${w.en} (${w.he})`).join(', ')}.`],
+        ['כמה זמן לוקח סט?', `כ-10 דקות: מקשיבים למילים, עושים סבב תרגול אחד (${s.words.length} שאלות), ואם רוצים גם הכתבה. סט ביום מסיים את המסלול בפחות משלושה שבועות.`],
+        ['למי מתאים המסלול?', 'לילדים שמסיימים את בית הספר היסודי ורוצים לחזור על אוצר המילים של Band I לפני חטיבת הביניים, למשל בחופש הגדול, ולכל מי שרוצה לחזור על מילים בסיסיות.'],
+      ],
+      sheetsName: `Band I review · set ${s.n}`,
+      shareTitle: `חזרה על Band I — סט ${s.n}: מילים באנגלית עם הגייה ותרגול`,
+      ctaUtm: `utm_medium=band1&amp;utm_content=review-${s.n}`,
+    });
+  }
+
+  const cards = sets.map((s) => `
+        <a class="unit-card step-card" href="${hubPath}set-${s.n}/" data-step-card="${s.n}"><strong>סט ${s.n}<span class="step-done" aria-hidden="true"> ✓</span></strong><span>${escapeHtml(s.he)} · ${s.bandCount} מילים · <span lang="en" dir="ltr">${escapeHtml(s.words.slice(0, 3).map((w) => w.en).join(', '))}</span>…</span></a>`).join('');
+  writePage(join(distDir, 'band-1', 'review', 'index.html'), kit.shell({
+    path: hubPath, test: false, footerNote,
+    title: `חזרה על Band I לפני חטיבת הביניים — ${sets.length} סטים קצרים עם הגייה ותרגול`,
+    description: `${total} מילים מרשימת Band I ב-${sets.length} סטים קצרים, מהקל לקשה: תמונה, הגייה, תרגום ותרגול בכל סט. מתאים לחופש הגדול לפני כיתה ז׳. חינם, בלי הרשמה.`,
+    schemas: [
+      kit.crumbs([['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/'], [hubName, hubPath]]),
+      kit.faq([
+        ['מה זה מסלול החזרה?', `${sets.length} סטים קצרים של מילים מתוך Band I (${total} מילים), מהרמה הראשונה (Pre-Band I) דרך Core I ועד Core II. כל סט: מקשיבים, מתרגלים, ועוברים לבא.`],
+        ['איך יודעים מה כבר עשינו?', 'סט שבו סיימתם סבב תרגול מסומן ✓ בעמוד הזה. הסימון נשמר רק בדפדפן שבו תרגלתם — בלי הרשמה ובלי לשלוח מידע.'],
+        ['האם זו רשימת Band I המלאה?', 'לא. אלה המילים מהאתר שלנו שנמצאות ב-Band I, עם מילת בונוס אחת בכל סט. את הרשימה הרשמית מפרסם משרד החינוך.'],
+      ]),
+    ],
+    body: `
+  <nav class="breadcrumb" aria-label="breadcrumb"><a href="/he/">עברית</a> › <a href="/band-1/"><span lang="en" dir="ltr">Band I</span> לפי נושאים</a> › מסלול חזרה</nav>
+  <header class="hero"><h1>חזרה על <span lang="en" dir="ltr">Band I</span> לפני חטיבת הביניים</h1>
+    <p class="answer">${total} מילים מרשימת <span lang="en" dir="ltr">Band I</span> ב-${sets.length} סטים קצרים, מהקל לקשה. בכל סט מקשיבים למילים, מתרגלים, ועוברים לסט הבא. סט ביום, כעשר דקות.</p></header>
+  <main class="container"><section class="section">
+  <p class="center path-progress" id="path-progress" hidden></p>
+  <div class="unit-grid">${cards}
+  </div>
+  ${legend}
+  </section></main>
+  <script defer src="/unit-practice.js"></script>`,
+  }));
+  return sets.length + 1;
 }
