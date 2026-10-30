@@ -55,6 +55,9 @@ describe('textbook-unit pages', () => {
     expect(html).toContain('<script defer src="/unit-sheets.js"></script>');
     // the card images are lazy: printing must go through print-btn.js, which loads them first
     expect(html).toContain('<script defer src="/print-btn.js"></script>');
+    // RC12: pin as "this week in class"; the hub shows the pinned unit
+    expect(html).toContain('data-pin-unit="/units/jet-2/unit-3/" data-pin-name="Jet 2 Unit 3"');
+    expect(read('/units/')).toContain('id="week-unit"');
   });
 
   it('a live unit needs its source URL; titles and example sentences render', () => {

@@ -369,6 +369,8 @@ export default {
   dailyReviewDesc: 'חזרו על מילים שלמדתם',
   today: 'היום',
   todayDesc: '5 דקות · {{count}} מילים שנבחרו בשבילך',
+  classWeek: 'השבוע בכיתה',
+  classWeekDesc: 'מילים, הגייה ותרגול',
   todayDone: 'סיימת להיום!',
   todayComeBack: 'חוזרים מחר למילים הבאות.',
   todayPicture: 'איזו מילה זו?',

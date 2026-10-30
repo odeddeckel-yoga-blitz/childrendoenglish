@@ -96,7 +96,9 @@ ${body}
   // navHtml/h1Html are trusted builder HTML; everything else is escaped here.
   // battleHref → a one-click Class Battle with these words (units with enough photos).
   // step → a set on the Band I review path: finishing a round ticks it off on this device.
-  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null, step = null }) {
+  // pin → "this week in class" (RC12): the unit name; the button saves the page on this
+  // device and the app's home then opens with a one-tap card to it.
+  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null, step = null, pin = null }) {
     const items = words.map((w) => {
       const base = byId.get(w.wordId);
       return { en: w.en, he: w.he, ex: w.ex || null, chip: w.chip || null, id: w.wordId || null, audio: `/audio/${audioKey(w.en)}.mp3`, img: base?.imageUrl || null, ...hebrewOptions(w, words) };
@@ -121,6 +123,8 @@ ${body}
   <header class="hero">
     <h1>${h1Html}</h1>
     <p class="answer">${escapeHtml(answer)}</p>
+    ${pin ? `<p class="pin-row"><button type="button" class="pin-btn" data-pin-unit="${path}" data-pin-name="${escapeHtml(pin)}" aria-pressed="false">📌 זו היחידה שלנו השבוע</button></p>
+    <p class="pin-hint" hidden>נשמר במכשיר הזה: האפליקציה תיפתח עם כרטיס ליחידה הזו.</p>` : ''}
   </header>
   <main class="container">
     <section class="section" aria-labelledby="words-h">
@@ -255,6 +259,7 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
       sheetsName: unitName,
       shareTitle: `${unitName} — מילים באנגלית עם הגייה ותרגול`,
       ctaUtm: `utm_medium=unit&amp;utm_content=${u.book}-${u.unit}`,
+      pin: unitName,
       battleHref: battleUnitIds.has(`u-${u.book}-${u.unit}`) ? `/battle/?unit=u-${u.book}-${u.unit}` : null,
     });
     if (!test) sitemapUrls.push(path);
@@ -301,9 +306,13 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
       body: `
   <nav class="breadcrumb" aria-label="breadcrumb"><a href="/he/">עברית</a> › יחידות לימוד</nav>
   <header class="hero"><h1>יחידות לימוד באנגלית</h1><p class="answer">בחרו ספר ויחידה: כל המילים עם הגייה, תרגום לעברית ותרגול.</p></header>
-  <main class="container"><section class="section"><div class="unit-grid">${withUnits.map((b) => `
+  <main class="container"><section class="section">
+  <p class="center week-unit" id="week-unit" hidden></p>
+  <div class="unit-grid">${withUnits.map((b) => `
         <a class="unit-card" href="/units/${b}/"><strong lang="en" dir="ltr">${escapeHtml(BOOKS[b].name)}</strong><span>${UNITS.filter((u) => u.book === b).length} יחידות</span></a>`).join('')}
-  </div></section></main>`,
+  </div>
+  <p class="center pin-hint">בעמוד של כל יחידה אפשר ללחוץ 📌 "זו היחידה שלנו השבוע", והאפליקציה תיפתח עם כרטיס אליה.</p></section></main>
+  <script defer src="/unit-practice.js"></script>`,
     }));
     if (!test) sitemapUrls.push(path);
   }
@@ -370,6 +379,8 @@ const UNIT_CSS = `
     .unit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; }
     .unit-card { display: block; background: #fff; border-radius: 0.75rem; padding: 1rem 1.2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-decoration: none; color: inherit; }
     .unit-card strong { display: block; color: #2563eb; font-size: 1.1rem; } .unit-card span { font-size: 0.85rem; color: #475569; }
+    .pin-row { margin-top: 0.75rem; } .pin-btn { font: inherit; font-weight: 700; padding: 0.5rem 1rem; min-height: 44px; border-radius: 999px; border: 2px solid #fff; background: transparent; color: #fff; cursor: pointer; } .pin-btn[aria-pressed="true"] { background: #fff; color: #1d4ed8; } .hero .pin-hint { font-size: 0.9rem; margin-top: 0.4rem; }
+    .week-unit a { font-weight: 700; }
     .step-card .step-done { display: none; } .step-card.done .step-done { display: inline; font-size: 1.1rem; color: #15803d; } .step-card.done { box-shadow: inset 0 0 0 2px #15803d; }
     .more { padding-bottom: 2rem; }
     .footer { text-align: center; padding: 1.5rem 1rem; color: #4b5a6e; font-size: 0.8rem; background: #f8fafc; }

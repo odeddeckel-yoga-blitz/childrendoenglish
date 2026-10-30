@@ -65,6 +65,44 @@
     if (prog && n) { prog.textContent = 'סיימתם ' + n + ' מתוך ' + stepCards.length + ' סטים ✓'; prog.hidden = false; }
   }
 
+  // "This week in class" (RC12): the pinned unit lives only in this browser
+  // (cde_class_unit = {p: path, n: name}); the app's home reads it for its card.
+  var PIN_KEY = 'cde_class_unit';
+  var PIN_PATH = /^\/units\/[a-z0-9-]+\/unit-\d+\/$/;
+  function pinned() {
+    try { var v = JSON.parse(localStorage.getItem(PIN_KEY) || 'null'); return v && PIN_PATH.test(v.p) ? v : null; }
+    catch (e) { return null; }
+  }
+  var pinBtn = document.querySelector('[data-pin-unit]');
+  function showPin(on) {
+    pinBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    pinBtn.textContent = on ? '📌 היחידה שלנו השבוע ✓' : '📌 זו היחידה שלנו השבוע';
+    var hint = document.querySelector('.pin-hint');
+    if (hint) hint.hidden = !on;
+  }
+  if (pinBtn) {
+    var cur = pinned();
+    showPin(!!cur && cur.p === pinBtn.getAttribute('data-pin-unit'));
+    pinBtn.addEventListener('click', function () {
+      var p = pinBtn.getAttribute('data-pin-unit'), on = pinBtn.getAttribute('aria-pressed') !== 'true';
+      try {
+        if (on) localStorage.setItem(PIN_KEY, JSON.stringify({ p: p, n: pinBtn.getAttribute('data-pin-name').slice(0, 60) }));
+        else localStorage.removeItem(PIN_KEY);
+      } catch (e) { return; /* storage unavailable — nothing to save */ }
+      showPin(on);
+      beacon('wk', on ? 'pin' : 'unpin');
+    });
+  }
+  var weekEl = document.getElementById('week-unit');
+  var wk = weekEl && pinned();
+  if (wk) {
+    weekEl.textContent = '📌 השבוע בכיתה: ';
+    var a = document.createElement('a');
+    a.href = wk.p; a.textContent = wk.n; a.setAttribute('dir', 'ltr');
+    weekEl.appendChild(a);
+    weekEl.hidden = false;
+  }
+
   var dataEl = document.getElementById('unit-data');
   var box = document.getElementById('practice');
   var live = document.getElementById('practice-live');

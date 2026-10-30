@@ -371,6 +371,8 @@ const translations = {
     dailyReviewDesc: 'Review words you\'ve learned',
     today: 'Today',
     todayDesc: '5 minutes · {{count}} words picked for you',
+    classWeek: 'This week in class',
+    classWeekDesc: 'Words, audio and practice',
     todayDone: 'Done for today!',
     todayComeBack: 'Come back tomorrow for your next words.',
     todayPicture: 'Which word is this?',

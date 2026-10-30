@@ -369,6 +369,8 @@ export default {
   dailyReviewDesc: 'Repasa las palabras que has aprendido',
   today: 'Hoy',
   todayDesc: '5 minutos · {{count}} palabras elegidas para ti',
+  classWeek: 'Esta semana en clase',
+  classWeekDesc: 'Palabras, audio y práctica',
   todayDone: '¡Listo por hoy!',
   todayComeBack: 'Vuelve mañana para tus próximas palabras.',
   todayPicture: '¿Qué palabra es?',

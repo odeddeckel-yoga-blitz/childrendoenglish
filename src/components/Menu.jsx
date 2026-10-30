@@ -1,5 +1,6 @@
 import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck } from 'lucide-react';
 import SpotlightCards from './SpotlightCards';
+import ClassWeekCard from './ClassWeekCard';
 import { t } from '../utils/i18n';
 
 import LanguagePicker from './LanguagePicker';
@@ -101,6 +102,9 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
       {/* Main actions */}
       <nav aria-label="Main menu" className="space-y-3">
+        {/* This week in class — the unit a parent pinned on its unit page (RC12) */}
+        <ClassWeekCard lang={lang} />
+
         {/* Play Quiz — primary action for new users */}
         <button
           onClick={() => onNavigate('levelSelect')}

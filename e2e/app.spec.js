@@ -670,3 +670,32 @@ test.describe('Badge Earning', () => {
 
 // ── Sharing block removed: the result-screen Share button was cut in the
 // UX simplification (kids don't share; parents have other channels). ──
+
+// ── This week in class (RC12): the unit pinned on its unit page is one tap
+// from home, on the menu and on the first-visit landing page. ──
+test.describe('This week in class', () => {
+  const pin = (page, v) => page.addInitScript((x) => localStorage.setItem('cde_class_unit', x), JSON.stringify(v));
+
+  test('a pinned unit shows on the menu and links to its page', async ({ page }) => {
+    await pin(page, { p: '/units/jet-2/unit-3/', n: 'Jet 2 Unit 3' });
+    await setupHebrewUser(page);
+    const card = page.getByTestId('class-week-card');
+    await expect(card).toBeVisible({ timeout: 5000 });
+    await expect(card).toContainText('השבוע בכיתה');
+    await expect(card).toContainText('Jet 2 Unit 3');
+    await expect(card).toHaveAttribute('href', '/units/jet-2/unit-3/');
+  });
+
+  test('first visit: the landing page shows it too', async ({ page }) => {
+    await pin(page, { p: '/units/jet-1/unit-2/', n: 'Jet 1 Unit 2' });
+    await page.goto('/');
+    await expect(page.getByTestId('class-week-card')).toHaveAttribute('href', '/units/jet-1/unit-2/', { timeout: 5000 });
+  });
+
+  test('nothing pinned, or a bad path → no card', async ({ page }) => {
+    await pin(page, { p: 'https://example.com/', n: 'x' });
+    await setupHebrewUser(page);
+    await expect(page.locator('text=שחקו בחידון')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByTestId('class-week-card')).toHaveCount(0);
+  });
+});
