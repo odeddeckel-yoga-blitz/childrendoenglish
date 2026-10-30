@@ -1213,7 +1213,7 @@ const HREFLANG_HE = ''; // Only add he hreflang on pages with Hebrew equivalents
 function buildHebrewLandingPage() {
   const url = `${SITE}/he/`;
   const title = 'לימוד אנגלית לילדים בחינם | Children Do English - אוצר מילים, חידונים ומשחקים';
-  const description = 'אפליקציה חינמית ללימוד אנגלית לילדים בגילאי 6-12. למעלה מ-480 מילים באנגלית עם תמונות, הגייה, משפטים ותרגום לעברית. ללא פרסומות, ללא רישום.';
+  const description = 'אפליקציה חינמית ללימוד אנגלית לילדים בגילאי 6-12. למעלה מ-500 מילים באנגלית עם תמונות, הגייה, משפטים ותרגום לעברית. ללא פרסומות, ללא רישום.';
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -1276,7 +1276,7 @@ function buildHebrewLandingPage() {
         name: 'כמה מילים יש באפליקציה?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'האפליקציה כוללת למעלה מ-480 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.',
+          text: 'האפליקציה כוללת למעלה מ-500 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.',
         },
       },
       {
@@ -1560,6 +1560,18 @@ function buildHebrewLandingPage() {
     </div>
   </div>
 
+  <!-- Class & home materials (linked from 2026-10-30, owner lifted the Nov 14 hold) -->
+  <div class="section" style="background:#f8fafc">
+    <div class="container">
+      <h2 class="section-title">חומרים לכיתה ולבית</h2>
+      <div class="cat-grid">
+        <a href="/units/" class="cat-item"><span class="cat-name">מילים לפי ספר ויחידה</span><span class="cat-count" dir="ltr">Jet 1 · Jet 2 · Fantastic Five</span></a>
+        <a href="/band-1/" class="cat-item"><span class="cat-name">מילים לפי <span dir="ltr">Band I</span></span><span class="cat-count">לפי נושאים, עם הגייה ותרגול</span></a>
+        <a href="/printable-flashcards/hebrew/" class="cat-item"><span class="cat-name">כרטיסיות להדפסה</span><span class="cat-count">עם תמונות ותרגום לעברית</span></a>
+      </div>
+    </div>
+  </div>
+
 
   <!-- FAQ -->
   <div class="section">
@@ -1576,7 +1588,7 @@ function buildHebrewLandingPage() {
         </div>
         <div class="faq-item">
           <div class="faq-q">כמה מילים יש באפליקציה?</div>
-          <div class="faq-a">האפליקציה כוללת למעלה מ-480 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.</div>
+          <div class="faq-a">האפליקציה כוללת למעלה מ-500 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.</div>
         </div>
         <div class="faq-item">
           <div class="faq-q">האם יש תמיכה בעברית?</div>
