@@ -15,6 +15,11 @@
     if(lang==='en') return;
     var S=(window.CDE_STRINGS||{})[lang]; if(!S) return;
     document.documentElement.setAttribute('data-cde-lang',lang);
+    document.documentElement.lang=lang;
+    // The English "about / questions parents ask" block is for English readers and
+    // search; a child playing in Hebrew or Spanish doesn't get it under the game.
+    var about=document.querySelectorAll('section.about');
+    for(var j=0;j<about.length;j++) about[j].hidden=true;
     var els=document.querySelectorAll('[data-l10n]');
     for(var i=0;i<els.length;i++){
       var k=els[i].getAttribute('data-l10n'); if(S[k]==null) continue;

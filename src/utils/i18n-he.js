@@ -54,7 +54,7 @@ export default {
   imageQuizDesc: 'ראו תמונה, בחרו את המילה הנכונה',
   wordQuiz: 'חידון מילים',
   wordQuizDesc: 'ראו מילה, בחרו את התמונה הנכונה',
-  audioQuiz: 'חידון שמיעה',
+  audioQuiz: 'שומעים ובוחרים',
   audioQuizDesc: 'שמעו מילה, בחרו את התמונה הנכונה',
   unlockHint: 'השיגו 7/10 ב{{level}} כדי לפתוח',
   wordsCount: '{{count}} מילים',
@@ -303,7 +303,7 @@ export default {
   // Quiz modes
   mode_image: 'חידון תמונות',
   mode_word: 'חידון מילים',
-  mode_audio: 'חידון שמיעה',
+  mode_audio: 'שומעים ובוחרים',
   mode_listen: 'הקשיבו והתאימו',
 
   // Aria labels
@@ -430,7 +430,7 @@ export default {
 
   // Language select
   confirmLanguage: 'באיזו שפה אתם מדברים?',
-  landingStatsWords: '480+ מילים',
+  landingStatsWords: '{{n}}+ מילים',
   landingStatsCategories: '13 קטגוריות',
   landingStatsModes: 'סולם 11 שלבים',
   landingFeaturesHeading: 'כל מה שהילד שלכם צריך',
@@ -537,16 +537,16 @@ export default {
   cycleStart: 'מתחילים ללמוד!',
 
   stepFlashcards: 'כרטיסיות',
-  stepAudio: 'מקשיבים ובוחרים',
+  stepAudio: 'שומעים ובוחרים',
   stepWordQuiz: 'חידון מילים',
   stepImageQuiz: 'חידון תמונות',
-  stepConveyor: 'משחק מיון',
+  stepConveyor: 'Category Conveyor',
   stepLetterFix1: 'אות חסרה',
   stepLetterFix2: 'שתי אותיות חסרות',
   stepLetterFix3: 'אות מאתגרת',
-  stepForge: 'נפחיית איות',
+  stepForge: 'Spelling Forge',
   stepSentence: 'משתמשים במילה',
-  stepZapper: 'זאפ מילים',
+  stepZapper: 'Word Zapper',
   phaseMeet: 'מכירים את המילים',
   phaseUnderstand: 'מבינים',
   phaseSpell: 'מאייתים',

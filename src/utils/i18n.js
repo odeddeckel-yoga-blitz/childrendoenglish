@@ -56,7 +56,7 @@ const translations = {
     imageQuizDesc: 'See an image, pick the right word',
     wordQuiz: 'Word Quiz',
     wordQuizDesc: 'See a word, pick the right image',
-    audioQuiz: 'Audio Quiz',
+    audioQuiz: 'Listen & Pick',
     audioQuizDesc: 'Hear a word, pick the right image',
     unlockHint: 'Score 7/10 on {{level}} to unlock',
     wordsCount: '{{count}} words',
@@ -305,7 +305,7 @@ const translations = {
     // Quiz modes
     mode_image: 'Image Quiz',
     mode_word: 'Word Quiz',
-    mode_audio: 'Audio Quiz',
+    mode_audio: 'Listen & Pick',
     mode_listen: 'Listen & Match',
 
     // Aria labels
@@ -332,9 +332,9 @@ const translations = {
     badge_perfect_quiz: 'Perfect Score',
     badge_perfect_quiz_desc: 'Get 10/10 on any quiz',
     badge_bookworm: 'Bookworm',
-    badge_bookworm_desc: 'Complete 10 quizzes',
+    badge_bookworm_desc: 'Complete 10 quizzes', // persona-ok: a rule, not a catalogue count
     badge_vocab_champion: 'Vocab Champion',
-    badge_vocab_champion_desc: 'Master 50 words',
+    badge_vocab_champion_desc: 'Master 50 words', // persona-ok: a rule, not a catalogue count
     badge_week_warrior: 'Week Warrior',
     badge_week_warrior_desc: 'Practice 7 days in a row',
     badge_polyglot: 'Polyglot',
@@ -396,7 +396,7 @@ const translations = {
 
     // Features
     featureLearnTitle: 'Learn Words',
-    featureLearnDesc: 'Browse 480+ words with images, audio & translations',
+    featureLearnDesc: 'Browse {{n}}+ words with images, audio & translations',
     featureFlashcardsTitle: 'Flashcards',
     featureFlashcardsDesc: 'Swipe through cards with spaced repetition',
     featureQuizTitle: 'Fun Quizzes',
@@ -424,15 +424,15 @@ const translations = {
     faq4Q: 'Is there Hebrew support?',
     faq4A: 'Yes! Full Hebrew interface and translations for every word.',
     faq5Q: 'How many words does it include?',
-    faq5A: '480+ words across 13 categories, organized into 3 difficulty levels.',
+    faq5A: '{{n}}+ words across 13 categories, organized into 3 difficulty levels.',
     faq6Q: 'Can multiple kids use the app?',
     faq6A: 'Yes! The app supports multiple player profiles so siblings can each track their own progress independently.',
     faq7Q: 'How does it teach vocabulary?',
-    faq7A: 'Every group of 10 words climbs an 11-step practice ladder — flashcards, listening and reading quizzes, missing-letter spelling games, sentence practice and arcade games — with spaced repetition resurfacing words until they are mastered.',
+    faq7A: 'Every group of 10 words climbs an 11-step practice ladder — flashcards, listening and reading quizzes, missing-letter spelling games, sentence practice and arcade games — with spaced repetition resurfacing words until they are mastered.', // persona-ok: a rule, not a catalogue count
 
     // Language select
     confirmLanguage: 'What language do you speak?',
-    landingStatsWords: '480+ Words',
+    landingStatsWords: '{{n}}+ Words',
     landingStatsCategories: '13 Categories',
     landingStatsModes: '11-Step Ladder',
     landingFeaturesHeading: 'Everything your child needs',
@@ -550,7 +550,7 @@ const translations = {
     stepAudio: 'Listen & Pick',
     stepWordQuiz: 'Word Quiz',
     stepImageQuiz: 'Image Quiz',
-    stepConveyor: 'Sorting Game',
+    stepConveyor: 'Category Conveyor',
     stepLetterFix1: 'Missing Letter',
     stepLetterFix2: 'Two Missing Letters',
     stepLetterFix3: 'Tricky Letter',

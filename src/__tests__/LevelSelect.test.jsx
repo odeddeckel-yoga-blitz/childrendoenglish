@@ -40,7 +40,7 @@ describe('LevelSelect', () => {
     render(<LevelSelect {...defaultProps} />);
     expect(screen.getByText('Image Quiz')).toBeInTheDocument();
     expect(screen.getByText('Word Quiz')).toBeInTheDocument();
-    expect(screen.getByText('Audio Quiz')).toBeInTheDocument();
+    expect(screen.getByText('Listen & Pick')).toBeInTheDocument();
     expect(screen.getByText('Listen & Match')).toBeInTheDocument();
   });
 

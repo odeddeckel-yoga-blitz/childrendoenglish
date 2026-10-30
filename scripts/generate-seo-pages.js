@@ -18,27 +18,52 @@ const ROOT = join(__dirname, '..');
 // Same fix that took kidsdomath from 11 to 67 indexed pages.
 function writePage(path, html) {
   let out = html.replace('</head>', '  <script defer src="/land-beacon.js"></script>\n</head>');
-  if (out.includes('</body>') && !out.includes('crawl-mesh')) {
-    out = out.replace('</body>', buildCrawlMesh() + '</body>');
+  // Match the element, not the word: unit/Band I pages name .crawl-mesh in their
+  // print CSS, which used to skip their mesh entirely.
+  const lang = (out.match(/<html[^>]*\blang="([a-z]{2})/) || [])[1] || 'en';
+  if (out.includes('</body>') && !out.includes('class="crawl-mesh"')) {
+    out = out.replace('</body>', buildCrawlMesh(lang) + '</body>');
   }
+  if (out.includes('</body>') && !out.includes('class="site-head"')) out = out.replace(/<body([^>]*)>/, (m) => m + siteHeader(lang));
   writeFileSync(path, out, 'utf-8');
 }
 
-let _meshCache = null;
-function buildCrawlMesh() {
-  if (_meshCache) return _meshCache;
+// UX audit CUX17: one slim header on every generated page — the site name (home),
+// games, the teacher door and a language switch — in the page's language.
+const SITE_HEAD = {
+  he: { dir: 'rtl', links: [['/he/', '🏠 Children Do English'], ['/he/english-games/', 'משחקים'], ['/he/#teachers', 'למורים'], ['/', 'EN', 'en', 'English'], ['/es/', 'ES', 'es', 'Español']] },
+  es: { dir: 'ltr', links: [['/es/', '🏠 Children Do English'], ['/games/', 'Juegos'], ['/printable-flashcards/spanish/', 'Tarjetas'], ['/', 'EN', 'en', 'English'], ['/he/', 'עב', 'he', 'עברית']] },
+  en: { dir: 'ltr', links: [['/', '🏠 Children Do English'], ['/games/', 'Games'], ['/printable-flashcards/', 'Printables'], ['/he/', 'עב', 'he', 'עברית'], ['/es/', 'ES', 'es', 'Español']] },
+};
+function siteHeader(lang) {
+  const h = SITE_HEAD[lang] || SITE_HEAD.en;
+  return `\n<nav class="site-head" dir="${h.dir}" aria-label="Site">` +
+    `<style>.site-head{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .65rem;padding:.55rem 1rem;background:#fff;border-bottom:1px solid #e2e8f0;font:600 .8rem/1.4 system-ui,-apple-system,'Segoe UI',sans-serif}` +
+    `.site-head a{color:#1e40af;text-decoration:none}.site-head a:first-child{font-weight:800;color:#0f172a;margin-inline-end:auto}.site-head a:hover{text-decoration:underline}@media print{.site-head{display:none}}</style>` +
+    h.links.map(([href, text, hl, full]) => `<a href="${href}"${hl ? ` lang="${hl}" hreflang="${hl}" aria-label="${full}"` : ''}>${text}</a>`).join('') +
+    `</nav>\n`;
+}
+
+// UX audit CUX18: the mesh stays in the DOM for crawlers, but readers see only the
+// language row; the ~90 links sit in one closed <details> labelled in the page language.
+const _meshCache = {};
+const MESH_MORE = { he: 'עוד דפים באתר', es: 'Más páginas', en: 'More pages' };
+function buildCrawlMesh(lang = 'en') {
+  if (_meshCache[lang]) return _meshCache[lang];
   const cats = CATEGORIES.map((c) => c.id || c.key || c);
   const label = (c) => String(c).charAt(0).toUpperCase() + String(c).slice(1);
   const row = (title, links) =>
     `<h2>${title}</h2><p>` + links.map(([href, text]) => `<a href="${href}">${text}</a>`).join(' ') + `</p>`;
-  _meshCache = `\n<nav class="crawl-mesh" aria-label="Explore ChildrenDoEnglish">` +
+  _meshCache[lang] = `\n<nav class="crawl-mesh" aria-label="Explore ChildrenDoEnglish">` +
     `<style>.crawl-mesh{max-width:960px;margin:2rem auto 0;padding:1.2rem 1rem 2.2rem;font-size:.78rem;color:#4b5a6e;border-top:1px solid #e2e8f0}` +
     `.crawl-mesh h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;margin:.8rem 0 .25rem;color:#475569}` +
     `.crawl-mesh p{margin:0;line-height:1.9}` +
-    `.crawl-mesh a{color:#0f766e;text-decoration:none;margin-right:.7rem;white-space:nowrap}.crawl-mesh a:hover{text-decoration:underline}</style>` +
+    `.crawl-mesh a{color:#0f766e;text-decoration:none;margin-right:.7rem;white-space:nowrap}.crawl-mesh a:hover{text-decoration:underline}` +
+    `.crawl-mesh summary{cursor:pointer;margin-top:.8rem;font-weight:700;color:#475569}</style>` +
     // Language landings FIRST — hreflang alone gave /he/ zero link equity for
     // months (pos ~21); every generated page now links each language's front door.
     row('Languages · שפות · Idiomas', [['/', 'English'], ['/he/', 'עברית — לימוד אנגלית לילדים'], ['/es/', 'Español — vocabulario en inglés para niños']]) +
+    `<details><summary>${MESH_MORE[lang] || MESH_MORE.en}</summary>` +
     // Hebrew games cluster (Oct 2026): targets "משחקים ללימוד אנגלית לילדים" queries.
     row('משחקים באנגלית', [
       ['/he/english-games/', 'משחקים ללימוד אנגלית לילדים'],
@@ -53,8 +78,8 @@ function buildCrawlMesh() {
     row('Vocabulary in Spanish', cats.map((c) => [`/vocabulary/${c}/spanish/`, `${label(c)} español`])) +
     row('Play Games', [['/games/', 'All games'], ['/games/word-zapper/', 'Word Zapper'], ['/games/spelling-forge/', 'Spelling Forge'], ['/games/category-conveyor/', 'Category Conveyor'], ['/app', 'Practice app']]) +
     row('Learn by Topic', [['/free-english-practice/', 'Free practice — no sign-up'], ['/vocabulary/', 'All vocabulary'], ...cats.map((c) => [`/vocabulary/${c}/`, label(c)]), ['/guides/', 'Parent guides']]) +
-    `</nav>\n`;
-  return _meshCache;
+    `</details></nav>\n`;
+  return _meshCache[lang];
 }
 
 // Dynamic import of the data module (pure ESM, no JSX)
@@ -1461,7 +1486,7 @@ function buildHebrewLandingPage() {
   </div>
 
   <!-- Teacher door (UX audit CUX8, persona P3): one line right under the hero -->
-  <nav class="teacher-row" aria-label="למורים"><strong>למורים:</strong> <a href="/band-1/">רשימת <bdi>Band I</bdi></a> &middot; <a href="/units/">יחידות לימוד</a> &middot; <a href="/battle/">קרב כיתתי</a> &middot; <a href="/printable-flashcards/hebrew/">כרטיסיות להדפסה</a></nav>
+  <nav class="teacher-row" id="teachers" aria-label="למורים"><strong>למורים:</strong> <a href="/band-1/">רשימת <bdi>Band I</bdi></a> &middot; <a href="/units/">יחידות לימוד</a> &middot; <a href="/battle/">קרב כיתתי</a> &middot; <a href="/printable-flashcards/hebrew/">כרטיסיות להדפסה</a></nav>
 
   <!-- Stats bar -->
   <div class="stats-bar">
@@ -1651,7 +1676,7 @@ function buildHebrewLandingPage() {
 function buildSpanishLandingPage() {
   const url = `${SITE}/es/`;
   const title = 'Aprende vocabulario en inglés para niños — gratis | Children Do English';
-  const description = 'App gratuita para que los niños de 6 a 12 años aprendan vocabulario en inglés. Más de 480 palabras con fotos, pronunciación en inglés nativo y traducción al español. Sin anuncios, sin registro.';
+  const description = `App gratuita para que los niños de 6 a 12 años aprendan vocabulario en inglés. Más de ${Math.floor(WORDS.length / 10) * 10} palabras con fotos, pronunciación en inglés y traducción al español. Sin anuncios, sin registro.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -1868,8 +1893,8 @@ function buildSpanishLandingPage() {
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128266;</div>
-          <h3>Pronunciación en inglés nativo</h3>
-          <p>Cada palabra tiene audio grabado en inglés real. Los niños escuchan y repiten — así se entrena el oído desde el primer día.</p>
+          <h3>Pronunciación en inglés</h3>
+          <p>Cada palabra tiene audio en inglés. Los niños escuchan y repiten — así se entrena el oído desde el primer día.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#127918;</div>
@@ -2117,7 +2142,8 @@ const HE_GAMES_TOPIC_INTROS = {
     'מפתח, תיק, שעון, מטרייה: חפצים יומיומיים שילדים רואים בכל מקום. המשחקים הופכים אותם למילים מוכרות באנגלית, עם תמונה, הגייה ותרגום לעברית לכל מילה.',
 };
 
-// "480+" style rounded count, derived from WORDS (never hardcoded).
+// "530+" style rounded count, derived from WORDS (never hardcoded): the one word
+// count every page shows (persona standard P5).
 const HE_GAMES_WORDS_ROUNDED = Math.floor(WORDS.length / 10) * 10;
 
 const HE_GAMES_CSS = `
@@ -2716,11 +2742,11 @@ document.addEventListener('DOMContentLoaded', function () {
 function buildFlashcardMakerPage() {
   const url = `${SITE}/tools/flashcard-maker/`;
   const title = 'Free Printable Flashcard Maker — Photo Cards, Double-Sided, No Login | Children Do English';
-  const description = 'Make printable flashcards free: 488 real-photo English words or paste your own list. 4, 6 or 9 cards per page, Hebrew or Spanish backs, and mirrored back pages so double-sided printing lines up. No login, no watermark, no paywall.';
+  const description = `Make printable flashcards free: ${Math.floor(WORDS.length / 10) * 10}+ real-photo English words or paste your own list. 4, 6 or 9 cards per page, Hebrew or Spanish backs, and mirrored back pages so double-sided printing lines up. No login, no watermark, no paywall.`;
   const faq = [
     ['Is the flashcard maker really free?', 'Yes — every feature is free: photo cards, all card sizes, double-sided backs and printing. No login, no watermark, no paid tier.'],
     ['How does double-sided printing work?', 'Back pages are mirrored (each row’s columns are reversed), so when your printer flips the sheet on the long edge, every back lands exactly behind its front. Print all pages double-sided and cut along the lines.'],
-    ['Can I use my own word list?', 'Yes — choose “Paste a list” and enter any words, one per line. Words from our 488-word vocabulary get their photo automatically; other words become text cards.'],
+    ['Can I use my own word list?', `Yes — choose “Paste a list” and enter any words, one per line. Words from our ${Math.floor(WORDS.length / 10) * 10}+ word vocabulary get their photo automatically; other words become text cards.`],
   ];
   const faqLd = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage',
     mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) });
@@ -2769,7 +2795,7 @@ function buildFlashcardMakerPage() {
 <body>
 <div class="wrap">
   <h1>Free Printable Flashcard Maker</h1>
-  <p class="sub">Photo flashcards for kids — pick from 488 real-photo English words or paste your own list. Free, no login, no watermark.</p>
+  <p class="sub">Photo flashcards for kids — pick from ${Math.floor(WORDS.length / 10) * 10}+ real-photo English words or paste your own list. Free, no login, no watermark.</p>
   <p class="hero-cite">The Children Do English flashcard maker creates printable photo flashcards with 4, 6 or 9 cards per page, Hebrew or Spanish card backs, and mirrored back pages so double-sided printing aligns perfectly — completely free.</p>
 
   <div class="panel">
@@ -2780,7 +2806,7 @@ function buildFlashcardMakerPage() {
     </div>
     <div id="pick-category" class="pick-detail row">
       <label for="fmCat">Category</label>
-      <select id="fmCat"><option value="all">All 488 words</option></select>
+      <select id="fmCat"><option value="all">All words</option></select>
     </div>
     <div id="pick-letter" class="pick-detail row" hidden>
       <label for="fmLetter">Letter</label><select id="fmLetter"></select>
@@ -3065,7 +3091,7 @@ const wordEntries = CATEGORIES.flatMap((slug) =>
     { q: 'Do I need to download an app?', a: 'No. Everything runs in the web browser on a phone, tablet or computer. If you want, you can add it to your home screen, and it then also works offline — but that is optional.' },
     { q: 'How is progress saved without an account?', a: 'Progress is saved in the browser on your device, never on our servers. Several kids can share one device with their own nicknames. Clearing the browser data erases the progress.' },
     { q: 'Who is it for?', a: `Kids aged 6-12 and other beginners. There are three levels: beginner (${byLevel[0].n} words), intermediate (${byLevel[1].n}) and advanced (${byLevel[2].n}). Translations and menus are available in Hebrew and Spanish.` },
-    { q: 'How long does one practice take?', a: 'A quiz is 10 words and takes about 2-3 minutes. Words a child gets wrong come back sooner (spaced repetition), so short daily practice works best.' },
+    { q: 'How long does one practice take?', a: 'A quiz is 10 words and takes about 2-3 minutes. Words a child gets wrong come back sooner (spaced repetition), so short daily practice works best.' }, // persona-ok: quiz length, not a catalogue count
   ];
   const breadcrumb = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
@@ -3337,7 +3363,7 @@ const aboutHtml = `<!DOCTYPE html>
     <div class="section">
       <h2>About the Creator</h2>
       <p>Children Do English is built and maintained by me, <strong>Oded Deckelbaum</strong> &mdash; a software engineer and parent who couldn&rsquo;t find an English vocabulary app for my own kids that was genuinely free, ad-free, and focused on real learning. I design and build everything myself, and I stand behind every activity and every privacy claim on this site. Questions or ideas? Reach me at <a href="mailto:info@childrendoenglish.com">info@childrendoenglish.com</a>.</p>
-      <p style="font-size:0.9rem;color:#4b5a6e">Also from me: <a href="https://www.kidsdomath.com" rel="me">KidsDoMath</a> &mdash; 200 free math games for kids, built on the same no-ads, privacy-first principles.</p>
+      <p style="font-size:0.9rem;color:#4b5a6e">Also from me: <a href="https://www.kidsdomath.com" rel="me">KidsDoMath</a> &mdash; free math and science games for kids, built on the same no-ads, privacy-first principles.</p>
     </div>
 
 
@@ -4227,7 +4253,7 @@ const GUIDES = [
         content: `<p>Kids are motivated by visible progress. Use tools that show:</p>
 <ul>
   <li><strong>Streak tracking</strong> &mdash; How many days in a row they've practiced</li>
-  <li><strong>Badges and achievements</strong> &mdash; Milestones like "first quiz," "50 words learned," "7-day streak"</li>
+  <li><strong>Badges and achievements</strong> &mdash; Milestones like "first quiz," "50 words learned," "7-day streak"</li><!-- persona-ok: badge threshold -->
   <li><strong>Vocabulary mastery</strong> &mdash; See which words they've mastered vs. which need more practice</li>
 </ul>
 <p><a href="/">Children Do English</a> includes all of these features to keep kids motivated and give parents visibility into their child's progress.</p>`,
@@ -4314,7 +4340,7 @@ const GUIDES = [
     slug: 'english-vocabulary-for-bilingual-hebrew-english-kids',
     heroImage: '/og/feelings.png',
     title: 'English Vocabulary for Bilingual Hebrew-English Kids — A Parent\'s Guide',
-    description: 'Help your bilingual Hebrew-English child build English vocabulary. 480+ words with Hebrew translations, phonetics, and pictures. Free app for kids 6-12.',
+    description: `Help your bilingual Hebrew-English child build English vocabulary. ${Math.floor(WORDS.length / 10) * 10}+ words with Hebrew translations, phonetics, and pictures. Free app for kids 6-12.`,
     h1: 'English Vocabulary for Bilingual Hebrew-English Kids',
     sections: [
       {
@@ -4486,7 +4512,7 @@ const GUIDES = [
   <li>Comprehensive curriculum covering vocabulary, grammar, listening, and speaking</li>
   <li>Excellent gamification with streaks, leaderboards, and XP points</li>
   <li>Offers Hebrew-to-English courses for Hebrew speakers</li>
-  <li>Massive word library (2000+ words across many topics)</li>
+  <li>Massive word library (2000+ words across many topics)</li><!-- persona-ok: a competitor fact -->
 </ul>
 <p><strong>Cons:</strong></p>
 <ul>
@@ -4574,15 +4600,15 @@ const GUIDE_GEO = {
     faq: [
       { q: 'What is the best English learning activity for young kids?', a: 'Picture-word matching. When a child matches a picture of a cat to the word "cat", the word is stored both visually and verbally, which is one of the fastest ways to learn vocabulary.' },
       { q: 'How long should a daily English routine be for a child?', a: 'About 10 minutes: 2 minutes reviewing due words, 3 minutes learning 3-5 new words from one category, and 5 minutes of a quiz or game. Consistency matters more than session length.' },
-      { q: 'How do I keep my child motivated to learn English words?', a: 'Make progress visible: day streaks, badges for milestones like a first quiz or 50 words learned, and a growing list of mastered words. Kids are motivated by seeing what they have already done.' },
+      { q: 'How do I keep my child motivated to learn English words?', a: 'Make progress visible: day streaks, badges for milestones like a first quiz or 50 words learned, and a growing list of mastered words. Kids are motivated by seeing what they have already done.' }, // persona-ok: badge threshold
     ],
   },
   'best-english-learning-apps-for-kids': {
     answer: 'For Hebrew-English families, Children Do English is the only completely free, ad-free vocabulary app with full Hebrew support and offline access; Duolingo has the broadest curriculum but shows ads on its free tier, and Lingokids and Khan Academy Kids suit ages 2-8. The deciding factor is consistency: ten minutes a day on any good app beats an hour of sporadic use.',
     faq: [
-      { q: 'What is the best free English learning app for kids?', a: 'For vocabulary, Children Do English: free, no ads, 488 words with real photos, recorded audio, Hebrew and Spanish translations, and it works offline. For a broad language course, Duolingo’s free tier is the most popular but includes ads.' },
+      { q: 'What is the best free English learning app for kids?', a: `For vocabulary, Children Do English: free, no ads, ${Math.floor(WORDS.length / 10) * 10}+ words with real photos, spoken audio, Hebrew and Spanish translations, and it works offline. For a broad language course, Duolingo’s free tier is the most popular but includes ads.` },
       { q: 'Is Duolingo good for kids learning English?', a: 'It is the most downloaded language app and its gamified lessons build a daily habit, with a comprehensive curriculum. The downsides for kids are ads on the free tier and only partial Hebrew support; the ad-free version is paid.' },
-      { q: 'Which English app is best for ages 2-8?', a: 'Lingokids (songs, animated characters and mini-games, but a limited free tier) and Khan Academy Kids (free, about 500 words, no Hebrew). Starfall is a strong free option for early reading.' },
+      { q: 'Which English app is best for ages 2-8?', a: 'Lingokids (songs, animated characters and mini-games, but a limited free tier) and Khan Academy Kids (free, about 500 words, no Hebrew). Starfall is a strong free option for early reading.' }, // persona-ok: a competitor fact
     ],
   },
 };

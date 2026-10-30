@@ -365,7 +365,7 @@ test.describe('Quiz Flow', () => {
     await setupReturningUser(page);
     await page.locator('text=Play Quiz').click();
     await page.locator('button:has-text("Beginner")').click();
-    await page.locator('text=Audio Quiz').or(page.locator('text=Listening Quiz')).click();
+    await page.locator('text=Listen & Pick').click();
 
     // Wait for quiz to load
     await page.waitForTimeout(2000);

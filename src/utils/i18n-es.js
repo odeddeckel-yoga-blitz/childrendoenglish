@@ -54,7 +54,7 @@ export default {
   imageQuizDesc: 'Mira una imagen, elige la palabra correcta',
   wordQuiz: 'Quiz de Palabras',
   wordQuizDesc: 'Mira una palabra, elige la imagen correcta',
-  audioQuiz: 'Quiz de Audio',
+  audioQuiz: 'Escucha y elige',
   audioQuizDesc: 'Escucha una palabra, elige la imagen correcta',
   unlockHint: 'Obtén 7/10 en {{level}} para desbloquear',
   wordsCount: '{{count}} palabras',
@@ -303,7 +303,7 @@ export default {
   // Quiz modes
   mode_image: 'Quiz de Imágenes',
   mode_word: 'Quiz de Palabras',
-  mode_audio: 'Quiz de Audio',
+  mode_audio: 'Escucha y elige',
   mode_listen: 'Escuchar y Emparejar',
 
   // Aria labels
@@ -330,7 +330,7 @@ export default {
   badge_perfect_quiz: 'Puntaje Perfecto',
   badge_perfect_quiz_desc: 'Obtén 10/10 en cualquier quiz',
   badge_bookworm: 'Ratón de Biblioteca',
-  badge_bookworm_desc: 'Completa 10 quizzes',
+  badge_bookworm_desc: 'Completa 10 quizzes', // persona-ok: a rule, not a catalogue count
   badge_vocab_champion: 'Campeón de Vocabulario',
   badge_vocab_champion_desc: 'Domina 50 palabras',
   badge_week_warrior: 'Guerrero de la Semana',
@@ -430,7 +430,7 @@ export default {
 
   // Language select
   confirmLanguage: '¿Qué idioma hablas?',
-  landingStatsWords: '480+ Palabras',
+  landingStatsWords: '{{n}}+ Palabras',
   landingStatsCategories: '13 Categorías',
   landingStatsModes: 'Escalera de 11 pasos',
   landingFeaturesHeading: 'Todo lo que tu hijo necesita',
@@ -540,13 +540,13 @@ export default {
   stepAudio: 'Escucha y elige',
   stepWordQuiz: 'Quiz de palabras',
   stepImageQuiz: 'Quiz de imágenes',
-  stepConveyor: 'Juego de clasificar',
+  stepConveyor: 'Category Conveyor',
   stepLetterFix1: 'Letra que falta',
   stepLetterFix2: 'Dos letras que faltan',
   stepLetterFix3: 'Letra difícil',
-  stepForge: 'Forja de ortografía',
+  stepForge: 'Spelling Forge',
   stepSentence: 'Usa la palabra',
-  stepZapper: 'Zapea palabras',
+  stepZapper: 'Word Zapper',
   phaseMeet: 'Conoce las palabras',
   phaseUnderstand: 'Comprende',
   phaseSpell: 'Deletrea',

@@ -1,3 +1,4 @@
+import { WORD_COUNT } from '../data/wordCount';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { BookOpen, Layers, Play, BarChart2, ChevronDown, Brain } from 'lucide-react';
 import SpotlightCards from './SpotlightCards';
@@ -186,7 +187,7 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
                          bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300
                          text-sm font-medium"
             >
-              {emoji} {t(key, lang)}
+              {emoji} {t(key, lang, { n: WORD_COUNT })}
             </span>
           ))}
         </div>
