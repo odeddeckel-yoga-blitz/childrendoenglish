@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck } from 'lucide-react';
 import SpotlightCards from './SpotlightCards';
 import ClassWeekCard from './ClassWeekCard';
@@ -9,6 +10,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
   const isNewUser = stats.totalQuizzes === 0 && wordsLearned === 0;
+  // "More" stays open for the rest of the visit once opened (per tab, a convenience).
+  const [moreOpen] = useState(() => { try { return sessionStorage.getItem('cde-menu-more') === '1'; } catch { return false; } });
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -105,77 +108,6 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         {/* This week in class — the unit a parent pinned on its unit page (RC12) */}
         <ClassWeekCard lang={lang} />
 
-        {/* Play Quiz — primary action for new users */}
-        <button
-          onClick={() => onNavigate('levelSelect')}
-          className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
-        >
-          <div className="relative shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-blue-600
-                            flex items-center justify-center">
-              <Play className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <div className="flex-1">
-            <p className="font-bold text-slate-800 dark:text-slate-100">{t('playQuiz', lang)}</p>
-            <p className="text-slate-500 text-sm">{t('playQuizDesc', lang)}</p>
-          </div>
-        </button>
-
-        {/* Letter-by-letter path — the natural progression for young learners */}
-        <button
-          onClick={() => onNavigate('letterPath')}
-          className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
-        >
-          <div className="shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500 to-purple-600
-                            flex items-center justify-center font-black text-white text-lg" aria-hidden="true">
-              A<span className="text-purple-200">b</span>
-            </div>
-          </div>
-          <div className="flex-1">
-            <p className="font-bold text-slate-800 dark:text-slate-100">{t('letterPath', lang)}</p>
-            <p className="text-slate-500 text-sm">{t('letterPathDesc', lang)}</p>
-          </div>
-        </button>
-
-        {/* Learn Words */}
-        <button
-          onClick={() => onNavigate('learning')}
-          className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
-        >
-          <div className="relative shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600
-                            flex items-center justify-center">
-              <BookOpen className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <div className="flex-1">
-            <p className="font-bold text-slate-800 dark:text-slate-100">{t('learnWords', lang)}</p>
-            <p className="text-slate-500 text-sm">{t('learnWordsDesc', lang)}</p>
-          </div>
-        </button>
-
-        <button
-          onClick={() => onNavigate('flashcards')}
-          className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
-        >
-          <div className="shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-amber-500 to-amber-600
-                            flex items-center justify-center">
-              <Layers className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <div>
-            <p className="font-bold text-slate-800 dark:text-slate-100">{t('flashcards', lang)}</p>
-            <p className="text-slate-500 text-sm">{t('flashcardsDesc', lang)}</p>
-          </div>
-        </button>
-
         {/* Vocabulary arcade — standalone game pages (full navigation out of the
             SPA; the games' home pill links back). Engagement fix 2026-10-01:
             the games had ZERO in-app doors, so real users never found them. */}
@@ -194,14 +126,17 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           </div>
         </a>
 
-        {isNewUser && (
-          <p className="text-center text-sm text-slate-400">{t('menuMoreFeatures', lang)}</p>
-        )}
-
-        {!isNewUser && (
-          <>
+        {/* Everything else, behind one disclosure (persona P1/P2: a short kid menu =
+            Continue · Game of the day · Games · More). Today leads when it has words. */}
+        <details className="glass rounded-2xl group" data-testid="menu-more" open={moreOpen}
+          onToggle={(e) => { try { sessionStorage.setItem('cde-menu-more', e.currentTarget.open ? '1' : '0'); } catch { /* storage off */ } }}>
+          <summary className="cursor-pointer list-none p-4 flex items-center justify-between font-bold text-slate-700 dark:text-slate-200">
+            <span>{t('menuMore', lang)}{!isNewUser && todayCount > 0 ? ' · ☀️' : ''}</span>
+            <span aria-hidden="true" className="transition-transform group-open:rotate-180">▾</span>
+          </summary>
+          <div className="space-y-3 p-3 pt-0">
             {/* Today — the day's ~5-minute run (due + missed + a few new words), always on top */}
-            {todayCount > 0 && (
+            {!isNewUser && todayCount > 0 && (
               <button
                 onClick={() => onNavigate('today')}
                 data-testid="today-card"
@@ -218,6 +153,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               </button>
             )}
 
+            {!isNewUser && (
+              <>
             <button
               onClick={() => onNavigate('personalList')}
               className="w-full glass rounded-2xl p-4 flex items-center gap-4
@@ -247,13 +184,77 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
                 <p className="text-slate-500 text-sm">{t('learningPathDesc', lang)}</p>
               </div>
             </button>
+              </>
+            )}
 
-          </>
-        )}
-      </nav>
-
-      {/* Bottom row — hidden for new users */}
-      {!isNewUser && (
+        {/* Play Quiz — primary action for new users */}
+        <button
+          onClick={() => onNavigate('levelSelect')}
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
+        >
+          <div className="relative shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-blue-500 to-blue-600
+                            flex items-center justify-center">
+              <Play className="w-6 h-6 text-white" />
+            </div>
+          </div>
+          <div className="flex-1">
+            <p className="font-bold text-slate-800 dark:text-slate-100">{t('playQuiz', lang)}</p>
+            <p className="text-slate-500 text-sm">{t('playQuizDesc', lang)}</p>
+          </div>
+        </button>
+        {/* Letter-by-letter path — the natural progression for young learners */}
+        <button
+          onClick={() => onNavigate('letterPath')}
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
+        >
+          <div className="shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500 to-purple-600
+                            flex items-center justify-center font-black text-white text-lg" aria-hidden="true">
+              A<span className="text-purple-200">b</span>
+            </div>
+          </div>
+          <div className="flex-1">
+            <p className="font-bold text-slate-800 dark:text-slate-100">{t('letterPath', lang)}</p>
+            <p className="text-slate-500 text-sm">{t('letterPathDesc', lang)}</p>
+          </div>
+        </button>
+        {/* Learn Words */}
+        <button
+          onClick={() => onNavigate('learning')}
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
+        >
+          <div className="relative shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600
+                            flex items-center justify-center">
+              <BookOpen className="w-6 h-6 text-white" />
+            </div>
+          </div>
+          <div className="flex-1">
+            <p className="font-bold text-slate-800 dark:text-slate-100">{t('learnWords', lang)}</p>
+            <p className="text-slate-500 text-sm">{t('learnWordsDesc', lang)}</p>
+          </div>
+        </button>
+        <button
+          onClick={() => onNavigate('flashcards')}
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
+        >
+          <div className="shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-amber-500 to-amber-600
+                            flex items-center justify-center">
+              <Layers className="w-6 h-6 text-white" />
+            </div>
+          </div>
+          <div>
+            <p className="font-bold text-slate-800 dark:text-slate-100">{t('flashcards', lang)}</p>
+            <p className="text-slate-500 text-sm">{t('flashcardsDesc', lang)}</p>
+          </div>
+        </button>
+            {!isNewUser && (
         <div className="grid grid-cols-2 gap-3">
           <button
             onClick={() => onNavigate('progress')}
@@ -279,7 +280,16 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             </div>
           </button>
         </div>
-      )}
+            )}
+          </div>
+        </details>
+
+        {isNewUser && (
+          <p className="text-center text-sm text-slate-400">{t('menuMoreFeatures', lang)}</p>
+        )}
+
+      </nav>
+
 
       {/* PWA install banner */}
       {showInstallBanner && (
@@ -302,9 +312,11 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         </div>
       )}
 
-      {/* Parent area — one visible, self-describing entry so parents know
-          what they can adjust (was a near-invisible footer link) */}
-      {!isNewUser && (
+      {/* For grown-ups — the parent area (always reachable, also before the first
+          quiz) and the legal links, folded so the kid screen stays adult-free (P4). */}
+      <details className="text-center" data-kdm-audience="teacher">
+        <summary className="cursor-pointer list-none text-xs font-semibold text-slate-400 hover:text-slate-600">{t('forGrownUps', lang)} ▾</summary>
+        <div className="mt-3 space-y-3 text-start">
         <button
           onClick={() => onNavigate('parentDashboard')}
           className="w-full glass rounded-2xl p-3.5 flex items-center gap-3
@@ -316,8 +328,6 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <span className="block text-xs text-slate-500">{t('parentDashboardHint', lang)}</span>
           </span>
         </button>
-      )}
-
       <div className="text-center space-y-1">
         <div className="flex items-center justify-center gap-3">
           <button
@@ -335,6 +345,8 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           </button>
         </div>
       </div>
+        </div>
+      </details>
     </div>
   );
 }

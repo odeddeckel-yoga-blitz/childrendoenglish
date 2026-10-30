@@ -7,6 +7,9 @@ import { test, expect } from '@playwright/test';
 // TTS-dependent UI (e.g. the audio-quiz speaker button) renders normally.
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
+    // These flows reach the long-tail menu items: open the menu's "More" (a
+    // per-tab memory); the short default menu has its own test below.
+    try { sessionStorage.setItem('cde-menu-more', '1'); } catch { /* ignore */ }
     if (window.speechSynthesis) {
       try {
         window.speechSynthesis.speak = () => {};
@@ -180,6 +183,21 @@ test.describe('Landing Page', () => {
 });
 
 // ── Menu ────────────────────────────────────────────
+
+// Persona standard (CUX14): the kid menu is short — Continue, game of the day,
+// Games, More — and the grown-up area sits behind its own small disclosure.
+test('the default menu is short; the rest sits under More and For grown-ups', async ({ page }) => {
+  await page.addInitScript(() => { try { sessionStorage.removeItem('cde-menu-more'); } catch { /* ignore */ } });
+  await setupReturningUser(page);
+  await expect(page.getByText(/Word batch \d+/)).toBeVisible({ timeout: 8000 });
+  await expect(page.locator('a[href="/games/"]')).toBeVisible();
+  await expect(page.locator('text=Play Quiz')).toBeHidden();
+  await expect(page.locator('text=Parent Dashboard')).toBeHidden();
+  await page.getByTestId('menu-more').locator('summary').click();
+  await expect(page.locator('text=Play Quiz')).toBeVisible();
+  await page.getByText('For grown-ups').click();
+  await expect(page.locator('text=Parent Dashboard')).toBeVisible();
+});
 
 test.describe('Menu', () => {
   test('shows all main buttons for returning user', async ({ page }) => {

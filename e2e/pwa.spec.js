@@ -67,8 +67,7 @@ test.describe('PWA Offline', () => {
       const visible = await page.locator('text=Children Do English').isVisible().catch(() => false);
       if (visible) {
         // 5. Verify basic navigation works offline
-        await expect(page.locator('text=Play Quiz')).toBeVisible();
-        await expect(page.locator('text=Learn Words')).toBeVisible();
+        await expect(page.getByTestId('menu-more')).toBeVisible();
       }
     }
 

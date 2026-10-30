@@ -571,6 +571,8 @@ const translations = {
     ladderAgainDifferent: 'Again — different words',
     ladderAgainMore: 'Again — more words',
     ladderStripLabel: 'Step {{n}} of {{total}}',
+    menuMore: 'More',
+    forGrownUps: 'For grown-ups',
     retrySameWords: '🔁 Again — same words',
     moreChoices: 'More choices',
     nextQuiz: '▶ Next quiz',

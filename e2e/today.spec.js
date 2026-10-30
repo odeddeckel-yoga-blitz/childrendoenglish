@@ -30,6 +30,7 @@ test('Today: picture, hear and spell questions, then the summary', async ({ page
   await seed(page);
   await page.goto('/');
   await page.waitForSelector('#root > *', { timeout: 10000 });
+  await page.getByTestId('menu-more').locator('summary').click(); // Today sits under More
   await page.locator('[data-testid="today-card"]').click();
   const run = page.locator('[data-testid="today-run"]');
   await expect(run).toBeVisible({ timeout: 10000 });

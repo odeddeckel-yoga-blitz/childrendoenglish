@@ -561,6 +561,8 @@ export default {
   ladderAgainDifferent: 'שוב — מילים אחרות',
   ladderAgainMore: 'שוב — יותר מילים',
   ladderStripLabel: 'שלב {{n}} מתוך {{total}}',
+  menuMore: 'עוד',
+  forGrownUps: 'להורים',
   retrySameWords: '🔁 שוב — אותן מילים',
   moreChoices: 'עוד אפשרויות',
   nextQuiz: '▶ לחידון הבא',

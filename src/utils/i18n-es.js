@@ -561,6 +561,8 @@ export default {
   ladderAgainDifferent: 'Otra vez — otras palabras',
   ladderAgainMore: 'Otra vez — más palabras',
   ladderStripLabel: 'Paso {{n}} de {{total}}',
+  menuMore: 'Más',
+  forGrownUps: 'Para adultos',
   retrySameWords: '🔁 Otra vez — las mismas palabras',
   moreChoices: 'Más opciones',
   nextQuiz: '▶ Siguiente quiz',
