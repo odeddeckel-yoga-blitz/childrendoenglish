@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { sendLearn } from '../utils/learnBeacon';
 import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck } from 'lucide-react';
 import SpotlightCards from './SpotlightCards';
 import ClassWeekCard from './ClassWeekCard';
@@ -13,8 +14,23 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
   // "More" stays open for the rest of the visit once opened (per tab, a convenience).
   const [moreOpen] = useState(() => { try { return sessionStorage.getItem('cde-menu-more') === '1'; } catch { return false; } });
 
+  // onb m1_*: where a brand-new player's FIRST menu tap goes (continue | spotlight |
+  // games | more | grownups | profile | lang | class), against m1_view; views with
+  // no tap = left from the menu. Once per tab, new players only (Factory UX read).
+  useEffect(() => {
+    if (!isNewUser) return;
+    try { if (sessionStorage.getItem('cde-m1')) return; sessionStorage.setItem('cde-m1', 'view'); } catch { return; }
+    sendLearn('onb', 'm1_view');
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const firstTap = (e) => {
+    const target = e.target.closest?.('[data-m1]')?.getAttribute('data-m1');
+    if (!isNewUser || !target) return;
+    try { if (sessionStorage.getItem('cde-m1') !== 'view') return; sessionStorage.setItem('cde-m1', 'tap'); } catch { return; }
+    sendLearn('onb', `m1_${target}`);
+  };
+
   return (
-    <div className="animate-fade-in space-y-6">
+    <div className="animate-fade-in space-y-6" onClickCapture={firstTap}>
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -45,7 +61,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             }
           </button>
           {onSelectLanguage && (
-            <LanguagePicker lang={lang} onSelectLanguage={onSelectLanguage} />
+            <span className="contents" data-m1="lang"><LanguagePicker lang={lang} onSelectLanguage={onSelectLanguage} /></span>
           )}
         </div>
       </div>
@@ -54,6 +70,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       {activePlayer && (
         <button
           onClick={onOpenProfilePicker}
+          data-m1="profile"
           className="w-full glass rounded-2xl p-3 flex items-center gap-3
                      hover:shadow-md active:scale-[0.98] transition-all text-start"
         >
@@ -77,6 +94,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       {onContinueCycle && (
         <button
           onClick={onContinueCycle}
+          data-m1="continue"
           className="w-full rounded-2xl p-5 text-start text-white shadow-lg
                      bg-linear-to-br from-blue-600 to-indigo-600
                      hover:shadow-xl active:scale-[0.98] transition-all ring-2 ring-emerald-400 ring-offset-2"
@@ -101,18 +119,19 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       {/* Today's picks — build-time spotlight of one cold word + one cold game
           (scripts/pick-spotlight.mjs). Sits right under the Continue hero for
           visibility (owner, 2026-10-10); uses the traffic we have, creates none. */}
-      <SpotlightCards lang={lang} onOpenWord={onOpenSpotlightWord} />
+      <div className="contents" data-m1="spotlight"><SpotlightCards lang={lang} onOpenWord={onOpenSpotlightWord} /></div>
 
       {/* Main actions */}
       <nav aria-label="Main menu" className="space-y-3">
         {/* This week in class — the unit a parent pinned on its unit page (RC12) */}
-        <ClassWeekCard lang={lang} />
+        <div className="contents" data-m1="class"><ClassWeekCard lang={lang} /></div>
 
         {/* Vocabulary arcade — standalone game pages (full navigation out of the
             SPA; the games' home pill links back). Engagement fix 2026-10-01:
             the games had ZERO in-app doors, so real users never found them. */}
         <a
           href="/games/"
+          data-m1="games"
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
                      hover:shadow-lg active:scale-[0.98] transition-all text-start"
         >
@@ -128,7 +147,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
         {/* Everything else, behind one disclosure (persona P1/P2: a short kid menu =
             Continue · Game of the day · Games · More). Today leads when it has words. */}
-        <details className="glass rounded-2xl group" data-testid="menu-more" open={moreOpen}
+        <details className="glass rounded-2xl group" data-testid="menu-more" data-m1="more" open={moreOpen}
           onToggle={(e) => { try { sessionStorage.setItem('cde-menu-more', e.currentTarget.open ? '1' : '0'); } catch { /* storage off */ } }}>
           <summary className="cursor-pointer list-none p-4 flex items-center justify-between font-bold text-slate-700 dark:text-slate-200">
             <span>{t('menuMore', lang)}{!isNewUser && todayCount > 0 ? ' · ☀️' : ''}</span>
@@ -314,7 +333,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
 
       {/* For grown-ups — the parent area (always reachable, also before the first
           quiz) and the legal links, folded so the kid screen stays adult-free (P4). */}
-      <details className="text-center" data-kdm-audience="teacher">
+      <details className="text-center" data-kdm-audience="teacher" data-m1="grownups">
         <summary className="cursor-pointer list-none text-xs font-semibold text-slate-400 hover:text-slate-600">{t('forGrownUps', lang)} ▾</summary>
         <div className="mt-3 space-y-3 text-start">
         <button
