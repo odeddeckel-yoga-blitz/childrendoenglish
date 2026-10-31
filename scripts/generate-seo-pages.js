@@ -2129,7 +2129,7 @@ const HE_TOPIC_QUERY = {
 
 // Standalone arcade games (public/games/), listed on the hub; ?lang=he opens them in Hebrew.
 const HE_ARCADE_GAMES = [
-  { slug: 'read-it', name: 'Read It!', desc: 'קוראים מילים קצרות צליל אחרי צליל ומקישים על התמונה הנכונה — תרגול קריאה ראשון.' },
+  { slug: 'read-it', name: 'Read It!', desc: 'קוראים מילים קצרות צליל אחרי צליל ומקישים על התמונה הנכונה, ואחר כך מילים עם e שקטה בסוף וצירופי אותיות כמו sh ו-ch — תרגול קריאה ראשון.' },
   { slug: 'letter-twins', name: 'Letter Twins', desc: 'b או d? m או w? רואים תמונה, שומעים את המילה ובוחרים באיזו אות היא מתחילה — וגם צלילי אותיות: רק שומעים ולוחצים על האות.' },
   { slug: 'sound-pairs', name: 'Sound Pairs', desc: 'שתי מילים שנשמעות כמעט אותו דבר: מקשיבים ובוחרים את המילה ששמעתם. מאמן את האוזן לצלילים שקשים לדוברי עברית.' },
   { slug: 'word-zapper', name: 'Word Zapper', desc: 'שומעים מילה באנגלית ותופסים את התמונה הנכונה לפני שהיא חומקת.' },
@@ -5296,7 +5296,7 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
     { id: 'category-conveyor', emoji: '📦', name: 'Category Conveyor', desc: 'Photos ride the conveyor belt — sort each one into the right category bin before it slides away!', skill: 'Word meaning: sort animals, food, clothes and more', who: 'Ages 6-12 · photos carry the meaning', alt: 'Category Conveyor: photos of a bear and a zebra on a belt above Animals and Food bins' },
     { id: 'spelling-forge', emoji: '🔨', name: 'Spelling Forge', desc: 'See the picture, hear the word, and forge its spelling letter by letter on the anvil. Watch out for tricky look-alike letters!', skill: 'Spelling: build the word letter by letter', who: 'Ages 7-12 · for kids who know their letters', alt: 'Spelling Forge: a photo of baseball bats above empty letter slots for the word bat' },
     { id: 'sound-pairs', emoji: '👂', name: 'Sound Pairs', desc: 'Ship or sheep? Pen or pan? Hear one word and tap which of two almost-identical words it was. A wrong tap plays both so the difference is easy to hear.', skill: 'Listening: tell apart sounds that learners mix up (p/b, a/u, e/a, th/t, th/d, ee/i, v/w)', who: 'Ages 7-12 · for kids who can read short words', alt: 'Sound Pairs: a speaker button above two word cards, park and bark' },
-    { id: 'read-it', emoji: '📖', name: 'Read It!', desc: 'Phonics for new readers: read short words like cat, pig and bed and tap the picture, then hear a word and pick its spelling from three words one letter apart.', skill: 'Reading: decode short-vowel words letter by letter', who: 'Ages 6-10 · for kids starting to read English', alt: 'Read It!: the word cat above three photos to choose from' },
+    { id: 'read-it', emoji: '📖', name: 'Read It!', desc: 'Phonics for new readers in three steps: short words like cat, pig and bed, then magic e (cap → cape, kit → kite), then sh, ch, th and ck. Read a word and tap the picture, or hear a word and pick its spelling.', skill: 'Reading: short vowels, magic e and digraphs', who: 'Ages 6-10 · for kids starting to read English', alt: 'Read It!: the word cat above three photos to choose from' },
     { id: 'letter-twins', emoji: '🔤', name: 'Letter Twins', desc: 'b or d? m or w? See the picture, hear the word and pick the letter it starts with, or play letter sounds: just listen and tap the letter. A tip after every mistake.', skill: 'Reading: tell apart b, d, p and q', who: 'Ages 6-9 · new readers', alt: 'Letter Twins: a photo of a dog above the word _og and the letter buttons b and d' },
   ];
   let todayId = null;
