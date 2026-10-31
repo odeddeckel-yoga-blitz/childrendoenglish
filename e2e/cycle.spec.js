@@ -158,3 +158,22 @@ test('back from a ladder step returns to the ladder, not the My Word List editor
   await expect(page.getByText(/Word batch 1/)).toBeVisible({ timeout: 8000 });
   await expect(page.getByText('My Word List')).toHaveCount(0);
 });
+
+// U3: an English/Spanish newcomer's very first deck is 5 cards (the quizzes after it keep all 10).
+test('a brand-new English player meets 5 cards in the first deck', async ({ page }) => {
+  await reachMenu(page);
+  await page.getByText(/Word batch 1/).click();
+  await expect(page.getByText('Tap to flip')).toBeVisible({ timeout: 8000 });
+  const cont = page.getByRole('button', { name: /^Continue/ });
+  const flip = page.getByRole('button', { name: 'Flip card to see answer' });
+  let cards = 0;
+  for (let i = 0; i < 15; i++) {
+    await expect(flip.or(cont)).toBeVisible({ timeout: 5000 });
+    if (await cont.count()) break;
+    await flip.click();
+    await page.getByRole('button', { name: 'Know It' }).click();
+    cards++;
+    await page.waitForTimeout(400);
+  }
+  expect(cards).toBe(5);
+});

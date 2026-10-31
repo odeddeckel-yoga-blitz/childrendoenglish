@@ -27,6 +27,8 @@ import SentenceGap from './components/SentenceGap';
 import BatchComplete from './components/BatchComplete';
 
 // Screens that show the ladder progress strip while a ladder step runs.
+// U3: the first flashcard deck for an English/Spanish newcomer
+const FIRST_DECK = 5;
 const LADDER_STRIP_STATES = new Set(['imageQuiz', 'wordQuiz', 'audioQuiz', 'listenMatchQuiz', 'flashcards', 'letterFix', 'sentenceGap']);
 
 
@@ -390,7 +392,13 @@ export default function App() {
       quizFlow.startQuiz(null, mode, words, 'ladder');
       return;
     }
-    if (step.kind === 'flashcards') { setCycleRun(true); setFocusedWords(words); navigate('flashcards'); return; }
+    if (step.kind === 'flashcards') {
+      // U3: English/Spanish newcomers left the first 10-card deck (10-31 read: en 29 starts → 7 decks
+      // done, es 7 → 0; he 45 → 26), so their very first deck is the set's first 5 cards. The quizzes
+      // after it still use all 10; Hebrew keeps the full deck.
+      const shortFirst = lang !== 'he' && !(stats.totalQuizzes || 0) && !Object.keys(stats.wordProgress || {}).length;
+      setCycleRun(true); setFocusedWords(shortFirst ? words.slice(0, FIRST_DECK) : words); navigate('flashcards'); return;
+    }
     if (step.kind === 'letterfix') { navigate('letterFix'); return; }
     if (step.kind === 'sentence') { navigate('sentenceGap'); return; }
     if (step.kind === 'arcade') {
@@ -401,7 +409,7 @@ export default function App() {
       window.location.href = `/games/${step.game}/?words=${encodeURIComponent(ids)}&from=ladder`;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeSet, ladderPos, canReadNow, quizFlow, navigate]);
+  }, [activeSet, ladderPos, canReadNow, quizFlow, navigate, lang, stats]);
 
   // Record a completed step; advance position; celebrate batch completion.
   const completeLadderStep = useCallback((stepKey, leaving = false) => {
