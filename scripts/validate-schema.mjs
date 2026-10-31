@@ -5,6 +5,8 @@
 // field. Usage: node scripts/validate-schema.mjs [--quiet]
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+// script-src keyword that lets the speculation-rules JSON run (R2X19)
+const CSP_SPEC = readFileSync(new URL('../vercel.json', import.meta.url), 'utf8').includes("'inline-speculation-rules'");
 
 const DIST = 'dist';
 const quiet = process.argv.includes('--quiet');
@@ -84,6 +86,8 @@ for (const file of pages(DIST)) {
   const inline = [...tags.matchAll(/<script(?![^>]*\ssrc=)([^>]*)>\s*\S/gi)]
     .filter((m) => !/\stype=["']?(?!text\/javascript|module|application\/javascript)[^"'\s>]+/i.test(m[1]));
   if (inline.length) errors.push(`${rel}: inline <script> (blocked by CSP) — move it to an external file`);
+  // R2X19: the prefetch rules block runs only if the CSP allows it ('inline-speculation-rules').
+  if (html.includes('type="speculationrules"') && !CSP_SPEC) errors.push(`${rel}: speculationrules block but vercel.json script-src lacks 'inline-speculation-rules'`);
   // RTL gate (R2C29): on Hebrew pages, mixed-direction text the bidi algorithm
   // scrambles. Runs already isolated (dir="ltr", lang="en", <bdi>) are skipped.
   // Each rule is a glitch that shipped: "(ב-Mac: Cmd+P)" printed as ")Mac: Cmd+P-ב(",
