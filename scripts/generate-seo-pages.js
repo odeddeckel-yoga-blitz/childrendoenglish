@@ -3,6 +3,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import ES_GLOSSES from '../src/data/word-glosses-es.js';
 import { printQrBlock, PRINT_QR_CSS } from './qr-svg.mjs';
+import { sentenceAudio } from './sentence-audio.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -103,6 +104,35 @@ function buildCrawlMesh(lang = 'en') {
 const { WORDS, CATEGORIES, getWordsByCategory } = await import(
   join(ROOT, 'src', 'data', 'words.js')
 );
+
+// R2C23: quotable facts — plain one-line sentences an answer engine can lift,
+// every number computed from the data (no hand-typed counts).
+const { UNITS: FACT_UNITS } = await import(join(ROOT, 'src', 'data', 'units.js'));
+const { BAND1_BY_ID: FACT_BAND1 } = await import(join(ROOT, 'src', 'data', 'band1.js'));
+const FACT_GAMES = (await import('fs')).readdirSync(join(ROOT, 'public', 'games'), { withFileTypes: true }).filter((d) => d.isDirectory()).length;
+const FACT_UNITS_N = FACT_UNITS.filter((u) => !u.test).length;
+const FACT_BAND1_N = Object.keys(FACT_BAND1).length;
+const FACT_ES_N = WORDS.filter((w) => ES_GLOSSES[w.id]).length;
+const FACT_WORDS = `${Math.floor(WORDS.length / 10) * 10}+`; // the one rounded count (persona P5)
+const FACTS_EN = [
+  `Children Do English has ${FACT_WORDS} English words in ${CATEGORIES.length} topics, each with a photo, audio, a kid-friendly definition and an example sentence.`,
+  FACT_ES_N === WORDS.length ? 'Every word has a Hebrew and a Spanish translation.' : `Every word has a Hebrew translation, and ${FACT_ES_N} have a Spanish one.`,
+  `Every word's audio uses one computer voice (Piper text-to-speech), the same on every device.`,
+  `Each group of 10 words climbs an 11-step practice ladder: flashcards, listening and reading quizzes, spelling, a sentence step and arcade games.`, // persona-ok: the group size, not a catalogue count
+  `There are ${FACT_GAMES} free arcade games and a live Class Battle for classrooms.`,
+  `${FACT_BAND1_N} of the words are mapped to Israel's Band I vocabulary levels, and ${FACT_UNITS_N} textbook units have their own word pages.`,
+  'It is free, has no ads, needs no account or sign-up, and keeps progress on the device.',
+];
+const FACTS_HE = [
+  `ב-Children Do English יש ${FACT_WORDS} מילים באנגלית ב-${CATEGORIES.length} נושאים, לכל מילה תמונה, השמעה, הגדרה ומשפט לדוגמה.`,
+  'לכל המילים יש תרגום לעברית.',
+  'ההשמעה של כל המילים היא באותו קול ממוחשב (TTS), זהה בכל מכשיר.',
+  'כל קבוצה של 10 מילים עוברת סולם תרגול בן 11 שלבים: כרטיסיות, חידוני האזנה וקריאה, איות, משפט ומשחקים.',
+  `יש ${FACT_GAMES} משחקי ארקייד בחינם וקרב כיתתי חי לכיתה.`,
+  `${FACT_BAND1_N} מהמילים ממופות לרמות של Band I, ול-${FACT_UNITS_N} יחידות מספרי הלימוד יש עמוד מילים משלהן.`,
+  'האתר חינמי, בלי פרסומות, בלי חשבון ובלי הרשמה, וההתקדמות נשמרת במכשיר.',
+];
+
 
 let ENRICHMENTS = {};
 try {
@@ -626,7 +656,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
       <div class="hero-phonetic">${escapeHtml(word.phonetic)}</div>
       <div class="hero-pos">${escapeHtml(word.partOfSpeech)}</div>
       <div class="hero-def">${escapeHtml(word.definition)}</div>
-      <div class="hero-ex">&ldquo;${escapeHtml(word.exampleSentence)}&rdquo;</div>
+      <div class="hero-ex">&ldquo;${escapeHtml(word.exampleSentence)}&rdquo;${sentenceAudio(word.exampleSentence) ? ` <button class="say-btn say-ex" data-say="${sentenceAudio(word.exampleSentence)}" aria-label="Hear the sentence">🔊</button>` : ''}</div>
       <div class="hero-he">${escapeHtml(word.hebrewTranslation)}</div>
       <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear ${escapeHtml(word.word)}">🔊 Hear &ldquo;${escapeHtml(word.word)}&rdquo;</button>
     </div>
@@ -2419,6 +2449,9 @@ function buildHebrewGamesHubPage() {
 
   <div class="section">
     <div class="container">
+      <h2 class="section-title">עובדות בקצרה</h2>
+      <ul class="facts" style="max-width:40rem;margin:0 auto 1.5rem;line-height:1.9">${FACTS_HE.map((f) => `\n        <li>${escapeHtml(f).replace(/(Children Do English|Band I|TTS)/g, '<bdi lang="en" dir="ltr">$1</bdi>')}</li>`).join('')}
+      </ul>
       <h2 class="section-title">עוד חומרי לימוד בחינם</h2>
       <p style="text-align:center;color:#475569;margin-bottom:0.9rem">רשימות מילים דו-לשוניות אנגלית-עברית, לכל קטגוריה:</p>
       <div class="res-links">
@@ -3382,6 +3415,12 @@ const aboutHtml = `<!DOCTYPE html>
         <div class="stat"><div class="stat-num">3</div><div class="stat-label">Difficulty Levels</div></div>
       </div>
       <p>Every word includes a definition, example sentence, phonetic pronunciation, and Hebrew translation &mdash; making it perfect for bilingual Hebrew-English learners.</p>
+    </div>
+
+    <div class="section" id="facts">
+      <h2>Facts at a glance</h2>
+      <ul>${FACTS_EN.map((f) => `\n        <li>${escapeHtml(f)}</li>`).join('')}
+      </ul>
     </div>
 
     <div class="section">

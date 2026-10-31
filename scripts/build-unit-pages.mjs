@@ -13,6 +13,7 @@
 // book index with no live units is noindex too. Nothing links into /units/
 // until the /he/ head-term test ends (~Nov 14) — keep it that way.
 import { printQrBlock } from './qr-svg.mjs';
+import { sentenceAudio } from './sentence-audio.mjs';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { mkdirSync } from 'fs';
@@ -118,7 +119,7 @@ ${body}
     const rows = items.map((it) => `
           <tr>
             <td class="col-img">${it.img ? `<img src="${it.img}" alt="${escapeHtml(it.en)}" width="56" height="56" loading="lazy" />` : ''}</td>
-            <td class="col-en" lang="en" dir="ltr">${escapeHtml(it.en)}${it.chip ? ` <span class="chip ${it.chip.cls}" lang="he" dir="rtl">${escapeHtml(it.chip.label)}</span>` : ''}${it.ex ? `<span class="ex">${escapeHtml(it.ex)}</span>` : ''}</td>
+            <td class="col-en" lang="en" dir="ltr">${escapeHtml(it.en)}${it.chip ? ` <span class="chip ${it.chip.cls}" lang="he" dir="rtl">${escapeHtml(it.chip.label)}</span>` : ''}${it.ex ? `<span class="ex">${escapeHtml(it.ex)}${sentenceAudio(it.ex) ? ` <button type="button" class="say say-ex" data-say="${sentenceAudio(it.ex)}" aria-label="השמעת המשפט">🔊</button>` : ''}</span>` : ''}</td>
             <td class="col-say"><button type="button" class="say" data-say="${it.audio}" aria-label="השמעה: ${escapeHtml(it.en)}">🔊</button></td>
             <td class="col-he">${escapeHtml(it.he)}</td>
           </tr>`).join('');
@@ -375,6 +376,7 @@ const UNIT_CSS = `
     .practice .big-say { font-size: 2rem; width: 72px; height: 72px; border-radius: 50%; border: 0; background: linear-gradient(135deg, #8b5cf6, #6366f1); color: #fff; cursor: pointer; margin-bottom: 0.75rem; }
     .slow-say { display: block; margin: -0.3rem auto 0.7rem; min-height: 44px; padding: 0 1rem; border-radius: 999px; border: 2px solid #c4b5fd; background: #fff; color: #5b21b6; font-weight: 700; cursor: pointer; }
     .slow-say[aria-pressed="true"] { background: #ede9fe; border-color: #7c3aed; }
+    .say-ex { width: 44px; height: 44px; font-size: 1rem; vertical-align: middle; }
     .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
     .opt { min-height: 56px; font-size: 1.1rem; font-weight: 700; border-radius: 0.75rem; border: 2px solid #cbd5e1; background: #f8fafc; cursor: pointer; }
     .opt.ok { border-color: #16a34a; background: #dcfce7; } .opt.no { border-color: #dc2626; background: #fee2e2; }

@@ -28,6 +28,7 @@
     try {
       if (current) current.pause();
       current = new Audio(btn.getAttribute('data-say'));
+      try { if (localStorage.getItem('cde_slow') === '1') { current.playbackRate = 0.75; current.preservesPitch = true; } } catch (e) { /* storage off */ }
       current.play().catch(function () {});
       btn.classList.add('say-active');
       current.onended = function () { btn.classList.remove('say-active'); };
