@@ -107,6 +107,31 @@
         }, true);
       }
     } catch (e) { /* never break the page */ }
+    /* t1 (kit R2X7 "verified session"): once per page load, the first TRUSTED
+       pointerdown / keydown on a play surface — a quiz or flashcard screen in the
+       app (<html data-view>), anything on a game page except its links, or a
+       mini-quiz / practice / reading block on a static page. Item = the surface:
+       app · g-<game> · pg-<page class>. Read next to opens; old metrics unchanged. */
+    try {
+      var PLAY_VIEWS = /^(imageQuiz|wordQuiz|audioQuiz|listenMatchQuiz|flashcards|letterFix|sentenceGap|today|dailyReview|lightning|learning|wordCheck)$/;
+      var gm = /^\/games\/([a-z0-9-]+)\/?/.exec(p);
+      var t1done = false;
+      var onInput = function (ev) {
+        if (t1done || !ev.isTrusted) return;
+        var t = ev.target, item = null;
+        if (!t || !t.closest) return;
+        if (document.getElementById('root')) {
+          if (PLAY_VIEWS.test(document.documentElement.getAttribute('data-view') || '')) item = 'app';
+        } else if (gm) {
+          if (!t.closest('a[href]')) item = ('g-' + gm[1]).slice(0, 40);
+        } else if (t.closest('.mq-opt, .practice, #practice, [data-reading]')) item = 'pg-' + g;
+        if (!item) return;
+        t1done = true;
+        navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: 't1', i: item }], l: l }));
+      };
+      document.addEventListener('pointerdown', onInput, true);
+      document.addEventListener('keydown', function (ev) { if (ev.key !== 'Tab' && !ev.metaKey && !ev.ctrlKey && !ev.altKey) onInput(ev); }, true);
+    } catch (e) { /* never break the page */ }
     /* Return-visit bucket (Engagement Optimizer) — once per local day per
        browser. Stores ONLY the last visit date ('cde_seen', YYYY-MM-DD) and
        sends ONLY a coarse bucket as an aggregate tally — never the date, never

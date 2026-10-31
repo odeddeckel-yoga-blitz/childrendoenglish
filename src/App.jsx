@@ -145,6 +145,8 @@ export default function App() {
   // is random — a re-render must not swap the words mid-run).
   const todayWords = useRef(null);
   useEffect(() => { if (gameState !== 'today') todayWords.current = null; }, [gameState]);
+  // The current screen for land-beacon.js's t1 (first real tap while playing, kit R2X7).
+  useEffect(() => { document.documentElement.setAttribute('data-view', gameState); }, [gameState]);
   const [darkMode, setDarkMode] = useState(() => isDarkMode());
   const [soundEnabled, setSoundEnabled] = useState(() => isSoundEnabled());
 
