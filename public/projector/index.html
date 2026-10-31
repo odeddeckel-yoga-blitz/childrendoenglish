@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projector Mode — Whole-Class English Vocabulary on the Big Screen | ChildrenDoEnglish</title>
+<meta name="description" content="Free whole-class projector mode: show a photo on the big screen, the class says the English word, then reveal it with its Hebrew meaning and audio. Pick a topic or a textbook unit. No accounts, nothing stored.">
+<link rel="canonical" href="https://childrendoenglish.com/projector/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ChildrenDoEnglish">
+<meta property="og:title" content="Projector Mode — Whole-Class English Vocabulary">
+<meta property="og:description" content="Show a photo, the class says the word, reveal it with audio and the Hebrew meaning. Free, no accounts.">
+<meta property="og:url" content="https://childrendoenglish.com/projector/">
+<meta property="og:image" content="https://childrendoenglish.com/og-image.png">
+<link rel="icon" href="/favicon.png">
+<script defer src="/land-beacon.js"></script>
+<style>
+  :root{ --indigo:#4f46e5; --ink:#1e1b4b; --dim:#4b5563; --sky:#eef2ff; --line:rgba(79,70,229,.25); --grn:#059669; }
+  [hidden]{display:none!important;}
+  *{box-sizing:border-box;}
+  html,body{margin:0;min-height:100%;background:var(--sky);color:var(--ink);
+    font-family:system-ui,-apple-system,'Segoe UI','Noto Sans Hebrew','Arial Hebrew',sans-serif;}
+  body{display:flex;flex-direction:column;align-items:center;padding:60px 16px 32px;gap:16px;}
+  button{font-family:inherit;cursor:pointer;}
+  #homePill{position:fixed;inset-inline-start:12px;top:12px;font:700 13px/1 inherit;color:var(--indigo);text-decoration:none;
+    background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:9px 14px;z-index:5;}
+  .langToggle{position:fixed;inset-inline-end:12px;top:12px;font-weight:800;color:var(--indigo);min-height:44px;padding:10px 12px;}
+  h1{margin:0;font-size:clamp(28px,6vw,48px);font-weight:900;text-align:center;}
+  .sub{max-width:680px;text-align:center;font-weight:600;line-height:1.5;margin:0;}
+  .grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;max-width:900px;}
+  .chip{min-height:44px;padding:10px 16px;border-radius:999px;border:2px solid var(--line);background:#fff;font-size:16px;font-weight:700;color:var(--ink);}
+  .chip[aria-pressed="true"]{background:var(--indigo);color:#fff;border-color:var(--indigo);}
+  h2{margin:8px 0 0;font-size:20px;}
+  .btn{min-height:56px;padding:12px 30px;border-radius:18px;font-size:20px;font-weight:800;border:0;color:#fff;
+    background:linear-gradient(180deg,#6366f1,var(--indigo));box-shadow:0 5px 0 #3730a3;}
+  .btn.ghost{background:#fff;color:var(--indigo);border:2px solid var(--line);box-shadow:none;}
+  /* the show: fills the screen */
+  #show{position:fixed;inset:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2vh;padding:2vh 2vw;}
+  #stage{flex:1;display:flex;align-items:center;justify-content:center;width:100%;min-height:0;}
+  #stage img{max-width:92vw;max-height:60vh;border-radius:24px;object-fit:contain;box-shadow:0 10px 40px rgba(0,0,0,.15);}
+  #stage .bigword{font-size:clamp(56px,13vw,170px);font-weight:900;color:var(--indigo);}
+  #stage .ear{font-size:clamp(90px,20vw,220px);background:none;border:0;}
+  #answer{text-align:center;}
+  #show.revealed #stage img{max-height:50vh;}
+  #show.revealed #answer .en{font-size:clamp(44px,9vh,120px);}
+  #show.revealed #answer .he{font-size:clamp(26px,5vh,60px);}
+  #stage{overflow:hidden;}
+  #answer .en{font-size:clamp(48px,10vw,130px);font-weight:900;color:var(--grn);line-height:1.05;}
+  #answer .he{font-size:clamp(28px,5vw,64px);font-weight:700;color:var(--dim);}
+  .bar{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;align-items:center;}
+  #count{font-weight:800;font-size:20px;color:var(--dim);min-width:80px;text-align:center;}
+  .keys{font-size:14px;color:var(--dim);margin:0;}
+  kbd{background:#f1f5f9;border:1px solid #cbd5e1;border-radius:6px;padding:1px 6px;font-family:inherit;}
+</style>
+</head>
+<body>
+<a id="homePill" href="/">🏠 Children Do English</a>
+<a class="langToggle" href="?lang=he">עברית</a>
+<main id="setup" style="display:flex;flex-direction:column;align-items:center;gap:16px;width:100%">
+  <h1>📽️ <span id="tTitle">Projector Mode</span></h1>
+  <p class="sub" id="tSub">For the whole class on one big screen: show a picture, the class says the English word together, then reveal it with its sound and Hebrew meaning. No accounts, nothing stored.</p>
+  <h2 id="tShow">What to show</h2>
+  <div class="grid" id="modeGrid"></div>
+  <h2 id="tTopic">Words</h2>
+  <div class="grid" id="catGrid"></div>
+  <button id="go" class="btn" type="button">▶ <span id="tGo">Start</span></button>
+  <p class="keys" id="tKeys"><kbd>Space</kbd> next · <kbd>Enter</kbd> show the answer · <kbd>S</kbd> sound · <kbd>F</kbd> full screen · <kbd>Esc</kbd> back</p>
+</main>
+<section id="show" hidden aria-live="polite">
+  <div id="stage"></div>
+  <div id="answer"></div>
+  <div class="bar">
+    <button id="bBack" class="btn ghost" type="button" aria-label="Back">✕</button>
+    <button id="bSay" class="btn ghost" type="button">🔊</button>
+    <button id="bReveal" class="btn ghost" type="button"><span id="tReveal">Show answer</span></button>
+    <button id="bNext" class="btn" type="button"><span id="tNext">Next</span> ▶</button>
+    <span id="count" dir="ltr"></span>
+    <button id="bFull" class="btn ghost" type="button" aria-label="Full screen">⛶</button>
+  </div>
+</section>
+<script defer src="/games/word-audio.js"></script>
+<script type="module" src="/projector/projector.js"></script>
+</body>
+</html>

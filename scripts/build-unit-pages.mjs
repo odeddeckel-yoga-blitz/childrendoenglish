@@ -186,7 +186,8 @@ ${body}
     <section class="section share" aria-labelledby="share-h">
       <h2 id="share-h" class="section-title">שיתוף עם הכיתה</h2>
       ${battleHref ? `<p class="center"><a class="cta battle-cta" href="${battleHref}">⚔️ קרב כיתתי עם המילים של היחידה</a></p>
-      <p class="center sheet-hint">המורה פותח/ת חדר על המקרן, והילדים מצטרפים מהטלפון או מהטאבלט עם קוד.</p>` : ''}
+      <p class="center sheet-hint">המורה פותח/ת חדר על המקרן, והילדים מצטרפים מהטלפון או מהטאבלט עם קוד.</p>
+      <p class="center"><a href="${battleHref.replace('/battle/', '/projector/')}&amp;lang=he">📽️ או בלי מכשירים: מצב מקרן, כל הכיתה עונה יחד בקול</a></p>` : ''}
       <p class="center">
         <a class="share-btn" href="https://wa.me/?text=${shareText}%20${pageUrl}" target="_blank" rel="noopener">שליחה בוואטסאפ</a>
         <a class="share-btn" href="https://classroom.google.com/share?url=${pageUrl}" target="_blank" rel="noopener">שיתוף ב-Google Classroom</a>

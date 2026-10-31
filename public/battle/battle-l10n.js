@@ -28,6 +28,7 @@ const HE_TEXT = {
   kidH: 'באתי לשחק',
   kidSub: 'קיבלתם קוד מהמורה? קפצו פנימה!',
   btnKid: 'הצטרפות עם קוד',
+  projLink: '📽️ מצב מקרן: כל הכיתה על מסך אחד',
   joinH: 'הקלידו את קוד החדר',
   btnCheckCode: 'הבא ←',
   nameH: 'בחרו שם לקרב!',
@@ -82,6 +83,8 @@ export function applyLang(lang, $) {
     a.textContent = other === 'he' ? 'עברית' : 'English';
     a.lang = other;
   }
+  // the projector link keeps the language
+  if ($('projLink')) $('projLink').href = lang === 'he' ? '/projector/?lang=he' : '/projector/';
   if (lang !== 'he') return;
   for (const [id, s] of Object.entries(HE_TEXT)) if ($(id)) $(id).textContent = s;
   for (const [id, s] of Object.entries(HE_ARIA)) if ($(id)) $(id).setAttribute('aria-label', s);
