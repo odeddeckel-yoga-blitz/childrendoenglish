@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-10-30T00:00:00.000Z",
+  "statsFrom": "2026-10-31T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "fishing",
@@ -7,16 +7,16 @@
     "category": "sports",
     "he": "דיג",
     "image": "/images/fishing.webp",
-    "ans": 0,
-    "ok": 0,
+    "ans": 7,
+    "ok": 5,
     "since": "2026-10-30T09:56:43.153Z"
   },
   "game": {
     "id": "spelling-forge",
     "name": "Spelling Forge",
     "emoji": "🔨",
-    "opens": 76,
-    "lvl": 106,
+    "opens": 82,
+    "lvl": 130,
     "cmp": 2,
     "since": "2026-10-25T08:21:30.744Z"
   },
