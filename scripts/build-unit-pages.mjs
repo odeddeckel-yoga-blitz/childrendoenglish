@@ -22,6 +22,17 @@ const hashOf = (s) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 
 
 // One Hebrew word-set page (table → practice → cards → sheets → share → FAQ).
 // words: [{ en, he, wordId?, ex?, chip? }] — chip = { label, cls } shown by the word.
+// Sentence modes (Band I sentence engine, roadmap step 4) need our own example
+// sentences: at least 4 words whose sentence contains the word itself.
+export const SENTENCE_MAX_WORDS = 9;
+export function sentenceUsable(it) {
+  if (!it.ex) return false;
+  const words = it.ex.trim().split(/\s+/);
+  const re = new RegExp(`\\b${it.en.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i');
+  return words.length <= SENTENCE_MAX_WORDS && re.test(it.ex);
+}
+export function sentenceReady(items) { return items.filter(sentenceUsable).length >= 4; }
+
 export function wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides }) {
   const byId = new Map(WORDS.map((w) => [w.id, w]));
   // Set words as word-like objects so collides() (same English, same/prefix
@@ -142,13 +153,15 @@ ${body}
       <div class="modes" role="group" aria-label="סוג תרגול">
         <button type="button" class="mode on" data-mode="hear" aria-pressed="true">🎧 שומעים ובוחרים</button>
         <button type="button" class="mode" data-mode="spell" aria-pressed="false">✏️ כותבים מה ששומעים</button>
-        <button type="button" class="mode" data-mode="dict" aria-pressed="false">📝 הכתבה</button>
+        <button type="button" class="mode" data-mode="dict" aria-pressed="false">📝 הכתבה</button>${sentenceReady(items) ? `
+        <button type="button" class="mode" data-mode="gap" aria-pressed="false">🔎 משלימים משפט</button>
+        <button type="button" class="mode" data-mode="build" aria-pressed="false">🧩 בונים משפט</button>` : ''}
       </div>
       <div id="practice" class="practice" data-unit="${practiceKey}"${step ? ` data-step="${step}"` : ''}>
         <noscript><p>התרגול צריך JavaScript. אפשר בינתיים ללמוד מהטבלה ומהכרטיסיות.</p></noscript>
       </div>
       <p id="practice-live" class="sr" aria-live="polite"></p>
-      <script type="application/json" id="unit-data">${JSON.stringify(items.map(({ en, id, audio, opts, ans }) => ({ en, id, audio, opts, ans }))).replace(/</g, '\\u003c')}</script>
+      <script type="application/json" id="unit-data">${JSON.stringify(items.map(({ en, he, ex, id, audio, opts, ans }) => ({ en, he, ex, id, audio, opts, ans }))).replace(/</g, '\\u003c')}</script>
     </section>
     ${afterPractice}
     <section class="section" aria-labelledby="cards-h">
@@ -362,6 +375,16 @@ const UNIT_CSS = `
     .spell input { font-size: 1.3rem; padding: 0.55rem 0.75rem; border: 2px solid #cbd5e1; border-radius: 0.6rem; width: 100%; max-width: 280px; text-align: center; direction: ltr; }
     .spell button[type=submit] { margin-top: 0.6rem; min-height: 44px; padding: 0 1.4rem; border: 0; border-radius: 0.6rem; background: #2563eb; color: #fff; font-weight: 700; font-size: 1rem; cursor: pointer; }
     .feedback { min-height: 1.6rem; margin-top: 0.7rem; font-weight: 700; }
+    .sent { font-size: 1.25rem; font-weight: 700; line-height: 1.8; margin: 0.4rem 0 0.8rem; direction: ltr; unicode-bidi: isolate; }
+    .sent .blank { display: inline-block; min-width: 4.5em; border-bottom: 3px solid #6366f1; color: #6366f1; }
+    .sent mark { background: #dcfce7; color: inherit; padding: 0 0.15em; border-radius: 0.25rem; }
+    .clue { color: #4b5a6e; margin-bottom: 0.3rem; }
+    .built { min-height: 3.2rem; border: 2px dashed #cbd5e1; border-radius: 0.75rem; padding: 0.4rem; direction: ltr; display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; align-items: center; margin-bottom: 0.7rem; }
+    .built span { font-weight: 700; font-size: 1.1rem; }
+    .tiles { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; direction: ltr; }
+    .tile { min-height: 48px; min-width: 48px; padding: 0 0.9rem; font-size: 1.1rem; font-weight: 700; border-radius: 0.6rem; border: 2px solid #cbd5e1; background: #f8fafc; cursor: pointer; }
+    .tile.no { border-color: #dc2626; background: #fee2e2; }
+    .tile:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
     .progress { font-size: 0.85rem; color: #4b5a6e; margin-bottom: 0.5rem; }
     .next { margin-top: 0.75rem; min-height: 44px; padding: 0 1.4rem; border-radius: 0.6rem; border: 2px solid #2563eb; background: #fff; color: #2563eb; font-weight: 700; cursor: pointer; }
     .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 0.75rem; }

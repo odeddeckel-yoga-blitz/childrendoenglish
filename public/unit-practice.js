@@ -5,6 +5,10 @@
  *   spell — play the English word, type it
  *   dict  — dictation (הכתבה): 10 words read one at a time, written in the
  *           notebook, then checked against the list (self-marked; no ans events)
+ *   gap   — sentence engine: our example sentence with the word blanked; the
+ *           Hebrew meaning is the clue, so only one English option fits
+ *   build — sentence engine: tap the sentence's words in order (a wrong tile
+ *           shakes and stays; first try with no slip counts as right)
  * Plus 🔊 buttons in the word table (the print button is print-btn.js).
  * Answers feed the same cookieless cde_learn aggregate as the app (ans_ok/ans_no
  * @ CDE word id when the word has one); quiz_start/quiz_done @ unit-hear|unit-spell.
@@ -123,15 +127,29 @@
     return n;
   }
   function announce(msg) { if (live) live.textContent = msg; }
+  // Hebrew line with English runs isolated, so punctuation doesn't jump sides:
+  // parts = ['נכון! ', ['pig'], ' = חזיר'] (an array part is English).
+  function mixed(node, parts) {
+    node.textContent = '';
+    parts.forEach(function (x) {
+      if (typeof x === 'string') node.appendChild(document.createTextNode(x));
+      else node.appendChild(el('bdi', { lang: 'en', dir: 'ltr' }, x[0]));
+    });
+    return node;
+  }
 
   // quiz_start fires on the round's first answer, not on page load (every
   // visitor sees round 1 rendered), and audio waits for the first tap.
   var mode = 'hear', order = [], pos = 0, score = 0, tries = 0, begun = false, interacted = false;
 
-  var DICT_N = 10;
+  var DICT_N = 10, SENT_N = 10, SENT_MAX = 9;
+  function esc(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function wordRe(en) { return new RegExp('\\b' + esc(en) + '\\b', 'i'); }
+  function usable(it) { return !!it.ex && it.ex.trim().split(/\s+/).length <= SENT_MAX && wordRe(it.en).test(it.ex); }
   function start(m) {
     mode = m; order = shuffle(items); pos = 0; score = 0; begun = false;
     if (m === 'dict') order = order.slice(0, DICT_N);
+    if (m === 'gap' || m === 'build') order = shuffle(items.filter(usable)).slice(0, SENT_N);
     var btns = document.querySelectorAll('.mode');
     for (var i = 0; i < btns.length; i++) {
       var on = btns[i].getAttribute('data-mode') === m;
@@ -199,10 +217,13 @@
     var it = order[pos];
     tries = 0;
     box.textContent = '';
-    box.appendChild(el('p', { class: 'progress' }, (pos + 1) + ' / ' + order.length));
-    var big = el('button', { type: 'button', class: 'big-say', 'aria-label': 'השמעת המילה' }, '🔊');
-    big.addEventListener('click', function () { say(it.audio); });
-    box.appendChild(big);
+    box.appendChild(el('p', { class: 'progress', dir: 'ltr' }, (pos + 1) + ' / ' + order.length));
+    // In the gap game the clue is the meaning; hearing the word would give it away.
+    if (mode !== 'gap') {
+      var big = el('button', { type: 'button', class: 'big-say', 'aria-label': 'השמעת המילה' }, '🔊');
+      big.addEventListener('click', function () { say(it.audio); });
+      box.appendChild(big);
+    }
     var fb = el('p', { class: 'feedback', role: 'status' });
 
     if (mode === 'dict') {
@@ -214,6 +235,78 @@
       });
       box.appendChild(nx);
       if (interacted) nx.focus({ preventScroll: true });
+    } else if (mode === 'gap') {
+      var m = it.ex.match(wordRe(it.en));
+      box.appendChild(el('p', { class: 'clue' }, 'השלימו את המשפט במילה שפירושה: ' + it.he));
+      var sent = el('p', { class: 'sent', lang: 'en', dir: 'ltr' });
+      sent.appendChild(document.createTextNode(it.ex.slice(0, m.index)));
+      var blank = el('span', { class: 'blank' }, '\u00a0');
+      sent.appendChild(blank);
+      sent.appendChild(document.createTextNode(it.ex.slice(m.index + m[0].length)));
+      box.appendChild(sent);
+      // 3 other page words: a different meaning, and not already in the sentence
+      var others = shuffle(items.filter(function (o) { return o.en !== it.en && o.he !== it.he && !wordRe(o.en).test(it.ex); })).slice(0, 3);
+      var choices = shuffle(others.concat([it]));
+      var g = el('div', { class: 'opts', lang: 'en', dir: 'ltr' });
+      choices.forEach(function (c) {
+        var b = el('button', { type: 'button', class: 'opt' }, c.en);
+        b.addEventListener('click', function () {
+          if (box.getAttribute('data-done') === '1') return;
+          box.setAttribute('data-done', '1');
+          var ok = c === it;
+          record(it, ok);
+          b.classList.add(ok ? 'ok' : 'no');
+          if (!ok) for (var j = 0; j < g.children.length; j++) if (g.children[j].textContent === it.en) g.children[j].classList.add('ok');
+          blank.className = ''; blank.textContent = ''; blank.appendChild(el('mark', {}, m[0]));
+          mixed(fb, ok ? ['נכון! ', [it.en], ' = ' + it.he] : ['המילה היא: ', [it.en], ' (' + it.he + ')']);
+          announce(fb.textContent);
+          say(it.audio);
+          var n = el('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ←' : 'סיום');
+          n.addEventListener('click', function () { box.removeAttribute('data-done'); next(); });
+          box.appendChild(n);
+          n.focus();
+        });
+        g.appendChild(b);
+      });
+      box.appendChild(g);
+      box.appendChild(fb);
+    } else if (mode === 'build') {
+      var toks = it.ex.trim().split(/\s+/), got = 0, slips = 0;
+      box.appendChild(mixed(el('p', { class: 'clue' }), ['בנו את המשפט עם המילה ', [it.en], ' (' + it.he + '): לחצו על המילים לפי הסדר']));
+      var built = el('div', { class: 'built', lang: 'en', dir: 'ltr', 'aria-live': 'polite' });
+      box.appendChild(built);
+      var tiles = el('div', { class: 'tiles', lang: 'en', dir: 'ltr' });
+      shuffle(toks.map(function (t, k) { return { t: t, k: k }; })).forEach(function (o) {
+        var b = el('button', { type: 'button', class: 'tile' }, o.t);
+        b.addEventListener('click', function () {
+          if (b.disabled) return;
+          if (o.t === toks[got]) {                      // same text = same word, whichever copy
+            built.appendChild(el('span', {}, o.t));
+            b.disabled = true; b.hidden = true;
+            got += 1;
+            if (got === toks.length) {
+              var ok = slips === 0;
+              record(it, ok);
+              fb.textContent = ok ? 'נכון! 🎉' : 'יפה! המשפט שלם.';
+              announce(fb.textContent + ' ' + it.ex);
+              say(it.audio);
+              var n = el('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ←' : 'סיום');
+              n.addEventListener('click', next);
+              box.appendChild(n);
+              n.focus();
+            }
+          } else {
+            slips += 1;
+            b.classList.add('no');
+            setTimeout(function () { b.classList.remove('no'); }, 450);
+            fb.textContent = 'לא זו — איזו מילה באה עכשיו?';
+            announce(fb.textContent);
+          }
+        });
+        tiles.appendChild(b);
+      });
+      box.appendChild(tiles);
+      box.appendChild(fb);
     } else if (mode === 'hear') {
       var grid = el('div', { class: 'opts' });
       it.opts.forEach(function (o, i) {
@@ -225,7 +318,7 @@
           record(it, ok);
           b.classList.add(ok ? 'ok' : 'no');
           if (!ok) grid.children[it.ans].classList.add('ok');
-          fb.textContent = ok ? 'נכון! ' + it.en + ' = ' + it.opts[it.ans] : it.en + ' = ' + it.opts[it.ans];
+          mixed(fb, ok ? ['נכון! ', [it.en], ' = ' + it.opts[it.ans]] : [[it.en], ' = ' + it.opts[it.ans]]);
           announce(fb.textContent);
           var n = el('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ←' : 'סיום');
           n.addEventListener('click', function () { box.removeAttribute('data-done'); next(); });
@@ -253,7 +346,7 @@
         if (!ok && tries < 2) { fb.textContent = 'כמעט — נסו שוב (הקשיבו עוד פעם)'; announce(fb.textContent); input.select(); return; }
         record(it, ok);
         input.disabled = true; go.disabled = true;
-        fb.textContent = ok ? 'נכון! ' + it.en : 'המילה היא: ' + it.en;
+        mixed(fb, ok ? ['נכון! ', [it.en]] : ['המילה היא: ', [it.en]]);
         announce(fb.textContent);
         var n = el('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ←' : 'סיום');
         n.addEventListener('click', next);
@@ -264,7 +357,7 @@
       box.appendChild(fb);
       if (interacted) input.focus({ preventScroll: true });
     }
-    if (interacted) say(it.audio);
+    if (interacted && mode !== 'gap' && mode !== 'build') say(it.audio);
   }
 
   box.addEventListener('click', function () { interacted = true; }, true);
