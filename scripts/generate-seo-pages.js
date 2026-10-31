@@ -83,6 +83,7 @@ function buildCrawlMesh(lang = 'en') {
       ...HE_GAMES_AGES.map((a) => [`/he/english-games/${a.slug}/`, `גילאי ${a.ages} (${a.grades})`]),
       ...HE_GAMES_TOPICS.map((t) => [`/he/english-games/${t}/`, `אנגלית לילדים — ${CATEGORY_NAMES_HE[t] || t}`]),
     ]) +
+    row('מילים באנגלית לפי נושא', [['/he/english-words/', 'כל הנושאים'], ['/he/english-words/days-of-the-week/', 'ימות השבוע באנגלית'], ['/he/english-words/months/', 'חודשי השנה באנגלית'], ['/he/english-words/family/', 'בני משפחה באנגלית'], ['/he/english-words/numbers-1-100/', 'מספרים באנגלית'], ['/he/english-words/abc/', 'אותיות באנגלית']]) +
     row('Printable Flashcards', [['/tools/flashcard-maker/', 'Flashcard maker (free tool)'], ['/printable-flashcards/', 'All flashcards'], ...cats.map((c) => [`/printable-flashcards/${c}/`, label(c)])]) +
     // Spanish printable sets (Oct 2026): they draw shared/direct visitors but
     // were linked only from their two sibling pages → "unknown to Google".
@@ -2398,6 +2399,7 @@ function buildHebrewGamesHubPage() {
       <div class="topic-grid">
         ${topicCards}
       </div>
+      <p style="text-align:center;margin-top:1.1rem">עוד נושאים: <a href="/he/english-words/days-of-the-week/" style="text-decoration:underline">ימות השבוע</a> &middot; <a href="/he/english-words/months/" style="text-decoration:underline">חודשי השנה</a> &middot; <a href="/he/english-words/family/" style="text-decoration:underline">בני המשפחה</a> &middot; <a href="/he/english-words/numbers-1-100/" style="text-decoration:underline">מספרים עד 100</a> &middot; <a href="/he/english-words/abc/" style="text-decoration:underline">אותיות <bdi>ABC</bdi></a></p>
     </div>
   </div>
 
@@ -5152,6 +5154,10 @@ const band1ChipFor = (w) => BAND_CHIPS[(w.wordId && BAND1_BY_ID[w.wordId]) || BA
 const { battleUnits } = await import(join(ROOT, 'scripts', 'gen-battle-words.mjs'));
 const unitUrls = buildUnitPages({ SITE, distDir, publicDir: join(ROOT, 'public'), writePage, escapeHtml, WORDS, collides, BOOKS, UNITS, chipFor: band1ChipFor, battleUnitIds: new Set(Object.keys(battleUnits())) });
 const band1Pages = buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND1_TOTAL, CATEGORY_NAMES_HE });
+const { buildHeTopicPages } = await import(join(ROOT, 'scripts', 'build-he-topic-pages.mjs'));
+const { HE_TOPICS } = await import(join(ROOT, 'src', 'data', 'heTopics.js'));
+const heTopicPages = buildHeTopicPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, HE_TOPICS });
+console.log(`Hebrew topic pages: ${heTopicPages}`);
 console.log(`  ✓ /band-1/: ${band1Pages} page(s)`);
 const unitEntries = unitUrls.map((u) => `  <url>
     <loc>${SITE}${u}</loc>
