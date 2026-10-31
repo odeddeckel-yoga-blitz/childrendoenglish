@@ -150,6 +150,7 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
     <p class="answer">${covered} מילים מרשימת <span lang="en" dir="ltr">Band I</span> של משרד החינוך, עם תמונה, הגייה, תרגום ותרגול, מסודרות לפי ${topics.length} נושאים. בכל נושא נוספו גם כמה מילות בונוס מחוץ לרשימה, מסומנות.</p></header>
   <main class="container"><section class="section">
   <p class="center"><a class="cta" href="/band-1/review/">🎒 מסלול חזרה: כל Band I ב-${PATH_SETS} סטים קצרים ←</a></p>
+  <p class="center"><a class="cta" href="/band-1/reading/">📖 קטעי קריאה קצרים עם הקראה ושאלות ←</a></p>
   <div class="unit-grid">${cards}
   </div>
   ${legend}

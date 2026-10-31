@@ -5194,6 +5194,10 @@ const heTopicPages = buildHeTopicPages({ SITE, distDir, writePage, escapeHtml, W
 console.log(`Hebrew topic pages: ${heTopicPages}`);
 const { buildGradePages } = await import(join(ROOT, 'scripts', 'build-grade-pages.mjs'));
 console.log(`Grade pages: ${buildGradePages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND_CHIPS, UNITS, BOOKS })}`);
+const { buildReadingPages } = await import(join(ROOT, 'scripts', 'build-reading-pages.mjs'));
+const { READINGS, READING_NAMES } = await import(join(ROOT, 'src', 'data', 'readings.js'));
+const { READING_GLOSSES, READING_PHRASES } = await import(join(ROOT, 'src', 'data', 'readingGlosses.js'));
+console.log(`Reading pages: ${buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, READINGS, READING_NAMES, READING_GLOSSES, READING_PHRASES })}`);
 console.log(`  ✓ /band-1/: ${band1Pages} page(s)`);
 const unitEntries = unitUrls.map((u) => `  <url>
     <loc>${SITE}${u}</loc>

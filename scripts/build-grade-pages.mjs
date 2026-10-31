@@ -15,11 +15,11 @@ const GRADES = [
   { n: 3, he: 'ג׳', band: 'c1', half: 0, age: 'ages-9-10', note: 'בכיתה ג׳ לומדים אנגלית בבית הספר באופן מסודר: מילים מנושאים קרובים לילד, קריאה ראשונה וכתיבה של מילים.',
     links: [['/he/english-words/months/', 'חודשי השנה'], ['/he/english-games/school/', 'בית הספר'], ['/band-1/', 'רשימת Band I לפי נושאים'], ['/games/spelling-forge/?lang=he', 'משחק: Spelling Forge']] },
   { n: 4, he: 'ד׳', band: 'c1', half: 1, age: 'ages-9-10', note: 'בכיתה ד׳ אוצר המילים גדל, ומתרגלים מילים בתוך משפטים — הבנה, איות ושימוש.',
-    links: [['/band-1/', 'רשימת Band I לפי נושאים'], ['/he/english-games/sports/', 'ספורט'], ['/he/english-games/feelings/', 'רגשות'], ['/games/word-zapper/?lang=he', 'משחק: Word Zapper']] },
+    links: [['/band-1/reading/', 'קטעי קריאה קצרים'], ['/band-1/', 'רשימת Band I לפי נושאים'], ['/he/english-games/sports/', 'ספורט'], ['/he/english-games/feelings/', 'רגשות'], ['/games/word-zapper/?lang=he', 'משחק: Word Zapper']] },
   { n: 5, he: 'ה׳', band: 'c2', half: 0, age: 'ages-11-12', note: 'בכיתה ה׳ מרחיבים את אוצר המילים לנושאים חדשים ומתרגלים קריאה וכתיבה של משפטים שלמים.',
-    links: [['/band-1/review/', 'מסלול חזרה על Band I'], ['/band-1/', 'רשימת Band I לפי נושאים'], ['/he/english-games/nature/', 'טבע'], ['/games/category-conveyor/?lang=he', 'משחק: Category Conveyor']] },
+    links: [['/band-1/reading/', 'קטעי קריאה קצרים'], ['/band-1/review/', 'מסלול חזרה על Band I'], ['/band-1/', 'רשימת Band I לפי נושאים'], ['/he/english-games/nature/', 'טבע'], ['/games/category-conveyor/?lang=he', 'משחק: Category Conveyor']] },
   { n: 6, he: 'ו׳', band: 'c2', half: 1, age: 'ages-11-12', note: 'בכיתה ו׳ סוגרים את אוצר המילים של בית הספר היסודי לקראת חטיבת הביניים — זה הזמן לחזרה מסודרת.',
-    links: [['/band-1/review/', 'מסלול חזרה על Band I'], ['/band-1/', 'רשימת Band I לפי נושאים'], ['/he/english-games/everyday/', 'חפצים יומיומיים'], ['/battle/', 'קרב כיתתי']] },
+    links: [['/band-1/reading/', 'קטעי קריאה קצרים'], ['/band-1/review/', 'מסלול חזרה על Band I'], ['/band-1/', 'רשימת Band I לפי נושאים'], ['/he/english-games/everyday/', 'חפצים יומיומיים'], ['/battle/', 'קרב כיתתי']] },
 ];
 const PER_PAGE = 20;
 
