@@ -1,9 +1,11 @@
-/* Read It! — CVC decoding game (/games/read-it/), phonics strand 1 (roadmap B2,
-   design: plans/b2-phonics-cvc-2026-10.md). Five short-vowel levels (a, i, o, u,
-   e); each level = "read it → tap the picture" items (the level's photo words)
-   then "hear it → pick the spelling" items (three real words one letter apart —
-   mostly the vowel). Audio = /audio/cvc/<word>.mp3, each accepted only when
-   whisper hears it as itself and never as a word shown next to it (2026-10-29).
+/* Read It! — decoding game (/games/read-it/), roadmap B2 phonics in the Building
+   Blocks order: strand 1 = five short-vowel CVC levels (a, i, o, u, e; design:
+   plans/b2-phonics-cvc-2026-10.md), strand 2 = magic e (a_e, i_e, o_e + u_e),
+   strand 3 = digraphs (sh + ch, th + ck). Each level = "read it → tap the picture"
+   items (the level's photo words) then "hear it → pick the spelling" items (three
+   real words, mostly one letter or one sound apart: cap / cape, ship / chip).
+   Audio = /audio/cvc/<word>.mp3, each accepted only when whisper hears it as
+   itself and never as a word shown next to it (2026-10-29; strands 2–3 10-31).
    Beacons (cookieless aggregates, same guards as land-beacon.js): g_open /
    g_start / g_lvl / g_cmp @ read-it, and cvc @ <vowel>_<r|h>_<ok|no>. */
 (function(){
@@ -13,14 +15,25 @@ var LANG=window.CDE_LANG||'en';
 
 // read = photo words (app images); hear = [target, two one-letter neighbours]
 var LEVELS=[
+  // strand 1 — short vowels
   {id:'a', read:['cat','hat','bat','jam','can','cap','bag','fan','map'], hear:[['cat','cut','cap'],['bag','big','bug'],['hat','hit','hot'],['pan','pen','pin'],['fan','fin','fun'],['bat','bit','bet'],['map','mop','mud'],['man','men','mud']]},
   {id:'i', read:['pig','six'], hear:[['pig','peg','pug'],['pin','pan','pen'],['sit','sat','set'],['lip','lap','lid'],['fin','fan','fun'],['hit','hat','hot'],['big','bag','bug'],['zip','zap','dig']]},
   {id:'o', read:['dog','fox','box'], hear:[['dog','dig','dot'],['pot','pit','pet'],['mop','map','men'],['top','tip','tap'],['log','leg','lot'],['hot','hit','hat'],['rob','rib','rub'],['hop','hip','hug']]},
   {id:'u', read:['bus','sun','cup'], hear:[['cup','cap','cut'],['bug','bag','big'],['hum','ham','him'],['rug','rag','rub'],['mud','mad','mid'],['hug','hog','hum'],['tub','tab','tug'],['run','ran','rot']]},
-  {id:'e', read:['bed','pen','net','jet'], hear:[['pen','pan','pin'],['bed','bad','bud'],['ten','tan','tin'],['net','not','nap'],['red','rid','rod'],['jet','jam','pet'],['leg','log','peg'],['wet','web','wig']]}
+  {id:'e', read:['bed','pen','net','jet'], hear:[['pen','pan','pin'],['bed','bad','bud'],['ten','tan','tin'],['net','not','nap'],['red','rid','rod'],['jet','jam','pet'],['leg','log','peg'],['wet','web','wig']]},
+  // strand 2 — magic e: the silent e makes the vowel say its name
+  {id:'a_e', read:['cake','gate','plate','snake','lake','cave','whale'], hear:[['cape','cap','cope'],['made','mad','mud'],['cane','can','cone'],['mane','man','mine'],['pane','pan','pine'],['bake','bike','cake'],['lake','lack','like'],['tape','tap','top']]},
+  {id:'i_e', read:['kite','five','nine','dice','slide','smile','rice'], hear:[['kite','kit','cute'],['pine','pin','pane'],['bite','bit','bat'],['hide','hid','had'],['ride','rid','rode'],['fine','fin','fun'],['dime','dim','dice'],['ripe','rip','rope']]},
+  {id:'o_e', read:['rope','globe','phone'], hear:[['hope','hop','top'],['note','not','net'],['robe','rob','rub'],['cone','cane','can'],['cube','tube','cute'],['tube','tub','tab'],['cute','cut','cat'],['rode','rod','red']]},
+  // strand 3 — digraphs: two letters, one sound
+  {id:'sh_ch', read:['ship','fish','sheep','shirt','brush','shark','cheese','chair','watch'], hear:[['ship','chip','sip'],['chop','shop','hop'],['dish','ditch','dig'],['sheep','cheap','jeep'],['wish','with','wit'],['cash','catch','cat'],['much','mush','mug'],['chat','that','hat']]},
+  {id:'th_ck', read:['three','duck','clock','truck','lock'], hear:[['thin','tin','fin'],['three','tree','free'],['bath','bat','path'],['math','mat','mash'],['sock','shock','lock'],['pick','pig','pit'],['lock','log','lot'],['duck','dock','sock']]}
 ];
+// strand of each level, by id (1 = short vowels)
+var STRAND=function(l){ return /_e$/.test(l.id)?2:/^(sh|th)_/.test(l.id)?3:1; };
+var STRAND_START=[null,0,5,8]; // first level index of strands 1–3
 var ROUNDS=8, MAX_READ=4;
-var PHOTOS=[].concat.apply([],LEVELS.map(function(l){ return l.read; }));
+var photosOf=function(s){ return [].concat.apply([],LEVELS.filter(function(l){ return STRAND(l)===s; }).map(function(l){ return l.read; })); };
 window.RI_LEVELS=LEVELS; // read by the audio-coverage test
 
 function beacon(ev,item){
@@ -45,17 +58,17 @@ function play(word, done){
 }
 function shuffle(a){ var b=a.slice(); for(var i=b.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=b[i]; b[i]=b[j]; b[j]=t; } return b; }
 function el(tag,cls,text){ var n=document.createElement(tag); if(cls) n.className=cls; if(text!=null) n.textContent=text; return n; }
-var shared=function(a,b){ var n=0; for(var i=0;i<3;i++) if(a[i]===b[i]) n++; return n; };
+var shared=function(a,b){ var n=0; for(var i=0;i<Math.min(a.length,b.length);i++) if(a[i]===b[i]) n++; return n; };
 
 // Photo distractors: other photo words, closest spelling first (cat → hat, cap),
 // so the child must read every letter rather than guess from the first one.
-function photoChoices(target){
-  var others=shuffle(PHOTOS.filter(function(w){ return w!==target; }))
+function photoChoices(target, strand){
+  var others=shuffle(photosOf(strand).filter(function(w){ return w!==target; }))
     .sort(function(a,b){ return shared(b,target)-shared(a,target); });
   return shuffle([target, others[0], others[1]]);
 }
 // The differing letter between two same-length words (for the wrong-answer hint)
-function diffAt(a,b){ for(var i=0;i<a.length;i++) if(a[i]!==b[i]) return i; return -1; }
+function diffAt(a,b){ for(var i=0;i<Math.max(a.length,b.length);i++) if(a[i]!==b[i]) return i<a.length?i:a.length-1; return -1; }
 function spelled(word, mark){
   var s=el('span','spelled'); s.setAttribute('dir','ltr');
   word.split('').forEach(function(ch,i){ s.appendChild(el('span', i===mark?'hl':null, ch)); });
@@ -65,9 +78,10 @@ function spelled(word, mark){
 var app=document.getElementById('app');
 var S={lvl:0,round:0,score:0,items:[],misses:{},started:false};
 var roundId=0;
+window.__riState=function(){ var it=S.items[S.round]; return {lvl:S.lvl, round:S.round, n:S.items.length, target:it&&it.target, kind:it&&it.kind}; }; // test hook (read-only)
 
 function plan(level){
-  var reads=shuffle(level.read).slice(0,MAX_READ).map(function(w){ return {kind:'r', target:w, choices:photoChoices(w)}; });
+  var reads=shuffle(level.read).slice(0,MAX_READ).map(function(w){ return {kind:'r', target:w, choices:photoChoices(w, STRAND(level))}; });
   var hears=shuffle(level.hear).slice(0,ROUNDS-reads.length).map(function(q){ return {kind:'h', target:q[0], choices:shuffle(q)}; });
   return reads.concat(hears);
 }
@@ -75,7 +89,9 @@ function startLevel(i){ S.lvl=i; S.round=0; S.score=0; S.items=plan(LEVELS[i]); 
 
 function header(item){
   var lv=LEVELS[S.lvl], h=el('div','hud');
-  h.appendChild(el('div','hud-level',T('level')+' '+(S.lvl+1)+' '+T('of')+' '+LEVELS.length+' · '+T('vowel')+' "'+lv.id+'"'));
+  var hl=el('div','hud-level',T('level')+' '+(S.lvl+1)+' '+T('of')+' '+LEVELS.length+' · '+T(['vowel','magicE','digraph'][STRAND(lv)-1])+' ');
+  var tag=el('bdi','tag',lv.id.replace('_',STRAND(lv)===3?' · ':'_')); tag.setAttribute('dir','ltr'); hl.appendChild(tag);
+  h.appendChild(hl);
   h.appendChild(el('div','hud-label', item.kind==='r'?T('readTap'):T('hearPick')));
   var dots=el('div','dots');
   for(var i=0;i<S.items.length;i++) dots.appendChild(el('span','dot'+(i<S.round?' done':'')+(i===S.round?' now':'')));
@@ -128,7 +144,7 @@ function render(){
   app.appendChild(opts);
   fb=el('p','feedback'); fb.setAttribute('role','status'); app.appendChild(fb);
   row=el('div','row'); app.appendChild(row);
-  if(S.round===0 && S.lvl===0) app.appendChild(el('p','tip',T('tip')));
+  if(S.round===0 && S.lvl===STRAND_START[STRAND(lv)]) app.appendChild(el('p','tip',T(['tip','tip2','tip3'][STRAND(lv)-1])));
   if(item.kind==='h') setTimeout(function(){ if(live()) play(item.target); }, 250);
 }
 
@@ -155,7 +171,7 @@ function renderEnd(){
   var box=el('div','card');
   box.appendChild(el('h2',null,T('allDone')));
   var worst=null; LEVELS.forEach(function(l){ if((S.misses[l.id]||0)>(worst?S.misses[worst.id]:0)) worst=l; });
-  if(worst){ box.appendChild(el('p',null,T('hardest'))); var w=el('p','hard','"'+worst.id+'" — '+worst.read[0]); w.setAttribute('dir','ltr'); box.appendChild(w); }
+  if(worst){ box.appendChild(el('p',null,T('hardest'))); var w=el('p','hard',worst.id.replace('_',STRAND(worst)===3?' · ':'_')+' — '+worst.read[0]); w.setAttribute('dir','ltr'); box.appendChild(w); }
   else box.appendChild(el('p',null,T('allRight')));
   var again=el('button','primary',T('playAgain')); again.type='button';
   again.addEventListener('click',function(){ S.misses={}; startLevel(0); });
@@ -165,9 +181,14 @@ function renderEnd(){
   (box.querySelector('[data-kdm-primary]')||again).focus();
 }
 
-document.getElementById('startBtn').addEventListener('click',function(){
+function go(lvl){
   if(!S.started){ S.started=true; beacon('g_start','read-it'); }
   document.getElementById('menu').hidden=true;
-  startLevel(0);
+  startLevel(lvl);
+}
+document.getElementById('startBtn').addEventListener('click',function(){ go(0); });
+// Strand chips: a child who already reads CVC words can jump to magic e or digraphs
+Array.prototype.forEach.call(document.querySelectorAll('[data-strand]'),function(b){
+  b.addEventListener('click',function(){ go(STRAND_START[+b.getAttribute('data-strand')]); });
 });
 })();

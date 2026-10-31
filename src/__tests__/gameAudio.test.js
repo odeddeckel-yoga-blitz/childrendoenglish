@@ -36,11 +36,29 @@ describe('recorded word audio coverage', () => {
   it('every Read It! word has its own neighbour-checked recording in /audio/cvc/, and every picture exists', () => {
     const src = fs.readFileSync(path.join(ROOT, 'public/games/read-it/game.js'), 'utf8');
     const block = src.slice(src.indexOf('var LEVELS=['), src.indexOf('];', src.indexOf('var LEVELS=[')));
-    const words = [...new Set([...block.matchAll(/'([a-z]{3})'/g)].map((m) => m[1]))];
+    const words = [...new Set([...block.matchAll(/'([a-z]{3,})'/g)].map((m) => m[1]).filter((w) => !/_/.test(w)))];
     expect(words.length).toBeGreaterThanOrEqual(80);
     expect(words.filter((w) => !fs.existsSync(path.join(ROOT, 'public/audio/cvc', `${w}.mp3`)))).toEqual([]);
     const reads = [...block.matchAll(/read:\[([^\]]*)\]/g)].flatMap((m) => [...m[1].matchAll(/'([a-z]+)'/g)].map((x) => x[1]));
     expect(reads.filter((w) => !fs.existsSync(path.join(ROOT, 'public/images', `${w}.webp`)))).toEqual([]);
+  });
+
+  it('Read It! strands follow the phonics order: 5 short-vowel CVC levels, then magic e, then digraphs', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'public/games/read-it/game.js'), 'utf8');
+    const levels = [...src.matchAll(/\{id:'([a-z_]+)', read:\[([^\]]*)\], hear:\[(.*?)\]\]\}/g)].map((m) => ({
+      id: m[1], read: [...m[2].matchAll(/'([a-z]+)'/g)].map((x) => x[1]),
+      hear: [...m[3].matchAll(/\['([a-z]+)','([a-z]+)','([a-z]+)'/g)].map((x) => [x[1], x[2], x[3]]),
+    }));
+    expect(levels.map((l) => l.id)).toEqual(['a', 'i', 'o', 'u', 'e', 'a_e', 'i_e', 'o_e', 'sh_ch', 'th_ck']);
+    for (const l of levels) {
+      expect(l.read.length).toBeGreaterThanOrEqual(2); // short i has only pig and six
+      expect(l.hear.length).toBeGreaterThanOrEqual(6);
+      for (const q of l.hear) expect(new Set(q).size).toBe(3);
+    }
+    // magic e: every target is a silent-e word; digraphs: every target has its digraph
+    for (const l of levels.filter((x) => x.id.endsWith('_e'))) for (const [w] of l.hear) expect(w).toMatch(/[aeiou][^aeiou]e$/);
+    const DG = { sh_ch: /sh|ch/, th_ck: /th|ck/ };
+    for (const l of levels.filter((x) => DG[x.id])) for (const [w] of l.hear) expect(w).toMatch(DG[l.id]);
   });
 
   it('every Letter Twins word has a recording and a photo, starts with one of its level letters, and every letter appears', () => {
