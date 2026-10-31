@@ -51,10 +51,40 @@ const wordAudioUrl = (text) =>
 
 let currentWordAudio = null;
 
+// iOS Safari only lets a page start sound inside a tap (carried ~1 s through
+// timers). A quiz's first word plays after the async image preload, often past
+// that window, so it could stay silent and the child sees four pictures and no
+// word. Fix: on the first tap anywhere, play a silent clip on ONE shared <audio>
+// element (and an empty utterance), which unlocks that element for later
+// programmatic play. Every word then plays through the shared element.
+let sharedAudio = null;
+let unlocked = false;
+const unlockAudio = () => {
+  if (unlocked) return;
+  unlocked = true;
+  try {
+    sharedAudio = sharedAudio || new Audio();
+    sharedAudio.src = '/audio/_unlock.mp3';
+    const p = sharedAudio.play();
+    if (p && p.catch) p.catch(() => { unlocked = false; });
+  } catch { unlocked = false; }
+  try {
+    if (window.speechSynthesis) window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+  } catch { /* no TTS */ }
+};
+export const installAudioUnlock = () => {
+  if (typeof window === 'undefined') return;
+  for (const ev of ['touchend', 'pointerup', 'click', 'keydown']) {
+    window.addEventListener(ev, unlockAudio, { capture: true, passive: true });
+  }
+};
+
 const playWordFile = (text) => new Promise((resolve) => {
   try {
     if (currentWordAudio) { currentWordAudio.pause(); currentWordAudio = null; }
-    const audio = new Audio(wordAudioUrl(text));
+    const audio = sharedAudio || new Audio();
+    audio.onplaying = null; audio.onerror = null;
+    audio.src = wordAudioUrl(text);
     currentWordAudio = audio;
     audio.onplaying = () => resolve(true);
     audio.onerror = () => resolve(false);
@@ -65,16 +95,18 @@ const playWordFile = (text) => new Promise((resolve) => {
   }
 });
 
+// Resolves true when the word's audio file started playing (false = blocked or
+// missing; the on-device TTS fallback below can't report whether it spoke).
 export const speakWord = async (text) => {
-  if (!isSoundEnabled()) return;
+  if (!isSoundEnabled()) return true;
 
-  if (await playWordFile(text)) return;
+  if (await playWordFile(text)) return true;
 
   // If TTS status unknown, try initializing first
   if (ttsAvailable === null) {
     await initTTS();
   }
-  if (!ttsAvailable) return;
+  if (!ttsAvailable) return false;
 
   try {
     window.speechSynthesis.cancel();
@@ -93,6 +125,7 @@ export const speakWord = async (text) => {
   } catch (e) {
     console.warn('TTS failed:', e);
   }
+  return false;
 };
 
 // Play synthesized sound effects via Web Audio API

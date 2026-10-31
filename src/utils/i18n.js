@@ -170,6 +170,7 @@ const translations = {
     listenMatchQuiz: 'Listen & Match',
     listenMatchQuizDesc: 'Hear & see a word, pick the right image',
     tapToHear: 'Tap to hear again',
+    tapToHearWord: '👆 Tap to hear the word',
 
     // Learn Mode empty state
     tryDifferentSearch: 'Try a different search or category',

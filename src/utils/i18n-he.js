@@ -168,6 +168,7 @@ export default {
   listenMatchQuiz: 'הקשיבו והתאימו',
   listenMatchQuizDesc: 'שמעו וראו מילה, בחרו את התמונה הנכונה',
   tapToHear: 'הקישו כדי לשמוע שוב',
+  tapToHearWord: '👆 הקישו כדי לשמוע את המילה',
 
   // Learn Mode empty state
   tryDifferentSearch: 'נסו חיפוש או קטגוריה אחרת',

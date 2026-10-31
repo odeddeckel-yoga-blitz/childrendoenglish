@@ -25,9 +25,12 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
 
   // Reset loaded images when question changes
   const [prevIndex, setPrevIndex] = useState(0);
+  // The auto-played word was blocked (e.g. iOS outside a tap): pulse the speaker.
+  const [needTap, setNeedTap] = useState(false);
   if (quiz.currentIndex !== prevIndex) {
     setPrevIndex(quiz.currentIndex);
     setLoadedImages(new Set());
+    setNeedTap(false);
   }
 
   // Show one-time toast if TTS not available
@@ -42,8 +45,11 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
   // Auto-speak current word
   useEffect(() => {
     if (ttsOk && quiz.currentWord) {
-      const timer = setTimeout(() => speakWord(quiz.currentWord.word), 300);
-      return () => clearTimeout(timer);
+      let live = true;
+      const timer = setTimeout(() => {
+        Promise.resolve(speakWord(quiz.currentWord.word)).then((played) => { if (live && played === false) setNeedTap(true); });
+      }, 300);
+      return () => { live = false; clearTimeout(timer); };
     }
   }, [quiz.currentIndex, quiz.currentWord, ttsOk]);
 
@@ -81,16 +87,19 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
         {ttsOk ? (
           <>
             <button
-              onClick={() => speakWord(quiz.currentWord.word)}
-              className="mx-auto w-24 h-24 rounded-full bg-linear-to-br from-amber-400 to-amber-600
+              onClick={() => { setNeedTap(false); speakWord(quiz.currentWord.word); }}
+              data-need-tap={needTap ? '' : undefined}
+              className={`mx-auto w-24 h-24 rounded-full bg-linear-to-br from-amber-400 to-amber-600
                          flex items-center justify-center shadow-lg hover:shadow-xl
-                         active:scale-95 transition-all"
+                         active:scale-95 transition-all ${needTap ? 'animate-pulse ring-4 ring-amber-300' : ''}`}
               aria-label={t('hearAgain', lang)}
             >
               <Volume2 className="w-12 h-12 text-white" />
             </button>
             <p className="text-slate-400 text-sm flex items-center justify-center gap-2">
-              <RefreshCw className="w-3 h-3" /> {t('hearAgain', lang)}
+              {needTap
+                ? <span className="font-bold text-amber-700">{t('tapToHearWord', lang)}</span>
+                : <><RefreshCw className="w-3 h-3" /> {t('hearAgain', lang)}</>}
             </p>
             {quiz.answered && (
               <p className="text-2xl font-bold text-slate-800 dark:text-slate-100 animate-fade-in">{quiz.currentWord.word}</p>

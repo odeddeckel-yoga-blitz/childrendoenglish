@@ -168,6 +168,7 @@ export default {
   listenMatchQuiz: 'Escuchar y Emparejar',
   listenMatchQuizDesc: 'Escucha y ve una palabra, elige la imagen correcta',
   tapToHear: 'Toca para escuchar de nuevo',
+  tapToHearWord: '👆 Toca para escuchar la palabra',
 
   // Learn Mode empty state
   tryDifferentSearch: 'Prueba otra búsqueda o categoría',

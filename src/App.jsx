@@ -5,7 +5,7 @@ import Menu from './components/Menu';
 import LandingPage from './components/LandingPage';
 import Confetti from './components/Confetti';
 import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, updateStreak, updateDailyGoal, touchLastActive, shouldResumeActivePlayer } from './utils/storage';
-import { initTTS } from './utils/sound';
+import { initTTS, installAudioUnlock } from './utils/sound';
 import { isRTL, t, loadLocale } from './utils/i18n';
 import useQuizFlow from './hooks/useQuizFlow';
 import usePlayerManagement from './hooks/usePlayerManagement';
@@ -297,7 +297,7 @@ export default function App() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Init TTS
-  useEffect(() => { initTTS(); }, []);
+  useEffect(() => { initTTS(); installAudioUnlock(); }, []);
 
   // Online/offline detection
   useEffect(() => {

@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, act, fireEvent } from '@testing-library/react';
+import { speakWord } from '../utils/sound';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import AudioQuiz from '../components/AudioQuiz';
 
@@ -63,5 +64,29 @@ describe('AudioQuiz', () => {
   it('shows skip button', () => {
     render(<AudioQuiz {...defaultProps} />);
     expect(screen.getByText('Skip this word')).toBeInTheDocument();
+  });
+
+  // iOS can block the first word outside a tap: the speaker then pulses with a
+  // "tap to hear the word" line, and a tap clears it.
+  it('pulses the speaker when the auto-played word was blocked', async () => {
+    vi.useFakeTimers();
+    speakWord.mockResolvedValue(false);
+    render(<AudioQuiz {...defaultProps} />);
+    await act(async () => { await vi.advanceTimersByTimeAsync(400); });
+    expect(screen.getByText('👆 Tap to hear the word')).toBeInTheDocument();
+    const btn = document.querySelector('[data-need-tap]');
+    expect(btn).not.toBeNull();
+    fireEvent.click(btn);
+    expect(document.querySelector('[data-need-tap]')).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it('no pulse when the word played', async () => {
+    vi.useFakeTimers();
+    speakWord.mockResolvedValue(true);
+    render(<AudioQuiz {...defaultProps} />);
+    await act(async () => { await vi.advanceTimersByTimeAsync(400); });
+    expect(document.querySelector('[data-need-tap]')).toBeNull();
+    vi.useRealTimers();
   });
 });
