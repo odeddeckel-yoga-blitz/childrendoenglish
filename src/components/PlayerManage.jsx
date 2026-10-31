@@ -1,7 +1,7 @@
 import { useState, useRef, useCallback } from 'react';
 import { ArrowLeft, Trash2, RotateCcw, Plus, Pencil, Check, X, Download, Upload } from 'lucide-react';
 import { t } from '../utils/i18n';
-import { exportAllData, importAllData, loadPlayerRegistry } from '../utils/storage';
+import { exportAllData, importAllData } from '../utils/storage';
 import useFocusTrap from '../hooks/useFocusTrap';
 
 const AVATARS = ['🦊', '🐱', '🦁', '🐶', '🦄', '🐼', '🐸', '🦋', '🌟', '🚀', '🎨', '🎵'];
@@ -31,22 +31,18 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
   const handleConfirm = () => {
     if (!confirmAction) return;
     if (confirmAction.type === 'deleteAll') {
-      // Delete all app-specific keys instead of clearing everything
-      const appKeys = [
-        'childrendoenglish-players',
-        'childrendoenglish-stats',
-        'childrendoenglish-dark',
-        'childrendoenglish-sound',
-        'childrendoenglish-analytics-consent',
-        'childrendoenglish-install-dismissed',
-        'childrendoenglish-notif-enabled',
-        'childrendoenglish-last-reminder',
-      ];
-      const registry = loadPlayerRegistry();
-      if (registry) {
-        registry.players.forEach(p => appKeys.push(`childrendoenglish-player-${p.id}`));
+      // Delete every key this site writes (app, games, word pages: childrendoenglish-*,
+      // cde_*, cde-*) instead of clearing other sites' storage on the same origin. A fixed
+      // list missed newer keys (cde_seen, cde_lang, cde_class_unit…). cde_internal stays:
+      // it is the owner's own "don't count this device" flag, not a child's data.
+      const ours = (k) => k && /^(childrendoenglish-|cde[_-])/.test(k) && k !== 'cde_internal';
+      for (const store of [localStorage, sessionStorage]) {
+        try {
+          const keys = [];
+          for (let i = 0; i < store.length; i++) keys.push(store.key(i));
+          keys.filter(ours).forEach((k) => store.removeItem(k));
+        } catch { /* storage blocked */ }
       }
-      appKeys.forEach(key => localStorage.removeItem(key));
       window.location.reload();
       return;
     }

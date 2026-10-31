@@ -178,3 +178,24 @@ describe('PlayerManage', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });
+
+describe('Delete all data', () => {
+  it('removes every key the site writes, keeps the owner flag and other sites\' keys', () => {
+    const reload = vi.fn();
+    vi.stubGlobal('location', { ...window.location, reload });
+    for (const k of ['childrendoenglish-players', 'childrendoenglish-player-1', 'childrendoenglish-spelling-forge',
+      'cde_seen', 'cde_lang', 'cde_class_unit', 'cde_arcade', 'cde-menu-more', 'cde_internal', 'other-site']) localStorage.setItem(k, '1');
+    sessionStorage.setItem('cde-battle-v1', '1');
+    render(<PlayerManage {...defaultProps} />);
+    fireEvent.click(screen.getByText('deleteAllData'));
+    const confirms = screen.getAllByText('deleteAllData');
+    fireEvent.click(confirms[confirms.length - 1]);
+    const left = [];
+    for (let i = 0; i < localStorage.length; i++) left.push(localStorage.key(i));
+    expect(left.sort()).toEqual(['cde_internal', 'other-site']);
+    expect(sessionStorage.getItem('cde-battle-v1')).toBeNull();
+    expect(reload).toHaveBeenCalled();
+    localStorage.clear();
+    vi.unstubAllGlobals();
+  });
+});
