@@ -220,6 +220,65 @@ function howToHtml(heading, steps) {
       <ol style="margin:0 0 0 1.25rem;color:#475569">${steps.map((st) => `<li style="margin-bottom:0.3rem"><strong>${escapeHtml(st.name)}.</strong> ${escapeHtml(st.text)}</li>`).join('')}</ol>
     </section>`;
 }
+// "At a glance" block (roadmap G1): AI answer engines quote short tables and numbered
+// steps, so printables and tools open with what prints, how many words, which ages,
+// and a timed plan for one lesson. Plain HTML, no FAQ markup (R2X1).
+const LEVEL_AGES = { beginner: [6, 8, 1, 3], intermediate: [9, 10, 4, 5], advanced: [11, 12, 6, 7] };
+function levelSpan(words) {
+  const present = ['beginner', 'intermediate', 'advanced'].filter((l) => words.some((w) => w.level === l));
+  if (!present.length) return null;
+  const lo = LEVEL_AGES[present[0]], hi = LEVEL_AGES[present[present.length - 1]];
+  return { ages: `${lo[0]}-${hi[1]}`, grades: `${lo[2]}-${hi[3]}`, lo, hi, counts: present.map((l) => [l, words.filter((w) => w.level === l).length]) };
+}
+function glanceHtml({ caption, rows, stepsHeading, steps, dir = 'ltr' }) {
+  const td = 'padding:0.5rem 0.75rem;border-top:1px solid #e2e8f0;text-align:start;vertical-align:top';
+  return `<section class="glance no-print" dir="${dir}" style="margin:0 0 1.25rem">
+      <table style="width:100%;border-collapse:collapse;background:#fff;border-radius:0.75rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.08);font-size:0.92rem;margin-bottom:1rem">
+        <caption style="caption-side:top;text-align:start;font-weight:700;color:#334155;padding:0.5rem 0.75rem">${caption}</caption>
+        <tbody>${rows.map(([k, v]) => `<tr><th scope="row" style="${td};width:34%;color:#1e3a8a;background:#eff6ff">${k}</th><td style="${td}">${v}</td></tr>`).join('')}</tbody>
+      </table>
+      <section style="background:#fff;border-radius:0.75rem;padding:1rem 1.25rem;box-shadow:0 1px 3px rgba(0,0,0,0.08);font-size:0.93rem">
+        <h2 style="font-size:1.05rem;margin:0 0 0.5rem;color:#1e293b">${stepsHeading}</h2>
+        <ol style="margin:0;padding-inline-start:1.25rem;color:#475569">${steps.map(([name, mins, text]) => `<li style="margin-bottom:0.3rem"><strong>${name} (${mins}).</strong> ${text}</li>`).join('')}</ol>
+      </section>
+    </section>`;
+}
+const LEVEL_EN = { beginner: 'beginner', intermediate: 'intermediate', advanced: 'advanced' };
+const LEVEL_ES = { beginner: 'nivel inicial', intermediate: 'nivel intermedio', advanced: 'nivel avanzado' };
+function printGlanceEn(lower, words) {
+  const sp = levelSpan(words);
+  return glanceHtml({
+    caption: `${escapeHtml(lower.charAt(0).toUpperCase() + lower.slice(1))} flashcards at a glance`,
+    rows: [
+      ['What prints', `${words.length} photo flashcards (picture, English word, pronunciation, short definition, Hebrew translation), 3 across with cutting lines. The same page prints bingo cards, a word search and a picture crossword, each with an answer key.`],
+      ['How many words', `${words.length} ${escapeHtml(lower)} words${sp ? `: ${sp.counts.map(([l, n]) => `${n} ${LEVEL_EN[l]}`).join(', ')}` : ''}.`],
+      ['Ages and grades', sp ? `Ages ${sp.ages} (about grades ${sp.grades}). Start with the beginner words for ages 6-8.` : 'Ages 6-12.'],
+    ],
+    stepsHeading: `How to use the ${escapeHtml(lower)} cards in class (20 minutes)`,
+    steps: [
+      ['Warm up', '5 min', 'Hold up 5 cards one at a time. Say the word, the class repeats it, then ask a child to point to something similar in the room or in a book.'],
+      ['Play', '10 min', 'Run a bingo round with the printed call list, or give pairs a set of cards face down to play memory, saying each word they turn over.'],
+      ['Check', '5 min', 'Hand out the word search or the picture crossword as an exit task. The answer key prints with it.'],
+    ],
+  });
+}
+function printGlanceEs(lower, words) {
+  const sp = levelSpan(words);
+  return glanceHtml({
+    caption: `Tarjetas de ${escapeHtml(lower)}: resumen`,
+    rows: [
+      ['Qué se imprime', `${words.length} tarjetas con foto (imagen, palabra en inglés, pronunciación y traducción al español), 3 por fila con líneas de corte.`],
+      ['Cuántas palabras', `${words.length} palabras${sp ? `: ${sp.counts.map(([l, n]) => `${n} de ${LEVEL_ES[l]}`).join(', ')}` : ''}.`],
+      ['Edades', sp ? `De ${sp.lo[0]} a ${sp.hi[1]} años (más o menos de ${sp.lo[2]}.º a ${sp.hi[3]}.º grado). Empieza por las palabras de nivel inicial, para 6 a 8 años.` : 'De 6 a 12 años.'],
+    ],
+    stepsHeading: 'Cómo usarlas en clase o en casa (20 minutos)',
+    steps: [
+      ['Calentamiento', '5 min', 'Muestra 5 tarjetas una por una. Di la palabra en inglés y que el niño la repita.'],
+      ['Juego', '10 min', 'Pon las tarjetas boca abajo y jueguen a memoria: quien da vuelta una tarjeta dice la palabra en inglés.'],
+      ['Repaso', '5 min', 'Muestra la foto y tapa la palabra: ¿la recuerda? Aparta las que falló para repasarlas mañana.'],
+    ],
+  });
+}
 const PRINT_STEPS_EN = (what) => [
   { name: 'Open the set', text: `Open this ${what} flashcard page on a computer or tablet that can reach your printer.` },
   { name: 'Print', text: 'Click "Print These Flashcards" or press Ctrl+P (Cmd+P on Mac). The header, links and buttons are hidden automatically; only the cards print, 3 across, each with a dashed cutting border.' },
@@ -249,6 +308,26 @@ function levelTable(words, caption) {
       <tbody>${rows}</tbody>
     </table>`.replace(/<td>/g, '<td style="padding:0.5rem 0.75rem;border-top:1px solid #e2e8f0">');
 }
+
+// The listen-and-tap widget's CSS (mini-quiz, vocab-quiz.js): hub, age and guide pages.
+const GUIDE_QUIZ_CSS = `
+    .mini-quiz{background:#fff;border-radius:0.75rem;padding:1.4rem;margin:0 0 1rem;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
+    .mini-quiz h2{font-size:1.1rem;margin:0 0 0.3rem;color:#1e293b}
+    .mini-quiz .mq-sub{font-size:0.85rem;color:#4b5a6e;margin:0 0 0.8rem}
+    .say-btn{display:inline-block;margin:0 0 0.9rem;padding:0.55rem 1.2rem;border:0;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:700;font-size:1rem;cursor:pointer}
+    .say-btn.say-active{transform:scale(0.97)}
+    .mq-options{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap}
+    .mq-opt{border:3px solid #e2e8f0;border-radius:0.9rem;padding:0;background:#fff;cursor:pointer;overflow:hidden;transition:transform .12s}
+    .mq-opt img{display:block;width:112px;height:112px;object-fit:cover}
+    @media (max-width:420px){.mq-options{gap:0.5rem}.mq-opt img{width:84px;height:84px}}
+    .mq-opt:hover{transform:translateY(-2px)}
+    .mq-opt.mq-right{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.3)}
+    .mq-opt.mq-wrong{border-color:#ef4444;animation:mqshake .5s}
+    .mq-opt.mq-dim{opacity:.45}
+    @keyframes mqshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+    .mq-result{margin-top:1rem}
+    .mq-yay{font-size:1.15rem;font-weight:800;color:#059669;margin:0 0 0.6rem}
+    .mq-cta{display:inline-block;padding:0.75rem 1.5rem;background:#2563eb;color:#fff !important;border-radius:999px;font-weight:700;text-decoration:none}`;
 
 function buildCategoryPage(slug, displayName, words) {
   const url = `${SITE}/vocabulary/${slug}/`;
@@ -299,6 +378,13 @@ function buildCategoryPage(slug, displayName, words) {
     { q: `Do the ${lower} words include Hebrew and Spanish translations?`, a: `Yes. Every ${lower} word has a Hebrew translation on this page, and the Spanish version of this list is at /vocabulary/${slug}/spanish/. Audio is always in English.` },
   ]);
   const levelTableHtml = levelTable(words, `${displayName} words by level`);
+  // Play-first top (roadmap S2): the ages pages turn ~11% of views into a play, the
+  // hubs ~0%. One button straight into this topic's quiz, a 10-second try, then the list.
+  const playHref = `/new-player?topic=${slug}&utm_source=seo&utm_medium=cta`;
+  const quizPool = (beg.length >= 3 ? beg : words).slice(0, 6);
+  const playTop = `<a class="top-cta" href="${playHref}&utm_content=vocab_category_top">▶ Play ${escapeHtml(lower)} words free &mdash; no sign-up</a>
+    ${miniQuizHtml(quizPool, slug, { title: '🎮 Try one word in 10 seconds', sub: 'Listen, then tap the right picture.', cta: `Play 10 more ${escapeHtml(lower)} words free &rarr;`, content: 'vocab_category', href: `/new-player?topic=${slug}&utm_source=seo&utm_medium=miniquiz` })}
+    <p class="how-to"><strong>For parents:</strong> tap Play, let your child listen and pick the picture for about 5 minutes, then look through the words below together. No account, no ads.</p>`;
 
   const wordCards = words
     .map(
@@ -390,6 +476,9 @@ function buildCategoryPage(slug, displayName, words) {
     .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .cat-links a:hover { background: #2563eb; color: #fff; }
     .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
+    .top-cta { display: block; text-align: center; background: #b45309; color: #fff; font-weight: 800; font-size: 1.1rem; padding: 0.85rem 1rem; border-radius: 999px; text-decoration: none; margin: 0 auto 1rem; max-width: 420px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+    .how-to { margin: 0 0 1.5rem; color: #475569; font-size: 0.92rem; }
+    ${GUIDE_QUIZ_CSS}
   </style>
 </head>
 <body>
@@ -403,6 +492,7 @@ function buildCategoryPage(slug, displayName, words) {
   </div>
 
   <div class="container">
+    ${playTop}
     <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
     ${levelTableHtml}
 
@@ -411,7 +501,7 @@ function buildCategoryPage(slug, displayName, words) {
     </div>
 
     <div class="cta">
-      <a href="/?utm_source=seo&utm_medium=cta&utm_content=vocab_category">Practice These Words in the App &rarr;</a>
+      <a href="${playHref}&utm_content=vocab_category">Practice These Words in the App &rarr;</a>
       <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
 
@@ -2859,6 +2949,20 @@ function buildFlashcardMakerPage() {
   <h1>Free Printable Flashcard Maker</h1>
   <p class="sub">Photo flashcards for kids — pick from ${Math.floor(WORDS.length / 10) * 10}+ real-photo English words or paste your own list. Free, no login, no watermark.</p>
   <p class="hero-cite">The Children Do English flashcard maker creates printable photo flashcards with 4, 6 or 9 cards per page, Hebrew or Spanish card backs, and mirrored back pages so double-sided printing aligns perfectly — completely free.</p>
+  ${glanceHtml({
+    caption: 'The flashcard maker at a glance',
+    rows: [
+      ['What it makes', 'Double-sided photo flashcards: the picture and English word on the front, the Hebrew, Spanish or English word on the back. 4, 6 or 9 cards per A4 or Letter page.'],
+      ['How many words', `Pick any of ${WORDS.length} photo words in ${CATEGORIES.length} topics, all words starting with one letter, or paste your own list (unknown words become text cards).`],
+      ['Ages and grades', 'Ages 6-12 (about grades 1-7). Beginner topics such as animals, colors and food suit ages 6-8.'],
+    ],
+    stepsHeading: 'How to use it for one lesson (25 minutes)',
+    steps: [
+      ['Make the set', '5 min', 'Pick this week\'s topic or paste the words from your textbook unit, choose 6 per page, and print double-sided (flip on the long edge).'],
+      ['Teach', '10 min', 'Show the photo side, say the word, the class repeats it; flip the card to show the translation only after they try.'],
+      ['Practice', '10 min', 'Pairs quiz each other: one shows the photo, the other says the English word. Wrong cards go in a pile to review next lesson.'],
+    ],
+  })}
 
   <div class="panel">
     <div class="row" role="radiogroup" aria-label="Pick words">
@@ -3612,6 +3716,7 @@ ${FC_SHEETS_CSS}
     <button class="print-btn" data-print>Print These Flashcards</button>
     <a class="play-online no-print" href="/?utm_source=seo&utm_medium=cta&utm_content=flashcard_top">🎮 Or play these words online free &rarr;</a>
     <script defer src="/print-btn.js"></script>
+    ${printGlanceEn(lower, words)}
     ${howToHtml(`How to print the ${lower} flashcards`, steps)}
     <p class="lang-variant"><a href="/printable-flashcards/${slug}/spanish/">View these flashcards in English and Spanish &rarr;</a></p>
     ${printQrBlock(`${SITE}/printable-flashcards/${slug}/`, 'Scan to play these words online &mdash; free, no sign-up')}
@@ -3787,6 +3892,7 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
     <button class="print-btn" data-print>Print These Flashcards</button>
     <a class="play-online no-print" href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=flashcard_top_es">🎮 ¿Prefieres jugar? Practica en línea gratis, en español &rarr;</a>
     <script defer src="/print-btn.js"></script>
+    ${printGlanceEs(lowerEs, words)}
     ${howToHtml(`Cómo imprimir las tarjetas de ${lowerEs}`, steps)}
     <p class="lang-variant"><a href="/printable-flashcards/${slug}/">View the English-only version &rarr;</a></p>
     ${printQrBlock(`${SITE}/printable-flashcards/${slug}/spanish/`, 'Escanea para jugar con estas palabras &mdash; gratis, sin registro')}
@@ -4693,29 +4799,11 @@ const GUIDE_GEO = {
 // reading about it. Easy, unambiguous beginner animals; deterministic per guide.
 const GUIDE_QUIZ_POOL = ['dog', 'fish', 'bird', 'rabbit', 'horse', 'cow']
   .map((id) => WORDS.find((w) => w.id === id)).filter(Boolean);
-const GUIDE_QUIZ_CSS = `
-    .mini-quiz{background:#fff;border-radius:0.75rem;padding:1.4rem;margin:0 0 1rem;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
-    .mini-quiz h2{font-size:1.1rem;margin:0 0 0.3rem;color:#1e293b}
-    .mini-quiz .mq-sub{font-size:0.85rem;color:#4b5a6e;margin:0 0 0.8rem}
-    .say-btn{display:inline-block;margin:0 0 0.9rem;padding:0.55rem 1.2rem;border:0;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:700;font-size:1rem;cursor:pointer}
-    .say-btn.say-active{transform:scale(0.97)}
-    .mq-options{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap}
-    .mq-opt{border:3px solid #e2e8f0;border-radius:0.9rem;padding:0;background:#fff;cursor:pointer;overflow:hidden;transition:transform .12s}
-    .mq-opt img{display:block;width:112px;height:112px;object-fit:cover}
-    @media (max-width:420px){.mq-options{gap:0.5rem}.mq-opt img{width:84px;height:84px}}
-    .mq-opt:hover{transform:translateY(-2px)}
-    .mq-opt.mq-right{border-color:#10b981;box-shadow:0 0 0 3px rgba(16,185,129,.3)}
-    .mq-opt.mq-wrong{border-color:#ef4444;animation:mqshake .5s}
-    .mq-opt.mq-dim{opacity:.45}
-    @keyframes mqshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-    .mq-result{margin-top:1rem}
-    .mq-yay{font-size:1.15rem;font-weight:800;color:#059669;margin:0 0 0.6rem}
-    .mq-cta{display:inline-block;padding:0.75rem 1.5rem;background:#2563eb;color:#fff !important;border-radius:999px;font-weight:700;text-decoration:none}`;
 function guideQuizHtml(slug) {
   return miniQuizHtml(GUIDE_QUIZ_POOL, slug, { cta: 'Play 5 more free &mdash; no sign-up &rarr;', content: 'guide' });
 }
 // One listen-and-tap question from a pool, deterministic per seed (guides, age pages).
-function miniQuizHtml(pool, seed, { title = '🎮 Try it in 10 seconds', sub = 'This is how the app works: listen, then tap the right picture.', cta, content }) {
+function miniQuizHtml(pool, seed, { title = '🎮 Try it in 10 seconds', sub = 'This is how the app works: listen, then tap the right picture.', cta, content, href = '/?utm_source=seo&utm_medium=miniquiz' }) {
   if (pool.length < 3) return '';
   const hash = [...seed].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
   const word = pool[hash % pool.length];
@@ -4736,7 +4824,7 @@ function miniQuizHtml(pool, seed, { title = '🎮 Try it in 10 seconds', sub = '
       </div>
       <div class="mq-result" hidden>
         <p class="mq-yay">🎉 That&rsquo;s right &mdash; it was &ldquo;${escapeHtml(word.word)}&rdquo;!</p>
-        <a class="mq-cta" href="/?utm_source=seo&utm_medium=miniquiz&utm_content=${content}">${cta}</a>
+        <a class="mq-cta" href="${href}&utm_content=${content}">${cta}</a>
       </div>
     </div>
     <script defer src="/vocab-quiz.js"></script>`;
