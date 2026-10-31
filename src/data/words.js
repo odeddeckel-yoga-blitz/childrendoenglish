@@ -786,6 +786,15 @@ export const CONFUSABLE_PAIRS = [
   ['happy', 'smile'], ['bear', 'polar-bear'], ['horse', 'donkey'], ['hen', 'chicken'], ['rooster', 'chicken'],
   ['meat', 'meatballs'], ['meat', 'sausage'], ['meat', 'burger'], ['burger', 'meatballs'], ['sausage', 'hot-dog'],
   ['burger', 'sandwich'], ['cake', 'pie'], ['juice', 'lemonade'], ['lemon', 'lemonade'], ['bean', 'pea'],
+  // Hardest-words pass 2026-10-31 (28d wrong-rates in brackets): a picture that IS
+  // one of the options' subject makes two answers right.
+  // "bird" (45%) next to any specific bird; "wheel" (39%, picks: train, wagon)
+  // next to a wheeled vehicle; arrow (he 29%) vs archery (a bow and arrow);
+  // rope (35%) vs jump rope; seesaw (43%) vs playground; vase vs jar;
+  // apron (49%, picks: scarf, hoodie) vs dress (the apron icon reads as a dress).
+  ...['duck', 'owl', 'parrot', 'rooster', 'ostrich', 'quail', 'eagle', 'penguin', 'chicken', 'flamingo', 'peacock', 'hen', 'goose'].map((b) => ['bird', b]),
+  ...['wagon', 'bicycle', 'car', 'cart', 'scooter', 'skateboard', 'train', 'bus'].map((v) => ['wheel', v]),
+  ['arrow', 'archery'], ['rope', 'jump-rope'], ['seesaw', 'playground'], ['vase', 'jar'], ['apron', 'dress'],
 ];
 const CONFUSABLE = new Map();
 for (const [a, b] of CONFUSABLE_PAIRS) { (CONFUSABLE.get(a) || CONFUSABLE.set(a, new Set()).get(a)).add(b); (CONFUSABLE.get(b) || CONFUSABLE.set(b, new Set()).get(b)).add(a); }
