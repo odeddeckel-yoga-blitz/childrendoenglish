@@ -8,6 +8,8 @@ vi.mock('../utils/sound', () => ({
   speakWord: vi.fn(),
   isTTSAvailable: () => true,
   initTTS: vi.fn(),
+  isSlowAudio: () => false,
+  setSlowAudio: vi.fn(),
 }));
 
 vi.mock('../utils/haptic', () => ({

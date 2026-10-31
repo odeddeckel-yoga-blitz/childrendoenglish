@@ -31,10 +31,14 @@
   }
 
   var player = null;
+  // R2C9: 🐢 slow playback (0.75×, pitch kept) — remembered on this device.
+  var SLOW_KEY = 'cde_slow';
+  function slowOn() { try { return localStorage.getItem(SLOW_KEY) === '1'; } catch (e) { return false; } }
   function say(src) {
     try {
       if (player) player.pause();
       player = new Audio(src);
+      if (slowOn()) { player.playbackRate = 0.75; player.preservesPitch = true; }
       player.play().catch(function () { /* autoplay blocked — the 🔊 button is right there */ });
     } catch (e) { /* no audio support */ }
   }
@@ -232,6 +236,14 @@
       var big = el('button', { type: 'button', class: 'big-say', 'aria-label': 'השמעת המילה' }, '🔊');
       big.addEventListener('click', function () { say(it.audio); });
       box.appendChild(big);
+      var slow = el('button', { type: 'button', class: 'slow-say', 'aria-pressed': slowOn() ? 'true' : 'false', 'aria-label': 'השמעה איטית' }, '🐢 לאט');
+      slow.addEventListener('click', function () {
+        var on = !slowOn();
+        try { localStorage.setItem(SLOW_KEY, on ? '1' : '0'); } catch (e) { /* storage off: this tap only */ }
+        slow.setAttribute('aria-pressed', on ? 'true' : 'false');
+        say(it.audio);
+      });
+      box.appendChild(slow);
     }
     var fb = el('p', { class: 'feedback', role: 'status' });
 

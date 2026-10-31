@@ -570,6 +570,7 @@ export default {
   teacherBattle: 'קרב כיתתי',
   teacherPrint: 'כרטיסיות להדפסה',
   skipToContent: 'דילוג לתוכן',
+  slowAudio: 'לאט',
   retrySameWords: '🔁 שוב — אותן מילים',
   moreChoices: 'עוד אפשרויות',
   nextQuiz: '▶ לחידון הבא',

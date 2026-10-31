@@ -85,6 +85,10 @@ const playWordFile = (text) => new Promise((resolve) => {
     const audio = sharedAudio || new Audio();
     audio.onplaying = null; audio.onerror = null;
     audio.src = wordAudioUrl(text);
+    // R2C9: 🐢 slow playback (0.75×, pitch kept), a per-device setting
+    let slow = false; try { slow = localStorage.getItem('cde_slow') === '1'; } catch { /* storage off */ }
+    audio.playbackRate = slow ? 0.75 : 1;
+    if (slow) audio.preservesPitch = true;
     currentWordAudio = audio;
     audio.onplaying = () => resolve(true);
     audio.onerror = () => resolve(false);
@@ -97,6 +101,9 @@ const playWordFile = (text) => new Promise((resolve) => {
 
 // Resolves true when the word's audio file started playing (false = blocked or
 // missing; the on-device TTS fallback below can't report whether it spoke).
+export const isSlowAudio = () => { try { return localStorage.getItem('cde_slow') === '1'; } catch { return false; } };
+export const setSlowAudio = (on) => { try { localStorage.setItem('cde_slow', on ? '1' : '0'); } catch { /* storage off */ } };
+
 export const speakWord = async (text) => {
   if (!isSoundEnabled()) return true;
 

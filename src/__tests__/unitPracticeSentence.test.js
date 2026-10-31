@@ -19,7 +19,8 @@ function mount() {
     <button class="mode" data-mode="hear"></button><button class="mode" data-mode="gap"></button><button class="mode" data-mode="build"></button>
     <div id="practice"></div><p id="practice-live"></p><button data-copy-list>copy</button>
     <script type="application/json" id="unit-data">${JSON.stringify(ITEMS)}</script>`;
-  window.Audio = vi.fn(function () { return { play: () => Promise.resolve(), pause() {} }; });
+  window.__audios = [];
+  window.Audio = vi.fn(function (src) { const a = { src, play: () => Promise.resolve(), pause() {} }; window.__audios.push(a); return a; });
   navigator.sendBeacon = vi.fn(() => true);
   new Function(SRC)();
 }
@@ -80,5 +81,17 @@ describe('unit-practice sentence engine', () => {
     expect(writeText).toHaveBeenCalledWith(ITEMS.map((w) => `${w.en}\t${w.he}`).join('\n'));
     await Promise.resolve();
     expect(document.querySelector('[data-copy-list]').textContent).toContain('הועתקה');
+  });
+
+  it('🐢 slow: plays at 0.75× and stays on for the next words (R2C9)', () => {
+    localStorage.removeItem('cde_slow');
+    const slow = box().querySelector('.slow-say');
+    expect(slow.getAttribute('aria-pressed')).toBe('false');
+    slow.click();
+    expect(slow.getAttribute('aria-pressed')).toBe('true');
+    expect(window.__audios.at(-1).playbackRate).toBe(0.75);
+    box().querySelector('.big-say').click();
+    expect(window.__audios.at(-1).playbackRate).toBe(0.75);
+    localStorage.removeItem('cde_slow');
   });
 });

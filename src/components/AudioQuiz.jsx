@@ -4,7 +4,7 @@ import useQuizState from '../hooks/useQuizState';
 import QuizHeader from './QuizHeader';
 import QuitModal from './QuitModal';
 import QuizOptionGrid from './QuizOptionGrid';
-import { speakWord, isTTSAvailable } from '../utils/sound';
+import { speakWord, isTTSAvailable, isSlowAudio, setSlowAudio } from '../utils/sound';
 import { t } from '../utils/i18n';
 
 export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onAnswer, onQuit: _onQuit }) {
@@ -27,6 +27,7 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
   const [prevIndex, setPrevIndex] = useState(0);
   // The auto-played word was blocked (e.g. iOS outside a tap): pulse the speaker.
   const [needTap, setNeedTap] = useState(false);
+  const [slow, setSlow] = useState(isSlowAudio);
   if (quiz.currentIndex !== prevIndex) {
     setPrevIndex(quiz.currentIndex);
     setLoadedImages(new Set());
@@ -101,6 +102,15 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
                 ? <span className="font-bold text-amber-700">{t('tapToHearWord', lang)}</span>
                 : <><RefreshCw className="w-3 h-3" /> {t('hearAgain', lang)}</>}
             </p>
+            {/* R2C9: slow playback toggle (0.75×), remembered on this device */}
+            <button
+              type="button"
+              aria-pressed={slow}
+              onClick={() => { setSlowAudio(!slow); setSlow(!slow); speakWord(quiz.currentWord.word); }}
+              className={`mx-auto px-4 min-h-11 rounded-full border-2 text-sm font-bold ${slow ? 'bg-amber-100 border-amber-500 text-amber-800' : 'bg-white border-amber-200 text-amber-700'}`}
+            >
+              🐢 {t('slowAudio', lang)}
+            </button>
             {quiz.answered && (
               <p className="text-2xl font-bold text-slate-800 dark:text-slate-100 animate-fade-in">{quiz.currentWord.word}</p>
             )}

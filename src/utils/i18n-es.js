@@ -570,6 +570,7 @@ export default {
   teacherBattle: 'Batalla en clase',
   teacherPrint: 'Tarjetas imprimibles',
   skipToContent: 'Saltar al contenido',
+  slowAudio: 'Lento',
   retrySameWords: '🔁 Otra vez — las mismas palabras',
   moreChoices: 'Más opciones',
   nextQuiz: '▶ Siguiente quiz',
