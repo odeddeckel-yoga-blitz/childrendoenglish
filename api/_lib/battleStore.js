@@ -28,6 +28,7 @@
 import { isValidNickname } from './battleNames.js';
 import { maxPlausibleScore, isGroupMode, defaultTarget, isValidTarget } from './battleRules.js';
 import { teamOf, teamTotals, teamWinner } from './battleTeams.js';
+import { dbUrl } from './dbUrl.js';
 
 export const ROOM_TTL_MS = 30 * 60 * 1000; // 30 minutes
 export const MAX_PLAYERS = 60;
@@ -408,7 +409,7 @@ let storeInstance = null;
  */
 export function getBattleStore() {
   if (storeInstance) return storeInstance;
-  const url = process.env.CDE_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL;
+  const url = dbUrl();
   if (url) {
     storeInstance = new PgBattleStore(url);
   } else {

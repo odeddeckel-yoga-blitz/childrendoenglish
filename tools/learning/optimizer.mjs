@@ -41,6 +41,7 @@
  */
 import { neon } from '@neondatabase/serverless';
 import { WORDS } from '../../src/data/words.js';
+import { dbUrl } from '../../api/_lib/dbUrl.js';
 
 const TARGET_WRONG = 0.25; // above this wrong-rate a word is "hard"
 const FLOOR = 10;          // min attempts before we trust a word's rate
@@ -49,7 +50,7 @@ const days = Math.min(365, Math.max(1, Number(process.argv[2]) || 28));
 const top = Number((process.argv.find(a => a.startsWith('--top=')) || '').split('=')[1]) || 15;
 const doRivals = process.argv.includes('--rivals');
 
-const url = process.env.CDE_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL;
+const url = dbUrl();
 if (!url) { console.error('Set CDE_DATABASE_URL (neonctl connection-string — see header).'); process.exit(2); }
 const q = neon(url);
 
