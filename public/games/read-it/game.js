@@ -17,10 +17,10 @@ var LANG=window.CDE_LANG||'en';
 var LEVELS=[
   // strand 1 — short vowels
   {id:'a', read:['cat','hat','bat','jam','can','cap','bag','fan','map'], hear:[['cat','cut','cap'],['bag','big','bug'],['hat','hit','hot'],['pan','pen','pin'],['fan','fin','fun'],['bat','bit','bet'],['map','mop','mud'],['man','men','mud']]},
-  {id:'i', read:['pig','six'], hear:[['pig','peg','pug'],['pin','pan','pen'],['sit','sat','set'],['lip','lap','lid'],['fin','fan','fun'],['hit','hat','hot'],['big','bag','bug'],['zip','zap','dig']]},
-  {id:'o', read:['dog','fox','box'], hear:[['dog','dig','dot'],['pot','pit','pet'],['mop','map','men'],['top','tip','tap'],['log','leg','lot'],['hot','hit','hat'],['rob','rib','rub'],['hop','hip','hug']]},
-  {id:'u', read:['bus','sun','cup'], hear:[['cup','cap','cut'],['bug','bag','big'],['hum','ham','him'],['rug','rag','rub'],['mud','mad','mid'],['hug','hog','hum'],['tub','tab','tug'],['run','ran','rot']]},
-  {id:'e', read:['bed','pen','net','jet'], hear:[['pen','pan','pin'],['bed','bad','bud'],['ten','tan','tin'],['net','not','nap'],['red','rid','rod'],['jet','jam','pet'],['leg','log','peg'],['wet','web','wig']]},
+  {id:'i', read:['pig','six'], hear:[['pig','peg','pug'],['pin','pan','pen'],['sit','sat','set'],['tin','tan','ten'],['fin','fan','fun'],['hit','hat','hot'],['big','bag','bug'],['zip','zap','dig']]},
+  {id:'o', read:['dog','fox','box'], hear:[['dog','dig','dot'],['pot','pit','pet'],['mop','map','men'],['top','tip','tap'],['lot','lit','let'],['hot','hit','hat'],['fox','fix','fax'],['rod','red','rid']]},
+  {id:'u', read:['bus','sun','cup'], hear:[['cup','cap','cut'],['bug','bag','big'],['hum','ham','him'],['fun','fan','fin'],['mud','mad','mid'],['hug','hog','hum'],['tub','tab','tug'],['run','ran','rot']]},
+  {id:'e', read:['bed','pen','net','jet'], hear:[['pen','pan','pin'],['bed','bad','bud'],['ten','tan','tin'],['net','not','nap'],['red','rid','rod'],['jet','jam','pet'],['peg','pig','pug'],['wet','web','wig']]},
   // strand 2 — magic e: the silent e makes the vowel say its name
   {id:'a_e', read:['cake','gate','plate','snake','lake','cave','whale'], hear:[['cape','cap','cope'],['made','mad','mud'],['cane','can','cone'],['mane','man','mine'],['pane','pan','pine'],['bake','bike','cake'],['lake','lack','like'],['tape','tap','top']]},
   {id:'i_e', read:['kite','five','nine','dice','slide','smile','rice'], hear:[['kite','kit','cute'],['pine','pin','pane'],['bite','bit','bat'],['hide','hid','had'],['ride','rid','rode'],['fine','fin','fun'],['dime','dim','dice'],['ripe','rip','rope']]},
