@@ -189,7 +189,9 @@ ${body}
         <a class="share-btn" href="https://classroom.google.com/share?url=${pageUrl}" target="_blank" rel="noopener">שיתוף ב-Google Classroom</a>
         <a class="share-btn" href="https://teams.microsoft.com/share?href=${pageUrl}&amp;msgText=${shareText}" target="_blank" rel="noopener">שיתוף ב-Teams</a>
         <button type="button" class="share-btn" data-copy="${SITE}${path}">העתקת קישור</button>
+        <button type="button" class="share-btn" data-copy-list>📋 העתקת הרשימה (אנגלית ⇥ עברית)</button>
       </p>
+      <p class="center sheet-hint">"העתקת הרשימה" מעתיקה את המילים בשתי עמודות (אנגלית, עברית) — מדביקים ב-Google Sheets, ב-Excel, או ב-Quizlet ובכלים דומים דרך "ייבוא".</p>
     </section>
     <section class="section" aria-labelledby="faq-h">
       <h2 id="faq-h" class="section-title">שאלות נפוצות</h2>

@@ -42,6 +42,15 @@
   document.addEventListener('click', function (ev) {
     var s = ev.target.closest('[data-say]');
     if (s) say(s.getAttribute('data-say'));
+    // R2C16: the page's word list as TSV (English<TAB>Hebrew per line) for a sheet or a flashcard tool
+    var cl = ev.target.closest('[data-copy-list]');
+    if (cl) {
+      var d; try { d = JSON.parse(document.getElementById('unit-data').textContent); } catch (e) { d = []; }
+      var tsv = d.map(function (w) { return w.en + '\t' + w.he; }).join('\n');
+      var done = function () { cl.textContent = 'הרשימה הועתקה ✓ (' + d.length + ' מילים)'; beacon('sheet', 'tsv'); };
+      try { navigator.clipboard.writeText(tsv).then(done, function () { window.prompt('העתיקו את הרשימה:', tsv); }); }
+      catch (err) { window.prompt('העתיקו את הרשימה:', tsv); }
+    }
     var c = ev.target.closest('[data-copy]');
     if (c) {
       var url = c.getAttribute('data-copy');

@@ -27,7 +27,7 @@ const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 // gemini|claude|other); aie with every ai open, aiv once visible 5 s. Not opens.
 // mp = Sound Pairs answer per sound contrast (<p-b|a-u|e-a|th|th-d|ee-i|v-w>_<ok|no>) — public/games/sound-pairs;
 // cvc = Read It! answer per short vowel and activity (<a|i|o|u|e>_<r|h>_<ok|no>) — public/games/read-it;
-// sheet = a unit-page activity sheet printed (bingo|search) — public/unit-sheets.js;
+// sheet = a unit-page activity sheet printed (bingo|search) — public/unit-sheets.js — or the word list copied as TSV (tsv, public/unit-practice.js);
 // zv = a Word Zapper run's variant (<pics|words>-<all|animals|food|transport|things|nature>);
 // rs = app result screen (UX baseline 2026-10-31): <lo|hi|quit>_<view|retry|next|nextquiz|again|more|lightning|game|menu>, lo = under 70%;
 // ge = arcade end card: <game>_<view-good|view-low|next|again|menu> (public/games/end-card.js);

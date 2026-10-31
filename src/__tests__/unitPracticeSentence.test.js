@@ -17,7 +17,7 @@ const ITEMS = [
 function mount() {
   document.body.innerHTML = `
     <button class="mode" data-mode="hear"></button><button class="mode" data-mode="gap"></button><button class="mode" data-mode="build"></button>
-    <div id="practice"></div><p id="practice-live"></p>
+    <div id="practice"></div><p id="practice-live"></p><button data-copy-list>copy</button>
     <script type="application/json" id="unit-data">${JSON.stringify(ITEMS)}</script>`;
   window.Audio = vi.fn(function () { return { play: () => Promise.resolve(), pause() {} }; });
   navigator.sendBeacon = vi.fn(() => true);
@@ -71,5 +71,14 @@ describe('unit-practice sentence engine', () => {
     for (const t of toks) tile(t).click();
     expect(box().querySelector('.built').textContent).toBe(toks.join(''));
     expect(box().querySelector('.feedback').textContent).toBe('יפה! המשפט שלם.'); // one slip → not a first-try right
+  });
+
+  it('copy list: the page words as TSV (English, tab, Hebrew per line) — R2C16', async () => {
+    const writeText = vi.fn(() => Promise.resolve());
+    Object.assign(navigator, { clipboard: { writeText } });
+    document.querySelector('[data-copy-list]').click();
+    expect(writeText).toHaveBeenCalledWith(ITEMS.map((w) => `${w.en}\t${w.he}`).join('\n'));
+    await Promise.resolve();
+    expect(document.querySelector('[data-copy-list]').textContent).toContain('הועתקה');
   });
 });
