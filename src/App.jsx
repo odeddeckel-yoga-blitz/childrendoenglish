@@ -685,6 +685,12 @@ export default function App() {
             onNavigate={navigate}
             onQuickStart={() => quizFlow.startQuiz('beginner', 'listen', null, 'quick')}
             onContinueCycle={() => openLadder(starterFirst ? 'starter' : 'batch', null, true)}
+            onPickTopic={(topic) => {
+              // a topic from the mastery map: its words not yet mastered first (the quiz picks 10 by spaced repetition)
+              const inTopic = filterByKnownLetters(WORDS.filter((w) => w.category === topic), activePlayer?.knownLetters);
+              const open = inTopic.filter((w) => stats.wordMap?.[w.id]?.s !== 2);
+              quizFlow.startQuiz(null, 'audio', open.length >= 4 ? open : inTopic, 'map');
+            }}
             cycleInfo={(() => {
               const { batch, stage } = cycleState(stats);
               const kl = activePlayer?.knownLetters;

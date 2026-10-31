@@ -6,6 +6,8 @@ import { BADGES } from '../data/badges';
 import { playSound } from '../utils/sound';
 import { analytics } from '../utils/analytics';
 import { sendLearn, sendLearnBatch } from '../utils/learnBeacon';
+import { applyQuiz, topicsJustMastered, todayKey } from '../utils/mastery';
+import { WORDS } from '../data/words';
 
 // A player who has never finished a quiz nor answered a word (a quit keeps its
 // word progress, so this stays true only until the first real answer).
@@ -149,6 +151,7 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     // (safe against concurrent updates, StrictMode-friendly) AND once against
     // the current stats snapshot to derive the new-best flags for
     // the result screen. Nothing mutates stats mid-quiz, so both runs agree.
+    const today = todayKey();
     const completeQuiz = (prev) => {
       let updated = { ...prev };
       let arcadeNewBest = false;
@@ -202,6 +205,9 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
         updated.arcade = arcade;
       }
 
+      // Mastery map (kit RL16 rules, utils/mastery.js): first tries + re-asks
+      updated.wordMap = applyQuiz(updated.wordMap, { answers: answers || [], retries: results.retries || [] }, today).map;
+
       // Update word progress from answers
       if (answers) {
         let wp = { ...updated.wordProgress };
@@ -235,7 +241,12 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     };
 
     // Snapshot run: derive result-screen flags + reward sound
-    const { newBadges, arcadeNewBest } = completeQuiz(stats);
+    const { newBadges, arcadeNewBest, updated: after } = completeQuiz(stats);
+    // Mastery events from the same snapshot (the updater below may run twice)
+    const mm = applyQuiz(stats.wordMap, { answers: answers || [], retries: results.retries || [] }, today);
+    const mmEvents = mm.events.map(([e, i]) => ({ e, i }));
+    for (const c of topicsJustMastered(stats.wordMap || {}, after.wordMap || {}, WORDS)) mmEvents.push({ e: 'mm_tmast', i: c });
+    if (mmEvents.length) sendLearnBatch(mmEvents.slice(0, 30));
     if (newBadges.length > 0) {
       playSound('badge');
     }

@@ -3,11 +3,13 @@ import { sendLearn } from '../utils/learnBeacon';
 import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck } from 'lucide-react';
 import SpotlightCards from './SpotlightCards';
 import ClassWeekCard from './ClassWeekCard';
+import MasteryMap from './MasteryMap';
+import { WORDS } from '../data/words';
 import { t } from '../utils/i18n';
 
 import LanguagePicker from './LanguagePicker';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount: _dueCount = 0, todayCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart: _onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage, onContinueCycle, cycleInfo, onOpenSpotlightWord }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount: _dueCount = 0, todayCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart: _onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage, onContinueCycle, cycleInfo, onOpenSpotlightWord, onPickTopic }) {
 
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
   const isNewUser = stats.totalQuizzes === 0 && wordsLearned === 0;
@@ -144,6 +146,9 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <p className="text-slate-500 text-sm">{t('arcadeGamesDesc', lang)}</p>
           </div>
         </a>
+
+        {/* Mastery map (kit RL16): only once the child has answered a word; a topic tap starts a quiz */}
+        {onPickTopic && <MasteryMap wordMap={stats.wordMap} words={WORDS} lang={lang} onPickTopic={onPickTopic} />}
 
         {/* Everything else, behind one disclosure (persona P1/P2: a short kid menu =
             Continue · Game of the day · Games · More). Today leads when it has words. */}
