@@ -571,6 +571,7 @@ export default {
   teacherPrint: 'Tarjetas imprimibles',
   skipToContent: 'Saltar al contenido',
   slowAudio: 'Lento',
+  ladderSetStarter: '¡Palabras que ya conoces!',
   retrySameWords: '🔁 Otra vez — las mismas palabras',
   moreChoices: 'Más opciones',
   nextQuiz: '▶ Siguiente quiz',

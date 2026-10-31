@@ -97,11 +97,20 @@ export function batchLabel(batchIdx, knownLetters = null) {
  *  opts: { stats, knownLetters, letters (for 'letters'), size (default 10),
  *          seed (for 'surprise' — pass a session-stable number) }
  *  Returns { words, token } — token is the beacon batch-token ('b<idx>' | 'adhoc'). */
+// R2C4: a brand-new Hebrew-speaking player's first set — English words Hebrew
+// already uses (פיצה, בננה, טלפון…), each with a photo and our own gloss that
+// sounds like the English. Easiest first. "You already know these!"
+export const STARTER_IDS = ['banana', 'pizza', 'phone', 'robot', 'balloon', 'giraffe', 'zebra', 'penguin', 'dolphin', 'chocolate'];
+
 export function buildSet(source, opts = {}) {
   const size = opts.size || BATCH_SIZE;
   if (source === 'batch') {
     const { batch } = cycleState(opts.stats);
     return { words: batchWords(batch, opts.knownLetters), token: 'b' + batch };
+  }
+  if (source === 'starter') {
+    const byId = new Map(WORDS.map((w) => [w.id, w]));
+    return { words: STARTER_IDS.map((id) => byId.get(id)).filter(Boolean), token: 'starter' };
   }
   if (source === 'letters') {
     const chosen = new Set((opts.letters || []).map((l) => l.toLowerCase()));

@@ -571,6 +571,7 @@ export default {
   teacherPrint: 'כרטיסיות להדפסה',
   skipToContent: 'דילוג לתוכן',
   slowAudio: 'לאט',
+  ladderSetStarter: 'מילים שאתם כבר מכירים!',
   retrySameWords: '🔁 שוב — אותן מילים',
   moreChoices: 'עוד אפשרויות',
   nextQuiz: '▶ לחידון הבא',

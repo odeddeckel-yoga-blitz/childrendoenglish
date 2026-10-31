@@ -103,7 +103,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             {cycleInfo?.isNew ? t('startHere', lang) : t('cycleContinue', lang)}
           </p>
           <p className="text-lg font-black mt-1">
-            {t('cycleBatchTitle', lang, { num: (cycleInfo?.batch ?? 0) + 1, label: cycleInfo?.label || 'A' })}
+            {cycleInfo?.starter ? t('ladderSetStarter', lang) : t('cycleBatchTitle', lang, { num: (cycleInfo?.batch ?? 0) + 1, label: cycleInfo?.label || 'A' })}
           </p>
           <div className="flex items-center justify-between mt-2 text-sm text-blue-100">
             <span>{t('cycleStageOf', lang, { step: (cycleInfo?.stage ?? 0) + 1, total: cycleInfo?.stages ?? 3 })}</span>

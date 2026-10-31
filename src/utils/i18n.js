@@ -581,6 +581,7 @@ const translations = {
     teacherPrint: 'Printable flashcards',
     skipToContent: 'Skip to content',
     slowAudio: 'Slow',
+    ladderSetStarter: 'You already know these words!',
     retrySameWords: '🔁 Again — same words',
     moreChoices: 'More choices',
     nextQuiz: '▶ Next quiz',

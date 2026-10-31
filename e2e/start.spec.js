@@ -28,3 +28,22 @@ test('?topic= starts the first quiz on that topic', async ({ page }) => {
   const animalImgs = new Set(WORDS.filter((w) => w.category === 'animals').map((w) => w.imageUrl));
   expect(srcs.filter((s) => animalImgs.has(s)).length).toBeGreaterThanOrEqual(2);
 });
+
+test('a new Hebrew player starts on the "words you already know" set (R2C4)', async ({ page }) => {
+  await page.goto('/new-player?lang=he');
+  await page.getByRole('button', { name: /מתחילים לשחק/ }).click();
+  await expect(page.getByText('מילים שאתם כבר מכירים!')).toBeVisible({ timeout: 10000 });
+  await page.getByText('מילים שאתם כבר מכירים!').click();
+  // flashcards are shuffled: the first card is one of the starter words
+  const starter = ['banana', 'pizza', 'phone', 'robot', 'balloon', 'giraffe', 'zebra', 'penguin', 'dolphin', 'chocolate'];
+  await expect(page.getByText('Tap to flip').or(page.getByText(/להפוך|הקישו/)).first()).toBeVisible({ timeout: 10000 });
+  const src = await page.locator('.flashcard-front img, main img').first().getAttribute('src');
+  expect(starter.some((w) => src.includes(`/images/${w}.`))).toBe(true);
+});
+
+test('an English newcomer keeps the normal first batch', async ({ page }) => {
+  await page.goto('/new-player');
+  await page.getByRole('button', { name: 'Start playing' }).click();
+  await expect(page.getByText(/Word batch 1/)).toBeVisible({ timeout: 10000 });
+  await expect(page.getByText('You already know these words!')).toHaveCount(0);
+});

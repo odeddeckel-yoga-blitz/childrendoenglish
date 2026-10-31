@@ -331,6 +331,9 @@ export default function App() {
   // ⚡ Lightning Round finished: persist per-mode best + rounds count.
   // ---- Practice ladder controller ----------------------------------------
   const canReadNow = activePlayer?.canRead ?? true;
+  // R2C4: a brand-new player with the Hebrew interface starts on the loanword set
+  // ("You already know these!"); any progress at all → the normal batch path.
+  const starterFirst = lang === 'he' && !(stats.totalQuizzes || 0) && !Object.keys(stats.wordProgress || {}).length;
   const klNow = activePlayer?.knownLetters;
 
   // The active set: explicit ladderSet, else the current cycle batch.
@@ -361,7 +364,7 @@ export default function App() {
       setLadderSet(null);
     } else {
       const built = buildSet(source, { stats, knownLetters: klNow, letters, seed: sessionSeed });
-      const labels = { letters: t('ladderSetLetters', lang), surprise: t('ladderSetSurprise', lang), fresh: t('ladderSetFresh', lang) };
+      const labels = { letters: t('ladderSetLetters', lang), surprise: t('ladderSetSurprise', lang), fresh: t('ladderSetFresh', lang), starter: t('ladderSetStarter', lang) };
       setLadderSet({ ...built, source, label: labels[source] || '' });
       setAdhocPos({ done: [] });
     }
@@ -679,7 +682,7 @@ export default function App() {
             onDismissInstall={dismissInstall}
             onNavigate={navigate}
             onQuickStart={() => quizFlow.startQuiz('beginner', 'listen', null, 'quick')}
-            onContinueCycle={() => openLadder('batch', null, true)}
+            onContinueCycle={() => openLadder(starterFirst ? 'starter' : 'batch', null, true)}
             cycleInfo={(() => {
               const { batch, stage } = cycleState(stats);
               const kl = activePlayer?.knownLetters;
@@ -690,6 +693,7 @@ export default function App() {
                 mastered: masteredCount(stats),
                 totalBatches: batchCount(kl),
                 isNew: (stats.totalQuizzes || 0) === 0 && batch === 0 && stage === 0,
+                starter: starterFirst,
               };
             })()}
             onToggleDark={toggleDarkMode}
