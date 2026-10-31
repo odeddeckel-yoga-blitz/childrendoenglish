@@ -121,3 +121,31 @@ test('class battle: the teacher nudges the goal; a late join does not move it', 
   await expect(kids[2].locator('#kidGroup')).toHaveText(/🎯 \d+ \/ 14/);
   await expect(h.locator('#podiumTitle')).toHaveText('💪 So close! Try again?', { timeout: DUR * 1000 + 10000 });
 });
+
+// CUX20: the kid side in Hebrew (?lang=he): RTL screens, Hebrew join + lobby + team line,
+// English nicknames and the English word stay left-to-right; the teacher side stays English.
+test('kid screens in Hebrew', async ({ browser }) => {
+  const { page: teacher, code } = await host(browser, 'team');
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await wire(ctx);
+  const page = await ctx.newPage();
+  await page.goto('/battle/index.html?lang=he');
+  await expect(page.locator('#btnKid')).toHaveText('הצטרפות עם קוד');
+  await expect(page.locator('#sHome')).toHaveAttribute('dir', 'rtl');
+  await expect(page.locator('#sHome .langToggle')).toHaveText('English');
+  await page.click('#btnKid');
+  await expect(page.locator('#joinH')).toHaveText('הקלידו את קוד החדר');
+  await page.fill('#codeInput', 'ZZ');
+  await page.click('#btnCheckCode');
+  await expect(page.locator('#joinErr')).toHaveText(/5 אותיות/);
+  await page.fill('#codeInput', code);
+  await page.click('#btnCheckCode');
+  await expect(page.locator('#nameH')).toHaveText('בחרו שם לקרב!');
+  await expect(page.locator('#nameGrid')).toHaveAttribute('dir', 'ltr');
+  await page.locator('.namebtn').first().click();
+  await expect(page.locator('#kidHello')).toHaveText(/^היי, /);
+  await expect(page.locator('#kidTeam')).toHaveText(/^אתם בקבוצת .*(השביטים|הטילים)!$/);
+  await expect(teacher.locator('#btnStart')).toHaveText(/Start the Battle/);
+  await ctx.close();
+  await teacher.context().close();
+});

@@ -16,6 +16,7 @@ import {
   BATTLE_CATEGORIES, BATTLE_UNIT_CATEGORIES, BATTLE_DURATIONS, BATTLE_MODES, TEAM_NAMES, defaultTarget,
   normalizeCode, suggestNicknames, makeQuestion, pointsForAnswer,
 } from './battle-core.js';
+import { pickLang, applyLang, HE, ltr } from './battle-l10n.js';
 
 const API = '/api/live';
 const POLL_MS = 2000;
@@ -23,6 +24,8 @@ const SS_KEY = 'cde-battle-v1';
 const NO_REPEAT_WINDOW = 6;
 
 const $ = (id) => document.getElementById(id);
+// Kid screens in Hebrew (CUX20); the teacher/projector screens stay English.
+const HEB = pickLang() === 'he';
 const screens = ['sHome', 'sSetup', 'sHostLobby', 'sHostLive', 'sJoin', 'sName', 'sKidLobby', 'sPlay', 'sPodium'];
 
 /* ---------------- state ---------------- */
@@ -218,12 +221,12 @@ function render() {
     if (room.status === 'lobby') {
       if (S.view !== 'sKidLobby') {
         show('sKidLobby');
-        $('kidHello').textContent = `Hi, ${S.nickname}! ⚡`;
+        $('kidHello').textContent = HEB ? HE.hello(S.nickname) : `Hi, ${S.nickname}! ⚡`;
       }
       $('kidLobbyPlayers').replaceChildren(...room.players.map((p) => chip(p.nickname, room.mode === 'team' ? p.team : null)));
       const t = myTeam();
-      $('kidTeam').textContent = room.mode === 'team' && t !== null ? `You're on the ${teamLabel(t)}!`
-        : room.mode === 'class' ? '🎯 Your whole class has one goal together!' : '';
+      $('kidTeam').textContent = room.mode === 'team' && t !== null ? (HEB ? HE.onTeam(teamLabel(t)) : `You're on the ${teamLabel(t)}!`)
+        : room.mode === 'class' ? (HEB ? HE.classGoal : '🎯 Your whole class has one goal together!') : '';
     } else if (room.status === 'running') {
       if (S.view !== 'sPlay') {
         show('sPlay');
@@ -255,7 +258,8 @@ function renderKidHud() {
   } else if (S.room && S.room.mode === 'class') {
     pill.hidden = false;
     pill.style.borderColor = '';
-    pill.textContent = `🎯 ${S.room.classTotal} / ${S.room.target}`;
+    const goal = `${S.room.classTotal} / ${S.room.target}`;
+    pill.textContent = `🎯 ${HEB ? ltr(goal) : goal}`;
   } else {
     pill.hidden = true;
   }
@@ -269,13 +273,13 @@ function chip(text, team = null) {
 }
 
 const isGroup = (room) => room && (room.mode === 'team' || room.mode === 'class');
-const teamLabel = (t) => `${TEAM_NAMES[t].icon} ${TEAM_NAMES[t].name}`;
+const teamLabel = (t) => `${TEAM_NAMES[t].icon} ${HEB ? HE.team[t] : TEAM_NAMES[t].name}`;
 const myTeam = () => {
   const me = S.room && S.room.players.find((p) => p.id === S.playerId);
   return me ? me.team : null;
 };
 const TARGET_STEP = 5;
-const words = (n) => `${n} word${n === 1 ? '' : 's'}`;
+const words = (n) => (HEB ? HE.words(n) : `${n} word${n === 1 ? '' : 's'}`);
 function lobbyTarget(n) {
   return Math.max(TARGET_STEP, defaultTarget(n, S.room ? S.room.durationSec : S.durationSec) + TARGET_STEP * S.targetNudge);
 }
@@ -291,10 +295,10 @@ function renderTeams(el, room) {
     bar.className = 'bar';
     bar.style.width = `${Math.round((t.avg / max) * 100)}%`;
     const name = document.createElement('span');
-    name.textContent = `${teamLabel(t.team)} · ${t.members} player${t.members === 1 ? '' : 's'}`;
+    name.textContent = `${teamLabel(t.team)} · ${HEB ? HE.members(t.members) : `${t.members} player${t.members === 1 ? '' : 's'}`}`;
     const sc = document.createElement('span');
     sc.className = 'sc';
-    sc.textContent = `${t.avg} per player · ${words(t.total)}`;
+    sc.textContent = `${HEB ? HE.perPlayer(t.avg) : `${t.avg} per player`} · ${words(t.total)}`;
     row.append(bar, name, sc);
     return row;
   }));
@@ -309,7 +313,7 @@ function renderGoal(el, room) {
   bar.style.width = `${Math.min(100, Math.round((room.classTotal / Math.max(1, room.target || 1)) * 100))}%`;
   const txt = document.createElement('span');
   txt.className = 'gtxt';
-  txt.textContent = `🎯 ${room.classTotal} / ${words(room.target)}`;
+  txt.textContent = HEB ? `🎯 ${ltr(room.classTotal)} / ${words(room.target)}` : `🎯 ${room.classTotal} / ${words(room.target)}`;
   row.append(bar, txt);
   el.replaceChildren(row);
 }
@@ -338,26 +342,31 @@ function renderGroupPodium() {
   const room = S.room;
   $('podiumTop').replaceChildren();
   if (room.mode === 'team') {
-    $('podiumTitle').textContent = room.winner === null ? '🤝 It’s a tie!' : `🏆 The ${teamLabel(room.winner)} win!`;
+    $('podiumTitle').textContent = room.winner === null ? (HEB ? HE.tie : '🤝 It’s a tie!')
+      : (HEB ? HE.teamWins(teamLabel(room.winner)) : `🏆 The ${teamLabel(room.winner)} win!`);
     renderTeams($('podiumList'), room);
   } else {
     const hit = room.classTotal >= room.target;
-    $('podiumTitle').textContent = hit ? '🎉 Class goal reached!' : '💪 So close! Try again?';
+    $('podiumTitle').textContent = HEB ? (hit ? HE.goalHit : HE.goalMiss) : hit ? '🎉 Class goal reached!' : '💪 So close! Try again?';
     renderGoal($('podiumList'), room);
   }
   if (S.role === 'kid') {
     const t = myTeam();
-    const forWhom = room.mode === 'team' && t !== null ? `the ${teamLabel(t)}` : 'your class';
-    $('podiumSelf').textContent = `${S.nickname}, you got ${words(S.correct)} right for ${forWhom}!`;
+    if (HEB) {
+      $('podiumSelf').textContent = HE.groupSelf(S.nickname, S.correct, room.mode === 'team' && t !== null ? teamLabel(t) : HE.yourClass);
+    } else {
+      const forWhom = room.mode === 'team' && t !== null ? `the ${teamLabel(t)}` : 'your class';
+      $('podiumSelf').textContent = `${S.nickname}, you got ${words(S.correct)} right for ${forWhom}!`;
+    }
   } else {
-    $('podiumSelf').textContent = 'Great teamwork, everyone! 🎉';
+    $('podiumSelf').textContent = HEB ? HE.teamwork : 'Great teamwork, everyone! 🎉';
   }
 }
 
 function renderPodium() {
   if (S.view !== 'sPodium') show('sPodium');
   if (isGroup(S.room)) { renderGroupPodium(); return; }
-  $('podiumTitle').textContent = '🏆 Battle over!';
+  $('podiumTitle').textContent = HEB ? '🏆 הקרב נגמר!' : '🏆 Battle over!';
   const players = S.room.players;
   const medals = ['🥇', '🥈', '🥉'];
   const order = [1, 0, 2]; // 2nd — 1st — 3rd visual layout
@@ -373,7 +382,7 @@ function renderPodium() {
     name.textContent = p.nickname;
     const score = document.createElement('div');
     score.className = 'pscore';
-    score.textContent = `${p.score} pts`;
+    score.textContent = HEB ? HE.pts(p.score) : `${p.score} pts`;
     const block = document.createElement('div');
     block.className = 'block';
     step.append(medal, name, score, block);
@@ -383,10 +392,11 @@ function renderPodium() {
   if (S.role === 'kid') {
     const rank = players.findIndex((p) => p.id === S.playerId) + 1;
     $('podiumSelf').textContent = rank > 0
-      ? `${S.nickname}, you finished #${rank} with ${S.score} points (${S.correct}/${S.answered} correct)!`
+      ? (HEB ? HE.soloSelf(S.nickname, rank, S.score, S.correct, S.answered)
+        : `${S.nickname}, you finished #${rank} with ${S.score} points (${S.correct}/${S.answered} correct)!`)
       : '';
   } else {
-    $('podiumSelf').textContent = 'Great battle, everyone! 🎉';
+    $('podiumSelf').textContent = HEB ? HE.greatBattle : 'Great battle, everyone! 🎉';
   }
 }
 
@@ -519,20 +529,20 @@ async function checkCode() {
   $('joinErr').textContent = '';
   const code = normalizeCode($('codeInput').value);
   if (!code) {
-    $('joinErr').textContent = 'Codes are 5 letters — check the big screen!';
+    $('joinErr').textContent = (HEB ? HE.errCode : 'Codes are 5 letters — check the big screen!');
     return;
   }
   const room = await apiState(code);
   if (room === 'offline') {
-    $('joinErr').textContent = 'No connection — check your internet and try again.';
+    $('joinErr').textContent = (HEB ? HE.errOffline : 'No connection — check your internet and try again.');
     return;
   }
   if (!room) {
-    $('joinErr').textContent = 'Hmm, no room with that code. Check the big screen!';
+    $('joinErr').textContent = (HEB ? HE.errNoRoom : 'Hmm, no room with that code. Check the big screen!');
     return;
   }
   if (room.status === 'finished') {
-    $('joinErr').textContent = 'That battle already finished — ask for a new code.';
+    $('joinErr').textContent = (HEB ? HE.errFinished : 'That battle already finished — ask for a new code.');
     return;
   }
   S.code = code;
@@ -568,14 +578,14 @@ async function joinAs(nickname) {
     startLoops();
   } catch (e) {
     if (e.code === 'nickname_taken') {
-      $('nameErr').textContent = 'Someone grabbed that name — pick another!';
+      $('nameErr').textContent = (HEB ? HE.errTaken : 'Someone grabbed that name — pick another!');
       renderNamePicker();
     } else if (e.code === 'room_full') {
-      $('nameErr').textContent = 'This room is full (60 players max).';
+      $('nameErr').textContent = (HEB ? HE.errFull : 'This room is full (60 players max).');
     } else if (e.code === 'room_finished') {
-      $('nameErr').textContent = 'That battle already finished — ask for a new code.';
+      $('nameErr').textContent = (HEB ? HE.errFinished : 'That battle already finished — ask for a new code.');
     } else {
-      $('nameErr').textContent = 'Could not join — please try again.';
+      $('nameErr').textContent = (HEB ? HE.errJoin : 'Could not join — please try again.');
     }
   }
 }
@@ -626,6 +636,7 @@ async function resume() {
 }
 
 function boot() {
+  applyLang(HEB ? 'he' : 'en', $);
   $('btnTeacher').addEventListener('click', () => { renderSetup(); show('sSetup'); });
   $('btnKid').addEventListener('click', () => show('sJoin'));
   $('btnCreate').addEventListener('click', createRoom);
