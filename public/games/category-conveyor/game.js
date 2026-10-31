@@ -53,7 +53,7 @@ const WORDS = [
   {id:'juice',en:'juice',he:'מיץ',es:'jugo',cat:'food'},{id:'potato',en:'potato',he:'תפוח אדמה',es:'papa',cat:'food'},
   {id:'cucumber',en:'cucumber',he:'מלפפון',es:'pepino',cat:'food'},{id:'icecream',en:'ice cream',he:'גלידה',es:'helado',cat:'food'},
   {id:'popcorn',en:'popcorn',he:'פופקורן',es:'palomitas',cat:'food'},{id:'cheese',en:'cheese',he:'גבינה',es:'queso',cat:'food'},
-  {id:'cookie',en:'cookie',he:'עוגיה',es:'galleta',cat:'food'},{id:'grape',en:'grape',he:'ענב',es:'uva',cat:'food'},
+  {id:'cookie',en:'cookie',he:'עוגיה',es:'galleta',cat:'food'},{id:'grapes',en:'grapes',he:'ענבים',es:'uvas',cat:'food'},
   {id:'tomato',en:'tomato',he:'עגבנייה',es:'tomate',cat:'food'},
   {id:'orange',en:'orange',he:'תפוז',es:'naranja',cat:'food',tricky:'🍊 orange is a FRUIT here — look at the picture!'},
   // transport (16)

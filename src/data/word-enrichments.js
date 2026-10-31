@@ -1519,7 +1519,7 @@ export const ENRICHMENTS = {
       "dessert"
     ]
   },
-  "grape": {
+  "grapes": {
     "sentences": [
       "She plucked a small bunch of sweet green grapes off the vine in the greenhouse.",
       "He popped grapes one by one into his mouth as he watched his favorite show.",
@@ -4469,7 +4469,7 @@ export const ENRICHMENTS = {
     "relatedWords": [
       "pencil",
       "marker",
-      "crayon",
+      "crayons",
       "ink"
     ]
   },
@@ -4509,7 +4509,7 @@ export const ENRICHMENTS = {
     "relatedWords": [
       "pen",
       "eraser",
-      "crayon",
+      "crayons",
       "marker"
     ]
   },
@@ -4531,26 +4531,6 @@ export const ENRICHMENTS = {
       "correction fluid",
       "rubber",
       "pen"
-    ]
-  },
-  "crayon": {
-    "sentences": [
-      "She used a yellow crayon to color the big bright sun in her picture.",
-      "The toddler drew all over the wall with a purple crayon.",
-      "His box of crayons had every color he could ever need."
-    ],
-    "funFact": "The famous Crayola brand was founded in 1903, and their first box had only 8 colors costing 5 cents! Today Crayola makes over 120 different crayon colors. The average child wears down 730 crayons by their 10th birthday. The scent of crayons is so well-known that it is listed as one of the top 20 most recognizable scents to American adults!",
-    "collocations": [
-      "color with crayons",
-      "box of crayons",
-      "wax crayon",
-      "crayon drawing"
-    ],
-    "relatedWords": [
-      "pencil",
-      "marker",
-      "paintbrush",
-      "colored pencil"
     ]
   },
   "notebook": {
@@ -4687,7 +4667,7 @@ export const ENRICHMENTS = {
       "fine paintbrush"
     ],
     "relatedWords": [
-      "crayon",
+      "crayons",
       "paint",
       "canvas",
       "art"
@@ -4807,7 +4787,7 @@ export const ENRICHMENTS = {
       "wax crayons"
     ],
     "relatedWords": [
-      "crayon",
+      "crayons",
       "marker",
       "colored pencil",
       "paint"

@@ -209,7 +209,6 @@ export const WORDS = [
   // Intermediate
   { id: 'pencil', word: 'pencil', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A writing tool made of wood with graphite inside', exampleSentence: 'Sharpen your pencil before the test.', phonetic: '/ˈpɛnsəl/', hebrewTranslation: 'עיפרון', imageUrl: '/images/pencil.webp' },
   { id: 'eraser', word: 'eraser', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A small rubber tool for removing pencil marks', exampleSentence: 'Use the eraser to fix your mistake.', phonetic: '/ɪˈreɪsər/', hebrewTranslation: 'מחק', imageUrl: '/images/eraser.webp' },
-  { id: 'crayon', word: 'crayon', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A colored wax stick for drawing', exampleSentence: 'She colored the picture with a red crayon.', phonetic: '/ˈkreɪɒn/', hebrewTranslation: 'צבע שעווה', imageUrl: '/images/crayon.webp' },
   { id: 'notebook', word: 'notebook', level: 'intermediate', partOfSpeech: 'noun', category: 'school', definition: 'A small book with blank pages for writing', exampleSentence: 'Write the homework in your notebook.', phonetic: '/ˈnoʊtˌbʊk/', hebrewTranslation: 'מחברת', imageUrl: '/images/notebook.webp' },
   // Advanced
   { id: 'scissors', word: 'scissors', level: 'advanced', partOfSpeech: 'noun', category: 'school', definition: 'A tool with two blades for cutting paper', exampleSentence: 'Cut along the line with scissors.', phonetic: '/ˈsɪzərz/', hebrewTranslation: 'מספריים', imageUrl: '/images/scissors.webp' },
@@ -282,7 +281,6 @@ export const WORDS = [
   // FOOD +5
   { id: 'cheese', word: 'cheese', level: 'beginner', partOfSpeech: 'noun', category: 'food', definition: 'A food made from milk that can be soft or hard', exampleSentence: 'I put cheese on my sandwich.', phonetic: '/tʃiːz/', hebrewTranslation: 'גבינה', imageUrl: '/images/cheese.webp' },
   { id: 'cookie', word: 'cookie', level: 'beginner', partOfSpeech: 'noun', category: 'food', definition: 'A small sweet baked treat', exampleSentence: 'She ate a chocolate chip cookie.', phonetic: '/ˈkʊki/', hebrewTranslation: 'עוגיה', imageUrl: '/images/cookie.webp' },
-  { id: 'grape', word: 'grape', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'A small round fruit that grows in bunches', exampleSentence: 'We picked grapes from the vine.', phonetic: '/ɡreɪp/', hebrewTranslation: 'ענב', imageUrl: '/images/grape.webp' },
   { id: 'pasta', word: 'pasta', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'A food made from flour and water, like spaghetti', exampleSentence: 'We had pasta with tomato sauce.', phonetic: '/ˈpæstə/', hebrewTranslation: 'פסטה', imageUrl: '/images/pasta.webp' },
   { id: 'pancake', word: 'pancake', level: 'advanced', partOfSpeech: 'noun', category: 'food', definition: 'A thin flat cake cooked in a pan', exampleSentence: 'Dad made pancakes for breakfast.', phonetic: '/ˈpænkeɪk/', hebrewTranslation: 'פנקייק', imageUrl: '/images/pancake.webp' },
 
@@ -767,9 +765,9 @@ export const CONFUSABLE_PAIRS = [
   // batch-4 review: a shopping cart and a kids' wagon are both 'עגלה'; white vs cream spheres
   ['cart', 'wagon'], ['white', 'cream'],
   // batch-5 (drawn-icon) review: singular/plural glosses differ (ענב/ענבים); fear faces sit one emoji apart
-  ['grape', 'grapes'], ['nervous', 'scared'], ['scared', 'worried'],
+  ['nervous', 'scared'], ['scared', 'worried'],
   // batch-6 full photo review: same object/activity photographed for both words
-  ['crayon', 'crayons'], ['pasta', 'spaghetti'], ['pasta', 'noodles'], ['spaghetti', 'noodles'],
+  ['pasta', 'spaghetti'], ['pasta', 'noodles'], ['spaghetti', 'noodles'],
   ['tennis', 'badminton'], ['climb_verb', 'climbing'], ['paint_verb', 'paintbrush'],
   ['goal', 'soccer'], ['goal', 'net'], ['curtain', 'window'],
   ['mirror', 'vase'], // mirror photo reflects a vase; no clean replacement on Commons
@@ -780,7 +778,7 @@ export const CONFUSABLE_PAIRS = [
   ['kitchen', 'dining-room'], ['sofa', 'living-room'], ['dining-room', 'living-room'], ['house', 'apartment'],
   ['computer', 'keyboard'], ['computer', 'tablet'], ['phone', 'tablet'], ['clock', 'watch'],
   ['book', 'bookstore'], ['bookshelf', 'bookstore'], ['library', 'bookstore'], ['garden', 'park'], ['park', 'playground'],
-  ['slide', 'playground'], ['shorts', 'pants'], ['jeans', 'pants'], ['drawing', 'painting'], ['crayon', 'drawing'],
+  ['slide', 'playground'], ['shorts', 'pants'], ['jeans', 'pants'], ['drawing', 'painting'], ['crayons', 'drawing'],
   ['paintbrush', 'painting'], ['ball', 'baseball'], ['bat', 'baseball'], ['skateboard', 'skateboarding'],
   ['tennis', 'table-tennis'], ['tennis', 'tennis-racket'], ['bat', 'tennis-racket'], ['beach', 'sand'], ['desert', 'sand'],
   ['happy', 'smile'], ['bear', 'polar-bear'], ['horse', 'donkey'], ['hen', 'chicken'], ['rooster', 'chicken'],

@@ -168,6 +168,26 @@
       "permanent": true
     },
     {
+      "source": "/vocabulary/food/grape",
+      "destination": "/vocabulary/food/grapes/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/food/grape/",
+      "destination": "/vocabulary/food/grapes/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/crayon",
+      "destination": "/vocabulary/school/crayons/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/crayon/",
+      "destination": "/vocabulary/school/crayons/",
+      "permanent": true
+    },
+    {
       "source": "/vocabulary/colors/amber",
       "destination": "/vocabulary/colors/",
       "permanent": true

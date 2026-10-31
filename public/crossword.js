@@ -125,7 +125,8 @@
       var key = res.placed.length * 1000 - res.rows * res.cols;
       if (!best || key > best.key) { best = res; best.key = key; }
     }
-    if (!best) return null;
+    // nothing fit the page: fewer words make a tighter grid
+    if (!best) return max > 6 ? make(words, Object.assign({}, opts, { max: max - 2, rnd: rnd })) : null;
     delete best.key;
     best.skipped = rejected; // not a–z or too long/short: never offered to the layout
     return best;

@@ -29,7 +29,7 @@ const WORDS=[
 {id:'ship',en:'ship',he:'ספינה',es:'barco'},{id:'star',en:'star',he:'כוכב',es:'estrella'},{id:'tent',en:'tent',he:'אוהל',es:'carpa'},{id:'vest',en:'vest',he:'אפודה',es:'chaleco'},
 {id:'beige',en:'beige',he:'בז\'',es:'beige'},{id:'brave',en:'brave',he:'אמיץ',es:'valiente'},{id:'brown',en:'brown',he:'חום',es:'marrón'},
 {id:'cliff',en:'cliff',he:'צוק',es:'acantilado'},{id:'cream',en:'cream',he:'קרם',es:'crema'},{id:'dress',en:'dress',he:'שמלה',es:'vestido'},{id:'fence',en:'fence',he:'גדר',es:'cerca'},
-{id:'grape',en:'grape',he:'ענב',es:'uva'},{id:'happy',en:'happy',he:'שמח',es:'feliz'},{id:'horse',en:'horse',he:'סוס',es:'caballo'},{id:'kayak',en:'kayak',he:'קייאק',es:'kayak'},
+{id:'grapes',en:'grapes',he:'ענבים',es:'uvas'},{id:'happy',en:'happy',he:'שמח',es:'feliz'},{id:'horse',en:'horse',he:'סוס',es:'caballo'},{id:'kayak',en:'kayak',he:'קייאק',es:'kayak'},
 {id:'paint_verb',en:'paint',he:'לצבוע',es:'pintar'},{id:'peach',en:'peach',he:'אפרסק',es:'durazno'},{id:'pizza',en:'pizza',he:'פיצה',es:'pizza'},{id:'river',en:'river',he:'נהר',es:'río'},
 {id:'scarf',en:'scarf',he:'צעיף',es:'bufanda'},{id:'sheep',en:'sheep',he:'כבשה',es:'oveja'},{id:'sixty',en:'sixty',he:'שישים',es:'sesenta'},{id:'socks',en:'socks',he:'גרביים',es:'calcetines'},
 {id:'three',en:'three',he:'שלוש',es:'tres'},{id:'tired',en:'tired',he:'עייף',es:'cansado'},{id:'train',en:'train',he:'רכבת',es:'tren'},{id:'whale',en:'whale',he:'לוויתן',es:'ballena'},
