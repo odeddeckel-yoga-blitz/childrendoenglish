@@ -5,7 +5,6 @@
 // no identifier, no IP, no device storage. Table: cde_land (shared Neon
 // project childrendoenglish, CDE_DATABASE_URL — own project since 2026-10-17).
 import { neon } from '@neondatabase/serverless';
-import { dbUrl } from './_lib/dbUrl.js';
 
 const PAGES = new Set(['home', 'vocab', 'hebrew', 'spanish', 'games', 'tool', 'flashcards', 'guide', 'app', 'unit', 'battle', 'other']);
 const LANGS_OK = new Set(['en', 'he', 'es', 'ar']);
@@ -56,7 +55,7 @@ function logFail(where, err) {
 let ready = null;
 let warnedNoUrl = false;
 function sql() {
-  const url = dbUrl();
+  const url = process.env.CDE_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL;
   if (!url) {
     if (!warnedNoUrl) { warnedNoUrl = true; console.error('[land] no database URL configured — events are being DROPPED (cause=no-db-url)'); }
     return null;

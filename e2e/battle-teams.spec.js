@@ -26,7 +26,7 @@ test.describe.configure({ mode: 'serial' });
 test.skip(({ browserName, isMobile }) => browserName !== 'chromium' || isMobile, 'one multi-client run is enough');
 
 test.beforeEach(() => {
-  for (const k of ['CDE_NEW_DATABASE_URL', 'CDE_DATABASE_URL', 'DATABASE_URL', 'POSTGRES_URL']) delete process.env[k];
+  for (const k of ['CDE_DATABASE_URL', 'DATABASE_URL', 'POSTGRES_URL']) delete process.env[k];
   __resetBattleStoreForTests();
 });
 
