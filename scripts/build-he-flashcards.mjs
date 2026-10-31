@@ -4,6 +4,7 @@
 // and Hebrew-first cards: photo, English word, Hebrew meaning — no English
 // definition (the English sets keep it). Reciprocal hreflang en/es/he.
 // Nothing on /he/ links here until the /he/ head-term test ends (~Nov 14).
+import { printQrBlock } from './qr-svg.mjs';
 import { join } from 'path';
 import { mkdirSync } from 'fs';
 
@@ -146,6 +147,7 @@ ${body}
     <a class="play-online no-print" href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_top_he&topic=${c.slug}">🎮 מעדיפים לשחק? תרגול באנגלית בחינם, בעברית ←</a>
     <script defer src="/print-btn.js"></script>
     ${howToHtml(`איך מדפיסים את כרטיסיות ה${c.he}`, steps)}
+    ${printQrBlock(`${SITE}/printable-flashcards/${c.slug}/hebrew/`, 'סרקו כדי לשחק עם המילים האלה באתר — חינם, בלי הרשמה', 'rtl')}
     <div class="grid">${cards}
     </div>
     ${faqHtml(faq)}

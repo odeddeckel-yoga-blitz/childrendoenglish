@@ -12,6 +12,7 @@
 // the template but is noindex,nofollow, left out of the sitemap, and a hub or
 // book index with no live units is noindex too. Nothing links into /units/
 // until the /he/ head-term test ends (~Nov 14) — keep it that way.
+import { printQrBlock } from './qr-svg.mjs';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { mkdirSync } from 'fs';
@@ -167,6 +168,7 @@ ${body}
     <section class="section" aria-labelledby="cards-h">
       <h2 id="cards-h" class="section-title">כרטיסיות להדפסה</h2>
       <p class="center"><button type="button" class="print-btn" data-print>🖨️ הדפסת הכרטיסיות</button></p>
+      ${printQrBlock(`${SITE}${path}`, 'סרקו כדי לשמוע את המילים ולתרגל באתר — חינם, בלי הרשמה', 'rtl')}
       <div class="cards">${cards}
       </div>
     </section>

@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import ES_GLOSSES from '../src/data/word-glosses-es.js';
+import { printQrBlock, PRINT_QR_CSS } from './qr-svg.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -18,6 +19,7 @@ const ROOT = join(__dirname, '..');
 // Same fix that took kidsdomath from 11 to 67 indexed pages.
 function writePage(path, html) {
   let out = html.replace('</head>', '  <script defer src="/land-beacon.js"></script>\n</head>');
+  if (out.includes('class="print-qr"')) out = out.replace('</head>', `  <style>${PRINT_QR_CSS}</style>\n</head>`);
   // Match the element, not the word: unit/Band I pages name .crawl-mesh in their
   // print CSS, which used to skip their mesh entirely.
   const lang = (out.match(/<html[^>]*\blang="([a-z]{2})/) || [])[1] || 'en';
@@ -3562,6 +3564,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
     <script defer src="/print-btn.js"></script>
     ${howToHtml(`How to print the ${lower} flashcards`, steps)}
     <p class="lang-variant"><a href="/printable-flashcards/${slug}/spanish/">View these flashcards in English and Spanish &rarr;</a></p>
+    ${printQrBlock(`${SITE}/printable-flashcards/${slug}/`, 'Scan to play these words online &mdash; free, no sign-up')}
 
     <div class="grid">
       ${flashcardCards}
@@ -3732,6 +3735,7 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
     <script defer src="/print-btn.js"></script>
     ${howToHtml(`Cómo imprimir las tarjetas de ${lowerEs}`, steps)}
     <p class="lang-variant"><a href="/printable-flashcards/${slug}/">View the English-only version &rarr;</a></p>
+    ${printQrBlock(`${SITE}/printable-flashcards/${slug}/spanish/`, 'Escanea para jugar con estas palabras &mdash; gratis, sin registro')}
 
     <div class="grid">
       ${flashcardCards}
