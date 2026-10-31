@@ -4474,12 +4474,12 @@ const GUIDES = [
     slug: 'best-english-learning-apps-for-kids',
     heroImage: '/og/colors.png',
     title: 'Best English Learning Apps for Kids in 2026 — Free & Paid Compared',
-    description: 'Compare the 6 best English learning apps for kids in 2026. Side-by-side features, pricing, and age recommendations. Find the right vocabulary app for your child.',
+    description: 'Five English learning apps for kids compared on what each app says about itself: ages, price, ads and Hebrew support. Checked October 2026.',
     h1: 'Best English Learning Apps for Kids in 2026',
     sections: [
       {
         h2: 'How We Evaluated Each App',
-        content: `<p>With hundreds of language-learning apps on the market, choosing the right one for your child can feel overwhelming. We tested and compared six popular English vocabulary apps specifically designed for kids ages 6-12, evaluating them on the criteria that matter most to parents:</p>
+        content: `<p>With hundreds of language-learning apps on the market, choosing the right one for your child can feel overwhelming. Below are five apps parents often ask about, compared on what each app says about itself, using the criteria that matter most to parents:</p>
 <ul>
   <li><strong>Vocabulary depth</strong> &mdash; How many words are available, and how well are they taught?</li>
   <li><strong>Learning methodology</strong> &mdash; Does the app use proven techniques like spaced repetition and multi-sensory engagement?</li>
@@ -4492,95 +4492,84 @@ const GUIDES = [
       },
       {
         h2: 'Quick Comparison Table',
-        content: `<div style="overflow-x:auto" tabindex="0" role="region" aria-label="Comparison table">
+        content: `<p>We compared what each app says about itself on its own website, help pages or app-store page (checked October 2026). Prices change and differ by country and platform; a dash means the app does not state it clearly, so we did not guess.</p>
+<div style="overflow-x:auto" tabindex="0" role="region" aria-label="Comparison table">
 <table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.9rem">
   <thead>
     <tr style="background:#f1f5f9">
       <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0;white-space:nowrap">App</th>
       <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Ages</th>
       <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Price</th>
-      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Words</th>
       <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Hebrew</th>
-      <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Offline</th>
       <th style="padding:0.6rem;text-align:left;border-bottom:2px solid #e2e8f0">Ads</th>
     </tr>
   </thead>
   <tbody>
-    <tr style="background:#eff6ff"><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Children Do English</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">6-12</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">${WORDS.length}+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Full</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Yes</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
-    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Duolingo</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">6+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free / $7-13/mo</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">2000+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Partial</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Paid only</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free tier</td></tr>
-    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Lingokids</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">2-8</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free / $15/mo</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">1000+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
-    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Khan Academy Kids</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">2-8</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">500+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Partial</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
-    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Starfall</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">4-8</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free / $35/yr</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">300+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
-    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Babbel Kids</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">6-12</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">$7-13/mo</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">1500+</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">No</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Paid only</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
+    <tr style="background:#eff6ff"><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Children Do English</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">6-12</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Full (menus + every word)</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Duolingo</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">&mdash;</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free plan, or paid Super</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">&mdash;</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">On the free plan</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Lingokids</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">2-8</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free version, or paid Lingokids Plus</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Not offered</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None with Plus</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Khan Academy Kids</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">2-8</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">&mdash;</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">None</td></tr>
+    <tr><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0;font-weight:700">Starfall</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Early readers</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">Free activities, or a $35/year Home membership</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">&mdash;</td><td style="padding:0.6rem;border-bottom:1px solid #e2e8f0">&mdash;</td></tr>
   </tbody>
 </table>
 </div>`,
       },
       {
-        h2: 'Children Do English — Best Free Bilingual Option',
-        content: `<p><a href="/">Children Do English</a> stands out as the only completely free, ad-free English vocabulary app designed specifically for bilingual Hebrew-English families. While it focuses on vocabulary rather than full language courses, it does this one thing exceptionally well.</p>
-<p><strong>What makes it unique:</strong></p>
+        h2: 'Children Do English — Free, Ad-Free, in Hebrew',
+        content: `<p><a href="/">Children Do English</a> is a free, ad-free English vocabulary app built for Hebrew-speaking (and Spanish-speaking) children. It focuses on vocabulary rather than being a full language course.</p>
+<p><strong>What it offers:</strong></p>
 <ul>
-  <li><strong>Full Hebrew integration</strong> &mdash; Every word includes Hebrew translation, and the entire interface is available in Hebrew. No other app on this list offers this level of Hebrew support.</li>
-  <li><strong>Spaced repetition built in</strong> &mdash; The app automatically schedules word reviews at optimal intervals, so kids remember what they learn long-term.</li>
+  <li><strong>Hebrew throughout</strong> &mdash; every word has a Hebrew translation, and the menus are available in Hebrew.</li>
+  <li><strong>Spaced repetition built in</strong> &mdash; the app schedules word reviews so kids keep what they learn.</li>
   <li><strong>An 11-step practice ladder</strong> &mdash; flashcards, listening and reading quizzes, missing-letter spelling games, sentence practice and arcade games take each group of words from first meeting to mastery.</li>
-  <li><strong>Truly free</strong> &mdash; No premium tier, no ads, no in-app purchases. Every feature is available to every user.</li>
-  <li><strong>Works completely offline</strong> &mdash; After the first visit, the app works without internet. Perfect for car rides and areas with spotty connectivity.</li>
-  <li><strong>Multiple player profiles</strong> &mdash; Siblings can each track their own progress on the same device.</li>
+  <li><strong>Free</strong> &mdash; no premium tier, no ads, no in-app purchases, no account.</li>
+  <li><strong>Works offline</strong> &mdash; after the first visit, the app works without internet.</li>
+  <li><strong>Multiple player profiles</strong> &mdash; siblings can each track their own progress on the same device.</li>
 </ul>
-<p><strong>Limitations:</strong> Focused on vocabulary only (${WORDS.length} words), so kids wanting grammar lessons or conversation practice will need to supplement with another resource.</p>
-<p><strong>Best for:</strong> Hebrew-English bilingual families wanting a focused, free vocabulary tool with no distractions.</p>`,
+<p><strong>Limitations:</strong> vocabulary only (${WORDS.length} words), so kids who want grammar lessons or conversation practice need another resource alongside it.</p>
+<p><strong>Best for:</strong> Hebrew-speaking families who want a focused, free vocabulary tool.</p>`,
       },
       {
-        h2: 'Duolingo — Most Popular, But Ad-Heavy for Kids',
-        content: `<p>Duolingo is the most downloaded language app in the world, and for good reason. Its gamified approach makes daily practice habit-forming, and the breadth of content is impressive.</p>
+        h2: 'Duolingo — A Broad Course, With Ads on the Free Plan',
+        content: `<p>Duolingo is a widely used, gamified language app with full courses that go beyond vocabulary.</p>
 <p><strong>Pros:</strong></p>
 <ul>
-  <li>Comprehensive curriculum covering vocabulary, grammar, listening, and speaking</li>
-  <li>Excellent gamification with streaks, leaderboards, and XP points</li>
-  <li>Offers Hebrew-to-English courses for Hebrew speakers</li>
-  <li>Massive word library (2000+ words across many topics)</li><!-- persona-ok: a competitor fact -->
+  <li>A full course: vocabulary, grammar, listening and speaking practice</li>
+  <li>Streaks and game elements that help build a daily habit</li>
 </ul>
 <p><strong>Cons:</strong></p>
 <ul>
-  <li>Free tier shows frequent ads between lessons &mdash; disruptive for young kids</li>
-  <li>Hearts system punishes mistakes, which can frustrate sensitive learners</li>
-  <li>Interface designed for teens/adults, not young children</li>
-  <li>Offline access requires the paid Super plan ($7-13/month)</li>
-  <li>Hebrew support is limited to course selection, not full UI translation</li>
+  <li>The free plan shows ads between lessons</li>
+  <li>No ads and offline (downloaded) lessons come with the paid Super plan</li>
+  <li>The main app is built for older learners; Duolingo makes a separate app, Duolingo ABC, for young children learning to read</li>
 </ul>
-<p><strong>Best for:</strong> Older kids (10+) who can handle the adult-oriented interface and want a comprehensive language course.</p>`,
+<p><strong>Best for:</strong> older kids who want a full language course and can work with a general-audience app.</p>`,
       },
       {
-        h2: 'Lingokids, Khan Academy Kids, Starfall & Babbel Kids',
+        h2: 'Lingokids, Khan Academy Kids & Starfall',
         content: `<h3>Lingokids</h3>
-<p>Lingokids offers a beautiful, playful experience aimed at younger children (ages 2-8). The app features animated characters, songs, and mini-games that make learning feel like play. However, the free tier is very limited (3 games per day), and the full experience costs $15/month. There is no Hebrew support, and it requires an internet connection.</p>
-<p><strong>Best for:</strong> Younger children (2-6) whose parents are willing to pay for a premium experience.</p>
+<p>Lingokids is a playful English app for ages 2-8, with animated characters, songs and mini-games. It has a free version, and the paid Lingokids Plus unlocks all content with no ads; on its own website Plus is listed at about $13.49 a month in the US, and app-store prices differ. Its help pages list the languages its content comes in, and Hebrew is not one of them.</p>
+<p><strong>Best for:</strong> young children whose parents are willing to pay for the full app.</p>
 
 <h3>Khan Academy Kids</h3>
-<p>Khan Academy Kids is truly free with no ads &mdash; a rare combination. It covers reading, math, social skills, and vocabulary through interactive activities. The vocabulary component is solid but not its primary focus, and the app is designed for ages 2-8, so older kids may find it too simple. No Hebrew support is available.</p>
-<p><strong>Best for:</strong> Young learners (2-7) who benefit from a broad educational app that includes some vocabulary.</p>
+<p>Khan Academy Kids is free, with no ads and no subscriptions, for ages 2-8. It covers early reading, math and more, so vocabulary is one part of a broad app rather than its focus.</p>
+<p><strong>Best for:</strong> young learners who benefit from a broad, free educational app.</p>
 
 <h3>Starfall</h3>
-<p>Starfall has been a trusted name in early literacy since 2002. It excels at phonics and early reading skills, with vocabulary woven into reading exercises. The free web version covers basic content, while the full app costs $35/year. It's designed for ages 4-8, making it too simple for older elementary students. No Hebrew or offline support.</p>
-<p><strong>Best for:</strong> Beginning readers (ages 4-7) who need phonics instruction alongside vocabulary.</p>
-
-<h3>Babbel Kids</h3>
-<p>Babbel Kids brings the popular Babbel methodology to younger learners. Lessons are structured around real-world topics with speech recognition for pronunciation practice. The content is well-designed and age-appropriate for 6-12 year olds. However, it requires a paid subscription ($7-13/month), has no Hebrew support, and offline lessons are only available to paying subscribers.</p>
-<p><strong>Best for:</strong> Families willing to invest in a structured, curriculum-based approach for kids 6-12.</p>`,
+<p>Starfall is a long-running early-literacy site focused on phonics and learning to read. Some activities are free, and a Home membership costs $35 a year according to Starfall&rsquo;s help pages.</p>
+<p><strong>Best for:</strong> beginning readers who need phonics practice.</p>`,
       },
       {
         h2: 'Which App Should You Choose?',
-        content: `<p>The best app depends on your family's specific needs:</p>
+        content: `<p>The best app depends on your family&rsquo;s needs:</p>
 <ul>
-  <li><strong>Hebrew-English bilingual family on a budget?</strong> &rarr; <a href="/">Children Do English</a> is the clear winner &mdash; it's the only free app with full Hebrew support and offline access.</li>
-  <li><strong>Want a comprehensive language course for an older kid?</strong> &rarr; Duolingo offers the broadest curriculum, though expect ads on the free tier.</li>
-  <li><strong>Have a very young child (under 6)?</strong> &rarr; Khan Academy Kids (free) or Lingokids (paid) are designed for this age group.</li>
-  <li><strong>Willing to pay for premium quality?</strong> &rarr; Babbel Kids offers the most polished paid experience for elementary-age kids.</li>
-  <li><strong>Need phonics and early reading?</strong> &rarr; Starfall specializes in this area for ages 4-8.</li>
+  <li><strong>Hebrew-speaking family looking for a free vocabulary app?</strong> &rarr; <a href="/">Children Do English</a> is free, ad-free, in Hebrew, and works offline.</li>
+  <li><strong>Want a full language course for an older kid?</strong> &rarr; Duolingo covers grammar and conversation too; expect ads on the free plan.</li>
+  <li><strong>Have a very young child (under 6)?</strong> &rarr; Khan Academy Kids (free) or Lingokids (free version, or paid Plus) are made for this age.</li>
+  <li><strong>Need phonics and early reading?</strong> &rarr; Starfall focuses on this.</li>
 </ul>
-<p><strong>Our recommendation for most families:</strong> Start with <a href="/">Children Do English</a> for vocabulary building &mdash; it's free, ad-free, and designed for kids. If your child outgrows the vocabulary focus or wants grammar lessons, supplement with Duolingo or Babbel Kids. Many families find that combining a vocabulary-focused app with a broader language app produces the best results.</p>
-<p>The most important factor isn't which app you choose &mdash; it's consistency. Ten minutes of daily practice on any good app will produce better results than an hour of sporadic use on the "best" one.</p>`,
+<p><strong>Our suggestion:</strong> start with <a href="/">Children Do English</a> for vocabulary &mdash; it&rsquo;s free and ad-free. If your child wants grammar lessons or conversation practice, add a broader language course alongside it.</p>
+<p>The most important factor isn&rsquo;t which app you choose &mdash; it&rsquo;s consistency. Ten minutes of daily practice on any good app beats an hour of sporadic use.</p>`,
       },
     ],
   },
@@ -4631,11 +4620,11 @@ const GUIDE_GEO = {
     ],
   },
   'best-english-learning-apps-for-kids': {
-    answer: 'For Hebrew-English families, Children Do English is the only completely free, ad-free vocabulary app with full Hebrew support and offline access; Duolingo has the broadest curriculum but shows ads on its free tier, and Lingokids and Khan Academy Kids suit ages 2-8. The deciding factor is consistency: ten minutes a day on any good app beats an hour of sporadic use.',
+    answer: 'For Hebrew-speaking families, Children Do English is a free, ad-free vocabulary app in Hebrew that also works offline; Duolingo is a broad language course whose free plan shows ads, and Lingokids and Khan Academy Kids are made for ages 2-8. The deciding factor is consistency: ten minutes a day on any good app beats an hour of sporadic use.',
     faq: [
-      { q: 'What is the best free English learning app for kids?', a: `For vocabulary, Children Do English: free, no ads, ${Math.floor(WORDS.length / 10) * 10}+ words with real photos, spoken audio, Hebrew and Spanish translations, and it works offline. For a broad language course, Duolingo’s free tier is the most popular but includes ads.` },
-      { q: 'Is Duolingo good for kids learning English?', a: 'It is the most downloaded language app and its gamified lessons build a daily habit, with a comprehensive curriculum. The downsides for kids are ads on the free tier and only partial Hebrew support; the ad-free version is paid.' },
-      { q: 'Which English app is best for ages 2-8?', a: 'Lingokids (songs, animated characters and mini-games, but a limited free tier) and Khan Academy Kids (free, about 500 words, no Hebrew). Starfall is a strong free option for early reading.' }, // persona-ok: a competitor fact
+      { q: 'What is the best free English learning app for kids?', a: `For vocabulary, Children Do English: free, no ads, ${Math.floor(WORDS.length / 10) * 10}+ words with real photos, spoken audio, Hebrew and Spanish translations, and it works offline. For a broad language course, Duolingo has a free plan that shows ads.` },
+      { q: 'Is Duolingo good for kids learning English?', a: 'Its gamified lessons help build a daily habit and it covers grammar and conversation, not just vocabulary. The free plan shows ads between lessons; no ads and offline lessons come with the paid Super plan. For young children learning to read, Duolingo makes a separate app, Duolingo ABC.' },
+      { q: 'Which English app is best for ages 2-8?', a: 'Lingokids (songs, animated characters and mini-games; a free version and a paid Plus plan) and Khan Academy Kids (free, no ads, no subscriptions). Starfall offers early-reading activities, some free.' },
     ],
   },
 };
