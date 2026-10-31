@@ -2448,8 +2448,11 @@ function buildHebrewGamesHubPage() {
 function buildHebrewGamesAgePage(age) {
   const path = `/he/english-games/${age.slug}/`;
   const levelWords = WORDS.filter((w) => w.level === age.level);
-  const title = `משחקים ללימוד אנגלית לילדים בגילאי ${age.ages} (${age.grades}) — חינם | Children Do English`;
-  const description = `משחקים ללימוד אנגלית לילדים בגילאי ${age.ages}, מותאמים לכיתות ${age.grades}: ${levelWords.length} מילים ברמת ${age.levelHe} עם תמונות אמיתיות, הקלטה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
+  // Age-led title/H1 (GSC 10-28: the age pages took "משחקים ללימוד אנגלית לילדים"
+  // at pos 52–60 while the hub never ranked). The head phrase belongs to the hub;
+  // age pages link up to it with that exact anchor.
+  const title = `אנגלית לגילאי ${age.ages} (${age.grades}): משחקים ותרגול מילים — חינם | Children Do English`;
+  const description = `משחקי אנגלית לגילאי ${age.ages}, מותאמים לכיתות ${age.grades}: ${levelWords.length} מילים ברמת ${age.levelHe} עם תמונות אמיתיות, הקלטה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -2491,7 +2494,7 @@ function buildHebrewGamesAgePage(age) {
 
   const body = `
   <div class="hero">
-    <h1>משחקים ללימוד אנגלית לילדים בגילאי ${age.ages}</h1>
+    <h1>משחקי אנגלית לגילאי ${age.ages}</h1>
     <p class="subtitle">רמת ${age.levelHe}, מותאם לכיתות ${age.grades} — <span style="direction:ltr;display:inline-block">${levelWords.length}</span> מילים באנגלית עם תמונות, שמע ותרגום לעברית.</p>
     <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_${age.slug.replace(/-/g, '_')}" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
     <p class="cta-sub">בלי פרסומות &middot; בלי הרשמה &middot; חינם לגמרי</p>
@@ -2504,6 +2507,7 @@ function buildHebrewGamesAgePage(age) {
   <div class="section" style="padding-top:0.5rem">
     <div class="container prose">
       <p>${age.pitch}</p>
+      <p>מחפשים משחקים לגיל אחר או לפי נושא? כל המשחקים נמצאים בעמוד <a href="/he/english-games/">משחקים ללימוד אנגלית לילדים</a>.</p>
       <p>ברמה הזו מחכות <span style="direction:ltr;display:inline-block">${levelWords.length}</span> מילים, וכל אחת עוברת דרך סולם תרגול בן 11 שלבים — מכרטיסייה ראשונה ועד משחקי ארקייד — עם חזרה מרווחת עד שליטה מלאה. הכול בחינם, בלי פרסומות ובלי הרשמה.</p>
     </div>
   </div>
