@@ -63,7 +63,9 @@ describe('textbook-unit pages', () => {
     expect(html).toContain('<a class="jump-btn" href="#practice-h">');
     expect(html).toContain('data-sheet="bingo"');
     expect(html).toContain('data-sheet="search"');
-    expect(html).toContain('<div id="sheets-out" data-name="Jet 2 Unit 3" aria-hidden="true"></div>');
+    expect(html).toContain('data-sheet="cross"'); // E2: picture crossword + answer key
+    expect(html).toContain('<div id="sheets-out" data-name="Jet 2 Unit 3" data-lang="he" aria-hidden="true"></div>');
+    expect(html).toContain('<script defer src="/crossword.js"></script>');
     expect(html).toContain('<script defer src="/unit-sheets.js"></script>');
     // the card images are lazy: printing must go through print-btn.js, which loads them first
     expect(html).toContain('<script defer src="/print-btn.js"></script>');

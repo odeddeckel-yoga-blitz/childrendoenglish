@@ -13,6 +13,7 @@
 // book index with no live units is noindex too. Nothing links into /units/
 // until the /he/ head-term test ends (~Nov 14) — keep it that way.
 import { printQrBlock } from './qr-svg.mjs';
+import { collides } from '../src/data/words.js';
 import { sentenceAudio } from './sentence-audio.mjs';
 import { existsSync } from 'fs';
 import { join } from 'path';
@@ -34,6 +35,47 @@ export function sentenceUsable(it) {
   return words.length <= SENTENCE_MAX_WORDS && re.test(it.ex);
 }
 export function sentenceReady(items) { return items.filter(sentenceUsable).length >= 4; }
+
+
+// Printable activity sheets (bingo, word search, crossword), built in the browser by
+// public/unit-sheets.js + public/crossword.js from the page's word data (#unit-data on
+// word-set pages, #sheet-data elsewhere). Shared by every word-set page and the
+// printable-flashcard category pages (E2). lang: 'he' (RTL page) or 'en'.
+const SHEET_TEXT = {
+  he: { h: 'דפי פעילות לכיתה', bingo: 'בינגו:', cards: 'כרטיסים', bingoBtn: '🎲 הדפסת כרטיסי בינגו', search: '🔎 הדפסת תפזורת מילים (עם דף פתרון)', cross: '✏️ הדפסת תשבץ עם תמונות (עם דף פתרון)', hint: 'בכל הדפסה נוצרים כרטיסים, תפזורת ותשבץ חדשים מהמילים שבעמוד, כולל רשימת קריאה למורה.' },
+  en: { h: 'Classroom activity sheets', bingo: 'Bingo:', cards: 'cards', bingoBtn: '🎲 Print bingo cards', search: '🔎 Print a word search (with answer key)', cross: '✏️ Print a picture crossword (with answer key)', hint: 'Every print makes new cards, a new word search and a new crossword from the words on this page, plus a teacher call list.' },
+};
+export function sheetsSection(lang) {
+  const s = SHEET_TEXT[lang];
+  return `<section class="section no-print sheets" aria-labelledby="sheets-h">
+      <h2 id="sheets-h" class="section-title">${s.h}</h2>
+      <p class="center sheet-row">
+        <label for="bingo-n">${s.bingo}</label>
+        <select id="bingo-n">${[10, 20, 30, 40].map((n) => `<option value="${n}"${n === 30 ? ' selected' : ''}>${n} ${s.cards}</option>`).join('')}</select>
+        <button type="button" class="print-btn" data-sheet="bingo">${s.bingoBtn}</button>
+      </p>
+      <p class="center sheet-row"><button type="button" class="print-btn" data-sheet="search">${s.search}</button></p>
+      <p class="center sheet-row"><button type="button" class="print-btn" data-sheet="cross">${s.cross}</button></p>
+      <p class="center sheet-hint">${s.hint}</p>
+    </section>`;
+}
+// The print target + the runtime. name = the sheet title (already escaped).
+export function sheetsOut(name, lang) {
+  return `<div id="sheets-out" data-name="${name}" data-lang="${lang}" aria-hidden="true"></div>
+  <script defer src="/crossword.js"></script>
+  <script defer src="/unit-sheets.js"></script>`;
+}
+// Word data for the sheets on pages without #unit-data, from our WORDS entries:
+// [{ en, he, img, def?, x? }]. x = the page's other words a child can't tell apart
+// from this one (collides(): same Hebrew, CONFUSABLE_PAIRS such as crocodile /
+// alligator) — a picture crossword never uses both (public/crossword.js).
+export function sheetData(words, { def = false } = {}) {
+  const data = words.map((w) => {
+    const x = words.filter((o) => o !== w && collides(w, o)).map((o) => o.word);
+    return { en: w.word, he: w.hebrewTranslation, img: `/images/${w.id}.webp`, ...(def ? { def: w.definition } : {}), ...(x.length ? { x } : {}) };
+  });
+  return `<script type="application/json" id="sheet-data">${JSON.stringify(data).replace(/</g, '\\u003c')}</script>`;
+}
 
 export function wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides }) {
   const byId = new Map(WORDS.map((w) => [w.id, w]));
@@ -163,7 +205,7 @@ ${body}
         <noscript><p>התרגול צריך JavaScript. אפשר בינתיים ללמוד מהטבלה ומהכרטיסיות.</p></noscript>
       </div>
       <p id="practice-live" class="sr" aria-live="polite"></p>
-      <script type="application/json" id="unit-data">${JSON.stringify(items.map(({ en, he, ex, id, audio, opts, ans }) => ({ en, he, ex, id, audio, opts, ans }))).replace(/</g, '\\u003c')}</script>
+      <script type="application/json" id="unit-data">${JSON.stringify(items.map(({ en, he, ex, id, audio, img, opts, ans }, i) => { const x = words.filter((o, j) => j !== i && collides(asWord(words[i]), asWord(o))).map((o) => o.en); return { en, he, ex, id, audio, img, opts, ans, ...(x.length ? { x } : {}) }; })).replace(/</g, '\\u003c')}</script>
     </section>
     ${afterPractice}
     <section class="section" aria-labelledby="cards-h">
@@ -173,16 +215,7 @@ ${body}
       <div class="cards">${cards}
       </div>
     </section>
-    <section class="section no-print" aria-labelledby="sheets-h">
-      <h2 id="sheets-h" class="section-title">דפי פעילות לכיתה</h2>
-      <p class="center sheet-row">
-        <label for="bingo-n">בינגו:</label>
-        <select id="bingo-n">${[10, 20, 30, 40].map((n) => `<option value="${n}"${n === 30 ? ' selected' : ''}>${n} כרטיסים</option>`).join('')}</select>
-        <button type="button" class="print-btn" data-sheet="bingo">🎲 הדפסת כרטיסי בינגו</button>
-      </p>
-      <p class="center sheet-row"><button type="button" class="print-btn" data-sheet="search">🔎 הדפסת תפזורת מילים (עם דף פתרון)</button></p>
-      <p class="center sheet-hint">בכל הדפסה נוצרים כרטיסים ותפזורת חדשים מהמילים שבעמוד, כולל רשימת קריאה למורה.</p>
-    </section>
+    ${sheetsSection('he')}
     <section class="section share" aria-labelledby="share-h">
       <h2 id="share-h" class="section-title">שיתוף עם הכיתה</h2>
       ${battleHref ? `<p class="center"><a class="cta battle-cta" href="${battleHref}">⚔️ קרב כיתתי עם המילים של היחידה</a></p>
@@ -204,10 +237,9 @@ ${body}
     </section>
     <p class="center more"><a class="cta" href="/new-player?lang=he&amp;utm_source=seo&amp;${ctaUtm}">עוד מילים ומשחקים באפליקציה ←</a></p>
   </main>
-  <div id="sheets-out" data-name="${escapeHtml(sheetsName)}" aria-hidden="true"></div>
+  ${sheetsOut(escapeHtml(sheetsName), 'he')}
   <script defer src="/unit-practice.js"></script>
-  <script defer src="/print-btn.js"></script>
-  <script defer src="/unit-sheets.js"></script>`;
+  <script defer src="/print-btn.js"></script>`;
     mkdirSync(dir, { recursive: true });
     writePage(join(dir, 'index.html'), shell({ path, title, description, test, footerNote, schemas: [crumbs(crumbItems), faq(faqPairs)], body }));
   }
@@ -342,6 +374,44 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
   return sitemapUrls;
 }
 
+export const SHEETS_CSS = `
+    #sheets-out { display: none; }
+    .sheet-row { margin-bottom: 0.4rem; } .sheet-row select { font-size: 1rem; padding: 0.35rem; border-radius: 0.4rem; margin: 0 0.25rem; font-family: inherit; }
+    .sheet-hint { font-size: 0.85rem; color: #475569; }
+    @media print {
+      body.printing-sheets > *:not(#sheets-out) { display: none !important; }
+      body.printing-sheets #sheets-out { display: block; direction: ltr; text-align: left; }
+      .sheet-page { break-after: page; padding: 0.5cm 0; } .sheet-page:last-child { break-after: auto; }
+      .sheet-head { font-size: 16pt; font-weight: 800; text-align: center; margin-bottom: 0.4cm; }
+      .sheet-head:empty { display: none; }
+      .sheet-note { direction: rtl; text-align: center; font-size: 11pt; margin: 0.3cm 0; }
+      .bingo-card { border: 2px solid #000; border-radius: 8px; padding: 0.4cm; margin: 0 auto 0.8cm; width: 15cm; break-inside: avoid; }
+      .bingo-title { text-align: center; font-size: 16pt; font-weight: 900; }
+      .bingo-name { font-size: 11pt; margin: 0.15cm 0 0.3cm; }
+      .bingo-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #000; border-left: 1px solid #000; }
+      .bingo-cell { border-right: 1px solid #000; border-bottom: 1px solid #000; height: 2.4cm; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14pt; font-weight: 700; padding: 0.1cm; }
+      .call-list, .ws-list { columns: 3; font-size: 11pt; padding-left: 1.2cm; }
+      .ws-list { list-style: none; columns: 2; padding-left: 0; margin: 0.3cm auto; width: 14cm; }
+      .call-list li, .ws-list li { break-inside: avoid; margin-bottom: 0.1cm; }
+      .call-box { margin-right: 0.2cm; } .call-en { font-weight: 700; margin-right: 0.3cm; } .call-he { direction: rtl; unicode-bidi: isolate; color: #333; }
+      .ws-grid { display: grid; grid-template-columns: repeat(11, 1.2cm); justify-content: center; margin: 0 auto; }
+      .ws-cell { width: 1.2cm; height: 1.2cm; display: flex; align-items: center; justify-content: center; font: 700 16pt ui-monospace, Menlo, monospace; border: 1px solid #bbb; }
+      .ws-on { background: #ddd !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .cw-grid { display: grid; justify-content: center; margin: 0.2cm auto 0.4cm; }
+      .cw-cell { position: relative; border: 1px solid #000; margin: 0 -1px -1px 0; }
+      .cw-block { border-color: transparent; }
+      .cw-n { position: absolute; top: 1px; left: 2px; font-size: 7pt; font-weight: 700; }
+      .cw-l { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: 700 14pt ui-monospace, Menlo, monospace; }
+      .cw-cols { display: flex; gap: 0.6cm; justify-content: center; }
+      .cw-clues { flex: 1; max-width: 9cm; }
+      .cw-h { font-size: 12pt; margin-bottom: 0.15cm; }
+      .cw-list { list-style: none; padding: 0; font-size: 11pt; }
+      .cw-list li { display: flex; align-items: center; gap: 0.2cm; break-inside: avoid; margin-bottom: 0.12cm; }
+      .cw-img { width: 1.5cm; height: 1.5cm; object-fit: cover; border-radius: 4px; }
+      .cw-len { color: #555; font-size: 9pt; }
+      .sheet-note-en { direction: ltr; }
+    }
+`;
 const UNIT_CSS = `
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; direction: rtl; text-align: right; }
@@ -423,28 +493,8 @@ const UNIT_CSS = `
     .footer { text-align: center; padding: 1.5rem 1rem; color: #4b5a6e; font-size: 0.8rem; background: #f8fafc; }
     .footer a { color: #4b5a6e; } .not-affiliated { max-width: 640px; margin: 0.5rem auto 0; }
     @media (max-width: 420px) { .hero h1 { font-size: 1.35rem; } .opts { grid-template-columns: 1fr; } }
-    #sheets-out { display: none; }
-    .sheet-row { margin-bottom: 0.4rem; } .sheet-row select { font-size: 1rem; padding: 0.35rem; border-radius: 0.4rem; margin: 0 0.25rem; font-family: inherit; }
-    .sheet-hint { font-size: 0.85rem; color: #475569; }
+${SHEETS_CSS}
     @media print {
-      body.printing-sheets > *:not(#sheets-out) { display: none !important; }
-      body.printing-sheets #sheets-out { display: block; direction: ltr; text-align: left; }
-      .sheet-page { break-after: page; padding: 0.5cm 0; } .sheet-page:last-child { break-after: auto; }
-      .sheet-head { font-size: 16pt; font-weight: 800; text-align: center; margin-bottom: 0.4cm; }
-      .sheet-head:empty { display: none; }
-      .sheet-note { direction: rtl; text-align: center; font-size: 11pt; margin: 0.3cm 0; }
-      .bingo-card { border: 2px solid #000; border-radius: 8px; padding: 0.4cm; margin: 0 auto 0.8cm; width: 15cm; break-inside: avoid; }
-      .bingo-title { text-align: center; font-size: 16pt; font-weight: 900; }
-      .bingo-name { font-size: 11pt; margin: 0.15cm 0 0.3cm; }
-      .bingo-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #000; border-left: 1px solid #000; }
-      .bingo-cell { border-right: 1px solid #000; border-bottom: 1px solid #000; height: 2.4cm; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 14pt; font-weight: 700; padding: 0.1cm; }
-      .call-list, .ws-list { columns: 3; font-size: 11pt; padding-left: 1.2cm; }
-      .ws-list { list-style: none; columns: 2; padding-left: 0; margin: 0.3cm auto; width: 14cm; }
-      .call-list li, .ws-list li { break-inside: avoid; margin-bottom: 0.1cm; }
-      .call-box { margin-right: 0.2cm; } .call-en { font-weight: 700; margin-right: 0.3cm; } .call-he { direction: rtl; unicode-bidi: isolate; color: #333; }
-      .ws-grid { display: grid; grid-template-columns: repeat(11, 1.2cm); justify-content: center; margin: 0 auto; }
-      .ws-cell { width: 1.2cm; height: 1.2cm; display: flex; align-items: center; justify-content: center; font: 700 16pt ui-monospace, Menlo, monospace; border: 1px solid #bbb; }
-      .ws-on { background: #ddd !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       body { background: #fff; }
       .breadcrumb, .hero, .section:not(:has(.cards)), .more, .footer, .crawl-mesh, .print-btn, #cards-h { display: none !important; }
       .cards { grid-template-columns: repeat(3, 1fr); }

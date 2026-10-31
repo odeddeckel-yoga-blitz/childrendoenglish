@@ -1,21 +1,39 @@
-/* Printable class activity sheets on the textbook-unit pages
- * (/units/<book>/unit-<n>/), built in the browser from the unit's own word list
- * (#unit-data), so every print is a fresh random set:
+/* Printable class activity sheets, built in the browser from the page's own word
+ * list, so every print is a fresh random set. Used on every word-set page (units,
+ * Band I topics/review, grades, /he/english-words — data in #unit-data) and on the
+ * printable-flashcard category pages (#sheet-data, Hebrew and English):
  *   bingo  — N different 4×4 cards (2 per page) + a teacher call list
  *   search — a word search (11×11, right / down / diagonal only, for grades 3–6)
  *            + an answer-key page
- * Printing: body.printing-sheets shows only #sheets-out (see the unit CSS);
+ *   cross  — a crossword (public/crossword.js): picture + meaning clues, English
+ *            answers, numbered grid + an answer-key page
+ * #sheets-out data-lang="he" (default) or "en" picks the sheet text.
+ * Printing: body.printing-sheets shows only #sheets-out (moved to the end of <body>
+ * first, so it is a direct child even where the page wraps content in <main>);
  * afterprint clears it. Use is counted as a cookieless aggregate (sheet @ kind). */
 (function () {
   'use strict';
   var out = document.getElementById('sheets-out');
-  var dataEl = document.getElementById('unit-data');
+  var dataEl = document.getElementById('sheet-data') || document.getElementById('unit-data');
   if (!out || !dataEl) return;
   var items;
   try { items = JSON.parse(dataEl.textContent); } catch (e) { return; }
   var unitName = out.getAttribute('data-name') || '';
-  // Hebrew meaning = the correct hear-and-pick option
-  var words = items.map(function (it) { return { en: it.en, he: it.opts[it.ans] }; });
+  var EN = out.getAttribute('data-lang') === 'en';
+  var T = EN ? {
+    calls: 'Teacher call list · ', callsNote: 'Call out a word (or its meaning, for a challenge) and tick it here. A full row, column or diagonal wins — BINGO!',
+    search: 'Word Search · ', searchNote: 'Find the words: left to right →, top to bottom ↓ or diagonally ↘', key: 'Answer key · ',
+    cross: 'Crossword · ', crossNote: 'Write the English word for each picture.', across: 'Across →', down: 'Down ↓',
+  } : {
+    calls: 'רשימת קריאה למורה · ', callsNote: 'קוראים מילה (באנגלית, או את הפירוש בעברית לאתגר) ומסמנים אותה כאן. מי שמסמן שורה, טור או אלכסון — צועק BINGO!',
+    search: 'Word Search · ', searchNote: 'מצאו את המילים: משמאל לימין →, מלמעלה למטה ↓ או באלכסון ↘', key: 'פתרון · ',
+    cross: 'Crossword · ', crossNote: 'כתבו באנגלית את המילה של כל תמונה ותרגום. Across = מאוזן →, Down = מאונך ↓', across: 'Across →', down: 'Down ↓',
+  };
+  // he = the Hebrew meaning (word-set pages: the correct hear-and-pick option);
+  // img = a photo for picture clues when the word has one; def = English clue (en pages)
+  var words = items.map(function (it) {
+    return { en: it.en, he: it.he || (it.opts ? it.opts[it.ans] : ''), img: it.img || null, def: it.def || '' };
+  });
 
   function beacon(kind) {
     try {
@@ -42,8 +60,15 @@
   }
   function print(kind) {
     beacon(kind);
+    document.body.appendChild(out);
     document.body.classList.add('printing-sheets');
-    window.print();
+    // picture clues: wait (≤4 s) for the photos so they make it onto the paper
+    var imgs = Array.prototype.slice.call(out.querySelectorAll('img'));
+    var waits = imgs.map(function (im) {
+      return im.complete ? null : new Promise(function (res) { im.onload = im.onerror = res; });
+    }).filter(Boolean);
+    if (!waits.length) { window.print(); return; }
+    Promise.race([Promise.all(waits), new Promise(function (res) { setTimeout(res, 4000); })]).then(function () { window.print(); });
   }
   window.addEventListener('afterprint', function () {
     document.body.classList.remove('printing-sheets');
@@ -66,8 +91,8 @@
       card.appendChild(grid);
       p.appendChild(card);
     }
-    var calls = page('רשימת קריאה למורה · ' + unitName);
-    calls.appendChild(el('p', 'sheet-note', 'קוראים מילה (באנגלית, או את הפירוש בעברית לאתגר) ומסמנים אותה כאן. מי שמסמן שורה, טור או אלכסון — צועק BINGO!'));
+    var calls = page(T.calls + unitName);
+    calls.appendChild(el('p', 'sheet-note' + (EN ? ' sheet-note-en' : ''), T.callsNote));
     var list = el('ol', 'call-list');
     shuffle(pool).forEach(function (w) {
       var li = el('li');
@@ -164,10 +189,10 @@
     out.textContent = '';
     var s = makeSearch();
     if (!s) return false;
-    var p = page('Word Search · ' + unitName);
+    var p = page(T.search + unitName);
     p.appendChild(el('div', 'bingo-name', 'Name: ______________________'));
     drawGrid(p, s, false);
-    p.appendChild(el('p', 'sheet-note', 'מצאו את המילים: משמאל לימין →, מלמעלה למטה ↓ או באלכסון ↘'));
+    p.appendChild(el('p', 'sheet-note' + (EN ? ' sheet-note-en' : ''), T.searchNote));
     var list = el('ul', 'ws-list');
     s.placed.forEach(function (x) {
       var li = el('li');
@@ -176,8 +201,64 @@
       list.appendChild(li);
     });
     p.appendChild(list);
-    var keyPage = page('פתרון · Word Search · ' + unitName);
+    var keyPage = page(T.key + 'Word Search · ' + unitName);
     drawGrid(keyPage, s, true);
+    return true;
+  }
+
+
+  // --- crossword ---
+  function drawCross(p, s, key) {
+    var num = {};
+    s.placed.forEach(function (x) { num[x.r + ',' + x.c] = x.n; });
+    var cell = Math.min(1.1, Math.floor((17 / s.cols) * 10) / 10);
+    var g = el('div', 'cw-grid');
+    g.style.gridTemplateColumns = 'repeat(' + s.cols + ', ' + cell + 'cm)';
+    for (var r = 0; r < s.rows; r++) for (var c = 0; c < s.cols; c++) {
+      var ch = s.grid[r][c];
+      var d = el('div', ch ? 'cw-cell' : 'cw-cell cw-block');
+      d.style.width = d.style.height = cell + 'cm';
+      if (ch && num[r + ',' + c]) d.appendChild(el('span', 'cw-n', String(num[r + ',' + c])));
+      if (ch && key) d.appendChild(el('span', 'cw-l', ch));
+      g.appendChild(d);
+    }
+    p.appendChild(g);
+  }
+  function clueList(dir, s) {
+    var box = el('div', 'cw-clues');
+    box.appendChild(el('h3', 'cw-h', dir === 'across' ? T.across : T.down));
+    var ol = el('ol', 'cw-list');
+    s.placed.filter(function (x) { return x.dir === dir; }).sort(function (a, b) { return a.n - b.n; }).forEach(function (x) {
+      var li = el('li');
+      li.appendChild(el('b', 'cw-num', x.n + '.'));
+      if (x.w.img) { var im = el('img', 'cw-img'); im.src = x.w.img; im.alt = ''; li.appendChild(im); }
+      var clue = EN ? (x.w.img ? '' : x.w.def) : x.w.he;
+      if (clue) li.appendChild(el('span', EN ? 'cw-def' : 'call-he', clue));
+      li.appendChild(el('span', 'cw-len', '(' + x.word.length + ')'));
+      ol.appendChild(li);
+    });
+    box.appendChild(ol);
+    return box;
+  }
+  function cross() {
+    out.textContent = '';
+    if (!window.cdeCrossword) return false;
+    // picture clues when most words have a photo; otherwise meaning clues for all
+    var withImg = words.filter(function (w) { return w.img; });
+    var pool = withImg.length >= 8 ? withImg : words.map(function (w) { return { en: w.en, he: w.he, def: w.def, img: null }; });
+    if (EN) pool = pool.filter(function (w) { return w.img || w.def; });
+    var s = window.cdeCrossword.make(pool, { max: 12, maxSide: 15 });
+    if (!s || s.placed.length < 4) return false;
+    var p = page(T.cross + unitName);
+    p.appendChild(el('div', 'bingo-name', 'Name: ______________________'));
+    drawCross(p, s, false);
+    p.appendChild(el('p', 'sheet-note' + (EN ? ' sheet-note-en' : ''), T.crossNote));
+    var clues = el('div', 'cw-cols');
+    clues.appendChild(clueList('across', s));
+    clues.appendChild(clueList('down', s));
+    p.appendChild(clues);
+    var keyPage = page(T.key + 'Crossword · ' + unitName);
+    drawCross(keyPage, s, true);
     return true;
   }
 
@@ -191,6 +272,8 @@
       done = bingo(Math.max(2, Math.min(40, parseInt(sel && sel.value, 10) || 10)));
     } else if (kind === 'search') {
       done = search();
+    } else if (kind === 'cross') {
+      done = cross();
     }
     if (done) print(kind);
   });
