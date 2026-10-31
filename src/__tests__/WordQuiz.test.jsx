@@ -50,16 +50,15 @@ describe('WordQuiz', () => {
 
   it('renders 4 image option buttons', () => {
     render(<WordQuiz {...defaultProps} />);
-    const images = screen.getAllByRole('img');
-    expect(images.length).toBe(4);
+    // the photos are decorative (alt=\"\"); each answer button carries the word (CUX10)
+    expect(document.querySelectorAll('button img').length).toBe(4);
   });
 
-  it('renders images with alt text', () => {
+  it('names each picture answer button by its word', () => {
     render(<WordQuiz {...defaultProps} />);
-    const images = screen.getAllByRole('img');
-    images.forEach(img => {
-      expect(img.getAttribute('alt')).toBeTruthy();
-    });
+    const buttons = [...document.querySelectorAll('button')].filter((b) => b.querySelector('img'));
+    expect(buttons).toHaveLength(4);
+    buttons.forEach((b) => expect(b.getAttribute('aria-label')).toBeTruthy());
   });
 
   it('shows skip button', () => {

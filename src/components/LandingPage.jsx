@@ -192,6 +192,19 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
           ))}
         </div>
 
+        {/* One start (UX audit CUX7): the page's language is the default; the tiles
+            below stay as the language switch */}
+        <button
+          onClick={() => onLanguageStart(lang)}
+          data-kdm-primary
+          data-testid="landing-start"
+          className="mx-auto flex items-center justify-center gap-2 w-full max-w-xs min-h-[56px] px-6 rounded-2xl
+                     bg-blue-600 hover:bg-blue-700 text-white text-xl font-black shadow-lg active:scale-95 transition-transform"
+        >
+          <span aria-hidden="true">▶</span> {t('landingStart', lang)}
+        </button>
+        <p className="text-sm text-slate-500 dark:text-slate-300">{t('landingOrPickLang', lang)}</p>
+
         {/* Language selection — one tap starts the app in that language.
             Tiles render from the LANGS registry (ready ones only), each in its
             own language, so adding language #5 is a data change. */}

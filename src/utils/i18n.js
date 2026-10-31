@@ -15,6 +15,10 @@ const translations = {
     startHere: 'Start here!',
     menuMoreFeatures: 'More features unlock after your first quiz!',
     modeRecommended: 'Try this one!',
+    listenMatchQuizHint: 'Hear it and read it',
+    wordQuizHint: 'Read it',
+    imageQuizHint: 'See the picture',
+    audioQuizHint: 'Hear it',
     letterPath: 'Letter by Letter',
     letterPathDesc: 'Practice words one letter at a time',
     letterPathHint: 'Pick a letter to practice its words',
@@ -406,11 +410,13 @@ const translations = {
     featureProgressDesc: 'Earn badges, keep streaks, see your growth',
 
     // How it works
+    landingStart: 'Start',
+    landingOrPickLang: 'or pick the language of the instructions:',
     howItWorksTitle: 'How It Works',
-    howStep1Title: 'Pick a Topic',
-    howStep1Desc: 'Choose from 13 categories like animals, food, colors...',
+    howStep1Title: 'Tap Start',
+    howStep1Desc: 'Pick a name (or skip it) and the first word set opens',
     howStep2Title: 'Practice',
-    howStep2Desc: 'Learn with flashcards, quizzes, and audio challenges',
+    howStep2Desc: 'Flashcards, then listening and picture quizzes, in short steps',
     howStep3Title: 'Master Words',
     howStep3Desc: 'Track your progress and earn badges as you improve',
 

@@ -30,6 +30,7 @@ const allModes = [
     id: 'listen',
     nameKey: 'listenMatchQuiz',
     descKey: 'listenMatchQuizDesc',
+    hintKey: 'listenMatchQuizHint',
     icon: Headphones,
     iconBg: 'bg-purple-100',
     iconColor: 'text-purple-600',
@@ -38,6 +39,7 @@ const allModes = [
     id: 'word',
     nameKey: 'wordQuiz',
     descKey: 'wordQuizDesc',
+    hintKey: 'wordQuizHint',
     icon: Type,
     iconBg: 'bg-emerald-100',
     iconColor: 'text-emerald-600',
@@ -46,6 +48,7 @@ const allModes = [
     id: 'image',
     nameKey: 'imageQuiz',
     descKey: 'imageQuizDesc',
+    hintKey: 'imageQuizHint',
     icon: Image,
     iconBg: 'bg-blue-100',
     iconColor: 'text-blue-600',
@@ -54,6 +57,7 @@ const allModes = [
     id: 'audio',
     nameKey: 'audioQuiz',
     descKey: 'audioQuizDesc',
+    hintKey: 'audioQuizHint',
     icon: Volume2,
     iconBg: 'bg-amber-100',
     iconColor: 'text-amber-600',
@@ -71,7 +75,8 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
   const modes = canRead
     ? allModes
     : allModes.filter(m => m.id !== 'image');
-  const recommended = recommendedMode(stats.quizHistory, canRead);
+  // All modes passed → still lead with the first one, so there is always one big button
+  const recommended = recommendedMode(stats.quizHistory, canRead) || modes[0].id;
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -153,18 +158,19 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
         </p>
       )}
 
-      {/* Mode cards */}
+      {/* Mode picker (CUX15): the recommended quiz is one big button; the others are
+          small chips that say in two words what the child does */}
       <div className="space-y-3">
         <h3 className="text-sm font-semibold text-slate-500">{t('chooseMode', lang)}</h3>
-        {modes.map((mode, index) => {
+        {modes.filter(m => m.id === recommended).map((mode) => {
           const Icon = mode.icon;
           return (
             <button
               key={mode.id}
               onClick={() => onStartQuiz(selectedLevel, mode.id)}
-              className="w-full glass rounded-2xl p-5 flex items-center gap-4 text-left
+              data-kdm-primary
+              className="w-full glass rounded-2xl p-5 flex items-center gap-4 text-start ring-2 ring-emerald-500
                          hover:shadow-lg hover:-translate-y-0.5 active:scale-[0.98] transition-all"
-              style={{ animationDelay: `${index * 80}ms` }}
             >
               <div className={`w-14 h-14 rounded-xl ${mode.iconBg} flex items-center justify-center shrink-0`}>
                 <Icon className={`w-7 h-7 ${mode.iconColor}`} />
@@ -173,14 +179,31 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
                 <h3 className="font-bold text-slate-800 dark:text-slate-100">{t(mode.nameKey, lang)}</h3>
                 <p className="text-slate-500 text-sm">{t(mode.descKey, lang)}</p>
               </div>
-              {mode.id === recommended && (
-                <span className="px-2.5 py-1 rounded-full bg-emerald-700 text-white text-xs font-bold shrink-0">
-                  {t('modeRecommended', lang)}
-                </span>
-              )}
+              <span className="px-2.5 py-1 rounded-full bg-emerald-700 text-white text-xs font-bold shrink-0">
+                {t('modeRecommended', lang)}
+              </span>
             </button>
           );
         })}
+        <div className="grid grid-cols-2 gap-2">
+          {modes.filter(m => m.id !== recommended).map((mode) => {
+            const Icon = mode.icon;
+            return (
+              <button
+                key={mode.id}
+                onClick={() => onStartQuiz(selectedLevel, mode.id)}
+                className="glass rounded-xl px-3 py-2.5 min-h-[44px] flex items-center gap-2 text-start
+                           hover:shadow-md active:scale-[0.98] transition-all"
+              >
+                <Icon className={`w-5 h-5 shrink-0 ${mode.iconColor}`} aria-hidden="true" />
+                <span className="min-w-0">
+                  <span className="block text-sm font-bold text-slate-800 dark:text-slate-100">{t(mode.nameKey, lang)}</span>
+                  <span className="block text-xs text-slate-500">{t(mode.hintKey, lang)}</span>
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

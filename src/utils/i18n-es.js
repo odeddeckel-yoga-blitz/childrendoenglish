@@ -13,6 +13,10 @@ export default {
   startHere: '¡Empieza aquí!',
   menuMoreFeatures: '¡Se desbloquean más funciones después de tu primer quiz!',
   modeRecommended: '¡Prueba este!',
+  listenMatchQuizHint: 'Escuchas y lees',
+  wordQuizHint: 'Lees',
+  imageQuizHint: 'Ves la imagen',
+  audioQuizHint: 'Escuchas',
   letterPath: 'Letra por Letra',
   letterPathDesc: 'Practica palabras una letra a la vez',
   letterPathHint: 'Elige una letra para practicar sus palabras',
@@ -404,11 +408,13 @@ export default {
   featureProgressDesc: 'Gana insignias, mantén rachas y observa tu crecimiento',
 
   // How it works
+  landingStart: 'Empezar',
+  landingOrPickLang: 'o elige el idioma de las instrucciones:',
   howItWorksTitle: 'Cómo Funciona',
-  howStep1Title: 'Elige un Tema',
-  howStep1Desc: 'Elige entre 13 categorías como animales, comida, colores...',
+  howStep1Title: 'Pulsa Empezar',
+  howStep1Desc: 'Elige un nombre (o sáltalo) y se abre el primer grupo de palabras',
   howStep2Title: 'Practica',
-  howStep2Desc: 'Aprende con tarjetas, quizzes y retos de audio',
+  howStep2Desc: 'Tarjetas y luego quizzes de escuchar y de imágenes, en pasos cortos',
   howStep3Title: 'Domina las Palabras',
   howStep3Desc: 'Sigue tu progreso y gana insignias a medida que mejoras',
 

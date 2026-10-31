@@ -57,6 +57,9 @@ export default function QuizOptionGrid({ quiz, loadedImages, onImageLoad, lang }
             key={option.id}
             onClick={() => quiz.handleAnswer(option)}
             disabled={!!quiz.answered}
+            aria-label={quiz.answered && (isCorrect || isSelected)
+              ? `${option.word}: ${t(isCorrect ? 'correct' : 'wrong', lang)}`
+              : option.word}
             className={`relative aspect-square rounded-2xl overflow-hidden bg-slate-100
                        transition-all ${borderClass} ${
                          !quiz.answered ? 'hover:shadow-lg active:scale-95' : ''
@@ -73,7 +76,7 @@ export default function QuizOptionGrid({ quiz, loadedImages, onImageLoad, lang }
             ) : (
               <img
                 src={getImageUrl(option)}
-                alt={option.word}
+                alt=""
                 className={`w-full h-full object-cover transition-opacity ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
                 onLoad={() => onImageLoad(option.id)}
                 onError={(e) => {
@@ -90,14 +93,14 @@ export default function QuizOptionGrid({ quiz, loadedImages, onImageLoad, lang }
               />
             )}
             {quiz.answered && isCorrect && (
-              <span className="absolute inset-0 flex items-center justify-center" aria-label={t('correct', lang)}>
+              <span className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
                 <span className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg">
                   <Check className="w-6 h-6 text-white" />
                 </span>
               </span>
             )}
             {quiz.answered && isSelected && !isCorrect && (
-              <span className="absolute inset-0 flex items-center justify-center" aria-label={t('wrong', lang)}>
+              <span className="absolute inset-0 flex items-center justify-center" aria-hidden="true">
                 <span className="w-10 h-10 rounded-full bg-rose-500 flex items-center justify-center shadow-lg">
                   <XIcon className="w-6 h-6 text-white" />
                 </span>

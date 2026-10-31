@@ -13,6 +13,10 @@ export default {
   startHere: 'התחילו כאן!',
   menuMoreFeatures: 'עוד משחקים ייפתחו אחרי החידון הראשון!',
   modeRecommended: 'נסו את זה!',
+  listenMatchQuizHint: 'שומעים וקוראים',
+  wordQuizHint: 'קוראים',
+  imageQuizHint: 'רואים תמונה',
+  audioQuizHint: 'שומעים',
   letterPath: 'לומדים אות-אות',
   letterPathDesc: 'מתרגלים מילים אות אחת בכל פעם',
   letterPathHint: 'בחרו אות כדי לתרגל את המילים שלה',
@@ -404,11 +408,13 @@ export default {
   featureProgressDesc: 'השיגו תגים, שמרו רצפים, ראו את ההתקדמות',
 
   // How it works
+  landingStart: 'התחילו',
+  landingOrPickLang: 'או בחרו את שפת ההוראות:',
   howItWorksTitle: 'איך זה עובד',
-  howStep1Title: 'בחרו נושא',
-  howStep1Desc: 'בחרו מתוך 13 קטגוריות כמו חיות, אוכל, צבעים...',
+  howStep1Title: 'לוחצים "התחילו"',
+  howStep1Desc: 'בוחרים שם (או מדלגים) וסט המילים הראשון נפתח',
   howStep2Title: 'תרגלו',
-  howStep2Desc: 'למדו עם כרטיסיות, חידונים ואתגרי שמע',
+  howStep2Desc: 'כרטיסיות, ואחריהן חידוני שמיעה ותמונות, בצעדים קצרים',
   howStep3Title: 'שלטו במילים',
   howStep3Desc: 'עקבו אחרי ההתקדמות והשיגו תגים ככל שתשתפרו',
 
