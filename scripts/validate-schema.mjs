@@ -84,6 +84,23 @@ for (const file of pages(DIST)) {
   const inline = [...tags.matchAll(/<script(?![^>]*\ssrc=)([^>]*)>\s*\S/gi)]
     .filter((m) => !/\stype=["']?(?!text\/javascript|module|application\/javascript)[^"'\s>]+/i.test(m[1]));
   if (inline.length) errors.push(`${rel}: inline <script> (blocked by CSP) — move it to an external file`);
+  // RTL gate (R2C29): on Hebrew pages, mixed-direction text the bidi algorithm
+  // scrambles. Runs already isolated (dir="ltr", lang="en", <bdi>) are skipped.
+  // Each rule is a glitch that shipped: "(ב-Mac: Cmd+P)" printed as ")Mac: Cmd+P-ב(",
+  // "(20, 30, 40…)" printed reversed, a "1 / 16" counter printed "16 / 1".
+  if (/<html[^>]*\blang="he"/.test(html)) {
+    const text = tags
+      .replace(/<(script|style)[\s\S]*?<\/\1>/g, ' ')
+      .replace(/<(bdi|span|p|div|td|a|strong|b)\b[^>]*(dir="ltr"|lang="en")[^>]*>[^<]*<\/\1>/g, ' ')
+      .replace(/<bdi\b[^>]*>[^<]*<\/bdi>/g, ' ')
+      .replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/g, ' ');
+    const RTL_RULES = [
+      [/\([^()]*[\u0590-\u05FF]-[A-Za-z][^()]*\)/, 'Hebrew-prefix + Latin inside parentheses'],
+      [/[\u0590-\u05FF][^.()]{0,40}\(\d+, ?\d+/, 'a list of numbers in parentheses inside Hebrew'],
+      [/[\u0590-\u05FF]\s+\d+ \/ \d+\s/, 'an "n / m" counter in Hebrew text (wrap it dir="ltr")'],
+    ];
+    for (const [re, why] of RTL_RULES) { const m = text.match(re); if (m) errors.push(`${rel}: RTL — ${why}: "${m[0].slice(0, 60)}"`); }
+  }
 }
 
 const pct = (a, b) => (b ? Math.round((100 * a) / b) : 0);
@@ -99,4 +116,4 @@ if (errors.length) {
   for (const e of errors.slice(0, 30)) console.error('  ' + e);
   process.exit(1);
 }
-console.log('\n✓ every JSON-LD block parses and carries its required properties; no CSP-blocked inline scripts or handlers');
+console.log('\n✓ every JSON-LD block parses and carries its required properties; no CSP-blocked inline scripts or handlers; no known RTL glitches on Hebrew pages');
