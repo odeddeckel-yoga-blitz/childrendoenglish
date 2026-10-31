@@ -259,19 +259,21 @@ export default {
 
   // Privacy policy
   privacyTitle: 'Política de Privacidad',
-  privacyUpdated: 'Última actualización: 18 de octubre de 2026',
+  privacyUpdated: "Última actualización: 31 de octubre de 2026",
   privacyDataTitle: 'Qué datos recopilamos',
-  privacyDataDesc: 'Children Do English no recopila información personal. No pedimos nombres ni ningún dato identificable. Durante la introducción se muestra un campo opcional de correo electrónico para los padres — si lo completas, se guarda solo en el almacenamiento local de tu navegador y nunca se envía a ningún servidor.',
+  privacyDataDesc: "No hay cuentas ni registro. Para separar el progreso de hermanos en un mismo dispositivo puedes escribir un nombre de jugador (opcional para el primer jugador). El nombre se queda en el almacenamiento local de este navegador y nunca se nos envía. No pedimos correo electrónico ni otros datos de contacto.",
   privacyCookieTitle: 'Cookies y rastreo',
-  privacyCookieDesc: 'No usamos cookies ni servicios de publicidad. Para entender cómo se usa el sitio contamos las visitas con Vercel Web Analytics, que funciona sin cookies y no guarda ningún identificador en tu dispositivo, y guardamos totales anónimos (por ejemplo, cuántas respuestas fueron correctas para cada palabra, o cuántas veces se toca el botón de jugar de una página). Estos totales no contienen ninguna información sobre quién eres.',
+  privacyCookieDesc: "No usamos cookies ni mostramos anuncios. Para entender cómo se usa el sitio contamos las visitas con Vercel Web Analytics, que funciona sin cookies y no guarda ningún identificador en tu dispositivo. Nuestro propio contador también guarda totales diarios: qué tipo de página se abrió, cómo llegó la visita (por ejemplo, desde un buscador) y el idioma de la interfaz, además de totales de aprendizaje, como cuántas respuestas de cada palabra fueron correctas o incorrectas y cuántas veces se empezó o terminó un quiz o un juego. Estos totales no usan cookies, identificadores ni direcciones IP, y no dicen nada sobre quién jugó.",
   privacyStorageTitle: 'Qué se guarda en tu dispositivo',
-  privacyStorageDesc: 'Tu progreso de aprendizaje (puntajes de quizzes, progreso de palabras, racha, insignias y preferencias como el modo oscuro y el sonido) se guarda en el almacenamiento local de tu navegador. Estos datos nunca salen de tu dispositivo y no se envían a ningún servidor. También guardamos la fecha de tu última visita para contar cuántas visitas son de regreso, como un total anónimo, sin ningún identificador y sin enviar la fecha.',
+  privacyStorageDesc: "Los nombres de los jugadores, todo el progreso (puntuaciones, progreso por palabra, racha, insignias) y los ajustes (sonido, modo oscuro, audio lento, idioma) se guardan solo en el almacenamiento local de tu navegador y no se nos envían. También guardamos la fecha de tu última visita para contar las visitas que vuelven: solo se cuenta un rango aproximado (por ejemplo, \"volvió en una semana\"), nunca la fecha. Si activas los recordatorios, los muestra tu navegador; nada se registra en un servidor.",
+  privacyBattleTitle: "Class Battle",
+  privacyBattleDesc: "En Class Battle, los alumnos entran con un código de sala y eligen un apodo de una lista ya preparada; nadie escribe su nombre. Una sala guarda solo esos apodos, las puntuaciones y el número de respuestas, la categoría de palabras y los tiempos, y toda la sala se borra unos 30 minutos después de crearse.",
   privacyThirdPartyTitle: 'Servicios de terceros',
-  privacyThirdPartyDesc: 'Usamos Vercel Web Analytics (sin cookies ni identificadores) para contar visitas a las páginas. Usamos Sentry para el monitoreo de errores en producción — puede recopilar reportes de errores, metadatos del navegador e información del dispositivo para ayudarnos a corregir errores y mejorar la estabilidad de la app (ver sentry.io/privacy). La síntesis de voz integrada del navegador puede conectarse al motor de voz de tu dispositivo para la pronunciación de las palabras. Todos los datos de palabras e imágenes vienen incluidos con la app.',
+  privacyThirdPartyDesc: "Vercel Web Analytics (sin cookies ni identificadores) cuenta las visitas. Si algo falla, un informe de error (qué falló, la página, el tipo de navegador y los pasos justo antes del error) va a Sentry para que podamos arreglarlo (ver sentry.io/privacy); no hay grabación de sesiones. El audio de las palabras es un archivo de sonido de nuestro sitio o, si falla, la voz integrada de tu dispositivo. No cargamos scripts de publicidad ni de seguimiento.",
   privacyChildrenTitle: 'Privacidad de los niños',
-  privacyChildrenDesc: 'Esta app está diseñada para niños de 6 a 12 años. Como no recopilamos ni transmitimos ningún dato personal, no existe riesgo de que la información de los niños sea compartida o utilizada indebidamente.',
+  privacyChildrenDesc: "Esta app está pensada para niños de 6 a 12 años. No recopilamos información personal de los niños: el progreso se queda en el dispositivo, los apodos de Class Battle vienen de una lista fija y nuestros totales son anónimos.",
   privacyDeleteTitle: 'Eliminar tus datos',
-  privacyDeleteDesc: 'Puedes borrar todo el progreso guardado eliminando los datos del sitio de tu navegador para este sitio web, o usando la función "Borrar datos de navegación" de tu navegador.',
+  privacyDeleteDesc: "Para borrar todo lo guardado en este dispositivo, usa Administrar Jugadores → \"Eliminar Todos los Datos\" (borra todos los jugadores, todo el progreso y todos los ajustes de este sitio), o borra los datos de este sitio en los ajustes del navegador. Una sala de Class Battle se borra sola unos 30 minutos después de crearse. Para cualquier otra cosa, escribe a info@childrendoenglish.com.",
   privacyContactTitle: 'Contacto',
   privacyContactDesc: 'Children Do English fue creada por Oded Deckelbaum. Si tienes preguntas sobre esta política de privacidad o la app, escribe un correo a',
   termsTitle: 'Términos de Servicio',
@@ -368,7 +370,7 @@ export default {
 
   // COPPA compliance
   privacyCoppaTitle: 'Cumplimiento de COPPA',
-  privacyCoppaDesc: 'Children Do English cumple con la Ley de Protección de la Privacidad Infantil en Internet (COPPA). No recopilamos a sabiendas información personal de niños menores de 13 años. Todos los datos de aprendizaje se guardan localmente en el dispositivo y nunca se transmiten a nuestros servidores. El monitoreo de errores mediante Sentry funciona solo en producción y recopila únicamente datos técnicos de diagnóstico (sin nombres, sin contenido del usuario).',
+  privacyCoppaDesc: "Children Do English está hecho para cumplir la Ley de Protección de la Privacidad Infantil en Línea (COPPA). No recopilamos a sabiendas información personal de menores de 13 años. El progreso se guarda en el dispositivo; solo se envían totales anónimos sin identificador. La monitorización de errores con Sentry funciona solo en producción y recoge solo datos técnicos de diagnóstico (sin nombres ni contenido del usuario).",
 
   // Daily Review
   dailyReview: 'Repaso Diario',

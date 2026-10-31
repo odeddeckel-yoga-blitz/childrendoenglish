@@ -25,6 +25,11 @@ export default function PrivacyPolicy({ lang = 'en', onBack }) {
         </section>
 
         <section className="space-y-2">
+          <h3 className="font-bold text-slate-800 dark:text-slate-100">{t('privacyBattleTitle', lang)}</h3>
+          <p>{t('privacyBattleDesc', lang)}</p>
+        </section>
+
+        <section className="space-y-2">
           <h3 className="font-bold text-slate-800 dark:text-slate-100">{t('privacyCookieTitle', lang)}</h3>
           <p>{t('privacyCookieDesc', lang)}</p>
         </section>

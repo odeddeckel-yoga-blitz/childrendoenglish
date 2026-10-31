@@ -261,19 +261,21 @@ const translations = {
 
     // Privacy policy
     privacyTitle: 'Privacy Policy',
-    privacyUpdated: 'Last updated: October 18, 2026',
+    privacyUpdated: "Last updated: October 31, 2026",
     privacyDataTitle: 'What data we collect',
-    privacyDataDesc: 'Children Do English does not collect personal information. We do not ask for names or any identifying details. An optional parent email field is shown during onboarding — if provided, it is saved only in your browser\'s local storage and is never sent to any server.',
+    privacyDataDesc: "There are no accounts and no sign-up. To keep siblings' progress apart on one device you can type a player name (optional for the first player). The name stays in this browser's local storage and is never sent to us. We do not ask for an email address or any other contact details.",
     privacyCookieTitle: 'Cookies & tracking',
-    privacyCookieDesc: 'We do not use cookies or advertising services. To understand how the site is used we count page visits with Vercel Web Analytics, which is cookieless and stores no identifier on your device, and we keep anonymous totals (for example, how many quiz answers were right for each word, or how often a page\'s play button is tapped). These totals contain no information about who you are.',
+    privacyCookieDesc: "We set no cookies and show no ads. To understand how the site is used we count page visits with Vercel Web Analytics, which is cookieless and stores no identifier on your device. Our own counter also keeps daily totals: which kind of page was opened, how the visit arrived (for example from a search engine) and the interface language, plus learning totals such as how many answers for each word were right or wrong and how often a quiz or game was started or finished. These totals use no cookie, no identifier and no IP address, and say nothing about who played.",
     privacyStorageTitle: 'What is stored on your device',
-    privacyStorageDesc: 'Your learning progress (quiz scores, word progress, streak, badges, and preferences like dark mode and sound) is saved in your browser\'s local storage. This data never leaves your device and is not sent to any server. We also save the date of your last visit, so we can count how many visits are return visits — as an anonymous total, with no identifier and without sending the date.',
+    privacyStorageDesc: "Player names, all learning progress (scores, word progress, streak, badges) and settings (sound, dark mode, slow audio, language) are saved only in your browser's local storage and are not sent to us. We also save the date of your last visit so we can count return visits: only a rough bucket (for example \"came back within a week\") is counted, never the date itself. If you switch on reminders, your browser shows them itself; nothing is registered with a server.",
+    privacyBattleTitle: "Class Battle",
+    privacyBattleDesc: "In Class Battle, students join with a room code and pick a nickname from a ready-made list; nobody types a name. A room stores only those nicknames, the scores and answer counts, the word category and the times, and the whole room is deleted about 30 minutes after it is created.",
     privacyThirdPartyTitle: 'Third-party services',
-    privacyThirdPartyDesc: 'We use Vercel Web Analytics (cookieless, no identifiers) for page-visit counts. We use Sentry for error monitoring in production — it may collect error reports, browser metadata, and device information to help us fix bugs and improve app stability (see sentry.io/privacy). The browser\'s built-in speech synthesis may connect to your device\'s speech engine for word pronunciation. All word data and images are bundled with the app.',
+    privacyThirdPartyDesc: "Vercel Web Analytics (cookieless, no identifiers) counts page visits. If something breaks, an error report (what went wrong, the page, the browser type and the steps just before the error) goes to Sentry so we can fix it (see sentry.io/privacy); there is no session recording. Word audio is a sound file from our own site or, if that fails, your device's built-in speech voice. We load no advertising or tracking scripts.",
     privacyChildrenTitle: 'Children\'s privacy',
-    privacyChildrenDesc: 'This app is designed for children ages 6-12. Because we do not collect or transmit any personal data, there is no risk of children\'s information being shared or misused.',
+    privacyChildrenDesc: "This app is designed for children ages 6-12. We collect no personal information from children: progress stays on the device, Class Battle nicknames come from a fixed list, and our totals are anonymous.",
     privacyDeleteTitle: 'Deleting your data',
-    privacyDeleteDesc: 'You can clear all saved progress by clearing your browser\'s site data for this website, or by using your browser\'s "Clear browsing data" feature.',
+    privacyDeleteDesc: "To delete everything saved on this device, use Manage Players → \"Delete All Data\" (it removes every player, all progress and all of this site's settings), or clear this site's data in your browser settings. A Class Battle room deletes itself about 30 minutes after it is created. For anything else, email info@childrendoenglish.com.",
     privacyContactTitle: 'Contact',
     privacyContactDesc: 'Children Do English is made by Oded Deckelbaum. If you have questions about this privacy policy or the app, email',
     termsTitle: 'Terms of Service',
@@ -370,7 +372,7 @@ const translations = {
 
     // COPPA compliance
     privacyCoppaTitle: 'COPPA compliance',
-    privacyCoppaDesc: 'Children Do English complies with the Children\'s Online Privacy Protection Act (COPPA). We do not knowingly collect personal information from children under 13. All learning data is stored locally on the device and is never transmitted to our servers. Error monitoring via Sentry runs only in production and collects only technical diagnostic data (no names, no user content).',
+    privacyCoppaDesc: "Children Do English is built to comply with the Children's Online Privacy Protection Act (COPPA). We do not knowingly collect personal information from children under 13. Learning progress is stored on the device; only anonymous totals with no identifier are sent. Error monitoring via Sentry runs only in production and collects only technical diagnostic data (no names, no user content).",
 
     // Daily Review
     dailyReview: 'Daily Review',
