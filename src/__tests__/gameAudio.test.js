@@ -43,10 +43,17 @@ describe('recorded word audio coverage', () => {
     expect(reads.filter((w) => !fs.existsSync(path.join(ROOT, 'public/images', `${w}.webp`)))).toEqual([]);
   });
 
-  it('every Letter Twins word has a recording and a photo, starts with one of its level letters, and every letter appears', () => {
+  it('every Letter Twins word (all three tracks) has a recording and a photo, starts with one of its level letters, and every letter appears', () => {
     const src = fs.readFileSync(path.join(ROOT, 'public/games/letter-twins/game.js'), 'utf8');
     const levels = [...src.matchAll(/letters:\[([^\]]*)\], words:\[([^\]]*)\]/g)].map((m) => ({ letters: [...m[1].matchAll(/'([a-z])'/g)].map((x) => x[1]), words: [...m[2].matchAll(/'([a-z]+)'/g)].map((x) => x[1]) }));
-    expect(levels.length).toBe(4);
+    expect(levels.length).toBe(12); // twins b/d/p/q · m/n/w/u · letter sounds
+    // letter-sound levels: four letters with different first sounds (never c with k)
+    const sounds = levels.slice(8);
+    for (const l of sounds) {
+      expect(new Set(l.letters).size).toBe(4);
+      expect(l.letters.includes('c') && l.letters.includes('k')).toBe(false);
+      for (const ch of l.letters) expect(l.words.filter((w) => w[0] === ch).length).toBeGreaterThanOrEqual(2);
+    }
     for (const l of levels) {
       expect(missing(l.words)).toEqual([]);
       expect(l.words.filter((w) => !fs.existsSync(path.join(ROOT, 'public/images', `${w}.webp`)))).toEqual([]);
