@@ -2807,7 +2807,7 @@ function buildFlashcardToolJs() {
 'use strict';
 ${m[1]}
 var FM_WORDS = ${JSON.stringify(data)};
-var byWord = {}; FM_WORDS.forEach(function (w) { byWord[w.w.toLowerCase()] = w; });
+var byWord = Object.create(null); FM_WORDS.forEach(function (w) { byWord[w.w.toLowerCase()] = w; });
 var CATS = Array.from(new Set(FM_WORDS.map(function (w) { return w.cat; })));
 
 function $(id) { return document.getElementById(id); }
@@ -2822,10 +2822,8 @@ function selectedWords() {
     var L = $('fmLetter').value.toLowerCase();
     return FM_WORDS.filter(function (w) { return w.w[0].toLowerCase() === L; });
   }
-  // paste: match known words (photos) and keep unknown ones as text-only cards
-  return $('fmPaste').value.split(/[\\n,;]+/).map(function (t) { return t.trim(); })
-    .filter(Boolean).slice(0, 180)
-    .map(function (t) { return byWord[t.toLowerCase()] || { id: null, w: t, he: '', es: '', img: null }; });
+  // paste: known words get our photo, others become text-only cards (parsePasteList guards)
+  return parsePasteList($('fmPaste').value, byWord);
 }
 
 function cardFront(w) {
@@ -2979,7 +2977,7 @@ function buildFlashcardMakerPage() {
     </div>
     <div id="pick-paste" class="pick-detail" hidden>
       <label for="fmPaste">Your words (one per line — known words get photos)</label>
-      <textarea id="fmPaste" placeholder="dog&#10;banana&#10;rocket ship"></textarea>
+      <textarea id="fmPaste" maxlength="8000" spellcheck="false" autocomplete="off" placeholder="dog&#10;banana&#10;rocket ship"></textarea>
     </div>
     <div class="row" role="radiogroup" aria-label="Cards per page">
       <label>Cards per page:</label>

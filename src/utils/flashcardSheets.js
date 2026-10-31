@@ -56,6 +56,33 @@ function buildSheets(words, perPage) {
   }
   return out;
 }
+/** "Paste a list" input → cards. The text stays in the browser (never sent or stored,
+ *  no AI reads it) and is only ever written with textContent, so the guards are about
+ *  abuse and garbage: at most PASTE_MAX_ITEMS items of PASTE_MAX_LEN characters, control /
+ *  zero-width / bidi-override characters stripped (they hide or reverse text on the card),
+ *  duplicates dropped, and the word lookup is own-property only, so "constructor" or
+ *  "__proto__" become plain text cards instead of prototype objects. A known word gets our
+ *  own photo; nothing pasted can choose an image URL. */
+const PASTE_MAX_ITEMS = 180;
+const PASTE_MAX_LEN = 40;
+// eslint-disable-next-line no-control-regex -- stripping control characters is the point
+const PASTE_STRIP = /[\u0000-\u001F\u007F-\u009F\u00AD\u061C\u180E\u200B-\u200F\u202A-\u202E\u2060-\u206F\uFEFF\uFFF9-\uFFFB]/g;
+function parsePasteList(text, byWord) {
+  const out = [];
+  const seen = new Set();
+  const parts = String(text || '').slice(0, PASTE_MAX_ITEMS * (PASTE_MAX_LEN + 2)).split(/[\n,;]+/);
+  for (const raw of parts) {
+    const t = raw.replace(PASTE_STRIP, '').replace(/\s+/g, ' ').trim().slice(0, PASTE_MAX_LEN).trim();
+    if (!t) continue;
+    const key = t.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const known = Object.prototype.hasOwnProperty.call(byWord, key) ? byWord[key] : null;
+    out.push(known || { id: null, w: t, he: '', es: '', img: null });
+    if (out.length >= PASTE_MAX_ITEMS) break;
+  }
+  return out;
+}
 /* flashcard-logic:end */
 
-export { FLASHCARD_LAYOUTS, chunkWords, mirrorPage, buildSheets };
+export { FLASHCARD_LAYOUTS, chunkWords, mirrorPage, buildSheets, parsePasteList, PASTE_MAX_ITEMS, PASTE_MAX_LEN };

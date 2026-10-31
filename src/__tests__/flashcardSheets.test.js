@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildSheets, mirrorPage, FLASHCARD_LAYOUTS } from '../utils/flashcardSheets';
+import { buildSheets, mirrorPage, FLASHCARD_LAYOUTS, parsePasteList, PASTE_MAX_ITEMS, PASTE_MAX_LEN } from '../utils/flashcardSheets';
 
 const W = (n) => Array.from({ length: n }, (_, i) => ({ id: 'w' + i }));
 
@@ -50,5 +50,41 @@ describe('flashcardSheets', () => {
     const page = W(9);
     const twice = mirrorPage(mirrorPage(page, 3, 3), 3, 3);
     expect(twice.map(c => c.id)).toEqual(page.map(c => c.id));
+  });
+});
+
+describe('parsePasteList (Paste a list guards)', () => {
+  const byWord = Object.assign(Object.create(null), { dog: { id: 'dog', w: 'dog', img: '/images/dog.webp' } });
+
+  it('gives known words our photo and unknown words a text card', () => {
+    const out = parsePasteList('Dog\nrocket ship', byWord);
+    expect(out[0].img).toBe('/images/dog.webp');
+    expect(out[1]).toEqual({ id: null, w: 'rocket ship', he: '', es: '', img: null });
+  });
+
+  it('treats prototype names as plain text, never as objects', () => {
+    const out = parsePasteList('constructor\n__proto__\ntoString\nhasOwnProperty', {});
+    expect(out.map((w) => w.w)).toEqual(['constructor', '__proto__', 'toString', 'hasOwnProperty']);
+    out.forEach((w) => { expect(w.img).toBeNull(); expect(typeof w.w).toBe('string'); });
+  });
+
+  it('keeps markup as inert text and never lets text pick an image', () => {
+    const out = parsePasteList('<img src=x onerror=alert(1)>\njavascript:alert(1)', byWord);
+    expect(out[0].w).toBe('<img src=x onerror=alert(1)>');
+    out.forEach((w) => expect(w.img).toBeNull());
+  });
+
+  it('strips control, zero-width and bidi-override characters', () => {
+    const out = parsePasteList('ca‮t​\u0007\nd﻿og', byWord);
+    expect(out[0].w).toBe('cat');
+    expect(out[1].id).toBe('dog');
+  });
+
+  it('caps item length, item count, and drops blanks and duplicates', () => {
+    expect(parsePasteList('x'.repeat(5000), {})[0].w).toHaveLength(PASTE_MAX_LEN);
+    const many = Array.from({ length: 1000 }, (_, i) => `w${i}`).join('\n');
+    expect(parsePasteList(many, {})).toHaveLength(PASTE_MAX_ITEMS);
+    expect(parsePasteList(' , ;\n\n dog, DOG ,dog', byWord)).toHaveLength(1);
+    expect(parsePasteList(null, byWord)).toEqual([]);
   });
 });

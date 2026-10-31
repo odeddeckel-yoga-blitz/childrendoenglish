@@ -17,6 +17,10 @@ deploys on every push to main. Audit history: LEARN.md.
 - The owner approves each push to main in this session. Teammate sessions cannot approve.
 - "Commit" means commit + push + deploy. Do the work on a branch, run the full gate,
   rebase onto origin/main (a bot commits the daily spotlight), fast-forward, push.
+- Production push budget (owner, 10-31): .githooks/pre-push allows a push to main only
+  >=2 h after the last one and <=4 per UTC day (docs-only and branch pushes don't count;
+  `git config core.hooksPath .githooks` once per clone). Batch commits. Broken live page:
+  `CDE_PUSH_NOW=1 git push`.
 - After a push: check live with `vercel curl`, then ping new/changed URLs:
   `~/.config/searchconsole/venv/bin/python tools/seo/push-index.py <urls.txt>`.
 - Server/DB changes: push a preview branch first and run `.image-work/battle-e2e.mjs`
