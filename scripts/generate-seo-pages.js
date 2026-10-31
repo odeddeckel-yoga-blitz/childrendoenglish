@@ -83,6 +83,7 @@ function buildCrawlMesh(lang = 'en') {
       ...HE_GAMES_AGES.map((a) => [`/he/english-games/${a.slug}/`, `גילאי ${a.ages} (${a.grades})`]),
       ...HE_GAMES_TOPICS.map((t) => [`/he/english-games/${t}/`, `אנגלית לילדים — ${CATEGORY_NAMES_HE[t] || t}`]),
     ]) +
+    row('אנגלית לפי כיתה', [1, 2, 3, 4, 5, 6].map((n) => [`/he/grade-${n}/`, `אנגלית לכיתה ${'אבגדהו'[n - 1]}׳`])) +
     row('מילים באנגלית לפי נושא', [['/he/english-words/', 'כל הנושאים'], ['/he/english-words/days-of-the-week/', 'ימות השבוע באנגלית'], ['/he/english-words/months/', 'חודשי השנה באנגלית'], ['/he/english-words/family/', 'בני משפחה באנגלית'], ['/he/english-words/numbers-1-100/', 'מספרים באנגלית'], ['/he/english-words/abc/', 'אותיות באנגלית']]) +
     row('Printable Flashcards', [['/tools/flashcard-maker/', 'Flashcard maker (free tool)'], ['/printable-flashcards/', 'All flashcards'], ...cats.map((c) => [`/printable-flashcards/${c}/`, label(c)])]) +
     // Spanish printable sets (Oct 2026): they draw shared/direct visitors but
@@ -5158,6 +5159,8 @@ const { buildHeTopicPages } = await import(join(ROOT, 'scripts', 'build-he-topic
 const { HE_TOPICS } = await import(join(ROOT, 'src', 'data', 'heTopics.js'));
 const heTopicPages = buildHeTopicPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, HE_TOPICS });
 console.log(`Hebrew topic pages: ${heTopicPages}`);
+const { buildGradePages } = await import(join(ROOT, 'scripts', 'build-grade-pages.mjs'));
+console.log(`Grade pages: ${buildGradePages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND_CHIPS, UNITS, BOOKS })}`);
 console.log(`  ✓ /band-1/: ${band1Pages} page(s)`);
 const unitEntries = unitUrls.map((u) => `  <url>
     <loc>${SITE}${u}</loc>
