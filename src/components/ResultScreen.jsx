@@ -212,7 +212,7 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
       {answers.length > 0 && (
         <div className="glass rounded-2xl p-4 space-y-3">
           <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-300">{t('review', lang)}</h3>
-          <div className="space-y-2 max-h-60 overflow-y-auto" role="list">
+          <div className="space-y-2 max-h-60 overflow-y-auto" role="list" tabIndex={0} aria-label={t('review', lang)}>
             {answers.map((answer, i) => {
               const word = getWordById(answer.wordId);
               if (!word) return null;
@@ -234,7 +234,7 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
                   </div>
                   <span className="font-semibold text-sm text-slate-700 dark:text-slate-200">{word.word}</span>
                   {!answer.correct && answer.selected && (
-                    <span className="text-xs text-slate-500 ml-auto">
+                    <span className="text-xs text-slate-600 ml-auto">
                       {t('youPicked', lang, { word: getWordById(answer.selected)?.word })}
                     </span>
                   )}

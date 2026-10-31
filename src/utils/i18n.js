@@ -578,6 +578,7 @@ const translations = {
     teacherUnits: 'Textbook units',
     teacherBattle: 'Class Battle',
     teacherPrint: 'Printable flashcards',
+    skipToContent: 'Skip to content',
     retrySameWords: '🔁 Again — same words',
     moreChoices: 'More choices',
     nextQuiz: '▶ Next quiz',

@@ -1065,7 +1065,7 @@ export default function App() {
       <Confetti active={showConfetti && !(gameState === 'finished' && quizFlow.quizResults?.total > 0
         && quizFlow.quizResults.score / quizFlow.quizResults.total < 0.5)} />
       <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-lg focus:text-sm focus:font-semibold">
-        Skip to content
+        {t('skipToContent', lang)}
       </a>
       {isOffline && (
         <div className="bg-amber-100 text-amber-800 text-center text-sm py-2 px-4 font-medium" role="alert">

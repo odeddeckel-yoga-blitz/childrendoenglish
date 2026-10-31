@@ -137,7 +137,7 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
               </span>
               <span className="text-xs font-bold block mt-0.5">{localName}</span>
               {unlocked && (
-                <span className={`text-[10px] block ${active ? 'text-white/70' : 'opacity-60'}`}>
+                <span className={`text-[10px] block ${active ? 'text-white/90' : 'text-slate-600 dark:text-slate-300'}`}>
                   {wordCount} {t('words', lang)}
                 </span>
               )}
@@ -174,7 +174,7 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
                 <p className="text-slate-500 text-sm">{t(mode.descKey, lang)}</p>
               </div>
               {mode.id === recommended && (
-                <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white text-xs font-bold shrink-0">
+                <span className="px-2.5 py-1 rounded-full bg-emerald-700 text-white text-xs font-bold shrink-0">
                   {t('modeRecommended', lang)}
                 </span>
               )}

@@ -568,6 +568,7 @@ export default {
   teacherUnits: 'יחידות לימוד',
   teacherBattle: 'קרב כיתתי',
   teacherPrint: 'כרטיסיות להדפסה',
+  skipToContent: 'דילוג לתוכן',
   retrySameWords: '🔁 שוב — אותן מילים',
   moreChoices: 'עוד אפשרויות',
   nextQuiz: '▶ לחידון הבא',

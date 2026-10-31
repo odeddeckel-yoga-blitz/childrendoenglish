@@ -568,6 +568,7 @@ export default {
   teacherUnits: 'Unidades del libro',
   teacherBattle: 'Batalla en clase',
   teacherPrint: 'Tarjetas imprimibles',
+  skipToContent: 'Saltar al contenido',
   retrySameWords: '🔁 Otra vez — las mismas palabras',
   moreChoices: 'Más opciones',
   nextQuiz: '▶ Siguiente quiz',

@@ -251,6 +251,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
                 <h3 className="text-3xl font-black text-slate-800 dark:text-slate-100">{currentCard.word}</h3>
                 <button
                   onClick={(e) => { e.stopPropagation(); speakWord(currentCard.word); }}
+                  tabIndex={flipped ? 0 : -1}
                   className="p-2 rounded-full bg-blue-50 hover:bg-blue-100 transition-colors"
                   aria-label={t('pronounceWord', lang)}
                 >
