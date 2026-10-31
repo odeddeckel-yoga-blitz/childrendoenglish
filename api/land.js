@@ -31,9 +31,10 @@ const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 // zv = a Word Zapper run's variant (<pics|words>-<all|animals|food|transport|things|nature>);
 // rs = app result screen (UX baseline 2026-10-31): <lo|hi|quit>_<view|retry|next|nextquiz|again|more|lightning|game|menu>, lo = under 70%;
 // ge = arcade end card: <game>_<view-good|view-low|next|again|menu> (public/games/end-card.js);
+// ltw = Letter Twins answer per level and first letter (<bd|pb|pq|all>_<b|d|p|q>_<ok|no>) — public/games/letter-twins;
 // qr = a printed sheet's QR code scanned (item = page path key, public/print-btn.js);
 // bt = Class Battle use (create | start_p<1|2-5|6-15|16+> | join) — public/battle/battle.js.
-const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'g_start', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb', 'ansx', 'fcr', 'pg', 'cta', 'mq', 'bt', 'qs', 'aie', 'aiv', 'sheet', 'mp', 'cvc', 'zv', 'b1r', 'wk', 'rq_ok', 'rq_no', 'rs', 'ge', 'qr']);
+const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'g_start', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb', 'ansx', 'fcr', 'pg', 'cta', 'mq', 'bt', 'qs', 'aie', 'aiv', 'sheet', 'mp', 'cvc', 'zv', 'b1r', 'wk', 'rq_ok', 'rq_no', 'rs', 'ge', 'qr', 'ltw']);
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
 const AI_ATTR_RE = /^ai[ev]_(chatgpt|perplexity|copilot|gemini|claude|other)$/; // fixed engine enum (kit spec)
 

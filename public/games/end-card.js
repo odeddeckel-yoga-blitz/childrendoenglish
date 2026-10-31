@@ -6,8 +6,8 @@
    child with a player, else create-player in the page language) replaces the old
    domain-name link. Game names stay English everywhere (one name per game). */
 (function(){
-  var ORDER=['sound-pairs','read-it','spelling-forge','word-zapper','category-conveyor'];
-  var NAMES={'sound-pairs':'Sound Pairs','read-it':'Read It!','spelling-forge':'Spelling Forge','word-zapper':'Word Zapper','category-conveyor':'Category Conveyor'};
+  var ORDER=['sound-pairs','read-it','letter-twins','spelling-forge','word-zapper','category-conveyor'];
+  var NAMES={'sound-pairs':'Sound Pairs','read-it':'Read It!','letter-twins':'Letter Twins','spelling-forge':'Spelling Forge','word-zapper':'Word Zapper','category-conveyor':'Category Conveyor'};
   var STR={
     en:{next:'▶ Next game: ',menu:'🏠 My menu',start:'🏠 More English practice',home:'🏠 Children Do English'},
     he:{next:'▶ המשחק הבא: ',menu:'🏠 לתפריט שלי',start:'🏠 עוד תרגול באנגלית',home:'🏠 Children Do English'},

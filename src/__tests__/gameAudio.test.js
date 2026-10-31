@@ -43,6 +43,18 @@ describe('recorded word audio coverage', () => {
     expect(reads.filter((w) => !fs.existsSync(path.join(ROOT, 'public/images', `${w}.webp`)))).toEqual([]);
   });
 
+  it('every Letter Twins word has a recording and a photo, starts with one of its level letters, and every letter appears', () => {
+    const src = fs.readFileSync(path.join(ROOT, 'public/games/letter-twins/game.js'), 'utf8');
+    const levels = [...src.matchAll(/letters:\[([^\]]*)\], words:\[([^\]]*)\]/g)].map((m) => ({ letters: [...m[1].matchAll(/'([a-z])'/g)].map((x) => x[1]), words: [...m[2].matchAll(/'([a-z]+)'/g)].map((x) => x[1]) }));
+    expect(levels.length).toBe(4);
+    for (const l of levels) {
+      expect(missing(l.words)).toEqual([]);
+      expect(l.words.filter((w) => !fs.existsSync(path.join(ROOT, 'public/images', `${w}.webp`)))).toEqual([]);
+      expect(l.words.filter((w) => !l.letters.includes(w[0]))).toEqual([]);
+      for (const ch of l.letters) expect(l.words.some((w) => w[0] === ch)).toBe(true);
+    }
+  });
+
   it('Class Battle loads word-audio.js before its module', () => {
     expect(fs.readFileSync(path.join(ROOT, 'public/battle/index.html'), 'utf8')).toMatch(/word-audio\.js"><\/script>\s*<script type="module" src="\/battle\/battle\.js"/);
   });

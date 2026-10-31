@@ -11,13 +11,22 @@ import { chromium } from 'playwright';
 const args = process.argv.slice(2);
 const BASE = args.find((a) => a.startsWith('http')) || 'http://localhost:4719';
 const LANG = (args.find((a) => a.startsWith('--lang=')) || '--lang=en').slice(7);
-const ALL = ['sound-pairs', 'read-it', 'spelling-forge', 'word-zapper', 'category-conveyor'];
+const ALL = ['sound-pairs', 'read-it', 'letter-twins', 'spelling-forge', 'word-zapper', 'category-conveyor'];
 const GAMES = args.filter((a) => ALL.includes(a)).length ? args.filter((a) => ALL.includes(a)) : ALL;
 
 // play to the end screen with real taps (or the game's own test contract)
 const PLAY = {
   async 'sound-pairs'(p) { await playRounds(p, 'pairs'); },
   async 'read-it'(p) { await playRounds(p, 'cvc'); },
+  async 'letter-twins'(p) {
+    for (let guard = 0; guard < 80; guard++) {
+      if (await p.locator('.cde-end').count()) return;
+      if (await p.locator('.card .primary').count() && !(await p.locator('.opt').count())) { await p.locator('.card .primary').first().click(); continue; }
+      await p.waitForSelector('.opt', { timeout: 8000 });
+      const w = await p.evaluate(() => (document.querySelector('.pic')?.getAttribute('src') || '').replace(/^.*\/|\.webp$/g, ''));
+      await p.click(`.opt[data-letter="${w[0]}"]`); await p.waitForTimeout(1300);
+    }
+  },
   async 'spelling-forge'(p) {
     for (let i = 0; i < 200 && !(await vis(p, '#win')); i++) {
       await p.evaluate(() => { if (window.SF?.dbg?.word && !SF.state.locked) { SF.dbg.solveForTest(); SF.forge(); } });

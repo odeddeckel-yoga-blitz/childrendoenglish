@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letter Twins — Free b, d, p, q Game for Kids | Children Do English</title>
+<meta name="description" content="A free game for kids who mix up b, d, p and q: see the picture, hear the word, and pick the first letter. Four short levels, with a tip after each mistake. No sign-up.">
+<link rel="canonical" href="https://childrendoenglish.com/games/letter-twins/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="theme-color" content="#1e1b4b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Children Do English">
+<meta property="og:title" content="Letter Twins — b, d, p or q? A Free Letter Game for Kids">
+<meta property="og:description" content="See the picture, hear the word, pick b, d, p or q. Free, no sign-up.">
+<meta property="og:url" content="https://childrendoenglish.com/games/letter-twins/">
+<meta property="og:image" content="https://childrendoenglish.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Letter Twins","url":"https://childrendoenglish.com/games/letter-twins/","description":"A free game for children who mix up the letters b, d, p and q: see the picture, hear the English word and pick its first letter. Four levels: b or d, p or b, p or q, then all four.","inLanguage":"en","genre":"Educational","gamePlatform":"Web Browser","playMode":"SinglePlayer","applicationCategory":"EducationalApplication","operatingSystem":"Any (modern web browser)","isFamilyFriendly":true,"isAccessibleForFree":true,"typicalAgeRange":"6-9","learningResourceType":"Game","educationalUse":"Practice","keywords":"b and d confusion, letter reversals, b d p q, phonics, esl kids","author":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"publisher":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}
+</script>
+<script defer src="/land-beacon.js"></script>
+<style>
+  :root{ --bg0:#0b1230; --bg1:#1e1b4b; --ink:#eef2ff; --dim:#a5b4fc; --blue:#60a5fa; --gold:#fbbf24; --grn:#4ade80; --red:#f87171; --glass:rgba(30,27,75,.7); --line:rgba(129,140,248,.35); }
+  *{box-sizing:border-box;}
+  body{margin:0;min-height:100dvh;background:radial-gradient(circle at 50% 0%,var(--bg1),var(--bg0) 70%);color:var(--ink);font-family:-apple-system,system-ui,'Segoe UI',sans-serif;}
+  #homePill{position:fixed;left:12px;top:12px;z-index:9;direction:ltr;font:bold 13px/1 -apple-system,system-ui,sans-serif;color:var(--ink);text-decoration:none;background:rgba(11,18,48,.8);border:1px solid rgba(165,180,252,.45);border-radius:999px;padding:9px 14px;}
+  main{max-width:560px;margin:0 auto;padding:64px 16px 32px;text-align:center;}
+  h1{font-size:clamp(30px,8vw,46px);margin:0 0 8px;background:linear-gradient(90deg,var(--blue),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{font-size:17px;line-height:1.55;color:#dbe4ff;margin:0 auto 18px;max-width:440px;}
+  .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+  .pill{background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:14px;}
+  button,.ghost,.primary{font-family:inherit;}
+  .primary,#startBtn{display:inline-block;background:linear-gradient(135deg,#6366f1,#3b82f6);color:#fff;border:0;border-radius:14px;padding:15px 28px;font-size:19px;font-weight:800;cursor:pointer;min-height:52px;margin:6px;text-decoration:none;}
+  .ghost{display:inline-block;background:transparent;color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:11px 18px;font-size:16px;font-weight:700;cursor:pointer;margin:6px;text-decoration:none;min-height:46px;}
+  .about{margin-top:28px;text-align:left;font-size:14px;line-height:1.6;color:var(--dim);background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+  .about a{color:var(--blue);}
+  .hud{margin-bottom:18px;}
+  .hud-level{font-size:14px;color:var(--dim);}
+  .hud-label{font-size:22px;font-weight:800;margin:4px 0 10px;}
+  .dots{display:flex;gap:6px;justify-content:center;}
+  .dot{width:12px;height:12px;border-radius:50%;background:rgba(165,180,252,.25);}
+  .dot.done{background:var(--grn);} .dot.now{background:var(--gold);}
+  .big-say{width:96px;height:96px;border-radius:50%;border:0;font-size:42px;background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;cursor:pointer;margin:6px auto 22px;display:block;box-shadow:0 8px 30px rgba(99,102,241,.45);}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .opt{background:var(--glass);border:3px solid var(--line);border-radius:18px;padding:22px 8px;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:4px;min-height:110px;justify-content:center;transition:transform .12s;}
+  .opt:active{transform:scale(.97);}
+  .opt-en{font-size:clamp(30px,9vw,44px);font-weight:900;direction:ltr;}
+  .opt-gl{font-size:15px;color:var(--dim);}
+  .opt.ok{border-color:var(--grn);background:rgba(74,222,128,.18);}
+  .opt.no{border-color:var(--red);background:rgba(248,113,113,.18);}
+  .opt.pulse{box-shadow:0 0 0 6px rgba(251,191,36,.55);}
+  .feedback{min-height:28px;font-size:18px;margin:16px 0 6px;}
+  .feedback .en{direction:ltr;unicode-bidi:isolate;color:var(--gold);}
+  .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .next{background:var(--gold);color:#1e1b4b;border:0;border-radius:12px;padding:12px 22px;font-size:17px;font-weight:800;cursor:pointer;margin:6px;min-height:46px;}
+  .tip{font-size:14px;color:var(--dim);margin-top:18px;}
+  .card{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:26px 18px;}
+  .card h2{margin:6px 0;font-size:28px;}
+  .stars{font-size:40px;letter-spacing:4px;}
+  .score{font-size:22px;font-weight:800;color:var(--gold);}
+  .hard{font-size:22px;font-weight:800;color:var(--gold);}
+  .big-word{font-size:clamp(56px,18vw,84px);font-weight:900;letter-spacing:4px;margin:4px 0 18px;color:#fff;}
+  .opts.photos{grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .opts.photos .opt{padding:6px;min-height:0;aspect-ratio:1/1;}
+  .opts.photos img{width:100%;height:100%;object-fit:cover;border-radius:12px;display:block;}
+  .opts.words{grid-template-columns:1fr 1fr 1fr;gap:10px;}
+  .opts.words .opt{min-height:90px;padding:14px 4px;}
+  .pic{width:min(46vw,200px);height:min(46vw,200px);object-fit:cover;border-radius:18px;display:block;margin:0 auto 12px;border:3px solid var(--line);}
+  .gap-word{font-size:clamp(46px,14vw,70px);font-weight:900;letter-spacing:6px;margin:4px 0 16px;direction:ltr;}
+  .gap-word .blank{display:inline-block;min-width:0.7em;border-bottom:5px solid var(--gold);color:var(--gold);}
+  .opts.letters{grid-template-columns:repeat(auto-fit,minmax(70px,1fr));}
+  .opts.letters .opt{min-height:96px;}
+  @media(max-height:740px){ main{padding-top:52px;} .pic{width:min(36vw,140px);height:min(36vw,140px);margin-bottom:6px;} .gap-word{font-size:44px;margin:0 0 8px;} .big-say{width:64px;height:64px;font-size:28px;margin:0 auto 10px;} .opts.letters .opt{min-height:72px;padding:8px;} .opt-letter{font-size:44px;} .hud{margin-bottom:8px;} .hud-label{font-size:18px;margin:2px 0 6px;} }
+  .opt-letter{font-size:56px;font-weight:900;font-family:'Comic Sans MS','Chalkboard SE',system-ui,sans-serif;direction:ltr;}
+  .spelled{direction:ltr;unicode-bidi:isolate;font-weight:900;letter-spacing:2px;color:var(--gold);}
+  .spelled .hl{text-decoration:underline;text-decoration-thickness:3px;color:#fff;background:rgba(251,191,36,.35);border-radius:4px;padding:0 2px;}
+  [data-cde-lang="he"] main{direction:rtl;}
+  [data-cde-lang="he"] .about{text-align:right;}
+  @media(prefers-reduced-motion:reduce){ .opt{transition:none;} }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Why do children mix up b and d?","acceptedAnswer":{"@type":"Answer","text":"b, d, p and q are the same shape turned or flipped, and young readers are still learning that direction matters in letters. Mixing them up is common and usually fades with practice."}},{"@type":"Question","name":"How does Letter Twins help?","acceptedAnswer":{"@type":"Answer","text":"Each round shows a picture, plays the English word and asks for its first letter, so the child links the letter shape to its sound. After a mistake it shows the right letter and a short tip for telling the pair apart."}},{"@type":"Question","name":"Is it free?","acceptedAnswer":{"@type":"Answer","text":"Yes. No ads, no sign-up and nothing to install. The buttons are in English, Hebrew or Spanish."}}]}</script>
+</head>
+<body>
+<a id="homePill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
+<main>
+  <div id="menu">
+    <h1>🔤 LETTER TWINS</h1>
+    <p class="sub" data-l10n="sub">b or d? p or q? <b>See the picture, hear the word</b> and pick the letter it starts with.</p>
+    <div class="pills"><span class="pill" dir="ltr">b · d</span><span class="pill" dir="ltr">p · b</span><span class="pill" dir="ltr">p · q</span><span class="pill" dir="ltr">b d p q</span></div>
+    <button type="button" id="startBtn" data-l10n="start">▶ Start</button>
+    <section class="about">
+      <h2 style="font-size:15px;margin:0 0 4px;color:inherit;">Letter Twins</h2>
+      <p style="margin:0 0 4px;">A free game for children who mix up b, d, p and q. Each round shows a picture, plays the English word and asks for its first letter. Four levels: b or d, p or b, p or q, then all four. After a mistake the game shows the right letter and a short tip for telling the pair apart.</p>
+      <p style="margin:0;">No ads, no sign-up. Part of <a href="/">childrendoenglish.com</a> — free vocabulary games, flashcards and quizzes with Hebrew support.</p>
+      <h3 style="font-size:14px;margin:12px 0 4px;color:inherit;">Questions parents ask</h3>
+      <p style="margin:0 0 6px;"><b>Why do children mix up b and d?</b> b, d, p and q are the same shape turned or flipped, and young readers are still learning that direction matters in letters. Mixing them up is common and usually fades with practice.</p>
+      <p style="margin:0 0 6px;"><b>How does Letter Twins help?</b> Each round shows a picture, plays the English word and asks for its first letter, so the child links the letter shape to its sound. After a mistake it shows the right letter and a short tip for telling the pair apart.</p>
+      <p style="margin:0 0 6px;"><b>Is it free?</b> Yes. No ads, no sign-up and nothing to install. The buttons are in English, Hebrew or Spanish.</p>
+    </section>
+  </div>
+  <div id="app" aria-live="polite"></div>
+</main>
+<script src="../cde-l10n.js" defer></script>
+<script src="../end-card.js" defer></script>
+<script src="./l10n.js" defer></script>
+<script src="./game.js" defer></script>
+</body>
+</html>

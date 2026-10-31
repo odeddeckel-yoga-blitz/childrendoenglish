@@ -1,0 +1,27 @@
+/* Letter Twins — interface strings (see ../cde-l10n.js). Letters and words stay English. */
+window.CDE_STRINGS={
+  en:{sub:'b or d? p or q? <b>See the picture, hear the word</b> and pick the letter it starts with.',start:'▶ Start',
+      level:'Level',of:'of',pick:'Which letter does it start with?',again:'🔊 Hear it again',right:'✓ Right!',next:'Next ➜',
+      levelDone:'Level done!',nextLevel:'Next level ➜',retry:'↺ Try this level again',allDone:'🏆 Letter detective!',
+      hardest:'The twins that tricked you most:',allRight:'You got every letter!',playAgain:'↺ Play again',
+      tip_b:'b: the line comes first, then the round belly — b for bed, and bed looks like a bed.',
+      tip_d:'d: the round part comes first, then the line — like the end of the word bed.',
+      tip_p:'p: the line goes down below the other letters, the round part is on the right.',
+      tip_q:'q: the line goes down, the round part is on the left — and q is almost always followed by u.'},
+  he:{sub:'b או d? p או q? <b>רואים את התמונה, שומעים את המילה</b> ובוחרים באיזו אות היא מתחילה.',start:'▶ מתחילים',
+      level:'שלב',of:'מתוך',pick:'באיזו אות המילה מתחילה?',again:'🔊 לשמוע שוב',right:'✓ נכון!',next:'הבא ←',
+      levelDone:'השלב הושלם!',nextLevel:'לשלב הבא ←',retry:'↺ לנסות את השלב שוב',allDone:'🏆 בלשי אותיות!',
+      hardest:'התאומות שהכי בלבלו אתכם:',allRight:'זיהיתם את כל האותיות!',playAgain:'↺ לשחק שוב',
+      tip_b:'ב-b קודם הקו ואז הבטן העגולה — כמו במילה bed, שנראית כמו מיטה.',
+      tip_d:'ב-d קודם החלק העגול ואז הקו — כמו בסוף המילה bed.',
+      tip_p:'ב-p הקו יורד מתחת לשורה, והחלק העגול מימין לו.',
+      tip_q:'ב-q הקו יורד מתחת לשורה, והחלק העגול משמאל לו — ואחרי q כמעט תמיד בא u.'},
+  es:{sub:'¿b o d? ¿p o q? <b>Mira la imagen, escucha la palabra</b> y elige la letra con la que empieza.',start:'▶ Empezar',
+      level:'Nivel',of:'de',pick:'¿Con qué letra empieza?',again:'🔊 Escuchar otra vez',right:'✓ ¡Bien!',next:'Siguiente ➜',
+      levelDone:'¡Nivel completado!',nextLevel:'Siguiente nivel ➜',retry:'↺ Repetir este nivel',allDone:'🏆 ¡Detective de letras!',
+      hardest:'Las gemelas que más te confundieron:',allRight:'¡Acertaste todas las letras!',playAgain:'↺ Jugar otra vez',
+      tip_b:'b: primero la línea y luego la panza redonda — b de bed, y bed parece una cama.',
+      tip_d:'d: primero la parte redonda y luego la línea — como al final de bed.',
+      tip_p:'p: la línea baja por debajo de las otras letras y lo redondo está a la derecha.',
+      tip_q:'q: la línea baja y lo redondo está a la izquierda — y después de q casi siempre va u.'}
+};
