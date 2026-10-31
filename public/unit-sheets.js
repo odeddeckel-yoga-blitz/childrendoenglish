@@ -27,7 +27,7 @@
   } : {
     calls: 'רשימת קריאה למורה · ', callsNote: 'קוראים מילה (באנגלית, או את הפירוש בעברית לאתגר) ומסמנים אותה כאן. מי שמסמן שורה, טור או אלכסון — צועק BINGO!',
     search: 'Word Search · ', searchNote: 'מצאו את המילים: משמאל לימין →, מלמעלה למטה ↓ או באלכסון ↘', key: 'פתרון · ',
-    cross: 'Crossword · ', crossNote: 'כתבו באנגלית את המילה של כל תמונה ותרגום. Across = מאוזן →, Down = מאונך ↓', across: 'Across →', down: 'Down ↓',
+    cross: 'Crossword · ', crossNote: 'כתבו באנגלית את המילה של כל תמונה ותרגום. מאוזן = \u2066Across →\u2069 · מאונך = \u2066Down ↓\u2069', across: 'Across →', down: 'Down ↓',
   };
   // he = the Hebrew meaning (word-set pages: the correct hear-and-pick option);
   // img = a photo for picture clues when the word has one; def = English clue (en pages)
