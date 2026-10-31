@@ -408,8 +408,12 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
   // "X definition for kids") and advertises the differentiators. Per-page
   // overrides from tools/seo/optimizer.py runs live in seo-title-overrides.json.
   const override = TITLE_OVERRIDES[path] || {};
-  const title = override.title || `${capitalWord} — Meaning for Kids, with Picture, Audio & Hebrew | Children Do English`;
-  const description = override.description || `What does "${word.word}" mean? Kid-friendly definition: ${word.definition}. With picture, audio pronunciation (${word.phonetic}), example sentence, and Hebrew translation (${word.hebrewTranslation}). Free for kids ages 6-12.`;
+  // Hebrew searchers type "(איך אומרים) <Hebrew word> באנגלית" (autocomplete 10-31:
+  // 89 phrasings → 75 of these pages, GSC p10–17 with 0 clicks), so the Hebrew
+  // phrase sits in the title, H1 and description; Hebrew blocks carry lang="he".
+  const he = word.hebrewTranslation;
+  const title = override.title || `${capitalWord} | ${he} באנגלית — Meaning for Kids, Picture & Audio | Children Do English`;
+  const description = override.description || `${he} באנגלית: ${word.word}. ` + `What does "${word.word}" mean? Kid-friendly definition: ${word.definition}. With picture, audio pronunciation (${word.phonetic}), example sentence, and Hebrew translation (${word.hebrewTranslation}). Free for kids ages 6-12.`;
   const audioFile = word.word.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-') + '.mp3';
   // Deterministic same-category distractors (different word text AND Hebrew, so
   // the mini-quiz never shows a synonym pair like taxi/cab as separate options)
@@ -462,6 +466,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
   const faqSchema = faqSchemaFor([
     { q: `What does "${word.word}" mean?`, a: `"${capitalWord}" means: ${word.definition}. Example: "${word.exampleSentence}"` },
     { q: `How do you say ${word.word} in Hebrew${esGloss ? ' and Spanish' : ''}?`, a: `In Hebrew, ${word.word} is ${word.hebrewTranslation}.${esGloss ? ` In Spanish, it is ${esGloss}.` : ''}` },
+    { q: `איך אומרים ${word.hebrewTranslation} באנגלית?`, a: `${word.hebrewTranslation} באנגלית זה ${word.word} (${word.phonetic}). בעמוד יש תמונה, השמעה של המילה ומשפט לדוגמה.` },
     { q: `How do you pronounce "${word.word}"?`, a: `${capitalWord} is pronounced ${word.phonetic}. It is a ${word.partOfSpeech}. You can hear it said aloud on this page.` },
   ]);
   const answerFirst = `"${capitalWord}" means: ${word.definition}. In Hebrew: ${word.hebrewTranslation}.`;
@@ -597,7 +602,8 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
 </head>
 <body>
   <div class="header">
-    <h1>${escapeHtml(capitalWord)}</h1>
+    <h1>${escapeHtml(capitalWord)} <span lang="he" dir="rtl" style="display:block;font-size:0.72em;font-weight:700">${escapeHtml(he)} באנגלית</span></h1>
+    <p lang="he" dir="rtl" style="font-size:1rem;margin-top:0.25rem">איך אומרים ${escapeHtml(he)} באנגלית? <bdi lang="en" dir="ltr"><strong>${escapeHtml(word.word)}</strong></bdi></p>
     <p class="answer-first" style="opacity:1;font-size:1.02rem;max-width:36rem;margin:0.35rem auto 0">${escapeHtml(answerFirst)}</p>
     <p style="font-size:0.85rem;margin-top:0.35rem">${escapeHtml(categoryDisplayName)} &middot; ${escapeHtml(word.level)}</p>
   </div>
