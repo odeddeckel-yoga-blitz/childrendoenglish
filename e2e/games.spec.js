@@ -122,3 +122,35 @@ test('spelling-forge: tapping the last letter forges the word on a small phone',
   await expect.poll(() => page.evaluate(() => SF.dbg.score)).toBeGreaterThan(0);
   expect(await page.evaluate(() => SF.state.forged)).toBe(1);
 });
+
+// R2C6: Letter Twins tracks. m/n/w/u from the menu picker; letter sounds = no photo
+// and no word until the answer, then both appear; a wrong pick shows the sound tip.
+test('letter-twins: m n w u track and the letter-sounds track', async ({ page }) => {
+  const errors = [];
+  page.on('pageerror', (e) => errors.push(e.message));
+  await page.route('**/api/**', (r) => r.fulfill({ status: 204 }));
+  await page.goto('/games/letter-twins/index.html');
+  await page.click('[data-track="mnwu"]');
+  await expect(page.locator('[data-track="mnwu"]')).toHaveAttribute('aria-pressed', 'true');
+  await page.click('#startBtn');
+  await expect(page.locator('#app .opt')).toHaveCount(2);
+  expect((await page.locator('#app .opt').allInnerTexts()).sort()).toEqual(['m', 'n']);
+
+  await page.goto('/games/letter-twins/index.html?track=sounds');
+  await page.click('#startBtn');
+  await expect(page.locator('#app .opt')).toHaveCount(4);
+  expect((await page.locator('#app .opt').allInnerTexts()).sort()).toEqual(['a', 'p', 's', 't']);
+  await expect(page.locator('#app .pic')).toBeHidden();
+  await expect(page.locator('#app .gap-word')).toBeHidden();
+  const word = (await page.locator('#app .pic').getAttribute('src')).match(/\/images\/(\w+)\.webp/)[1];
+  const wrong = ['s', 'a', 't', 'p'].find((l) => l !== word[0]);
+  await page.click(`#app .opt[data-letter="${wrong}"]`);
+  await expect(page.locator('#app .pic')).toBeVisible();
+  await expect(page.locator('#app .gap-word')).toHaveText(word);
+  await expect(page.locator('#app .feedback')).toContainText(`begins with the sound of`);
+  await page.click('#app .next');
+  const word2 = (await page.locator('#app .pic').getAttribute('src')).match(/\/images\/(\w+)\.webp/)[1];
+  await page.click(`#app .opt[data-letter="${word2[0]}"]`);
+  await expect(page.locator('#app .feedback')).toContainText('Right');
+  expect(errors).toEqual([]);
+});

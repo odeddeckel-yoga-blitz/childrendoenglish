@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Letter Twins — Free b, d, p, q Game for Kids | Children Do English</title>
-<meta name="description" content="A free game for kids who mix up b, d, p and q: see the picture, hear the word, and pick the first letter. Four short levels, with a tip after each mistake. No sign-up.">
+<title>Letter Twins — b/d, m/w and Letter Sounds: Free Game for Kids | Children Do English</title>
+<meta name="description" content="A free game for kids who mix up b, d, p, q or m, n, w, u: see the picture, hear the word and pick the first letter. Plus letter sounds: hear a word, tap the letter it starts with. A tip after each mistake. No sign-up.">
 <link rel="canonical" href="https://childrendoenglish.com/games/letter-twins/">
 <link rel="icon" type="image/png" href="/favicon.png">
 <meta name="theme-color" content="#1e1b4b">
@@ -16,7 +16,7 @@
 <meta property="og:image" content="https://childrendoenglish.com/og-image.png">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"VideoGame","name":"Letter Twins","url":"https://childrendoenglish.com/games/letter-twins/","description":"A free game for children who mix up the letters b, d, p and q: see the picture, hear the English word and pick its first letter. Four levels: b or d, p or b, p or q, then all four.","inLanguage":"en","genre":"Educational","gamePlatform":"Web Browser","playMode":"SinglePlayer","applicationCategory":"EducationalApplication","operatingSystem":"Any (modern web browser)","isFamilyFriendly":true,"isAccessibleForFree":true,"typicalAgeRange":"6-9","learningResourceType":"Game","educationalUse":"Practice","keywords":"b and d confusion, letter reversals, b d p q, phonics, esl kids","author":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"publisher":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}
+{"@context":"https://schema.org","@type":"VideoGame","name":"Letter Twins","url":"https://childrendoenglish.com/games/letter-twins/","description":"A free game for children who mix up the letters b, d, p and q: see the picture, hear the English word and pick its first letter. Look-alike levels for b, d, p, q and m, n, w, u, and a letter-sounds track: hear the word only and tap the letter its first sound makes.","inLanguage":"en","genre":"Educational","gamePlatform":"Web Browser","playMode":"SinglePlayer","applicationCategory":"EducationalApplication","operatingSystem":"Any (modern web browser)","isFamilyFriendly":true,"isAccessibleForFree":true,"typicalAgeRange":"6-9","learningResourceType":"Game","educationalUse":"Practice","keywords":"b and d confusion, letter reversals, b d p q, m and w, letter sounds, phonics, esl kids","author":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"publisher":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}
 </script>
 <script defer src="/land-beacon.js"></script>
 <style>
@@ -29,6 +29,9 @@
   .sub{font-size:17px;line-height:1.55;color:#dbe4ff;margin:0 auto 18px;max-width:440px;}
   .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
   .pill{background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:14px;}
+  .track{background:var(--glass);border:2px solid var(--line);border-radius:999px;padding:10px 16px;font-size:16px;font-weight:800;color:var(--ink);cursor:pointer;min-height:44px;}
+  .track[aria-pressed="true"]{border-color:var(--gold);background:rgba(251,191,36,.2);}
+  .gap-word.hidden-word,.pic[hidden]{display:none;}
   button,.ghost,.primary{font-family:inherit;}
   .primary,#startBtn{display:inline-block;background:linear-gradient(135deg,#6366f1,#3b82f6);color:#fff;border:0;border-radius:14px;padding:15px 28px;font-size:19px;font-weight:800;cursor:pointer;min-height:52px;margin:6px;text-decoration:none;}
   .ghost{display:inline-block;background:transparent;color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:11px 18px;font-size:16px;font-weight:700;cursor:pointer;margin:6px;text-decoration:none;min-height:46px;}
@@ -85,12 +88,12 @@
 <main>
   <div id="menu">
     <h1>🔤 LETTER TWINS</h1>
-    <p class="sub" data-l10n="sub">b or d? p or q? <b>See the picture, hear the word</b> and pick the letter it starts with.</p>
-    <div class="pills"><span class="pill" dir="ltr">b · d</span><span class="pill" dir="ltr">p · b</span><span class="pill" dir="ltr">p · q</span><span class="pill" dir="ltr">b d p q</span></div>
+    <p class="sub" data-l10n="sub">b or d? m or w? <b>See the picture, hear the word</b> and pick the letter it starts with. Or play <b>letter sounds</b>: just listen and tap the letter.</p>
+    <div class="pills tracks" role="group" aria-label="Pick a game"><button type="button" class="track" data-track="twins" data-l10n="trackTwins" dir="ltr" aria-pressed="true">b d p q</button><button type="button" class="track" data-track="mnwu" data-l10n="trackMnwu" dir="ltr" aria-pressed="false">m n w u</button><button type="button" class="track" data-track="sounds" data-l10n="trackSounds" aria-pressed="false">🔊 Letter sounds</button></div>
     <button type="button" id="startBtn" data-l10n="start">▶ Start</button>
     <section class="about">
       <h2 style="font-size:15px;margin:0 0 4px;color:inherit;">Letter Twins</h2>
-      <p style="margin:0 0 4px;">A free game for children who mix up b, d, p and q. Each round shows a picture, plays the English word and asks for its first letter. Four levels: b or d, p or b, p or q, then all four. After a mistake the game shows the right letter and a short tip for telling the pair apart.</p>
+      <p style="margin:0 0 4px;">A free game for children who mix up b, d, p and q. Each round shows a picture, plays the English word and asks for its first letter. Two look-alike tracks (b, d, p, q and m, n, w, u) and a letter-sounds track, where the child only hears the word and taps the letter its first sound makes. After a mistake the game shows the right letter and a short tip.</p>
       <p style="margin:0;">No ads, no sign-up. Part of <a href="/">childrendoenglish.com</a> — free vocabulary games, flashcards and quizzes with Hebrew support.</p>
       <h3 style="font-size:14px;margin:12px 0 4px;color:inherit;">Questions parents ask</h3>
       <p style="margin:0 0 6px;"><b>Why do children mix up b and d?</b> b, d, p and q are the same shape turned or flipped, and young readers are still learning that direction matters in letters. Mixing them up is common and usually fades with practice.</p>
