@@ -23,7 +23,7 @@ export function heTopicWords(topic, byId) {
 export function buildHeTopicPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, HE_TOPICS }) {
   const kit = wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides });
   const { byId } = kit;
-  const footerNote = 'רשימות המילים, התרגום והמשפטים הם שלנו. ההשמעה היא קול מוקלט מראש של מחשב (TTS), אחיד לכל המילים.';
+  const footerNote = 'רשימות המילים, התרגום והמשפטים הם שלנו. ההשמעה היא קול ממוחשב (TTS), אחיד לכל המילים.';
   const hubPath = '/he/english-words/';
   for (const [i, t] of HE_TOPICS.entries()) {
     const path = `${hubPath}${t.slug}/`;

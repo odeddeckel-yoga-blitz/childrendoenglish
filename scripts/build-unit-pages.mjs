@@ -263,7 +263,7 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
       answer: `כל ${u.words.length} המילים של היחידה עם הגייה באנגלית ותרגום לעברית${u.grade ? ` (כיתה ${u.grade})` : ''}. לוחצים 🔊 כדי לשמוע, ואז מתרגלים למטה.`,
       listHeading: 'המילים של היחידה',
       words: u.words.map((w) => ({ ...w, chip: chipFor(w) })),
-      afterTable: u.source ? `<p class="aligned">הרשימה תואמת לרשימת המילים של <span lang="en" dir="ltr">${escapeHtml(unitName)}</span>. התרגום לעברית, משפטי הדוגמה, ההקלטות והתמונות הם של <span lang="en" dir="ltr">Children Do English</span>.</p>` : '',
+      afterTable: u.source ? `<p class="aligned">הרשימה תואמת לרשימת המילים של <span lang="en" dir="ltr">${escapeHtml(unitName)}</span>. התרגום לעברית, משפטי הדוגמה, ההשמעות והתמונות הם של <span lang="en" dir="ltr">Children Do English</span>.</p>` : '',
       practiceKey: `${u.book}-${u.unit}`,
       faqPairs: [
         [`אילו מילים יש ב-${unitName}?`, `ב-${unitName} יש ${u.words.length} מילים, למשל: ${u.words.slice(0, 8).map((w) => `${w.en} (${w.he})`).join(', ')}. הרשימה המלאה עם הגייה ותרגום נמצאת בטבלה בעמוד.`],

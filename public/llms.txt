@@ -1,7 +1,7 @@
 # Children Do English
 
 > Free, ad-free English vocabulary app for kids ages 5-12 (with Hebrew support for
-> bilingual learners). 480+ words, each with a curated photo, recorded audio
+> bilingual learners). 530+ words, each with a curated photo, audio
 > pronunciation, kid-friendly definition, example sentence, phonetics, and Hebrew
 > translation. Picture quizzes, flashcards, spaced repetition, a letter-by-letter
 > learning path, and a live classroom vocabulary battle. No accounts, no data
@@ -14,7 +14,7 @@ with pronunciation, an example sentence, and the Hebrew translation.
 
 ## Vocabulary
 
-- [All words by category](https://childrendoenglish.com/vocabulary/): 480+ kid-level
+- [All words by category](https://childrendoenglish.com/vocabulary/): 530+ kid-level
   English words across animals, food, home, transport, nature, colors, numbers,
   everyday things, clothing, school, sports, feelings, and toys.
 - [Words with Hebrew translations](https://childrendoenglish.com/vocabulary/animals/hebrew/):
@@ -40,14 +40,14 @@ with pronunciation, an example sentence, and the Hebrew translation.
   practise English vocabulary in the browser with no account, email or app
   download — a nickname saved on the device starts a 10-word picture quiz.
 - [Spanish landing page](https://childrendoenglish.com/es/): the app for
-  Spanish-speaking kids — English vocabulary with photos, native English
+  Spanish-speaking kids — English vocabulary with photos, English
   pronunciation, and Spanish translations (interface available in Spanish).
 - [Hebrew games hub](https://childrendoenglish.com/he/english-games/): משחקים
   ללימוד אנגלית לילדים — free English-learning games for Hebrew-speaking kids,
-  with by-age (6-8, 9-10, 11-12) and by-topic pages. Hebrew interface, real
-  native-English audio, no ads, no sign-up.
+  with by-age (6-8, 9-10, 11-12) and by-topic pages. Hebrew interface, 
+  English audio, no ads, no sign-up.
 - [Flashcard maker](https://childrendoenglish.com/tools/flashcard-maker/): free
-  printable photo-flashcard generator — 488 real-photo words or any pasted list,
+  printable photo-flashcard generator — 530+ real-photo words or any pasted list,
   4/6/9 cards per page, Hebrew/Spanish backs, mirrored back pages for aligned
   double-sided printing. No login, no watermark.
 - [Printable flashcards](https://childrendoenglish.com/printable-flashcards/animals/)
