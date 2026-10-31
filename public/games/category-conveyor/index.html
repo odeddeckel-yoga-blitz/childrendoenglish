@@ -67,6 +67,8 @@
     text-align:center;gap:14px;padding:22px;background:linear-gradient(180deg,rgba(239,246,255,.97),rgba(219,234,254,.97));
     overflow:auto;}
   .overlay.show{display:flex;}
+  /* menu / game-over overlays cover the HUD: hide it there rather than show buttons that cannot be tapped */
+  body:has(.overlay.show) #hud{visibility:hidden;}
   .overlay h1,.overlay h2{margin:0;font-size:clamp(30px,7vw,58px);letter-spacing:1px;color:var(--blue2);
     text-shadow:0 2px 0 #fff;}
   .overlay .sub{max-width:600px;font-size:clamp(15px,2.6vw,19px);font-weight:600;color:var(--ink);line-height:1.5;}
