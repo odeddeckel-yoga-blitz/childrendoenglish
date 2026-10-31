@@ -9,7 +9,7 @@ import { mkdirSync } from 'fs';
 
 const PRINT_STEPS_HE = (what) => [
   { name: 'פותחים את הסט', text: `פותחים את עמוד הכרטיסיות של ${what} במחשב או בטאבלט שמחובר למדפסת.` },
-  { name: 'מדפיסים', text: 'לוחצים על "הדפסת הכרטיסיות" או על Ctrl+P (ב-Mac: Cmd+P). הכותרת, הקישורים והכפתורים מוסתרים לבד; מודפסות רק הכרטיסיות, 3 בשורה, עם קו מקווקו לגזירה.' },
+  { name: 'מדפיסים', text: 'לוחצים על "הדפסת הכרטיסיות" או על ‎Ctrl+P‎ (במחשב מק: ‎Cmd+P‎). הכותרת, הקישורים והכפתורים מוסתרים לבד; מודפסות רק הכרטיסיות, 3 בשורה, עם קו מקווקו לגזירה.' },
   { name: 'בוחרים נייר', text: 'בוחרים A4 לאורך ומסמנים "גרפיקת רקע" כדי שהתמונות יודפסו. בריסטול (160–200 גרם) נותן כרטיסיות חזקות יותר; נייר רגיל מתאים אם מנילנים.' },
   { name: 'גוזרים', text: 'גוזרים לאורך הקווים המקווקווים. לכרטיסיות דו-צדדיות עם התרגום מאחור יש את יוצר הכרטיסיות החינמי, שמסדר את העמודים כך שההדפסה הדו-צדדית מתאימה.' },
 ];
@@ -98,7 +98,7 @@ ${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join(
 </head>
 <body>
 ${body}
-  <div class="footer">&copy; ${year} Children Do English &middot; <a href="/about/">אודות</a> &middot; <a href="/privacy">פרטיות</a></div>
+  <div class="footer"><span dir="ltr">&copy; ${year} Children Do English</span> &middot; <a href="/about/">אודות</a> &middot; <a href="/privacy">פרטיות</a></div>
 </body>
 </html>`;
 

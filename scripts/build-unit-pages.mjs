@@ -87,7 +87,7 @@ ${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join(
 <body>
 ${body}
   <footer class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/he/">עברית</a> &middot; <a href="/about/">אודות</a> &middot; <a href="/privacy">פרטיות</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/he/">עברית</a> &middot; <a href="/about/">אודות</a> &middot; <a href="/privacy">פרטיות</a>
     ${footerNote ? `<p class="not-affiliated">${escapeHtml(footerNote)}</p>` : ''}
   </footer>
 </body>

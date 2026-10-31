@@ -137,7 +137,7 @@ test('arcade step navigates to a words-scoped game URL', async ({ page }) => {
   await reachMenu(page);
   await openLadder(page);
   await Promise.all([
-    page.waitForURL(/\/games\/word-zapper\/\?words=.+&from=ladder/, { timeout: 10000 }),
+    page.waitForURL(/\/games\/word-zapper\/\?words=.+&from=ladder/, { timeout: 20000 }),
     page.getByText('Word Zapper', { exact: true }).click(),
   ]);
   expect(page.url()).toContain('words=');

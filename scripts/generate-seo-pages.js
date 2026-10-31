@@ -25,6 +25,12 @@ function writePage(path, html) {
     out = out.replace('</body>', buildCrawlMesh(lang) + '</body>');
   }
   if (out.includes('</body>') && !out.includes('class="site-head"')) out = out.replace(/<body([^>]*)>/, (m) => m + siteHeader(lang));
+  // Sweep 10-31: one <main> landmark per page (axe landmark-one-main on 648
+  // pages): wrap everything between the shared header and the footer mesh.
+  if (!/<main[\s>]/.test(out) && out.includes('</nav>\n') && out.includes('<nav class="crawl-mesh"')) {
+    out = out.replace(/(<nav class="site-head"[\s\S]*?<\/nav>\n)/, '$1<main id="main">\n');
+    out = out.replace('\n<nav class="crawl-mesh"', '\n</main>\n<nav class="crawl-mesh"');
+  }
   writeFileSync(path, out, 'utf-8');
 }
 
@@ -38,9 +44,16 @@ const SITE_HEAD = {
 function siteHeader(lang) {
   const h = SITE_HEAD[lang] || SITE_HEAD.en;
   return `\n<nav class="site-head" dir="${h.dir}" aria-label="Site">` +
-    `<style>.site-head{display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .65rem;padding:.55rem 1rem;background:#fff;border-bottom:1px solid #e2e8f0;font:600 .8rem/1.4 system-ui,-apple-system,'Segoe UI',sans-serif}` +
-    `.site-head a{color:#1e40af;text-decoration:none}.site-head a:first-child{font-weight:800;color:#0f172a;margin-inline-end:auto}.site-head a:hover{text-decoration:underline}@media print{.site-head{display:none}}</style>` +
-    h.links.map(([href, text, hl, full]) => `<a href="${href}"${hl ? ` lang="${hl}" hreflang="${hl}" aria-label="${full}"` : ''}>${text}</a>`).join('') +
+    `<style>.site-head{display:flex;flex-wrap:wrap;align-items:center;gap:0 .65rem;padding:0 1rem;background:#fff;border-bottom:1px solid #e2e8f0;font:600 .8rem/1.4 system-ui,-apple-system,'Segoe UI',sans-serif}` +
+    `.cat-links a,.res-links a,.back-link,.play-online,.print-btn,.sheet-row select,details>summary{min-height:44px;box-sizing:border-box}details>summary{display:flex;align-items:center}` +
+    `.cat-links a,.res-links a,.back-link,.play-online{display:inline-flex;align-items:center}` +
+    `.lang-variant a,.topics a,.pick-detail select{display:inline-block;min-height:44px;padding:12px 0;box-sizing:border-box}` +
+    `.breadcrumb a,.footer a,.teacher-row a,.site-head a{display:inline-block;padding:12px 2px;min-width:44px;text-align:center}` +
+    `.site-head a{color:#1e40af;text-decoration:none}.site-head a:first-child{font-weight:800;color:#0f172a;margin-inline-end:auto}.site-head a:hover{text-decoration:underline}@media print{.site-head{display:none}}@media (max-width:420px){.site-head .sh-name{display:none}}</style>` +
+    // On phones the home link is just 🏠 (the site name hides) so the row fits one line.
+    h.links.map(([href, text, hl, full], i) => i === 0
+      ? `<a href="${href}" aria-label="Children Do English">🏠<span class="sh-name"> Children Do English</span></a>`
+      : `<a href="${href}"${hl ? ` lang="${hl}" hreflang="${hl}" aria-label="${full}"` : ''}>${text}</a>`).join('') +
     `</nav>\n`;
 }
 
@@ -381,7 +394,7 @@ function buildCategoryPage(slug, displayName, words) {
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -459,7 +472,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     .map(
       (w) => `
       <a href="/vocabulary/${categorySlug}/${w.id}/" class="related-card">
-        <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="related-img" loading="lazy" width="80" height="80" />
+        <img src="/images/${w.id}.webp" alt="" class="related-img" loading="lazy" width="80" height="80" />
         <div class="related-word">${escapeHtml(w.word)}</div>
       </a>`
     )
@@ -676,7 +689,7 @@ ${wordNav}
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
   <script defer src="/vocab-quiz.js"></script>
 </body>
@@ -881,7 +894,7 @@ function buildAgeBracketPage(bracket, allWords) {
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -1012,7 +1025,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
     .bi-img { width: 96px; height: 96px; border-radius: 0.6rem; object-fit: cover; flex-shrink: 0; }
     .bi-content { display: flex; flex: 1; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
     .bi-en { flex: 1; min-width: 200px; }
-    .bi-word { font-size: 1.15rem; font-weight: 700; color: #1e293b; text-decoration: none; }
+    .bi-word { font-size: 1.15rem; font-weight: 700; color: #1e293b; text-decoration: none; display: inline-block; padding: 11px 0; min-width: 44px; }
     .bi-word:hover { text-decoration: underline; color: #2563eb; }
     .bi-phonetic { font-size: 0.8rem; color: #5b6779; }
     .bi-def { font-size: 0.85rem; color: #475569; margin-top: 0.2rem; }
@@ -1075,7 +1088,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -1177,7 +1190,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
     .bi-img { width: 96px; height: 96px; border-radius: 0.6rem; object-fit: cover; flex-shrink: 0; }
     .bi-content { display: flex; flex: 1; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
     .bi-en { flex: 1; min-width: 200px; }
-    .bi-word { font-size: 1.15rem; font-weight: 700; color: #1e293b; text-decoration: none; }
+    .bi-word { font-size: 1.15rem; font-weight: 700; color: #1e293b; text-decoration: none; display: inline-block; padding: 11px 0; min-width: 44px; }
     .bi-word:hover { text-decoration: underline; color: #2563eb; }
     .bi-phonetic { font-size: 0.8rem; color: #5b6779; }
     .bi-def { font-size: 0.85rem; color: #475569; margin-top: 0.2rem; }
@@ -1239,7 +1252,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -1665,7 +1678,7 @@ function buildHebrewLandingPage() {
 
   <!-- Footer -->
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot;
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot;
     <a href="/about/">אודות</a> &middot;
     <a href="/">English</a>
   </div>
@@ -1995,7 +2008,7 @@ function buildSpanishLandingPage() {
 
   <!-- Footer -->
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot;
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot;
     <a href="/about/">Acerca de</a> &middot;
     <a href="/">English</a>
   </div>
@@ -2234,7 +2247,7 @@ ${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join(
 ${body}
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot;
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot;
     <a href="/he/">עברית — דף הבית</a> &middot;
     <a href="/about/">אודות</a> &middot;
     <a href="/">English</a>
@@ -3031,7 +3044,7 @@ const vocabIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -3126,6 +3139,7 @@ const wordEntries = CATEGORIES.flatMap((slug) =>
     .header p { font-size: 0.95rem; }
     .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 720px; margin: 0 auto; }
     .breadcrumb a, .section a { color: #2563eb; text-decoration: none; }
+    .section li a, .section p a { text-decoration: underline; }
     .container { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
     .section { background: #fff; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
     .section h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; }
@@ -3373,7 +3387,7 @@ const aboutHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/privacy" style="color:#5b6779">Privacy Policy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/privacy" style="color:#5b6779">Privacy Policy</a>
   </div>
 </body>
 </html>`;
@@ -3554,7 +3568,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -3724,7 +3738,7 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -3885,7 +3899,7 @@ const fcIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -4021,7 +4035,7 @@ const esFcIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/es/" style="color:#5b6779">Espa\u00f1ol</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/es/" style="color:#5b6779">Espa\u00f1ol</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -4136,7 +4150,7 @@ const GUIDES = [
       {
         h2: 'The Spaced Repetition Schedule',
         content: `<p>Children Do English uses this review schedule for every word. Each successful review pushes the next one further out; a miss resets the word to the start of the ladder:</p>
-<div style="overflow-x:auto">
+<div style="overflow-x:auto" tabindex="0" role="region" aria-label="Comparison table">
 <table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.9rem">
   <thead>
     <tr style="background:#f1f5f9">
@@ -4389,7 +4403,7 @@ const GUIDES = [
   <li><a href="/vocabulary/colors/">Colors</a> &mdash; Fundamental and practical</li>
 </ul>
 <p>Browse all <a href="/vocabulary/">${CATEGORIES.length} vocabulary categories</a> to find what excites your child most. Every category also has a bilingual word list showing English and Hebrew side by side:</p>
-<div style="overflow-x:auto">
+<div style="overflow-x:auto" tabindex="0" role="region" aria-label="Comparison table">
 <table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.9rem">
   <thead>
     <tr style="background:#f1f5f9">
@@ -4465,7 +4479,7 @@ const GUIDES = [
       },
       {
         h2: 'Quick Comparison Table',
-        content: `<div style="overflow-x:auto">
+        content: `<div style="overflow-x:auto" tabindex="0" role="region" aria-label="Comparison table">
 <table style="width:100%;border-collapse:collapse;margin:1rem 0;font-size:0.9rem">
   <thead>
     <tr style="background:#f1f5f9">
@@ -4783,7 +4797,7 @@ for (const guide of GUIDES) {
     .section p { margin-bottom: 0.75rem; color: #475569; }
     .section ul, .section ol { margin: 0.5rem 0 0.75rem 1.25rem; color: #475569; }
     .section li { margin-bottom: 0.35rem; }
-    .section a { color: #2563eb; text-decoration: none; }
+    .section a { color: #2563eb; text-decoration: underline; }
     .section a:hover { text-decoration: underline; }
     .cta { text-align: center; margin: 2rem 0; }
     .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
@@ -4852,7 +4866,7 @@ ${GUIDE_QUIZ_CSS}
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
@@ -4948,7 +4962,7 @@ const guidesIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    &copy; ${new Date().getFullYear()} Children Do English &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
 </body>
 </html>`;
