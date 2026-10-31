@@ -3458,6 +3458,14 @@ mkdirSync(flashcardsDir, { recursive: true });
 
 let flashcardsGenerated = 0;
 
+// E2: bingo / word search / crossword sheets on each printable category set
+const { sheetsSection, sheetsOut, sheetData, SHEETS_CSS } = await import(join(ROOT, 'scripts', 'build-unit-pages.mjs'));
+const FC_SHEETS_CSS = `
+    .sheets { background: #fff; border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 0 0 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
+    .sheets h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .sheets .print-btn { margin: 0.2rem; } .sheet-row label { font-weight: 700; }
+`;
+
 function buildPrintableFlashcardsPage(slug, displayName, words) {
   const url = `${SITE}/printable-flashcards/${slug}/`;
   const title = `Printable ${displayName} Flashcards for Kids | Children Do English`;
@@ -3578,6 +3586,8 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
     .cat-links a { background: #fff; padding: 0.4rem 0.85rem; border-radius: 2rem; font-size: 0.85rem; color: #2563eb; text-decoration: none; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
     .cat-links a:hover { background: #2563eb; color: #fff; }
     .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
+${SHEETS_CSS}
+${FC_SHEETS_CSS}
     @media print {
       .header, .breadcrumb, .print-btn, .cta, .categories, .footer, .no-print { display: none !important; }
       body { background: #fff; }
@@ -3610,6 +3620,9 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
       ${flashcardCards}
     </div>
 
+    ${sheetsSection('en')}
+    ${sheetData(words, { def: true })}
+
     <div class="cta">
       <a href="/?utm_source=seo&utm_medium=cta&utm_content=flashcard_category">Practice These Words in the App &rarr;</a>
       <p style="margin-top:0.5rem;font-size:0.8rem;color:#4b5a6e">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
@@ -3626,6 +3639,7 @@ function buildPrintableFlashcardsPage(slug, displayName, words) {
   <div class="footer">
     <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
   </div>
+  ${sheetsOut(escapeHtml(displayName), 'en')}
 </body>
 </html>`;
 }

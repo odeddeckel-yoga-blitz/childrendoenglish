@@ -5,6 +5,7 @@
 // definition (the English sets keep it). Reciprocal hreflang en/es/he.
 // Nothing on /he/ links here until the /he/ head-term test ends (~Nov 14).
 import { printQrBlock } from './qr-svg.mjs';
+import { sheetsSection, sheetsOut, sheetData, SHEETS_CSS } from './build-unit-pages.mjs';
 import { join } from 'path';
 import { mkdirSync } from 'fs';
 
@@ -95,7 +96,12 @@ ${alternates(en, es, `${SITE}${path}`)}
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:image" content="${SITE}/og-image.png" />
 ${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join('\n')}
-  <style>${CSS}</style>
+  <style>${CSS}
+${SHEETS_CSS}
+    .sheets { background: #fff; border-radius: 0.75rem; padding: 1rem 1.25rem; margin: 0 0 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); text-align: center; }
+    .sheets h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .sheets .print-btn { margin: 0.2rem; } .sheet-row label { font-weight: 700; }
+  </style>
 </head>
 <body>
 ${body}
@@ -150,6 +156,8 @@ ${body}
     ${printQrBlock(`${SITE}/printable-flashcards/${c.slug}/hebrew/`, 'סרקו כדי לשחק עם המילים האלה באתר — חינם, בלי הרשמה', 'rtl')}
     <div class="grid">${cards}
     </div>
+    ${sheetsSection('he')}
+    ${sheetData(c.words)}
     ${faqHtml(faq)}
     <div class="cta no-print"><a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_category_he&topic=${c.slug}">מתרגלים את המילים האלה באפליקציה ←</a>
       <p style="margin-top:0.5rem;font-size:0.8rem;color:#4b5a6e">חינם &middot; בלי פרסומות &middot; בלי הרשמה</p></div>
@@ -159,7 +167,8 @@ ${body}
         ${others}
       </div>
     </div>
-  </div>`,
+  </div>
+  ${sheetsOut(escapeHtml(c.he), 'he')}`,
     }));
   }
 
