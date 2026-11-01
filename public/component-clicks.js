@@ -26,14 +26,17 @@ export function normRoute (path) {
 }
 
 // Default template rule: a route with 2+ segments belongs to the family of its first segment ('/math-games/x' →
-// '/math-games/*'); a one-segment route is its own template. Sites override with [data-c-tpl] or options.templates.
+// '/math-games/*'); a one-segment route ending in -<number> pools as '…-n'; any other one-segment route is its own template. Sites override with [data-c-tpl] or options.templates.
 export function templateFor (route, templates = [], doc) {
   const marked = doc && doc.querySelector && doc.querySelector('[data-c-tpl]')
   if (marked) { const t = clean(marked.getAttribute('data-c-tpl'), 40); if (t) return t }
   for (const t of templates) if (t && t.re && t.re.test(route)) return clean(t.name, 40)
   const segs = route.split('/').filter(Boolean)
   if (!segs.length) return 'home'
-  return segs.length > 1 ? clean(segs[0], 36) + '/*' : clean(segs[0], 40)
+  if (segs.length > 1) return clean(segs[0], 36) + '/*'
+  // v1.50.2: a numbered family in one segment ('/math-games-for-grade-3', '/multiplication-table-of-7') pools as '…-n'
+  const num = /^(.*[a-z])-\d+$/.exec(segs[0])
+  return num ? clean(num[1], 38) + '-n' : clean(segs[0], 40)
 }
 
 function roleOf (el) {

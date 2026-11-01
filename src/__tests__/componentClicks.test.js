@@ -37,6 +37,9 @@ describe('component clicks config', () => {
     expect(tpl('/he/english-games/ages-6-8/')).toBe('he-games-age');
     expect(tpl('/he/english-words/family/')).toBe('he-words-set');
     expect(tpl('/he/grade-4/')).toBe('he-grade');
+    expect(tpl('/grade-1/')).toBe('grade');
+    expect(tpl('/grade-6/')).toBe('grade');
+    expect(tpl('/band-1/')).toBe('band1-hub');
     expect(tpl('/vocabulary/ages-9-10/')).toBe('vocab-age');
     expect(tpl('/vocabulary/food/')).toBe('vocab-category');
     expect(tpl('/vocabulary/food/spanish/')).toBe('vocab-category-lang');

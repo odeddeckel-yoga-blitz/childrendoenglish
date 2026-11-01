@@ -24,6 +24,8 @@ export const CC_CONFIG = {
     { name: 'vocab-category', re: /^\/vocabulary\/[^/]+$/ },
     { name: 'printable-lang', re: /^\/printable-flashcards\/[^/]+\/(hebrew|spanish)$/ },
     { name: 'printable-category', re: /^\/printable-flashcards\/[^/]+$/ },
+    { name: 'grade', re: /^\/grade-\d+$/ },
+    { name: 'band1-hub', re: /^\/band-1$/ },
     { name: 'band1-reading-hub', re: /^\/band-1\/reading$/ },
     { name: 'band1-review-hub', re: /^\/band-1\/review$/ },
     { name: 'band1-review-set', re: /^\/band-1\/review\/[^/]+$/ },
