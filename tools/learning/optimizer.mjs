@@ -473,6 +473,24 @@ if (picks.length > 0) {
   }
 }
 
+// --- Dead components (kit infra/kpi component clicks, live since the cc wiring): navigation-page components that
+// are seen and never clicked. 7-day window by kit default. "Never seen" needs tools/learning/component-inventory.json
+// (node tools/learning/component-inventory.mjs <one URL per template> > that file). Suggestions only: every page
+// change needs the owner's OK.
+{
+  const { deadComponents, formatReport } = await import('./component-clicks-report.mjs');
+  const { existsSync, readFileSync } = await import('node:fs');
+  const invPath = new URL('./component-inventory.json', import.meta.url);
+  const inventory = existsSync(invPath) ? JSON.parse(readFileSync(invPath, 'utf8')) : {};
+  let rows = [];
+  try {
+    rows = await q.query(`SELECT tpl, route, comp, SUM(imp)::int AS imp, SUM(clk)::int AS clk FROM component_daily
+      WHERE day >= CURRENT_DATE - 7 GROUP BY tpl, route, comp`, []);
+  } catch { /* table appears with the first beacon */ }
+  console.log('\n— dead components (7d, navigation pages):');
+  console.log(rows.length ? formatReport(deadComponents(rows, inventory), { days: 7 }) : '  no component_daily rows yet');
+}
+
 // --- committed snapshot for the build-time home spotlight (shared with tools/spotlight/hourly.mjs) ---
 // scripts/pick-spotlight.mjs (prebuild) derives "Today's picks" from THIS file,
 // never from the live DB, so builds are deterministic. generatedAt is the last

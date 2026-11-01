@@ -5,6 +5,7 @@
 // no identifier, no IP, no device storage. Table: cde_land (shared Neon
 // project childrendoenglish, CDE_DATABASE_URL — own project since 2026-10-17).
 import { neon } from '@neondatabase/serverless';
+import { parseComponentBeacon, pgComponentStore } from './_lib/component-clicks-server.mjs';
 
 const PAGES = new Set(['home', 'vocab', 'hebrew', 'spanish', 'games', 'tool', 'flashcards', 'guide', 'app', 'unit', 'battle', 'other']);
 const LANGS_OK = new Set(['en', 'he', 'es', 'ar']);
@@ -54,6 +55,7 @@ function logFail(where, err) {
 
 let ready = null;
 let warnedNoUrl = false;
+let ccStore = null;
 function sql() {
   const url = process.env.CDE_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL;
   if (!url) {
@@ -93,6 +95,19 @@ export default async function handler(req, res) {
     if (req.method === 'POST') {
       let body = req.body;
       if (typeof body === 'string') { try { body = JSON.parse(body); } catch { body = {}; } }
+      // Component clicks (kit infra/kpi): one page view's {cc:{t, r, i}} tally → ONE multi-row UPSERT into
+      // component_daily (day, tpl, route, comp, imp, clk). Validated static ids only; bot user agents dropped.
+      if (body && body.cc) {
+        const rec = parseComponentBeacon(body, req.headers?.['user-agent'] || '');
+        const q = rec && sql();
+        if (q) {
+          await ready; // sql() started the shared table init; awaiting it keeps a failure inside this try
+          ccStore ||= pgComponentStore((text, params) => q.query(text, params));
+          // The kit store caches its table-init promise: drop the store on failure so a failed init isn't cached.
+          try { await ccStore.record(rec); } catch (err) { ccStore = null; throw err; }
+        }
+        return res.status(204).end();
+      }
       const { g, s, batch } = body || {};
       // Interface language of the session (multilang WS4) — validated, defaults 'en'
       const l = LANGS_OK.has(body?.l) ? body.l : 'en';

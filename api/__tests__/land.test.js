@@ -7,13 +7,18 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 let mode = 'ok';
 const calls = [];
+const fail = () => {
+  if (mode === 'quota') throw Object.assign(new Error('Server error (HTTP status 402): Your project has exceeded the compute time quota'), { status: 402 });
+  if (mode === 'auth') throw new Error('password authentication failed for user "neondb_owner"');
+};
 vi.mock('@neondatabase/serverless', () => ({
-  neon: () => async (strings, ...values) => {
+  neon: () => Object.assign(async (strings, ...values) => {
     calls.push({ sql: strings.join('?'), values });
-    if (mode === 'quota') throw Object.assign(new Error('Server error (HTTP status 402): Your project has exceeded the compute time quota'), { status: 402 });
-    if (mode === 'auth') throw new Error('password authentication failed for user "neondb_owner"');
+    fail();
     return [];
-  },
+  }, {
+    query: async (text, params) => { calls.push({ sql: text, values: params }); fail(); return []; },
+  }),
 }));
 
 const res = () => { const r = { code: 0 }; r.status = (c) => { r.code = c; return r; }; r.end = () => r; r.json = (b) => { r.body = b; return r; }; return r; };
@@ -66,5 +71,44 @@ describe('api/land learn-event whitelist', () => {
     expect(written).toEqual(expect.arrayContaining(['fcr:c3', 'fcr:done', 'ansx:arrow@airplane', 'g_start:spelling-forge', 'pg:vocabulary_ages-6-8', 'cta:games', 'mq:vocabulary_word', 'bt:start_p6-15', 'qs:new-ladder_start', 'aie:chatgpt', 'aiv:perplexity', 'sheet:bingo', 'mp:ee-i_no', 'cvc:o_h_ok', 'zv:words-animals', 'b1r:3-hear', 'wk:pin', 'rq_ok:apron', 'rs:lo_retry', 'ge:word-zapper_next', 'qr:printable-flashcards_animals', 'ltw:bd_d_no', 't1:g-letter-twins', 'mm_keep:apron']));
     expect(written).not.toContain('aie:bing');
     expect(written.some((w) => w.startsWith('nope'))).toBe(false);
+  });
+});
+
+describe('api/land component clicks (kit infra/kpi)', () => {
+  let handler;
+  beforeEach(async () => {
+    vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    vi.spyOn(console, 'error').mockImplementation(() => {});
+    ({ default: handler } = await import('../land.js'));
+    calls.length = 0;
+  });
+  const cc = { cc: { t: 'vocab-category', r: '/vocabulary/animals', i: [['main0.card0', 1, 2], ['site-head.link0', 1, 0], ['bad id!', 1, 1]] } };
+  const ua = { 'user-agent': 'Mozilla/5.0 (iPhone)' };
+
+  it('writes one multi-row UPSERT per beacon, valid ids only', async () => {
+    const r = res(); await handler({ method: 'POST', headers: ua, body: cc }, r);
+    expect(r.code).toBe(204);
+    const ups = calls.filter((c) => /INSERT INTO component_daily/.test(c.sql));
+    expect(ups).toHaveLength(1);
+    expect(ups[0].values.slice(1, 3)).toEqual(['vocab-category', '/vocabulary/animals']);
+    expect(ups[0].values[3]).toEqual(['main0.card0', 'site-head.link0']);
+    expect(calls.some((c) => /cde_land|cde_learn \(day/.test(c.sql) && /INSERT/.test(c.sql))).toBe(false);
+  });
+
+  it('drops bot user agents and malformed payloads', async () => {
+    await handler({ method: 'POST', headers: { 'user-agent': 'Googlebot/2.1' }, body: cc }, res());
+    await handler({ method: 'POST', headers: ua, body: { cc: { t: 'X Y', r: '/a', i: [['a', 1, 0]] } } }, res());
+    expect(calls.some((c) => /component_daily/.test(c.sql))).toBe(false);
+  });
+
+  it('retries the table init after a failure', async () => {
+    mode = 'quota';
+    const r = res(); await handler({ method: 'POST', headers: ua, body: cc }, r);
+    expect(r.code).toBe(204);
+    mode = 'ok'; calls.length = 0;
+    await handler({ method: 'POST', headers: ua, body: cc }, res());
+    expect(calls.filter((c) => /INSERT INTO component_daily/.test(c.sql))).toHaveLength(1);
   });
 });

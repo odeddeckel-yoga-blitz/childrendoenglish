@@ -19,7 +19,8 @@ const ROOT = join(__dirname, '..');
 // pos 7.5), so the content works; the crawl equity wasn't reaching the rest.
 // Same fix that took kidsdomath from 11 to 67 indexed pages.
 function writePage(path, html) {
-  let out = html.replace('</head>', '  <script defer src="/land-beacon.js"></script>\n</head>');
+  // + kit component clicks (public/cc-init.js: dead-component detection on navigation pages; leaf pages excluded).
+  let out = html.replace('</head>', '  <script defer src="/land-beacon.js"></script>\n  <script type="module" src="/cc-init.js"></script>\n</head>');
   if (out.includes('class="print-qr"')) out = out.replace('</head>', `  <style>${PRINT_QR_CSS}</style>\n</head>`);
   // Match the element, not the word: unit/Band I pages name .crawl-mesh in their
   // print CSS, which used to skip their mesh entirely.

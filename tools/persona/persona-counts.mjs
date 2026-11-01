@@ -14,9 +14,11 @@ const EXT = new Set(['.js', '.jsx', '.ts', '.tsx', '.astro', '.md', '.mdx', '.ht
 const SKIP = /node_modules|__tests__|\.test\.|\/test\/|\/data\/|\/i18n\/|\.next|dist/
 const hits = []
 function walk(d) { for (const f of readdirSync(d)) { const p = join(d, f); if (SKIP.test(p)) continue; const s = statSync(p)
-  if (s.isDirectory()) walk(p); else if (EXT.has(extname(p))) readFileSync(p, 'utf8').split('\n').forEach((ln, i) => {
-    if (/persona-ok/.test(ln) || /^\s*(\/\/|\*|\/\*|\{\/\*)/.test(ln)) return   // comments describe history, not the page
-    const m = ln.match(RE); if (m && !/^\s*(played|mastered|completed|in a row|per|a day|a week)\b/i.test(ln.slice(ln.indexOf(m[0]) + m[0].length))) hits.push(`${p}:${i + 1}  "${m[0]}"  ${ln.trim().slice(0, 110)}`) }) } }
+  if (s.isDirectory()) walk(p); else if (EXT.has(extname(p))) { let inBlock = false; readFileSync(p, 'utf8').split('\n').forEach((ln, i) => {
+    // comments describe history, not the page: skip // lines and everything inside /* … */ (incl. JSX {/* … */})
+    const wasBlock = inBlock; const o = ln.lastIndexOf('/*'), c = ln.lastIndexOf('*/'); if (o > c) inBlock = true; else if (c > o) inBlock = false
+    if (wasBlock || /persona-ok/.test(ln) || /^\s*(\/\/|\*|\/\*|\{\/\*)/.test(ln)) return
+    const m = ln.match(RE); if (m && !/^\s*(played|mastered|completed|in a row|per|a day|a week)\b/i.test(ln.slice(ln.indexOf(m[0]) + m[0].length))) hits.push(`${p}:${i + 1}  "${m[0]}"  ${ln.trim().slice(0, 110)}`) }) } } }
 for (const d of dirs) walk(d)
 for (const h of hits) console.log(h)
 console.log(`persona-counts: ${hits.length} hand-typed count(s) in ${dirs.join(', ')}`)

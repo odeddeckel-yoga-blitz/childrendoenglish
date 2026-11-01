@@ -1,12 +1,14 @@
 // persona-check.mjs — the persona standard (PATTERNS §3e, P1/P2/P4) on game pages, at a phone size. (2026-10-30)
 //   node <kit>/test/persona-check.mjs [id …] [--json=out.json]     # run from the site root; no ids = every game
 //   GAMES_PUBLIC=<dir> overrides public/; PERSONA_W/PERSONA_H override the 390×664 VISIBLE phone area.
-// P1 end screen: open it (Game.winGame(), or Game.roundClear()) → exactly ONE visible primary action ([data-kdm-primary],
+// P1 end screen: open it (Game.winGame(), an arcade's global gameOver()/endGame(), or Game.roundClear()) → exactly ONE visible primary action ([data-kdm-primary],
 //    else .btn.primary), and a tap at its centre hits it (no toast/pill/overlay on top).
 // P2 start: tap the menu's play button ([data-kdm-play], else #t_start / #t_play / .btn.primary in #menu) → Game.screen
 //    becomes 'play' within 2 s, the page did not merely scroll, and no question/overlay came up instead.
 // P4 kid path: with no teacher arrival (?class / a set or battle link), no element marked [data-kdm-audience=teacher]
 //    is visible on the menu, the play screen or the end screen. Teacher arrival (?class=1) may show them.
+// PERSONA_FOLD=1 also fails P1 when the primary needs scrolling to be seen (Factory 10-31: it must replace the toast).
+// <body data-kdm-endless> marks an endless game that boots straight into play (no menu, no end screen): P1/P2 n/a.
 // A site that has not adopted the markers yet reports P1 'no-marker' — fix the site, don't loosen the check.
 // Exit 1 if any game fails P1, P2 or P4.
 import { chromium } from '@playwright/test'
@@ -24,8 +26,8 @@ const srv = createServer((req, res) => { const p = join(PUB, decodeURIComponent(
 
 const TEACHER = '[data-kdm-audience="teacher"]'
 // In-page helpers (serialised into the page).
-function visible(el) { if (!el) return false; const r = el.getBoundingClientRect(), s = getComputedStyle(el); return r.width > 2 && r.height > 2 && s.visibility !== 'hidden' && s.display !== 'none' && +s.opacity > 0.05 && r.bottom > 0 && r.top < innerHeight && el.offsetParent !== null }
-function teacherVisible(sel) { return [...document.querySelectorAll(sel)].filter((e) => { const r = e.getBoundingClientRect(), s = getComputedStyle(e); return r.width > 2 && r.height > 2 && s.visibility !== 'hidden' && s.display !== 'none' && e.offsetParent !== null }).map((e) => (e.textContent || '').trim().slice(0, 40)) }
+function visible(el) { if (!el || (el.closest && el.closest('details:not([open])'))) return false; const r = el.getBoundingClientRect(), s = getComputedStyle(el); return r.width > 2 && r.height > 2 && s.visibility !== 'hidden' && s.display !== 'none' && +s.opacity > 0.05 && r.bottom > 0 && r.top < innerHeight && el.offsetParent !== null }
+function teacherVisible(sel) { return [...document.querySelectorAll(sel)].filter((e) => { const r = e.getBoundingClientRect(), s = getComputedStyle(e); return r.width > 2 && r.height > 2 && s.visibility !== 'hidden' && s.display !== 'none' && e.offsetParent !== null && !(e.closest && e.closest('details:not([open])')) }).map((e) => (e.textContent || '').trim().slice(0, 40)) }
 
 const b = await chromium.launch(); const rows = []; let i = 0
 await Promise.all(Array.from({ length: 4 }, async () => {
@@ -36,6 +38,11 @@ await Promise.all(Array.from({ length: 4 }, async () => {
       await pg.addScriptTag({ content: `window.__pv=${visible.toString()};window.__pt=${teacherVisible.toString()}` })
       const hasGame = await pg.evaluate(() => !!(window.Game && typeof Game.start === 'function'))
       if (!hasGame) { row.notes.push('no Game.start — NOT CHECKED'); rows.push(row); await ctx.close(); continue }
+      // an endless game that boots straight into play (data-kdm-endless on <body>) has no menu and no end screen: P1/P2 n/a
+      if (await pg.evaluate(() => document.body.hasAttribute('data-kdm-endless'))) {
+        row.p1 = 'ok · n/a (endless, no end screen)'; row.p2 = 'ok'; row.p4 = (await pg.evaluate((sel) => __pt(sel), TEACHER)).length ? 'teacher items visible' : 'ok'
+        rows.push(row); await ctx.close(); console.log(`✓ ${id}  P1 n/a (endless) · P2 n/a (boots into play) · P4 ${row.p4}`); continue
+      }
       // P4 on the menu
       const t4 = await pg.evaluate((sel) => __pt(sel), TEACHER)
       // P2: press the menu's play button
@@ -43,27 +50,30 @@ await Promise.all(Array.from({ length: 4 }, async () => {
         const menu = document.getElementById('menu') || document.body
         const btn = menu.querySelector('[data-kdm-play]') || document.getElementById('t_start') || document.getElementById('t_play') || menu.querySelector('.btn.primary')
         if (!btn || !__pv(btn)) return { ok: false, why: 'no visible play button on the menu' }
-        const y0 = scrollY; btn.click(); const end = Date.now() + 2000
-        while (Date.now() < end) { if (Game.screen === 'play') return { ok: true }; await new Promise((r) => setTimeout(r, 80)) }
+        // any game screen counts (a roguelite's route map is play); still on the menu, or a mere scroll, does not
+        const y0 = scrollY, s0 = Game.screen; btn.click(); const end = Date.now() + 2000
+        while (Date.now() < end) { if (Game.screen && Game.screen !== s0 && Game.screen !== 'menu') return { ok: true }; await new Promise((r) => setTimeout(r, 80)) }
         return { ok: false, why: scrollY !== y0 ? 'the play button only scrolled the page' : 'play did not start (screen=' + Game.screen + ')' }
       })
       row.p2 = p2.ok ? 'ok' : p2.why
       await pg.waitForTimeout(400)
       const t4b = await pg.evaluate((sel) => __pt(sel), TEACHER)
       // P1: open the end screen
-      await pg.evaluate(() => { try { if (typeof Game.winGame === 'function') Game.winGame(); else if (typeof Game.roundClear === 'function') Game.roundClear(false) } catch (e) {} })
+      await pg.evaluate(() => { try { if (typeof Game.winGame === 'function') Game.winGame(); else if (typeof window.gameOver === 'function') window.gameOver(); else if (typeof window.endGame === 'function') window.endGame(); else if (typeof Game.roundClear === 'function') Game.roundClear(false) } catch (e) {} })
       await pg.waitForTimeout(900)
-      const p1 = await pg.evaluate(() => {
+      const p1 = await pg.evaluate((process_env_strict) => {
         const scr = [...document.querySelectorAll('#win, #result, .overlay.show, [data-kdm-end]')].find((e) => __pv(e) || e.classList.contains('show'))
         if (!scr) return { ok: false, why: 'no end screen opened' }
         let prim = [...scr.querySelectorAll('[data-kdm-primary]')].filter(__pv), marker = true
         if (!prim.length) { prim = [...scr.querySelectorAll('.btn.primary, button.primary')].filter(__pv); marker = false }
         if (prim.length !== 1) return { ok: false, why: (marker ? '' : 'no-marker · ') + prim.length + ' primary actions (want 1)' }
-        const el = prim[0]; el.scrollIntoView({ block: 'center' }); const r = el.getBoundingClientRect()
+        const el = prim[0]; const r0 = el.getBoundingClientRect(); const fold = r0.bottom <= innerHeight && r0.top >= 0
+        if (!fold && process_env_strict) return { ok: false, why: 'primary below the fold (needs scrolling)' }
+        el.scrollIntoView({ block: 'center' }); const r = el.getBoundingClientRect()
         const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2)
         if (!hit || !(hit === el || el.contains(hit))) return { ok: false, why: 'primary covered by ' + (hit ? (hit.id ? '#' + hit.id : hit.className || hit.tagName) : 'nothing') }
-        return { ok: true, why: marker ? '' : 'no-marker (used .btn.primary)' }
-      })
+        return { ok: true, why: (marker ? '' : 'no-marker (used .btn.primary)') + (fold ? '' : ' · below the fold') }
+      }, !!process.env.PERSONA_FOLD)
       row.p1 = p1.ok ? 'ok' + (p1.why ? ' · ' + p1.why : '') : p1.why
       const t4c = await pg.evaluate((sel) => __pt(sel), TEACHER)
       const t = [...t4, ...t4b, ...t4c]; row.p4 = t.length ? 'teacher items visible: ' + [...new Set(t)].slice(0, 3).join(' | ') : 'ok'
@@ -75,6 +85,6 @@ await Promise.all(Array.from({ length: 4 }, async () => {
 }))
 await b.close(); srv.close()
 const fails = rows.filter((r) => [r.p1, r.p2, r.p4].some((x) => x && !String(x).startsWith('ok')) || r.notes.some((n) => /NOT CHECKED|error/.test(n)))
-console.log(`persona-check: ${rows.length} games · ${W}×${H} · P1 fail ${rows.filter((r) => r.p1 && !r.p1.startsWith('ok')).length} · P2 fail ${rows.filter((r) => r.p2 && r.p2 !== 'ok').length} · P4 fail ${rows.filter((r) => r.p4 && r.p4 !== 'ok').length} · not checked ${rows.filter((r) => r.notes.length).length}`)
+console.log(`persona-check: ${rows.length} games · ${W}×${H} · P1 fail ${rows.filter((r) => r.p1 && !r.p1.startsWith('ok')).length} · P2 fail ${rows.filter((r) => r.p2 && !r.p2.startsWith('ok')).length} · P4 fail ${rows.filter((r) => r.p4 && r.p4 !== 'ok').length} · not checked ${rows.filter((r) => r.notes.length).length}`)
 if (JSON_OUT) writeFileSync(JSON_OUT, JSON.stringify(rows, null, 1))
 process.exit(fails.length ? 1 : 0)

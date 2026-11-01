@@ -461,6 +461,46 @@ P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page b
     (`fast=…&&!KDM_CALM`), a shared script that defaults ON for the youngest grades (`data-grade-lo ≤ 2`) with a menu
     switch, and a state hook (`window.__kdmCalm`). Don't gate games where motion IS the game (lanes, snakes) or where
     the timer is the skill being practised (a times-tables check). KDM R2K24, 16 K–2 games, 2026-10-30.
+19. **Correctness sweep: is there exactly ONE right answer, computed independently, and nothing that gives it away?**
+    (KDM 2026-10-31, `test/correctness-sweep.mjs` + `test/science-judge.mjs`; 508 games, 32.5K rounds.) Deal every
+    level many times via `Line.build`; recompute arithmetic from the round's own numbers (flag only PARTIAL mismatch —
+    equation games reuse a/b with other meanings); check duplicates, exactly-one-correct (the answer may be a VALUE, an
+    INDEX into the options, or a theta/target), and giveaways over ≥ 16 rounds (fixed slot, longest/shortest label,
+    middle/min-max number). Run solvability in a SECOND pass on fresh deals (a solved belt round's state leaks into the
+    next deal) and commit staged answers for stage→commit games. Science content can't be checked by code: dump the
+    rounds and have a model judge each stated answer (`science-judge.mjs`, CLI tier alias) — verdicts are LEADS, a
+    person reads them before a game changes. KDM found: 9 science games where the right option was always the
+    longest/shortest, a duplicate option from a generator bug, and a camel 'water-storing hump' (it stores fat).
+    Calibrate first: 7 of the first 21 hits were the checker's own matcher (index answers), not the games.
+20. **Endless games that boot into play** mark `<body data-kdm-endless>`; persona-check then reports P1/P2 n/a.
+21. **After a WRONG answer on a phone, can the child see why?** (KDM 2026-10-31, `test/feedback-visible.mjs`.) A pinned
+    button + scrolling controls box (kdm-pinned-act) hid #statusLine — the only line that says WHY — below the box's
+    visible part or under the button; at 320×568 it was below the screen. 257 of 507 KDM games; number-detective kept 65%
+    of triers on level 1 and nobody ever saw a reason. Probe: make a REAL miss (commit a staged wrong answer — many
+    wrongForTest hooks only stage), then require the line in the viewport, inside every scroll ancestor, not covered (sample
+    the TEXT rect, not the box: a pill over a full-width line's edge covers no words). Fix once, shared: mirror the line's
+    text in a non-interactive bubble above the main button when it is hidden right after a miss shake or a red message.
+22. **Engagement diagnosis: COUNT, then LOOK, on a phone with real taps.** Six KDM 'stuck on level 1' games (10-31): not one
+    was workload. Causes found: a board that LOOKS tappable but ignores taps; the answer button below the fold; the clue as
+    the faintest text; jargon names with no meaning; a demo finger hovering over the most tempting WRONG option; an
+    unfinished CHECK counted as a miss; a menu promising ants that calm mode freezes; first-play coach pointing at a hidden
+    button. Every one was invisible to the dbg-driven gates — screenshots at 390×664 found them.
+23. **Predict-observe-explain: after a WRONG prediction, is NEXT on screen?** (KDM 2026-10-31, `test/poe-next-visible.mjs`.)
+    The shared "✓ It was … — <rule>" explain line pushed NEXT below the fold; real players (no auto-advance) sat at ⭐1/3.
+    44 of 200 KDM science games. Probe as a real player (navigator.webdriver=false): wrongForTest → wait for phase
+    'explain' → NEXT inside the viewport and hit by a tap at its centre. Fix once, shared: the reveal keeps NEXT pinned
+    and puts the explanation above it in a capped, scrolling card. Tolerance: bottom == innerHeight is on screen (+0.5px).
+24. **A shared phone-layout script must not run ONCE at parse time.** kdm-pinned-act checked `matchMedia` before layout
+    settled; ~1 in 8 fresh loads at 320×568 got no pinned box and CHECK landed off screen. Run the setup idempotently
+    and retry on load, 250 ms, 1 s and resize until it applies. Measure fresh loads in a loop (24/24), not one load.
+25. **Every answer option on screen BEFORE the pick.** (KDM 2026-10-31, tap-reach "below the fold only".) 173 of 200 science
+    games showed 1–2 of 3–4 cards on a phone; the rest sat in a scroll box under a mostly empty picture — a child saw one
+    card, often the wrong one. Fix once, shared (kdm-poe-fit): per round, before paint, hide the duplicate heading, compact
+    the cards, then shrink the picture in steps (46 → 42 → 38 %, never less) until cards + LOCK IN fit; restore the picture
+    when the experiment runs. Treat "below the fold only" on OPTIONS as a defect, not a soft warning.
+26. **Check every LINE of a message, not its centre.** A two-line miss reason passed with its centre visible while line 2
+    wrapped under the pinned button (70 KDM games). Probe and fix both use Range.getClientRects() per line, and the
+    mirror rechecks at 1 s (a panel can reflow after the first check).
 
 ## 6. Multi-agent workflow rules
 - One agent per game file; agents never touch sibling games or revert anything beyond

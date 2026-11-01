@@ -24,6 +24,12 @@ const MAP = {
   'infra/seo/optimizer.py': 'tools/seo/optimizer.py',
   'infra/seo/push-index.py': 'tools/seo/push-index.py',
   'infra/seo/bing_query.py': 'tools/seo/bing_query.py',
+  // Component clicks (kit infra/kpi, All-ZC): browser module served from public/ (static pages and the SPA load
+  // it through public/cc-init.js), the server half for /api/land, the optimizer's report and the inventory crawl.
+  'infra/kpi/component-clicks.js': 'public/component-clicks.js',
+  'infra/kpi/component-clicks-server.mjs': 'api/_lib/component-clicks-server.mjs',
+  'infra/kpi/component-clicks-report.mjs': 'tools/learning/component-clicks-report.mjs',
+  'infra/kpi/component-inventory.mjs': 'tools/learning/component-inventory.mjs',
 };
 
 const hash = (p) => createHash('sha256').update(readFileSync(p)).digest('hex').slice(0, 12);
