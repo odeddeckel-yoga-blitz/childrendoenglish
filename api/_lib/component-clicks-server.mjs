@@ -1,4 +1,4 @@
-// component-clicks-server v1 (kit infra/kpi, 2026-11-01, All-ZC) — framework-agnostic server half.
+// component-clicks-server v1.50.1 (kit infra/kpi, 2026-11-01, All-ZC) — framework-agnostic server half.
 // The site's beacon endpoint (Next route, Vercel fn, Express…) calls parseComponentBeacon(body, userAgent) and, when
 // it returns a record, store.record(rec). Postgres via any `query(text, params)` function (neon: sql.query), else memory.
 // Privacy: validated static ids only (no free text), aggregate daily rows, no identifier, no IP.
@@ -16,7 +16,8 @@ export const COMPONENT_DDL = `CREATE TABLE IF NOT EXISTS component_daily (
 const TPL_RE = /^[a-z0-9_-]{1,40}(\/\*)?$/
 const ROUTE_RE = /^\/[a-z0-9/-]{0,80}$/
 const COMP_RE = /^[a-z0-9_.-]{1,60}$/
-export const BOT_UA = /bot|crawl|spider|slurp|headless|preview|fetch|monitor|lighthouse|pagespeed|python|curl|wget|httpclient|axios|node-fetch/i
+// Known automation only (v1.50.1: no generic words like 'preview'/'fetch', which real browsers and in-app webviews can carry).
+export const BOT_UA = /bot\b|bot\/|crawl|spider|slurp|headlesschrome|lighthouse|pagespeed|facebookexternalhit|whatsapp\/|python-requests|python-urllib|aiohttp|\bcurl\/|\bwget\/|go-http-client|okhttp|java\/|axios\/|node-fetch|undici/i
 const MAX_ITEMS = 60, MAX_CLK = 20
 
 // body: the parsed beacon JSON. Returns { tpl, route, items: [[comp, imp, clk]] } or null (drop quietly).
@@ -45,7 +46,8 @@ const since = (days) => new Date(Date.now() - days * 86400000).toISOString().sli
 // query(text, params) → Promise<rows>. One multi-row UPSERT per beacon.
 export function pgComponentStore (query) {
   let ready = null
-  const init = () => (ready ||= query(COMPONENT_DDL, []))
+  // a failed DDL (cold DB, quota) must not stick: drop the cached promise so the next beacon retries (v1.50.1)
+  const init = () => (ready ||= query(COMPONENT_DDL, []).catch((e) => { ready = null; throw e }))
   return {
     async record (rec, day = today()) {
       await init()

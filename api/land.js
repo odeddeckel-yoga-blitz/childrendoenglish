@@ -103,8 +103,7 @@ export default async function handler(req, res) {
         if (q) {
           await ready; // sql() started the shared table init; awaiting it keeps a failure inside this try
           ccStore ||= pgComponentStore((text, params) => q.query(text, params));
-          // The kit store caches its table-init promise: drop the store on failure so a failed init isn't cached.
-          try { await ccStore.record(rec); } catch (err) { ccStore = null; throw err; }
+          await ccStore.record(rec); // kit 1.50.1+: a failed table init is retried, not cached
         }
         return res.status(204).end();
       }
