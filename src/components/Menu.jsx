@@ -17,7 +17,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
   const [moreOpen] = useState(() => { try { return sessionStorage.getItem('cde-menu-more') === '1'; } catch { return false; } });
 
   // onb m1_*: where a brand-new player's FIRST menu tap goes (continue | spotlight |
-  // games | more | grownups | profile | lang | class), against m1_view; views with
+  // games | letters | more | grownups | profile | lang | class), against m1_view; views with
   // no tap = left from the menu. Once per tab, new players only (Factory UX read).
   useEffect(() => {
     if (!isNewUser) return;
@@ -147,6 +147,26 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           </div>
         </a>
 
+        {/* Letter-by-letter path — the natural progression for young learners. Back on the short
+            menu (11-02 read: taps 9 → 1-2/day once it sat inside More). */}
+        <button
+          onClick={() => onNavigate('letterPath')}
+          data-m1="letters"
+          className="w-full glass rounded-2xl p-4 flex items-center gap-4
+                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
+        >
+          <div className="shrink-0">
+            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500 to-purple-600
+                            flex items-center justify-center font-black text-white text-lg" aria-hidden="true">
+              A<span className="text-purple-200">b</span>
+            </div>
+          </div>
+          <div className="flex-1">
+            <p className="font-bold text-slate-800 dark:text-slate-100">{t('letterPath', lang)}</p>
+            <p className="text-slate-500 text-sm">{t('letterPathDesc', lang)}</p>
+          </div>
+        </button>
+
         {/* Mastery map (kit RL16): only once the child has answered a word; a topic tap starts a quiz */}
         {onPickTopic && <MasteryMap wordMap={stats.wordMap} words={WORDS} lang={lang} onPickTopic={onPickTopic} />}
 
@@ -226,23 +246,6 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           <div className="flex-1">
             <p className="font-bold text-slate-800 dark:text-slate-100">{t('playQuiz', lang)}</p>
             <p className="text-slate-500 text-sm">{t('playQuizDesc', lang)}</p>
-          </div>
-        </button>
-        {/* Letter-by-letter path — the natural progression for young learners */}
-        <button
-          onClick={() => onNavigate('letterPath')}
-          className="w-full glass rounded-2xl p-4 flex items-center gap-4
-                     hover:shadow-lg active:scale-[0.98] transition-all text-start"
-        >
-          <div className="shrink-0">
-            <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500 to-purple-600
-                            flex items-center justify-center font-black text-white text-lg" aria-hidden="true">
-              A<span className="text-purple-200">b</span>
-            </div>
-          </div>
-          <div className="flex-1">
-            <p className="font-bold text-slate-800 dark:text-slate-100">{t('letterPath', lang)}</p>
-            <p className="text-slate-500 text-sm">{t('letterPathDesc', lang)}</p>
           </div>
         </button>
         {/* Learn Words */}
