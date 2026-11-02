@@ -4,6 +4,15 @@
 # Stop hook (stop_hook_active) so a pre-existing failure can't loop forever.
 cd "$CLAUDE_PROJECT_DIR" || exit 0
 grep -q '"stop_hook_active": *true' 2>/dev/null && exit 0
+# Skip inside headless `claude -p` runs (tool-less judges, e.g. tools/game-review/*judge*.mjs). They never edit code,
+# and a full test run per judge x concurrency drove the Mac to load ~450 on 11-02. Walks up the parent chain.
+pid=$PPID
+for _ in 1 2 3 4 5 6; do
+  [ -z "$pid" ] || [ "$pid" -le 1 ] && break
+  cmd=$(ps -o command= -p "$pid" 2>/dev/null)
+  echo "$cmd" | grep -qE '(^|/)claude( .*)? (-p|--print)( |$)' && exit 0
+  pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
+done
 git diff --quiet HEAD 2>/dev/null && exit 0
 OUT=$(mktemp)
 if ! { npm run lint --silent && npx vitest run --reporter=dot; } >"$OUT" 2>&1; then
