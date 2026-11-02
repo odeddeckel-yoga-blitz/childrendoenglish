@@ -5,7 +5,7 @@ import { test, expect } from '@playwright/test';
 // step strip opens the 11-step LadderMap with free navigation; steps dispatch to flashcards / quizzes / Letter Fix /
 // Sentence Gap / scoped arcade URLs.
 
-async function reachMenu(page, { canRead = true } = {}) {
+async function reachMenu(page, { canRead = true, fresh = false } = {}) {
   await page.addInitScript(() => {
     localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
   });
@@ -21,6 +21,17 @@ async function reachMenu(page, { canRead = true } = {}) {
   const readBtn = page.locator(canRead ? 'text=I can read!' : 'text=Not yet');
   if (await readBtn.count()) await readBtn.click();
   await page.waitForTimeout(800);
+  // Since 11-02 a brand-new player's first Continue opens the first quiz; the ladder
+  // tests below start from a player who has done that one quiz (still on step 1).
+  if (!fresh) {
+    await page.evaluate(() => {
+      const { activePlayerId } = JSON.parse(localStorage.getItem('childrendoenglish-players'));
+      const key = 'childrendoenglish-player-' + activePlayerId;
+      localStorage.setItem(key, JSON.stringify({ ...JSON.parse(localStorage.getItem(key)), totalQuizzes: 1 }));
+    });
+    await page.reload();
+    await page.waitForSelector('#root > *', { timeout: 10000 });
+  }
 }
 
 test('play-first: a new player can start without typing a name', async ({ page }) => {
@@ -48,6 +59,13 @@ async function openLadder(page) {
   await page.getByTestId('ladder-strip').click();
   await expect(page.getByText('Your practice ladder')).toBeVisible({ timeout: 8000 });
 }
+
+test("a brand-new player's first Continue opens the first quiz (step 2), flashcards after it", async ({ page }) => {
+  await reachMenu(page, { fresh: true });
+  await page.getByText(/Word batch 1/).click();
+  await expect(page.getByRole('button', { name: 'Quit quiz' })).toBeVisible({ timeout: 8000 });
+  await expect(page.getByTestId('ladder-strip')).toContainText(/Step 2 of \d+/);
+});
 
 test('menu leads with the cycle Continue card for a new player', async ({ page }) => {
   await reachMenu(page);
@@ -98,6 +116,8 @@ test('pre-readers see only the no-reading steps enabled', async ({ page }) => {
     localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
     const player = { id: 'player_prereader1', name: 'Pre', avatar: '🐣', canRead: false, createdAt: new Date().toISOString() };
     localStorage.setItem('childrendoenglish-players', JSON.stringify({ schemaVersion: 2, players: [player], activePlayerId: player.id }));
+    // one quiz done, so Continue opens the current step (a brand-new player gets the first quiz)
+    localStorage.setItem('childrendoenglish-player-' + player.id, JSON.stringify({ totalQuizzes: 1, hasSeenOnboarding: true }));
   });
   await page.goto('/');
   await page.waitForSelector('#root > *', { timeout: 10000 });
@@ -140,7 +160,8 @@ test('arcade step navigates to a words-scoped game URL', async ({ page }) => {
     page.waitForURL(/\/games\/word-zapper\/\?words=.+&from=ladder/, { timeout: 20000 }),
     page.getByText('Word Zapper', { exact: true }).click(),
   ]);
-  expect(page.url()).toContain('words=');
+  // waitForURL is the check: the local preview server can bounce the game page back to /app
+  // a moment later (live stays on the game, checked 11-02), so no second read of page.url().
 });
 
 test('back from a ladder step returns to the ladder, not the My Word List editor', async ({ page }) => {
@@ -156,7 +177,8 @@ test('back from a ladder step returns to the ladder, not the My Word List editor
   await page.getByRole('button', { name: 'End Quiz' }).click();
   await page.getByRole('button', { name: 'Back to Menu' }).click();
   await expect(page.getByText(/Word batch 1/)).toBeVisible({ timeout: 8000 });
-  await expect(page.getByText('My Word List')).toHaveCount(0);
+  // the menu, not the My Word List editor (the menu's own 'My Word List' row sits in More)
+  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.view)).toBe('menu');
 });
 
 // U3: an English/Spanish newcomer's very first deck is 5 cards (the quizzes after it keep all 10).
