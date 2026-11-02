@@ -378,11 +378,11 @@ export default function App() {
   }, [stats, klNow, sessionSeed, lang, navigate]);
 
   // Launch a step (any step — free navigation). Fires cyc_start on a set's first step.
-  const startLadderStep = useCallback((stepKey, wordsOverride = null) => {
+  const startLadderStep = useCallback((stepKey, wordsOverride = null, setStart = false) => {
     const step = LADDER.find((st) => st.key === stepKey);
     if (!step) return;
     const words = wordsOverride || activeSet.words;
-    if (ladderPos.doneKeys.length === 0 && stepKey === ladderPos.currentKey) {
+    if (ladderPos.doneKeys.length === 0 && (setStart || stepKey === ladderPos.currentKey)) {
       sendLearn('cyc_start', activeSet.token);
     }
     setLadderStepKey(stepKey);
@@ -396,7 +396,9 @@ export default function App() {
       // U3: English/Spanish newcomers left the first 10-card deck (10-31 read: en 29 starts → 7 decks
       // done, es 7 → 0; he 45 → 26), so their very first deck is the set's first 5 cards. The quizzes
       // after it still use all 10; Hebrew keeps the full deck.
-      const shortFirst = lang !== 'he' && !(stats.totalQuizzes || 0) && !Object.keys(stats.wordProgress || {}).length;
+      // Newcomers now meet the words in a quiz first (see quizFirst), so "first deck" = batch 0 still on step 0.
+      const { batch: b0, stage: s0 } = cycleState(stats);
+      const shortFirst = lang !== 'he' && (stats.totalQuizzes || 0) <= 1 && b0 === 0 && s0 === 0;
       setCycleRun(true); setFocusedWords(shortFirst ? words.slice(0, FIRST_DECK) : words); navigate('flashcards'); return;
     }
     if (step.kind === 'letterfix') { navigate('letterFix'); return; }
@@ -419,7 +421,11 @@ export default function App() {
     if (activeSet.source === 'batch') {
       const { batch } = cycleState(stats);
       if (stepKey === ladderPos.currentKey) {
-        const next = advanceCycle(stats, canReadNow, activeSet.words);
+        let next = advanceCycle(stats, canReadNow, activeSet.words);
+        // Skip steps already done off-order (a newcomer's quiz-first launch lands in extraDone).
+        while (!next.batchDone && extraDone.includes(ladderSteps[next.stage]?.key)) {
+          next = advanceCycle({ ...stats, cycle: { batch: next.batch, stage: next.stage } }, canReadNow, activeSet.words);
+        }
         setStats((prev) => ({ ...prev, cycle: { batch: next.batch, stage: next.stage } }));
         if (next.batchDone) {
           sendLearn('cyc_done', activeSet.token);
@@ -439,14 +445,21 @@ export default function App() {
     if (done.length >= ladderSteps.length) { sendLearn('cyc_done', activeSet.token); navigate('ladder'); return; }
     if (!leaving) setPendingStart(true);
    
-  }, [activeSet, ladderPos, stats, canReadNow, adhocPos, ladderSteps, navigate, setStats]);
+  }, [activeSet, ladderPos, stats, canReadNow, adhocPos, ladderSteps, extraDone, navigate, setStats]);
 
   useEffect(() => {
     if (!pendingStart) return;
     setPendingStart(false);
-    if (ladderPos.currentKey) startLadderStep(ladderPos.currentKey);
+    // 11-02 read: with flashcards first, new players' first quiz fell from 27 done (10-27..30)
+    // to 2 (10-31..11-01). A brand-new player's first Continue opens the first quiz; the
+    // flashcard step (still current) follows it.
+    const quizFirst = !(stats.totalQuizzes || 0) && !Object.keys(stats.wordProgress || {}).length
+      && ladderPos.doneKeys.length === 0 && ladderPos.currentKey === 'fc'
+      && ladderSteps[1]?.kind === 'quiz';
+    if (quizFirst) startLadderStep(ladderSteps[1].key, null, true);
+    else if (ladderPos.currentKey) startLadderStep(ladderPos.currentKey);
     else navigate('ladder');
-  }, [pendingStart, ladderPos, startLadderStep, navigate]);
+  }, [pendingStart, ladderPos, ladderSteps, stats, startLadderStep, navigate]);
 
   // Carry a topic page's topic into the first quiz once the child reaches the menu
   // (after create-player, or at once for a returning child).

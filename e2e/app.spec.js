@@ -191,12 +191,23 @@ test('the default menu is short; the rest sits under More and For grown-ups', as
   await setupReturningUser(page);
   await expect(page.getByText(/Word batch \d+/)).toBeVisible({ timeout: 8000 });
   await expect(page.locator('a[href="/games/"]')).toBeVisible();
+  // Letter Path sits on the short menu (11-02: taps fell 9 → 1-2/day inside More)
+  await expect(page.locator('[data-m1="letters"]')).toBeVisible();
   await expect(page.locator('text=Play Quiz')).toBeHidden();
   await expect(page.locator('text=Parent Dashboard')).toBeHidden();
   await page.getByTestId('menu-more').locator('summary').click();
   await expect(page.locator('text=Play Quiz')).toBeVisible();
   await page.getByText('For grown-ups').click();
   await expect(page.locator('text=Parent Dashboard')).toBeVisible();
+});
+
+// 11-02 read: a brand-new player's first Continue opens the first quiz (flashcards came
+// first from 10-31 and first quizzes fell 27 → 2); the flashcard step follows it.
+test("a brand-new player's first Continue opens a quiz, not flashcards", async ({ page }) => {
+  await setupNewPlayer(page);
+  await page.locator('[data-m1="continue"]').click();
+  await expect.poll(() => page.evaluate(() => document.documentElement.dataset.view), { timeout: 8000 })
+    .toMatch(/Quiz$/);
 });
 
 test.describe('Menu', () => {
