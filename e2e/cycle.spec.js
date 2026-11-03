@@ -67,6 +67,16 @@ test("a brand-new player's first Continue opens the first quiz (step 2), flashca
   await expect(page.getByTestId('ladder-strip')).toContainText(/Step 2 of \d+/);
 });
 
+test('the flashcard front has a Show the word button that flips the card (small phone)', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 });
+  await reachMenu(page, { canRead: true });
+  await page.getByText(/Word batch 1/).click();
+  const show = page.getByRole('button', { name: /Show the word/ });
+  await expect(show).toBeInViewport({ timeout: 8000 });
+  await show.click();
+  await expect(page.getByRole('button', { name: /Know It/ })).toBeInViewport();
+});
+
 test('menu leads with the cycle Continue card for a new player', async ({ page }) => {
   await reachMenu(page);
   await expect(page.getByText(/Word batch 1/)).toBeVisible({ timeout: 8000 });

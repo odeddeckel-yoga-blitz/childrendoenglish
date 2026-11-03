@@ -154,6 +154,7 @@ const SEO_TEST_HOLDOUT = new Set([
   'street', 'park', 'playground', 'shorts', 'pants', 'alphabet', 'drawing', 'painting', 'baseball',
   'fishing', 'skateboarding', 'table-tennis', 'tennis-racket', 'board-game', 'sand', 'smile',
   'snail', // 11-03: replaces grape + crayon (removed 10-31); held like the Phase 0 words
+  'toaster', // 11-03: replaces apron (owner: remove)
 ]);
 // The /he/ landing's word stat is part of the held head-term test: frozen at its live value
 // (488) so removing grape + crayon doesn't move it. Delete with SEO_TEST_HOLDOUT after the read.

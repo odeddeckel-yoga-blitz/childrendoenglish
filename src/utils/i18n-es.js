@@ -106,6 +106,7 @@ export default {
 
   // Flashcards
   tapToFlip: 'Toca para girar',
+  showWord: 'Ver la palabra',
   stillLearning: 'Aún Aprendiendo',
   knowIt: 'La Sé',
   swipeHint: 'Deslizar a la derecha = La sé, Deslizar a la izquierda = Aún aprendiendo',

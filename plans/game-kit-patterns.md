@@ -550,6 +550,90 @@ P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page b
     browsers inside pre-push held the GitHub connection open until it dropped). A flagged game is re-run alone and only
     a repeat counts (one missed tap under load blocked a push on 11-02).
 
+34. **A move the game TEACHES is never scored as a miss** (KDM 2026-11-02, deep-sea-vector-salvage: the mine levels say
+    "move one axis at a time", but `correct = vec === need` judged leg 1 against the whole vector → shake, "OFF BY", a
+    miss and the struggle scaffold for doing exactly what it said). A taught multi-step route gives step credit
+    ("✅ Leg 1 done"). And `solveForTest()` must play the route a child would (around the mine): its straight shot bounced
+    for ever, so levels 5–6 were never reached by ANY gate. An endless last level exposes `Game.MAX` so a runner knows
+    it reached the end.
+
+35. **`#actBtn` is the commit — an answer option parked there says so** (KDM 2026-11-02, price-detective: from L7 `#actBtn`
+    is the "✔ ALL CORRECT" stamp; every tool tapped it as CHECK after staging the guilty row, so it answered "clean" and
+    L7 never cleared in the runner). Such a button gets `data-kdm-role="answer"`; real-tap-levels, messy-kid and
+    blank-commit-probe then commit through the contract instead. Catalogue check: 495/502 `#actBtn` call `Line.commit()`;
+    lock/seal/forge/engage are commits under another name, tangram-harbor's is a helper (noted by the runner).
+
+36. **A test helper never lifts the game's commit lock** (KDM 2026-11-02, circuit-lemmings + mirror-breakout:
+    `solveForTest(){ … locked=false }`. Called by a runner during the 2.3 s level-end wait, it re-armed GO; a second
+    `roundClear` was queued and NEXT bounced from the win screen back to the result card — ~half of all runs, on every
+    view). Helpers start with `if (locked) return;` (or `settle()` the in-flight move first) and `dbg.busy` exposes the
+    lock so tools wait. Gate: KDM `contract-lint` rule `helper-unlock`. A flaky "NEXT did nothing" is worth tracing: here
+    the flake was the tool's own hook.
+
+37. **A double tap answers once** (KDM 2026-11-02 messy-kid: fraction-stack, prime-asteroids, ratio-pop — the 2nd tap
+    of a quick double tap landed on the NEXT round, which appears at once, and the child got a red "❌" for a move they
+    never made). The template carries `kdm-tapguard v1` (a 2nd click on a committing `#actBtn` within 400 ms is dropped,
+    capture phase); KDM injects it into every game via normalize-games. Tester: messy-kid double-tap probe (the 1st tap
+    must have scored; a red line must SAY wrong — colour alone is not a verdict).
+
+38. **The answer key agrees with the TRUE value, not only the method's estimate** (KDM 2026-11-03 answer-check,
+    fraction-estimation-cove: "is the robot's claim reasonable?" was judged only against the benchmark estimate; 3/8 + 6/7
+    rounds to 1½, so "≈ 1¾" passed although the real sum is 1.23 — 22 of 100 such rounds had a wrong or borderline key).
+    A judged claim is "yes" only when near both the estimate and the true value, "no" only when far from both; draw again
+    otherwise. Tester: `answer-check` (a text judge rules each staged answer; a SCORED round judged wrong is the
+    finding), plus a per-game fuzz of the round generator when the key is a rule.
+
+39. **The prompt and the miss line fit EVERY round a level deals** (KDM 2026-11-03 struggle-replay + answer-check:
+    price-detective L5–6 said "breaks its shelf tag" on rounds whose error was the line's math; bar-graph-builder's
+    "how many MORE" miss said "count higher up the bar"; capacity-canyon said "change L into mL" when both were mL;
+    shape-sort-shack's "count the sides" can't split square from rectangle; temp-trek cited 20° on a scale that marks
+    −20/0/40). Text keyed by level band must be checked against each mode that band can deal; a miss line names the
+    step that fixes THIS round. Tester: `struggle-replay` (replay the level real players quit on, wrong twice, vision
+    judge + a human read of the frames).
+
+40. **A canvas layout budgets the gaps, not just the item size** (KDM 2026-11-03, doubles-dash: the dot radius was
+    capped by `width / (2·cols)` while each group also needs ½r gaps and a 1.4r centre margin, so the outer dot of each
+    group sat half off a 390 px phone — "3 + 3" showed 2½ a side). Compute the cap from the full row width. Reveal text
+    that has no room under its labels moves (or becomes the sign between them) — never clamp it onto them.
+    Tester: `edge-clip-probe` (strongly coloured pixels in the canvas's outer columns; scenery drawn to the edge on
+    purpose also lights up — read the frame).
+
+41. **Storage can throw — every localStorage/sessionStorage touch is guarded** (KDM 2026-11-03 env-probe,
+    deep-sea-vector-salvage: four bare `localStorage.getItem` calls → the game never loaded where storage is blocked:
+    cookies off, a locked-down school profile, some embedded frames). Tester: `env-probe` (plain, LMS iframe,
+    storage-throws, 125/150 % zoom, slow Wi-Fi, shared scripts missing; a setting is flagged only when plain passes).
+    Catalogue: 1 of 511.
+
+42. **Shared overlays never sit on the controls a retry needs** (KDM 2026-11-03 struggle-replay: the miss bubble
+    (kdm-feedback-mirror) floated just above CHECK — over the last row of answers in doubles-dash, bond-breaker,
+    place-value-blocks-bay, capacity-canyon; and the pinned controls box hid answers below its fold with no sign).
+    Bubble v1.4 sits at the top of the controls panel (its title/how-to text) and hides on the next touch; pinned-act
+    v2.2 shows a "▾ more" chip while a CONTROL is below the fold. Tester: `feedback-visible` `bubble-covers` (old 4/4
+    flagged → new 0/4). A test hook that already commits (wrongForTest) must not be followed by a second CHECK in a
+    runner — it reads as the game saying "set your answer first" (struggle-replay false positives, 3 games).
+43. **A phone fit never hides the round's question** (KDM 2026-11-03: kdm-poe-fit v1 hid `#panelHead` on phones on the
+    assumption the HUD asks the same; in 146 of 200 science games it held round-specific words shown nowhere else —
+    reduce-reuse-recycle showed a can and "which R?" with no action). Compact a panel head before hiding it; hide it only
+    when every non-generic word is visible elsewhere. Anything a round needs to be answered lives outside a hideable
+    heading. Keeping the question costs room: pay with the picture, not the answers (kept head → picture 33 → 29 % at
+    320×568; without that, 117 games' cards fell below the fold). Testers: `poe-question-visible` (320×568 + 390×664)
+    AND `tap-reach` on the same games — each fix alone passes its own gate and fails the other's.
+44. **Every input a round needs is on screen at round start on a 320×568 phone, not only CHECK** (KDM 2026-11-03:
+    factor-dig's 💨 PRIME chip and number-line-jumps' −1/+1 row sat below the fold behind the pinned button; a pre-reader
+    saw one button). Order the phone panel status → inputs → teach text. "▾ more" is a fallback, not a layout.
+45. **A later level never marks wrong what an earlier level taught, and the picture never pre-draws the asked
+    direction** (KDM 2026-11-03 growing-toward-light: L1 taught "shoots bend toward a side light", L2 kept a side light
+    and marked "sideways" wrong, while the predict frame already showed the upright shoot). Check each mode's reveal
+    against every other mode's answer; before a direction prediction draw only the start state.
+46. **A skill ladder ramps each new sub-skill, easiest first** (KDM 2026-11-03 count-by-cove: 5s arrived at L2 before
+    10s, opening on 20,25,30,?). The first round of a new step starts at the step itself (10,20,30,?).
+47. **Miss text: first miss names the strategy, second gives the answer and why; one fixed "count again!" for every
+    miss is a defect** (KDM 2026-11-03 add-attack). Name controls by their on-screen label ("+1"), never a look-alike
+    emoji (➕ rendered grey), and no low-contrast symbol emoji (➖) as a choice icon on dark themes.
+48. **A level generator must have more than one output** (KDM 2026-11-03 what-is-a-wave: `LEVELS[0]=()=>genIsWave(true)`
+    always returned the rope; the no-repeat guard can't help a constant). Fuzz each level ~20× and require ≥3 distinct
+    rounds where the pool allows.
+
 33. **Every issue goes round the loop** — fix → creator rule → tester gate (fails on the old game, passes on the fix) →
     optimizer → catalogue sweep → kit + `LESSONS.jsonl`. Enforced by `hooks/commit-msg` (a game change needs a
     `Lesson:` trailer). See `ISSUE-LOOP.md`.

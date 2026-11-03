@@ -108,6 +108,7 @@ const translations = {
 
     // Flashcards
     tapToFlip: 'Tap to flip',
+    showWord: 'Show the word',
     stillLearning: 'Still Learning',
     knowIt: 'Know It',
     swipeHint: 'Swipe right = Know it, Swipe left = Still learning',

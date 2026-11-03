@@ -450,5 +450,6 @@ window.addEventListener('error',()=>{ const p=$('errPill'); if(p) p.style.displa
 applyText();   /* MUST be last — modules are defined above; calling earlier hits the TDZ */
 </script>
 <!-- kdm-arcade v1 --><script src="/games/_shared/kdm-arcade.js"></script>
+<!-- kdm-tapguard v1 --><script>/* kdm-tapguard v1 — scripts/normalize-games.mjs: drop a second CHECK click within 400 ms (a double tap must not answer the next round). */(function(){try{var last=0;document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('#actBtn');if(!a||a.getAttribute('data-kdm-role')==='answer')return;if(!/Line\.(commit|lock|seal|forge|engage)\(/.test(a.getAttribute('onclick')||'Line.commit('))return;var t=Date.now();if(t-last<400){e.stopImmediatePropagation();e.preventDefault();return;}last=t;},true);}catch(e){}})();</script>
 </body>
 </html>

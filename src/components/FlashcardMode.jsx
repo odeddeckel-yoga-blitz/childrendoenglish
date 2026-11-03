@@ -279,6 +279,19 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
         )}
       </div>
 
+      {/* Front: a real button, not only the grey "Tap to flip" — kids who didn't think to tap the
+          photo left at card 1 (en 9 → 2 reached card 2, 10-27..11-02). */}
+      {!flipped && (
+        <button
+          onClick={() => setFlipped(true)}
+          data-kdm-primary=""
+          className="w-full py-3 rounded-xl bg-blue-600 text-white font-bold text-lg
+                     hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
+        >
+          <span aria-hidden="true">🔄</span> {t('showWord', lang)}
+        </button>
+      )}
+
       {/* Buttons — only visible after flipping */}
       {flipped && (
         <>

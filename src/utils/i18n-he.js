@@ -106,6 +106,7 @@ export default {
 
   // Flashcards
   tapToFlip: 'הקישו כדי להפוך',
+  showWord: 'הציגו את המילה',
   stillLearning: 'עדיין לומדים',
   knowIt: 'יודעים',
   swipeHint: 'החליקו ימינה = יודעים, החליקו שמאלה = עדיין לומדים',

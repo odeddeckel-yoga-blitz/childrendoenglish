@@ -528,6 +528,7 @@ export const WORDS = [
   // Home
   { id: 'igloo', word: 'igloo', level: 'intermediate', partOfSpeech: 'noun', category: 'home', definition: 'A round house built from blocks of snow', exampleSentence: 'They built an igloo from snow blocks.', phonetic: '/ˈɪɡluː/', hebrewTranslation: 'איגלו', imageUrl: '/images/igloo.webp' },
   { id: 'kettle', word: 'kettle', level: 'intermediate', partOfSpeech: 'noun', category: 'home', definition: 'A pot used to boil water for tea', exampleSentence: 'The kettle whistled when the water boiled.', phonetic: '/ˈkɛtəl/', hebrewTranslation: 'קומקום', imageUrl: '/images/kettle.webp' },
+  { id: 'toaster', word: 'toaster', level: 'beginner', partOfSpeech: 'noun', category: 'home', definition: 'A kitchen machine that makes bread hot and crispy', exampleSentence: 'Dad put two slices of bread in the toaster.', phonetic: '/ˈtoʊstər/', hebrewTranslation: 'טוסטר', imageUrl: '/images/toaster.webp' },
   { id: 'vase', word: 'vase', level: 'beginner', partOfSpeech: 'noun', category: 'home', definition: 'A container for holding flowers', exampleSentence: 'She put the flowers in a blue vase.', phonetic: '/veɪs/', hebrewTranslation: 'אגרטל', imageUrl: '/images/vase.webp' },
   { id: 'lock', word: 'lock', level: 'beginner', partOfSpeech: 'noun', category: 'home', definition: 'A metal object that keeps a door closed and needs a key', exampleSentence: 'Dad opened the lock with his key.', phonetic: '/lɒk/', hebrewTranslation: 'מנעול', imageUrl: '/images/lock.webp' },
   { id: 'quilt', word: 'quilt', level: 'intermediate', partOfSpeech: 'noun', category: 'home', definition: 'A warm bed cover made from pieces of cloth sewn together', exampleSentence: 'Grandma made a colorful quilt for my bed.', phonetic: '/kwɪlt/', hebrewTranslation: 'שמיכת טלאים', imageUrl: '/images/quilt.webp' },
@@ -593,7 +594,6 @@ export const WORDS = [
   { id: 'carpet', word: 'carpet', level: 'beginner', partOfSpeech: 'noun', category: 'home', definition: 'A soft covering for the floor', exampleSentence: 'The cat slept on the carpet.', phonetic: '/ˈkɑːrpɪt/', hebrewTranslation: 'שטיח', imageUrl: '/images/carpet.webp' },
 
   // === USER-REQUESTED A+D WORDS (letter school lists) 2026-09-20 ===
-  { id: 'apron', word: 'apron', level: 'intermediate', partOfSpeech: 'noun', category: 'clothing', definition: 'A cloth you wear to keep clothes clean while cooking', exampleSentence: 'Grandma wore an apron while baking.', phonetic: '/ˈeɪprən/', hebrewTranslation: 'סינר', imageUrl: '/images/apron.webp' },
   { id: 'axe', word: 'axe', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A tool with a heavy blade for chopping wood', exampleSentence: 'He chopped the log with an axe.', phonetic: '/æks/', hebrewTranslation: 'גרזן', imageUrl: '/images/axe.webp' },
   { id: 'angel', word: 'angel', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A kind figure with wings from stories', exampleSentence: 'The angel had big white wings.', phonetic: '/ˈeɪndʒəl/', hebrewTranslation: 'מלאך', imageUrl: '/images/angel.webp' },
   { id: 'aquarium', word: 'aquarium', level: 'intermediate', partOfSpeech: 'noun', category: 'animals', definition: 'A glass tank where fish live', exampleSentence: 'Colorful fish swim in the aquarium.', phonetic: '/əˈkwɛriəm/', hebrewTranslation: 'אקווריום', imageUrl: '/images/aquarium.webp' },
@@ -754,7 +754,7 @@ export const getWordByName = (name) => WORD_NAME_MAP.get(name?.toLowerCase());
 // wrong, cap 46% wrong under Hebrew while 0% under English = the OTHER word
 // was among the options with the same meaning).
 export const CONFUSABLE_PAIRS = [
-  ['snail', 'seashell'], ['snail', 'worm'],
+  ['snail', 'seashell'], ['snail', 'worm'], ['toaster', 'kettle'], ['toaster', 'bread'],
   ['jam', 'jelly'], ['cap', 'hat'], ['stairs', 'staircase'], ['purple', 'violet'],
   ['gloves', 'mittens'], ['taxi', 'cab'], ['run', 'running'], ['fries', 'potato'],
   // image review 2026-10-11: a jet IS an airplane and a jeep IS a car to a 6-year-old
@@ -791,10 +791,9 @@ export const CONFUSABLE_PAIRS = [
   // "bird" (45%) next to any specific bird; "wheel" (39%, picks: train, wagon)
   // next to a wheeled vehicle; arrow (he 29%) vs archery (a bow and arrow);
   // rope (35%) vs jump rope; seesaw (43%) vs playground; vase vs jar;
-  // apron (49%, picks: scarf, hoodie) vs dress (the apron icon reads as a dress).
   ...['duck', 'owl', 'parrot', 'rooster', 'ostrich', 'quail', 'eagle', 'penguin', 'chicken', 'flamingo', 'peacock', 'hen', 'goose'].map((b) => ['bird', b]),
   ...['wagon', 'bicycle', 'car', 'cart', 'scooter', 'skateboard', 'train', 'bus'].map((v) => ['wheel', v]),
-  ['arrow', 'archery'], ['rope', 'jump-rope'], ['seesaw', 'playground'], ['vase', 'jar'], ['apron', 'dress'],
+  ['arrow', 'archery'], ['rope', 'jump-rope'], ['seesaw', 'playground'], ['vase', 'jar'],
 ];
 const CONFUSABLE = new Map();
 for (const [a, b] of CONFUSABLE_PAIRS) { (CONFUSABLE.get(a) || CONFUSABLE.set(a, new Set()).get(a)).add(b); (CONFUSABLE.get(b) || CONFUSABLE.set(b, new Set()).get(b)).add(a); }
