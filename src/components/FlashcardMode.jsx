@@ -261,11 +261,14 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
               <p className="text-center text-slate-500 font-mono text-sm" dir="ltr">{currentCard.phonetic}</p>
               <p className="text-center text-slate-600 dark:text-slate-300" dir="ltr" lang="en">{currentCard.definition}</p>
               <p className="text-center text-sm text-slate-500 italic" dir="ltr" lang="en">"{currentCard.exampleSentence}"</p>
-              <div className="pt-3 border-t border-slate-200">
-                <p className="text-xl text-center font-semibold text-blue-600" dir={(lang === 'es') ? 'ltr' : 'rtl'}>
-                  {gloss(currentCard, lang === 'en' ? 'he' : lang) || currentCard.hebrewTranslation}
-                </p>
-              </div>
+              {/* Translation in the player's own language only; an English-interface player gets none (owner 11-03). */}
+              {lang !== 'en' && (
+                <div className="pt-3 border-t border-slate-200">
+                  <p className="text-xl text-center font-semibold text-blue-600" dir={(lang === 'es') ? 'ltr' : 'rtl'}>
+                    {gloss(currentCard, lang) || currentCard.hebrewTranslation}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

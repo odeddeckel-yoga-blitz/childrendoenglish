@@ -54,6 +54,15 @@ describe('FlashcardMode', () => {
     );
   });
 
+  it('shows the Hebrew translation only in the Hebrew interface, none in English', () => {
+    const card = [{ id: 'cat', word: 'cat', category: 'animals', definition: 'A pet', exampleSentence: 'A cat.', hebrewTranslation: 'חתול' }];
+    const { unmount } = render(<FlashcardMode {...defaultProps} words={card} />);
+    expect(screen.queryByText('חתול')).not.toBeInTheDocument();
+    unmount();
+    render(<FlashcardMode {...defaultProps} lang="he" words={card} />);
+    expect(screen.getByText('חתול')).toBeInTheDocument();
+  });
+
   it('renders flashcard progress bar', () => {
     render(<FlashcardMode {...defaultProps} />);
     expect(screen.getByRole('progressbar', { name: 'Flashcard progress' })).toBeInTheDocument();
