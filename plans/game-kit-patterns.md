@@ -367,6 +367,20 @@ P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page b
   CHECK `position:sticky;bottom:…` and scroll the panel to the feedback after each answer. Verify with a
   click-level phone run, not dbg: the API tester never scrolls.
 
+- **Time is seconds, never layout pixels** (KDM venn-voyage 2026-11-02: unplayable on most phones). A falling item's
+  speed was `(contactY − spawnY) / 7.5 s`; on a 390×664 phone the lane between spawn and contact was 0 px, so every item
+  "timed out" the moment it appeared, and at 320×568 the lane was negative. Desktop was fine, so no desktop test saw it.
+  Drive timed things by a fraction of their lifetime (`f += dt / life`) and map the fraction onto whatever space exists;
+  clamp any layout-derived distance with `Math.max(0, …)` and give it a floor.
+- **Boards and maps scale to the width** (KDM fraction-propulsion star map 2026-11-02): fixed 96-px nodes laid out in
+  columns overlapped on a 390-px phone ("YOU" on top of a sector). Size nodes from `(W − margins) / cols`, with a
+  minimum tap size (≥ 44 px) and font sizes from the node size; check 320 px.
+- **The CHECK label fits on one line at 320 px** (KDM expression-lab "✅ GO — LOG THE ANSWER" wrapped and pushed itself
+  below the fold). Budget ≈ 14 characters including the emoji; long labels go in the status line.
+- **A tap target is ≥ 32 px in both directions on a phone** (KDM hundred-chart-hunt: chart rows were 21 px tall at
+  390 px — a finger lands on the row above; real-input run 11-02). Grids that can't fit give the board more height on
+  narrow screens rather than shrinking rows.
+
 ## 5. Verification protocol (non-negotiable, per game)
 1. `node test/playthrough.mjs <game>` — dbg contract, 560-round reachability sweep, win flow,
    desktop+mobile shims, 0 errors. Custom endless arcades may fail the win-flow gate BY DESIGN —
@@ -501,6 +515,44 @@ P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page b
 26. **Check every LINE of a message, not its centre.** A two-line miss reason passed with its centre visible while line 2
     wrapped under the pinned button (70 KDM games). Probe and fix both use Range.getClientRects() per line, and the
     mirror rechecks at 1 s (a panel can reflow after the first check).
+
+27. **Play every level with real taps, on real engines, on 4 screens — not dbg** (KDM 2026-11-02 real-tap sweep, 446
+    games). `test/real-tap-levels.mjs` stages the answer through dbg but TAPS the real CHECK and NEXT, level after level:
+    views `phone` (iPhone 13), `se` (iPhone SE on **WebKit** = Safari's engine), `android` (Galaxy S8), `desktop`, and
+    `chromebook` (1366×768, CPU slowed 4× — a school laptop; run it on every timed game). `--levels=all`. Found: a game
+    unplayable on phones (§4 "time in seconds"), a star map overlapping on phones, CHECK below the fold at L2/L3 only.
+    Runner traps that each produced hundreds of false flags (build any new runner around them): CHECK is disabled
+    during the ~1 s feedback beat (wait, don't tap); a game that auto-advances once staged makes the tap miss (flag only
+    if nothing moved); a solve can change neither `made` nor `o` (compare a coarse state signature); `#actBtn` can be a
+    helper (TURN PIECE) or a 2-px placeholder (the answer tap commits); **`offsetParent` is null for a `position:fixed`
+    CHECK** — use `checkVisibility()`; a ready-pulse scales CHECK a few px past the edge (8 px tolerance).
+28. **Messy-kid probes** (`test/messy-kid.mjs`, phone): wrong→right, CHECK double-tapped 90 ms apart (counted twice?
+    level skipped? judged as a miss on the next round?), 5 taps during the feedback beat, tab frozen 10 s and resumed,
+    turned sideways and back, 20 s of random taps. After each, a correct answer + CHECK must still move the game on.
+29. **Real input, no dbg shortcut, on the top-traffic games** (`test/real-input-levels.mjs` + a per-game driver that may
+    READ the round but enters the answer only with taps/drags/keys; the runner lints drivers for solveForTest/commit/
+    dispatchEvent). Drags on the phone go through real touch events (CDP), not the mouse. This is the only gate that
+    sees a hidden extra step (graph-tricks) or a target too small for a finger; staging through dbg hides both.
+30. **tap-reach checks EVERY level (≤9), and a CHECK that needs scrolling is a hard fail.** L1 + Lmax missed three games
+    whose controls grew at L2/L3 (§4 "Fit check = every level" said so since 10-11; the gate didn't).
+
+31. **A commit with nothing chosen is never right** (KDM 2026-11-02: pattern-parade, angle-aim, shape-sort-shack had
+    `commit(){ resolve(O.ans) }` — a harness helper — bound to Enter/Space; a child pressing Enter 3× cleared level 1).
+    `commit()` judges the child's own pick (`if (O.picked != null) resolve(O.picked)`), never the answer; keys choose an
+    option, they don't answer. Gate: `blank-commit-probe.mjs` (Enter, Space, visible CHECK on fresh L1–L3 rounds; fails if
+    one wins every time). Found only by a real-input run: every dbg gate stages an answer before committing.
+
+32. **Content that grows DURING a round must not push CHECK away** (KDM 2026-11-02: expression-lab's work log adds a row
+    per real step; by step 4 GO sat below a 375×667 screen). Staged-answer gates (tap-reach, harness) never grow it, so
+    they passed. Creator: CHECK pinned on phones (template default since 1.51.0) or the growing list scrolls inside a
+    capped box. Tester: `real-tap-levels.mjs --serve --gate --levels=all --views=se,android` on every changed game
+    before a push (passing games are stamped by file hash; pre-push only checks the stamps with `--check-stamps` —
+    browsers inside pre-push held the GitHub connection open until it dropped). A flagged game is re-run alone and only
+    a repeat counts (one missed tap under load blocked a push on 11-02).
+
+33. **Every issue goes round the loop** — fix → creator rule → tester gate (fails on the old game, passes on the fix) →
+    optimizer → catalogue sweep → kit + `LESSONS.jsonl`. Enforced by `hooks/commit-msg` (a game change needs a
+    `Lesson:` trailer). See `ISSUE-LOOP.md`.
 
 ## 6. Multi-agent workflow rules
 - One agent per game file; agents never touch sibling games or revert anything beyond

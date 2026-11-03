@@ -457,6 +457,11 @@ but they bend three contracts, so do this explicitly (see kidsdomath `plans/arca
 - **Wrong-answer copy cites the child's own value AND names the control**: "📉 10 is too low — tap + (one 🐟 = 5)".
 - **Canvas text is drawn upright in world space** — labels drawn after `ctx.rotate` tilt with the beam and collide with
   rims (balance-bay). `restore()` first, then draw.
+- **CHECK is pinned on phones by default** (template 1.51.0: `#actBtn{position:sticky}` under 760 px; sites add
+  `infra/ui/pinned-act.js`). Don't remove it: options and labels that grow at later levels push an unpinned CHECK below
+  the fold (3 KDM games at L2/L3, 2026-11-02). Keep its label ≤ ~14 characters so it never wraps at 320 px.
+- **Anything timed runs on seconds, never on screen size** — see PATTERNS §4 "Time is seconds" (venn-voyage: 0-px lane
+  on phones = every item "too slow" at once).
 - **A panel hint and the drone must name the same target** (logic-grid said "Start with clue 1" while the drone said
   "re-read clue 3"). Derive both from one picker.
 
@@ -514,6 +519,12 @@ Build these into the generator, not into a later fix pass:
 - **Copy is tier-aware**: never name a control that's hidden at this level; say how many to find.
 - **Anything drawn like a button responds** (pick it, or nudge toward the real control).
 - **Emit the funnel events**: open, play, tap1, clear1 (even without a result card — reaching L2 implies it), levelup.
+- **One commit, one target set (grades ≤5).** A commit must not need a second pick on something the child can't see
+  next to the buttons (on phones the chart/scene sits above the fold). If the heading already names what to check, the
+  verdict IS the answer: fill the rest from the round's family, the same way for every answer kind (no oracle), and
+  show it in the feedback. 2026-11-01 graph-tricks: 7 tapped MISLEADING, 1 found the "tap the part" step, 0 clears.
+  The harness and kid-sim drive `Line.dbg`, so they can't see this. Play L1 with real taps at phone size once before
+  shipping any multi-step commit.
 
 ## Design-review lens — the 3 personas (quick pre-ship check)
 
@@ -667,6 +678,10 @@ The harness lives in `templates/game-template/test/`; see `README.md` there for 
 
 4. **Eyeball the `/tmp` screenshots:** affordance cue visible on all manipulable objects, no overlaps, numbers
    legible, `dir` is empty (no RTL).
+
+4b. **Real-tap, every level, every screen** (PATTERNS §5.27–5.30): `real-tap-levels.mjs <id> --levels=all
+   --views=phone,se,android,desktop` (+ `chromebook` if anything is timed), `messy-kid.mjs <id>`, and `tap-reach.mjs <id>`
+   (every level). New games also get a real-input driver (`tools/game-review/real-input/<id>.mjs`).
 
 5. **Playtest gate** — `node tools/game-review/run.mjs --playtest <id>`: a model PLAYS from screenshots, one
    move at a time. If it gets stuck, or its obvious tap doesn't advance the game, a child will too. But note:

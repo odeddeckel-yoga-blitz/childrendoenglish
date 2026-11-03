@@ -1,4 +1,4 @@
-// component-clicks-report v1 (kit infra/kpi, 2026-11-01, All-ZC) — the optimizer's "Dead components" section.
+// component-clicks-report v1.50.3 (kit infra/kpi, 2026-11-01, All-ZC) — the optimizer's "Dead components" section.
 // Pure functions over aggregated rows { tpl, route, comp, imp, clk } (summed over the read window, e.g. 7 days) and an
 // optional inventory { [tpl]: [comp ids present on the page] } from window.__componentClicks().
 // Output is SUGGESTIONS only: every page change still needs the owner's OK.
@@ -42,7 +42,8 @@ export function deadComponents (rows, inventory = {}, opts = {}) {
     const imp = comps.reduce((s, c) => s + c.imp, 0), clk = comps.reduce((s, c) => s + c.clk, 0)
     const j = judge(comps, minImp, bottomPct)
     const seen = new Set(comps.filter((c) => c.imp > 0).map((c) => c.comp))
-    const neverSeen = (inventory[tpl] || []).filter((c) => !seen.has(c))
+    // 'never seen' only once the template has volume: on a page viewed a handful of times everything below the fold is unseen (v1.50.3)
+    const neverSeen = imp >= urlMinTplImp ? (inventory[tpl] || []).filter((c) => !seen.has(c)) : []
     // Per-URL drill-down only once the template has volume; a URL row still needs minImp per component.
     let urls = []
     if (imp >= urlMinTplImp) {

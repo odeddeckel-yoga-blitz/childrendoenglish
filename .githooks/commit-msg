@@ -1,0 +1,7 @@
+#!/bin/sh
+# kit hooks/commit-msg (v1.52.0, ISSUE-LOOP.md): a commit that changes a game must carry a Lesson: trailer.
+# Consumers sync this to their hooks dir (core.hooksPath) and the checker to tools/game-review/lesson-check.mjs
+# (override with KIT_LESSON_CHECK). Add other commit-msg checks below; this one must stay first.
+CHECK="${KIT_LESSON_CHECK:-tools/game-review/lesson-check.mjs}"
+[ -f "$CHECK" ] || { echo "commit-msg: $CHECK missing (run the kit sync)" >&2; exit 1; }
+node "$CHECK" "$1" || exit 1

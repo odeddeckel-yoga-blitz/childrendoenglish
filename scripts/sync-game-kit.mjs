@@ -30,6 +30,10 @@ const MAP = {
   'infra/kpi/component-clicks-server.mjs': 'api/_lib/component-clicks-server.mjs',
   'infra/kpi/component-clicks-report.mjs': 'tools/learning/component-clicks-report.mjs',
   'infra/kpi/component-inventory.mjs': 'tools/learning/component-inventory.mjs',
+  // Issue loop (kit ISSUE-LOOP.md): a commit that changes a game must carry a Lesson: trailer.
+  'hooks/commit-msg': '.githooks/commit-msg',
+  'test/lesson-check.mjs': 'tools/game-review/lesson-check.mjs',
+  'ISSUE-LOOP.md': 'plans/issue-loop.md',
 };
 
 const hash = (p) => createHash('sha256').update(readFileSync(p)).digest('hex').slice(0, 12);
