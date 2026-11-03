@@ -153,7 +153,11 @@ const SEO_TEST_HOLDOUT = new Set([
   'dining-room', 'living-room', 'sofa', 'computer', 'keyboard', 'tablet', 'radio', 'watch', 'bookstore',
   'street', 'park', 'playground', 'shorts', 'pants', 'alphabet', 'drawing', 'painting', 'baseball',
   'fishing', 'skateboarding', 'table-tennis', 'tennis-racket', 'board-game', 'sand', 'smile',
+  'snail', // 11-03: replaces grape + crayon (removed 10-31); held like the Phase 0 words
 ]);
+// The /he/ landing's word stat is part of the held head-term test: frozen at its live value
+// (488) so removing grape + crayon doesn't move it. Delete with SEO_TEST_HOLDOUT after the read.
+const HE_WORD_STAT = 488;
 const TITLE_OVERRIDES = JSON.parse(readFileSync(new URL('./seo-title-overrides.json', import.meta.url), 'utf8'));
 // Pages the SEO optimizer's link advisor wants boosted (rendered on /vocabulary/)
 const SEO_FEATURED = JSON.parse(readFileSync(new URL('./seo-featured.json', import.meta.url), 'utf8'));
@@ -1634,7 +1638,7 @@ function buildHebrewLandingPage() {
 
   <!-- Stats bar -->
   <div class="stats-bar">
-    <div class="stat"><div class="stat-num">${WORDS.length - SEO_TEST_HOLDOUT.size}+</div><div class="stat-label">מילים</div></div>
+    <div class="stat"><div class="stat-num">${HE_WORD_STAT}+</div><div class="stat-label">מילים</div></div>
     <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">קטגוריות</div></div>
     <div class="stat"><div class="stat-num">4</div><div class="stat-label">סוגי חידונים</div></div>
     <div class="stat"><div class="stat-num">3</div><div class="stat-label">רמות קושי</div></div>

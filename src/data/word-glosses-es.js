@@ -62,6 +62,7 @@ export default {
   'peacock': 'pavo real',
   'rooster': 'gallo',
   'worm': 'gusano',
+  'snail': 'caracol',
   'beetle': 'escarabajo',
   'gorilla': 'gorila',
   'goose': 'ganso',

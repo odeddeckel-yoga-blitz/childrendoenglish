@@ -676,6 +676,7 @@ export const WORDS = [
   { id: 'rooster', word: 'rooster', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A male chicken that crows in the morning', exampleSentence: 'The rooster crowed at sunrise.', phonetic: '/ˈruːstər/', hebrewTranslation: 'תרנגול', imageUrl: '/images/rooster.webp' },
   { id: 'vet', word: 'vet', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A doctor who takes care of animals', exampleSentence: 'The vet checked the puppy\'s ears.', phonetic: '/vɛt/', hebrewTranslation: 'וטרינר', imageUrl: '/images/vet.webp' },
   { id: 'worm', word: 'worm', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A long soft tiny animal that lives in the soil', exampleSentence: 'The bird pulled a worm from the ground.', phonetic: '/wɜːrm/', hebrewTranslation: 'תולעת', imageUrl: '/images/worm.webp' },
+  { id: 'snail', word: 'snail', level: 'beginner', partOfSpeech: 'noun', category: 'animals', definition: 'A small slow animal that carries a round shell on its back', exampleSentence: 'The snail moved slowly across the wet leaf.', phonetic: '/sneɪl/', hebrewTranslation: 'חילזון', imageUrl: '/images/snail.webp' },
   { id: 'wizard', word: 'wizard', level: 'intermediate', partOfSpeech: 'noun', category: 'toys', definition: 'A man with magic powers from stories', exampleSentence: 'The wizard waved his magic staff.', phonetic: '/ˈwɪzərd/', hebrewTranslation: 'קוסם', imageUrl: '/images/wizard.webp' },
   { id: 'quiet', word: 'quiet', level: 'beginner', partOfSpeech: 'adjective', category: 'feelings', definition: 'Making little or no sound', exampleSentence: 'Please be quiet in the library.', phonetic: '/ˈkwaɪət/', hebrewTranslation: 'שקט', imageUrl: '/images/quiet.webp' },
   { id: 'yawn', word: 'yawn', level: 'intermediate', partOfSpeech: 'noun', category: 'feelings', definition: 'Opening your mouth wide when you are tired or bored', exampleSentence: 'She gave a big yawn before bedtime.', phonetic: '/jɔːn/', hebrewTranslation: 'פיהוק', imageUrl: '/images/yawn.webp' },
@@ -753,6 +754,7 @@ export const getWordByName = (name) => WORD_NAME_MAP.get(name?.toLowerCase());
 // wrong, cap 46% wrong under Hebrew while 0% under English = the OTHER word
 // was among the options with the same meaning).
 export const CONFUSABLE_PAIRS = [
+  ['snail', 'seashell'], ['snail', 'worm'],
   ['jam', 'jelly'], ['cap', 'hat'], ['stairs', 'staircase'], ['purple', 'violet'],
   ['gloves', 'mittens'], ['taxi', 'cab'], ['run', 'running'], ['fries', 'potato'],
   // image review 2026-10-11: a jet IS an airplane and a jeep IS a car to a 6-year-old
