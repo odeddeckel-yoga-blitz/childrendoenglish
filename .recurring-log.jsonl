@@ -1,2 +1,14 @@
 {"id":"optimizer-read","at":"2026-11-03T12:00:00.000Z","result":"found","note":"11-03 7d --rivals: flashcard drop-off at card 1 (en) → Show the word (d804a2c); hard words = word difficulty, audio clean"}
 {"id":"kit-sync","at":"2026-11-04T13:24:30.198Z","result":"found","note":"11-04: 1.57.0 + 1.59.1 synced; games checked vs §5.49–54: forge letters-left fixed (§5.52), English gloss removed (owner)"}
+{"id":"errors-check","at":"2026-11-04T19:35:33.335Z","result":"ok","note":"12h retention only (Pro): 0 errors; 4 DEP0169 url.parse warnings on /api/live from the runtime wrapper, not our code"}
+{"id":"spend-check","at":"2026-11-04T19:35:33.506Z","result":"found","note":"Vercel team Nov1-4 billed $2.67 (~$20/mo pace = budget; KDM $1.49, CDE $0.44; Oct5-31 $1.93). Neon CDE 9.3 CU-h in 4d (~70/mo)"}
+{"id":"index-coverage","at":"2026-11-04T19:35:33.658Z","result":"found","note":"GSC sitemap 'indexed' field is 0 (API quirk); inspection sample 8/16 indexed, toaster indexed in 1d, snail discovered-not-indexed; 3 old word pages unknown; crayon ghost 308s to crayons"}
+{"id":"dead-components","at":"2026-11-04T19:35:33.858Z","result":"ok","note":"7d: 11 components judged (>=100 imp), none dead; game-clicks rows arriving since 14:21Z"}
+{"id":"game-flow-read","at":"2026-11-04T19:35:34.066Z","result":"skipped","note":"tallies shipped 11-04 14:21Z; first read ~Nov 11"}
+{"id":"page-to-game-read","at":"2026-11-04T19:35:34.315Z","result":"skipped","note":"tallies shipped 11-04 14:21Z; first read ~Nov 11"}
+{"id":"errors-bounce-read","at":"2026-11-04T19:35:34.475Z","result":"skipped","note":"tallies shipped 11-04 14:21Z; first read ~Nov 11"}
+{"id":"speed-read","at":"2026-11-04T19:35:34.576Z","result":"skipped","note":"tallies shipped 11-04 14:21Z; first read ~Nov 11"}
+{"id":"returning-read","at":"2026-11-04T19:35:34.762Z","result":"skipped","note":"tallies shipped 11-04 14:21Z; first read ~Nov 11"}
+{"id":"ingame-controls-read","at":"2026-11-04T19:35:34.860Z","result":"skipped","note":"tallies shipped 11-04 14:21Z; first read ~Nov 11"}
+{"id":"ai-referrals-read","at":"2026-11-04T19:35:34.970Z","result":"ok","note":"28d: 244 AI arrivals; land on other 20% / flashcards 18% / spanish 15% / tool 15% / games 11% / hebrew 10%"}
+{"id":"deps-audit","at":"2026-11-04T19:39:12.215Z","result":"found","note":"21 (8 high) -> 8 (0 high/critical): npm audit fix + sharp 0.35.5; left: 6 moderate/2 low need eslint/vite-plugin-pwa majors (dev only)"}
