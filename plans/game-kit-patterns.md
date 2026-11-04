@@ -659,6 +659,10 @@ P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page b
     head-oracle covers DOM headings; canvas labels need the vision review (a static scan can't tell PREDICT from reveal).
 54. **Every word in an instruction names something on screen** (KDM 2026-11-04 gene-squadron: "Move under the diver" —
     "diver" was the Galaga term for the diving ship; the child saw a glowing ship). Use what the child sees.
+55. **The optimizer read covers the whole path, not just in-game depth** (owner 11-04: the ~Oct 28 game-flow read never
+    happened; page→game rates were a monthly eyeball). Every site's optimizer carries the standing sections in
+    infra/optimizer-pattern.md — movement between games, site pages → games, in-game controls, errors × bounce, AI
+    referrals — each from aggregate tallies only, and each listed in recurring.json so due.mjs brings it up.
 
 33. **Every issue goes round the loop** — fix → creator rule → tester gate (fails on the old game, passes on the fix) →
     optimizer → catalogue sweep → kit + `LESSONS.jsonl`. Enforced by `hooks/commit-msg` (a game change needs a
