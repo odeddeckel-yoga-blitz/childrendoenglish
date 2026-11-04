@@ -621,6 +621,8 @@ P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page b
 44. **Every input a round needs is on screen at round start on a 320×568 phone, not only CHECK** (KDM 2026-11-03:
     factor-dig's 💨 PRIME chip and number-line-jumps' −1/+1 row sat below the fold behind the pinned button; a pre-reader
     saw one button). Order the phone panel status → inputs → teach text. "▾ more" is a fallback, not a layout.
+    Tester: `tap-reach --inputs` (round 1 at 320×568: any input needing a scroll is a finding; it also caught
+    number-line-jumps' +10 wrapping to a 2nd row on the ±10 levels after the first fix).
 45. **A later level never marks wrong what an earlier level taught, and the picture never pre-draws the asked
     direction** (KDM 2026-11-03 growing-toward-light: L1 taught "shoots bend toward a side light", L2 kept a side light
     and marked "sideways" wrong, while the predict frame already showed the upright shoot). Check each mode's reveal
@@ -628,11 +630,35 @@ P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page b
 46. **A skill ladder ramps each new sub-skill, easiest first** (KDM 2026-11-03 count-by-cove: 5s arrived at L2 before
     10s, opening on 20,25,30,?). The first round of a new step starts at the step itself (10,20,30,?).
 47. **Miss text: first miss names the strategy, second gives the answer and why; one fixed "count again!" for every
-    miss is a defect** (KDM 2026-11-03 add-attack). Name controls by their on-screen label ("+1"), never a look-alike
+    miss is a defect** (KDM 2026-11-03 add-attack; contract-lint `lone-miss`, advisory). Name controls by their on-screen label ("+1"), never a look-alike
     emoji (➕ rendered grey), and no low-contrast symbol emoji (➖) as a choice icon on dark themes.
 48. **A level generator must have more than one output** (KDM 2026-11-03 what-is-a-wave: `LEVELS[0]=()=>genIsWave(true)`
     always returned the rope; the no-repeat guard can't help a constant). Fuzz each level ~20× and require ≥3 distinct
-    rounds where the pool allows.
+    rounds where the pool allows. Tester: `test/gen-fuzz.mjs` (6 dbg rounds per level; a constant level fails).
+49. **A round's heading never names the answer** (KDM 2026-11-03 terminal-velocity L2: head "⚖️ Balance the forces",
+    the right card the only ⚖️ one and worded "(balanced)"). Head = the question's topic ("Forces at top speed"), never
+    the result; no head icon that the right card shares (blocking) and no head word only it shares (advisory). The sweep
+    found 72 of 200 science games heading the round with the right card's icon (🔄 / 🔋 / 🌍): KDM strips shared icons
+    from the heading in PREDICT (kdm-poe-headicon v1). Tester: `test/head-oracle.mjs`.
+50. **A toast sits over the card that raised it, not the window centre** (KDM 2026-11-03 measure-meadow: the clean-quota
+    toast, centred on 1280 px, covered the side panel's answer buttons and result line). Words a 5-year-old reads.
+51. **A phone fit may shrink the picture only while the scene still fits in it** (KDM 2026-11-04: the science fit's
+    42/38/33/29 % steps ran 88 of 200 scenes off the bottom at 320×568 — animal-migration's scene gone, food-chain's
+    Sun → algae → fish row halved — and 20 at 390×664; the first math fit cropped 46 of 78, clock-climb's clock among
+    them). Games size scenes from the WIDTH or fixed minimums, so a shorter box crops instead of re-laying out. Guard
+    at runtime: learn the canvas's bottom-edge ink at full size, and after each picture step back off if it rose.
+    Every gate passed while the scene was cut (tap-reach, question-visible, playthrough): a fit needs its own crop
+    tester. Tester: `test/fit-clip.mjs` (fit on vs off, bottom-edge ink). Shared: KDM kdm-poe-fit v3.4, kdm-phone-fit v1.1.
+52. **A helper's claim is re-checked as the board changes** (KDM 2026-11-04 number-sudoku: "the left column is missing
+    just one number" stayed up after the child filled it and after the solve — the hint went false). Re-word on every
+    refresh (no extra scaffold count, no cursor jump); hide it once the round is solved. A toast about the LAST round
+    leaves when the next round starts (≥1.8 s readable) and speaks in the past tense ("You got that one!").
+53. **Distractors carry no tell-tale qualifier, and the scene carries no card's icon** (KDM 2026-11-04 animal-migration:
+    "Pet dog" / "Pet turtle" vs "Monarch" — the word "Pet" ruled them out; the scene band "☀️ WARM GROUNDS · food 🍃"
+    showed the two right reasons' icons). Name every option the same way; scene labels in PREDICT are words only.
+    head-oracle covers DOM headings; canvas labels need the vision review (a static scan can't tell PREDICT from reveal).
+54. **Every word in an instruction names something on screen** (KDM 2026-11-04 gene-squadron: "Move under the diver" —
+    "diver" was the Galaga term for the diving ship; the child saw a glowing ship). Use what the child sees.
 
 33. **Every issue goes round the loop** — fix → creator rule → tester gate (fails on the old game, passes on the fix) →
     optimizer → catalogue sweep → kit + `LESSONS.jsonl`. Enforced by `hooks/commit-msg` (a game change needs a
