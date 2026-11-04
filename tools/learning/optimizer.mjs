@@ -491,6 +491,13 @@ if (picks.length > 0) {
   console.log(rows.length ? formatReport(deadComponents(rows, inventory), { days: 7 }) : '  no component_daily rows yet');
 }
 
+// --- standing sections (kit 1.59 §5.55): movement between activities, pages → games, in-game controls, errors ×
+// bounce, AI landings, returning-day starts, phone load speed. See standing-sections.mjs.
+{
+  const { standingSections } = await import('./standing-sections.mjs');
+  await standingSections(q, days);
+}
+
 // --- committed snapshot for the build-time home spotlight (shared with tools/spotlight/hourly.mjs) ---
 // scripts/pick-spotlight.mjs (prebuild) derives "Today's picks" from THIS file,
 // never from the live DB, so builds are deterministic. generatedAt is the last

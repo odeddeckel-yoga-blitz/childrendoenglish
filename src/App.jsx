@@ -16,6 +16,7 @@ import { getDueWords } from './utils/spaced-repetition';
 import { pickTodayWords, TODAY_SIZE } from './utils/todayRun';
 import { filterByKnownLetters } from './utils/letterFilter';
 import { sendLearn } from './utils/learnBeacon';
+import { noteAppActivity } from './utils/activityFlow';
 import { WORDS, CATEGORIES } from './data/words';
 import { cycleState, advanceCycle, batchLabel, batchCount, stepsFor, LADDER, buildSet, repeatSet, masteredCount } from './utils/learningCycle';
 import LadderMap from './components/LadderMap';
@@ -161,6 +162,9 @@ export default function App() {
   // label}); batch sets track position in stats.cycle, ad-hoc sets in adhocPos.
   // cycleRun marks an in-flight quiz as a ladder step; ladderStepKey = which.
   const [cycleRun, setCycleRun] = useState(false);
+  // Movement between activities (g2/g3/hop, kit §5.55): each play screen entered, and whether the ladder sent it.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { noteAppActivity(gameState, cycleRun ? 'ladder' : 'menu'); }, [gameState]);
   const [batchDoneNum, setBatchDoneNum] = useState(null);
   const [ladderSet, setLadderSet] = useState(null);
   const [ladderStepKey, setLadderStepKey] = useState(null);

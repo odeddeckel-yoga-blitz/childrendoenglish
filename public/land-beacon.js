@@ -1,8 +1,24 @@
 /* Cookieless no-PII landing beacon — one aggregate ping per page load with
  * {page-class, source-class} only. Independent of the analytics consent gate
  * by design: it is a turnstile count, not tracking (no cookie, no identifier;
- * the only storage is the last-visit DATE for the return bucket below). See /api/land. */
+ * the only storage is the last-visit DATE for the return bucket below, plus a tab-scoped
+ * sessionStorage list of activities opened, for the movement tallies; neither is sent). See /api/land. */
 (function () {
+  // Page class of a path (the landing tally's page field; also the class of a referrer page for vp).
+  function pageClass(path) {
+    if (path === '/' || path === '') return 'home';
+    if (path.indexOf('/he/') === 0 || path.indexOf('/he') === 0 && path.length <= 4 || (path.indexOf('/vocabulary/') === 0 && path.indexOf('/hebrew') > -1)) return 'hebrew';
+    if (path.indexOf('/es') === 0 || (path.indexOf('/vocabulary/') === 0 && path.indexOf('/spanish') > -1)) return 'spanish';
+    if (path.indexOf('/units') === 0) return 'unit';
+    if (path.indexOf('/battle') === 0) return 'battle';
+    if (path.indexOf('/games') === 0) return 'games';
+    if (path.indexOf('/tools') === 0) return 'tool';
+    if (path.indexOf('/vocabulary') === 0) return 'vocab';
+    if (path.indexOf('/printable-flashcards') === 0) return 'flashcards';
+    if (path.indexOf('/guides') === 0) return 'guide';
+    if (/^\/(app|learn|quiz|flashcards|players|new-player|path|review|my-words|progress|badges)/.test(path)) return 'app';
+    return 'other';
+  }
   try {
     // Owner opt-out: visiting any page once with ?internal=1 marks THIS browser
     // as internal traffic forever (localStorage write is the owner's own choice,
@@ -22,18 +38,9 @@
       va.src = '/_vercel/insights/script.js';
       document.head.appendChild(va);
     }
-    var p = location.pathname, g = 'other';
-    if (p === '/' || p === '') g = 'home';
-    else if (p.indexOf('/he/') === 0 || p.indexOf('/he') === 0 && p.length <= 4 || (p.indexOf('/vocabulary/') === 0 && p.indexOf('/hebrew') > -1)) g = 'hebrew';
-    else if (p.indexOf('/es') === 0 || (p.indexOf('/vocabulary/') === 0 && p.indexOf('/spanish') > -1)) g = 'spanish';
-    else if (p.indexOf('/units') === 0) g = 'unit';
-    else if (p.indexOf('/battle') === 0) g = 'battle';
-    else if (p.indexOf('/games') === 0) g = 'games';
-    else if (p.indexOf('/tools') === 0) g = 'tool';
-    else if (p.indexOf('/vocabulary') === 0) g = 'vocab';
-    else if (p.indexOf('/printable-flashcards') === 0) g = 'flashcards';
-    else if (p.indexOf('/guides') === 0) g = 'guide';
-    else if (/^\/(app|learn|quiz|flashcards|players|new-player|path|review|my-words|progress|badges)/.test(p)) g = 'app';
+    var p = location.pathname, g = pageClass(p);
+    // The surface a tally belongs to: g-<game> (a game page) · app (the SPA) · pg-<page class> (any other page).
+    var surface = function () { var m = /^\/games\/([a-z0-9-]+)\/?/.exec(p); return m ? ('g-' + m[1]).slice(0, 40) : document.getElementById('root') ? 'app' : 'pg-' + g; };
     /* Interface language: language surfaces declare themselves by path; the SPA
        reads the saved UI preference; everything else counts as 'en'. */
     var l = 'en';
@@ -155,7 +162,78 @@
         }
         localStorage.setItem('cde_seen', today);
         navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: 'vis', i: b }], l: l }));
+        // Which surface a RETURNING day starts on (kit 1.59 "returning players"): rets @ surface, same once-a-day gate.
+        if (b !== 'new' && b !== 'rpre') navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: 'rets', i: surface() }], l: l }));
       }
     } catch (e) { /* storage unavailable — no return signal */ }
+    /* Standing optimizer sections (kit 1.59 §5.55, owner 11-04). Aggregate tallies like everything above: no identifier,
+       no path, no message and no timing is ever sent — only a surface (g-<game> · app · pg-<page class>) and a word. */
+    try {
+      var surf = surface();
+      var tally = function (e, i) { navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: e, i: i }], l: l })); };
+      // Errors × bounce: at most ONE jserr per page load when a script of OURS throws (same-origin file; extension and
+      // cross-origin "Script error." events are skipped).
+      var errSent = false;
+      var onErr = function (ev) {
+        try {
+          if (errSent || !ev) return;
+          var f = String(ev.filename || (ev.reason && ev.reason.stack) || '');
+          if (ev.type === 'error' && (f ? f.indexOf(location.origin) !== 0 : (!ev.error || /^Script error\.?$/.test(ev.message || '')))) return;
+          if (ev.type === 'unhandledrejection' && f.indexOf(location.origin) < 0) return;
+          errSent = true; tally('jserr', surf);
+        } catch (x) { /* never break the page */ }
+      };
+      window.addEventListener('error', onErr);
+      window.addEventListener('unhandledrejection', onErr);
+      // Phone load speed (the free alternative to Vercel Speed Insights): phones only (≤760 px), 1 page load in 4; when
+      // the page hides, LCP / CLS / INP each as one bucket word (web.dev limits) → cwv @ <metric>_<good|ni|poor>@<surface>.
+      if (window.PerformanceObserver && window.matchMedia && matchMedia('(max-width:760px)').matches && Math.random() < 0.25) {
+        var lcp = 0, cls = 0, inp = 0, cwvSent = false;
+        try { new PerformanceObserver(function (li) { var es = li.getEntries(); if (es.length) lcp = es[es.length - 1].startTime; }).observe({ type: 'largest-contentful-paint', buffered: true }); } catch (x) { /* unsupported */ }
+        try { new PerformanceObserver(function (li) { li.getEntries().forEach(function (en) { if (!en.hadRecentInput) cls += en.value; }); }).observe({ type: 'layout-shift', buffered: true }); } catch (x) { /* unsupported */ }
+        try { new PerformanceObserver(function (li) { li.getEntries().forEach(function (en) { if (en.interactionId && en.duration > inp) inp = en.duration; }); }).observe({ type: 'event', buffered: true, durationThreshold: 40 }); } catch (x) { /* unsupported */ }
+        var b3 = function (v, a, z) { return v <= a ? 'good' : v <= z ? 'ni' : 'poor'; };
+        document.addEventListener('visibilitychange', function () {
+          if (cwvSent || document.visibilityState !== 'hidden') return;
+          cwvSent = true;
+          var out = [];
+          if (lcp > 0) out.push('lcp_' + b3(lcp, 2500, 4000));
+          out.push('cls_' + b3(cls, 0.1, 0.25));
+          if (inp > 0) out.push('inp_' + b3(inp, 200, 500));
+          navigator.sendBeacon('/api/land', JSON.stringify({ batch: out.map(function (m) { return { e: 'cwv', i: (m + '@' + surf).slice(0, 40) }; }), l: l }));
+        });
+      }
+      // Game pages: movement between activities (g2 / g3 / hop — the same tab list as src/utils/activityFlow.js) and
+      // which kind of site page sent the child here (vp @ page class; ÷ that class's page loads = its click-through to a
+      // game). A reload or Back return is not a new open.
+      var gid = (/^\/games\/([a-z0-9-]+)\/?/.exec(p) || [])[1];
+      var nav = 'navigate';
+      try { var ne = performance.getEntriesByType('navigation')[0]; if (ne && ne.type) nav = ne.type; } catch (x) { /* old browser */ }
+      if (gid && nav === 'navigate') {
+        var rp = '', rself = false;
+        try { if (ref) { var ru = new URL(ref); rself = ru.hostname.replace(/^www\./, '') === self; rp = ru.pathname; } } catch (x) { /* bad referrer */ }
+        var rcls = rself ? pageClass(rp) : '';
+        var how = /[?&]from=ladder/.test(location.search) ? 'ladder' : !ref ? 'direct' : !rself ? 'ext'
+          : /^\/games\/[a-z0-9-]+/.test(rp) ? 'game' : rcls === 'games' ? 'hub' : (rcls === 'home' || rcls === 'app') ? 'app' : 'page';
+        var seenActs = [];
+        try { seenActs = JSON.parse(sessionStorage.getItem('cde_acts') || '[]') || []; } catch (x) { seenActs = []; }
+        var fl = [];
+        if (seenActs.indexOf(gid) < 0) {
+          seenActs.push(gid);
+          sessionStorage.setItem('cde_acts', JSON.stringify(seenActs.slice(-30)));
+          if (seenActs.length === 2 || seenActs.length === 3) fl.push({ e: 'g' + seenActs.length, i: how });
+        }
+        var lastAct = sessionStorage.getItem('cde_last');
+        if (lastAct && lastAct !== gid) fl.push({ e: 'hop', i: (lastAct + '@' + gid).slice(0, 40) });
+        sessionStorage.setItem('cde_last', gid);
+        if (rself && how !== 'game') fl.push({ e: 'vp', i: rcls });
+        if (fl.length) navigator.sendBeacon('/api/land', JSON.stringify({ batch: fl, l: l }));
+      }
+      // In-game controls (kit infra/kpi game-clicks): which buttons children see and tap, per level.
+      if (gid) {
+        var gc = function () { var s = document.createElement('script'); s.src = '/games/game-clicks.js'; s.async = true; document.head.appendChild(s); };
+        if (document.readyState === 'complete') setTimeout(gc, 0); else window.addEventListener('load', function () { setTimeout(gc, 0); });
+      }
+    } catch (e) { /* never break the page */ }
   } catch (e) { /* never break the page */ }
 })();

@@ -40,6 +40,14 @@ deploys on every push to main. Audit history: LEARN.md.
 - Public contact is info@childrendoenglish.com only. No testimonials unless real and consented.
 - Never re-add words from the "Removed Words" list. Kids' content guardrails apply.
 
+## Recurring checks (kit RECURRING.md, owner OK 11-04)
+- On "status", "what next" or the start of a session: run
+  `node ~/projects/shared/game-kit/tools/due.mjs cde` and put the overdue/due checks in the answer.
+  Offer to run the session ones; remind once about the owner ones (never run those).
+- After running one: `node ~/projects/shared/game-kit/tools/due.mjs cde --done=<id> --result=ok|found|skipped --note="…"`
+  (appends to `.recurring-log.jsonl`, committed). No new crons, launchd jobs or routines.
+- The optimizer's standing sections (tools/learning/standing-sections.mjs) cover the *-read checks.
+
 ## Gotchas
 - Hebrew RTL: wrap English words/names inside Hebrew text in `<bdi dir="ltr">` or
   `<span dir="ltr">`, and numbers too, or the line reorders.

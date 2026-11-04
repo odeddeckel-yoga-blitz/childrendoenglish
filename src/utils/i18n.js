@@ -266,11 +266,11 @@ const translations = {
 
     // Privacy policy
     privacyTitle: 'Privacy Policy',
-    privacyUpdated: "Last updated: October 31, 2026",
+    privacyUpdated: "Last updated: November 4, 2026",
     privacyDataTitle: 'What data we collect',
     privacyDataDesc: "There are no accounts and no sign-up. To keep siblings' progress apart on one device you can type a player name (optional for the first player). The name stays in this browser's local storage and is never sent to us. We do not ask for an email address or any other contact details.",
     privacyCookieTitle: 'Cookies & tracking',
-    privacyCookieDesc: "We set no cookies and show no ads. To understand how the site is used we count page visits with Vercel Web Analytics, which is cookieless and stores no identifier on your device. Our own counter also keeps daily totals: which kind of page was opened, how the visit arrived (for example from a search engine) and the interface language, plus learning totals such as how many answers for each word were right or wrong and how often a quiz or game was started or finished. These totals use no cookie, no identifier and no IP address, and say nothing about who played.",
+    privacyCookieDesc: "We set no cookies and show no ads. To understand how the site is used we count page visits with Vercel Web Analytics, which is cookieless and stores no identifier on your device. Our own counter also keeps daily totals: which kind of page was opened, how the visit arrived (for example from a search engine) and the interface language, plus learning totals such as how many answers for each word were right or wrong and how often a quiz or game was started or finished. They also count whether a day's visit is new or returning (worked out on the device from the date of its last visit, which is the only date kept), which game or activity a child moved on to next, which buttons inside a game were tapped, whether a page hit a script error, and, on one phone visit in four, whether the page loaded fast, OK or slow. These totals use no cookie, no identifier and no IP address, and say nothing about who played.",
     privacyStorageTitle: 'What is stored on your device',
     privacyStorageDesc: "Player names, all learning progress (scores, word progress, streak, badges) and settings (sound, dark mode, slow audio, language) are saved only in your browser's local storage and are not sent to us. We also save the date of your last visit so we can count return visits: only a rough bucket (for example \"came back within a week\") is counted, never the date itself. If you switch on reminders, your browser shows them itself; nothing is registered with a server.",
     privacyBattleTitle: "Class Battle",

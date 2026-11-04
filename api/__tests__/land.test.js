@@ -74,6 +74,24 @@ describe('api/land learn-event whitelist', () => {
   });
 });
 
+describe('api/land standing-section events (kit 1.59 §5.55)', () => {
+  it('records g2/g3/hop/vp/rets/jserr/cwv in their pinned shapes and drops malformed ones', async () => {
+    vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    const { default: handler } = await import('../land.js');
+    calls.length = 0;
+    const good = [{ e: 'g2', i: 'hub' }, { e: 'g3', i: 'ladder' }, { e: 'hop', i: 'flashcards@word-zapper' }, { e: 'vp', i: 'vocab' },
+      { e: 'rets', i: 'g-read-it' }, { e: 'jserr', i: 'app' }, { e: 'jserr', i: 'pg-hebrew' }, { e: 'cwv', i: 'lcp_poor@g-spelling-forge' }, { e: 'cwv', i: 'cls_good@app' }];
+    const bad = [{ e: 'g2', i: 'google' }, { e: 'hop', i: 'flashcards' }, { e: 'vp', i: 'vocab_word' }, { e: 'jserr', i: 'TypeError' },
+      { e: 'cwv', i: 'lcp_2400@app' }, { e: 'cwv', i: 'ttfb_good@app' }, { e: 'rets', i: 'x' }];
+    const r = res(); await handler({ method: 'POST', body: { batch: [...good, ...bad], l: 'en' } }, r);
+    expect(r.code).toBe(204);
+    const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
+    expect(written.sort()).toEqual(good.map((x) => `${x.e}:${x.i}`).sort());
+  });
+});
+
 describe('api/land component clicks (kit infra/kpi)', () => {
   let handler;
   beforeEach(async () => {
