@@ -161,7 +161,7 @@ export default {
   addPlayer: 'Agregar Jugador',
   createPlayer: 'Crear Jugador',
   playerName: 'Nombre del Jugador',
-  playerNamePlaceholder: 'Sofía',
+  playerNamePlaceholder: 'Escribe un nombre',
   chooseAvatar: 'Elige un Avatar',
   deletePlayer: 'Eliminar Jugador',
   deleteConfirm: '¿Eliminar a {{name}}? Se perderá todo el progreso.',

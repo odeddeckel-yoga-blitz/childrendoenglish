@@ -19,7 +19,7 @@ describe('PlayerCreate', () => {
 
   it('renders name input and avatar picker', () => {
     render(<PlayerCreate {...defaultProps} />);
-    expect(screen.getByPlaceholderText('Emma')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Type a name')).toBeInTheDocument();
     expect(screen.getByText('Choose Avatar')).toBeInTheDocument();
   });
 
@@ -31,13 +31,13 @@ describe('PlayerCreate', () => {
     expect(submitBtn).toBeDisabled();
 
     // Fill name
-    fireEvent.change(screen.getByPlaceholderText('Emma'), { target: { value: 'TestKid' } });
+    fireEvent.change(screen.getByPlaceholderText('Type a name'), { target: { value: 'TestKid' } });
     expect(submitBtn).not.toBeDisabled();
   });
 
   it('calls onCreatePlayer with correct args on submit', () => {
     render(<PlayerCreate {...defaultProps} />);
-    fireEvent.change(screen.getByPlaceholderText('Emma'), { target: { value: 'TestKid' } });
+    fireEvent.change(screen.getByPlaceholderText('Type a name'), { target: { value: 'TestKid' } });
     const createBtns = screen.getAllByText('Create Player');
     fireEvent.click(createBtns[createBtns.length - 1]);
     expect(defaultProps.onCreatePlayer).toHaveBeenCalledWith('TestKid', '🦊', true);
@@ -55,7 +55,7 @@ describe('PlayerCreate', () => {
   it('first player who types a name is created with it', () => {
     const onCreatePlayer = vi.fn();
     render(<PlayerCreate {...defaultProps} onCreatePlayer={onCreatePlayer} first />);
-    fireEvent.change(screen.getByPlaceholderText('Emma'), { target: { value: 'Dana' } });
+    fireEvent.change(screen.getByPlaceholderText('Type a name'), { target: { value: 'Dana' } });
     fireEvent.click(screen.getByRole('button', { name: 'Start playing' }));
     expect(onCreatePlayer).toHaveBeenCalledWith('Dana', '🦊', true);
   });
