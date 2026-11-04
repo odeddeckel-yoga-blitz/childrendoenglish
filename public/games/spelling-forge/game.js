@@ -166,7 +166,7 @@ const S={
   lastWordId:null, usedIds:new Set(),
 };
 
-function setStatus(msg,col){ const e=$('statusLine'); e.innerHTML=msg; e.style.color=col||'var(--dim)'; }
+function setStatus(msg,col,key){ S.statusKey=key||''; const e=$('statusLine'); e.innerHTML=msg; e.style.color=col||'var(--dim)'; }
 function updateHUD(){
   $('levelPill').textContent='⚒️ LV '+S.level;
   $('wordPill').textContent='📜 '+(S.wordIdx+1)+'/'+WORDS_PER_LEVEL;
@@ -199,8 +199,8 @@ function buildRound(){
   const img=$('photo');
   img.src='/images/'+S.word.id+'.webp';
   img.alt=listenOnly?'':('photo of '+S.word.en);
-  $('heWord').textContent=(window.CDE_GLOSS?CDE_GLOSS(S.word):S.word.he);
-  $('heWord').style.display=listenOnly?'none':'';
+  $('heWord').textContent=(window.CDE_GLOSS?CDE_GLOSS(S.word):'');
+  $('heWord').style.display=(listenOnly||!$('heWord').textContent)?'none':'';
   renderSlots(); renderPad(); refreshForge();
   setStatus(listenOnly?'🎧 Listen closely, then forge the word — the photo is your reward!':'Tap the letter tiles to spell what you see and hear!');
   updateHUD();
@@ -237,6 +237,12 @@ function renderPad(){
 function refreshForge(){
   const full=S.slots.every(s=>s.ch!==null);
   $('forgeBtn').classList.toggle('ready',full&&!S.locked);
+  /* §5.52: the scaffold's "letters left" line is re-counted on every change (a child who pulls a tile
+     back must not read "one letter left" over two empty slots); a full word forges on its own. */
+  if(S.statusKey==='left'&&!full){
+    const n=S.slots.filter(s=>s.ch===null).length;
+    setStatus(n===1?L10N('oneLeft','⚒️ One letter left — you finish it!'):L10N('lettersLeft','⚒️ {n} letters left — you finish them!').replace('{n}',n),'var(--gold)','left');
+  }
 }
 
 /* ---------- interactions ---------- */
@@ -300,7 +306,7 @@ function autoFill(){
   const step=()=>{
     if(S.screen!=='play'||S.locked){ S.autoFilling=false; return; }
     const empties=S.slots.filter(s=>s.ch===null).length;
-    if(empties<=1){ S.autoFilling=false; updateHintGlow(); setStatus(L10N('oneLeft','⚒️ One letter left — you finish it!'),'var(--gold)'); return; }
+    if(empties<=1){ S.autoFilling=false; updateHintGlow(); S.statusKey='left'; refreshForge(); return; }
     const j=S.slots.findIndex(s=>s.ch===null);
     const need=S.letters[j];
     const idx=S.tiles.findIndex(t=>!t.used&&t.ch===need);
@@ -342,9 +348,10 @@ function forgeSuccess(){
   $('forgeBtn').classList.remove('ready');
   /* the reveal: photo appears on listen-only rounds, word is pronounced again */
   $('photoCard').classList.remove('myst');
-  $('heWord').style.display='';
+  $('heWord').style.display=$('heWord').textContent?'':'none';
   say(S.word.en);
-  setStatus('⚒️ CLANG! <b style="color:var(--grn)">'+S.word.en.toUpperCase()+'</b> '+L10N('forged','forged!')+' · <span dir="rtl">'+(window.CDE_GLOSS?CDE_GLOSS(S.word):S.word.he)+'</span> · +'+pts,'var(--grn)');
+  const gloss=$('heWord').textContent;
+  setStatus('⚒️ CLANG! <b style="color:var(--grn)">'+S.word.en.toUpperCase()+'</b> '+L10N('forged','forged!')+(gloss?' · <span dir="rtl">'+gloss+'</span>':'')+' · +'+pts,'var(--grn)');
   if(S.streak>=3) toast('🔥 COMBO ×'+S.streak);
   updateHUD();
   track('word_forged',{word:S.word.en,level:S.level,streak:S.streak});

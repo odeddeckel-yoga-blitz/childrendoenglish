@@ -106,6 +106,45 @@ test('game chrome follows the interface language (he / es), English stays defaul
   await expect(page.locator('#startBtn')).toHaveText('▶ START SORTING');
 });
 
+// 11-04 (owner, as on the flashcards 11-03): an English-interface player sees no translation in the
+// games; Hebrew and Spanish players keep theirs.
+test('word-zapper and spelling-forge show no Hebrew in English, the gloss in he / es', async ({ page }) => {
+  await page.route('**/api/**', (r) => r.fulfill({ status: 204 }));
+  for (const lang of ['en', 'he']) {
+    await page.goto(`/games/word-zapper/index.html?lang=${lang}`);
+    await page.click('#startBtn');
+    await page.waitForFunction(() => WZ.dbg.targetWord(), null, { timeout: 15000 });
+    const he = await page.locator('#targetHe').textContent();
+    if (lang === 'en') expect(he).not.toMatch(/[֐-׿]/);
+    else expect(he).toMatch(/[֐-׿]/);
+    await page.goto(`/games/spelling-forge/index.html?lang=${lang}`);
+    await page.click('#startBtn');
+    await page.waitForFunction(() => window.SF && !!SF.dbg.word);
+    if (lang === 'en') await expect(page.locator('#heWord')).toBeHidden();
+    else await expect(page.locator('#heWord')).toHaveText(/[֐-׿]/);
+    await page.evaluate(() => { SF.dbg.solveForTest(); SF.forge(); });
+    const line = await page.locator('#statusLine').textContent();
+    expect(line).toContain('CLANG');
+    if (lang === 'en') expect(line).not.toMatch(/[֐-׿]|·\s*·/);
+  }
+});
+
+// Kit §5.52: a helper's claim is re-checked as the board changes. After 4 misses the forge fills all
+// but one slot ("One letter left"); a child who pulls a tile back must read "2 letters left".
+test('spelling-forge: the letters-left helper line re-counts when a tile is pulled back', async ({ page }) => {
+  await page.route('**/api/**', (r) => r.fulfill({ status: 204 }));
+  await page.goto('/games/spelling-forge/index.html');
+  await page.click('#startBtn');
+  await page.waitForFunction(() => window.SF && !!SF.dbg.word);
+  for (let i = 0; i < 4; i++) {
+    await page.evaluate(() => SF.dbg.wrongForTest());
+    await page.waitForFunction(() => !SF.state.locked, null, { timeout: 8000 });
+  }
+  await expect(page.locator('#statusLine')).toHaveText(/One letter left/, { timeout: 15000 });
+  await page.evaluate(() => SF.tapSlot(SF.state.slots.findIndex((s) => s.ch !== null)));
+  await expect(page.locator('#statusLine')).toHaveText(/2 letters left/);
+});
+
 // 10-28: kids stalled in Spelling Forge (61 opens → 1.4 level-ups each); the
 // FORGE button sat below the fold on 360×640 phones. The kid's own last letter
 // now strikes the forge — no FORGE tap needed.

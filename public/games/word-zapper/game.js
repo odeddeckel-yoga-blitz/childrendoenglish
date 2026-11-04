@@ -245,7 +245,7 @@ function spawnSprite(word,isTarget){
 function announce(word){
   S.target=word; S.targetAt=performance.now(); lastTargetId=word.id;
   const en=$('targetEn'), he=$('targetHe');
-  const lang=window.CDE_LANG||'en', meaning=(window.CDE_GLOSS?CDE_GLOSS(word):word.he);
+  const lang=window.CDE_LANG||'en', meaning=(window.CDE_GLOSS?CDE_GLOSS(word):'');
   if(WORDMODE()){
     /* reading: never show the English — he/es see the meaning, en hears it */
     if(lang==='en'){ if(en) en.textContent='🔊 ?'; if(he) he.textContent=L10N('findWord','Find the word you hear'); speak(word.en); }
@@ -253,7 +253,7 @@ function announce(word){
     return;
   }
   if(en) en.textContent=word.en;
-  if(he) he.textContent=meaning;
+  if(he) he.textContent=meaning||'\u00a0';
   speak(word.en);
 }
 function newRound(){
@@ -496,7 +496,7 @@ function start(){
   S.runStartBest=S.best;
   show('play'); updateHUD();
   const en=$('targetEn'), he=$('targetHe');
-  if(en) en.textContent='…'; if(he) he.textContent=L10N('listening','מקשיבים…');
+  if(en) en.textContent='…'; if(he) he.textContent=L10N('listening','🔊 Listen…');
   ac();
   try{ if('speechSynthesis' in window) speechSynthesis.resume(); }catch(e){}
 }

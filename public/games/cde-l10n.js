@@ -2,7 +2,7 @@
    loaded before each game's l10n.js + game.js). The interface language is the
    app's `cde_lang` (or ?lang= for deep links). GAME CONTENT stays English —
    spoken words, canvas, letter tiles — only menus / HUD labels / overlays and
-   the gloss line switch (he → Hebrew gloss, es → Spanish gloss). Elements opt
+   the gloss line switch (he → Hebrew gloss, es → Spanish gloss, en → none). Elements opt
    in with data-l10n="key"; a key whose string is '' hides the element. */
 (function(){
   var lang='en';
@@ -10,7 +10,8 @@
   try{ var q=new URLSearchParams(location.search).get('lang'); if(q==='he'||q==='es'||q==='en') lang=q; }catch(e){}
   window.CDE_LANG=lang;
   window.CDE_T=function(k){ var D=window.CDE_STRINGS||{}; var S=D[lang]||{}; return S[k]!=null?S[k]:(D.en||{})[k]; };
-  window.CDE_GLOSS=function(w){ if(!w) return ''; return (lang==='es'&&w.es)?w.es:(w.he||''); };
+  // An English-interface player gets no translation (owner 11-04, as on the SPA flashcards).
+  window.CDE_GLOSS=function(w){ if(!w||lang==='en') return ''; return (lang==='es'&&w.es)?w.es:(w.he||''); };
   function apply(){
     if(lang==='en') return;
     var S=(window.CDE_STRINGS||{})[lang]; if(!S) return;
