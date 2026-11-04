@@ -13,24 +13,24 @@ import { BATTLE_WORDS, BATTLE_AVOID, BATTLE_UNITS } from './battle-words.js';
 /* ---- categories & durations (teacher setup) ---- */
 
 export const BATTLE_CATEGORIES = [
-  { id: 'mix', label: 'Big Mix (everything)', emoji: '🌈' },
-  { id: 'animals', label: 'Animals', emoji: '🦁' },
-  { id: 'food', label: 'Food', emoji: '🍎' },
-  { id: 'everyday', label: 'Everyday Things', emoji: '🎒' },
-  { id: 'colors', label: 'Colors', emoji: '🎨' },
-  { id: 'numbers', label: 'Numbers', emoji: '🔢' },
-  { id: 'home', label: 'At Home', emoji: '🏠' },
-  { id: 'transport', label: 'Transport', emoji: '🚌' },
-  { id: 'nature', label: 'Nature', emoji: '🌳' },
-  { id: 'feelings', label: 'Feelings', emoji: '😊' },
-  { id: 'clothing', label: 'Clothing', emoji: '👕' },
-  { id: 'school', label: 'School', emoji: '✏️' },
-  { id: 'sports', label: 'Sports', emoji: '⚽' },
-  { id: 'toys', label: 'Toys', emoji: '🧸' },
+  { id: 'mix', label: 'Big Mix (everything)', emoji: '🌈', icon: 'rainbow' },
+  { id: 'animals', label: 'Animals', emoji: '🦁', icon: 'paw-print' },
+  { id: 'food', label: 'Food', emoji: '🍎', icon: 'apple' },
+  { id: 'everyday', label: 'Everyday Things', emoji: '🎒', icon: 'backpack' },
+  { id: 'colors', label: 'Colors', emoji: '🎨', icon: 'palette' },
+  { id: 'numbers', label: 'Numbers', emoji: '🔢', icon: 'hash' },
+  { id: 'home', label: 'At Home', emoji: '🏠', icon: 'house' },
+  { id: 'transport', label: 'Transport', emoji: '🚌', icon: 'bus' },
+  { id: 'nature', label: 'Nature', emoji: '🌳', icon: 'trees' },
+  { id: 'feelings', label: 'Feelings', emoji: '😊', icon: 'smile' },
+  { id: 'clothing', label: 'Clothing', emoji: '👕', icon: 'shirt' },
+  { id: 'school', label: 'School', emoji: '✏️', icon: 'pencil' },
+  { id: 'sports', label: 'Sports', emoji: '⚽', icon: 'volleyball' },
+  { id: 'toys', label: 'Toys', emoji: '🧸', icon: 'blocks' },
 ];
 
 // Textbook units with enough photo words (generated): one chip per unit.
-export const BATTLE_UNIT_CATEGORIES = Object.entries(BATTLE_UNITS || {}).map(([id, u]) => ({ id, label: u.label, emoji: '📘' }));
+export const BATTLE_UNIT_CATEGORIES = Object.entries(BATTLE_UNITS || {}).map(([id, u]) => ({ id, label: u.label, emoji: '📘', icon: 'book-open' }));
 
 export const BATTLE_DURATIONS = [
   { sec: 120, label: '2 min' },

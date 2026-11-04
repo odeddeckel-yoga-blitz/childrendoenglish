@@ -1,6 +1,6 @@
 import { WORD_COUNT } from '../data/wordCount';
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { BookOpen, Layers, Play, BarChart2, ChevronDown, Brain } from 'lucide-react';
+import { BookOpen, Layers, Play, BarChart2, ChevronDown, Brain, Tag, Gamepad2, Lock, Smartphone, Users, Languages, X, Check } from 'lucide-react';
 import SpotlightCards from './SpotlightCards';
 import ClassWeekCard from './ClassWeekCard';
 import { t, LANGS } from '../utils/i18n';
@@ -157,15 +157,15 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
             {suggest.code === 'es' ? 'Sí' : suggest.code === 'ar' ? 'نعم' : suggest.code === 'he' ? 'כן' : 'Yes'}
           </button>
           <button onClick={dismissSuggest} className="px-2 py-1.5 text-slate-400 hover:text-slate-600" aria-label="No">
-            ✕
+            <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>
       )}
 
       {/* Hero */}
       <section className="animate-fade-in text-center space-y-6">
-        <div className="text-7xl">
-          <span role="img" aria-label="books">📚</span>
+        <div className="flex justify-center text-blue-600 dark:text-blue-400">
+          <BookOpen className="w-16 h-16" strokeWidth={1.75} aria-hidden="true" />
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-slate-800 dark:text-white leading-tight">
           {t('landingHeroTitle', lang)}
@@ -177,17 +177,17 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
         {/* Stat pills */}
         <div className="flex flex-wrap justify-center gap-3">
           {[
-            { key: 'landingStatsWords', emoji: '📖' },
-            { key: 'landingStatsCategories', emoji: '🏷️' },
-            { key: 'landingStatsModes', emoji: '🎮' },
-          ].map(({ key, emoji }) => (
+            { key: 'landingStatsWords', Icon: BookOpen },
+            { key: 'landingStatsCategories', Icon: Tag },
+            { key: 'landingStatsModes', Icon: Gamepad2 },
+          ].map(({ key, Icon }) => (
             <span
               key={key}
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full
                          bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300
                          text-sm font-medium"
             >
-              {emoji} {t(key, lang, { n: WORD_COUNT })}
+              <Icon className="w-4 h-4" aria-hidden="true" /> {t(key, lang, { n: WORD_COUNT })}
             </span>
           ))}
         </div>
@@ -201,7 +201,7 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
           className="mx-auto flex items-center justify-center gap-2 w-full max-w-xs min-h-[56px] px-6 rounded-2xl
                      bg-blue-600 hover:bg-blue-700 text-white text-xl font-black shadow-lg active:scale-95 transition-transform"
         >
-          <span aria-hidden="true">▶</span> {t('landingStart', lang)}
+          <Play className="w-5 h-5" aria-hidden="true" /> {t('landingStart', lang)}
         </button>
         <p className="text-sm text-slate-500 dark:text-slate-300">{t('landingOrPickLang', lang)}</p>
 
@@ -319,14 +319,14 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
           <div className="rounded-4xl border-[3px] border-slate-800 dark:border-slate-600 overflow-hidden shadow-2xl">
             <div className="bg-blue-600 px-4 py-2 flex items-center justify-between">
               <span className="text-white text-xs font-bold">{t('appPreviewQuestion', lang)}</span>
-              <span className="text-white/70 text-xs">✓ 2/2</span>
+              <span className="text-white/70 text-xs inline-flex items-center gap-0.5"><Check className="w-3 h-3" aria-hidden="true" /> 2/2</span>
             </div>
             <div className="p-4 space-y-3 bg-linear-to-b from-blue-50 to-white dark:from-slate-800 dark:to-slate-900">
               <p className="text-center text-sm font-bold text-slate-700 dark:text-slate-200">{t('appPreviewPrompt', lang)}</p>
               <img src="/images/cat.webp" alt="" className="w-24 h-24 mx-auto rounded-2xl object-cover shadow-md" loading="lazy" />
               <div className="grid grid-cols-2 gap-2">
                 <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">{t('appPreviewDog', lang)}</div>
-                <div className="py-2 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 border-2 border-emerald-500 text-xs text-center text-emerald-700 dark:text-emerald-300 font-bold">{t('appPreviewCat', lang)} ✓</div>
+                <div className="py-2 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 border-2 border-emerald-500 text-xs text-center text-emerald-700 dark:text-emerald-300 font-bold">{t('appPreviewCat', lang)} <Check className="w-3 h-3 inline -mt-0.5" aria-hidden="true" /></div>
                 <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">{t('appPreviewFish', lang)}</div>
                 <div className="py-2 rounded-xl bg-white dark:bg-slate-700 border-2 border-slate-200 dark:border-slate-600 text-xs text-center text-slate-600 dark:text-slate-300 font-medium">{t('appPreviewBird', lang)}</div>
               </div>
@@ -345,13 +345,13 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
         </h2>
         <div className="grid grid-cols-2 gap-3">
           {[
-            { key: 'trustNoAds', emoji: '🔒' },
-            { key: 'trustOffline', emoji: '📱' },
-            { key: 'trustProfiles', emoji: '👨‍👩‍👧‍👦' },
-            { key: 'trustHebrew', emoji: '🇮🇱' },
-          ].map(({ key, emoji }) => (
+            { key: 'trustNoAds', Icon: Lock },
+            { key: 'trustOffline', Icon: Smartphone },
+            { key: 'trustProfiles', Icon: Users },
+            { key: 'trustHebrew', Icon: Languages },
+          ].map(({ key, Icon }) => (
             <div key={key} className="glass rounded-2xl p-4 text-center space-y-1">
-              <span className="text-2xl block">{emoji}</span>
+              <Icon className="w-7 h-7 mx-auto text-blue-600 dark:text-blue-400" aria-hidden="true" />
               <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">
                 {t(key, lang)}
               </h3>

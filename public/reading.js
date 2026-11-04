@@ -20,6 +20,8 @@
       navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: e, i: i }], l: 'he' }));
     } catch (err) { /* never break the page */ }
   }
+  // Drawn icons (sprite): own static strings only, so innerHTML is safe for them.
+  function ic(n){return '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-'+n+'"/></svg>';}
   var begun = false;
   function begin() { if (!begun) { begun = true; beacon('quiz_start', ('read-' + slug).slice(0, 40)); } }
 
@@ -40,7 +42,7 @@
     queue = [];
     if (player) { player.onended = null; player.pause(); }
     mark(null);
-    if (playAllBtn) playAllBtn.textContent = '▶ הקשיבו לכל הקטע';
+    if (playAllBtn) playAllBtn.innerHTML = ic('play') + ' הקשיבו לכל הקטע';
   }
   function play(src, onend) {
     try {
@@ -73,7 +75,7 @@
       begin();
       if (queue.length || (player && !player.paused)) { stop(); return; }
       queue = sentences.slice();
-      playAllBtn.textContent = '⏹ עצירה';
+      playAllBtn.innerHTML = ic('x') + ' עצירה';
       nextInQueue();
       return;
     }
@@ -100,7 +102,7 @@
       o.classList.add('good');
       q.setAttribute('data-done', '1');
       Array.prototype.forEach.call(q.querySelectorAll('.opt'), function (b) { b.disabled = true; });
-      fb.textContent = 'נכון! ✓';
+      fb.innerHTML = 'נכון! ' + ic('check');
       if (!tried) firstTry++;
       done++;
       if (done === qs.length) finish();
@@ -114,7 +116,7 @@
   function finish() {
     var sc = document.getElementById('read-score');
     sc.hidden = false;
-    sc.textContent = '⁦' + firstTry + '/' + qs.length + '⁩ ' + (firstTry === qs.length ? 'כבר בניסיון הראשון — כל הכבוד! 🎉' : 'בניסיון הראשון. כל השאלות נפתרו! 👏');
+    sc.innerHTML = '⁦' + firstTry + '/' + qs.length + '⁩ ' + (firstTry === qs.length ? 'כבר בניסיון הראשון — כל הכבוד! ' + ic('party-popper') : 'בניסיון הראשון. כל השאלות נפתרו! ' + ic('sparkles'));
     beacon('quiz_done', ('read-' + slug).slice(0, 40));
   }
 })();

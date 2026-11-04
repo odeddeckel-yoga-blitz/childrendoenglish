@@ -126,7 +126,7 @@ describe('combo scoring in the quiz flow (useQuizState via ImageQuiz)', () => {
   it('awards 15 for a fast first correct answer (10 x 1 x 1.5)', () => {
     renderQuiz();
     clickCorrect(0);
-    expect(screen.getByText('⭐ 15')).toBeInTheDocument();
+    expect(screen.getByText('15')).toBeInTheDocument();
   });
 
   it('shows the combo pill at streak >= 2 and compounds the score', () => {
@@ -135,7 +135,7 @@ describe('combo scoring in the quiz flow (useQuizState via ImageQuiz)', () => {
     advance();
     clickCorrect(1); // +17 (10 * 1.15 * 1.5)
     expect(screen.getByText('×2')).toBeInTheDocument();
-    expect(screen.getByText('⭐ 32')).toBeInTheDocument();
+    expect(screen.getByText('32')).toBeInTheDocument();
   });
 
   it('resets the combo on a wrong answer but keeps the score', () => {
@@ -147,7 +147,7 @@ describe('combo scoring in the quiz flow (useQuizState via ImageQuiz)', () => {
     advance();
     clickWrong(2); // streak resets
     expect(screen.queryByText(/^×\d+$/)).not.toBeInTheDocument();
-    expect(screen.getByText('⭐ 32')).toBeInTheDocument();
+    expect(screen.getByText('32')).toBeInTheDocument();
   });
 
   it('reports arcade totals in the completion payload', () => {
@@ -167,6 +167,6 @@ describe('combo scoring in the quiz flow (useQuizState via ImageQuiz)', () => {
     renderQuiz();
     act(() => { vi.advanceTimersByTime(FAST_ANSWER_MS + 500); }); // dawdle past the fast window
     clickCorrect(0);
-    expect(screen.getByText('⭐ 10')).toBeInTheDocument();
+    expect(screen.getByText('10')).toBeInTheDocument();
   });
 });

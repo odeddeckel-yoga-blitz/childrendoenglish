@@ -1,4 +1,4 @@
-import { X, Volume2, VolumeX, Flame } from 'lucide-react';
+import { X, Volume2, VolumeX, Flame, Star, Repeat } from 'lucide-react';
 import { t } from '../utils/i18n';
 
 export default function QuizHeader({ score, total, scoreTotal = total, isRetry = false, questionNum, streak, arcadeScore, soundEnabled, onToggleSound, onQuit, gradientColor = 'from-blue-500 to-blue-600', currentIndex, lang = 'en' }) {
@@ -34,7 +34,7 @@ export default function QuizHeader({ score, total, scoreTotal = total, isRetry =
               className={`text-sm font-bold text-amber-600 dark:text-amber-400 ${arcadeScore > 0 ? 'animate-score-pop' : ''}`}
               aria-label={t('arcadeScoreLabel', lang, { score: arcadeScore })}
             >
-              ⭐ {arcadeScore}
+              <Star className="w-4 h-4 inline -mt-0.5 fill-current" aria-hidden="true" /> {arcadeScore}
             </span>
           )}
           <span className="text-sm font-semibold text-slate-600 dark:text-slate-300" dir="ltr">{score}/{scoreTotal}</span>
@@ -63,7 +63,7 @@ export default function QuizHeader({ score, total, scoreTotal = total, isRetry =
       </p>
       {isRetry && (
         <p className="text-center">
-          <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-sm font-semibold">🔁 {t('quizRetry', lang)}</span>
+          <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-sm font-semibold"><Repeat className="w-3.5 h-3.5 inline -mt-0.5" aria-hidden="true" /> {t('quizRetry', lang)}</span>
         </p>
       )}
     </>

@@ -1,18 +1,22 @@
 /* Shared arcade end card (persona standard P1, UX audit CUX5). Each game keeps its
    own "play again" button (its listeners stay) and calls CDE_END when its end
    screen opens. The card then shows ONE primary action, picked by the result:
-     good run → "▶ Next game: <name>"; otherwise → the game's "play again".
-   The other one is a smaller secondary, and a "🏠 My menu" link (the app for a
+     good run → "Next game: <name>" (play icon); otherwise → the game's "play again".
+   The other one is a smaller secondary, and a "My menu" link (house icon) (the app for a
    child with a player, else create-player in the page language) replaces the old
    domain-name link. Game names stay English everywhere (one name per game). */
 (function(){
   var ORDER=['sound-pairs','read-it','letter-twins','spelling-forge','word-zapper','category-conveyor'];
   var NAMES={'sound-pairs':'Sound Pairs','read-it':'Read It!','letter-twins':'Letter Twins','spelling-forge':'Spelling Forge','word-zapper':'Word Zapper','category-conveyor':'Category Conveyor'};
+  // Plain labels; the drawn icons (CDE_IC from cde-l10n.js) are added as markup next to them.
   var STR={
-    en:{next:'▶ Next game: ',menu:'🏠 My menu',start:'🏠 More English practice',home:'🏠 Children Do English'},
-    he:{next:'▶ המשחק הבא: ',menu:'🏠 לתפריט שלי',start:'🏠 עוד תרגול באנגלית',home:'🏠 Children Do English'},
-    es:{next:'▶ Siguiente juego: ',menu:'🏠 Mi menú',start:'🏠 Más práctica de inglés',home:'🏠 Children Do English'}
+    en:{next:'Next game: ',menu:'My menu',start:'More English practice',home:'Children Do English'},
+    he:{next:'המשחק הבא: ',menu:'לתפריט שלי',start:'עוד תרגול באנגלית',home:'Children Do English'},
+    es:{next:'Siguiente juego: ',menu:'Mi menú',start:'Más práctica de inglés',home:'Children Do English'}
   };
+  function ic(n){ return window.CDE_IC?window.CDE_IC(n)+' ':''; }
+  // label (our own static text) → innerHTML with a leading icon
+  function labelled(a,icon,text){ a.innerHTML=ic(icon); a.appendChild(document.createTextNode(text)); }
   // ge beacon (same cookieless tally as the games' own beacons): what a child does
   // at the end card — <game>_<view-good|view-low|next|again|menu>.
   function ge(item){
@@ -45,12 +49,12 @@
     var next=document.createElement('a');
     next.className=again.className;
     next.href='/games/'+nid+'/'+(lang!=='en'?'?lang='+lang:'');
-    next.textContent=L.next; var nm=document.createElement('bdi'); nm.textContent=NAMES[nid]; next.appendChild(nm);
+    labelled(next,'play',L.next); var nm=document.createElement('bdi'); nm.textContent=NAMES[nid]; next.appendChild(nm);
     next.setAttribute('data-cde-css','text-decoration:none;display:inline-block');
     var home=document.createElement('a');
     var player=hasPlayer();
     home.href=player?'/app':(lang==='en'?'/new-player':'/new-player?lang='+lang);
-    home.textContent=player?L.menu:L.start;
+    labelled(home,'house',player?L.menu:L.start);
     home.style.cssText='font-weight:700;text-decoration:underline;font-size:15px;color:inherit';
     ge(o.game+(o.good?'_view-good':'_view-low'));
     next.addEventListener('click',function(){ ge(o.game+'_next'); });
@@ -60,14 +64,13 @@
     else { primary(again); wrap.appendChild(again); wrap.appendChild(next); secondary(next); }
     wrap.appendChild(home);
   };
-  // The top-left pill: "🏠 My menu" back into the app for a child with a player
+  // The top-left pill: "My menu" with a house icon back into the app for a child with a player
   // (one name for home), else the site name — never a bare domain with an arrow.
   // Runs before game.js, whose leave-guard remembers this label.
   var pill=document.getElementById('homePill');
   if(pill){
     var L0=STR[window.CDE_LANG||'en']||STR.en;
-    if(hasPlayer()){ pill.href='/app'; pill.textContent=L0.menu; }
-    else pill.textContent=L0.home;
-    pill.setAttribute('aria-label',pill.textContent.replace('🏠 ',''));
+    if(hasPlayer()){ pill.href='/app'; labelled(pill,'house',L0.menu); pill.setAttribute('aria-label',L0.menu); }
+    else { labelled(pill,'house',L0.home); pill.setAttribute('aria-label',L0.home); }
   }
 })();

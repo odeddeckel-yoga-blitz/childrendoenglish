@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { ArrowLeft, Volume2, Check, X as XIcon } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Volume2, Check, X as XIcon, Layers, RefreshCw } from 'lucide-react';
 import { WORDS } from '../data/words';
 import { filterByKnownLetters } from '../utils/letterFilter';
 import { spacedRepetitionSort, updateWordSR } from '../utils/spaced-repetition';
@@ -136,7 +136,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
     return (
       <div className="animate-fade-in space-y-6 text-center">
         <div className="glass rounded-3xl p-8 space-y-4">
-          <div className="text-6xl">🎴</div>
+          <Layers className="w-14 h-14 mx-auto text-blue-500" aria-hidden="true" />
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
             {cards.length === 0 ? t('noCardsToReview', lang) : t('sessionComplete', lang)}
           </h2>
@@ -160,7 +160,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
             className="w-full py-3.5 px-6 bg-blue-600 text-white rounded-xl font-black text-lg
                        hover:bg-blue-700 active:scale-95 transition-all shadow-md"
           >
-            {t('continue', lang)} <span aria-hidden="true" className="inline-block rtl:-scale-x-100">→</span>
+            {t('continue', lang)} <ArrowRight className="w-5 h-5 inline -mt-0.5 rtl:-scale-x-100" aria-hidden="true" />
           </button>
         )}
         <button
@@ -184,8 +184,8 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
         </button>
         <span className="text-sm text-slate-500" dir="ltr">{currentIdx + 1} / {cards.length}</span>
         <div className="flex gap-3 text-sm">
-          <span className="text-emerald-600 font-semibold">{known} ✓</span>
-          <span className="text-amber-600 font-semibold">{learning} ✗</span>
+          <span className="text-emerald-600 font-semibold">{known} <Check className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /></span>
+          <span className="text-amber-600 font-semibold">{learning} <XIcon className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /></span>
         </div>
       </div>
 
@@ -277,7 +277,9 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
         {swipeOverlay && (
           <div className={`absolute inset-0 rounded-2xl flex items-center justify-center text-4xl font-black
                           ${swipeOverlay === 'know' ? 'bg-emerald-400/30 text-emerald-600' : 'bg-amber-400/30 text-amber-600'}`}>
-            {swipeOverlay === 'know' ? `✓ ${t('knowIt', lang)}` : `✗ ${t('stillLearning', lang)}`}
+            {swipeOverlay === 'know'
+              ? <span className="inline-flex items-center gap-2"><Check className="w-9 h-9" aria-hidden="true" /> {t('knowIt', lang)}</span>
+              : <span className="inline-flex items-center gap-2"><XIcon className="w-9 h-9" aria-hidden="true" /> {t('stillLearning', lang)}</span>}
           </div>
         )}
       </div>
@@ -291,7 +293,7 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
           className="w-full py-3 rounded-xl bg-blue-600 text-white font-bold text-lg
                      hover:bg-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2"
         >
-          <span aria-hidden="true">🔄</span> {t('showWord', lang)}
+          <RefreshCw className="w-5 h-5" aria-hidden="true" /> {t('showWord', lang)}
         </button>
       )}
 

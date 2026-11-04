@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Star, Volume2, Image as ImageIcon, Frown, ThumbsUp } from 'lucide-react';
 import { getDistractors } from '../data/words';
 import { t, gloss, isRTL } from '../utils/i18n';
 import { speakWord, playSound } from '../utils/sound';
@@ -72,7 +72,7 @@ export default function WordCheck({ word, lang = 'en', canRead = true, onDone })
           <ArrowLeft className={`w-5 h-5 ${rtl ? 'rotate-180' : ''}`} />
         </button>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">⭐ {t('spotlightWord', lang)}</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400"><Star className="w-3.5 h-3.5 inline -mt-0.5" aria-hidden="true" /> {t('spotlightWord', lang)}</p>
           <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">{t('wcTitle', lang)}</h2>
         </div>
         {!done && <span className="ms-auto text-sm text-slate-400">{i + 1}/{steps.length}</span>}
@@ -82,7 +82,7 @@ export default function WordCheck({ word, lang = 'en', canRead = true, onDone })
         <section className="space-y-4">
           {step === 'aud' && (
             <button onClick={() => speakWord(word.word)} className="mx-auto flex items-center gap-2 px-5 py-3 rounded-full bg-violet-600 text-white font-bold shadow">
-              <span aria-hidden="true">🔊</span> <span>{t('wcStepAud', lang)}</span>
+              <Volume2 className="w-5 h-5" aria-hidden="true" /> <span>{t('wcStepAud', lang)}</span>
             </button>
           )}
           {step === 'img' && (
@@ -93,7 +93,7 @@ export default function WordCheck({ word, lang = 'en', canRead = true, onDone })
           )}
           {step === 'txt' && (
             <div className="text-center space-y-2">
-              <button onClick={() => speakWord(word.word)} className="text-3xl font-black text-slate-800 dark:text-slate-100">{word.word} 🔊</button>
+              <button onClick={() => speakWord(word.word)} className="text-3xl font-black text-slate-800 dark:text-slate-100">{word.word} <Volume2 className="w-7 h-7 inline -mt-1" aria-hidden="true" /></button>
               <p className="font-semibold text-slate-700 dark:text-slate-200">{t('wcStepTxt', lang)}</p>
             </div>
           )}
@@ -121,10 +121,10 @@ export default function WordCheck({ word, lang = 'en', canRead = true, onDone })
             <p className="text-sm font-semibold text-slate-600 dark:text-slate-300">{fb ? t('wcThanks', lang) : t('wcAsk', lang)}</p>
             {!fb && (
               <div className="grid grid-cols-2 gap-2">
-                {[['img', 'wcFbImg', '🖼️'], ['aud', 'wcFbAud', '🔊'], ['hard', 'wcFbHard', '😕'], ['ok', 'wcFbOk', '👍']].map(([k, key, emoji]) => (
+                {[['img', 'wcFbImg', ImageIcon], ['aud', 'wcFbAud', Volume2], ['hard', 'wcFbHard', Frown], ['ok', 'wcFbOk', ThumbsUp]].map(([k, key, Icon]) => (
                   <button key={k} onClick={() => feedback(k)} data-fb={k}
                           className="glass rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-200 hover:shadow active:scale-[0.97]">
-                    <span aria-hidden="true">{emoji}</span> {t(key, lang)}
+                    <Icon className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /> {t(key, lang)}
                   </button>
                 ))}
               </div>

@@ -57,25 +57,25 @@ describe('LightningRound', () => {
 
   it('renders the countdown at the configured duration', () => {
     renderLightning();
-    expect(screen.getByTestId('lightning-timer')).toHaveTextContent('⚡3');
-    expect(screen.getByTestId('lightning-solves')).toHaveTextContent('✓ 0');
+    expect(screen.getByTestId('lightning-timer')).toHaveTextContent('3');
+    expect(screen.getByTestId('lightning-solves')).toHaveTextContent('0');
   });
 
   it('counts down each second', () => {
     renderLightning();
     act(() => { vi.advanceTimersByTime(1000); });
-    expect(screen.getByTestId('lightning-timer')).toHaveTextContent('⚡2');
+    expect(screen.getByTestId('lightning-timer')).toHaveTextContent('2');
   });
 
   it('counts a correct solve and advances to the next question', () => {
     // Single-word pool makes the correct answer deterministic
     renderLightning({ words: [testWords[0]] });
     fireEvent.click(screen.getByRole('button', { name: testWords[0].word }));
-    expect(screen.getByTestId('lightning-solves')).toHaveTextContent('✓ 1');
+    expect(screen.getByTestId('lightning-solves')).toHaveTextContent('1');
     // After the flash delay the next question is answerable again
     act(() => { vi.advanceTimersByTime(400); });
     fireEvent.click(screen.getByRole('button', { name: testWords[0].word }));
-    expect(screen.getByTestId('lightning-solves')).toHaveTextContent('✓ 2');
+    expect(screen.getByTestId('lightning-solves')).toHaveTextContent('2');
   });
 
   it('ends after the timer runs out and reports solves once', () => {
@@ -95,7 +95,7 @@ describe('LightningRound', () => {
     fireEvent.click(screen.getByRole('button', { name: testWords[0].word }));
     act(() => { vi.advanceTimersByTime(4000); });
     expect(onFinish).toHaveBeenCalledWith(1);
-    expect(screen.getByText('★ NEW LIGHTNING BEST!')).toBeInTheDocument();
+    expect(screen.getByText('NEW LIGHTNING BEST!')).toBeInTheDocument();
   });
 
   it('shows the stored best when it was not beaten', () => {
@@ -108,8 +108,8 @@ describe('LightningRound', () => {
     renderLightning();
     act(() => { vi.advanceTimersByTime(3000); });
     fireEvent.click(screen.getByText('Lightning Again'));
-    expect(screen.getByTestId('lightning-timer')).toHaveTextContent('⚡3');
-    expect(screen.getByTestId('lightning-solves')).toHaveTextContent('✓ 0');
+    expect(screen.getByTestId('lightning-timer')).toHaveTextContent('3');
+    expect(screen.getByTestId('lightning-solves')).toHaveTextContent('0');
     // Finishing again reports again
     act(() => { vi.advanceTimersByTime(3000); });
     expect(onFinish).toHaveBeenCalledTimes(2);

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Map, Check } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { sendLearn } from '../utils/learnBeacon';
 import { topicCounts, hasEarlierProgress, todayKey } from '../utils/mastery';
@@ -20,7 +21,7 @@ export default function MasteryMap({ wordMap, words, lang, onPickTopic }) {
     .sort((a, b) => (b.n.mastered + b.n.learning > 0) - (a.n.mastered + a.n.learning > 0));
   return (
     <section role="group" aria-labelledby="cdeMmTitle" data-m1="map" data-testid="mastery-map" className="glass rounded-2xl p-4">
-      <h2 id="cdeMmTitle" className="font-bold text-slate-800 dark:text-slate-100 mb-3">🗺️ {t('masteryTitle', lang)}</h2>
+      <h2 id="cdeMmTitle" className="font-bold text-slate-800 dark:text-slate-100 mb-3"><Map className="w-5 h-5 inline -mt-0.5" aria-hidden="true" /> {t('masteryTitle', lang)}</h2>
       <div className="grid gap-2" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))' }}>
         {rows.map(({ c, n }) => {
           const done = n.mastered === n.total;
@@ -34,7 +35,7 @@ export default function MasteryMap({ wordMap, words, lang, onPickTopic }) {
               aria-label={`${label}: ${n.mastered} ${t('masteryMastered', lang)}, ${n.learning} ${t('masteryLearning', lang)}, ${n.unseen} ${t('masteryNew', lang)}`}
               className={`min-h-[48px] text-start rounded-xl border-2 px-3 py-2 transition-colors focus-visible:ring-2 focus-visible:ring-amber-400 ${done ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20' : 'border-slate-200 dark:border-slate-600 hover:border-blue-400'}`}
             >
-              <span className="block font-bold text-sm text-slate-800 dark:text-slate-100">{label}{done && ' ✓'}</span>
+              <span className="block font-bold text-sm text-slate-800 dark:text-slate-100">{label}{done && <> <Check className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /></>}</span>
               <span className="block text-xs text-slate-500 dark:text-slate-300" aria-hidden="true"><bdi dir="ltr">● {n.mastered} · ◐ {n.learning} · ○ {n.unseen}</bdi></span>
             </button>
           );

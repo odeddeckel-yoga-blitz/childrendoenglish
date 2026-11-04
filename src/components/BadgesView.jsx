@@ -1,4 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
+import NamedIcon from './NamedIcon';
 import { BADGES } from '../data/badges';
 import { t } from '../utils/i18n';
 
@@ -54,7 +55,7 @@ export default function BadgesView({ stats, lang = 'en', onBack }) {
               }`}
               style={earned ? { animationDelay: `${i * 100}ms` } : {}}
             >
-              <div className={`text-4xl ${earned ? '' : 'grayscale'}`}>{badge.icon}</div>
+              <div data-badge={earned ? 'earned' : 'locked'} className={`flex justify-center ${earned ? 'text-amber-500' : 'text-slate-400'}`}><NamedIcon name={badge.icon} className="w-10 h-10" /></div>
               <h3 className="font-bold text-slate-800 dark:text-slate-100 text-sm">{t(badge.nameKey, lang)}</h3>
               <p className="text-xs text-slate-500">{t(badge.descKey, lang)}</p>
               {earned ? (

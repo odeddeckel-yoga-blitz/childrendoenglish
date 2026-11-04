@@ -16,7 +16,7 @@ import {
   BATTLE_CATEGORIES, BATTLE_UNIT_CATEGORIES, BATTLE_DURATIONS, BATTLE_MODES, TEAM_NAMES, defaultTarget,
   normalizeCode, suggestNicknames, makeQuestion, pointsForAnswer,
 } from './battle-core.js';
-import { pickLang, applyLang, HE, ltr } from './battle-l10n.js';
+import { pickLang, applyLang, HE, ltr, ic, setIc } from './battle-l10n.js';
 
 const API = '/api/live';
 const POLL_MS = 2000;
@@ -203,14 +203,14 @@ function render() {
         : `${n} player${n === 1 ? '' : 's'} in — waiting for more!`;
       $('hostPlayers').replaceChildren(...room.players.map((p) => chip(p.nickname, room.mode === 'team' ? p.team : null)));
       $('btnStart').disabled = n === 0;
-      $('hostMode').textContent = modeLine(room.mode);
+      setModeLine($('hostMode'), room.mode);
       $('targetRow').hidden = room.mode !== 'class';
       if (room.mode === 'class') $('targetVal').textContent = String(lobbyTarget(n));
     } else if (room.status === 'running') {
       if (S.view !== 'sHostLive') {
         show('sHostLive');
         const cat = [...BATTLE_CATEGORIES, ...BATTLE_UNIT_CATEGORIES].find((c) => c.id === room.category);
-        $('hostTopic').textContent = cat ? `${cat.emoji} ${cat.label}` : '';
+        if (cat) setIc($('hostTopic'), cat.label, cat.icon); else $('hostTopic').textContent = '';
       }
       if (room.mode === 'team') renderTeams($('hostBoard'), room);
       else if (room.mode === 'class') renderGoal($('hostBoard'), room);
@@ -221,12 +221,13 @@ function render() {
     if (room.status === 'lobby') {
       if (S.view !== 'sKidLobby') {
         show('sKidLobby');
-        $('kidHello').textContent = HEB ? HE.hello(S.nickname) : `Hi, ${S.nickname}! ⚡`;
+        setIc($('kidHello'), HEB ? HE.hello(S.nickname) : `Hi, ${S.nickname}!`, null, 'zap');
       }
       $('kidLobbyPlayers').replaceChildren(...room.players.map((p) => chip(p.nickname, room.mode === 'team' ? p.team : null)));
       const t = myTeam();
-      $('kidTeam').textContent = room.mode === 'team' && t !== null ? (HEB ? HE.onTeam(teamLabel(t)) : `You're on the ${teamLabel(t)}!`)
-        : room.mode === 'class' ? (HEB ? HE.classGoal : '🎯 Your whole class has one goal together!') : '';
+      if (room.mode === 'team' && t !== null) $('kidTeam').textContent = HEB ? HE.onTeam(teamLabel(t)) : `You're on the ${teamLabel(t)}!`;
+      else if (room.mode === 'class') setIc($('kidTeam'), HEB ? HE.classGoal : 'Your whole class has one goal together!', 'target');
+      else $('kidTeam').textContent = '';
     } else if (room.status === 'running') {
       if (S.view !== 'sPlay') {
         show('sPlay');
@@ -238,15 +239,23 @@ function render() {
   }
 }
 
+/** Mode glyph: team colour markers stay (they name the teams); target / trophy are drawn icons. */
+const MODE_ICON = { class: 'target', solo: 'trophy' };
+function setModeLine(el, mode) {
+  const m = BATTLE_MODES.find((x) => x.id === mode);
+  if (!m) { el.textContent = ''; return; }
+  if (MODE_ICON[mode]) setIc(el, modeLine(mode), MODE_ICON[mode]);
+  else el.textContent = `${m.emoji} ${modeLine(mode)}`;
+}
 function modeLine(mode) {
   const m = BATTLE_MODES.find((x) => x.id === mode);
-  return m ? `${m.emoji} ${m.label}: ${m.hint}` : '';
+  return m ? `${m.label}: ${m.hint}` : '';
 }
 
 /** Kid HUD: points in solo; in team/class the words they got right, plus their team or the class goal. */
 function renderKidHud() {
   const group = isGroup(S.room);
-  $('kidScoreIcon').textContent = group ? '✅' : '⭐';
+  $('kidScoreIcon').innerHTML = ic(group ? 'circle-check' : 'star');
   $('kidScore').textContent = String(group ? S.correct : S.score);
   $('kidStreak').textContent = String(S.streak);
   const pill = $('kidGroup');
@@ -259,7 +268,7 @@ function renderKidHud() {
     pill.hidden = false;
     pill.style.borderColor = '';
     const goal = `${S.room.classTotal} / ${S.room.target}`;
-    pill.textContent = `🎯 ${HEB ? ltr(goal) : goal}`;
+    setIc(pill, HEB ? ltr(goal) : goal, 'target');
   } else {
     pill.hidden = true;
   }
@@ -313,7 +322,7 @@ function renderGoal(el, room) {
   bar.style.width = `${Math.min(100, Math.round((room.classTotal / Math.max(1, room.target || 1)) * 100))}%`;
   const txt = document.createElement('span');
   txt.className = 'gtxt';
-  txt.textContent = HEB ? `🎯 ${ltr(room.classTotal)} / ${words(room.target)}` : `🎯 ${room.classTotal} / ${words(room.target)}`;
+  setIc(txt, HEB ? `${ltr(room.classTotal)} / ${words(room.target)}` : `${room.classTotal} / ${words(room.target)}`, 'target');
   row.append(bar, txt);
   el.replaceChildren(row);
 }
@@ -329,7 +338,7 @@ function renderBoard(el, players) {
     const rank = document.createElement('span');
     rank.textContent = ['🥇', '🥈', '🥉'][i] || `${i + 1}.`;
     const name = document.createElement('span');
-    name.textContent = p.nickname + (p.streak >= 3 ? ' 🔥' : '');
+    if (p.streak >= 3) setIc(name, p.nickname + ' ', null, 'flame'); else name.textContent = p.nickname;
     const sc = document.createElement('span');
     sc.className = 'sc';
     sc.textContent = String(p.score);
@@ -342,12 +351,12 @@ function renderGroupPodium() {
   const room = S.room;
   $('podiumTop').replaceChildren();
   if (room.mode === 'team') {
-    $('podiumTitle').textContent = room.winner === null ? (HEB ? HE.tie : '🤝 It’s a tie!')
-      : (HEB ? HE.teamWins(teamLabel(room.winner)) : `🏆 The ${teamLabel(room.winner)} win!`);
+    if (room.winner === null) $('podiumTitle').textContent = HEB ? HE.tie : 'It’s a tie!';
+    else setIc($('podiumTitle'), HEB ? HE.teamWins(teamLabel(room.winner)) : `The ${teamLabel(room.winner)} win!`, 'trophy');
     renderTeams($('podiumList'), room);
   } else {
     const hit = room.classTotal >= room.target;
-    $('podiumTitle').textContent = HEB ? (hit ? HE.goalHit : HE.goalMiss) : hit ? '🎉 Class goal reached!' : '💪 So close! Try again?';
+    setIc($('podiumTitle'), HEB ? (hit ? HE.goalHit : HE.goalMiss) : hit ? 'Class goal reached!' : 'So close! Try again?', hit ? 'party-popper' : null);
     renderGoal($('podiumList'), room);
   }
   if (S.role === 'kid') {
@@ -359,14 +368,14 @@ function renderGroupPodium() {
       $('podiumSelf').textContent = `${S.nickname}, you got ${words(S.correct)} right for ${forWhom}!`;
     }
   } else {
-    $('podiumSelf').textContent = HEB ? HE.teamwork : 'Great teamwork, everyone! 🎉';
+    setIc($('podiumSelf'), HEB ? HE.teamwork : 'Great teamwork, everyone!', null, 'party-popper');
   }
 }
 
 function renderPodium() {
   if (S.view !== 'sPodium') show('sPodium');
   if (isGroup(S.room)) { renderGroupPodium(); return; }
-  $('podiumTitle').textContent = HEB ? '🏆 הקרב נגמר!' : '🏆 Battle over!';
+  setIc($('podiumTitle'), HEB ? 'הקרב נגמר!' : 'Battle over!', 'trophy');
   const players = S.room.players;
   const medals = ['🥇', '🥈', '🥉'];
   const order = [1, 0, 2]; // 2nd — 1st — 3rd visual layout
@@ -396,7 +405,7 @@ function renderPodium() {
         : `${S.nickname}, you finished #${rank} with ${S.score} points (${S.correct}/${S.answered} correct)!`)
       : '';
   } else {
-    $('podiumSelf').textContent = HEB ? HE.greatBattle : 'Great battle, everyone! 🎉';
+    setIc($('podiumSelf'), HEB ? HE.greatBattle : 'Great battle, everyone!', null, 'party-popper');
   }
 }
 
@@ -461,7 +470,7 @@ function renderSetup() {
   $('modeGrid').replaceChildren(...BATTLE_MODES.map((m) => {
     const b = document.createElement('button');
     b.className = 'chip' + (m.id === S.mode ? ' sel' : '');
-    b.textContent = `${m.emoji} ${m.label}`;
+    if (MODE_ICON[m.id]) setIc(b, m.label, MODE_ICON[m.id]); else b.textContent = `${m.emoji} ${m.label}`;
     b.dataset.mode = m.id;
     b.setAttribute('aria-pressed', m.id === S.mode ? 'true' : 'false');
     b.addEventListener('click', () => { S.mode = m.id; renderSetup(); });
@@ -471,7 +480,7 @@ function renderSetup() {
   $('catGrid').replaceChildren(...[...BATTLE_CATEGORIES, ...BATTLE_UNIT_CATEGORIES].map((c) => {
     const b = document.createElement('button');
     b.className = 'chip' + (c.id === S.category ? ' sel' : '');
-    b.textContent = `${c.emoji} ${c.label}`;
+    setIc(b, c.label, c.icon);
     b.dataset.cat = c.id;
     b.addEventListener('click', () => { S.category = c.id; renderSetup(); });
     return b;

@@ -121,31 +121,31 @@
 </style>
 </head>
 <body>
-<a id="homePill" href="/">🏠 Children Do English</a>
+<a id="homePill" href="/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-house"/></svg> Children Do English</a>
 <main>
 
 <!-- home: pick role -->
 <section id="sHome" class="screen show">
-  <h1 class="logo">⚔️ Class Battle</h1>
+  <h1 class="logo"><svg class="ic" aria-hidden="true" focusable="false" style="width:1em;height:1em;vertical-align:-.12em;flex:none;color:var(--indigo)"><use href="/icons.svg#i-swords"/></svg> Class Battle</h1>
   <p id="homeSub" class="sub">A live English vocabulary race for the whole class. The teacher puts the room code on the big
     screen — everyone joins on their own device, hears the word and taps the matching photo. Fastest streaks win!</p>
   <div class="rolerow">
     <div class="card rolecard">
-      <div class="big">🧑‍🏫</div>
+      <div class="big"><svg class="ic" aria-hidden="true" focusable="false" style="width:1em;height:1em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-users"/></svg></div>
       <h2 id="teacherH">I'm the Teacher</h2>
       <p id="teacherSub" class="sub">Create a battle and show the code on the projector.</p>
       <button id="btnTeacher" class="btn">Create a Battle</button>
-      <a id="projLink" class="projLink" href="/projector/">📽️ Projector mode: the whole class on one screen</a>
+      <a id="projLink" class="projLink" href="/projector/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-projector"/></svg> Projector mode: the whole class on one screen</a>
     </div>
     <div class="card rolecard">
-      <div class="big">🙋</div>
+      <div class="big"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-smile"/></svg></div>
       <h2 id="kidH">I'm a Player</h2>
       <p id="kidSub" class="sub">Got a code from your teacher? Jump in!</p>
       <button id="btnKid" class="btn green">Join with a Code</button>
     </div>
   </div>
   <p><a class="langToggle" href="?lang=he">עברית</a></p>
-  <p id="homePrivacy" class="privacy">🔒 <b>Privacy:</b> no accounts and no sign-up. Players pick a fun nickname from a list — nobody
+  <p id="homePrivacy" class="privacy"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-lock"/></svg> <b>Privacy:</b> no accounts and no sign-up. Players pick a fun nickname from a list — nobody
     types their real name. Only that picked nickname and the score are stored, and the whole room is automatically
     deleted about 30 minutes after it's created.</p>
 </section>
@@ -160,7 +160,7 @@
   <h2>Battle length</h2>
   <div id="durGrid" class="grid"></div>
   <p id="setupErr" class="err"></p>
-  <button id="btnCreate" class="btn">Create Room →</button>
+  <button id="btnCreate" class="btn">Create Room <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-arrow-right"/></svg></button>
 </section>
 
 <!-- teacher: lobby (projector) -->
@@ -173,12 +173,12 @@
     <div id="hostPlayers" style="margin-top:12px"></div>
   </div>
   <div id="targetRow" class="targetrow" hidden>
-    <span>🎯 Class goal:</span>
+    <span><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-target"/></svg> Class goal:</span>
     <button id="targetDown" class="btn ghost" aria-label="Lower the class goal">−</button>
     <b id="targetVal">0</b> <span>words</span>
     <button id="targetUp" class="btn ghost" aria-label="Raise the class goal">+</button>
   </div>
-  <button id="btnStart" class="btn green" disabled>Start the Battle! 🚀</button>
+  <button id="btnStart" class="btn green" disabled>Start the Battle! <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-rocket"/></svg></button>
   <p id="hostErr" class="err"></p>
 </section>
 
@@ -194,7 +194,7 @@
   <h2 id="joinH">Type your room code</h2>
   <input id="codeInput" maxlength="5" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Room code">
   <p id="joinErr" class="err"></p>
-  <button id="btnCheckCode" class="btn green">Next →</button>
+  <button id="btnCheckCode" class="btn green">Next <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-arrow-right"/></svg></button>
   <p><a class="langToggle" href="?lang=he">עברית</a></p>
 </section>
 
@@ -203,7 +203,7 @@
   <h2 id="nameH">Pick your battle name!</h2>
   <p id="nameSub" class="sub">No real names here — choose a hero name from the list.</p>
   <div id="nameGrid" class="namegrid"></div>
-  <button id="btnMoreNames" class="btn ghost">🎲 Show me different names</button>
+  <button id="btnMoreNames" class="btn ghost"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-dices"/></svg> Show me different names</button>
   <p id="nameErr" class="err"></p>
 </section>
 
@@ -211,21 +211,21 @@
 <section id="sKidLobby" class="screen">
   <h2 id="kidHello"></h2>
   <p id="kidTeam" class="sub teamline"></p>
-  <p id="kidLobbySub" class="sub">You're in! 👀 Watch the big screen — the battle starts when your teacher presses Start.</p>
+  <p id="kidLobbySub" class="sub">You're in! Watch the big screen — the battle starts when your teacher presses Start.</p>
   <div class="card"><div id="kidLobbyPlayers" class="grid"></div></div>
 </section>
 
 <!-- kid: play -->
 <section id="sPlay" class="screen">
   <div class="hud">
-    <span class="pill">⏱ <span id="kidClock">--:--</span></span>
+    <span class="pill"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-timer"/></svg> <span id="kidClock">--:--</span></span>
     <span class="pill" id="kidGroup" hidden></span>
-    <span class="pill"><span id="kidScoreIcon">⭐</span> <span id="kidScore">0</span></span>
-    <span class="pill">🔥 <span id="kidStreak">0</span></span>
+    <span class="pill"><span id="kidScoreIcon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-star"/></svg></span> <span id="kidScore">0</span></span>
+    <span class="pill"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-flame"/></svg> <span id="kidStreak">0</span></span>
   </div>
   <div class="card" style="max-width:620px">
     <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap">
-      <button id="sayBtn" aria-label="Hear the word again">🔊</button>
+      <button id="sayBtn" aria-label="Hear the word again"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>
       <div>
         <div id="playWord"></div>
         <div id="playHe"></div>
@@ -237,7 +237,7 @@
 
 <!-- podium (both roles) -->
 <section id="sPodium" class="screen">
-  <h2 id="podiumTitle" style="font-size:clamp(28px,6vw,44px)">🏆 Battle over!</h2>
+  <h2 id="podiumTitle" style="font-size:clamp(28px,6vw,44px)"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-trophy"/></svg> Battle over!</h2>
   <p class="sub" id="podiumSelf"></p>
   <div class="podium" id="podiumTop"></div>
   <div class="card"><div class="board" id="podiumList" style="flex-direction:column"></div></div>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, ChevronDown } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Check, Pencil } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { PHASES, LADDER, stepsFor } from '../utils/learningCycle';
 
@@ -73,13 +73,13 @@ export default function LadderMap({
                     <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0
                       ${isDone ? 'bg-emerald-600 text-white' : isCurrent ? 'bg-white/25 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
                       aria-hidden="true">
-                      {isDone ? '✓' : LADDER.indexOf(step) + 1}
+                      {isDone ? <Check className="w-4 h-4" aria-hidden="true" /> : LADDER.indexOf(step) + 1}
                     </span>
                     <span className={`flex-1 font-bold text-sm ${isCurrent ? '' : 'text-slate-700 dark:text-slate-200'}`}>
                       {t(step.labelKey, lang)}
                     </span>
                     {step.writing && !unavailable && !isDone && (
-                      <span className={`text-[10px] font-semibold ${isCurrent ? 'text-blue-100' : 'text-slate-400'}`}>✏️</span>
+                      <span className={`text-[10px] font-semibold ${isCurrent ? 'text-blue-100' : 'text-slate-400'}`}><Pencil className="w-3.5 h-3.5" aria-hidden="true" /></span>
                     )}
                   </button>
                 );

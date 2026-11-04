@@ -23,6 +23,8 @@
     } catch (e) { /* storage unavailable — treat as a real visitor */ }
     return false;
   }
+  // Drawn icons (sprite): own static strings only, so innerHTML is safe for them.
+  function ic(n){return '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-'+n+'"/></svg>';}
   function beacon(e, i) {
     try {
       if (excluded() || !navigator.sendBeacon || !/^[a-z0-9@_-]{1,40}$/.test(i)) return;
@@ -51,14 +53,14 @@
     if (cl) {
       var d; try { d = JSON.parse(document.getElementById('unit-data').textContent); } catch (e) { d = []; }
       var tsv = d.map(function (w) { return w.en + '\t' + w.he; }).join('\n');
-      var done = function () { cl.textContent = 'הרשימה הועתקה ✓ (' + d.length + ' מילים)'; beacon('sheet', 'tsv'); };
+      var done = function () { cl.innerHTML = 'הרשימה הועתקה ' + ic('check') + ' (' + (+d.length) + ' מילים)'; beacon('sheet', 'tsv'); };
       try { navigator.clipboard.writeText(tsv).then(done, function () { window.prompt('העתיקו את הרשימה:', tsv); }); }
       catch (err) { window.prompt('העתיקו את הרשימה:', tsv); }
     }
     var c = ev.target.closest('[data-copy]');
     if (c) {
       var url = c.getAttribute('data-copy');
-      var ok = function () { c.textContent = 'הקישור הועתק ✓'; };
+      var ok = function () { c.innerHTML = 'הקישור הועתק ' + ic('check'); };
       try { navigator.clipboard.writeText(url).then(ok, function () { window.prompt('העתיקו את הקישור:', url); }); }
       catch (err) { window.prompt('העתיקו את הקישור:', url); }
     }
@@ -79,7 +81,7 @@
       if (done.indexOf(+stepCards[k].getAttribute('data-step-card')) >= 0) { stepCards[k].classList.add('done'); n++; }
     }
     var prog = document.getElementById('path-progress');
-    if (prog && n) { prog.textContent = 'סיימתם ' + n + ' מתוך ' + stepCards.length + ' סטים ✓'; prog.hidden = false; }
+    if (prog && n) { prog.innerHTML = 'סיימתם ' + (+n) + ' מתוך ' + (+stepCards.length) + ' סטים ' + ic('check'); prog.hidden = false; }
   }
 
   // "This week in class" (RC12): the pinned unit lives only in this browser
@@ -93,7 +95,7 @@
   var pinBtn = document.querySelector('[data-pin-unit]');
   function showPin(on) {
     pinBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
-    pinBtn.textContent = on ? '📌 היחידה שלנו השבוע ✓' : '📌 זו היחידה שלנו השבוע';
+    pinBtn.innerHTML = on ? ic('pin') + ' היחידה שלנו השבוע ' + ic('check') : ic('pin') + ' זו היחידה שלנו השבוע';
     var hint = document.querySelector('.pin-hint');
     if (hint) hint.hidden = !on;
   }
@@ -113,7 +115,7 @@
   var weekEl = document.getElementById('week-unit');
   var wk = weekEl && pinned();
   if (wk) {
-    weekEl.textContent = '📌 השבוע בכיתה: ';
+    weekEl.innerHTML = ic('pin') + ' השבוע בכיתה: ';
     var a = document.createElement('a');
     a.href = wk.p; a.textContent = wk.n; a.setAttribute('dir', 'ltr');
     weekEl.appendChild(a);
@@ -139,6 +141,7 @@
     if (text != null) n.textContent = text;
     return n;
   }
+  function elh(tag, attrs, html) { var n = el(tag, attrs); n.innerHTML = html; return n; }
   function announce(msg) { if (live) live.textContent = msg; }
   // Hebrew line with English runs isolated, so punctuation doesn't jump sides:
   // parts = ['נכון! ', ['pig'], ' = חזיר'] (an array part is English).
@@ -181,7 +184,7 @@
       catch (e) { /* storage unavailable — the path just won't tick */ }
     }
     box.textContent = '';
-    box.appendChild(el('p', { class: 'feedback' }, 'סיימתם! ' + score + ' מתוך ' + order.length + ' ⭐'));
+    box.appendChild(elh('p', { class: 'feedback' }, 'סיימתם! ' + (+score) + ' מתוך ' + (+order.length) + ' ' + ic('star')));
     var again = el('button', { type: 'button', class: 'next' }, 'עוד סיבוב');
     again.addEventListener('click', function () { start(mode); });
     box.appendChild(again);
@@ -205,7 +208,7 @@
       lab.appendChild(cb);
       lab.appendChild(el('span', { lang: 'en', dir: 'ltr', class: 'dict-en' }, it.en));
       li.appendChild(lab);
-      var sb = el('button', { type: 'button', class: 'say', 'aria-label': 'השמעה: ' + it.en }, '🔊');
+      var sb = elh('button', { type: 'button', class: 'say', 'aria-label': 'השמעה: ' + it.en }, ic('volume-2'));
       sb.addEventListener('click', function () { say(it.audio); });
       li.appendChild(sb);
       list.appendChild(li);
@@ -233,10 +236,10 @@
     box.appendChild(el('p', { class: 'progress', dir: 'ltr' }, (pos + 1) + ' / ' + order.length));
     // In the gap game the clue is the meaning; hearing the word would give it away.
     if (mode !== 'gap') {
-      var big = el('button', { type: 'button', class: 'big-say', 'aria-label': 'השמעת המילה' }, '🔊');
+      var big = elh('button', { type: 'button', class: 'big-say', 'aria-label': 'השמעת המילה' }, ic('volume-2'));
       big.addEventListener('click', function () { say(it.audio); });
       box.appendChild(big);
-      var slow = el('button', { type: 'button', class: 'slow-say', 'aria-pressed': slowOn() ? 'true' : 'false', 'aria-label': 'השמעה איטית' }, '🐢 לאט');
+      var slow = el('button', { type: 'button', class: 'slow-say', 'aria-pressed': slowOn() ? 'true' : 'false', 'aria-label': 'השמעה איטית' }, ic('turtle') + ' לאט');
       slow.addEventListener('click', function () {
         var on = !slowOn();
         try { localStorage.setItem(SLOW_KEY, on ? '1' : '0'); } catch (e) { /* storage off: this tap only */ }
@@ -248,8 +251,8 @@
     var fb = el('p', { class: 'feedback', role: 'status' });
 
     if (mode === 'dict') {
-      box.appendChild(el('p', { class: 'dict-hint' }, 'כתבו את המילה במחברת. אפשר לשמוע שוב ב-🔊.'));
-      var nx = el('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'המילה הבאה ←' : 'סיום ובדיקה');
+      box.appendChild(elh('p', { class: 'dict-hint' }, 'כתבו את המילה במחברת. אפשר לשמוע שוב ב-' + ic('volume-2') + '.'));
+      var nx = elh('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'המילה הבאה ' + ic('arrow-left') : 'סיום ובדיקה');
       nx.addEventListener('click', function () {
         if (!begun) { begun = true; beacon('quiz_start', 'unit-dict'); }
         next();
@@ -282,7 +285,7 @@
           mixed(fb, ok ? ['נכון! ', [it.en], ' = ' + it.he] : ['המילה היא: ', [it.en], ' (' + it.he + ')']);
           announce(fb.textContent);
           say(it.audio);
-          var n = el('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ←' : 'סיום');
+          var n = elh('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ' + ic('arrow-left') : 'סיום');
           n.addEventListener('click', function () { box.removeAttribute('data-done'); next(); });
           box.appendChild(n);
           n.focus();
@@ -308,10 +311,10 @@
             if (got === toks.length) {
               var ok = slips === 0;
               record(it, ok);
-              fb.textContent = ok ? 'נכון! 🎉' : 'יפה! המשפט שלם.';
+              fb.innerHTML = ok ? 'נכון! ' + ic('party-popper') : 'יפה! המשפט שלם.';
               announce(fb.textContent + ' ' + it.ex);
               say(it.audio);
-              var n = el('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ←' : 'סיום');
+              var n = elh('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ' + ic('arrow-left') : 'סיום');
               n.addEventListener('click', next);
               box.appendChild(n);
               n.focus();
@@ -341,7 +344,7 @@
           if (!ok) grid.children[it.ans].classList.add('ok');
           mixed(fb, ok ? ['נכון! ', [it.en], ' = ' + it.opts[it.ans]] : [[it.en], ' = ' + it.opts[it.ans]]);
           announce(fb.textContent);
-          var n = el('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ←' : 'סיום');
+          var n = elh('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ' + ic('arrow-left') : 'סיום');
           n.addEventListener('click', function () { box.removeAttribute('data-done'); next(); });
           box.appendChild(n);
           n.focus();
@@ -369,7 +372,7 @@
         input.disabled = true; go.disabled = true;
         mixed(fb, ok ? ['נכון! ', [it.en]] : ['המילה היא: ', [it.en]]);
         announce(fb.textContent);
-        var n = el('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ←' : 'סיום');
+        var n = elh('button', { type: 'button', class: 'next' }, pos + 1 < order.length ? 'הבא ' + ic('arrow-left') : 'סיום');
         n.addEventListener('click', next);
         box.appendChild(n);
         n.focus();

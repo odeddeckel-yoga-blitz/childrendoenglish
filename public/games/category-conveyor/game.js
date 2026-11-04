@@ -18,12 +18,12 @@ function L10N(k,d){try{var v=window.CDE_T&&window.CDE_T(k);return v!=null?v:d;}c
 
 /* ---------------- word data (from src/data/words.js, 6 categories) ---------------- */
 const CATS = {
-  animals:  { name:'Animals',   emoji:'🐾', color:'#f59e0b' },
-  food:     { name:'Food',      emoji:'🍎', color:'#ef4444' },
-  transport:{ name:'Transport', emoji:'🚗', color:'#3b82f6' },
-  clothing: { name:'Clothing',  emoji:'👕', color:'#8b5cf6' },
-  home:     { name:'Home',      emoji:'🏠', color:'#16a34a' },
-  colors:   { name:'Colors',    emoji:'🎨', color:'#ec4899' },
+  animals:  { name:'Animals',   emoji:'🐾', icon:'paw-print', color:'#f59e0b' },
+  food:     { name:'Food',      emoji:'🍎', icon:'apple', color:'#ef4444' },
+  transport:{ name:'Transport', emoji:'🚗', icon:'car', color:'#3b82f6' },
+  clothing: { name:'Clothing',  emoji:'👕', icon:'shirt', color:'#8b5cf6' },
+  home:     { name:'Home',      emoji:'🏠', icon:'house', color:'#16a34a' },
+  colors:   { name:'Colors',    emoji:'🎨', icon:'palette', color:'#ec4899' },
 };
 // bin labels follow the interface language (spoken words stay English)
 Object.keys(CATS).forEach(function(k){ var n=L10N('cat_'+k,null); if(n) CATS[k].name=n; });
@@ -55,7 +55,7 @@ const WORDS = [
   {id:'popcorn',en:'popcorn',he:'פופקורן',es:'palomitas',cat:'food'},{id:'cheese',en:'cheese',he:'גבינה',es:'queso',cat:'food'},
   {id:'cookie',en:'cookie',he:'עוגיה',es:'galleta',cat:'food'},{id:'grapes',en:'grapes',he:'ענבים',es:'uvas',cat:'food'},
   {id:'tomato',en:'tomato',he:'עגבנייה',es:'tomate',cat:'food'},
-  {id:'orange',en:'orange',he:'תפוז',es:'naranja',cat:'food',tricky:'🍊 orange is a FRUIT here — look at the picture!'},
+  {id:'orange',en:'orange',he:'תפוז',es:'naranja',cat:'food',tricky:CDE_IC('apple')+' orange is a FRUIT here — look at the picture!'},
   // transport (16)
   {id:'car',en:'car',he:'מכונית',es:'carro',cat:'transport'},{id:'bus',en:'bus',he:'אוטובוס',es:'autobús',cat:'transport'},
   {id:'bicycle',en:'bicycle',he:'אופניים',es:'bicicleta',cat:'transport'},{id:'airplane',en:'airplane',he:'מטוס',es:'avión',cat:'transport'},
@@ -88,9 +88,9 @@ const WORDS = [
   {id:'black',en:'black',he:'שחור',es:'negro',cat:'colors'},{id:'white',en:'white',he:'לבן',es:'blanco',cat:'colors'},
   {id:'purple',en:'purple',he:'סגול',es:'morado',cat:'colors'},{id:'pink',en:'pink',he:'ורוד',es:'rosado',cat:'colors'},
   {id:'brown',en:'brown',he:'חום',es:'marrón',cat:'colors'},{id:'gray',en:'gray',he:'אפור',es:'gris',cat:'colors'},
-  {id:'lime',en:'lime',he:'ירוק ליים',es:'verde limón',cat:'colors',tricky:'🎨 lime is a COLOR here — look at the picture!'},
-  {id:'peach',en:'peach',he:'אפרסק',es:'durazno',cat:'colors',tricky:'🎨 peach is a COLOR here — look at the picture!'},
-  {id:'cream',en:'cream',he:'קרם',es:'crema',cat:'colors',tricky:'🎨 cream is a COLOR here — look at the picture!'},
+  {id:'lime',en:'lime',he:'ירוק ליים',es:'verde limón',cat:'colors',tricky:CDE_IC('palette')+' lime is a COLOR here — look at the picture!'},
+  {id:'peach',en:'peach',he:'אפרסק',es:'durazno',cat:'colors',tricky:CDE_IC('palette')+' peach is a COLOR here — look at the picture!'},
+  {id:'cream',en:'cream',he:'קרם',es:'crema',cat:'colors',tricky:CDE_IC('palette')+' cream is a COLOR here — look at the picture!'},
 ];
 
 /* Practice-ladder scoping (2026-10-07): ?words=id,id,... restricts the pool to
@@ -265,7 +265,7 @@ function tapBin(cat){
   const f = activeItem();
   if(!f){
     beep(240,0.07,'square',0.07);
-    setFeedback('⏳ Wait for a photo in the glowing zone!', 'var(--dim)');
+    setFeedback(CDE_IC('hourglass')+' Wait for a photo in the glowing zone!', 'var(--dim)');
     return;
   }
   if(f.w.cat === cat){
@@ -295,7 +295,7 @@ function correct(f, el){
   chord(392); shakeIt(Math.min(4 + S.combo, 12));
   if(el){ el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); }
   const cc = CATS[f.w.cat];
-  setFeedback('✅ ' + cc.emoji + ' <b>' + f.w.en + '</b> → ' + cc.name + ' · +' + pts, 'var(--grn)');
+  setFeedback(CDE_IC('circle-check')+' ' + CDE_IC(cc.icon) + ' <b>' + f.w.en + '</b> → ' + cc.name + ' · +' + pts, 'var(--grn)');
   if(S.combo >= 5 && S.combo % 5 === 0) toast('◈ COMBO ×' + S.combo + ' ◈');
   /* two-way adaptive: 4 fast correct sorts in a row → faster belt + next level */
   if(fast){ S.fastStreak++; if(S.fastStreak >= 4){ S.fastStreak = 0; levelUp(); } }
@@ -315,7 +315,7 @@ function wrong(f, cat, el){
   if(right){ right.classList.add('hint'); setTimeout(()=>right.classList.remove('hint'), 1400); }
   const cc = CATS[f.w.cat];
   const msg = f.w.tricky ? f.w.tricky
-    : ('❌ <b>' + f.w.en + '</b> is ' + article(cc.name) + ' <b>' + cc.name.toUpperCase() + '</b> word ' + cc.emoji + ' — look at the picture!');
+    : (CDE_IC('circle-x')+' <b>' + f.w.en + '</b> is ' + article(cc.name) + ' <b>' + cc.name.toUpperCase() + '</b> word ' + CDE_IC(cc.icon) + ' — look at the picture!');
   setFeedback(msg, 'var(--red)');
   const g = geo();
   burst(f.x, g.beltY, 14, '#ef4444', 5, 0.7);
@@ -331,7 +331,7 @@ function slipped(f){
   burst(W-30, g.beltY, 24, '#ef4444', 6, 1);
   buzz(); shakeIt(12);
   const cc = CATS[f.w.cat];
-  setFeedback('💨 <b>' + f.w.en + '</b> slipped past! It was ' + cc.emoji + ' <b>' + cc.name + '</b>. −1 shield', 'var(--red)');
+  setFeedback(CDE_IC('wind')+' <b>' + f.w.en + '</b> slipped past! It was ' + CDE_IC(cc.icon) + ' <b>' + cc.name + '</b>. −1 shield', 'var(--red)');
   updateHUD();
   if(S.shields <= 0) gameOver();
 }
@@ -361,10 +361,10 @@ function levelUp(){
     for(const it of S.items) burst(it.x, g.beltY, 12, '#3b82f6', 5, 0.7);
     S.items.length = 0; S.spawnT = 0.6;                      // sweep the belt — new bins
     renderBins(); preloadCats(bins());
-    toast('⚡ LV ' + S.level + ' — ' + (bins().length) + L10N('bins',' BINS!'));
+    toast(CDE_IC('zap')+' LV ' + S.level + ' — ' + (bins().length) + L10N('bins',' BINS!'));
     learnBeacon('g_lvl');
   } else {
-    toast(L10N('fasterBelt','⚡ FASTER BELT!'));
+    toast(L10N('fasterBelt',CDE_IC('zap')+' FASTER BELT!'));
   }
   chord(523); shakeIt(6); updateHUD();
 }
@@ -375,9 +375,9 @@ function gameOver(){
   try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
   const isBest = S.score > 0 && S.score > S.runStartBest;
   $('overCard').innerHTML =
-    L10N('lbScore','⭐ Score') + ' <b>' + S.score + '</b>' +
-    (isBest ? ' · <span class="newbest">' + L10N('lbNewBest','★ NEW BEST!') + '</span>' : ' · ' + L10N('lbBest','best') + ' <b>' + S.best + '</b>') +
-    '<br>' + L10N('lbSorted','📦 Sorted') + ' <b>' + S.sorted + '</b> ' + L10N('lbWords','words') + ' · ' + L10N('lbReached','reached') + ' <b><bdi>LV ' + S.level + '</bdi></b>';
+    L10N('lbScore',CDE_IC('star')+' Score') + ' <b>' + S.score + '</b>' +
+    (isBest ? ' · <span class="newbest">' + L10N('lbNewBest',CDE_IC('star')+' NEW BEST!') + '</span>' : ' · ' + L10N('lbBest','best') + ' <b>' + S.best + '</b>') +
+    '<br>' + L10N('lbSorted',CDE_IC('package')+' Sorted') + ' <b>' + S.sorted + '</b> ' + L10N('lbWords','words') + ' · ' + L10N('lbReached','reached') + ' <b><bdi>LV ' + S.level + '</bdi></b>';
   show('over');
   // a good run (level 3+ or a new best) → the next game leads; else play again
   if(window.CDE_END) CDE_END({game:'category-conveyor',again:$('againBtn'),good:S.level>=3||isBest,hide:[$('overHome')]});
@@ -551,11 +551,11 @@ function loop(ts){
 
 /* ---------------- HUD / feedback / bins / screens ---------------- */
 function updateHUD(){
-  $('shieldPill').textContent = '🛡'.repeat(Math.max(0,S.shields)) + '▫'.repeat(Math.max(0, 3-S.shields));
-  $('scorePill').textContent = '⭐ ' + S.score + (S.best > 0 ? ' · best ' + S.best : '');
-  $('levelPill').textContent = '⚡ LV ' + S.level;
+  $('shieldPill').innerHTML = CDE_IC('shield').repeat(Math.max(0,S.shields)) + '▫'.repeat(Math.max(0, 3-S.shields));
+  $('scorePill').innerHTML = CDE_IC('star')+' ' + S.score + (S.best > 0 ? ' · best ' + S.best : '');
+  $('levelPill').innerHTML = CDE_IC('zap')+' LV ' + S.level;
 }
-const NEUTRAL = '👀 Tap the bin that matches the photo in the glowing zone!';
+const NEUTRAL = 'Tap the bin that matches the photo in the glowing zone!';
 let fbT = null;
 function setFeedback(msg, col){
   const e = $('feedback');
@@ -566,7 +566,7 @@ function setFeedback(msg, col){
 let toastT = null;
 function toast(msg){
   const e = $('combo');
-  e.textContent = msg; e.style.opacity = 1;
+  e.innerHTML = msg; e.style.opacity = 1;
   clearTimeout(toastT); toastT = setTimeout(() => { e.style.opacity = 0; }, 1000);
 }
 function renderBins(){
@@ -577,7 +577,7 @@ function renderBins(){
     b.type = 'button'; b.className = 'bin'; b.id = 'bin-'+cat;
     b.style.setProperty('--bc', c.color);
     b.setAttribute('aria-label', 'Sort into ' + c.name);
-    const be = document.createElement('span'); be.className = 'be'; be.textContent = c.emoji;
+    const be = document.createElement('span'); be.className = 'be'; be.innerHTML = CDE_IC(c.icon);
     const bn = document.createElement('span'); bn.className = 'bn'; bn.textContent = c.name;
     b.appendChild(be); b.appendChild(bn);
     b.addEventListener('click', () => tapBin(cat));
@@ -608,7 +608,7 @@ function start(){
 
 function toggleMute(){
   muted = !muted;
-  $('mute').textContent = muted ? '🔇' : '🔊';
+  $('mute').innerHTML = muted ? CDE_IC('volume-x') : CDE_IC('volume-2');
   if(muted){ try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){} }
 }
 
@@ -622,7 +622,7 @@ window.addEventListener('keydown', e => {
 });
 
 const mb = $('menuBest');
-if(S.best > 0){ mb.style.display = ''; mb.textContent = L10N('yourBest','🏆 Your best: ') + S.best; }
+if(S.best > 0){ mb.style.display = ''; mb.innerHTML = L10N('yourBest',CDE_IC('trophy')+' Your best: ') + S.best; }
 
 /* test/debug contract (used by the Playwright verification; no gameplay shortcuts) */
 window.CC = {

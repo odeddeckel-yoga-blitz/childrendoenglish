@@ -97,10 +97,10 @@ describe('ResultScreen arcade layer', () => {
 
   it('shows this-run arcade stats and the new-best banner', () => {
     render(<ResultScreen {...arcadeProps} />);
-    expect(screen.getByText('⭐ 120')).toBeInTheDocument();
+    expect(screen.getByText('120')).toBeInTheDocument();
     expect(screen.getByText('4')).toBeInTheDocument();
     expect(screen.getByText('6')).toBeInTheDocument();
-    expect(screen.getByText('★ NEW BEST SCORE!')).toBeInTheDocument();
+    expect(screen.getByText('NEW BEST SCORE!')).toBeInTheDocument();
   });
 
 
@@ -129,7 +129,7 @@ describe('ResultScreen arcade layer', () => {
   it('renders without arcade data (legacy results)', () => {
     render(<ResultScreen {...defaultProps} />);
     expect(screen.getByText(/Next quiz/)).toBeInTheDocument();
-    expect(screen.queryByText('★ NEW BEST SCORE!')).not.toBeInTheDocument();
+    expect(screen.queryByText('NEW BEST SCORE!')).not.toBeInTheDocument();
   });
 
   it('offers a rename to a player who skipped the name, then hides it', () => {

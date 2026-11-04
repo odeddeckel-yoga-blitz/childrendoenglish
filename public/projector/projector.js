@@ -24,9 +24,9 @@ const TXT = HEB ? {
   tKeys: 'רווח = הבא · Enter = התשובה · S = שמע · F = מסך מלא · Esc = חזרה',
 } : null;
 const MODES = [
-  { id: 'pic', en: '🖼️ Picture → say the word', he: '🖼️ תמונה ← אומרים את המילה' },
-  { id: 'word', en: '🔤 English word → say the meaning', he: '🔤 מילה באנגלית ← אומרים מה היא אומרת' },
-  { id: 'ear', en: '👂 Sound only → say the word', he: '👂 רק שמע ← אומרים את המילה' },
+  { id: 'pic', icon: 'image', en: 'Picture → say the word', he: 'תמונה ← אומרים את המילה' },
+  { id: 'word', icon: 'type', en: 'English word → say the meaning', he: 'מילה באנגלית ← אומרים מה היא אומרת' },
+  { id: 'ear', icon: 'ear', en: 'Sound only → say the word', he: 'רק שמע ← אומרים את המילה' },
 ];
 const CATS_HE = { mix: 'הכול מעורבב', animals: 'חיות', food: 'אוכל', everyday: 'חפצים', colors: 'צבעים', numbers: 'מספרים', home: 'בבית', transport: 'תחבורה', nature: 'טבע', feelings: 'רגשות', clothing: 'בגדים', school: 'בית ספר', sports: 'ספורט', toys: 'צעצועים' };
 
@@ -50,7 +50,9 @@ function chips(el, items, sel, onPick) {
     const b = document.createElement('button');
     b.type = 'button';
     b.className = 'chip';
-    b.textContent = it.label;
+    // Drawn icon (owner 11-04: no emoji icons) + the label as a text node.
+    if (it.icon) { const t = document.createElement('template'); t.innerHTML = '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-' + it.icon + '"/></svg>'; b.replaceChildren(t.content.firstChild, ' ', it.label); }
+    else b.textContent = it.label;
     b.dataset.id = it.id;
     b.setAttribute('aria-pressed', String(it.id === sel()));
     b.addEventListener('click', () => { onPick(it.id); for (const x of el.children) x.setAttribute('aria-pressed', String(x.dataset.id === it.id)); });
@@ -80,7 +82,7 @@ function render() {
     stage.append(d);
   } else {
     const b = document.createElement('button');
-    b.type = 'button'; b.className = 'ear'; b.textContent = '👂🔊'; b.setAttribute('aria-label', 'Play the word');
+    b.type = 'button'; b.className = 'ear'; b.innerHTML = '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg>'; b.setAttribute('aria-label', 'Play the word');
     b.addEventListener('click', say);
     stage.append(b);
     say();
@@ -120,11 +122,11 @@ function full() {
 
 function boot() {
   applyLang();
-  chips($('modeGrid'), MODES.map((m) => ({ id: m.id, label: HEB ? m.he : m.en })), () => S.mode, (id) => { S.mode = id; });
+  chips($('modeGrid'), MODES.map((m) => ({ id: m.id, icon: m.icon, label: HEB ? m.he : m.en })), () => S.mode, (id) => { S.mode = id; });
   const unit = new URLSearchParams(location.search).get('unit');
   const cats = [...BATTLE_CATEGORIES, ...BATTLE_UNIT_CATEGORIES];
   if (unit && cats.some((c) => c.id === unit)) S.cat = unit;
-  chips($('catGrid'), cats.map((c) => ({ id: c.id, label: `${c.emoji} ${HEB && CATS_HE[c.id] ? CATS_HE[c.id] : `\u2066${c.label}\u2069`}` })), () => S.cat, (id) => { S.cat = id; });
+  chips($('catGrid'), cats.map((c) => ({ id: c.id, icon: c.icon, label: HEB && CATS_HE[c.id] ? CATS_HE[c.id] : `\u2066${c.label}\u2069` })), () => S.cat, (id) => { S.cat = id; });
   $('go').addEventListener('click', start);
   $('bNext').addEventListener('click', next);
   $('bReveal').addEventListener('click', reveal);

@@ -1,3 +1,5 @@
+import { Star, ArrowRight } from 'lucide-react';
+import ArcadeIcon from './ArcadeIcon';
 import spotlight from '../data/spotlight.json';
 import { getWordById } from '../data/words';
 import { t, gloss } from '../utils/i18n';
@@ -22,7 +24,7 @@ export default function SpotlightCards({ lang = 'en', onOpenWord }) {
   return (
     <section aria-label={t('spotlightTitle', lang)} className="space-y-2" data-testid="spotlight">
       <p className="px-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
-        <span aria-hidden="true">⭐</span> {t('spotlightTitle', lang)}
+        <Star className="w-3.5 h-3.5 inline -mt-0.5" aria-hidden="true" /> {t('spotlightTitle', lang)}
       </p>
       <div className="grid grid-cols-2 gap-3">
         {w && (() => {
@@ -63,10 +65,10 @@ export default function SpotlightCards({ lang = 'en', onOpenWord }) {
             data-spot="game"
           >
             <span className="w-14 h-14 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600
-                             flex items-center justify-center text-3xl" aria-hidden="true">{g.emoji}</span>
+                             flex items-center justify-center text-white" aria-hidden="true"><ArcadeIcon id={g.id} className="w-7 h-7" /></span>
             <p className={label}>{t('spotlightGame', lang)}</p>
             <p className="font-bold text-slate-800 dark:text-slate-100 leading-tight">{g.name}</p>
-            <p className="text-sm text-emerald-600 dark:text-emerald-300 leading-tight">{t('spotlightPlay', lang)} <span aria-hidden="true" className="inline-block rtl:-scale-x-100">→</span></p>
+            <p className="text-sm text-emerald-600 dark:text-emerald-300 leading-tight">{t('spotlightPlay', lang)} <ArrowRight className="w-4 h-4 inline -mt-0.5 rtl:-scale-x-100" aria-hidden="true" /></p>
           </a>
         )}
       </div>

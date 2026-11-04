@@ -54,28 +54,28 @@
 </style>
 </head>
 <body>
-<a id="homePill" href="/">🏠 Children Do English</a>
+<a id="homePill" href="/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-house"/></svg> Children Do English</a>
 <a class="langToggle" href="?lang=he">עברית</a>
 <main id="setup" style="display:flex;flex-direction:column;align-items:center;gap:16px;width:100%">
-  <h1>📽️ <span id="tTitle">Projector Mode</span></h1>
+  <h1><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-projector"/></svg> <span id="tTitle">Projector Mode</span></h1>
   <p class="sub" id="tSub">For the whole class on one big screen: show a picture, the class says the English word together, then reveal it with its sound and Hebrew meaning. No accounts, nothing stored.</p>
   <h2 id="tShow">What to show</h2>
   <div class="grid" id="modeGrid"></div>
   <h2 id="tTopic">Words</h2>
   <div class="grid" id="catGrid"></div>
-  <button id="go" class="btn" type="button">▶ <span id="tGo">Start</span></button>
+  <button id="go" class="btn" type="button"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> <span id="tGo">Start</span></button>
   <p class="keys" id="tKeys"><kbd>Space</kbd> next · <kbd>Enter</kbd> show the answer · <kbd>S</kbd> sound · <kbd>F</kbd> full screen · <kbd>Esc</kbd> back</p>
 </main>
 <section id="show" hidden aria-live="polite">
   <div id="stage"></div>
   <div id="answer"></div>
   <div class="bar">
-    <button id="bBack" class="btn ghost" type="button" aria-label="Back">✕</button>
-    <button id="bSay" class="btn ghost" type="button">🔊</button>
+    <button id="bBack" class="btn ghost" type="button" aria-label="Back"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-x"/></svg></button>
+    <button id="bSay" class="btn ghost" type="button" aria-label="Hear the word"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>
     <button id="bReveal" class="btn ghost" type="button"><span id="tReveal">Show answer</span></button>
-    <button id="bNext" class="btn" type="button"><span id="tNext">Next</span> ▶</button>
+    <button id="bNext" class="btn" type="button"><span id="tNext">Next</span> <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-arrow-right"/></svg></button>
     <span id="count" dir="ltr"></span>
-    <button id="bFull" class="btn ghost" type="button" aria-label="Full screen">⛶</button>
+    <button id="bFull" class="btn ghost" type="button" aria-label="Full screen"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-maximize"/></svg></button>
   </div>
 </section>
 <script defer src="/games/word-audio.js"></script>

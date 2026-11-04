@@ -838,8 +838,9 @@ export default function App() {
               const nextStep = ladderSteps[nextIdx];
               const label = willFinish ? t('cycleFinishBatch', lang)
                 : nextStep ? t('cycleNextStage', lang, { mode: t(nextStep.labelKey, lang) })
-                : t('ladderStepDone', lang) + ' ✓';
-              return { label, onClick: () => completeLadderStep(ladderStepKey) };
+                : t('ladderStepDone', lang);
+              const icon = willFinish ? 'party' : nextStep ? 'arrow' : 'check';
+              return { label, icon, onClick: () => completeLadderStep(ladderStepKey) };
             })()}
             cycleRepeats={cycleRun && !quizFlow.quizResults?.quit ? [
               { label: t('ladderAgainDifferent', lang), onClick: () => repeatLadderStep('different') },

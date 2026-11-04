@@ -1,4 +1,6 @@
-import { t } from '../utils/i18n';
+import { Trophy, PartyPopper, ArrowLeft, ArrowRight } from 'lucide-react';
+import { t, isRTL } from '../utils/i18n';
+import ArcadeIcon from './ArcadeIcon';
 import { batchCount, masteredCount, BATCH_SIZE } from '../utils/learningCycle';
 
 /**
@@ -8,9 +10,9 @@ import { batchCount, masteredCount, BATCH_SIZE } from '../utils/learningCycle';
  * batch. `batchJustDone` is 1-based for kid-facing copy.
  */
 const ARCADE = [
-  { id: 'word-zapper', name: 'Word Zapper', emoji: '⚡' },
-  { id: 'spelling-forge', name: 'Spelling Forge', emoji: '🔨' },
-  { id: 'category-conveyor', name: 'Category Conveyor', emoji: '📦' },
+  { id: 'word-zapper', name: 'Word Zapper' },
+  { id: 'spelling-forge', name: 'Spelling Forge' },
+  { id: 'category-conveyor', name: 'Category Conveyor' },
 ];
 
 export default function BatchComplete({ stats, lang = 'en', batchJustDone, onNextBatch, onBackToMenu }) {
@@ -21,7 +23,9 @@ export default function BatchComplete({ stats, lang = 'en', batchJustDone, onNex
 
   return (
     <div className="animate-fade-in max-w-md mx-auto text-center space-y-6 pt-10">
-      <div className="text-7xl" aria-hidden="true">{allDone ? '🏆' : '🎉'}</div>
+      <div className="flex justify-center text-amber-500" aria-hidden="true">
+        {allDone ? <Trophy className="w-20 h-20" /> : <PartyPopper className="w-20 h-20" />}
+      </div>
       <h2 className="text-2xl font-black text-slate-800 dark:text-slate-100">
         {allDone ? t('cycleAllDone', lang) : t('cycleBatchDone', lang, { num: batchJustDone })}
       </h2>
@@ -38,16 +42,17 @@ export default function BatchComplete({ stats, lang = 'en', batchJustDone, onNex
                    bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700
                    hover:shadow-md active:scale-95 transition-all"
       >
-        <span aria-hidden="true">{game.emoji}</span> {t('resultTryGame', lang, { name: game.name })}
+        <ArcadeIcon id={game.id} className="w-4 h-4 inline -mt-0.5" /> {t('resultTryGame', lang, { name: game.name })}
       </a>
 
       {!allDone && (
         <button
           onClick={onNextBatch}
           className="w-full py-3.5 px-4 rounded-xl font-bold text-white bg-blue-600
-                     hover:bg-blue-700 active:scale-95 transition-all shadow-md"
+                     hover:bg-blue-700 active:scale-95 transition-all shadow-md flex items-center justify-center gap-2"
         >
           {t('cycleNextBatch', lang, { num: batchJustDone + 1 })}
+          {isRTL(lang) ? <ArrowLeft className="w-4 h-4" aria-hidden="true" /> : <ArrowRight className="w-4 h-4" aria-hidden="true" />}
         </button>
       )}
 

@@ -95,7 +95,8 @@ test('team battle: Comets vs Rockets, no per-player scores, reload keeps the tea
   expect(await h.locator('#hostBoard').innerText()).not.toMatch(NICKS);
 
   // end: Rockets 4/2 = 2 per player beat Comets 3/3 = 1
-  await expect(h.locator('#podiumTitle')).toHaveText('🏆 The 🟠 Rockets win!', { timeout: DUR * 1000 + 10000 });
+  await expect(h.locator('#podiumTitle')).toHaveText('The 🟠 Rockets win!', { timeout: DUR * 1000 + 10000 });
+  await expect(h.locator('#podiumTitle svg use')).toHaveAttribute('href', '/icons.svg#i-trophy');
   expect(await h.locator('#podiumList').innerText()).not.toMatch(NICKS);
   await expect(kids[0].locator('#podiumSelf')).toContainText('3 words right for the 🔵 Comets');
   const state = await h.evaluate(() => window.__battleDbg.room);
@@ -113,13 +114,13 @@ test('class battle: the teacher nudges the goal; a late join does not move it', 
   await h.click('#targetUp');
   await expect(h.locator('#targetVal')).toHaveText('14');
   await h.click('#btnStart');
-  await expect(h.locator('#hostBoard .gtxt')).toHaveText('🎯 0 / 14 words');
+  await expect(h.locator('#hostBoard .gtxt')).toHaveText(/^\s*0 \/ 14 words$/);
   kids.push(await kid(browser, code)); // late join after start
   await answerRight(kids[0], 2);
   await answerRight(kids[2], 1);
-  await expect(h.locator('#hostBoard .gtxt')).toHaveText('🎯 3 / 14 words');
-  await expect(kids[2].locator('#kidGroup')).toHaveText(/🎯 \d+ \/ 14/);
-  await expect(h.locator('#podiumTitle')).toHaveText('💪 So close! Try again?', { timeout: DUR * 1000 + 10000 });
+  await expect(h.locator('#hostBoard .gtxt')).toHaveText(/^\s*3 \/ 14 words$/);
+  await expect(kids[2].locator('#kidGroup')).toHaveText(/\d+ \/ 14/);
+  await expect(h.locator('#podiumTitle')).toHaveText('So close! Try again?', { timeout: DUR * 1000 + 10000 });
 });
 
 // CUX20: the kid side in Hebrew (?lang=he): RTL screens, Hebrew join + lobby + team line,

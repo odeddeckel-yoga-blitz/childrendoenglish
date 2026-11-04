@@ -3,7 +3,7 @@ export const LEVELS = [
     id: 'beginner',
     name: 'Beginner',
     description: 'Simple everyday words',
-    icon: '🌱',
+    icon: 'sprout',
     color: 'blue',
     unlockScore: 0, // always unlocked
   },
@@ -11,7 +11,7 @@ export const LEVELS = [
     id: 'intermediate',
     name: 'Intermediate',
     description: 'More challenging vocabulary',
-    icon: '🌿',
+    icon: 'leaf',
     color: 'amber',
     unlockScore: 7, // need 7/10 on beginner
   },
@@ -19,7 +19,7 @@ export const LEVELS = [
     id: 'advanced',
     name: 'Advanced',
     description: 'Complex and longer words',
-    icon: '🌳',
+    icon: 'trees',
     color: 'purple',
     unlockScore: 7, // need 7/10 on intermediate
   },

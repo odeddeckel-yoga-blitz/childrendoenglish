@@ -168,13 +168,13 @@ const S={
 
 function setStatus(msg,col,key){ S.statusKey=key||''; const e=$('statusLine'); e.innerHTML=msg; e.style.color=col||'var(--dim)'; }
 function updateHUD(){
-  $('levelPill').textContent='⚒️ LV '+S.level;
-  $('wordPill').textContent='📜 '+(S.wordIdx+1)+'/'+WORDS_PER_LEVEL;
-  $('scorePill').textContent='⭐ '+S.score+(S.best>0?' · best '+S.best:'');
-  $('streakPill').textContent='🔥 '+S.streak;
+  $('levelPill').innerHTML=CDE_IC('hammer')+' LV '+S.level;
+  $('wordPill').innerHTML=CDE_IC('scroll')+' '+(S.wordIdx+1)+'/'+WORDS_PER_LEVEL;
+  $('scorePill').innerHTML=CDE_IC('star')+' '+S.score+(S.best>0?' · best '+S.best:'');
+  $('streakPill').innerHTML=CDE_IC('flame')+' '+S.streak;
 }
 let toastT=null;
-function toast(msg){ const e=$('combo'); e.textContent=msg; e.style.opacity=1; clearTimeout(toastT); toastT=setTimeout(()=>{ e.style.opacity=0; },1100); }
+function toast(msg){ const e=$('combo'); e.innerHTML=msg; e.style.opacity=1; clearTimeout(toastT); toastT=setTimeout(()=>{ e.style.opacity=0; },1100); }
 
 /* ---------- round build ---------- */
 function pickWord(){
@@ -202,7 +202,7 @@ function buildRound(){
   $('heWord').textContent=(window.CDE_GLOSS?CDE_GLOSS(S.word):'');
   $('heWord').style.display=(listenOnly||!$('heWord').textContent)?'none':'';
   renderSlots(); renderPad(); refreshForge();
-  setStatus(listenOnly?'🎧 Listen closely, then forge the word — the photo is your reward!':'Tap the letter tiles to spell what you see and hear!');
+  setStatus(listenOnly?CDE_IC('headphones')+' Listen closely, then forge the word — the photo is your reward!':'Tap the letter tiles to spell what you see and hear!');
   updateHUD();
   setTimeout(()=>{ if(S.screen==='play') say(S.word.en); },350);
 }
@@ -241,7 +241,7 @@ function refreshForge(){
      back must not read "one letter left" over two empty slots); a full word forges on its own. */
   if(S.statusKey==='left'&&!full){
     const n=S.slots.filter(s=>s.ch===null).length;
-    setStatus(n===1?L10N('oneLeft','⚒️ One letter left — you finish it!'):L10N('lettersLeft','⚒️ {n} letters left — you finish them!').replace('{n}',n),'var(--gold)','left');
+    setStatus(n===1?L10N('oneLeft',CDE_IC('hammer')+' One letter left — you finish it!'):L10N('lettersLeft',CDE_IC('hammer')+' {n} letters left — you finish them!').replace('{n}',n),'var(--gold)','left');
   }
 }
 
@@ -314,7 +314,7 @@ function autoFill(){
     tapTile(idx,true);
     setTimeout(step,RM?60:520);
   };
-  setStatus(L10N('helps','🤖 The forge helps out — watch the letters!'),'var(--gold)');
+  setStatus(L10N('helps',CDE_IC('wand-sparkles')+' The forge helps out — watch the letters!'),'var(--gold)');
   setTimeout(step,RM?60:400);
 }
 
@@ -351,8 +351,8 @@ function forgeSuccess(){
   $('heWord').style.display=$('heWord').textContent?'':'none';
   say(S.word.en);
   const gloss=$('heWord').textContent;
-  setStatus('⚒️ CLANG! <b style="color:var(--grn)">'+S.word.en.toUpperCase()+'</b> '+L10N('forged','forged!')+(gloss?' · <span dir="rtl">'+gloss+'</span>':'')+' · +'+pts,'var(--grn)');
-  if(S.streak>=3) toast('🔥 COMBO ×'+S.streak);
+  setStatus(CDE_IC('hammer')+' CLANG! <b style="color:var(--grn)">'+S.word.en.toUpperCase()+'</b> '+L10N('forged','forged!')+(gloss?' · <span dir="rtl">'+gloss+'</span>':'')+' · +'+pts,'var(--grn)');
+  if(S.streak>=3) toast(CDE_IC('flame')+' COMBO ×'+S.streak);
   updateHUD();
   track('word_forged',{word:S.word.en,level:S.level,streak:S.streak});
   setTimeout(nextWord,1600);
@@ -366,7 +366,7 @@ function forgeWrong(){
   const slotEls=$('slots').children;
   wrong.forEach(i=>{ if(slotEls[i]) slotEls[i].classList.add('bad'); });
   const missN=wrong.length;
-  setStatus('❌ '+missN+(missN===1?' letter is':' letters are')+' in the wrong place — they pop back. The green-ringed ones are right!','var(--red)');
+  setStatus(CDE_IC('circle-x')+' '+missN+(missN===1?' letter is':' letters are')+' in the wrong place — they pop back. The green-ringed ones are right!','var(--red)');
   updateHUD();
   S.locked=true; // freeze taps during the shake
   setTimeout(()=>{
@@ -377,7 +377,7 @@ function forgeWrong(){
     /* two-stage hints */
     if(S.wrongForges>=4){ S.hintStage=2; S.usedHint=true; updateHintGlow(); autoFill(); }
     else if(S.wrongForges>=2){ S.hintStage=1; S.usedHint=true; updateHintGlow();
-      setStatus(L10N('hint','💡 Hint: the glowing tile goes in the next slot!'),'var(--gold)'); }
+      setStatus(L10N('hint',CDE_IC('lightbulb')+' Hint: the glowing tile goes in the next slot!'),'var(--gold)'); }
     say(S.word.en);
   }, RM?120:820);
 }
@@ -400,7 +400,7 @@ function nextWord(){
   if(S.wordIdx>=WORDS_PER_LEVEL){
     S.wordIdx=0; S.level++;
     if(S.level>MAXLV){ winGame(); return; }
-    toast(L10N('level','⬆️ LEVEL ')+S.level+(S.level>=7?L10N('listenOnly',' — 🎧 listen-only!'):''));
+    toast(L10N('level',CDE_IC('arrow-up')+' LEVEL ')+S.level+(S.level>=7?L10N('listenOnly',' — '+CDE_IC('headphones')+' listen-only!'):''));
     learnBeacon('g_lvl');
     chord(659);
   }
@@ -420,10 +420,10 @@ function start(){
 }
 function winGame(){
   const isBest=S.score>0&&S.score>S.runStartBest;
-  $('winBody').innerHTML=L10N('lbScore','⭐ Score')+' <b>'+S.score+'</b>'
-    +(isBest?' · <b style="color:var(--gold)">'+L10N('lbNewBest','★ NEW BEST!')+'</b>':' · '+L10N('lbBest','best')+' <b>'+S.best+'</b>')
-    +'<br>'+L10N('lbForged','⚒️ Forged')+' <b>'+S.forged+'</b> '+L10N('lbWordsAcross','words across all')+' <b>'+MAXLV+'</b> '+L10N('lbLevels','levels')
-    +'<br>'+L10N('lbPerfect','✨ First-strike words (no misses, no hints):')+' <b>'+S.perfect+'</b>';
+  $('winBody').innerHTML=L10N('lbScore',CDE_IC('star')+' Score')+' <b>'+S.score+'</b>'
+    +(isBest?' · <b style="color:var(--gold)">'+L10N('lbNewBest',CDE_IC('star')+' NEW BEST!')+'</b>':' · '+L10N('lbBest','best')+' <b>'+S.best+'</b>')
+    +'<br>'+L10N('lbForged',CDE_IC('hammer')+' Forged')+' <b>'+S.forged+'</b> '+L10N('lbWordsAcross','words across all')+' <b>'+MAXLV+'</b> '+L10N('lbLevels','levels')
+    +'<br>'+L10N('lbPerfect',CDE_IC('sparkles')+' First-strike words (no misses, no hints):')+' <b>'+S.perfect+'</b>';
   show('win');
   if(window.CDE_END) CDE_END({game:'spelling-forge',again:$('againBtn'),good:true,hide:[document.querySelector('#win a[data-l10n=home]')]});
   chord(659); setTimeout(()=>chord(784),220);
@@ -437,7 +437,7 @@ $('startBtn').addEventListener('click',start);
 $('againBtn').addEventListener('click',start); // play again without reload
 $('forgeBtn').addEventListener('click',forge);
 $('sayBtn').addEventListener('click',()=>{ ac(); if(S.word) say(S.word.en); });
-$('mute').addEventListener('click',()=>{ muted=!muted; $('mute').textContent=muted?'🔇':'🔊';
+$('mute').addEventListener('click',()=>{ muted=!muted; $('mute').innerHTML=muted?CDE_IC('volume-x'):CDE_IC('volume-2');
   if(muted){ try{ if('speechSynthesis' in window) speechSynthesis.cancel(); }catch(e){} } });
 $('photo').addEventListener('error',()=>{ $('photoCard').classList.add('myst'); });
 

@@ -11,6 +11,8 @@
   window.CDE_LANG=lang;
   window.CDE_T=function(k){ var D=window.CDE_STRINGS||{}; var S=D[lang]||{}; return S[k]!=null?S[k]:(D.en||{})[k]; };
   // An English-interface player gets no translation (owner 11-04, as on the SPA flashcards).
+  // Drawn interface icon (owner 11-04: no emoji icons) — markup for innerHTML sinks only; names = scripts/build-icon-sprite.mjs.
+  window.CDE_IC=function(name){ return '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-'+name+'"/></svg>'; };
   window.CDE_GLOSS=function(w){ if(!w||lang==='en') return ''; return (lang==='es'&&w.es)?w.es:(w.he||''); };
   function apply(){
     if(lang==='en') return;

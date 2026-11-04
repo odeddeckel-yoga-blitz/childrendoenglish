@@ -726,8 +726,8 @@ test.describe('Badge Earning', () => {
     const earnedLabel = page.locator('text=Earned!');
     await expect(earnedLabel.first()).toBeVisible({ timeout: 3000 });
 
-    // Should have some grayscale (locked) badges
-    const lockedBadges = page.locator('.grayscale');
+    // Should have some locked badges (grey drawn icons since 11-04; were grayscale emoji)
+    const lockedBadges = page.locator('[data-badge="locked"]');
     expect(await lockedBadges.count()).toBeGreaterThan(0);
   });
 });

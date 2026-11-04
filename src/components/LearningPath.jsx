@@ -1,5 +1,6 @@
 import { ArrowLeft, Check, BookOpen, Play, Lock } from 'lucide-react';
 import { LESSONS, getLessonStatus } from '../data/lessons';
+import NamedIcon from './NamedIcon';
 import { getWordById } from '../data/words';
 import { t } from '../utils/i18n';
 
@@ -35,7 +36,7 @@ export default function LearningPath({ stats, lang = 'en', onBack, onStartLesson
               className={`glass rounded-2xl p-4 space-y-3 ${isLocked ? 'opacity-50' : ''}`}
             >
               <div className="flex items-center gap-3">
-                <span className="text-2xl">{lesson.emoji}</span>
+                <span className="text-blue-600 dark:text-blue-400 shrink-0"><NamedIcon name={lesson.icon} className="w-7 h-7" /></span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{title}</p>

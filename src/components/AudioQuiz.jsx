@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Volume2, RefreshCw } from 'lucide-react';
+import { Volume2, RefreshCw, Turtle, Pointer } from 'lucide-react';
 import useQuizState from '../hooks/useQuizState';
 import QuizHeader from './QuizHeader';
 import QuitModal from './QuitModal';
@@ -99,7 +99,7 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
             </button>
             <p className="text-slate-400 text-sm flex items-center justify-center gap-2">
               {needTap
-                ? <span className="font-bold text-amber-700">{t('tapToHearWord', lang)}</span>
+                ? <span className="font-bold text-amber-700 inline-flex items-center gap-1"><Pointer className="w-4 h-4" aria-hidden="true" /> {t('tapToHearWord', lang)}</span>
                 : <><RefreshCw className="w-3 h-3" /> {t('hearAgain', lang)}</>}
             </p>
             {/* R2C9: slow playback toggle (0.75×), remembered on this device */}
@@ -109,7 +109,7 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
               onClick={() => { setSlowAudio(!slow); setSlow(!slow); speakWord(quiz.currentWord.word); }}
               className={`mx-auto px-4 min-h-11 rounded-full border-2 text-sm font-bold ${slow ? 'bg-amber-100 border-amber-500 text-amber-800' : 'bg-white border-amber-200 text-amber-700'}`}
             >
-              🐢 {t('slowAudio', lang)}
+              <Turtle className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /> {t('slowAudio', lang)}
             </button>
             {quiz.answered && (
               <p className="text-2xl font-bold text-slate-800 dark:text-slate-100 animate-fade-in">{quiz.currentWord.word}</p>

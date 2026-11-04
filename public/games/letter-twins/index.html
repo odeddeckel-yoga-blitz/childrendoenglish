@@ -20,6 +20,8 @@
 </script>
 <script defer src="/land-beacon.js"></script>
 <style>
+  /* gradient-text headings use color:transparent — their drawn icon needs its own colour */
+  h1 .ic{color:#fbbf24;}
   :root{ --bg0:#0b1230; --bg1:#1e1b4b; --ink:#eef2ff; --dim:#a5b4fc; --blue:#60a5fa; --gold:#fbbf24; --grn:#4ade80; --red:#f87171; --glass:rgba(30,27,75,.7); --line:rgba(129,140,248,.35); }
   *{box-sizing:border-box;}
   body{margin:0;min-height:100dvh;background:radial-gradient(circle at 50% 0%,var(--bg1),var(--bg0) 70%);color:var(--ink);font-family:-apple-system,system-ui,'Segoe UI',sans-serif;}
@@ -87,10 +89,10 @@
 <a id="homePill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
 <main>
   <div id="menu">
-    <h1>🔤 LETTER TWINS</h1>
+    <h1><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-type"/></svg> LETTER TWINS</h1>
     <p class="sub" data-l10n="sub">b or d? m or w? <b>See the picture, hear the word</b> and pick the letter it starts with. Or play <b>letter sounds</b>: just listen and tap the letter.</p>
-    <div class="pills tracks" role="group" aria-label="Pick a game"><button type="button" class="track" data-track="twins" data-l10n="trackTwins" dir="ltr" aria-pressed="true">b d p q</button><button type="button" class="track" data-track="mnwu" data-l10n="trackMnwu" dir="ltr" aria-pressed="false">m n w u</button><button type="button" class="track" data-track="sounds" data-l10n="trackSounds" aria-pressed="false">🔊 Letter sounds</button></div>
-    <button type="button" id="startBtn" data-l10n="start">▶ Start</button>
+    <div class="pills tracks" role="group" aria-label="Pick a game"><button type="button" class="track" data-track="twins" data-l10n="trackTwins" dir="ltr" aria-pressed="true">b d p q</button><button type="button" class="track" data-track="mnwu" data-l10n="trackMnwu" dir="ltr" aria-pressed="false">m n w u</button><button type="button" class="track" data-track="sounds" data-l10n="trackSounds" aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg> Letter sounds</button></div>
+    <button type="button" id="startBtn" data-l10n="start"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> Start</button>
     <section class="about">
       <h2 style="font-size:15px;margin:0 0 4px;color:inherit;">Letter Twins</h2>
       <p style="margin:0 0 4px;">A free game for children who mix up b, d, p and q. Each round shows a picture, plays the English word and asks for its first letter. Two look-alike tracks (b, d, p, q and m, n, w, u) and a letter-sounds track, where the child only hears the word and taps the letter its first sound makes. After a mistake the game shows the right letter and a short tip.</p>

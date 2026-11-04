@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { sendLearn } from '../utils/learnBeacon';
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck, Gamepad2 } from 'lucide-react';
 import SpotlightCards from './SpotlightCards';
 import ClassWeekCard from './ClassWeekCard';
 import MasteryMap from './MasteryMap';
@@ -139,7 +139,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         >
           <div className="shrink-0">
             <div className="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600
-                            flex items-center justify-center text-2xl" aria-hidden="true">🎮</div>
+                            flex items-center justify-center text-white" aria-hidden="true"><Gamepad2 className="w-6 h-6" /></div>
           </div>
           <div>
             <p className="font-bold text-slate-800 dark:text-slate-100">{t('arcadeGames', lang)}</p>
@@ -175,7 +175,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         <details className="glass rounded-2xl group" data-testid="menu-more" data-m1="more" open={moreOpen}
           onToggle={(e) => { try { sessionStorage.setItem('cde-menu-more', e.currentTarget.open ? '1' : '0'); } catch { /* storage off */ } }}>
           <summary className="cursor-pointer list-none p-4 flex items-center justify-between font-bold text-slate-700 dark:text-slate-200">
-            <span>{t('menuMore', lang)}{!isNewUser && todayCount > 0 ? ' · ☀️' : ''}</span>
+            <span className="inline-flex items-center gap-1">{t('menuMore', lang)}{!isNewUser && todayCount > 0 && <> · <Sun className="w-4 h-4 text-amber-500" aria-hidden="true" /></>}</span>
             <span aria-hidden="true" className="transition-transform group-open:rotate-180">▾</span>
           </summary>
           <div className="space-y-3 p-3 pt-0">

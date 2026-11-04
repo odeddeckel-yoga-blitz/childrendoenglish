@@ -149,8 +149,8 @@ ${body}
   <div class="breadcrumb"><a href="/printable-flashcards/hebrew/">כרטיסיות להדפסה</a> &rsaquo; ${escapeHtml(c.he)}</div>
   <div class="container">
     <p class="intro answer-first">${escapeHtml(answer)}</p>
-    <button type="button" class="print-btn" data-print>🖨️ הדפסת הכרטיסיות</button>
-    <a class="play-online no-print" href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_top_he&topic=${c.slug}">🎮 מעדיפים לשחק? תרגול באנגלית בחינם, בעברית ←</a>
+    <button type="button" class="print-btn" data-print><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-printer"/></svg> הדפסת הכרטיסיות</button>
+    <a class="play-online no-print" href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=flashcard_top_he&topic=${c.slug}"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> מעדיפים לשחק? תרגול באנגלית בחינם, בעברית ←</a>
     <script defer src="/print-btn.js"></script>
     ${howToHtml(`איך מדפיסים את כרטיסיות ה${c.he}`, steps)}
     ${printQrBlock(`${SITE}/printable-flashcards/${c.slug}/hebrew/`, 'סרקו כדי לשחק עם המילים האלה באתר — חינם, בלי הרשמה', 'rtl')}

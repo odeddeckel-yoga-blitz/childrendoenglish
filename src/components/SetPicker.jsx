@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Library, Type, Dices, Sparkles } from 'lucide-react';
 import { t } from '../utils/i18n';
 
 /**
@@ -32,8 +32,8 @@ export default function SetPicker({ lang = 'en', onPick, onBack }) {
         <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{t('ladderPickSet', lang)}</h2>
       </div>
 
-      <Btn primary onClick={() => onPick('batch')}>📚 {t('ladderSetBatch', lang)}</Btn>
-      <Btn onClick={() => setLettersOpen((o) => !o)}>🔤 {t('ladderSetLetters', lang)}</Btn>
+      <Btn primary onClick={() => onPick('batch')}><Library className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /> {t('ladderSetBatch', lang)}</Btn>
+      <Btn onClick={() => setLettersOpen((o) => !o)}><Type className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /> {t('ladderSetLetters', lang)}</Btn>
       {lettersOpen && (
         <div className="glass rounded-xl p-3">
           <div className="flex flex-wrap gap-1.5" dir="ltr">
@@ -54,8 +54,8 @@ export default function SetPicker({ lang = 'en', onPick, onBack }) {
           )}
         </div>
       )}
-      <Btn onClick={() => onPick('surprise')}>🎲 {t('ladderSetSurprise', lang)}</Btn>
-      <Btn onClick={() => onPick('fresh')}>✨ {t('ladderSetFresh', lang)}</Btn>
+      <Btn onClick={() => onPick('surprise')}><Dices className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /> {t('ladderSetSurprise', lang)}</Btn>
+      <Btn onClick={() => onPick('fresh')}><Sparkles className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /> {t('ladderSetFresh', lang)}</Btn>
     </div>
   );
 }

@@ -109,7 +109,7 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
       crumbItems: [['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/'], [name, path]],
       navHtml: `<a href="/he/">עברית</a> › <a href="/band-1/"><span lang="en" dir="ltr">Band I</span> לפי נושאים</a> › ${escapeHtml(name)}`,
       h1Html: `מילים באנגלית <span lang="en" dir="ltr">Band I</span>: ${escapeHtml(t.he)}`,
-      answer: `${t.bandCount} מילים מרשימת Band I בנושא ${name}, כל אחת עם תמונה, הגייה, תרגום ומשפט לדוגמה, ועוד ${t.words.length - t.bandCount} מילות בונוס מחוץ לרשימה. לוחצים 🔊 כדי לשמוע, ומתרגלים למטה.`,
+      answer: `${t.bandCount} מילים מרשימת Band I בנושא ${name}, כל אחת עם תמונה, הגייה, תרגום ומשפט לדוגמה, ועוד ${t.words.length - t.bandCount} מילות בונוס מחוץ לרשימה. לוחצים על כפתור ההשמעה כדי לשמוע, ומתרגלים למטה.`,
       listHeading: `המילים בנושא ${name}`,
       words: t.words,
       afterTable: legend,
@@ -149,8 +149,8 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
   <header class="hero"><h1>מילים באנגלית <span lang="en" dir="ltr">Band I</span> לפי נושאים</h1>
     <p class="answer">${covered} מילים מרשימת <span lang="en" dir="ltr">Band I</span> של משרד החינוך, עם תמונה, הגייה, תרגום ותרגול, מסודרות לפי ${topics.length} נושאים. בכל נושא נוספו גם כמה מילות בונוס מחוץ לרשימה, מסומנות.</p></header>
   <main class="container"><section class="section">
-  <p class="center"><a class="cta" href="/band-1/review/">🎒 מסלול חזרה: כל Band I ב-${PATH_SETS} סטים קצרים ←</a></p>
-  <p class="center"><a class="cta" href="/band-1/reading/">📖 קטעי קריאה קצרים עם הקראה ושאלות ←</a></p>
+  <p class="center"><a class="cta" href="/band-1/review/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-backpack"/></svg> מסלול חזרה: כל Band I ב-${PATH_SETS} סטים קצרים ←</a></p>
+  <p class="center"><a class="cta" href="/band-1/reading/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-book-open"/></svg> קטעי קריאה קצרים עם הקראה ושאלות ←</a></p>
   <div class="unit-grid">${cards}
   </div>
   ${legend}
@@ -177,7 +177,7 @@ function buildReviewPath({ distDir, writePage, escapeHtml, kit, footerNote, lege
       crumbItems: [['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/'], [hubName, hubPath], [`סט ${s.n}`, path]],
       navHtml: `<a href="/he/">עברית</a> › <a href="/band-1/"><span lang="en" dir="ltr">Band I</span> לפי נושאים</a> › <a href="${hubPath}">מסלול חזרה</a> › סט ${s.n}`,
       h1Html: `חזרה על <span lang="en" dir="ltr">Band I</span>: סט ${s.n} מתוך ${sets.length}`,
-      answer: `${s.bandCount} מילים מתוך Band I (${s.he}) ועוד מילת בונוס אחת. מקשיבים לכל מילה ב-🔊, ואז עושים סבב "שומעים ובוחרים" למטה. סבב שהסתיים מסומן ✓ במסלול.`,
+      answer: `${s.bandCount} מילים מתוך Band I (${s.he}) ועוד מילת בונוס אחת. מקשיבים לכל מילה בכפתור ההשמעה, ואז עושים סבב "שומעים ובוחרים" למטה. סבב שהסתיים מסומן ✓ במסלול.`,
       listHeading: `המילים בסט ${s.n}`,
       words: s.words,
       afterTable: `${legend}
@@ -195,7 +195,7 @@ function buildReviewPath({ distDir, writePage, escapeHtml, kit, footerNote, lege
   }
 
   const cards = sets.map((s) => `
-        <a class="unit-card step-card" href="${hubPath}set-${s.n}/" data-step-card="${s.n}"><strong>סט ${s.n}<span class="step-done" aria-hidden="true"> ✓</span></strong><span>${escapeHtml(s.he)} · ${s.bandCount} מילים · <span lang="en" dir="ltr">${escapeHtml(s.words.slice(0, 3).map((w) => w.en).join(', '))}</span>…</span></a>`).join('');
+        <a class="unit-card step-card" href="${hubPath}set-${s.n}/" data-step-card="${s.n}"><strong>סט ${s.n}<span class="step-done" aria-hidden="true"> <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-check"/></svg></span></strong><span>${escapeHtml(s.he)} · ${s.bandCount} מילים · <span lang="en" dir="ltr">${escapeHtml(s.words.slice(0, 3).map((w) => w.en).join(', '))}</span>…</span></a>`).join('');
   writePage(join(distDir, 'band-1', 'review', 'index.html'), kit.shell({
     path: hubPath, test: false, footerNote,
     title: `חזרה על Band I לפני חטיבת הביניים — ${sets.length} סטים קצרים עם הגייה ותרגול`,

@@ -19,6 +19,8 @@
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"VideoGame","name":"Word Zapper","url":"https://childrendoenglish.com/games/word-zapper/","description":"Hear the English word, zap the matching picture before it reaches the ground. Free vocabulary arcade game for kids 6-12.","inLanguage":"en","genre":"Educational","gamePlatform":"Web Browser","playMode":"SinglePlayer","applicationCategory":"EducationalApplication","operatingSystem":"Any (modern web browser)","browserRequirements":"Requires JavaScript and HTML5 canvas","isFamilyFriendly":true,"isAccessibleForFree":true,"typicalAgeRange":"6-12","learningResourceType":"Game","educationalUse":"Practice","keywords":"english vocabulary, esl kids, listening, word game","author":{"@type":"Organization","name":"ChildrenDoEnglish","url":"https://childrendoenglish.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}</script>
 <script defer src="/land-beacon.js"></script>
 <style>
+  /* gradient-text headings use color:transparent — their drawn icon needs its own colour */
+  h1 .ic{color:#6366f1;}
   :root{
     --indigo:#4f46e5; --indigo2:#6366f1; --blue:#3b82f6; --sky:#eef2ff; --sky2:#dbeafe;
     --ink:#1e1b4b; --dim:#6b7280; --gold:#f59e0b; --grn:#10b981; --red:#ef4444;
@@ -89,13 +91,13 @@
 
   <div id="topbar" aria-live="off">
     <div class="hudrow">
-      <span class="pill" id="shieldPill">🛡 ●●●</span>
-      <span class="pill" id="scorePill">⭐ 0</span>
-      <span class="pill" id="tierPill">⚡ LV 1</span>
-      <button class="pill" id="mutePill" aria-label="Mute sound effects">🔊</button>
+      <span class="pill" id="shieldPill"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-shield"/></svg> ●●●</span>
+      <span class="pill" id="scorePill"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-star"/></svg> 0</span>
+      <span class="pill" id="tierPill"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-zap"/></svg> LV 1</span>
+      <button class="pill" id="mutePill" aria-label="Mute sound effects"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>
     </div>
     <div id="targetRow">
-      <button id="sayBtn" aria-label="Hear the word again">🔊</button>
+      <button id="sayBtn" aria-label="Hear the word again"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>
       <div aria-live="polite">
         <div id="targetEn">&nbsp;</div>
         <div id="targetHe">&nbsp;</div>
@@ -105,17 +107,17 @@
   <div id="combo"></div>
 
   <div id="menu" class="overlay show">
-    <h1>WORD ZAPPER ⚡</h1>
+    <h1>WORD ZAPPER <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-zap"/></svg></h1>
     <div class="sub" data-l10n="sub">Hear the word — <b>zap the matching picture</b> before it reaches the ground!</div>
-    <div class="crewrow"><span class="pill" data-l10n="pillSpoken">🔊 Spoken words</span><span class="pill" data-l10n="pillShields">🛡 3 shields</span><span class="pill" data-l10n="pillBest">🏆 Best-score chase</span></div>
+    <div class="crewrow"><span class="pill" data-l10n="pillSpoken"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg> Spoken words</span><span class="pill" data-l10n="pillShields"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-shield"/></svg> 3 shields</span><span class="pill" data-l10n="pillBest"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-trophy"/></svg> Best-score chase</span></div>
     <button class="btn" id="startBtn" data-l10n="start">▶ START</button>
     <div class="tag" data-l10n="tag">Endless survival: fast correct zaps speed things up and bring trickier words — a miss slows them back down. If the picture you were asked for touches the ground, you lose a shield. Lose all 3 and the run is over!</div>
   </div>
 
   <div id="over" class="overlay">
-    <h2 id="overTitle" data-l10n="overTitle">💥 GAME OVER</h2>
+    <h2 id="overTitle" data-l10n="overTitle"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-circle-x"/></svg> GAME OVER</h2>
     <div class="card glass" id="overCard"></div>
-    <button class="btn" id="againBtn" data-l10n="again">↺ PLAY AGAIN</button>
+    <button class="btn" id="againBtn" data-l10n="again"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-rotate-ccw"/></svg> PLAY AGAIN</button>
     <a id="overHome" data-l10n="home" href="/" style="color:var(--indigo);font-weight:700;text-decoration:underline;font-size:15px;">More English practice at childrendoenglish.com</a>
   </div>
 </div>

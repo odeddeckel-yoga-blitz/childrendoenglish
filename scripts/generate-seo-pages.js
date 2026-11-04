@@ -41,10 +41,11 @@ function writePage(path, html) {
 // UX audit CUX17: one slim header on every generated page — the site name (home),
 // games, the teacher door and a language switch — in the page's language.
 const SITE_HEAD = {
-  he: { dir: 'rtl', links: [['/he/', '🏠 Children Do English'], ['/he/english-games/', 'משחקים'], ['/he/#teachers', 'למורים'], ['/', 'EN', 'en', 'English'], ['/es/', 'ES', 'es', 'Español']] },
-  es: { dir: 'ltr', links: [['/es/', '🏠 Children Do English'], ['/games/', 'Juegos'], ['/printable-flashcards/spanish/', 'Tarjetas'], ['/', 'EN', 'en', 'English'], ['/he/', 'עב', 'he', 'עברית']] },
-  en: { dir: 'ltr', links: [['/', '🏠 Children Do English'], ['/games/', 'Games'], ['/printable-flashcards/', 'Printables'], ['/he/', 'עב', 'he', 'עברית'], ['/es/', 'ES', 'es', 'Español']] },
+  he: { dir: 'rtl', links: [['/he/', 'Children Do English'], ['/he/english-games/', 'משחקים'], ['/he/#teachers', 'למורים'], ['/', 'EN', 'en', 'English'], ['/es/', 'ES', 'es', 'Español']] },
+  es: { dir: 'ltr', links: [['/es/', 'Children Do English'], ['/games/', 'Juegos'], ['/printable-flashcards/spanish/', 'Tarjetas'], ['/', 'EN', 'en', 'English'], ['/he/', 'עב', 'he', 'עברית']] },
+  en: { dir: 'ltr', links: [['/', 'Children Do English'], ['/games/', 'Games'], ['/printable-flashcards/', 'Printables'], ['/he/', 'עב', 'he', 'עברית'], ['/es/', 'ES', 'es', 'Español']] },
 };
+const gameIcon = (n) => `<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-${n}"/></svg>`;
 function siteHeader(lang) {
   const h = SITE_HEAD[lang] || SITE_HEAD.en;
   return `\n<nav class="site-head" dir="${h.dir}" aria-label="Site">` +
@@ -56,7 +57,7 @@ function siteHeader(lang) {
     `.site-head a{color:#1e40af;text-decoration:none}.site-head a:first-child{font-weight:800;color:#0f172a;margin-inline-end:auto}.site-head a:hover{text-decoration:underline}@media print{.site-head{display:none}}@media (max-width:420px){.site-head .sh-name{display:none}}</style>` +
     // On phones the home link is just 🏠 (the site name hides) so the row fits one line.
     h.links.map(([href, text, hl, full], i) => i === 0
-      ? `<a href="${href}" aria-label="Children Do English">🏠<span class="sh-name"> Children Do English</span></a>`
+      ? `<a href="${href}" aria-label="Children Do English"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-house"/></svg><span class="sh-name"> Children Do English</span></a>`
       : `<a href="${href}"${hl ? ` lang="${hl}" hreflang="${hl}" aria-label="${full}"` : ''}>${text}</a>`).join('') +
     `</nav>\n`;
 }
@@ -388,8 +389,8 @@ function buildCategoryPage(slug, displayName, words) {
   // hubs ~0%. One button straight into this topic's quiz, a 10-second try, then the list.
   const playHref = `/new-player?topic=${slug}&utm_source=seo&utm_medium=cta`;
   const quizPool = (beg.length >= 3 ? beg : words).slice(0, 6);
-  const playTop = `<a class="top-cta" href="${playHref}&utm_content=vocab_category_top">▶ Play ${escapeHtml(lower)} words free &mdash; no sign-up</a>
-    ${miniQuizHtml(quizPool, slug, { title: '🎮 Try one word in 10 seconds', sub: 'Listen, then tap the right picture.', cta: `Play 10 more ${escapeHtml(lower)} words free &rarr;`, content: 'vocab_category', href: `/new-player?topic=${slug}&utm_source=seo&utm_medium=miniquiz` })}
+  const playTop = `<a class="top-cta" href="${playHref}&utm_content=vocab_category_top">${gameIcon('play')} Play ${escapeHtml(lower)} words free &mdash; no sign-up</a>
+    ${miniQuizHtml(quizPool, slug, { title: '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> Try one word in 10 seconds', sub: 'Listen, then tap the right picture.', cta: `Play 10 more ${escapeHtml(lower)} words free &rarr;`, content: 'vocab_category', href: `/new-player?topic=${slug}&utm_source=seo&utm_medium=miniquiz` })}
     <p class="how-to"><strong>For parents:</strong> tap Play, let your child listen and pick the picture for about 5 minutes, then look through the words below together. No account, no ads.</p>`;
 
   const wordCards = words
@@ -746,15 +747,15 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     <div class="word-hero">
       <button class="hero-img-btn" data-say="/audio/${audioFile}" aria-label="Hear ${escapeHtml(word.word)}">
         <img src="/images/${word.id}.webp" alt="${escapeHtml(word.word)}" width="192" height="192" />
-        <span class="img-sound-hint" aria-hidden="true">🔊</span>
+        <span class="img-sound-hint" aria-hidden="true"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></span>
       </button>
       <div class="hero-word">${escapeHtml(word.word)}</div>
       <div class="hero-phonetic">${escapeHtml(word.phonetic)}</div>
       <div class="hero-pos">${escapeHtml(word.partOfSpeech)}</div>
       <div class="hero-def">${escapeHtml(word.definition)}</div>
-      <div class="hero-ex">&ldquo;${escapeHtml(word.exampleSentence)}&rdquo;${sentenceAudio(word.exampleSentence) ? ` <button class="say-btn say-ex" data-say="${sentenceAudio(word.exampleSentence)}" aria-label="Hear the sentence">🔊</button>` : ''}</div>
+      <div class="hero-ex">&ldquo;${escapeHtml(word.exampleSentence)}&rdquo;${sentenceAudio(word.exampleSentence) ? ` <button class="say-btn say-ex" data-say="${sentenceAudio(word.exampleSentence)}" aria-label="Hear the sentence"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>` : ''}</div>
       <div class="hero-he">${escapeHtml(word.hebrewTranslation)}</div>
-      <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear ${escapeHtml(word.word)}">🔊 Hear &ldquo;${escapeHtml(word.word)}&rdquo;</button>
+      <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear ${escapeHtml(word.word)}"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg> Hear &ldquo;${escapeHtml(word.word)}&rdquo;</button>
     </div>
 ${wordNav}
     <style>
@@ -787,18 +788,18 @@ ${wordNav}
     </style>
 
     <div class="mini-quiz" data-answer="${word.id}">
-      <h2>🎮 Try it &mdash; tap the picture of &ldquo;${escapeHtml(word.word)}&rdquo;</h2>
-      <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear the word">🔊 Listen</button>
+      <h2><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> Try it &mdash; tap the picture of &ldquo;${escapeHtml(word.word)}&rdquo;</h2>
+      <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear the word"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg> Listen</button>
       <div class="mq-options">
         ${quizOptions}
       </div>
       <div class="mq-result" hidden>
-        <p class="mq-yay">🎉 That&rsquo;s right!</p>
+        <p class="mq-yay"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-party-popper"/></svg> That&rsquo;s right!</p>
         <a class="mq-cta" href="/?utm_source=seo&utm_medium=miniquiz&utm_content=vocab_word">Play 10 more like this free &rarr;</a>
       </div>
     </div>
 
-    <span class="cta-top"><a href="/?utm_source=seo&utm_medium=cta_top&utm_content=vocab_word">🎧 Practice free &mdash; no ads, no sign-up</a><p>${WORDS.length} words with pictures &amp; audio &middot; works offline</p></span>
+    <span class="cta-top"><a href="/?utm_source=seo&utm_medium=cta_top&utm_content=vocab_word"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-headphones"/></svg> Practice free &mdash; no ads, no sign-up</a><p>${WORDS.length} words with pictures &amp; audio &middot; works offline</p></span>
 
     ${enrichmentHtml}
 
@@ -1008,8 +1009,8 @@ function buildAgeBracketPage(bracket, allWords) {
   </div>
 
   <div class="container">
-    <a class="top-cta" href="/?utm_source=seo&utm_medium=cta&utm_content=age_bracket_top">▶ Play these words free &mdash; no sign-up</a>
-    ${miniQuizHtml(bracket.quiz.map((id) => allWords.find((w) => w.id === id)).filter(Boolean), bracket.slug, { title: `🎮 Try a word for ${bracket.ageRange} year olds`, sub: 'Listen, then tap the right picture.', cta: 'Play 10 more words like this free &rarr;', content: 'age_bracket' })}
+    <a class="top-cta" href="/?utm_source=seo&utm_medium=cta&utm_content=age_bracket_top">${gameIcon('play')} Play these words free &mdash; no sign-up</a>
+    ${miniQuizHtml(bracket.quiz.map((id) => allWords.find((w) => w.id === id)).filter(Boolean), bracket.slug, { title: `<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> Try a word for ${bracket.ageRange} year olds`, sub: 'Listen, then tap the right picture.', cta: 'Play 10 more words like this free &rarr;', content: 'age_bracket' })}
     <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
     ${catTable}
 
@@ -3103,7 +3104,7 @@ const categoryCards = CATEGORIES.map((slug) => {
 
 const featuredRow = SEO_FEATURED.length ? `
     <div class="featured" style="background:#eff6ff;border-radius:0.9rem;padding:1rem 1.2rem;margin:0 0 1.4rem">
-      <strong style="font-size:0.95rem;color:#1e40af">⭐ Popular</strong>
+      <strong style="font-size:0.95rem;color:#1e40af"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-star"/></svg> Popular</strong>
       <span style="font-size:0.92rem">&nbsp; ${SEO_FEATURED.map((f) => `<a href="${f.path}" style="color:#2563eb;margin-inline-end:1rem">${escapeHtml(f.label)}</a>`).join('')}</span>
     </div>` : '';
 
@@ -3718,7 +3719,7 @@ ${FC_SHEETS_CSS}
   <div class="container">
     <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
     <button class="print-btn" data-print>Print These Flashcards</button>
-    <a class="play-online no-print" href="/?utm_source=seo&utm_medium=cta&utm_content=flashcard_top">🎮 Or play these words online free &rarr;</a>
+    <a class="play-online no-print" href="/?utm_source=seo&utm_medium=cta&utm_content=flashcard_top"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> Or play these words online free &rarr;</a>
     <script defer src="/print-btn.js"></script>
     ${printGlanceEn(lower, words)}
     ${howToHtml(`How to print the ${lower} flashcards`, steps)}
@@ -3894,7 +3895,7 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
   <div class="container">
     <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
     <button class="print-btn" data-print>Print These Flashcards</button>
-    <a class="play-online no-print" href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=flashcard_top_es">🎮 ¿Prefieres jugar? Practica en línea gratis, en español &rarr;</a>
+    <a class="play-online no-print" href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=flashcard_top_es"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> ¿Prefieres jugar? Practica en línea gratis, en español &rarr;</a>
     <script defer src="/print-btn.js"></script>
     ${printGlanceEs(lowerEs, words)}
     ${howToHtml(`Cómo imprimir las tarjetas de ${lowerEs}`, steps)}
@@ -4807,7 +4808,7 @@ function guideQuizHtml(slug) {
   return miniQuizHtml(GUIDE_QUIZ_POOL, slug, { cta: 'Play 5 more free &mdash; no sign-up &rarr;', content: 'guide' });
 }
 // One listen-and-tap question from a pool, deterministic per seed (guides, age pages).
-function miniQuizHtml(pool, seed, { title = '🎮 Try it in 10 seconds', sub = 'This is how the app works: listen, then tap the right picture.', cta, content, href = '/?utm_source=seo&utm_medium=miniquiz' }) {
+function miniQuizHtml(pool, seed, { title = '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> Try it in 10 seconds', sub = 'This is how the app works: listen, then tap the right picture.', cta, content, href = '/?utm_source=seo&utm_medium=miniquiz' }) {
   if (pool.length < 3) return '';
   const hash = [...seed].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
   const word = pool[hash % pool.length];
@@ -4822,12 +4823,12 @@ function miniQuizHtml(pool, seed, { title = '🎮 Try it in 10 seconds', sub = '
     <div class="mini-quiz" data-answer="${word.id}">
       <h2>${title}</h2>
       <p class="mq-sub">${sub}</p>
-      <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear the word">🔊 Listen</button>
+      <button class="say-btn" data-say="/audio/${audioFile}" aria-label="Hear the word"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg> Listen</button>
       <div class="mq-options">
         ${ordered.map((w) => `<button class="mq-opt" data-k="${w.id}" aria-label="picture option"><img src="/images/${w.id}.webp" alt="" width="112" height="112" loading="lazy" /></button>`).join('\n        ')}
       </div>
       <div class="mq-result" hidden>
-        <p class="mq-yay">🎉 That&rsquo;s right &mdash; it was &ldquo;${escapeHtml(word.word)}&rdquo;!</p>
+        <p class="mq-yay"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-party-popper"/></svg> That&rsquo;s right &mdash; it was &ldquo;${escapeHtml(word.word)}&rdquo;!</p>
         <a class="mq-cta" href="${href}&utm_content=${content}">${cta}</a>
       </div>
     </div>
@@ -5384,12 +5385,12 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
   // .image-work/game-shots.mjs) replaced emoji cards; the hub absorbed the
   // never-indexed /guides/english-vocabulary-games-for-kids/ (301 in vercel.json).
   const GAMES = [
-    { id: 'word-zapper', emoji: '⚡', name: 'Word Zapper', desc: 'Hear the word, zap the matching picture before it lands! An endless arcade with shields, combos and adaptive speed.', skill: 'Listening: hear a word, find its picture', who: 'Ages 6-12 · no reading needed', alt: 'Word Zapper: the word cow is spoken and a photo of a cow and an apple fall toward the ground' },
-    { id: 'category-conveyor', emoji: '📦', name: 'Category Conveyor', desc: 'Photos ride the conveyor belt — sort each one into the right category bin before it slides away!', skill: 'Word meaning: sort animals, food, clothes and more', who: 'Ages 6-12 · photos carry the meaning', alt: 'Category Conveyor: photos of a bear and a zebra on a belt above Animals and Food bins' },
-    { id: 'spelling-forge', emoji: '🔨', name: 'Spelling Forge', desc: 'See the picture, hear the word, and forge its spelling letter by letter on the anvil. Watch out for tricky look-alike letters!', skill: 'Spelling: build the word letter by letter', who: 'Ages 7-12 · for kids who know their letters', alt: 'Spelling Forge: a photo of baseball bats above empty letter slots for the word bat' },
-    { id: 'sound-pairs', emoji: '👂', name: 'Sound Pairs', desc: 'Ship or sheep? Pen or pan? Hear one word and tap which of two almost-identical words it was. A wrong tap plays both so the difference is easy to hear.', skill: 'Listening: tell apart sounds that learners mix up (p/b, a/u, e/a, th/t, th/d, ee/i, v/w)', who: 'Ages 7-12 · for kids who can read short words', alt: 'Sound Pairs: a speaker button above two word cards, park and bark' },
-    { id: 'read-it', emoji: '📖', name: 'Read It!', desc: 'Phonics for new readers in three steps: short words like cat, pig and bed, then magic e (cap → cape, kit → kite), then sh, ch, th and ck. Read a word and tap the picture, or hear a word and pick its spelling.', skill: 'Reading: short vowels, magic e and digraphs', who: 'Ages 6-10 · for kids starting to read English', alt: 'Read It!: the word cat above three photos to choose from' },
-    { id: 'letter-twins', emoji: '🔤', name: 'Letter Twins', desc: 'b or d? m or w? See the picture, hear the word and pick the letter it starts with, or play letter sounds: just listen and tap the letter. A tip after every mistake.', skill: 'Reading: tell apart b, d, p and q', who: 'Ages 6-9 · new readers', alt: 'Letter Twins: a photo of a dog above the word _og and the letter buttons b and d' },
+    { id: 'word-zapper', icon: 'zap', name: 'Word Zapper', desc: 'Hear the word, zap the matching picture before it lands! An endless arcade with shields, combos and adaptive speed.', skill: 'Listening: hear a word, find its picture', who: 'Ages 6-12 · no reading needed', alt: 'Word Zapper: the word cow is spoken and a photo of a cow and an apple fall toward the ground' },
+    { id: 'category-conveyor', icon: 'package', name: 'Category Conveyor', desc: 'Photos ride the conveyor belt — sort each one into the right category bin before it slides away!', skill: 'Word meaning: sort animals, food, clothes and more', who: 'Ages 6-12 · photos carry the meaning', alt: 'Category Conveyor: photos of a bear and a zebra on a belt above Animals and Food bins' },
+    { id: 'spelling-forge', icon: 'hammer', name: 'Spelling Forge', desc: 'See the picture, hear the word, and forge its spelling letter by letter on the anvil. Watch out for tricky look-alike letters!', skill: 'Spelling: build the word letter by letter', who: 'Ages 7-12 · for kids who know their letters', alt: 'Spelling Forge: a photo of baseball bats above empty letter slots for the word bat' },
+    { id: 'sound-pairs', icon: 'ear', name: 'Sound Pairs', desc: 'Ship or sheep? Pen or pan? Hear one word and tap which of two almost-identical words it was. A wrong tap plays both so the difference is easy to hear.', skill: 'Listening: tell apart sounds that learners mix up (p/b, a/u, e/a, th/t, th/d, ee/i, v/w)', who: 'Ages 7-12 · for kids who can read short words', alt: 'Sound Pairs: a speaker button above two word cards, park and bark' },
+    { id: 'read-it', icon: 'book-open', name: 'Read It!', desc: 'Phonics for new readers in three steps: short words like cat, pig and bed, then magic e (cap → cape, kit → kite), then sh, ch, th and ck. Read a word and tap the picture, or hear a word and pick its spelling.', skill: 'Reading: short vowels, magic e and digraphs', who: 'Ages 6-10 · for kids starting to read English', alt: 'Read It!: the word cat above three photos to choose from' },
+    { id: 'letter-twins', icon: 'type', name: 'Letter Twins', desc: 'b or d? m or w? See the picture, hear the word and pick the letter it starts with, or play letter sounds: just listen and tap the letter. A tip after every mistake.', skill: 'Reading: tell apart b, d, p and q', who: 'Ages 6-9 · new readers', alt: 'Letter Twins: a photo of a dog above the word _og and the letter buttons b and d' },
   ];
   let todayId = null;
   try { todayId = JSON.parse(readFileSync(join(ROOT, 'src', 'data', 'spotlight.json'), 'utf-8')).game?.id || null; } catch { /* no spotlight yet */ }
@@ -5406,11 +5407,11 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
     <a class="card" href="/games/${g.id}/">
       <img class="shot" src="/games/${g.id}/shot.webp" alt="${escapeHtml(g.alt)}" width="480" height="300" loading="${g === GAMES[0] ? 'eager' : 'lazy'}">
       <div class="body">
-        <h2>${g.emoji} ${g.name}${g.id === todayId ? ' <span class="today">Today’s game</span>' : ''}</h2>
+        <h2>${gameIcon(g.icon)} ${g.name}${g.id === todayId ? ' <span class="today">Today’s game</span>' : ''}</h2>
         <p class="skill">${g.skill}</p>
         <p>${g.desc}</p>
         <p class="who">${g.who}</p>
-        <span class="play">▶ Play free</span>
+        <span class="play">${gameIcon('play')} Play free</span>
       </div>
     </a>`).join('');
   const html = `<!DOCTYPE html>
@@ -5448,7 +5449,7 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
 <body><div class="wrap">
   <h1>Free English Vocabulary Games for Kids</h1>
   <p class="sub">Five quick games with real photos and spoken words. No ads, no sign-up, nothing to install &mdash; tap and play in the browser on any device.</p>
-  ${today ? `<a class="today-cta" href="/games/${today.id}/">▶ Play today’s game: ${today.name}</a>` : ''}
+  ${today ? `<a class="today-cta" href="/games/${today.id}/">${gameIcon('play')} Play today’s game: ${today.name}</a>` : ''}
   <div class="grid">${cards}</div>
   <section class="more">
     <h2>Want step-by-step practice too?</h2>

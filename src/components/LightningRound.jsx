@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { Zap, ArrowLeft, Volume2 } from 'lucide-react';
+import { Zap, ArrowLeft, Volume2, Check, Star } from 'lucide-react';
 import QuizOptionGrid from './QuizOptionGrid';
 import { getImageUrl, preloadImages } from '../utils/images';
 import { getDistractors } from '../data/words';
@@ -168,7 +168,7 @@ export default function LightningRound({ words, mode, level, knownLetters = null
           <p className="text-sm font-semibold text-slate-500">{t('lightningSolvedIn', lang, { secs: duration })}</p>
           <p className={`text-sm font-bold ${isNew ? 'text-emerald-600' : 'text-slate-500'}`}>
             {isNew
-              ? t('lightningNewBest', lang)
+              ? <><Star className="w-4 h-4 inline -mt-0.5 fill-current" aria-hidden="true" /> {t('lightningNewBest', lang)}</>
               : t('lightningBestLabel', lang, { count: Math.max(best, solves) })}
           </p>
         </div>
@@ -207,10 +207,10 @@ export default function LightningRound({ words, mode, level, knownLetters = null
           className={`text-4xl font-black tabular-nums ${hot ? 'text-rose-500 lightning-hot' : 'text-amber-500'}`}
           data-testid="lightning-timer"
         >
-          ⚡{timeLeft}
+          <Zap className="w-8 h-8 inline -mt-1" aria-hidden="true" />{timeLeft}
         </span>
         <span dir="ltr" className="text-lg font-bold text-slate-600 dark:text-slate-300" data-testid="lightning-solves">
-          ✓ {solves}
+          <Check className="w-5 h-5 inline -mt-0.5" aria-hidden="true" /> {solves}
         </span>
       </div>
 

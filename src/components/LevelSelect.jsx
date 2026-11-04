@@ -2,6 +2,7 @@ import { useState, lazy, Suspense } from 'react';
 const LetterPicker = lazy(() => import('./LetterPicker'));
 import { ArrowLeft, Lock, Image, Type, Volume2, Headphones } from 'lucide-react';
 import { LEVELS } from '../data/levels';
+import NamedIcon from './NamedIcon';
 import { getWordsByLevel } from '../data/words';
 import { filterByKnownLetters } from '../utils/letterFilter';
 import { recommendedMode } from '../utils/modeLadder';
@@ -138,7 +139,7 @@ export default function LevelSelect({ stats, lang = 'en', canRead = true, knownL
               }`}
             >
               <span className="text-lg block">
-                {unlocked ? level.icon : <Lock className="w-4 h-4 mx-auto" />}
+                {unlocked ? <NamedIcon name={level.icon} className="w-5 h-5 mx-auto" /> : <Lock className="w-4 h-4 mx-auto" aria-hidden="true" />}
               </span>
               <span className="text-xs font-bold block mt-0.5">{localName}</span>
               {unlocked && (

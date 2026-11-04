@@ -96,14 +96,16 @@ test('word-zapper honors ?words= scoping', async ({ page }) => {
 // spoken/typed English content does not change.
 test('game chrome follows the interface language (he / es), English stays default', async ({ page }) => {
   await page.goto('/games/word-zapper/index.html?lang=he');
-  await expect(page.locator('#startBtn')).toHaveText('▶ התחלה');
+  await expect(page.locator('#startBtn')).toHaveText('התחלה');
   await expect(page.locator('#startBtn')).toHaveAttribute('dir', 'rtl');
   await page.goto('/games/spelling-forge/index.html?lang=es');
-  await expect(page.locator('#startBtn')).toHaveText('▶ EMPEZAR A FORJAR');
+  await expect(page.locator('#startBtn')).toHaveText('EMPEZAR A FORJAR');
   await page.goto('/games/category-conveyor/index.html?lang=he');
-  await expect(page.locator('#startBtn')).toHaveText('▶ להתחיל למיין');
+  await expect(page.locator('#startBtn')).toHaveText('להתחיל למיין');
   await page.goto('/games/category-conveyor/index.html');
-  await expect(page.locator('#startBtn')).toHaveText('▶ START SORTING');
+  await expect(page.locator('#startBtn')).toHaveText('START SORTING');
+  // The ▶ is a drawn icon since 11-04 (owner: no emoji icons), not a character.
+  await expect(page.locator('#startBtn svg use')).toHaveAttribute('href', '/icons.svg#i-play');
 });
 
 // 11-04 (owner, as on the flashcards 11-03): an English-interface player sees no translation in the

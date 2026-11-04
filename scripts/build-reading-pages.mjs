@@ -40,7 +40,7 @@ export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS,
     : escapeHtml(t.text))).join('');
   const sayBtn = (s, label) => {
     const src = sentenceAudio(s);
-    return src ? `<button type="button" class="say" data-say="${src}" aria-label="${label}">🔊</button>` : '';
+    return src ? `<button type="button" class="say" data-say="${src}" aria-label="${label}"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>` : '';
   };
 
   for (const [i, r] of texts.entries()) {
@@ -65,9 +65,9 @@ export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS,
       body: `
   <nav class="breadcrumb" aria-label="breadcrumb"><a href="/he/">עברית</a> › <a href="/band-1/"><span lang="en" dir="ltr">Band I</span> לפי נושאים</a> › <a href="${hubPath}">${hubName}</a> › <bdi lang="en" dir="ltr">${escapeHtml(r.title)}</bdi></nav>
   <header class="hero"><h1><bdi lang="en" dir="ltr">${escapeHtml(r.title)}</bdi> · ${escapeHtml(r.he)}</h1>
-    <p class="answer">קטע קצר באנגלית: ${words(r)} מילים, ברמת <bdi lang="en" dir="ltr">${LEVEL_HE[r.level]}</bdi>. לוחצים על ▶ כדי לשמוע, על כל מילה כדי לראות אותה בעברית, ובסוף עונים על ${r.questions.length} שאלות.</p></header>
+    <p class="answer">קטע קצר באנגלית: ${words(r)} מילים, ברמת <bdi lang="en" dir="ltr">${LEVEL_HE[r.level]}</bdi>. לוחצים על כפתור ההשמעה כדי לשמוע, על כל מילה כדי לראות אותה בעברית, ובסוף עונים על ${r.questions.length} שאלות.</p></header>
   <main class="container"><section class="section reading" data-reading="${r.slug}">
-    <div class="read-tools"><button type="button" class="play-all" data-play-all>▶ הקשיבו לכל הקטע</button> <button type="button" class="slow-tog" data-slow aria-pressed="false">🐢 לאט</button></div>
+    <div class="read-tools"><button type="button" class="play-all" data-play-all><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> הקשיבו לכל הקטע</button> <button type="button" class="slow-tog" data-slow aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-turtle"/></svg> לאט</button></div>
     <article class="rtext" lang="en" dir="ltr">${sentences}</article>
     <p class="gloss" id="gloss" aria-live="polite">לחצו על מילה כדי לראות אותה בעברית</p>
     <h2 class="section-title">שאלות</h2>

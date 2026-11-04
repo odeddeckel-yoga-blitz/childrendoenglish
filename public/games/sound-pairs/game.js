@@ -64,6 +64,9 @@ function play(word, done){
 }
 function shuffle(a){ var b=a.slice(); for(var i=b.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=b[i]; b[i]=b[j]; b[j]=t; } return b; }
 function el(tag,cls,text){ var n=document.createElement(tag); if(cls) n.className=cls; if(text!=null) n.textContent=text; return n; }
+// own static strings only (they carry drawn-icon markup) — never words, names or scores
+function elh(tag,cls,html){ var n=document.createElement(tag); if(cls) n.className=cls; n.innerHTML=html; return n; }
+var IC=window.CDE_IC||function(){ return ''; };
 function gloss(w){ return LANG==='he'?W[w][0]:LANG==='es'?W[w][1]:''; }
 
 var app=document.getElementById('app');
@@ -102,7 +105,7 @@ function renderRound(){
   var live=function(){ return my===roundId; };
   app.textContent='';
   app.appendChild(header());
-  var say=el('button','big-say','🔊'); say.id='sayBtn'; say.type='button'; say.setAttribute('aria-label',T('again'));
+  var say=elh('button','big-say',IC('volume-2')); say.id='sayBtn'; say.type='button'; say.setAttribute('aria-label',T('again'));
   say.addEventListener('click',function(){ play(r.target); });
   app.appendChild(say);
   var opts=el('div','opts');
@@ -117,7 +120,7 @@ function renderRound(){
       beacon('mp',lv.id+'_'+(ok?'ok':'no'));
       if(ok){
         S.score++; b.classList.add('ok');
-        fb.textContent=T('right');
+        fb.innerHTML=T('right');
         setTimeout(function(){ if(live()) nextRound(); }, 900);
       } else {
         S.misses[lv.id]=(S.misses[lv.id]||0)+1;
@@ -128,7 +131,7 @@ function renderRound(){
         fb.appendChild(el('b','en',r.target));
         fb.appendChild(document.createTextNode(' — '+T('notWord')+' '));
         fb.appendChild(el('b','en',r.other));
-        var both=el('button','ghost',T('listenBoth')); both.type='button';
+        var both=elh('button','ghost',T('listenBoth')); both.type='button';
         var hearBoth=function(){
           if(!live()) return;
           right.classList.add('pulse');
@@ -140,7 +143,7 @@ function renderRound(){
           });
         };
         both.addEventListener('click',hearBoth);
-        var nx=el('button','next',T('next')); nx.type='button';
+        var nx=elh('button','next',T('next')); nx.type='button';
         nx.addEventListener('click',nextRound);
         row.appendChild(both); row.appendChild(nx);
         setTimeout(hearBoth, 500);
@@ -170,19 +173,19 @@ function nextRound(){
   box.appendChild(el('div','stars','⭐'.repeat(stars)+'☆'.repeat(3-stars)));
   box.appendChild(el('h2',null,T('levelDone')));
   box.appendChild(el('p','score',S.score+' / '+ROUNDS));
-  var nx=el('button','primary',T('nextLevel')); nx.type='button'; nx.addEventListener('click',function(){ startLevel(S.lvl+1); });
-  var again=el('button','ghost',T('retry')); again.type='button'; again.addEventListener('click',function(){ startLevel(S.lvl); });
+  var nx=elh('button','primary',T('nextLevel')); nx.type='button'; nx.addEventListener('click',function(){ startLevel(S.lvl+1); });
+  var again=elh('button','ghost',T('retry')); again.type='button'; again.addEventListener('click',function(){ startLevel(S.lvl); });
   box.appendChild(nx); box.appendChild(again);
   app.appendChild(box); nx.focus();
 }
 
 function renderEnd(){
   var box=el('div','card');
-  box.appendChild(el('h2',null,T('allDone')));
+  box.appendChild(elh('h2',null,T('allDone')));
   var worst=null; LEVELS.forEach(function(l){ if((S.misses[l.id]||0)>(worst?S.misses[worst.id]:0)) worst=l; });
   if(worst){ box.appendChild(el('p',null,T('hardest'))); var w=el('p','hard',worst.label[LANG]||worst.label.en); w.setAttribute('dir','ltr'); box.appendChild(w); }
   else box.appendChild(el('p',null,T('allRight')));
-  var again=el('button','primary',T('playAgain')); again.type='button';
+  var again=elh('button','primary',T('playAgain')); again.type='button';
   again.addEventListener('click',function(){ S.misses={}; startLevel(0); });
   box.appendChild(again);
   app.appendChild(box);

@@ -11,6 +11,18 @@ const PDI = '⁩';
 /** Keep a number run like "3/5" left-to-right inside Hebrew text. */
 export const ltr = (s) => `${LRI}${s}${PDI}`;
 
+/** Drawn icon (sprite) markup — our own static string, innerHTML only. */
+export function ic(n) { return '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-' + n + '"/></svg>'; }
+export function icEl(n) { const t = document.createElement('template'); t.innerHTML = ic(n); return t.content.firstChild; }
+/** Set el to [pre-icon] text [post-icon]; text goes in as a text node (safe for names/words). */
+export function setIc(el, text, pre, post) {
+  const nodes = [];
+  if (pre) nodes.push(icEl(pre), ' ');
+  nodes.push(text);
+  if (post) nodes.push(' ', icEl(post));
+  el.replaceChildren(...nodes);
+}
+
 export function pickLang() {
   try {
     const q = new URLSearchParams(location.search).get('lang');
@@ -28,17 +40,19 @@ const HE_TEXT = {
   kidH: 'באתי לשחק',
   kidSub: 'קיבלתם קוד מהמורה? קפצו פנימה!',
   btnKid: 'הצטרפות עם קוד',
-  projLink: '📽️ מצב מקרן: כל הכיתה על מסך אחד',
+  projLink: 'מצב מקרן: כל הכיתה על מסך אחד',
   joinH: 'הקלידו את קוד החדר',
-  btnCheckCode: 'הבא ←',
+  btnCheckCode: 'הבא',
   nameH: 'בחרו שם לקרב!',
   nameSub: 'בלי שמות אמיתיים — בחרו שם גיבור מהרשימה.',
-  btnMoreNames: '🎲 תראו לי שמות אחרים',
-  kidLobbySub: 'אתם בפנים! 👀 הסתכלו על המסך הגדול — הקרב מתחיל כשהמורה לוחצים על Start.',
-  podiumTitle: '🏆 הקרב נגמר!',
+  btnMoreNames: 'תראו לי שמות אחרים',
+  kidLobbySub: 'אתם בפנים! הסתכלו על המסך הגדול — הקרב מתחיל כשהמורה לוחצים על Start.',
+  podiumTitle: 'הקרב נגמר!',
   btnAgain: 'עוד פעם',
   podiumPrivacy: 'החדר וכל הניקוד יימחקו אוטומטית בקרוב. שום דבר אחר לא נשמר.',
 };
+// Drawn icon before / after the text of these ids (the emoji were stripped from HE_TEXT).
+const HE_ICON = { projLink: ['projector'], btnCheckCode: [null, 'arrow-left'], btnMoreNames: ['dices'], podiumTitle: ['trophy'] };
 const HE_ARIA = { codeInput: 'קוד החדר', sayBtn: 'לשמוע שוב את המילה' };
 const HE_PRIVACY = ['פרטיות:', ' בלי חשבונות ובלי הרשמה. השחקנים בוחרים כינוי מצחיק מרשימה — אף אחד לא מקליד את השם האמיתי שלו. נשמרים רק הכינוי והניקוד, והחדר כולו נמחק אוטומטית כ־30 דקות אחרי שנוצר.'];
 
@@ -47,17 +61,17 @@ const KID_SCREENS = ['sHome', 'sJoin', 'sName', 'sKidLobby', 'sPlay', 'sPodium']
 
 export const HE = {
   team: ['השביטים', 'הטילים'],
-  hello: (nick) => `היי, ${nick}! ⚡`,
+  hello: (nick) => `היי, ${nick}!`,
   onTeam: (team) => `אתם בקבוצת ${team}!`,
-  classGoal: '🎯 לכל הכיתה יש יעד אחד משותף!',
-  tie: '🤝 תיקו!',
-  teamWins: (team) => `🏆 ${team} ניצחו!`,
-  goalHit: '🎉 הגעתם ליעד הכיתתי!',
-  goalMiss: '💪 כמעט! עוד ניסיון?',
+  classGoal: 'לכל הכיתה יש יעד אחד משותף!',
+  tie: 'תיקו!',
+  teamWins: (team) => `${team} ניצחו!`,
+  goalHit: 'הגעתם ליעד הכיתתי!',
+  goalMiss: 'כמעט! עוד ניסיון?',
   groupSelf: (nick, n, forWhom) => `${nick}: ${HE.words(n)} נכונות בשביל ${forWhom}!`,
   yourClass: 'הכיתה',
-  teamwork: 'עבודת צוות מעולה, כולם! 🎉',
-  greatBattle: 'קרב מעולה, כולם! 🎉',
+  teamwork: 'עבודת צוות מעולה, כולם!',
+  greatBattle: 'קרב מעולה, כולם!',
   soloSelf: (nick, rank, score, correct, answered) =>
     `${nick}: מקום ${ltr(rank)} עם ${ltr(score)} נקודות (${ltr(`${correct}/${answered}`)} נכונות)!`,
   words: (n) => (n === 1 ? 'מילה אחת' : `${ltr(n)} מילים`),
@@ -86,13 +100,17 @@ export function applyLang(lang, $) {
   // the projector link keeps the language
   if ($('projLink')) $('projLink').href = lang === 'he' ? '/projector/?lang=he' : '/projector/';
   if (lang !== 'he') return;
-  for (const [id, s] of Object.entries(HE_TEXT)) if ($(id)) $(id).textContent = s;
+  for (const [id, s] of Object.entries(HE_TEXT)) {
+    if (!$(id)) continue;
+    const [pre, post] = HE_ICON[id] || [];
+    if (pre || post) setIc($(id), s, pre, post); else $(id).textContent = s;
+  }
   for (const [id, s] of Object.entries(HE_ARIA)) if ($(id)) $(id).setAttribute('aria-label', s);
   const priv = $('homePrivacy');
   if (priv) {
     const b = document.createElement('b');
     b.textContent = HE_PRIVACY[0];
-    priv.replaceChildren('🔒 ', b, HE_PRIVACY[1]);
+    priv.replaceChildren(icEl('lock'), ' ', b, HE_PRIVACY[1]);
   }
   for (const id of KID_SCREENS) { $(id).dir = 'rtl'; $(id).lang = 'he'; }
   // English stays English inside the Hebrew screens

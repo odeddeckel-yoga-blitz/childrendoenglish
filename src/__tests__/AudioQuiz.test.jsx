@@ -74,7 +74,7 @@ describe('AudioQuiz', () => {
     speakWord.mockResolvedValue(false);
     render(<AudioQuiz {...defaultProps} />);
     await act(async () => { await vi.advanceTimersByTimeAsync(400); });
-    expect(screen.getByText('👆 Tap to hear the word')).toBeInTheDocument();
+    expect(screen.getByText('Tap to hear the word')).toBeInTheDocument();
     const btn = document.querySelector('[data-need-tap]');
     expect(btn).not.toBeNull();
     fireEvent.click(btn);

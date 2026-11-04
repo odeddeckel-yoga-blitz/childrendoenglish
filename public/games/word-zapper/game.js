@@ -1,7 +1,7 @@
 /* chrome strings by interface language (../cde-l10n.js + ./l10n.js); d = English fallback */
 function L10N(k,d){try{var v=window.CDE_T&&window.CDE_T(k);return v!=null?v:d;}catch(e){return d;}}
 /* error pill: friendly reload prompt if anything throws */
-(function(){var s=false;window.addEventListener('error',function(){if(s)return;s=true;try{var d=document.createElement('button');d.textContent='⚠️ Oops, something broke — tap to reload';d.style.cssText='position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:2147483200;background:#ef4444;color:#fff;font:bold 14px/1.2 system-ui,sans-serif;border:none;border-radius:999px;padding:10px 16px;box-shadow:0 6px 24px rgba(0,0,0,.4);cursor:pointer;';d.onclick=function(){location.reload()};(document.body||document.documentElement).appendChild(d);}catch(e){}});})();
+(function(){var s=false;window.addEventListener('error',function(){if(s)return;s=true;try{var d=document.createElement('button');d.textContent='Oops, something broke — tap to reload';d.style.cssText='position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:2147483200;background:#ef4444;color:#fff;font:bold 14px/1.2 system-ui,sans-serif;border:none;border-radius:999px;padding:10px 16px;box-shadow:0 6px 24px rgba(0,0,0,.4);cursor:pointer;';d.onclick=function(){location.reload()};(document.body||document.documentElement).appendChild(d);}catch(e){}});})();
 
 "use strict";
 /* ============================================================
@@ -248,7 +248,7 @@ function announce(word){
   const lang=window.CDE_LANG||'en', meaning=(window.CDE_GLOSS?CDE_GLOSS(word):'');
   if(WORDMODE()){
     /* reading: never show the English — he/es see the meaning, en hears it */
-    if(lang==='en'){ if(en) en.textContent='🔊 ?'; if(he) he.textContent=L10N('findWord','Find the word you hear'); speak(word.en); }
+    if(lang==='en'){ if(en) en.innerHTML=CDE_IC('volume-2')+' ?'; if(he) he.textContent=L10N('findWord','Find the word you hear'); speak(word.en); }
     else { if(en) en.textContent=meaning; if(he) he.textContent=L10N('findWord','Find the word you hear'); }
     return;
   }
@@ -342,7 +342,7 @@ function tierUp(){
   S.tier++;
   S.speedMul=Math.min(2.6,S.speedMul*1.12);
   S.spawnInt=Math.max(1.3,S.spawnInt*0.92);
-  toast(L10N('speedUp','⚡ SPEED UP — LV ')+S.tier);
+  toast(L10N('speedUp',CDE_IC('zap')+' SPEED UP — LV ')+S.tier);
   learnBeacon('g_lvl');
   chord(659); shakeIt(5); updateHUD();
 }
@@ -473,12 +473,12 @@ function loop(ts){
 /* ---------------- HUD / toast ---------------- */
 function updateHUD(){
   const sp=$('shieldPill'), sc=$('scorePill'), tp=$('tierPill');
-  if(sp){ const k=Math.max(0,S.shields); sp.textContent='🛡 '+(k>0?'●'.repeat(k):'')+'○'.repeat(Math.max(0,3-k)); }
-  if(sc) sc.textContent='⭐ '+S.score+(S.best>0?' · best '+S.best:'');
-  if(tp) tp.textContent='⚡ LV '+S.tier;
+  if(sp){ const k=Math.max(0,S.shields); sp.innerHTML=CDE_IC('shield')+' '+(k>0?'●'.repeat(k):'')+'○'.repeat(Math.max(0,3-k)); }
+  if(sc) sc.innerHTML=CDE_IC('star')+' '+S.score+(S.best>0?' · best '+S.best:'');
+  if(tp) tp.innerHTML=CDE_IC('zap')+' LV '+S.tier;
 }
 let toastT=null;
-function toast(msg){ const e=$('combo'); if(!e) return; e.textContent=msg; e.style.opacity=1; clearTimeout(toastT); toastT=setTimeout(()=>{ e.style.opacity=0; },900); }
+function toast(msg){ const e=$('combo'); if(!e) return; e.innerHTML=msg; e.style.opacity=1; clearTimeout(toastT); toastT=setTimeout(()=>{ e.style.opacity=0; },900); }
 
 /* ---------------- screens / lifecycle ---------------- */
 function show(s){
@@ -496,7 +496,7 @@ function start(){
   S.runStartBest=S.best;
   show('play'); updateHUD();
   const en=$('targetEn'), he=$('targetHe');
-  if(en) en.textContent='…'; if(he) he.textContent=L10N('listening','🔊 Listen…');
+  if(en) en.textContent='…'; if(he) he.innerHTML=L10N('listening',CDE_IC('volume-2')+' Listen…');
   ac();
   try{ if('speechSynthesis' in window) speechSynthesis.resume(); }catch(e){}
 }
@@ -506,9 +506,9 @@ function gameOver(){
   try{ if('speechSynthesis' in window) speechSynthesis.cancel(); }catch(e){}
   const isBest=S.score>0&&S.score>S.runStartBest;
   const c=$('overCard');
-  if(c) c.innerHTML=L10N('lbScore','⭐ Score')+' <b>'+S.score+'</b>'
-    +(isBest?' · <span class="newbest">'+L10N('lbNewBest','★ NEW BEST!')+'</span>':' · '+L10N('lbBest','best')+' <b>'+S.best+'</b>')
-    +'<br>'+L10N('lbReached','⚡ Reached')+' <b><bdi>LV '+S.tier+'</bdi></b> · <span style="white-space:nowrap">'+L10N('lbZapped','zapped')+' <b>'+S.zapped+'</b>'+(window.CDE_LANG&&window.CDE_LANG!=='en'?'':' word'+(S.zapped===1?'':'s'))+'</span>';
+  if(c) c.innerHTML=L10N('lbScore',CDE_IC('star')+' Score')+' <b>'+S.score+'</b>'
+    +(isBest?' · <span class="newbest">'+L10N('lbNewBest',CDE_IC('star')+' NEW BEST!')+'</span>':' · '+L10N('lbBest','best')+' <b>'+S.best+'</b>')
+    +'<br>'+L10N('lbReached',CDE_IC('zap')+' Reached')+' <b><bdi>LV '+S.tier+'</bdi></b> · <span style="white-space:nowrap">'+L10N('lbZapped','zapped')+' <b>'+S.zapped+'</b>'+(window.CDE_LANG&&window.CDE_LANG!=='en'?'':' word'+(S.zapped===1?'':'s'))+'</span>';
   show('over');
   // a good run (level 3+ or a new best) → the next game leads; else play again
   if(window.CDE_END) CDE_END({game:'word-zapper',again:$('againBtn'),good:S.tier>=3||isBest,hide:[$('overHome')]});
@@ -519,7 +519,7 @@ function gameOver(){
 const WZ={
   start,
   say(){ if(S.target) speak(S.target.en,true); },
-  toggleMute(){ muted=!muted; const m=$('mutePill'); if(m) m.textContent=muted?'🔇':'🔊'; if(muted){ try{ speechSynthesis.cancel(); }catch(e){} } },
+  toggleMute(){ muted=!muted; const m=$('mutePill'); if(m) m.innerHTML=muted?CDE_IC('volume-x'):CDE_IC('volume-2'); if(muted){ try{ speechSynthesis.cancel(); }catch(e){} } },
   dbg:{
     get screen(){ return S.screen; }, get playing(){ return S.playing; },
     get score(){ return S.score; }, get shields(){ return S.shields; },
@@ -584,13 +584,13 @@ $('sayBtn').addEventListener('click',()=>WZ.say());
     var r=document.createElement('div'); r.className='vrow'; r.setAttribute('role','group'); r.setAttribute('aria-label',label);
     items.forEach(function(it){
       var b=document.createElement('button'); b.type='button'; b.className='vchip'+(V[key]===it[0]?' on':'');
-      b.dataset[key]=it[0]; b.setAttribute('aria-pressed',V[key]===it[0]?'true':'false'); b.textContent=it[1];
+      b.dataset[key]=it[0]; b.setAttribute('aria-pressed',V[key]===it[0]?'true':'false'); b.innerHTML=it[1];
       b.addEventListener('click',function(){ V[key]=it[0]; r.querySelectorAll('.vchip').forEach(function(x){ var on=x.dataset[key]===it[0]; x.classList.toggle('on',on); x.setAttribute('aria-pressed',on?'true':'false'); }); });
       r.appendChild(b);
     });
     return r;
   }
-  box.appendChild(row([['pics',L10N('modePics','🖼 Pictures')],['words',L10N('modeWords','🔤 Word cards')]],'mode',L10N('modeLabel','Cards')));
-  box.appendChild(row([['all',L10N('tAll','🌈 All')],['animals',L10N('tAnimals','🐾 Animals')],['food',L10N('tFood','🍎 Food')],['transport',L10N('tTransport','🚗 Transport')],['things',L10N('tThings','🏠 Things')],['nature',L10N('tNature','🌳 Colors & nature')]],'topic',L10N('topicLabel','Topic')));
+  box.appendChild(row([['pics',L10N('modePics',CDE_IC('image')+' Pictures')],['words',L10N('modeWords',CDE_IC('type')+' Word cards')]],'mode',L10N('modeLabel','Cards')));
+  box.appendChild(row([['all',L10N('tAll',CDE_IC('rainbow')+' All')],['animals',L10N('tAnimals',CDE_IC('paw-print')+' Animals')],['food',L10N('tFood',CDE_IC('apple')+' Food')],['transport',L10N('tTransport',CDE_IC('car')+' Transport')],['things',L10N('tThings',CDE_IC('house')+' Things')],['nature',L10N('tNature',CDE_IC('trees')+' Colors & nature')]],'topic',L10N('topicLabel','Topic')));
   menu.insertBefore(box, btn);
 })();

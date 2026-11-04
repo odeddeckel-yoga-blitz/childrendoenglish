@@ -42,8 +42,8 @@ export function sentenceReady(items) { return items.filter(sentenceUsable).lengt
 // word-set pages, #sheet-data elsewhere). Shared by every word-set page and the
 // printable-flashcard category pages (E2). lang: 'he' (RTL page) or 'en'.
 const SHEET_TEXT = {
-  he: { h: 'דפי פעילות לכיתה', bingo: 'בינגו:', cards: 'כרטיסים', bingoBtn: '🎲 הדפסת כרטיסי בינגו', search: '🔎 הדפסת תפזורת מילים (עם דף פתרון)', cross: '✏️ הדפסת תשבץ עם תמונות (עם דף פתרון)', hint: 'בכל הדפסה נוצרים כרטיסים, תפזורת ותשבץ חדשים מהמילים שבעמוד, כולל רשימת קריאה למורה.' },
-  en: { h: 'Classroom activity sheets', bingo: 'Bingo:', cards: 'cards', bingoBtn: '🎲 Print bingo cards', search: '🔎 Print a word search (with answer key)', cross: '✏️ Print a picture crossword (with answer key)', hint: 'Every print makes new cards, a new word search and a new crossword from the words on this page, plus a teacher call list.' },
+  he: { h: 'דפי פעילות לכיתה', bingo: 'בינגו:', cards: 'כרטיסים', bingoBtn: '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-dices"/></svg> הדפסת כרטיסי בינגו', search: '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-search"/></svg> הדפסת תפזורת מילים (עם דף פתרון)', cross: '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-pencil"/></svg> הדפסת תשבץ עם תמונות (עם דף פתרון)', hint: 'בכל הדפסה נוצרים כרטיסים, תפזורת ותשבץ חדשים מהמילים שבעמוד, כולל רשימת קריאה למורה.' },
+  en: { h: 'Classroom activity sheets', bingo: 'Bingo:', cards: 'cards', bingoBtn: '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-dices"/></svg> Print bingo cards', search: '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-search"/></svg> Print a word search (with answer key)', cross: '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-pencil"/></svg> Print a picture crossword (with answer key)', hint: 'Every print makes new cards, a new word search and a new crossword from the words on this page, plus a teacher call list.' },
 };
 export function sheetsSection(lang) {
   const s = SHEET_TEXT[lang];
@@ -161,13 +161,13 @@ ${body}
     const rows = items.map((it) => `
           <tr>
             <td class="col-img">${it.img ? `<img src="${it.img}" alt="${escapeHtml(it.en)}" width="56" height="56" loading="lazy" />` : ''}</td>
-            <td class="col-en" lang="en" dir="ltr">${escapeHtml(it.en)}${it.chip ? ` <span class="chip ${it.chip.cls}" lang="he" dir="rtl">${escapeHtml(it.chip.label)}</span>` : ''}${it.ex ? `<span class="ex">${escapeHtml(it.ex)}${sentenceAudio(it.ex) ? ` <button type="button" class="say say-ex" data-say="${sentenceAudio(it.ex)}" aria-label="השמעת המשפט">🔊</button>` : ''}</span>` : ''}</td>
-            <td class="col-say"><button type="button" class="say" data-say="${it.audio}" aria-label="השמעה: ${escapeHtml(it.en)}">🔊</button></td>
+            <td class="col-en" lang="en" dir="ltr">${escapeHtml(it.en)}${it.chip ? ` <span class="chip ${it.chip.cls}" lang="he" dir="rtl">${escapeHtml(it.chip.label)}</span>` : ''}${it.ex ? `<span class="ex">${escapeHtml(it.ex)}${sentenceAudio(it.ex) ? ` <button type="button" class="say say-ex" data-say="${sentenceAudio(it.ex)}" aria-label="השמעת המשפט"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>` : ''}</span>` : ''}</td>
+            <td class="col-say"><button type="button" class="say" data-say="${it.audio}" aria-label="השמעה: ${escapeHtml(it.en)}"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button></td>
             <td class="col-he">${escapeHtml(it.he)}</td>
           </tr>`).join('');
     const cards = items.map((it) => `
         <div class="fc">
-          ${it.img ? `<img src="${it.img}" alt="" width="120" height="120" loading="lazy" />` : '<div class="fc-noimg" aria-hidden="true">🔤</div>'}
+          ${it.img ? `<img src="${it.img}" alt="" width="120" height="120" loading="lazy" />` : '<div class="fc-noimg" aria-hidden="true"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-type"/></svg></div>'}
           <div class="fc-en" lang="en" dir="ltr">${escapeHtml(it.en)}</div>
           <div class="fc-he">${escapeHtml(it.he)}</div>
         </div>`).join('');
@@ -178,8 +178,8 @@ ${body}
   <header class="hero">
     <h1>${h1Html}</h1>
     <p class="answer">${escapeHtml(answer)}</p>
-    <p class="jump-row"><a class="jump-btn" href="#practice-h">▶ תרגול</a></p>
-    ${pin ? `<p class="pin-row"><button type="button" class="pin-btn" data-pin-unit="${path}" data-pin-name="${escapeHtml(pin)}" aria-pressed="false">📌 זו היחידה שלנו השבוע</button></p>
+    <p class="jump-row"><a class="jump-btn" href="#practice-h"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> תרגול</a></p>
+    ${pin ? `<p class="pin-row"><button type="button" class="pin-btn" data-pin-unit="${path}" data-pin-name="${escapeHtml(pin)}" aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-pin"/></svg> זו היחידה שלנו השבוע</button></p>
     <p class="pin-hint" hidden>נשמר במכשיר הזה: האפליקציה תיפתח עם כרטיס ליחידה הזו.</p>` : ''}
   </header>
   <main class="container">
@@ -195,11 +195,11 @@ ${body}
     <section class="section" aria-labelledby="practice-h">
       <h2 id="practice-h" class="section-title">תרגול</h2>
       <div class="modes" role="group" aria-label="סוג תרגול">
-        <button type="button" class="mode on" data-mode="hear" aria-pressed="true">🎧 שומעים ובוחרים</button>
-        <button type="button" class="mode" data-mode="spell" aria-pressed="false">✏️ כותבים מה ששומעים</button>
-        <button type="button" class="mode" data-mode="dict" aria-pressed="false">📝 הכתבה</button>${sentenceReady(items) ? `
-        <button type="button" class="mode" data-mode="gap" aria-pressed="false">🔎 משלימים משפט</button>
-        <button type="button" class="mode" data-mode="build" aria-pressed="false">🧩 בונים משפט</button>` : ''}
+        <button type="button" class="mode on" data-mode="hear" aria-pressed="true"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-headphones"/></svg> שומעים ובוחרים</button>
+        <button type="button" class="mode" data-mode="spell" aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-pencil"/></svg> כותבים מה ששומעים</button>
+        <button type="button" class="mode" data-mode="dict" aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-notebook-pen"/></svg> הכתבה</button>${sentenceReady(items) ? `
+        <button type="button" class="mode" data-mode="gap" aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-search"/></svg> משלימים משפט</button>
+        <button type="button" class="mode" data-mode="build" aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-puzzle"/></svg> בונים משפט</button>` : ''}
       </div>
       <div id="practice" class="practice" data-unit="${practiceKey}"${step ? ` data-step="${step}"` : ''}>
         <noscript><p>התרגול צריך JavaScript. אפשר בינתיים ללמוד מהטבלה ומהכרטיסיות.</p></noscript>
@@ -210,7 +210,7 @@ ${body}
     ${afterPractice}
     <section class="section" aria-labelledby="cards-h">
       <h2 id="cards-h" class="section-title">כרטיסיות להדפסה</h2>
-      <p class="center"><button type="button" class="print-btn" data-print>🖨️ הדפסת הכרטיסיות</button></p>
+      <p class="center"><button type="button" class="print-btn" data-print><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-printer"/></svg> הדפסת הכרטיסיות</button></p>
       ${printQrBlock(`${SITE}${path}`, 'סרקו כדי לשמוע את המילים ולתרגל באתר — חינם, בלי הרשמה', 'rtl')}
       <div class="cards">${cards}
       </div>
@@ -218,15 +218,15 @@ ${body}
     ${sheetsSection('he')}
     <section class="section share" aria-labelledby="share-h">
       <h2 id="share-h" class="section-title">שיתוף עם הכיתה</h2>
-      ${battleHref ? `<p class="center"><a class="cta battle-cta" href="${battleHref}">⚔️ קרב כיתתי עם המילים של היחידה</a></p>
+      ${battleHref ? `<p class="center"><a class="cta battle-cta" href="${battleHref}"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-swords"/></svg> קרב כיתתי עם המילים של היחידה</a></p>
       <p class="center sheet-hint">המורה פותח/ת חדר על המקרן, והילדים מצטרפים מהטלפון או מהטאבלט עם קוד.</p>
-      <p class="center"><a href="${battleHref.replace('/battle/', '/projector/')}&amp;lang=he">📽️ או בלי מכשירים: מצב מקרן, כל הכיתה עונה יחד בקול</a></p>` : ''}
+      <p class="center"><a href="${battleHref.replace('/battle/', '/projector/')}&amp;lang=he"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-projector"/></svg> או בלי מכשירים: מצב מקרן, כל הכיתה עונה יחד בקול</a></p>` : ''}
       <p class="center">
         <a class="share-btn" href="https://wa.me/?text=${shareText}%20${pageUrl}" target="_blank" rel="noopener">שליחה בוואטסאפ</a>
         <a class="share-btn" href="https://classroom.google.com/share?url=${pageUrl}" target="_blank" rel="noopener">שיתוף ב-Google Classroom</a>
         <a class="share-btn" href="https://teams.microsoft.com/share?href=${pageUrl}&amp;msgText=${shareText}" target="_blank" rel="noopener">שיתוף ב-Teams</a>
         <button type="button" class="share-btn" data-copy="${SITE}${path}">העתקת קישור</button>
-        <button type="button" class="share-btn" data-copy-list>📋 העתקת הרשימה (אנגלית ⇥ עברית)</button>
+        <button type="button" class="share-btn" data-copy-list><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-clipboard-list"/></svg> העתקת הרשימה (אנגלית ⇥ עברית)</button>
       </p>
       <p class="center sheet-hint">"העתקת הרשימה" מעתיקה את המילים בשתי עמודות (אנגלית, עברית) — מדביקים ב-Google Sheets, ב-Excel, או ב-Quizlet ובכלים דומים דרך "ייבוא".</p>
     </section>
@@ -298,14 +298,14 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
       crumbItems: [['עברית', '/he/'], ['יחידות לימוד', '/units/'], [book.name, `/units/${u.book}/`], [`Unit ${u.unit}`, path]],
       navHtml: `<a href="/he/">עברית</a> › <a href="/units/">יחידות לימוד</a> › <a href="/units/${u.book}/">${escapeHtml(book.name)}</a> › Unit ${u.unit}`,
       h1Html: `<span lang="en" dir="ltr">${escapeHtml(fullName)}</span> – מילים באנגלית עם הגייה, תרגום ומשחקים`,
-      answer: `כל ${u.words.length} המילים של היחידה עם הגייה באנגלית ותרגום לעברית${u.grade ? ` (כיתה ${u.grade})` : ''}. לוחצים 🔊 כדי לשמוע, ואז מתרגלים למטה.`,
+      answer: `כל ${u.words.length} המילים של היחידה עם הגייה באנגלית ותרגום לעברית${u.grade ? ` (כיתה ${u.grade})` : ''}. לוחצים על כפתור ההשמעה כדי לשמוע, ואז מתרגלים למטה.`,
       listHeading: 'המילים של היחידה',
       words: u.words.map((w) => ({ ...w, chip: chipFor(w) })),
       afterTable: u.source ? `<p class="aligned">הרשימה תואמת לרשימת המילים של <span lang="en" dir="ltr">${escapeHtml(unitName)}</span>. התרגום לעברית, משפטי הדוגמה, ההשמעות והתמונות הם של <span lang="en" dir="ltr">Children Do English</span>.</p>` : '',
       practiceKey: `${u.book}-${u.unit}`,
       faqPairs: [
         [`אילו מילים יש ב-${unitName}?`, `ב-${unitName} יש ${u.words.length} מילים, למשל: ${u.words.slice(0, 8).map((w) => `${w.en} (${w.he})`).join(', ')}. הרשימה המלאה עם הגייה ותרגום נמצאת בטבלה בעמוד.`],
-        ['איך מתרגלים את המילים?', 'לוחצים על 🔊 כדי לשמוע כל מילה, ואז בוחרים תרגול: "שומעים ובוחרים" — שומעים מילה באנגלית ובוחרים את הפירוש בעברית; "כותבים מה ששומעים" — מאייתים את המילה; ו"הכתבה" — 10 מילים בקול, כותבים במחברת ובודקים מול הרשימה. אפשר גם להדפיס כרטיסיות.'],
+        ['איך מתרגלים את המילים?', 'לוחצים על כפתור ההשמעה כדי לשמוע כל מילה, ואז בוחרים תרגול: "שומעים ובוחרים" — שומעים מילה באנגלית ובוחרים את הפירוש בעברית; "כותבים מה ששומעים" — מאייתים את המילה; ו"הכתבה" — 10 מילים בקול, כותבים במחברת ובודקים מול הרשימה. אפשר גם להדפיס כרטיסיות.'],
         ['האם זה בחינם?', 'כן. בלי הרשמה, בלי פרסומות ובלי להוריד אפליקציה — עובד בדפדפן במחשב, בטאבלט ובטלפון.'],
         [`האם האתר קשור להוצאת ${book.publisher}?`, `לא. Children Do English אינו קשור להוצאה. אנחנו מציגים רק את רשימת המילים לתרגול, בלי תרגילים, קטעים או מבחנים מהספר.`],
       ],
@@ -366,7 +366,7 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
   <div class="unit-grid">${withUnits.map((b) => `
         <a class="unit-card" href="/units/${b}/"><strong lang="en" dir="ltr">${escapeHtml(BOOKS[b].name)}</strong><span>${(live.length ? liveUnitsOf(b) : UNITS.filter((u) => u.book === b)).length} יחידות</span></a>`).join('')}
   </div>
-  <p class="center pin-hint">בעמוד של כל יחידה אפשר ללחוץ 📌 "זו היחידה שלנו השבוע", והאפליקציה תיפתח עם כרטיס אליה.</p></section></main>
+  <p class="center pin-hint">בעמוד של כל יחידה אפשר ללחוץ <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-pin"/></svg> "זו היחידה שלנו השבוע", והאפליקציה תיפתח עם כרטיס אליה.</p></section></main>
   <script defer src="/unit-practice.js"></script>`,
     }));
     if (!test) sitemapUrls.push(path);

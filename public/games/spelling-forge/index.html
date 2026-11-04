@@ -23,6 +23,8 @@
 </script>
 <script defer src="/land-beacon.js"></script>
 <style>
+  /* gradient-text headings use color:transparent — their drawn icon needs its own colour */
+  h1 .ic{color:#fbbf24;}
   :root{
     --bg0:#0b1230; --bg1:#1e1b4b; --blue:#60a5fa; --ind:#818cf8; --ink:#eef2ff; --dim:#a5b4fc;
     --gold:#fbbf24; --grn:#4ade80; --red:#f87171;
@@ -147,9 +149,9 @@
 <a id="homePill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
 <div id="stage" role="main">
   <div id="menu" class="overlay show">
-    <h1>⚒️ SPELLING FORGE</h1>
+    <h1><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-hammer"/></svg> SPELLING FORGE</h1>
     <div class="sub" data-l10n="sub">Hear the word and see its picture, then <b>forge it letter by letter</b> — tap the tiles into the slots and the word is forged! Watch out for tricky decoy letters.</div>
-    <div class="crewrow"><span class="pill" data-l10n="pillHear">🔊 Hear every word</span><span class="pill" data-l10n="pillDecoy">🧲 Tricky decoy letters</span><span class="pill" data-l10n="pillLevels">🏆 8 levels · best-score chase</span></div>
+    <div class="crewrow"><span class="pill" data-l10n="pillHear"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg> Hear every word</span><span class="pill" data-l10n="pillDecoy"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-magnet"/></svg> Tricky decoy letters</span><span class="pill" data-l10n="pillLevels"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-trophy"/></svg> 8 levels · best-score chase</span></div>
     <button class="btn primary" id="startBtn" data-l10n="start">▶ START FORGING</button>
     <div class="tag" data-l10n="tag">Levels 1–2 forge short words, and the words grow longer as you level up. At the top of the forge you must spell by ear alone — the photo is your reward!</div>
     <section class="about">
@@ -165,29 +167,29 @@
 
   <div id="play" class="overlay">
     <div id="hud">
-      <span class="pill" id="levelPill">⚒️ LV 1</span>
-      <span class="pill" id="wordPill">📜 1/3</span>
-      <span class="pill" id="scorePill">⭐ 0</span>
-      <span class="pill" id="streakPill">🔥 0</span>
-      <button class="pill" id="mute" aria-label="Mute sounds">🔊</button>
+      <span class="pill" id="levelPill"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-hammer"/></svg> LV 1</span>
+      <span class="pill" id="wordPill"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-scroll"/></svg> 1/3</span>
+      <span class="pill" id="scorePill"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-star"/></svg> 0</span>
+      <span class="pill" id="streakPill"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-flame"/></svg> 0</span>
+      <button class="pill" id="mute" aria-label="Mute sounds"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>
     </div>
     <div id="photoCard">
       <img id="photo" alt="" draggable="false">
-      <div id="photoMyst">🎧<small data-l10n="listenSpell">LISTEN &amp; SPELL — photo unlocks when you forge it!</small></div>
+      <div id="photoMyst"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-headphones"/></svg><small data-l10n="listenSpell">LISTEN &amp; SPELL — photo unlocks when you forge it!</small></div>
       <span id="heWord" dir="rtl"></span>
-      <button id="sayBtn" aria-label="Hear the word again">🔊</button>
+      <button id="sayBtn" aria-label="Hear the word again"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>
     </div>
     <div id="slots" aria-label="letter slots"></div>
     <div id="statusLine" role="status" aria-live="polite"></div>
     <div id="pad" class="glass" aria-label="letter tiles"></div>
-    <button id="forgeBtn">⚒️ FORGE!</button>
+    <button id="forgeBtn"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-hammer"/></svg> FORGE!</button>
   </div>
 
   <div id="win" class="overlay">
-    <h2 id="winTitle" data-l10n="winTitle">🏆 MASTER BLACKSMITH</h2>
+    <h2 id="winTitle" data-l10n="winTitle"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-trophy"/></svg> MASTER BLACKSMITH</h2>
     <div class="card glass" id="winBody"></div>
-    <button class="btn primary" id="againBtn" data-l10n="again">↺ FORGE AGAIN</button>
-    <a class="btn" data-l10n="home" href="/" style="text-decoration:none;color:var(--ink);">🎮 More at childrendoenglish.com</a>
+    <button class="btn primary" id="againBtn" data-l10n="again"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-rotate-ccw"/></svg> FORGE AGAIN</button>
+    <a class="btn" data-l10n="home" href="/" style="text-decoration:none;color:var(--ink);"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> More at childrendoenglish.com</a>
   </div>
 </div>
 <div id="combo"></div>

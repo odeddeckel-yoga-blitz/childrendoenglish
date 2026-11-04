@@ -1,20 +1,20 @@
 import { WORDS } from './words';
 
-const CATEGORY_EMOJI = {
-  animals: '🐾',
-  food: '🍎',
-  home: '🏠',
-  transport: '🚗',
-  nature: '🌿',
-  colors: '🎨',
-  numbers: '🔢',
-  clothing: '👕',
-  school: '📚',
-  sports: '⚽',
+const CATEGORY_ICON = {
+  animals: 'paw-print',
+  food: 'apple',
+  home: 'house',
+  transport: 'car',
+  nature: 'trees',
+  colors: 'palette',
+  numbers: 'hash',
+  clothing: 'shirt',
+  school: 'library',
+  sports: 'volleyball',
 
-  feelings: '😊',
-  everyday: '🔑',
-  toys: '🧸',
+  feelings: 'smile',
+  everyday: 'key',
+  toys: 'blocks',
 };
 
 const CATEGORY_TITLES = {
@@ -59,7 +59,7 @@ function buildLessons() {
           title: `${titles.en}${suffix}`,
           titleHe: `${titles.he}${suffix}`,
           category,
-          emoji: CATEGORY_EMOJI[category] || '📖',
+          icon: CATEGORY_ICON[category] || 'book-open',
           level,
           wordIds: chunk.map(w => w.id),
           order: order++,

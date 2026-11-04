@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from 'react';
-import { ArrowLeft, Search, Grid3X3, BookOpen, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Search, Grid3X3, BookOpen, Volume2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { WORDS, CATEGORIES } from '../data/words';
 import { filterByKnownLetters } from '../utils/letterFilter';
 import { getImageUrl } from '../utils/images';
@@ -301,13 +301,13 @@ export default function LearnMode({ stats, lang = 'en', canRead = true, words: c
               <p className="text-sm text-slate-500 italic">"{currentWord.exampleSentence}"</p>
             </div>
           </div>
-          <p className="text-center text-xs text-slate-400">{rtl ? '← ' : ''}{t('swipeToBrowse', lang)}{rtl ? '' : ' →'}</p>
+          <p className="text-center text-xs text-slate-400"><span className="inline-flex items-center justify-center gap-1">{rtl && <ArrowLeft className="w-3.5 h-3.5" aria-hidden="true" />}{t('swipeToBrowse', lang)}{!rtl && <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />}</span></p>
         </div>
       )}
 
       {filtered.length === 0 && (
         <div className="text-center py-12 space-y-3">
-          <p className="text-5xl">🔍</p>
+          <Search className="w-12 h-12 mx-auto text-slate-400" aria-hidden="true" />
           <p className="text-slate-500 font-medium">{t('noWordsFound', lang)}</p>
           <p className="text-sm text-slate-400">{t('tryDifferentSearch', lang)}</p>
         </div>

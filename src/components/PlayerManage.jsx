@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { ArrowLeft, Trash2, RotateCcw, Plus, Pencil, Check, X, Download, Upload } from 'lucide-react';
+import { ArrowLeft, Trash2, RotateCcw, Plus, Pencil, Check, X, Download, Upload, TriangleAlert } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { exportAllData, importAllData } from '../utils/storage';
 import useFocusTrap from '../hooks/useFocusTrap';
@@ -144,7 +144,7 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                : 'bg-slate-50 text-slate-600 border border-slate-200'}`}
                 >
-                  {t('canReadLabel', lang)}: {player.canRead ? '✓' : '✗'}
+                  {t('canReadLabel', lang)}: {player.canRead ? <Check className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /> : <X className="w-4 h-4 inline -mt-0.5" aria-hidden="true" />}
                 </button>
               </>
             ) : (
@@ -155,7 +155,7 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{player.name}</p>
                     <p className="text-xs text-slate-400">
-                      {t('canReadLabel', lang)}: {player.canRead ? '✓' : '✗'}
+                      {t('canReadLabel', lang)}: {player.canRead ? <Check className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /> : <X className="w-4 h-4 inline -mt-0.5" aria-hidden="true" />}
                     </p>
                   </div>
                   <button
@@ -240,7 +240,7 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
           <div ref={confirmModalRef} role="dialog" aria-modal="true" className="glass rounded-2xl p-6 max-w-sm w-full space-y-4 text-center" onClick={e => e.stopPropagation()}>
             {confirmAction.type === 'deleteAll' ? (
               <>
-                <p className="text-3xl">⚠️</p>
+                <TriangleAlert className="w-9 h-9 mx-auto text-amber-500" aria-hidden="true" />
                 <p className="text-slate-700 dark:text-slate-200 font-medium">{t('deleteAllConfirm', lang)}</p>
               </>
             ) : (

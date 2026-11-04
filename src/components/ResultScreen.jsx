@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { sendLearn } from '../utils/learnBeacon';
-import { Play, ArrowLeft, Check, X as XIcon, Zap, Flame } from 'lucide-react';
+import { Play, ArrowLeft, ArrowRight, Check, X as XIcon, Zap, Flame, Star, Repeat, PartyPopper } from 'lucide-react';
 import { getWordById } from '../data/words';
 import { LIGHTNING_SECS } from '../utils/arcade';
-import { t } from '../utils/i18n';
+import { t, isRTL } from '../utils/i18n';
 import { ARCADE } from '../data/arcadeGames';
+import ArcadeIcon from './ArcadeIcon';
 
 // PASS_PCT: the ladder's bar to move on (7 of 10), the same bar as level unlocks.
 export const PASS_PCT = 70;
@@ -17,6 +18,7 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const passed = !quit && percentage >= PASS_PCT;
   const praise = percentage >= 50;
+  const ArrowIcon = isRTL(lang) ? ArrowLeft : ArrowRight;
   const primaryIsPlayAgain = passed ? !cycleNext : !onRetrySame;
   // rs beacon: what a child does from here, by score band (UX baseline/after-read)
   const band = quit ? 'quit' : passed ? 'hi' : 'lo';
@@ -97,9 +99,9 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
         <div className="glass rounded-2xl p-4">
           <div className="grid grid-cols-3 gap-2 text-center">
             <div>
-              <p className="text-lg font-black text-amber-600 dark:text-amber-400" dir="ltr">⭐ {arcade.score}</p>
+              <p className="text-lg font-black text-amber-600 dark:text-amber-400" dir="ltr"><Star className="w-4 h-4 inline -mt-0.5 fill-current" aria-hidden="true" /> {arcade.score}</p>
               <p className="text-[11px] text-slate-500 font-medium">
-                {arcadeNewBest && praise ? t('newBest', lang) : t('runScore', lang)}
+                {arcadeNewBest && praise ? <><Star className="w-3 h-3 inline -mt-0.5 fill-current" aria-hidden="true" /> {t('newBest', lang)}</> : t('runScore', lang)}
               </p>
             </div>
             <div>
@@ -117,7 +119,7 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
           </div>
           {arcadeNewBest && praise && (
             <p className="text-center text-sm font-black text-emerald-600 mt-2 animate-badge-pop">
-              {t('newBestBanner', lang)}
+              <Star className="w-4 h-4 inline -mt-0.5 fill-current" aria-hidden="true" /> {t('newBestBanner', lang)}
             </p>
           )}
         </div>
@@ -127,8 +129,8 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
       {/* The one primary action */}
       {(() => {
         const primary = passed
-          ? (cycleNext ? { ...cycleNext, onClick: track('next', cycleNext.onClick) } : { label: t('nextQuiz', lang), onClick: track('nextquiz', onPlayAgain) })
-          : onRetrySame ? { label: t('retrySameWords', lang), onClick: track('retry', onRetrySame) }
+          ? (cycleNext ? { ...cycleNext, onClick: track('next', cycleNext.onClick) } : { label: t('nextQuiz', lang), icon: 'play', onClick: track('nextquiz', onPlayAgain) })
+          : onRetrySame ? { label: t('retrySameWords', lang), icon: 'repeat', onClick: track('retry', onRetrySame) }
           : { label: t('playAgain', lang), onClick: track('again', onPlayAgain) };
         return (
           <>
@@ -138,7 +140,12 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
               className="w-full py-4 px-4 rounded-xl font-black text-white bg-blue-600 hover:bg-blue-700
                          active:scale-95 transition-all shadow-md text-lg flex items-center justify-center gap-2"
             >
-              {!passed && !onRetrySame && <Play className="w-4 h-4" />} {primary.label}
+              {(primary.icon === 'play' || (!passed && !onRetrySame)) && <Play className="w-4 h-4" aria-hidden="true" />}
+              {primary.icon === 'repeat' && <Repeat className="w-4 h-4" aria-hidden="true" />}
+              {primary.label}
+              {primary.icon === 'arrow' && <ArrowIcon className="w-4 h-4" aria-hidden="true" />}
+              {primary.icon === 'check' && <Check className="w-4 h-4" aria-hidden="true" />}
+              {primary.icon === 'party' && <PartyPopper className="w-4 h-4" aria-hidden="true" />}
             </button>
             {cycleNext && !passed && !quit && (
               <p className="text-center text-sm font-semibold text-slate-500">
@@ -156,8 +163,8 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
         <div className="space-y-2 p-3 pt-0">
           {passed && onRetrySame && (
             <button onClick={track('retry', onRetrySame)}
-              className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 active:scale-95 transition-all">
-              {t('retrySameWords', lang)}
+              className="w-full py-2.5 px-3 rounded-xl text-sm font-bold text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 active:scale-95 transition-all flex items-center justify-center gap-2">
+              <Repeat className="w-4 h-4" aria-hidden="true" /> {t('retrySameWords', lang)}
             </button>
           )}
           {!primaryIsPlayAgain && (
@@ -193,7 +200,7 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
                            bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-700
                            active:scale-95 transition-all flex items-center justify-center gap-2"
               >
-                <span aria-hidden="true">{g.emoji}</span> {t('resultTryGame', lang, { name: g.name })}
+                <ArcadeIcon id={g.id} /> {t('resultTryGame', lang, { name: g.name })}
               </a>
             );
           })()}

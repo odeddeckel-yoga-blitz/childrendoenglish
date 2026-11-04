@@ -20,6 +20,8 @@
 </script>
 <script defer src="/land-beacon.js"></script>
 <style>
+  /* gradient-text headings use color:transparent — their drawn icon needs its own colour */
+  h1 .ic{color:#fbbf24;}
   :root{ --bg0:#0b1230; --bg1:#1e1b4b; --ink:#eef2ff; --dim:#a5b4fc; --blue:#60a5fa; --gold:#fbbf24; --grn:#4ade80; --red:#f87171; --glass:rgba(30,27,75,.7); --line:rgba(129,140,248,.35); }
   *{box-sizing:border-box;}
   body{margin:0;min-height:100dvh;background:radial-gradient(circle at 50% 0%,var(--bg1),var(--bg0) 70%);color:var(--ink);font-family:-apple-system,system-ui,'Segoe UI',sans-serif;}
@@ -80,10 +82,10 @@
 <a id="homePill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
 <main>
   <div id="menu">
-    <h1>📖 READ IT!</h1>
+    <h1><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-book-open"/></svg> READ IT!</h1>
     <p class="sub" data-l10n="sub">Words, one sound at a time: <b>read the word</b> and tap its picture, then <b>hear a word</b> and pick how it is spelled. Short vowels first, then magic e, then sh, ch, th and ck.</p>
     <div class="pills"><span class="pill" dir="ltr">cat · cut</span><span class="pill" dir="ltr">pig · peg</span><span class="pill" dir="ltr">dog · dig</span><span class="pill" dir="ltr">cap · cape</span><span class="pill" dir="ltr">ship · chip</span></div>
-    <button type="button" id="startBtn" data-l10n="start">▶ Start reading</button>
+    <button type="button" id="startBtn" data-l10n="start"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> Start reading</button>
     <p class="strands"><span data-l10n="strandsLabel">Or jump to:</span><br><button type="button" class="ghost" data-strand="1" data-l10n="strand1">Short vowels</button><button type="button" class="ghost" data-strand="2" data-l10n="strand2">Magic e</button><button type="button" class="ghost" data-strand="3" data-l10n="strand3" dir="ltr">sh · ch · th · ck</button></p>
     <section class="about">
       <h2 style="font-size:15px;margin:0 0 4px;color:inherit;">Read It!</h2>
