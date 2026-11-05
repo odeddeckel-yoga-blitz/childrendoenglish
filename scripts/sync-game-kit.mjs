@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Copy this into a consumer repo's scripts/ and set MAP for that repo.
-// Usage: node scripts/sync-game-kit.mjs [--check]
+// Usage: node scripts/sync-game-kit.mjs [--from-origin] [--check]   (always --from-origin)
 //   default: copy kit files into the repo + stamp .game-kit-version
 //   --check: exit 1 if the local copies drifted from the kit (for CI)
 import { readFileSync, writeFileSync, existsSync, mkdirSync, cpSync } from 'fs';
@@ -8,7 +8,19 @@ import { createHash } from 'crypto';
 import { execSync } from 'child_process';
 import { join, dirname } from 'path';
 
-const KIT = process.env.GAME_KIT_DIR || join(process.env.HOME, 'projects', 'shared', 'game-kit');
+const KIT_DIR = process.env.GAME_KIT_DIR || join(process.env.HOME, 'projects', 'shared', 'game-kit');
+// --from-origin (kit 1.60, RECOMMENDED): sync from the kit's PUSHED origin/main, not the working folder — the shared
+// folder held other sessions' unpushed commits twice in one week (11-03/04). git archive origin/main → temp dir.
+const FROM_ORIGIN = process.argv.includes('--from-origin');
+let KIT = KIT_DIR, ORIGIN_REV = null;
+if (FROM_ORIGIN) {
+  const { mkdtempSync } = await import('fs'); const { tmpdir } = await import('os');
+  execSync('git fetch -q origin', { cwd: KIT_DIR });
+  ORIGIN_REV = execSync('git rev-parse --short origin/main', { cwd: KIT_DIR }).toString().trim();
+  KIT = mkdtempSync(join(tmpdir(), 'game-kit-origin-'));
+  execSync(`git archive origin/main | tar -x -C "${KIT}"`, { cwd: KIT_DIR, shell: '/bin/sh' });
+  console.log(`kit: syncing from origin/main @ ${ORIGIN_REV} (not the local folder)`);
+}
 // Per-repo mapping: kit path -> repo path  (EDIT PER CONSUMER)
 const MAP = {
   'template/index.html': 'game-kit/template/index.html',
@@ -49,7 +61,8 @@ for (const [src, dst] of Object.entries(MAP)) {
 }
 if (!check) {
   let rev = 'unknown';
-  try { rev = execSync('git rev-parse --short HEAD', { cwd: KIT }).toString().trim(); } catch { /* kit not a repo */ }
+  if (ORIGIN_REV) rev = `${ORIGIN_REV} (origin)`;
+  else try { rev = execSync('git rev-parse --short HEAD', { cwd: KIT }).toString().trim(); } catch { /* kit not a repo */ }
   writeFileSync('.game-kit-version', `${readFileSync(join(KIT, 'VERSION'), 'utf8').trim()} @ ${rev}\n`);
   console.log('kit version stamped:', readFileSync('.game-kit-version', 'utf8').trim());
 }

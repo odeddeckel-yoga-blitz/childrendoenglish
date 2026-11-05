@@ -118,6 +118,38 @@ When content needs a per-item image (vocabulary words, game icons, category art)
   non-trivial; same pattern for per-item audio if the product ships it (CDE pre-renders
   all word audio with Piper TTS — one consistent voice beats device TTS roulette).
 
+## 3b-gate. Media gates: every clip is heard back, every answer image is the sole answer and licensed (CDE + yoga, 2026-11-04)
+A file that exists is not a file that is right. CDE shipped `knight.mp3` (2026-09-22) and passed every "audio exists"
+test, because nobody listened to the batch. A quiz image that reads as a same-round rival ("jungle" photo that reads
+"house") gives the child two right answers. An image with no recorded licence is a takedown waiting to happen. Each site
+runs two kit gates (`test/audio-gate.py`, `test/image-gate.mjs`) driven by one JSON config (`test/media-gates/<site>.json`):
+
+- **Audio heard back.** Every clip for a word or phrase is transcribed locally (faster-whisper `small.en`, CPU int8,
+  `vad_filter=False`, a neutral one-answer `initialPrompt`) and must match its intended text after normalisation.
+  Tolerance is per site: CDE (English words) = exact, plus plurals, "contains" and a homophone list; yoga (Sanskrit) =
+  ratio ≥ 0.85 with spaces ignored. A fuzzy pass still fails when the transcript is closer to another item's text.
+  Rules: never `base.en` (deaf to sub-second clips); never put the expected text in the prompt; a flag is a candidate,
+  so listen before re-rendering. **Run after every audio batch**, before the batch is committed.
+- **Rivals = the site's real rounds.** The image gate derives each item's rivals from the site's own data: same category,
+  the site's confusable groups, minus the pairs the site's distractor picker keeps apart (CDE `collides`, yoga
+  `isImageTwin`). When the picker changes, the config's `rivals` must change with it.
+- **Sole answer, two levels.** Always on, free: no missing or tiny files, no two items sharing one image, no near-copy of a
+  rival's image (32×32 RGB distance ≤ 1.5). Greyscale dHash was tried and dropped: it called distinct emoji faces, colour
+  swatches and number tiles twins. Pixel distance only catches **copies**. "A different picture that reads as the rival"
+  needs the optional vision judge (`--judge`: `claude -p --model sonnet`, the bare alias, never a dated id). The judge
+  sees the target and its rivals as an unlabelled, shuffled list (so it is never told the answer) and names every plausible
+  option. A rival picked over the target = finding (sole-answer 0). The target picked with a rival also plausible =
+  advisory (sole-answer 1, the improver's "prefer a better candidate"). Run it on new or changed images, not nightly on
+  the whole catalogue.
+- **Provenance is recorded at install time.** Whatever installs an image (an improver `pick`, a staging script, a
+  generator) writes its manifest entry in the same step. Use a source tag the site accepts
+  (`"gemini"` = AI-generated on the owner's account), or `{source, licence, author, url}` for third-party files. Missing,
+  `legacy`, `unknown` or a CC-BY* entry with no author = finding. Backfilling later is archaeology: CDE's 530 Wikimedia and
+  generated images have no record of which Commons file each came from.
+- **Wiring.** Both gates exit 1 on a finding. Run the deterministic image gate in pre-push (about 2 s). Run the audio gate
+  and `--judge` by hand after a media batch (minutes, local CPU or paid calls), and note the result in the commit's
+  `Lesson:`/verification line.
+
 ## 3c. Discovery & retention — hub-level (kidsdomath, 2026-10)
 Once a catalog outruns demand (kidsdomath reached 205 math + 200 science games), the lever is
 surfacing the cold inventory to the traffic you already have — NOT more games.
@@ -664,9 +696,57 @@ P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page b
     infra/optimizer-pattern.md — movement between games, site pages → games, in-game controls, errors × bounce, AI
     referrals — each from aggregate tallies only, and each listed in recurring.json so due.mjs brings it up.
 
+56. **A shared script's change runs that script's catalogue gates before it ships** (KDM 2026-11-04: the science phone
+    fit cropped 88 scenes and went live twice, 10-31 and 11-03, with every gate green — the pre-push probes only run on
+    game FILES a commit touches, and a shared script touches none). Map each shared script to the classes of bug it can
+    cause and the gates that see them (fit → question-visible + crop + reach; anything → phone error-smoke + playthrough
+    sample); the push hook refuses a changed shared script without a pass stamped for its exact bytes.
+    Tool: `tools/shared-gate.mjs --run|--check`.
+57. **Whole-catalogue gates run weekly, not only on what a push touches** (KDM 2026-11-04: tap-reach found 19 games with
+    CHECK below a 320 fold since 10-30, head-oracle 72 icon giveaways, gen-fuzz a constant level, level-count 22 wrong
+    FAQs — all only when run over every game). `tools/catalogue-sweep.mjs` runs them all (~2.5 h) and reports what is NEW
+    since the last sweep. Phone error-smoke plays EVERY level at 320×568 (canvas code threw on negative radii only there);
+    `test/scene-cut.mjs` compares the phone canvas's bottom edge with desktop (clock-climb hid half its clock with no fit
+    at all); constant-by-design levels go in an allow file with a reason, so gen-fuzz can gate.
+58. **AI images stay the generator's bytes, with their provenance** (KDM Real or AI?: BFL terms forbid altering or
+    stripping Content Credentials). Store content-addressed (name = sha256 of the bytes), keep the originals, and gate
+    every push that touches the images: each served AI file has a byte-identical original that still carries its C2PA
+    chunk; monthly `--live` re-hashes the served files. Tool: `infra/privacy/provenance-check.mjs`. Gemini images: keep the
+    SynthID / provenance metadata (yoga variant).
+59. **A silent beacon is an outage** (KDM 10-22: the database quota ran out, /api/land kept answering 204 and dropped a
+    day of plays; every later read looked like a traffic collapse). Every status / optimizer read checks game opens per
+    bot-filtered visitor against the median of the SAME kind of day (weekends run ~half), and flags zero or a >50% drop.
+    Tool: `infra/kpi/data-health.mjs` (verified on simulated weekday and weekend silences).
+60. **The screen speaks only the interface's language: no stray script, no untranslated chrome** (CDE 2026-11-04:
+    Word Zapper and Spelling Forge showed the Hebrew gloss to English players (`#targetHe` "מקשיבים…", the `.subhe`
+    menu line, the forge photo's `#heWord`), a day after the flashcards were fixed for the same thing. Found by reading
+    string tables, not by any gate.) Two rules, per page, per interface locale, on load and after a little play:
+    (a) in a UI that is not Hebrew, no visible Hebrew unless the text's **nearest** `[lang]` ancestor declares `he`
+    (mark a deliberate Hebrew label, like the picker's "עברית", with `lang="he"`); (b) in a UI that is not the source
+    locale, no source-locale string of the page's **own** translation table (or of a keyed element's served HTML
+    default) on screen: an untranslated button, toast or fallback. **Never allowlist `dir="rtl"` / `direction:rtl`**:
+    every leaking box was RTL-styled for the Hebrew it was built to hold, so "skip RTL" skips exactly the leak. Gloss
+    and translation lines are written per locale (`''` = hidden for the source locale), not shown by default and hidden
+    later. Game content that is the language being taught is not in the chrome table, so (b) leaves it alone. Text
+    drawn on a canvas is not read: keep chrome in the DOM. Tester: `test/language-leak.mjs` (`--preset=cde|kdm`,
+    or `--switch` / `--table` / `--pages` flags). It fails on pre-fix CDE (a5af444: 4 findings on 2 games) and passes
+    on HEAD.
+
 33. **Every issue goes round the loop** — fix → creator rule → tester gate (fails on the old game, passes on the fix) →
     optimizer → catalogue sweep → kit + `LESSONS.jsonl`. Enforced by `hooks/commit-msg` (a game change needs a
     `Lesson:` trailer). See `ISSUE-LOOP.md`.
+
+61. **No emoji as interface icons; content emoji are fine** (owner 2026-11-04: emoji in nav, headings, buttons, badges,
+    cards and shared game chrome make the site read as AI-built; a stock icon pack with repeats does too). Site and game
+    CHROME uses one hand-drawn icon set (infra/icons: 24-grid, 2 px round stroke, currentColor, RTL-mirrored arrows,
+    aria-hidden when decorative); card icons are hand-drawn per game, one idea each, no repeated motif. Game CONTENT emoji
+    (animals, objects, the answers) stay — swapping those risks new icon-oracle giveaways and needs full re-testing.
+    Gate: `test/chrome-emoji.mjs` — a ratchet (a chrome file may lose emoji, never gain them) until the rollout is done.
+    Two rollout traps (CDE 11-04): (a) a currentColor icon VANISHES inside gradient-text headings (background-clip:text;
+    color:transparent) — 6 CDE headings shipped blank; give heading icons their own colour, and test that every visible
+    `<svg><use>` has a non-transparent computed colour and resolves in the sprite. (b) Emoji → markup breaks textContent
+    sinks: trace each string's sink; use innerHTML only for STATIC strings, never for player names or word data (XSS) —
+    keep data as text nodes and add the icon as its own element.
 
 ## 6. Multi-agent workflow rules
 - One agent per game file; agents never touch sibling games or revert anything beyond
@@ -844,3 +924,95 @@ Two grouping modes sit next to the existing scoring modes; scoring underneath st
 - **Gate:** a unit test for teamOf/teamTotals/defaultTarget, plus an e2e: teacher + 5 students, an odd team size, a
   reload mid-battle (same team), team board shows no per-player scores, and the target is fixed at start.
   KDM reference: `src/lib/liveTeams.js`, `e2e/live-team-battle.spec.ts`.
+
+
+## 8d. Post-deploy smoke: one tool, every site (2026-11-04)
+
+**Rule.** After every production deploy, run `node <kit>/tools/smoke.mjs <base> --site=<site>`. Run it again inside every optimizer read. It must exit 0 before you call a deploy done. Do not schedule it: no cron, launchd job or routine.
+
+**Why one tool.** KDM's optimizer tripwires (CSP, deindex, canonical, sitemap, beacon, headers, 404 sweep) and yoga's deploy-smoke (beacon, phone taps, CTA, auth) each caught real bugs on one site only. The bug classes are shared: a self-blocking CSP, an unwired beacon, a covered CTA on phones, a stale deploy. So the check lives in the kit and each site supplies a config.
+
+**Contracts every site config must keep**
+
+1. **Read-only and low-rate.** Node requests run at ≤ 2 req/s with a bot UA, and the tool reads no secrets.
+2. **No analytics inflation.** Browser pages load with `?internal=1`, and every beacon, CSP-report and analytics request is *aborted* in the browser. The only beacon write is a **documented no-op body**, an empty batch that the handler loops over without writing. Verify that in the handler before you configure it; if no no-op exists, omit `body`.
+3. **Auth probes never sign up.** Submit only when *every* sign-in proof holds. The proofs are the sign-in marker, one password field that is not `new-password`, no sign-up-only field, and a submit label that says sign in. Sign-up requests are also aborted at the network layer. Credentials are always a fresh `smoke-probe-<hex>@example.com` and a random password; never configured, never real. Production hosts are listed in `auth.liveHosts` and skipped unless `--auth-live` is passed.
+   *Lesson (yoga 11-01): the modal opened in sign-up mode, and a probe that "signed in" created a real account.*
+4. **Runtime CSP only counts what the page cannot survive.** A blocked `eval` with no page error is a library feature probe, such as zod v4's JIT `new Function("")`, and is only a note. *Lesson (yoga 11-04): the first live run flagged it as a self-block, which was a false alarm.*
+5. **Tap CTAs name the real primary control.** "The first link in `<main>`" picked a 44 px breadcrumb on CDE and a 17 px inline language link. Inline text links are exempt from the 24 px rule (WCAG 2.5.8), so configure the card or CTA selector per hub.
+6. **live = local reads git, not the working tree.** It compares `git show <ref>:<file>` with the live bytes. On a mismatch it names the cause: live equals `origin/main` (HEAD is unpushed) or neither (stale or failed deploy). Use `--ref=origin/main` to ask "is what's pushed live?"
+
+**Evidence (11-04 live runs, read-only).**
+- KDM: 10 ✓ and 1 ✗. The ✗ is `liveLocal`: `kdm-game-clicks.js` live equals origin/main, and HEAD `e239f246` is on an unpushed branch. With `--ref=origin/main`, all 13 files match.
+- CDE: 11 ✓, auth off.
+- yoga: auth skipped on the live host; csp, tap and cta ✓ after the fixes in contracts 4 and 5. `liveLocal` ✗ for the same unpushed-HEAD reason (`analytics.js`).
+- A broken fixture (port 4740) turned every check red.
+
+**Checklist for a new site (NEW-SITE-PLAYBOOK).** Add `smoke.config.<site>.json` with repo, base, blockInBrowser, hubs and their CTA selectors, the beacon no-op body (after reading the handler), the framing rule, the sitemap minimum and the sweep pattern. Get a green run before the first launch announcement.
+
+
+## 8e. Site-level checks: taps, CI, translations, health claims, hreflang (yoga-bits 10-30 → 11-04)
+
+The game gates (§5) never load the site's own pages, its CI or its prose. Each of the checks below found a live bug
+that had shipped on yoga-bits. All of them run against a site with only a `site-checks.json` config. See
+`infra/yoga-derived-checks.README.md` for the configs for yoga, KDM and CDE.
+
+1. **Every link and button on home and hubs takes a real tap on a phone, and nothing that looks like a card is dead.**
+   - *Yoga 11-01:* a see-through sticky CTA (fixed, z-40, semi-transparent padding) swallowed every tap in its strip.
+     The last footer links could never be tapped. The Android install banner's full-width wrapper did the same. The
+     home "How It Works" cards, stat chips and feature tiles looked tappable and did nothing.
+   - *Rule:* a fixed or sticky wrapper is `pointer-events:none` and only the control inside it is
+     `pointer-events:auto`. A sticky bar shows only where it is needed. A card either opens what it describes or doesn't
+     look like a card.
+   - *Gate:* `test/site-tap-cover.mjs` at 390×844 and 320×568, run after each deploy. It hit-tests the centre of the
+     **first line box** (`getClientRects()[0]`). The centre of the whole box of a wrapped link lands on neighbouring
+     text, which caused 3 false alarms on 11-04 (real taps confirmed all 3 were fine). The dead-card probe flags a card
+     with its own `cursor:pointer`, or a `/card|tile/` class with a card look, that has no link, button or handler.
+   - *11-04 sweep:* CDE `/he/` and `/es/` have 12 such `feature-card`s.
+2. **"CI is red" always says why: a billing block or a real failure.**
+   - *Yoga 10-31 → 11-01:* the Actions minutes ran out, and the red runs then hid a critical and then a high
+     npm-audit finding for about 3 days, because "red" had come to mean "billing".
+   - *Gate:* `test/ci-health.mjs`, run on every status check. It classifies a red run from the job's check-run
+     annotation ("The job was not started because … spending limit"), which needs only repo scope. Otherwise it names
+     the failing step and its error lines.
+   - **The minutes / billing API needs the gh `user` scope, which only the owner can add (`gh auth refresh -s user`).
+     Never attempt it from a tool or an agent.**
+3. **A translation passes when independent judges agree, not when one reviewer says so.**
+   - *Yoga 10-31:* the owner reads only Hebrew and English, so a native check was never going to happen.
+   - *Gate:* `infra/i18n/consensus.mjs`. An edit lands only when ≥2 judges flag the same passage: C (claude sonnet
+     editor), B (blind back-translation by opus, compared with the English by opus), optional G (Gemini) and D
+     (deterministic formal register). Removing a claim or restoring a dropped caution also lands. `--tiebreak` sends a
+     single-judge point to a fresh third judge, and the fix needs 2 of 3.
+   - **Guards:**
+     - An edit that drops a hedge is skipped. "Many people find…" is deliberate.
+     - Rewrites of title and description are reverted and listed for a human, because those belong to SEO.
+     - Edited JSON must still parse.
+   - `fill-gaps.mjs` translates only the sections that were never translated. It keeps existing lines verbatim
+     (≥97%) and the frontmatter byte-identical, or it writes nothing.
+   - *Yoga totals:* 223 units, 899 agreed and 62 tie-break fixes.
+   - **Every `claude` call uses a bare alias** (`--model sonnet|opus|haiku`, never a dated id) plus
+     `--no-session-persistence` and `--allowedTools ''`.
+   - **Stop hooks must exit early under headless `claude -p`.** On 11-02, each `claude -p` call fired the user's Stop
+     hooks, and those ran vitest until the load average hit 450. Keep concurrency at 3–4.
+4. **No health claim is stated as fact, in content or in page code.**
+   - *Yoga 10-30:* Downward Dog "helps relieve stress and mild depression", and 70+ lines like it ran across 11
+     locales. *10-31:* the `.astro` category pages said "reduced cortisol levels, lower heart rate", because the
+     content tests never read page code.
+   - *Gate:* `test/health-claim.mjs`, run before push. It flags a claim verb within about 40 characters of a condition
+     ("cures anxiety", "lowers blood pressure"), or a noun claim ("clinically proven", "detoxifies", "boosts
+     immunity"), when the sentence has no hedge ("may", "some people find", "research suggests", "talk to your doctor").
+     It skips cautions and negations. Allowlist entries are `path::sentence-substring`.
+   - English only. The translations are covered by the claim rules in 8e.3.
+   - *11-04 sweep:* 3 hits in KDM `vitamins` ("Vitamin C fights colds", "fights colds and heals cuts").
+5. **Every hreflang alternate answers 200 and links back.**
+   - *Yoga 10-30:* every article declared all 10 translations, but most locales carried only 20 of the 55 articles,
+     so 245 alternates answered 404 live for weeks. Google drops a cluster with broken or one-way members.
+   - *Gate:* `infra/seo/hreflang-check.mjs`.
+     - After a build, `--serve=dist --all` checks the whole build in about 30 s (yoga: 3,162 pages, 23,562 links).
+     - Live, it samples the sitemap at ≤2 requests a second, read-only, without following redirects. A 3xx is a
+       finding.
+     - A return link counts if it is in the target's HTML or in its sitemap entry.
+   - *11-04 sweep:*
+     - Yoga has 230 one-way links: EN `/poses/`, `/breaths/category/*` and `/breaths/level/*` carry no hreflang, while
+       their locale versions point at them.
+     - CDE `/he/english-games/toys/` claims an EN page whose cluster names a different `he` URL.

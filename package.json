@@ -17,7 +17,15 @@
     "format": "prettier --write src/",
     "build-data": "node scripts/build-word-data.js",
     "optimize-images": "node scripts/optimize-images.js",
-    "engagement": "node tools/learning/optimizer.mjs 28 --rivals"
+    "engagement": "node tools/learning/optimizer.mjs 28 --rivals",
+    "kit:smoke": "node ~/projects/shared/game-kit/tools/smoke.mjs https://childrendoenglish.com --site=cde",
+    "kit:hreflang": "node ~/projects/shared/game-kit/infra/seo/hreflang-check.mjs --base=https://childrendoenglish.com",
+    "kit:tap": "node ~/projects/shared/game-kit/test/site-tap-cover.mjs --base=https://childrendoenglish.com --pages=/,/games/,/he/,/es/,/vocabulary/,/units/,/printable-flashcards/ --query=internal=1",
+    "kit:lang": "node ~/projects/shared/game-kit/test/language-leak.mjs --preset=cde",
+    "kit:contrast": "node ~/projects/shared/game-kit/test/input-contrast.mjs --base=https://childrendoenglish.com --pages=/,/new-player,/vocabulary/,/units/",
+    "kit:images": "node ~/projects/shared/game-kit/test/image-gate.mjs --config=~/projects/shared/game-kit/test/media-gates/cde.json",
+    "kit:audio": "~/.venvs/whisper/bin/python ~/projects/shared/game-kit/test/audio-gate.py --config=~/projects/shared/game-kit/test/media-gates/cde.json",
+    "kit:creds": "node ~/projects/shared/game-kit/tools/cred-health.mjs cde"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

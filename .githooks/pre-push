@@ -1,14 +1,14 @@
 #!/bin/sh
 # Production push budget (owner, 2026-10-31): every push to main is a Vercel production
 # build, and production builds are ~85% of build cost (46 prod deploys Oct 24–31). So a
-# push to main that changes more than docs needs >=120 min since the last one and at most
+# push to main that changes more than docs needs >=180 min since the last one (owner 11-05: 3 h, was 2 h) and at most
 # 4 per UTC day. Branch/preview pushes and docs-only pushes are not counted. Batch commits:
 # they all go up together in the next allowed push.
 #   Urgent fix for a broken live page:  CDE_PUSH_NOW=1 git push
 #   Change the window / daily cap:      CDE_PUSH_GAP_MIN=60 CDE_PUSH_DAY_MAX=5 git push
-GAP_MIN="${CDE_PUSH_GAP_MIN:-120}"
+GAP_MIN="${CDE_PUSH_GAP_MIN:-180}"
 DAY_MAX="${CDE_PUSH_DAY_MAX:-4}"
-LOG="$(git rev-parse --git-dir)/prod-push-log"   # one epoch second per production push
+LOG="$(git rev-parse --git-common-dir)/prod-push-log"   # one epoch second per production push (common dir: shared by worktrees)
 ZERO=0000000000000000000000000000000000000000
 
 prod=0

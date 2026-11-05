@@ -15,9 +15,13 @@ that uses this kit gets the lesson.
    work log that grows with each real step never pushed CHECK down — only real step-by-step play shows it).
 4. **Optimizer** — if the issue changes how kids play (a wall, a giveaway, a dead control), add the signal or the step
    to the engagement optimizer / improver recipe so it is looked for in the data.
+   **4b. Dated read** — a fix whose effect only data can judge gets a follow-up read the same day:
+   `node ~/projects/shared/game-kit/tools/due.mjs <site> --add-read=<id> --due=YYYY-MM-DD --what="…" [--cmd="…"]`.
+   due.mjs lists it on status / what next until it is closed with `--done=<id>` (kit 1.60; one format for every site).
+   Any lever tested (worked, flat or falsified) gets a row in the site's `.lever-ledger.jsonl`.
 5. **Propagate** — run the gate over the whole catalogue; fix the other games in the same pass or list them.
 6. **Kit** — commit the kit with a line in `LESSONS.jsonl`, bump `VERSION`, then run each consumer's
-   `scripts/sync-game-kit.mjs`. Tell the Factory session which version carries it (a message; pushes stay with the owner).
+   `scripts/sync-game-kit.mjs --from-origin` (after the kit push — never sync another session's unpushed kit commits). Tell the Factory session which version carries it (a message; pushes stay with the owner).
 
 ## How it is enforced
 

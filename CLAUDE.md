@@ -18,7 +18,7 @@ deploys on every push to main. Audit history: LEARN.md.
 - "Commit" means commit + push + deploy. Do the work on a branch, run the full gate,
   rebase onto origin/main (a bot commits the daily spotlight), fast-forward, push.
 - Production push budget (owner, 10-31): .githooks/pre-push allows a push to main only
-  >=2 h after the last one and <=4 per UTC day (docs-only and branch pushes don't count;
+  >=3 h after the last one (owner 11-05; was 2 h) and <=4 per UTC day (docs-only and branch pushes don't count;
   `git config core.hooksPath .githooks` once per clone). Batch commits. Broken live page:
   `CDE_PUSH_NOW=1 git push`.
 - After a push: check live with `vercel curl`, then ping new/changed URLs:
@@ -50,6 +50,9 @@ deploys on every push to main. Audit history: LEARN.md.
 - After running one: `node ~/projects/shared/game-kit/tools/due.mjs cde --done=<id> --result=ok|found|skipped --note="…"`
   (appends to `.recurring-log.jsonl`, committed). No new crons, launchd jobs or routines.
 - The optimizer's standing sections (tools/learning/standing-sections.mjs) cover the *-read checks.
+- Kit gates (1.60+), one npm script each: `npm run kit:smoke | kit:hreflang | kit:tap | kit:lang | kit:contrast |
+  kit:images | kit:audio | kit:creds` (live site; read-only). Kit sync: `node scripts/sync-game-kit.mjs --from-origin`.
+  Dated follow-up reads: `.recurring-reads.jsonl` via `due.mjs cde --add-read=<id> --due=YYYY-MM-DD --what="…"`.
 
 ## Gotchas
 - Hebrew RTL: wrap English words/names inside Hebrew text in `<bdi dir="ltr">` or
