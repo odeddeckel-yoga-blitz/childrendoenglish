@@ -95,8 +95,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "armchair": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Armchair MET DT283449.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Armchair_MET_DT283449.jpg",
+  "author": "Louis Comfort Tiffany / Tiffany Studios",
+  "licence": "CC0",
+  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
  },
  "arrow": {
   "source": "own",
@@ -302,8 +306,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "bird": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Erithacus rubecula -Netherlands-8.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Erithacus_rubecula_-Netherlands-8.jpg",
+  "author": "Arjan Haverkamp",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "black": {
   "source": "own",
@@ -387,8 +395,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by/4.0/"
  },
  "bread": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Assorted bread.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Assorted_bread.jpg",
+  "author": "The original uploader was Klaus Höpfner at German Wikipedia. (Original text: Helge Höpfner)",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  "broccoli": {
   "source": "wikimedia-commons",
@@ -416,8 +428,12 @@
   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  "bubbles": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Reflection in a soap bubble edit.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Reflection_in_a_soap_bubble_edit.jpg",
+  "author": "Brocken Inaglory. The image was edited by user:Alvesgaspar",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  "bucket": {
   "source": "wikimedia-commons",
@@ -772,8 +788,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "cup": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Cup of black tea.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Cup_of_black_tea.JPG",
+  "author": "AntanO",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "curious": {
   "source": "twemoji",
@@ -892,8 +912,12 @@
   "match": 0.985
  },
  "door": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Rome (Italy), Door -- 2013 -- 3558.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Rome_(Italy),_Door_--_2013_--_3558.jpg",
+  "author": "Dietmar Rabich",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "dozen": {
   "source": "own",
@@ -957,8 +981,12 @@
   "match": 0.996
  },
  "ear": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Closeup of a human ear.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Closeup_of_a_human_ear.jpg",
+  "author": "צולם על ידי he:משתמש:אנדר-ויק",
+  "licence": "Public domain",
+  "licenceUrl": ""
  },
  "earth": {
   "source": "wikimedia-commons",
@@ -1108,8 +1136,12 @@
   "match": 0.963
  },
  "fish": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Carassius wild golden fish 2013 G1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Carassius_wild_golden_fish_2013_G1.jpg",
+  "author": "George Chernilevsky",
+  "licence": "Public domain",
+  "licenceUrl": ""
  },
  "fishing": {
   "source": "wikimedia-commons",
@@ -1159,8 +1191,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "foot": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Human male foot.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Human_male_foot.jpg",
+  "author": "Shinjo2001",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "forest": {
   "source": "wikimedia-commons",
@@ -1193,8 +1229,12 @@
   "licence": "own work"
  },
  "fox": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Rød ræv (Vulpes vulpes).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:R%C3%B8d_r%C3%A6v_(Vulpes_vulpes).jpg",
+  "author": "Malene Thyssen",
+  "licence": "CC BY 2.5",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.5"
  },
  "fridge": {
   "source": "unknown",
@@ -1388,8 +1428,12 @@
   "match": 0.948
  },
  "hammer": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Claw hammer-1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Claw_hammer-1.jpg",
+  "author": "Shakespeare at en.wikipedia",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "hammock": {
   "source": "own",
@@ -1461,8 +1505,12 @@
   "match": 0.984
  },
  "hen": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Hen on street.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Hen_on_street.jpg",
+  "author": "Just chaos",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "hippo": {
   "source": "unknown",
@@ -1496,20 +1544,32 @@
   "match": 0.995
  },
  "horse": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:IcelandicHorseInWinter.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:IcelandicHorseInWinter.jpg",
+  "author": "Andreas Tille",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "hose": {
   "source": "unknown",
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "hot-dog": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Hotdog - Evan Swigart.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Hotdog_-_Evan_Swigart.jpg",
+  "author": "Evan Swigart from Chicago, USA",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "house": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:The Kelly Family House in East Falls, Philadelphia.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:The_Kelly_Family_House_in_East_Falls,_Philadelphia.JPG",
+  "author": "Shuvaev",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "hundred": {
   "source": "own",
@@ -1848,8 +1908,12 @@
   "match": 0.926
  },
  "lollipop": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Lollipop-Rainbox-Swirl.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Lollipop-Rainbox-Swirl.jpg",
+  "author": "Evan-Amos",
+  "licence": "CC0",
+  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
  },
  "lonely": {
   "source": "twemoji",
@@ -2313,8 +2377,12 @@
   "match": 0.986
  },
  "penguin": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Magellanic penguin, Valdes Peninsula, e.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Magellanic_penguin,_Valdes_Peninsula,_e.jpg",
+  "author": "David",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "pepper": {
   "source": "wikimedia-commons",
@@ -3415,8 +3483,12 @@
   "match": 0.982
  },
  "wheel": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Leichtmetallrad mit Felgenschloss.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Leichtmetallrad_mit_Felgenschloss.jpg",
+  "author": "SweetWood",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "whistle": {
   "source": "wikimedia-commons",
@@ -3558,7 +3630,11 @@
   "match": 0.983
  },
  "zoo": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Dudley Zoo, West Midlands, England -entrance-8March2011.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Dudley_Zoo,_West_Midlands,_England_-entrance-8March2011.jpg",
+  "author": "Tony Hisgett from Birmingham, UK",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  }
 }
