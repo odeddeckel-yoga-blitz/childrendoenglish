@@ -37,7 +37,7 @@
  * look like covers/catalogs/posters/scans, duplicate URLs.
  */
 import sharp from 'sharp';
-import { mkdirSync, writeFileSync, copyFileSync, existsSync, readdirSync } from 'fs';
+import { mkdirSync, writeFileSync, copyFileSync, existsSync, readdirSync, readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -48,7 +48,7 @@ const UA = { 'User-Agent': 'ChildrenDoEnglish/1.0 (educational app; info@childre
 const BAD_NAME = /\b(cover|title|page|catalog|advert|poster|book|manuscript|folio|stamp|coin|map|document|newspaper_|magazine)\b/i;
 
 async function searchCandidates(term, limit = 6) {
-  const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=File:${encodeURIComponent(term)}&gsrnamespace=6&gsrlimit=${limit * 2}&prop=imageinfo&iiprop=url|size|mime&iiurlwidth=512&format=json&origin=*`;
+  const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=File:${encodeURIComponent(term)}&gsrnamespace=6&gsrlimit=${limit * 2}&prop=imageinfo&iiprop=url|size|mime|extmetadata&iiurlwidth=512&format=json&origin=*`;
   const res = await fetch(url, { headers: UA });
   const data = await res.json();
   if (!data.query?.pages) return [];
@@ -62,7 +62,12 @@ async function searchCandidates(term, limit = 6) {
       return true;
     })
     .slice(0, limit)
-    .map(p => ({ url: p.imageinfo[0].thumburl || p.imageinfo[0].url, title: p.title }));
+    .map(p => {
+      // Provenance for /image-credits/ (owner 11-04): CC BY / BY-SA need the author, the licence and a link.
+      const i = p.imageinfo[0], m = i.extmetadata || {}, strip = (h) => String(h || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+      return { url: i.thumburl || i.url, title: p.title, page: i.descriptionurl, author: strip(m.Artist?.value) || 'see file page',
+        licence: strip(m.LicenseShortName?.value), licenceUrl: m.LicenseUrl?.value || '' };
+    });
 }
 
 async function download(url, filepath) {
@@ -107,6 +112,7 @@ if (cmd === 'candidates' && word) {
       try {
         await download(c.url, fp);
         files.push(fp);
+        writeFileSync(fp.replace(/\.webp$/, '.json'), JSON.stringify(c));   // source record, read by `pick`
         console.log(`c${files.length - 1}: ${c.title} [${term.trim()}]`);
       } catch (e) { console.log(`skip ${c.title}: ${e.message}`); }
       await new Promise(r => setTimeout(r, 350));
@@ -118,7 +124,20 @@ if (cmd === 'candidates' && word) {
   const src = join(workDir, word, `c${third}.webp`);
   if (!existsSync(src)) { console.error('no such candidate'); process.exit(1); }
   copyFileSync(src, join(imagesDir, `${word}.webp`));
-  console.log(`installed ${word}.webp from candidate c${third}`);
+  // Record where it came from (scripts/IMAGE_SOURCES.json → /image-credits/). No record = the credits gate fails.
+  const meta = src.replace(/\.webp$/, '.json');
+  const srcFile = join(__dirname, 'IMAGE_SOURCES.json');
+  const all = existsSync(srcFile) ? JSON.parse(readFileSync(srcFile, 'utf8')) : {};
+  if (existsSync(meta)) {
+    const c = JSON.parse(readFileSync(meta, 'utf8'));
+    all[word] = { source: 'wikimedia-commons', title: c.title, url: c.page, author: c.author, licence: c.licence, licenceUrl: c.licenceUrl };
+    if (!c.licence) console.warn(`⚠ ${word}: Commons gave no licence name — check ${c.page} before shipping`);
+  } else {
+    all[word] = { source: 'unknown', note: 'picked from a candidate with no source record — fix before shipping' };
+    console.warn(`⚠ ${word}: no source record for c${third} — re-run \`candidates\` so it is recorded`);
+  }
+  writeFileSync(srcFile, JSON.stringify(Object.fromEntries(Object.entries(all).sort()), null, 1) + '\n');
+  console.log(`installed ${word}.webp from candidate c${third} · source recorded (${all[word].licence || all[word].source})`);
 } else if (cmd === 'rivals' && word) {
   // The confusable set for the sole-answer metric: same-category words are the
   // ones that can appear beside this word as quiz distractors.

@@ -39,6 +39,9 @@ deploys on every push to main. Audit history: LEARN.md.
   own URLs is fine).
 - Public contact is info@childrendoenglish.com only. No testimonials unless real and consented.
 - Never re-add words from the "Removed Words" list. Kids' content guardrails apply.
+- Every word image records its source in scripts/IMAGE_SOURCES.json (title, file page, author, licence;
+  `word-image-improver.mjs pick` writes it). /image-credits/ is built from it; src/__tests__/imageSources.test.js fails
+  on a new image without one. Owner 11-04: CC BY / BY-SA photos must be credited.
 
 ## Recurring checks (kit RECURRING.md, owner OK 11-04)
 - On "status", "what next" or the start of a session: run

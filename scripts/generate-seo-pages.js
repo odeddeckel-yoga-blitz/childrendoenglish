@@ -525,7 +525,7 @@ function buildCategoryPage(slug, displayName, words) {
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -826,7 +826,7 @@ ${wordNav}
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
   <script defer src="/vocab-quiz.js"></script>
 </body>
@@ -1031,7 +1031,7 @@ function buildAgeBracketPage(bracket, allWords) {
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -1225,7 +1225,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -1389,7 +1389,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -3202,7 +3202,7 @@ const vocabIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -3747,7 +3747,7 @@ ${FC_SHEETS_CSS}
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
   ${sheetsOut(escapeHtml(displayName), 'en')}
 </body>
@@ -3920,7 +3920,7 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -4081,7 +4081,7 @@ const fcIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -4217,7 +4217,7 @@ const esFcIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/es/" style="color:#5b6779">Espa\u00f1ol</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/es/" style="color:#5b6779">Espa\u00f1ol</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -5019,7 +5019,7 @@ ${GUIDE_QUIZ_CSS}
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -5115,7 +5115,7 @@ const guidesIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;

@@ -12,3 +12,6 @@
 {"id":"ingame-controls-read","at":"2026-11-04T19:35:34.860Z","result":"skipped","note":"tallies shipped 11-04 14:21Z; first read ~Nov 11"}
 {"id":"ai-referrals-read","at":"2026-11-04T19:35:34.970Z","result":"ok","note":"28d: 244 AI arrivals; land on other 20% / flashcards 18% / spanish 15% / tool 15% / games 11% / hebrew 10%"}
 {"id":"deps-audit","at":"2026-11-04T19:39:12.215Z","result":"found","note":"21 (8 high) -> 8 (0 high/critical): npm audit fix + sharp 0.35.5; left: 6 moderate/2 low need eslint/vite-plugin-pwa majors (dev only)"}
+{"id":"data-silence","at":"2026-11-04T21:02:11.509Z","result":"ok","note":"21d: no real gaps; quiz -57%/-59% flags = baselines include the 10-18/10-21 bot bursts; g_open=0 on 10-16/10-20 = early low game volume, loads normal"}
+{"id":"credential-health","at":"2026-11-04T21:02:11.586Z","result":"ok","note":"GSC OAuth OK, Bing key OK"}
+{"id":"site-tap-check","at":"2026-11-04T21:02:11.665Z","result":"ok","note":"7 pages (/, games, he, es, vocabulary, units, printable-flashcards) @390x844+320x568: all reachable, no dead cards"}
