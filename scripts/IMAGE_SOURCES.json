@@ -9,8 +9,12 @@
   "match": 0.952
  },
  "airplane": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Air-to-air photo of a Sukhoi Superjet 100 (97004) over Italy.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Air-to-air_photo_of_a_Sukhoi_Superjet_100_(97004)_over_Italy.jpg",
+  "author": "Katsuhiko Tokunaga/SuperJet International",
+  "licence": "CC BY-SA 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0"
  },
  "alligator": {
   "source": "wikimedia-commons",
@@ -22,8 +26,12 @@
   "match": 0.99
  },
  "alphabet": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Alphabet Blocks.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Alphabet_Blocks.jpg",
+  "author": "Mary Mark Ockerbloom",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "ambulance": {
   "source": "wikimedia-commons",
@@ -63,16 +71,28 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "apple": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Red Apple.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Red_Apple.jpg",
+  "author": "Abhijit Tembhekar from Mumbai, India",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "aquarium": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Monterey Bay Aquarium, California, USA (3).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Monterey_Bay_Aquarium,_California,_USA_(3).jpg",
+  "author": "Jim G from Silicon Valley, CA, USA",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "archery": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Archery RT.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Archery_RT.jpg",
+  "author": "Dulliman",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "armchair": {
   "source": "unknown",
@@ -110,8 +130,12 @@
   "match": 0.97
  },
  "baby": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Smiling baby bathing in a blue plastic tub (3132959300).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Smiling_baby_bathing_in_a_blue_plastic_tub_(3132959300).jpg",
+  "author": "Tom Reynolds from Melbourne, Australia",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "backpack": {
   "source": "wikimedia-commons",
@@ -132,12 +156,20 @@
   "match": 0.974
  },
  "bag": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Totebag.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Totebag.jpg",
+  "author": "Duphyc",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "ball": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:BeachBall.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:BeachBall.jpg",
+  "author": "User Norvy on en.wikipedia",
+  "licence": "Copyrighted free use",
+  "licenceUrl": ""
  },
  "balloon": {
   "source": "own",
@@ -171,8 +203,12 @@
   "match": 0.782
  },
  "bat": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Fourbats.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Fourbats.jpg",
+  "author": "The original uploader was Anetode at English Wikipedia.",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "bathroom": {
   "source": "unknown",
@@ -295,8 +331,12 @@
   "licence": "own work"
  },
  "book": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Liji 2.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Liji_2.jpg",
+  "author": "user:snowyowls",
+  "licence": "CC BY-SA 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0"
  },
  "bookshelf": {
   "source": "wikimedia-commons",
@@ -368,8 +408,12 @@
   "licence": "own work"
  },
  "brush": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Hairbrush flat.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Hairbrush_flat.JPG",
+  "author": "en:User:Musical Linguist",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  "bubbles": {
   "source": "unknown",
@@ -389,8 +433,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "bus": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Setra S6 - Empresa Mosquera - 02.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Setra_S6_-_Empresa_Mosquera_-_02.jpg",
+  "author": "Xosema",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "butterfly": {
   "source": "wikimedia-commons",
@@ -507,8 +555,12 @@
   "licence": "own work"
  },
  "cat": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Cat November 2010-1a.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cat_November_2010-1a.jpg",
+  "author": "Alvesgaspar",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "caterpillar": {
   "source": "unknown",
@@ -577,8 +629,12 @@
   "match": 0.98
  },
  "classroom": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Grande salle ENC n1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Grande_salle_ENC_n1.jpg",
+  "author": "Marie-Lan Nguyen",
+  "licence": "CC BY 2.5",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.5"
  },
  "cliff": {
   "source": "wikimedia-commons",
@@ -788,8 +844,12 @@
   "licence": "own work"
  },
  "dog": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:20110425 German Shepherd Dog 8505.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:20110425_German_Shepherd_Dog_8505.jpg",
+  "author": "Jakub Hałun",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "doll": {
   "source": "unknown",
@@ -1052,8 +1112,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "fishing": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Fishing rod & reel, Mahamaya Lake (01).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Fishing_rod_%26_reel,_Mahamaya_Lake_(01).jpg",
+  "author": "Moheen Reeyad",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "five": {
   "source": "own",
@@ -1838,8 +1902,12 @@
   "licence": "own work"
  },
  "mask": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Venice Carnival - Masked Lovers (2010).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Venice_Carnival_-_Masked_Lovers_(2010).jpg",
+  "author": "Frank Kovalchek from Anchorage, Alaska, USA",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "meadow": {
   "source": "wikimedia-commons",
@@ -2258,8 +2326,12 @@
   "match": 0.981
  },
  "phone": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Smartphone di varie marche.png",
+  "url": "https://commons.wikimedia.org/wiki/File:Smartphone_di_varie_marche.png",
+  "author": "The Tech Cheat",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "piano": {
   "source": "wikimedia-commons",
@@ -3381,8 +3453,12 @@
   "licence": "own work"
  },
  "wolf": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:European grey wolf in Prague zoo.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:European_grey_wolf_in_Prague_zoo.jpg",
+  "author": "[1]",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "worm": {
   "source": "unknown",

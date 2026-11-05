@@ -37,7 +37,7 @@
  * look like covers/catalogs/posters/scans, duplicate URLs.
  */
 import sharp from 'sharp';
-import { mkdirSync, writeFileSync, copyFileSync, existsSync, readdirSync, readFileSync } from 'fs';
+import { mkdirSync, writeFileSync, copyFileSync, existsSync, readdirSync, readFileSync, unlinkSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -101,6 +101,8 @@ if (cmd === 'candidates' && word) {
   const terms = termsArg ? termsArg.slice(8).split(',') : [word];
   const dir = join(workDir, word);
   mkdirSync(dir, { recursive: true });
+  // Clear an older run's candidates: a stale cN without its .json source record was once picked as if it were new.
+  for (const f of readdirSync(dir)) if (/^c\d+\.(webp|json)$/.test(f)) unlinkSync(join(dir, f));
   const seen = new Set();
   const files = [];
   for (const term of terms) {
