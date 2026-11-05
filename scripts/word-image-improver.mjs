@@ -26,6 +26,8 @@
  *     heart-shaped balloon ("balloon"), classroom of desks ("classroom").
  *   - Kid-suitability: bright, clear photo or friendly illustration; nothing
  *     scary, dark, adult, branded, or text-heavy; no archival b&w.
+ *     Check the pick at FULL size before `pick` and again on the before/after sheet: on 11-05 a 112px
+ *     thumbnail of a 'teacher' illustration hid a teacher pointing a pistol at the class.
  *   - Technical: sharp, >=300px source, sensible crop at square aspect.
  *
  * DROP RULE: if after ~3 candidate rounds (different terms each round) no

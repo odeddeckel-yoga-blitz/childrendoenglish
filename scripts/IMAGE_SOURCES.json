@@ -486,8 +486,12 @@
   "match": 0.985
  },
  "button": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Botones.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Botones.jpg",
+  "author": "Jorge Barrios",
+  "licence": "Public domain",
+  "licenceUrl": ""
  },
  "cab": {
   "source": "unknown",
@@ -531,8 +535,12 @@
   "match": 0.988
  },
  "camera": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Nikon D200 front (aka).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Nikon_D200_front_(aka).jpg",
+  "author": "André Karwath aka Aka",
+  "licence": "CC BY-SA 2.5",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.5"
  },
  "can": {
   "source": "own",
@@ -625,8 +633,12 @@
   "match": 0.955
  },
  "cheese": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Swiss cheese cubes.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Swiss_cheese_cubes.jpg",
+  "author": "Christian Bauer",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "cheetah": {
   "source": "wikimedia-commons",
@@ -880,8 +892,12 @@
   "match": 0.935
  },
  "dinosaur": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Indroda Dinosaur Park.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Indroda_Dinosaur_Park.jpg",
+  "author": "FabSubeject",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "doctor": {
   "source": "own",
@@ -896,8 +912,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "doll": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Baby doll-Calineczka-original-2006.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Baby_doll-Calineczka-original-2006.jpg",
+  "author": "A.J.",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "dollhouse": {
   "source": "wikimedia-commons",
@@ -1022,8 +1042,12 @@
   "match": 0.992
  },
  "egg": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:6-Pack-Chicken-Eggs.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:6-Pack-Chicken-Eggs.jpg",
+  "author": "Evan-Amos",
+  "licence": "Public domain",
+  "licenceUrl": ""
  },
  "eight": {
   "source": "own",
@@ -1095,8 +1119,12 @@
   "licence": "own work"
  },
  "fan": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Kawasaki-Electric Fan.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Kawasaki-Electric_Fan.jpg",
+  "author": "see file page",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  "farmer": {
   "source": "own",
@@ -1219,8 +1247,12 @@
   "match": 0.955
  },
  "folder": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Folder-dynamic-color.png",
+  "url": "https://commons.wikimedia.org/wiki/File:Folder-dynamic-color.png",
+  "author": "Vijay Verma",
+  "licence": "CC0",
+  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
  },
  "foot": {
   "source": "wikimedia-commons",
@@ -1253,8 +1285,12 @@
   "licence": "own work"
  },
  "fountain": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Bowl Fountain (French) in the Lower Park of Peterhof.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Bowl_Fountain_(French)_in_the_Lower_Park_of_Peterhof.jpg",
+  "author": "Florstein (Telegram:WikiPhoto.Space)",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "four": {
   "source": "own",
@@ -1269,8 +1305,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by/2.5"
  },
  "fridge": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:LG refrigerator interior.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:LG_refrigerator_interior.jpg",
+  "author": "Milad Mosapoor",
+  "licence": "Attribution",
+  "licenceUrl": ""
  },
  "fries": {
   "source": "wikimedia-commons",
@@ -1728,8 +1768,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by/4.0"
  },
  "juice": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Orange juice 1 edit1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Orange_juice_1_edit1.jpg",
+  "author": "Agency of the United States Department of Agriculture Edited Version by: Arad",
+  "licence": "Public domain",
+  "licenceUrl": ""
  },
  "jump-rope": {
   "source": "wikimedia-commons",
@@ -1824,8 +1868,12 @@
   "match": 0.972
  },
  "knife": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Kitchen knife by yashima.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Kitchen_knife_by_yashima.jpg",
+  "author": "yashima from Japan",
+  "licence": "CC BY-SA 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0"
  },
  "knight": {
   "source": "own",
@@ -1850,8 +1898,12 @@
   "match": 0.989
  },
  "ladybug": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Ladybug side.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Ladybug_side.jpg",
+  "author": "By Dan Parsons",
+  "licence": "CC BY-SA 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0"
  },
  "lake": {
   "source": "wikimedia-commons",
@@ -2039,8 +2091,12 @@
   "match": 0.99
  },
  "meat": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:13-09-01-kochtreffen-wien-Bi-frie-057.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:13-09-01-kochtreffen-wien-Bi-frie-057.jpg",
+  "author": "Bi-frie (talk)",
+  "licence": "CC BY 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/3.0"
  },
  "meatballs": {
   "source": "unknown",
@@ -2254,8 +2310,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "ocean": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Waves July 2009-1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Waves_July_2009-1.jpg",
+  "author": "Alvesgaspar (talk)",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "octopus": {
   "source": "unknown",
@@ -2566,8 +2626,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by/4.0/"
  },
  "pumpkin": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Cucurbita 2011 G1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Cucurbita_2011_G1.jpg",
+  "author": "George Chernilevsky",
+  "licence": "Public domain",
+  "licenceUrl": ""
  },
  "purple": {
   "source": "own",
@@ -2782,8 +2846,12 @@
   "match": 0.896
  },
  "sandals": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Man in sandals side view.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Man_in_sandals_side_view.jpg",
+  "author": "Wyetts",
+  "licence": "CC0",
+  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
  },
  "sandbox": {
   "source": "wikimedia-commons",
@@ -3154,8 +3222,12 @@
   "match": 0.908
  },
  "table": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Hal Blakeley, Wooden Table, c. 1953, NGA 20059.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Hal_Blakeley,_Wooden_Table,_c._1953,_NGA_20059.jpg",
+  "author": "Hal Blakeley",
+  "licence": "CC0",
+  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
  },
  "table-tennis": {
   "source": "wikimedia-commons",
@@ -3667,8 +3739,12 @@
   "licence": "own work"
  },
  "yoga": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Yoga pose image.png",
+  "url": "https://commons.wikimedia.org/wiki/File:Yoga_pose_image.png",
+  "author": "user_id:30363",
+  "licence": "CC0",
+  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
  },
  "yogurt": {
   "source": "unknown",
