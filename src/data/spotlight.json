@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-11-04T00:00:00.000Z",
+  "statsFrom": "2026-11-05T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "toaster",
@@ -7,16 +7,16 @@
     "category": "home",
     "he": "טוסטר",
     "image": "/images/toaster.webp",
-    "ans": 0,
-    "ok": 0,
+    "ans": 14,
+    "ok": 12,
     "since": "2026-11-04T10:50:22.318Z"
   },
   "game": {
     "id": "spelling-forge",
     "name": "Spelling Forge",
     "emoji": "🔨",
-    "opens": 107,
-    "lvl": 175,
+    "opens": 114,
+    "lvl": 191,
     "cmp": 5,
     "since": "2026-10-25T08:21:30.744Z"
   },
