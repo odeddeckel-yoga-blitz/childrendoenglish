@@ -67,8 +67,12 @@
   "match": 0.972
  },
  "apartment": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Apartment building - Niš.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Apartment_building_-_Ni%C5%A1.jpg",
+  "author": "MrPanyGoff",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "apple": {
   "source": "wikimedia-commons",
@@ -281,8 +285,12 @@
   "match": 0.986
  },
  "beetle": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Lucanus cervus.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Lucanus_cervus.jpg",
+  "author": "J.F. Gaffard",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  "beige": {
   "source": "own",
@@ -302,8 +310,12 @@
   "match": 0.983
  },
  "bicycle": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Raleigh lady's loop frame bicycle 1930s.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Raleigh_lady%27s_loop_frame_bicycle_1930s.jpg",
+  "author": "DeFacto",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "bird": {
   "source": "wikimedia-commons",
@@ -360,8 +372,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "boot": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Rain boots on Stairs.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Rain_boots_on_Stairs.jpg",
+  "author": "Erikamthompson",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "bored": {
   "source": "twemoji",
@@ -412,8 +428,12 @@
   "match": 0.955
  },
  "broom": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Broom, doll's (AM 2013.51.8.1-1).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Broom,_doll%27s_(AM_2013.51.8.1-1).jpg",
+  "author": "Unknown authorUnknown author",
+  "licence": "CC BY 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/4.0"
  },
  "brown": {
   "source": "own",
@@ -474,8 +494,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "cake": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:A birthday cake 2.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:A_birthday_cake_2.jpg",
+  "author": "SuperSwift",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "calculator": {
   "source": "wikimedia-commons",
@@ -1055,8 +1079,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by/4.0/"
  },
  "eye": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Eye iris.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Eye_iris.jpg",
+  "author": "che (Please credit as \"Petr Novák, Wikipedia\" in case you use this outside Wikimedia projects.)",
+  "licence": "CC BY-SA 2.5",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.5"
  },
  "fairy": {
   "source": "own",
@@ -1114,8 +1142,12 @@
   "match": 0.991
  },
  "fire": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Fireplace-RM.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Fireplace-RM.jpg",
+  "author": "Ryan Mahle from Sherman Oaks, CA, USA",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "fireplace": {
   "source": "wikimedia-commons",
@@ -1275,8 +1307,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by/4.0/"
  },
  "garden": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Літні клумби у саду.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:%D0%9B%D1%96%D1%82%D0%BD%D1%96_%D0%BA%D0%BB%D1%83%D0%BC%D0%B1%D0%B8_%D1%83_%D1%81%D0%B0%D0%B4%D1%83.jpg",
+  "author": "Sladkiynoyabr",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "gate": {
   "source": "unknown",
@@ -1391,8 +1427,12 @@
   "match": 0.652
  },
  "grass": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Green grass 10.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Green_grass_10.jpg",
+  "author": "BogTar201213",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "grateful": {
   "source": "twemoji",
@@ -1609,8 +1649,12 @@
   "licence": "own work"
  },
  "insect": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Luchsfliege Thereva sp 02 (MK).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Luchsfliege_Thereva_sp_02_(MK).jpg",
+  "author": "Mathias Krumbholz",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "iron": {
   "source": "unknown",
@@ -1676,8 +1720,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "jet": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:105 Polish Air Force MiG-29A Fulcrum ILA Berlin 2016 10.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:105_Polish_Air_Force_MiG-29A_Fulcrum_ILA_Berlin_2016_10.jpg",
+  "author": "Julian Herzog (Website)",
+  "licence": "CC BY 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/4.0"
  },
  "juice": {
   "source": "unknown",
@@ -1750,8 +1798,12 @@
   "match": 0.981
  },
  "kitchen": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Modern kitchen gnangarra.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Modern_kitchen_gnangarra.JPG",
+  "author": "User:Gnangarra",
+  "licence": "CC BY 2.5 au",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.5/au/deed.en"
  },
  "kite": {
   "source": "wikimedia-commons",
@@ -1895,8 +1947,12 @@
   "match": 0.97
  },
  "lock": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:- Padlock -.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:-_Padlock_-.jpg",
+  "author": "User:Nino Barbieri",
+  "licence": "CC BY-SA 2.5",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.5"
  },
  "locker": {
   "source": "wikimedia-commons",
@@ -2610,8 +2666,12 @@
   "licence": "own work"
  },
  "rice": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:A bowl of rice.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:A_bowl_of_rice.jpg",
+  "author": "Douglas Perkins",
+  "licence": "CC0",
+  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
  },
  "ring": {
   "source": "wikimedia-commons",
@@ -2645,8 +2705,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "rooster": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Junglefowl on tree.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Junglefowl_on_tree.jpg",
+  "author": "Philip Pikart",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "rope": {
   "source": "wikimedia-commons",
@@ -2667,8 +2731,12 @@
   "match": 0.958
  },
  "run": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Running Man Kyle Cassidy.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Running_Man_Kyle_Cassidy.jpg",
+  "author": "Kyle Cassidy",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "running": {
   "source": "wikimedia-commons",
@@ -2836,8 +2904,12 @@
   "match": 0.991
  },
  "shoes": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Black Converse sneakers.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Black_Converse_sneakers.JPG",
+  "author": "Brooke Fishwick",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "shorts": {
   "source": "wikimedia-commons",
@@ -3426,8 +3498,12 @@
   "match": 0.907
  },
  "wagon": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:July 4 Little Red Wagon on the Algiers Levee.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:July_4_Little_Red_Wagon_on_the_Algiers_Levee.jpg",
+  "author": "Derek Bridges",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "wall": {
   "source": "wikimedia-commons",
@@ -3533,8 +3609,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "worm": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Earthworm 01.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Earthworm_01.jpg",
+  "author": "Rob Hille",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "worried": {
   "source": "twemoji",
