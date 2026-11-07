@@ -21,6 +21,8 @@
         if (window.CC) return CC.dbg.level;
         if (window.OO) return OO.S.lvl + 1;   // odd-one-out / word-memory keep S in their closure
         if (window.WM) return WM.S.lvl + 1;
+        if (window.OPP) return OPP.S.lvl + 1;   // opposites / true-or-false (wave 2)
+        if (window.TF) return TF.S.lvl + 1;
         if (window.S && typeof S.lvl === 'number') return S.lvl + 1;   // letter-twins / read-it / sound-pairs (0-based)  (+ rhyme-time, missing-letter, picture-bingo)
       } catch (e) { /* game not up yet */ }
       return 1;

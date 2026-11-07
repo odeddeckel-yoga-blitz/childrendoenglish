@@ -6,12 +6,13 @@
  * NOT a load failure — TTS would be blocked the same way. */
 (function () {
   var clip = null;
-  window.cdeSay = function (text, fallback) {
+  /* src (optional): play this file instead of /audio/<word>.mp3 (True or False's sentence clips). */
+  window.cdeSay = function (text, fallback, src) {
     try {
       if (clip) clip.pause();
       try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
       var key = String(text).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
-      clip = new Audio('/audio/' + key + '.mp3');
+      clip = new Audio(src || '/audio/' + key + '.mp3');
       var failed = false;
       var fail = function () { if (!failed) { failed = true; if (fallback) fallback(); } };
       clip.addEventListener('error', fail, { once: true });
