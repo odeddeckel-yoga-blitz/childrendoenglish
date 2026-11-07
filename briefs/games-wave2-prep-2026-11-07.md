@@ -24,7 +24,19 @@ Head terms, for scale: "משחקי אנגלית לילדים" 10 and "english ga
 - **Words it needs:** at least 12 picturable pairs. The site has 47 adjectives today, but all are colours and feelings; the only pair among them is happy/sad.
 - **Which batch supplies them:** 1k **batch 7**, 28 adjectives. That gives 13 pairs: big/small, hot/cold, long/short, new/old, clean/dirty, wet/dry, full/empty, fast/slow, tall/short, hard/soft, heavy/light, loud/quiet, tidy/untidy, wide/narrow. Batch 8 adds broken, spotted and striped, but not as pairs.
 - **New card type:** a **pair card**, where one image shows both sides, or two images with one shared background. The word list needs a `pair` field.
-- **Picture style:** each pair needs a matched set (the same object both ways) or the answer gives itself away. A matched photo pair from stock is rare, so **Fluent 3D doesn't work here**: it has no "empty glass". Drawn matched pairs are our own drawings, and the owner has said no more of those. ⚠ **Open picture question for the owner.** One style per round still applies.
+- **Picture style: Fluent 3D icons (owner decision 11-07, option C on the picture-style page).** One style for every round, MIT licence, no keys needed. Pairs that work (previews in scratchpad `opp/`):
+  - hot/cold: Hot face / Cold face (backup: Fire / Ice)
+  - full/empty: Battery / Low battery
+  - loud/quiet: Speaker high volume / Muted speaker
+  - heavy/light: Rock / Feather
+  - hard/soft: Brick / Teddy bear
+  - wet/dry: Umbrella with rain drops / Closed umbrella
+  - big/small: Elephant / Mouse, with the small one **drawn at about 42% size** on the shared background
+  - tall/short: Evergreen tree / Seedling, with the short one at about 40%
+  - plus happy/sad, which is already on the site
+  - **Dropped:** fast/slow (speed doesn't show), long/short (the worm looks long too), new/old (Fluent only has young/old people), clean/dirty and wide/narrow (no icon).
+  - That makes 9 pairs, under the 12 aimed for. Look for more Fluent pairs before building.
+  - A size pair needs a `scale` field in the word list, so the shrunk picture is generated rather than hand-edited.
 - **Ladder slot:** after `odd-one-out`. Both are about word meaning.
 - **Demand note:** the Hebrew grade 4–6 suggestions match /he/english-games/ ages 9–10 and 11–12, so its hub card goes there after 11-14.
 
@@ -58,5 +70,5 @@ Head terms, for scale: "משחקי אנגלית לילדים" 10 and "english ga
 
 ## What this depends on
 - The **Pexels/Pixabay keys** gate batches 2–5 (nouns). Opposites and Simon Says also wait on batches 6–7 and their picture style.
-- A **picture decision for adjective pairs** is needed from the owner before Opposites can be specced to build.
+- ~~Picture decision for adjective pairs~~ Decided 11-07: Fluent 3D icons.
 - ~~Blend It needs an audio spike~~ Done 11-07; the owner chose whole-word sound only, so Blend It is dropped.
