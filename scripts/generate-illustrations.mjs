@@ -436,14 +436,22 @@ const ILLUSTRATIONS = {
     <path d="M 256 158 C 200 158 176 120 200 96 C 224 76 252 108 256 150 C 260 108 288 76 312 96 C 336 120 312 158 256 158 Z" fill="#FDE047" stroke="#EAB308" stroke-width="8"/>
   </svg>`,
 
+  // 11-07: the owner picked this drawing on the review page (old one was a blank bottle)
   glue: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
-    ${bgRect('#FFF7ED')}
-    <rect x="236" y="52" width="40" height="34" rx="6" fill="#F97316"/>
-    <path d="M 236 86 L 276 86 L 296 130 L 216 130 Z" fill="#FB923C"/>
-    <rect x="176" y="130" width="160" height="270" rx="26" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="8"/>
-    <rect x="196" y="190" width="120" height="140" rx="14" fill="#FDBA74"/>
-    <path d="M 256 430 C 246 452 236 458 236 470 A 20 20 0 0 0 276 470 C 276 458 266 452 256 430 Z" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="5"/>
-  </svg>`,
+    ${bgRect('#EFF6FF')}
+  <rect x="70" y="330" width="230" height="140" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="6" transform="rotate(-6 185 400)"/>
+  <rect x="180" y="350" width="180" height="120" rx="8" fill="#FCA5A5" stroke="#F87171" stroke-width="6" transform="rotate(5 270 410)"/>
+  <path d="M 120 380 Q 160 360 200 384 Q 236 404 270 380" fill="none" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round"/>
+  <path d="M 120 380 Q 160 360 200 384 Q 236 404 270 380" fill="none" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"/>
+  <g transform="rotate(28 330 200)">
+    <rect x="262" y="120" width="136" height="200" rx="30" fill="#FFFFFF" stroke="#94A3B8" stroke-width="8"/>
+    <rect x="262" y="150" width="136" height="16" fill="#F1F5F9"/>
+    <path d="M 290 120 L 370 120 L 352 82 L 308 82 Z" fill="#F97316" stroke="#C2410C" stroke-width="6" stroke-linejoin="round"/>
+    <path d="M 318 82 L 342 82 L 333 40 L 327 40 Z" fill="#F97316" stroke="#C2410C" stroke-width="5" stroke-linejoin="round"/>
+  </g>
+  <path d="M 262 300 Q 250 330 264 350" fill="none" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <path d="M 262 300 Q 250 330 264 350" fill="none" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round"/>
+</svg>`,
 
   glasses: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#F0F9FF')}

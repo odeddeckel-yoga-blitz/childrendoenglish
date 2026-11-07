@@ -543,8 +543,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.5"
  },
  "can": {
-  "source": "own",
-  "licence": "own work"
+  "source": "wikimedia-commons",
+  "title": "File:Konservendose-1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Konservendose-1.jpg",
+  "author": "No machine-readable author provided. Rainer Zenz assumed (based on copyright claims).",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  "candle": {
   "source": "wikimedia-commons",
@@ -976,8 +980,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "drawing": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Child art, Child drawings, Rostov-on-Don, Russia.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Child_art,_Child_drawings,_Rostov-on-Don,_Russia.jpg",
+  "author": "Vyacheslav Argenberg",
+  "licence": "CC BY 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/4.0"
  },
  "dress": {
   "source": "wikimedia-commons",
@@ -1664,12 +1672,11 @@
  },
  "ice": {
   "source": "wikimedia-commons",
-  "title": "File:Ice cubes openphoto.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Ice_cubes_openphoto.jpg",
-  "author": "Darren Hester",
-  "licence": "CC BY-SA 2.5",
-  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.5",
-  "match": 0.903
+  "title": "File:Ice-Cubes.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Ice-Cubes.jpg",
+  "author": "בר",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "icecream": {
   "source": "wikimedia-commons",
@@ -1690,9 +1697,9 @@
  },
  "insect": {
   "source": "wikimedia-commons",
-  "title": "File:Luchsfliege Thereva sp 02 (MK).jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Luchsfliege_Thereva_sp_02_(MK).jpg",
-  "author": "Mathias Krumbholz",
+  "title": "File:Insects collage.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Insects_collage.jpg",
+  "author": "Anax_imperator_qtl2.jpg: Quartl Cetonia-aurata.jpg: Crumps Unidentified_Mantid_Species_(6105939456).jpg: Thomas Brown Pyrrhocoris_apterus_(aka).jpg: André Karwath aka Aka Ectophasia_spp.jpg: BetacommandBot Eastern Tiger Swallowtail Papilio glaucus on Milkweed 2800px.jpg: Ram-Man Mantispidae_fg1.jpg: Fritz Geller-Grimm Bee-collecting-pollen2.jpeg: P.manchev Grasshopper_2.JPG: Ryan Wood Pulchriphyllium giganteum, adult femal from dorsal.jpg: Drägüs Scorpion_Fly._Panorpa_communis._Mecoptera_(7837166610).jpg: Sebastian Wallroth Blaberus_giganteus_MHNT_dos.jpg: Didier Descouens derivative work: Anaxibia",
   "licence": "CC BY-SA 3.0",
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
@@ -2099,12 +2106,20 @@
   "licenceUrl": "https://creativecommons.org/licenses/by/3.0"
  },
  "meatballs": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Meatballs and falafel balls on a plate.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Meatballs_and_falafel_balls_on_a_plate.jpg",
+  "author": "JIP",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "medal": {
-  "source": "own",
-  "licence": "own work"
+  "source": "wikimedia-commons",
+  "title": "File:Medals.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Medals.jpg",
+  "author": "Danielle Keller",
+  "licence": "CC BY-SA 2.5",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.5"
  },
  "mermaid": {
   "source": "own",
@@ -2251,21 +2266,19 @@
  },
  "net": {
   "source": "wikimedia-commons",
-  "title": "File:Hyde Real Tennis Court Net - geograph.org.uk - 1233115.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Hyde_Real_Tennis_Court_Net_-_geograph.org.uk_-_1233115.jpg",
-  "author": "Nigel Mykura",
-  "licence": "CC BY-SA 2.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-  "match": 0.976
+  "title": "File:2015 US Open Tennis - Qualies - The Net (20961952168).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:2015_US_Open_Tennis_-_Qualies_-_The_Net_(20961952168).jpg",
+  "author": "Steven Pisano from Brooklyn, NY, USA",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
  },
  "newspaper": {
   "source": "wikimedia-commons",
-  "title": "File:A stack of newspapers.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:A_stack_of_newspapers.jpg",
-  "author": "Daniel R. Blume from Orange County, California, USA",
-  "licence": "CC BY-SA 2.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-  "match": 0.947
+  "title": "File:Land on the Moon 7 21 1969-repair.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Land_on_the_Moon_7_21_1969-repair.jpg",
+  "author": "Jack Weir (1928-2005)",
+  "licence": "Public domain",
+  "licenceUrl": ""
  },
  "nine": {
   "source": "own",
@@ -2289,8 +2302,12 @@
   "match": 0.946
  },
  "nose": {
-  "source": "own",
-  "licence": "own work"
+  "source": "wikimedia-commons",
+  "title": "File:Child nose.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Child_nose.jpg",
+  "author": "see file page",
+  "licence": "Public domain",
+  "licenceUrl": ""
  },
  "notebook": {
   "source": "wikimedia-commons",
@@ -2696,12 +2713,11 @@
  },
  "rain": {
   "source": "wikimedia-commons",
-  "title": "File:Purple rain on roof.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Purple_rain_on_roof.jpg",
-  "author": "W.carter",
-  "licence": "CC0",
-  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-  "match": 0.953
+  "title": "File:A man walks through heavy rain under an umbrella in Kigali, Rwanda. Emmanuel Kwizera.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:A_man_walks_through_heavy_rain_under_an_umbrella_in_Kigali,_Rwanda._Emmanuel_Kwizera.jpg",
+  "author": "Emmanuelkwizera",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "rainbow": {
   "source": "wikimedia-commons",
@@ -3021,8 +3037,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "skates": {
-  "source": "own",
-  "licence": "own work"
+  "source": "wikimedia-commons",
+  "title": "File:Roller-skate.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Roller-skate.jpg",
+  "author": "see file page",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  "skiing": {
   "source": "wikimedia-commons",
@@ -3043,8 +3063,12 @@
   "match": 0.986
  },
  "smile": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Young girl smiling in sunshine.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Young_girl_smiling_in_sunshine.jpg",
+  "author": "Basile Morin",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "snail": {
   "source": "wikimedia-commons",
@@ -3571,11 +3595,11 @@
  },
  "wagon": {
   "source": "wikimedia-commons",
-  "title": "File:July 4 Little Red Wagon on the Algiers Levee.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:July_4_Little_Red_Wagon_on_the_Algiers_Levee.jpg",
-  "author": "Derek Bridges",
-  "licence": "CC BY 2.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  "title": "File:Bollerwagen der Piraten Bochum.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Bollerwagen_der_Piraten_Bochum.jpg",
+  "author": "Sebastian Martin Dicke",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "wall": {
   "source": "wikimedia-commons",

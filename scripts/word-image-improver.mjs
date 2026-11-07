@@ -142,6 +142,21 @@ if (cmd === 'candidates' && word) {
   }
   writeFileSync(srcFile, JSON.stringify(Object.fromEntries(Object.entries(all).sort()), null, 1) + '\n');
   console.log(`installed ${word}.webp from candidate c${third} · source recorded (${all[word].licence || all[word].source})`);
+} else if (cmd === 'title' && word && third) {
+  // Owner picked a specific Commons file on a review page (11-07): fetch it by its File: title with the same metadata
+  // as a search hit, as candidate c9 (search rounds use c0–c8), then `pick <word> 9` installs it with its credit.
+  const t = third.startsWith('File:') ? third : `File:${third}`;
+  const url = `https://commons.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(t)}&prop=imageinfo&iiprop=url|size|mime|extmetadata&iiurlwidth=1024&format=json&origin=*`;
+  const p = Object.values((await (await fetch(url, { headers: UA })).json()).query?.pages || {})[0];
+  const i = p?.imageinfo?.[0];
+  if (!i) { console.error(`no such Commons file: ${t}`); process.exit(1); }
+  const m = i.extmetadata || {}, strip = (h) => String(h || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  const c = { url: i.thumburl || i.url, title: p.title, page: i.descriptionurl, author: strip(m.Artist?.value) || 'see file page',
+    licence: strip(m.LicenseShortName?.value), licenceUrl: m.LicenseUrl?.value || '' };
+  const dir = join(workDir, word); mkdirSync(dir, { recursive: true });
+  await download(c.url, join(dir, 'c9.webp'));
+  writeFileSync(join(dir, 'c9.json'), JSON.stringify(c));
+  console.log(`c9: ${c.title} (${c.licence || 'no licence name'}) → pick ${word} 9`);
 } else if (cmd === 'rivals' && word) {
   // The confusable set for the sole-answer metric: same-category words are the
   // ones that can appear beside this word as quiz distractors.
