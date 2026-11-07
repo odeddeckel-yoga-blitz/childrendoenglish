@@ -75,4 +75,12 @@ describe('land-beacon on game pages (shares the tab list with the app)', () => {
     expect(sent.flatMap((b) => b.batch || []).filter((x) => x.e === 'vis' || x.e === 'rets'))
       .toEqual([{ e: 'vis', i: 'r2-7' }, { e: 'rets', i: 'g-sound-pairs' }]);
   });
+
+  it('keeps the tab arrival class for the first-quiz tally (first page of the tab wins)', () => {
+    sessionStorage.clear();
+    openPage('/', 'https://www.google.com/');
+    expect(sessionStorage.getItem('cde_src')).toBe('seo');
+    openPage('/vocabulary/animals/', `${location.origin}/`);
+    expect(sessionStorage.getItem('cde_src')).toBe('seo');
+  });
 });

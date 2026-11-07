@@ -342,6 +342,14 @@ const landRows = await q`SELECT sum(n)::int AS n FROM cde_land
   WHERE day >= GREATEST(CURRENT_DATE - ${days}::int, ${G_OPEN_SINCE}::date) AND page = 'games'`;
 const pageOpens = landRows[0]?.n || 0;
 const gameIds = Object.keys(gameEv).sort((a, b) => gameEv[b].open - gameEv[a].open);
+// Like-for-like start rate: opens and starts both counted from the game's first g_start (within the window).
+const startWin = {};
+for (const r of await q`SELECT o.item, s.since::text AS since,
+    sum(o.n) FILTER (WHERE o.ev = 'g_open')::int AS open, sum(o.n) FILTER (WHERE o.ev = 'g_start')::int AS start
+  FROM cde_learn o JOIN (SELECT item, min(day) AS since FROM cde_learn WHERE ev = 'g_start' GROUP BY item) s ON s.item = o.item
+  WHERE o.ev IN ('g_open', 'g_start') AND o.day >= GREATEST(s.since, CURRENT_DATE - ${days}::int) GROUP BY o.item, s.since`) {
+  startWin[r.item] = r;
+}
 if (pageOpens > 0 || gameIds.length > 0) {
   const tot = gameIds.reduce((a, id) => ({ open: a.open + gameEv[id].open, lvl: a.lvl + gameEv[id].lvl, cmp: a.cmp + gameEv[id].cmp }), { open: 0, lvl: 0, cmp: 0 });
   console.log(`\n— games: ${tot.open} game opens · ${tot.lvl} level-ups · ${tot.cmp} completes` +
@@ -351,8 +359,11 @@ if (pageOpens > 0 || gameIds.length > 0) {
     const depth = g.open ? g.lvl / g.open : null;
     const flag = g.open >= 10 && depth < 0.2 ? '  ⚠ opens don’t convert to play — check first-play UX'
       : g.open >= 10 && depth < 0.5 ? '  watch' : g.open < 10 ? '  (insufficient data)' : '';
-    // g_start (spelling-forge since 2026-10-28): runs actually started — opens minus starts = left on the menu
-    const starts = g.start ? `  starts ${String(g.start).padStart(4)}` : '';
+    // g_start (spelling-forge since 2026-10-28, read-it/sound-pairs 10-31, letter-twins 11-02): runs actually started.
+    // Compare starts only with the opens since that game's first g_start — the window above counts opens from 10-10,
+    // which read 11-07 as "72 of 115 Spelling Forge kids never start" when the like-for-like rate was 43/55 (78%).
+    const sw = startWin[id];
+    const starts = g.start ? `  starts ${String(g.start).padStart(4)} (${sw ? `${Math.round((100 * sw.start) / Math.max(1, sw.open))}% of ${sw.open} opens since ${sw.since}` : '—'})` : '';
     console.log(`  ${id.padEnd(20)} opens ${String(g.open).padStart(4)}${starts}  levelups ${String(g.lvl).padStart(4)}  completes ${String(g.cmp).padStart(3)}  depth ${depth == null ? '—' : depth.toFixed(2)}${flag}`);
   }
 }
@@ -438,6 +449,13 @@ if (picks.length > 0) {
     for (const lang of [...new Set(onbRows.map((r) => r.lang))].sort()) {
       const t = tally(onbRows.filter((r) => r.lang === lang));
       if (t.q1_start) console.log(`    ${lang}: 1st quiz ${t.q1_done}/${t.q1_start} finished (${pct(t.q1_done, t.q1_start)}), quit ${t.q1_quit}`);
+    }
+    // Q1 sound (from 11-07): did the first question's word play? blocked = autoplay refused (needs a tap), none = no speech.
+    for (const lang of [...new Set(onbRows.map((r) => r.lang))].sort()) {
+      const a = (it) => onbRows.filter((r) => r.lang === lang && r.item === it).reduce((s, r) => s + r.n, 0);
+      const src = ['seo', 'ai', 'external', 'direct', 'internal', 'unknown'].map((k) => [k, a('q1_src_' + k)]).filter(([, n]) => n);
+      if (src.length) console.log(`    ${lang}: first quizzes by arrival: ` + src.map(([k, n]) => `${k} ${n}`).join(' · '));
+      if (a('q1_audio_ok') + a('q1_audio_blocked') + a('q1_audio_none')) console.log(`    ${lang}: Q1 sound played ${a('q1_audio_ok')} · blocked ${a('q1_audio_blocked')} (then tapped to hear ${a('q1_hear_tap')}) · no speech ${a('q1_audio_none')}`);
     }
     if (onb.reach[1]) console.log(`  answered Q1..Q5: ${onb.reach.slice(1).join(' → ')} (of ${onb.q1_start} started since the per-answer beacon; Q1 wrong/skipped ${onb.firstWrong})`);
     if (onb.create_view >= 15 && created / onb.create_view < 0.6)

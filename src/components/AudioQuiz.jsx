@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { sendLearn } from '../utils/learnBeacon';
 import { Volume2, RefreshCw, Turtle, Pointer } from 'lucide-react';
 import useQuizState from '../hooks/useQuizState';
 import QuizHeader from './QuizHeader';
@@ -7,7 +8,18 @@ import QuizOptionGrid from './QuizOptionGrid';
 import { speakWord, isTTSAvailable, isSlowAudio, setSlowAudio } from '../utils/sound';
 import { t } from '../utils/i18n';
 
-export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onAnswer, onQuit: _onQuit }) {
+export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSound, onComplete, onAnswer, onQuit: _onQuit, firstQuiz = false }) {
+  // A new player's FIRST question (11-07 read: en 71 first quizzes started → 32 answered Q1; this is the listening quiz,
+  // so it needs sound on screen one). onb q1_audio_ok | q1_audio_blocked (autoplay refused) | q1_audio_none (no speech)
+  // and q1_hear_tap (tapped the pulsing speaker) split "couldn't hear it" from "left anyway". Once per quiz.
+  const q1Sent = useRef({});
+  const q1 = useCallback((item) => { if (firstQuiz && !q1Sent.current[item]) { q1Sent.current[item] = true; sendLearn('onb', item); } }, [firstQuiz]);
+  // …and how this child's tab arrived (land-beacon.js keeps the coarse class): q1_src_seo | ai | external | direct | internal.
+  useEffect(() => {
+    let src = '';
+    try { src = sessionStorage.getItem('cde_src') || ''; } catch { /* storage blocked */ }
+    q1('q1_src_' + (/^(seo|ai|external|direct|internal)$/.test(src) ? src : 'unknown'));
+  }, [q1]);
   const [loadedImages, setLoadedImages] = useState(new Set());
   const [ttsUnavailableToast, setTtsUnavailableToast] = useState(false);
 
@@ -37,22 +49,26 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
   // Show one-time toast if TTS not available
   useEffect(() => {
     if (ttsOk === false) {
+      q1('q1_audio_none'); // this effect runs at mount (question 1) and when TTS availability changes
       setTtsUnavailableToast(true);
       const timer = setTimeout(() => setTtsUnavailableToast(false), 4000);
       return () => clearTimeout(timer);
     }
-  }, [ttsOk]);
+  }, [ttsOk, q1]);
 
   // Auto-speak current word
   useEffect(() => {
     if (ttsOk && quiz.currentWord) {
       let live = true;
       const timer = setTimeout(() => {
-        Promise.resolve(speakWord(quiz.currentWord.word)).then((played) => { if (live && played === false) setNeedTap(true); });
+        Promise.resolve(speakWord(quiz.currentWord.word)).then((played) => {
+          if (quiz.currentIndex === 0) q1(played === false ? 'q1_audio_blocked' : 'q1_audio_ok');
+          if (live && played === false) setNeedTap(true);
+        });
       }, 300);
       return () => { live = false; clearTimeout(timer); };
     }
-  }, [quiz.currentIndex, quiz.currentWord, ttsOk]);
+  }, [quiz.currentIndex, quiz.currentWord, ttsOk, q1]);
 
   if (!quiz.currentWord) return null;
 
@@ -88,7 +104,7 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
         {ttsOk ? (
           <>
             <button
-              onClick={() => { setNeedTap(false); speakWord(quiz.currentWord.word); }}
+              onClick={() => { if (needTap && quiz.currentIndex === 0) q1('q1_hear_tap'); setNeedTap(false); speakWord(quiz.currentWord.word); }}
               data-need-tap={needTap ? '' : undefined}
               className={`mx-auto w-24 h-24 rounded-full bg-linear-to-br from-amber-400 to-amber-600
                          flex items-center justify-center shadow-lg hover:shadow-xl

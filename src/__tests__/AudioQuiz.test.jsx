@@ -12,6 +12,9 @@ vi.mock('../utils/sound', () => ({
   setSlowAudio: vi.fn(),
 }));
 
+vi.mock('../utils/learnBeacon', () => ({ sendLearn: vi.fn(), sendLearnBatch: vi.fn() }));
+import { sendLearn } from '../utils/learnBeacon';
+
 vi.mock('../utils/haptic', () => ({
   haptic: vi.fn(),
 }));
@@ -89,5 +92,33 @@ describe('AudioQuiz', () => {
     await act(async () => { await vi.advanceTimersByTimeAsync(400); });
     expect(document.querySelector('[data-need-tap]')).toBeNull();
     vi.useRealTimers();
+  });
+
+  // 11-07: a new player's first question tallies whether the word played, so "couldn't hear it" is visible.
+  it('first quiz, question 1: tallies a blocked autoplay and the tap to hear', async () => {
+    vi.useFakeTimers();
+    speakWord.mockReturnValue(false);
+    render(<AudioQuiz {...defaultProps} firstQuiz />);
+    await act(async () => { vi.advanceTimersByTime(400); await Promise.resolve(); });
+    expect(sendLearn).toHaveBeenCalledWith('onb', 'q1_audio_blocked');
+    expect(screen.getByText('Tap to hear the word')).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText('Tap to hear again'));
+    expect(sendLearn).toHaveBeenCalledWith('onb', 'q1_hear_tap');
+    vi.useRealTimers();
+  });
+  it('not a first quiz: no onb tallies', async () => {
+    vi.useFakeTimers();
+    speakWord.mockReturnValue(true);
+    render(<AudioQuiz {...defaultProps} />);
+    await act(async () => { vi.advanceTimersByTime(400); await Promise.resolve(); });
+    expect(sendLearn).not.toHaveBeenCalledWith('onb', expect.anything());
+    vi.useRealTimers();
+  });
+
+  it('first quiz: tallies how the tab arrived (q1_src_*), from the class land-beacon kept', () => {
+    sessionStorage.setItem('cde_src', 'ai');
+    render(<AudioQuiz {...defaultProps} firstQuiz />);
+    expect(sendLearn).toHaveBeenCalledWith('onb', 'q1_src_ai');
+    sessionStorage.clear();
   });
 });

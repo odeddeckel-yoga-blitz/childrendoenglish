@@ -10,9 +10,9 @@
   var NAMES={'sound-pairs':'Sound Pairs','read-it':'Read It!','letter-twins':'Letter Twins','spelling-forge':'Spelling Forge','word-zapper':'Word Zapper','category-conveyor':'Category Conveyor'};
   // Plain labels; the drawn icons (CDE_IC from cde-l10n.js) are added as markup next to them.
   var STR={
-    en:{next:'Next game: ',menu:'My menu',start:'More English practice',home:'Children Do English'},
-    he:{next:'המשחק הבא: ',menu:'לתפריט שלי',start:'עוד תרגול באנגלית',home:'Children Do English'},
-    es:{next:'Siguiente juego: ',menu:'Mi menú',start:'Más práctica de inglés',home:'Children Do English'}
+    en:{next:'Next game: ',menu:'My menu',start:'More English practice',home:'Children Do English',ladder:'Back to my words'},
+    he:{next:'המשחק הבא: ',menu:'לתפריט שלי',start:'עוד תרגול באנגלית',home:'Children Do English',ladder:'חזרה למילים שלי'},
+    es:{next:'Siguiente juego: ',menu:'Mi menú',start:'Más práctica de inglés',home:'Children Do English',ladder:'Volver a mis palabras'}
   };
   function ic(n){ return window.CDE_IC?window.CDE_IC(n)+' ':''; }
   // label (our own static text) → innerHTML with a leading icon
@@ -26,6 +26,9 @@
       navigator.sendBeacon('/api/land', JSON.stringify({batch:[{e:'ge',i:item}], l:l}));
     }catch(e){}
   }
+  // Opened as a step of the app's learning ladder (?words=…&from=ladder)? Then the ladder's next step is back in the
+  // app: 11-07 read, conv 45 launched → lf1 8 done, and every conveyor exit since 11-04 went to ANOTHER game.
+  function fromLadder(){ try{ return new URLSearchParams(location.search).get('from')==='ladder'; }catch(e){ return false; } }
   function hasPlayer(){ try{ var r=JSON.parse(localStorage.getItem('childrendoenglish-players')||'null'); return !!(r&&r.players&&r.players.length); }catch(e){ return false; } }
   function primary(b){ b.setAttribute('data-kdm-primary',''); b.style.cssText=b.getAttribute('data-cde-css')||''; }
   function secondary(b){
@@ -60,6 +63,17 @@
     next.addEventListener('click',function(){ ge(o.game+'_next'); });
     home.addEventListener('click',function(){ ge(o.game+'_menu'); });
     if(!again.hasAttribute('data-cde-ge')){ again.setAttribute('data-cde-ge','1'); again.addEventListener('click',function(){ ge(o.game+'_again'); }); }
+    if(player&&fromLadder()){
+      // Ladder child: the primary action continues the ladder; play-again stays as the secondary, no "next game".
+      var back=document.createElement('a');
+      back.className=again.className; back.href='/app';
+      labelled(back,lang==='he'?'arrow-left':'arrow-right',L.ladder);
+      back.setAttribute('data-cde-css','text-decoration:none;display:inline-block');
+      back.setAttribute('data-cde-ladder','');
+      back.addEventListener('click',function(){ ge(o.game+'_ladder'); });
+      primary(back); wrap.appendChild(back); wrap.appendChild(again); secondary(again);
+      return;
+    }
     if(o.good){ primary(next); wrap.appendChild(next); wrap.appendChild(again); secondary(again); }
     else { primary(again); wrap.appendChild(again); wrap.appendChild(next); secondary(next); }
     wrap.appendChild(home);
@@ -70,7 +84,8 @@
   var pill=document.getElementById('homePill');
   if(pill){
     var L0=STR[window.CDE_LANG||'en']||STR.en;
-    if(hasPlayer()){ pill.href='/app'; labelled(pill,'house',L0.menu); pill.setAttribute('aria-label',L0.menu); }
+    if(hasPlayer()&&fromLadder()){ pill.href='/app'; labelled(pill,'house',L0.ladder); pill.setAttribute('aria-label',L0.ladder); }
+    else if(hasPlayer()){ pill.href='/app'; labelled(pill,'house',L0.menu); pill.setAttribute('aria-label',L0.menu); }
     else { labelled(pill,'house',L0.home); pill.setAttribute('aria-label',L0.home); }
   }
 })();

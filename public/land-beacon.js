@@ -72,6 +72,9 @@
       } catch (e) { /* malformed utm — keep referrer class */ }
     }
     navigator.sendBeacon('/api/land', JSON.stringify({ g: g, s: s, l: l }));
+    // The tab's ARRIVAL class (seo · ai · external · direct), kept for this tab only so the first-quiz tally can say how
+    // that child arrived (11-07 en first-quiz leak: couldn't hear vs adult evaluating vs left). Coarse class, never sent alone.
+    try { if (!sessionStorage.getItem('cde_src')) sessionStorage.setItem('cde_src', s); } catch (e) { /* storage blocked */ }
     /* AI attribution v1 (game-kit infra/land-beacon.md, kit 1.37.0): the ai open
        above stays exactly as it was; alongside it, aie = WHICH assistant, and aiv
        once the page has been visible 5 s in total (clock paused while hidden,

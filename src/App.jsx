@@ -793,6 +793,7 @@ export default function App() {
           <AudioQuiz
             words={quizFlow.quizWords}
             lang={lang}
+            firstQuiz={!stats.totalQuizzes && !Object.keys(stats.wordProgress || {}).length}
             soundEnabled={soundEnabled}
             onToggleSound={toggleSound}
             onComplete={quizFlow.handleQuizComplete}
