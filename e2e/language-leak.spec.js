@@ -7,7 +7,7 @@ import { test, expect } from '@playwright/test';
 //  · he / es interface: no English interface string of the game's own table (CDE_STRINGS.en) on screen — an
 //    untranslated button or toast. Game CONTENT (the English words being learned) is English by design.
 
-const GAMES = ['letter-twins', 'read-it', 'sound-pairs', 'spelling-forge', 'word-zapper', 'category-conveyor', 'rhyme-time', 'odd-one-out', 'word-memory', 'missing-letter', 'picture-bingo', 'opposites', 'true-or-false', 'feelings', 'sentence-builder', 'beginning-sounds'];
+const GAMES = ['letter-twins', 'read-it', 'sound-pairs', 'spelling-forge', 'word-zapper', 'category-conveyor', 'rhyme-time', 'odd-one-out', 'word-memory', 'missing-letter', 'picture-bingo', 'opposites', 'true-or-false', 'feelings', 'sentence-builder', 'beginning-sounds', 'simon-says'];
 const HEB = /[֐-׿]/;
 
 // Visible text outside elements that declare themselves Hebrew.
