@@ -265,6 +265,7 @@ test('contrast: body text is WCAG AA on the darkest and lightest backgrounds of 
 });
 
 test('speech-sync (warm): a word is never still playing when the round changes', async ({ page }) => {
+  test.skip(!!process.env.CI, 'speech-sync needs real audio output (CI has none)');
   test.setTimeout(90000);
   await instrumentSpeech(page, { audio: /\/audio\/[a-z0-9-]+\.mp3/, visual: () => document.querySelector('#rtTarget')?.getAttribute('data-word') || '', answerSel: '.opt, #nextBtn' });
   await page.goto(PAGE);

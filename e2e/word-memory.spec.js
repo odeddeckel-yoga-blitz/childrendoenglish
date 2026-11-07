@@ -235,6 +235,7 @@ test('contrast: menu, HUD and card text meet WCAG AA', async ({ page }) => {
 });
 
 test('speech-sync: a word is never still playing when the next card turns or the board changes (warm)', async ({ page }) => {
+  test.skip(!!process.env.CI, 'speech-sync needs real audio output (CI has none)');
   test.setTimeout(90000);
   await instrumentSpeech(page, {
     audio: /\/audio\/[a-z0-9-]+\.mp3/,

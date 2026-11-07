@@ -293,6 +293,7 @@ test('contrast: menu and play text ≥ 4.5:1 (≥ 3:1 for large text) on its rea
 });
 
 test('speech sync (warm): each word stays with its round', async ({ page }) => {
+  test.skip(!!process.env.CI, 'speech-sync needs real audio output (CI has none)');
   test.setTimeout(90000);
   await instrumentSpeech(page, { audio: /\/audio\/[a-z0-9-]+\.mp3/, visual: () => (window.ML && ML.dbg.item ? ML.dbg.round + ':' + ML.dbg.item.word : ''), answerSel: '#app .opt' });
   await open(page);

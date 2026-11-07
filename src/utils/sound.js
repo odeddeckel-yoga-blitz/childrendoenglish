@@ -111,16 +111,22 @@ export const stopWordAudio = () => {
 export const whenWordAudioDone = (capMs, cb) => {
   const a = currentWordAudio;
   const tts = () => { try { return !!window.speechSynthesis?.speaking; } catch { return false; } };
-  if ((!a || a.paused || a.ended) && !tts()) { cb(); return; } // nothing playing: no wait
-  let poll = null;
+  const clipOn = a && !a.paused && !a.ended && a.readyState >= 2;
+  if (!clipOn && !tts()) { cb(); return; } // nothing (audibly) playing: no wait
+  // Wait only for what is LEFT of the clip, and stop waiting if playback stalls: a device with no audio output
+  // (CI 11-07) never ends the clip, and each question then waited the whole cap.
+  const left = clipOn && Number.isFinite(a.duration) ? Math.max(0, (a.duration - a.currentTime) * 1000 + 120) : capMs;
+  let poll = null, lastT = clipOn ? a.currentTime : -1, still = 0;
   const done = () => {
     clearTimeout(cap); clearInterval(poll);
     if (a) { a.removeEventListener('ended', done); a.removeEventListener('pause', done); }
     cb();
   };
-  const cap = setTimeout(done, capMs);
-  if (a && !a.paused && !a.ended) { a.addEventListener('ended', done); a.addEventListener('pause', done); }
-  else poll = setInterval(() => { if (!tts()) done(); }, 100);
+  const cap = setTimeout(done, Math.min(capMs, left));
+  if (clipOn) {
+    a.addEventListener('ended', done); a.addEventListener('pause', done);
+    poll = setInterval(() => { if (a.currentTime === lastT) { if (++still >= 3) done(); } else { still = 0; lastT = a.currentTime; } }, 100);
+  } else poll = setInterval(() => { if (!tts()) done(); }, 100);
 };
 
 // Resolves true when the word's audio file started playing (false = blocked or

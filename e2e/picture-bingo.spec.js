@@ -276,6 +276,7 @@ test('contrast: play-screen text is readable (WCAG AA; 3:1 for large bold button
 });
 
 test('speech-sync (real audio, warm): a call has finished before the next call shows', async ({ page }) => {
+  test.skip(!!process.env.CI, 'speech-sync needs real audio output (CI has none)');
   test.setTimeout(60000);
   await instrumentSpeech(page, { audio: /\/audio\/[a-z0-9-]+\.mp3/, visual: () => document.getElementById('hud')?.getAttribute('data-call') || '', answerSel: '.sq, #notOn' });
   await page.route('**/api/**', (r) => r.fulfill({ status: 204 }));

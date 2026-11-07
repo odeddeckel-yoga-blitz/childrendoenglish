@@ -25,6 +25,9 @@ async function newPlayer(page) {
   await page.waitForTimeout(800);
 }
 
+// Real audio OUTPUT is needed (the clips must play and end): CI runners have none, so this is a local gate (11-07).
+test.skip(!!process.env.CI, 'needs real audio output');
+
 for (const mode of ['warm', 'cold']) {
   test(`flashcards: each word stays with its card (${mode})`, async ({ page }) => {
     test.setTimeout(90000);

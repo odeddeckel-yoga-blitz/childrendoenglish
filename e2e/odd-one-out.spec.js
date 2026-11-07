@@ -266,6 +266,7 @@ test('contrast: play-screen text is WCAG AA on the dark theme', async ({ page })
 });
 
 test('speech sync (warm): a word never plays over the next round', async ({ page }) => {
+  test.skip(!!process.env.CI, 'speech-sync needs real audio output (CI has none)');
   test.setTimeout(90000);
   await instrumentSpeech(page, { audio: /\/audio\/[a-z0-9-]+\.mp3/, visual: () => (window.OO && OO.dbg.roundKey) || '', answerSel: '#app .opt' });
   await open(page);
