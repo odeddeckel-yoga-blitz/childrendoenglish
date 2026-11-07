@@ -46,6 +46,8 @@ const MAP = {
   'hooks/commit-msg': '.githooks/commit-msg',
   'test/lesson-check.mjs': 'tools/game-review/lesson-check.mjs',
   'ISSUE-LOOP.md': 'plans/issue-loop.md',
+  // Spoken content stays with its visual (kit §8g, yoga 11-07): CI can't reach the shared kit, so the tool is synced in.
+  'test/speech-sync.mjs': 'e2e/lib/speech-sync.mjs',
 };
 
 const hash = (p) => createHash('sha256').update(readFileSync(p)).digest('hex').slice(0, 12);
