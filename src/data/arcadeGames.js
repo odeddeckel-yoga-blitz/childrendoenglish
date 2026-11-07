@@ -26,4 +26,5 @@ export const SPOTLIGHT_GAMES = [
   { id: 'opposites', name: 'Opposites', icon: 'repeat', emoji: '🔁' },
   { id: 'true-or-false', name: 'True or False', icon: 'circle-check', emoji: '✅' },
   { id: 'feelings', name: 'Feelings', icon: 'smile', emoji: '😊' },
+  { id: 'sentence-builder', name: 'Sentence Builder', icon: 'blocks', emoji: '🧱' },
 ];
