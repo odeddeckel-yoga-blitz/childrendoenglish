@@ -15,11 +15,11 @@ const snap = existsSync(STATS) ? JSON.parse(readFileSync(STATS, 'utf8')) : { wor
 const prev = existsSync(OUT) ? JSON.parse(readFileSync(OUT, 'utf8')) : null;
 
 const { WORDS } = await import(pathToFileURL(join(REPO, 'src/data/words.js')).href);
-const { ARCADE } = await import(pathToFileURL(join(REPO, 'src/data/arcadeGames.js')).href);
+const { SPOTLIGHT_GAMES } = await import(pathToFileURL(join(REPO, 'src/data/arcadeGames.js')).href);
 const { decideSpotlight } = await import(pathToFileURL(join(REPO, 'src/utils/spotlightDecide.js')).href);
 
 const now = snap.generatedAt || '1970-01-01T00:00:00.000Z';
-const { next, changes } = decideSpotlight({ prev, snap, words: WORDS, games: ARCADE, now, fillOnly: true });
+const { next, changes } = decideSpotlight({ prev, snap, words: WORDS, games: SPOTLIGHT_GAMES, now, fillOnly: true });
 const text = JSON.stringify(next, null, 2) + '\n';
 const prevText = prev ? JSON.stringify(prev, null, 2) + '\n' : '';
 if (text !== prevText) writeFileSync(OUT, text);

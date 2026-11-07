@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { pickWord, pickGame, pickSpotlight, wordGraduated, gameGraduated, GRAD } from '../utils/spotlightPick';
 import { WORDS } from '../data/words';
-import { ARCADE } from '../data/arcadeGames';
+import { ARCADE, SPOTLIGHT_GAMES } from '../data/arcadeGames';
 import spotlight from '../data/spotlight.json';
 
 const words = [
@@ -49,7 +49,7 @@ describe('spotlight picker', () => {
     expect(w).toBeTruthy();
     expect(`/vocabulary/${w.category}/${w.id}/`).toMatch(/^\/vocabulary\/[a-z]+\/[a-z0-9_-]+\/$/);
     expect(wordGraduated({ ans: spotlight.word.ans, ok: spotlight.word.ok })).toBe(false);
-    expect(games.some((g) => g.id === spotlight.game.id)).toBe(true);
+    expect(SPOTLIGHT_GAMES.some((g) => g.id === spotlight.game.id)).toBe(true);
     expect(gameGraduated({ opens: spotlight.game.opens, lvl: spotlight.game.lvl })).toBe(false);
     expect(spotlight.gradRule).toContain(String(GRAD.word.ans));
   });

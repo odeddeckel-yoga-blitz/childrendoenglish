@@ -35,7 +35,7 @@ if (!/^postgres(ql)?:\/\/[^\s'"]+$/.test(url)) {
 const q = neon(url);
 
 const { WORDS } = await import(pathToFileURL(join(REPO, 'src/data/words.js')).href);
-const { ARCADE } = await import(pathToFileURL(join(REPO, 'src/data/arcadeGames.js')).href);
+const { SPOTLIGHT_GAMES } = await import(pathToFileURL(join(REPO, 'src/data/arcadeGames.js')).href);
 const { decideSpotlight, RULES } = await import(pathToFileURL(join(REPO, 'src/utils/spotlightDecide.js')).href);
 
 const prev = existsSync(SPOT) ? JSON.parse(readFileSync(SPOT, 'utf8')) : null;
@@ -65,7 +65,7 @@ if (sufficient.word || sufficient.game || force) {
 }
 
 // 3. keep or swap
-const { next, changes, flags, verdicts } = decideSpotlight({ prev, snap, words: WORDS, games: ARCADE, now, live });
+const { next, changes, flags, verdicts } = decideSpotlight({ prev, snap, words: WORDS, games: SPOTLIGHT_GAMES, now, live });
 for (const lane of ['word', 'game']) console.log(`${lane}: ${verdicts[lane].action.toUpperCase()} — ${verdicts[lane].reason}`);
 if (flags.length) {
   console.log('improver flags: ' + flags.map((f) => `${f.lane}/${f.id} ${f.severity} (rate ${f.rate} over ${f.exposure})`).join('; '));

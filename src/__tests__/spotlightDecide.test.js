@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { decideSpotlight, judgeLane, RULES } from '../utils/spotlightDecide';
-import { ARCADE } from '../data/arcadeGames';
+import { ARCADE, SPOTLIGHT_GAMES } from '../data/arcadeGames';
 
 const words = [
   { id: 'apple', word: 'apple', category: 'food', hebrewTranslation: 'תפוח', imageUrl: '/images/apple.webp' },
@@ -86,6 +86,15 @@ describe('11-07 spotlight review: the deployed pick drifted from the committed o
     const r = decideSpotlight({ prev, snap: s2, words, games: ARCADE, now: at(RULES.maxTenureDays), live: { game: { spot: 9, exposure: 12, good: 20 } } });
     expect(r.next.game.id).toBe('spelling-forge');
     expect(r.changes.filter((c) => c.lane === 'game')).toEqual([]);
+  });
+  it('with all six /games/ games eligible, the 11-08 swap picks the coldest one (owner 11-07)', () => {
+    const s3 = { ...snap, games: { 'word-zapper': { opens: 106, lvl: 1374, cmp: 24 }, 'spelling-forge': { opens: 115, lvl: 191, cmp: 5 },
+      'category-conveyor': { opens: 66, lvl: 243, cmp: 49 }, 'letter-twins': { opens: 6, lvl: 9, cmp: 1 },
+      'read-it': { opens: 45, lvl: 23, cmp: 0 }, 'sound-pairs': { opens: 22, lvl: 29, cmp: 1 } } };
+    const prev = { word: { id: 'cat', since: T0 }, game: { id: 'spelling-forge', since: T0 },
+      history: [{ lane: 'game', from: 'category-conveyor', to: 'spelling-forge', reason: 'max tenure 14d', at: T0 }] };
+    const r = decideSpotlight({ prev, snap: s3, words, games: SPOTLIGHT_GAMES, now: at(RULES.maxTenureDays), live: { game: { spot: 9, exposure: 12, good: 20 } } });
+    expect(r.next.game.id).toBe('letter-twins');
   });
 });
 
