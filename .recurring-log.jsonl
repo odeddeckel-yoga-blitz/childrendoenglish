@@ -16,3 +16,11 @@
 {"id":"credential-health","at":"2026-11-04T21:02:11.586Z","result":"ok","note":"GSC OAuth OK, Bing key OK"}
 {"id":"site-tap-check","at":"2026-11-04T21:02:11.665Z","result":"ok","note":"7 pages (/, games, he, es, vocabulary, units, printable-flashcards) @390x844+320x568: all reachable, no dead cards"}
 {"id":"data-silence","at":"2026-11-07T07:36:55.826Z","result":"ok","note":"no silent days; quiz 'drops' = baselines include the 10-21 bot burst (11-04 Wed 53 vs prior Wed 72)"}
+{"id":"optimizer-read","at":"2026-11-07T07:43:36.620Z","result":"found","note":"11-07 7d+28d: en = 67% of browser-days but 10% return (he 30%), image quiz en 9/36 done, ladder en 43 starts→7 flashcards; ladder wall conv 45→lf1 8; forge 115 opens→43 starts; read-it depth 0.47; conveyor jserr 2/15 not reproducible"}
+{"id":"dead-components","at":"2026-11-07T07:43:36.809Z","result":"ok","note":"7d: 0 dead; new-player btn12 low (1.4% of 140)"}
+{"id":"game-flow-read","at":"2026-11-07T07:43:36.900Z","result":"found","note":"first read 11-07, 3 days of tallies (thin): see optimizer-read"}
+{"id":"page-to-game-read","at":"2026-11-07T07:43:36.994Z","result":"found","note":"first read 11-07, 3 days of tallies (thin): see optimizer-read"}
+{"id":"ingame-controls-read","at":"2026-11-07T07:43:37.087Z","result":"found","note":"first read 11-07, 3 days of tallies (thin): see optimizer-read"}
+{"id":"errors-bounce-read","at":"2026-11-07T07:43:37.182Z","result":"found","note":"first read 11-07, 3 days of tallies (thin): see optimizer-read"}
+{"id":"returning-read","at":"2026-11-07T07:43:37.268Z","result":"found","note":"first read 11-07, 3 days of tallies (thin): see optimizer-read"}
+{"id":"speed-read","at":"2026-11-07T07:43:37.359Z","result":"found","note":"first read 11-07, 3 days of tallies (thin): see optimizer-read"}
