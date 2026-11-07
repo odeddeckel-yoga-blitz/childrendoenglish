@@ -387,14 +387,10 @@ const ILLUSTRATIONS = {
 
   nose: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FFF7ED')}
-  <circle cx="256" cy="262" r="176" fill="#FCD9B8" stroke="#E8B48E" stroke-width="8"/>
-  <path d="M 120 170 Q 150 70 256 72 Q 362 70 392 170 Q 330 120 256 126 Q 182 120 120 170 Z" fill="#7C4A2D"/>
-  <circle cx="190" cy="228" r="16" fill="#3F2A1D"/><circle cx="322" cy="228" r="16" fill="#3F2A1D"/>
-  <circle cx="256" cy="292" r="74" fill="#FDE68A" fill-opacity="0.75"/>
-  <path d="M 246 222 Q 236 286 214 306 Q 204 326 228 334 Q 256 344 284 334 Q 308 326 298 306 Q 276 286 266 222 Z" fill="#F4A582" stroke="#C9764F" stroke-width="7"/>
-  <ellipse cx="236" cy="322" rx="9" ry="6" fill="#9A4A2A"/><ellipse cx="276" cy="322" rx="9" ry="6" fill="#9A4A2A"/>
-  <path d="M 206 382 Q 256 410 306 382" fill="none" stroke="#C9764F" stroke-width="9" stroke-linecap="round"/>
-</svg>`,
+    <path d="M 236 96 Q 226 200 196 284 Q 176 330 200 352 Q 232 380 276 366 Q 316 352 306 316 Q 300 296 276 292 Q 262 290 258 276 Q 266 180 262 96 Z"
+      fill="#FCD9B8" stroke="#E8B48E" stroke-width="8"/>
+    <ellipse cx="226" cy="330" rx="16" ry="11" fill="#B5651D" transform="rotate(-20 226 330)"/>
+  </svg>`,
 
   jar: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#FEF9C3')}
@@ -441,37 +437,13 @@ const ILLUSTRATIONS = {
   </svg>`,
 
   glue: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
-    ${bgRect('#EFF6FF')}
-  <rect x="70" y="330" width="230" height="140" rx="8" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="6" transform="rotate(-6 185 400)"/>
-  <rect x="180" y="350" width="180" height="120" rx="8" fill="#FCA5A5" stroke="#F87171" stroke-width="6" transform="rotate(5 270 410)"/>
-  <path d="M 120 380 Q 160 360 200 384 Q 236 404 270 380" fill="none" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round"/>
-  <path d="M 120 380 Q 160 360 200 384 Q 236 404 270 380" fill="none" stroke="#E2E8F0" stroke-width="4" stroke-linecap="round"/>
-  <g transform="rotate(28 330 200)">
-    <rect x="262" y="120" width="136" height="200" rx="30" fill="#FFFFFF" stroke="#94A3B8" stroke-width="8"/>
-    <rect x="262" y="150" width="136" height="16" fill="#F1F5F9"/>
-    <path d="M 290 120 L 370 120 L 352 82 L 308 82 Z" fill="#F97316" stroke="#C2410C" stroke-width="6" stroke-linejoin="round"/>
-    <path d="M 318 82 L 342 82 L 333 40 L 327 40 Z" fill="#F97316" stroke="#C2410C" stroke-width="5" stroke-linejoin="round"/>
-  </g>
-  <path d="M 262 300 Q 250 330 264 350" fill="none" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
-  <path d="M 262 300 Q 250 330 264 350" fill="none" stroke="#CBD5E1" stroke-width="3" stroke-linecap="round"/>
-</svg>`,
-
-  // 11-07 owner: yoga kept (was a black silhouette); a child in tree pose on a mat
-  yoga: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
-    ${bgRect('#F5F3FF')}
-  <rect x="96" y="440" width="320" height="30" rx="12" fill="#A78BFA"/>
-  <path d="M 256 260 L 256 440" stroke="#2563EB" stroke-width="34" stroke-linecap="round"/>
-  <path d="M 256 300 L 318 352 L 262 380" fill="none" stroke="#2563EB" stroke-width="30" stroke-linecap="round" stroke-linejoin="round"/>
-  <rect x="216" y="172" width="80" height="130" rx="36" fill="#F472B6"/>
-  <path d="M 226 190 Q 190 120 240 64" fill="none" stroke="#E8B48E" stroke-width="22" stroke-linecap="round"/>
-  <path d="M 286 190 Q 322 120 272 64" fill="none" stroke="#E8B48E" stroke-width="22" stroke-linecap="round"/>
-  <circle cx="256" cy="58" r="14" fill="#E8B48E"/>
-  <circle cx="256" cy="136" r="38" fill="#FCD9B8"/>
-  <path d="M 218 128 Q 222 92 256 94 Q 290 92 294 128 Q 276 112 256 114 Q 236 112 218 128 Z" fill="#7C4A2D"/>
-  <circle cx="243" cy="138" r="4.5" fill="#3F2A1D"/><circle cx="269" cy="138" r="4.5" fill="#3F2A1D"/>
-  <path d="M 244 154 Q 256 162 268 154" fill="none" stroke="#C9764F" stroke-width="4" stroke-linecap="round"/>
-  <ellipse cx="246" cy="446" rx="26" ry="10" fill="#E8B48E"/>
-</svg>`,
+    ${bgRect('#FFF7ED')}
+    <rect x="236" y="52" width="40" height="34" rx="6" fill="#F97316"/>
+    <path d="M 236 86 L 276 86 L 296 130 L 216 130 Z" fill="#FB923C"/>
+    <rect x="176" y="130" width="160" height="270" rx="26" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="8"/>
+    <rect x="196" y="190" width="120" height="140" rx="14" fill="#FDBA74"/>
+    <path d="M 256 430 C 246 452 236 458 236 470 A 20 20 0 0 0 276 470 C 276 458 266 452 256 430 Z" fill="#E2E8F0" stroke="#CBD5E1" stroke-width="5"/>
+  </svg>`,
 
   glasses: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#F0F9FF')}

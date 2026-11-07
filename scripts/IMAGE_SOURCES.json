@@ -3739,8 +3739,12 @@
   "licence": "own work"
  },
  "yoga": {
-  "source": "own",
-  "licence": "own work"
+  "source": "wikimedia-commons",
+  "title": "File:Yoga pose image.png",
+  "url": "https://commons.wikimedia.org/wiki/File:Yoga_pose_image.png",
+  "author": "user_id:30363",
+  "licence": "CC0",
+  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
  },
  "yogurt": {
   "source": "unknown",
