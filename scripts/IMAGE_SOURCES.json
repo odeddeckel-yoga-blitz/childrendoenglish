@@ -1499,12 +1499,11 @@
  },
  "guitar": {
   "source": "wikimedia-commons",
-  "title": "File:Classical Guitar two views.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Classical_Guitar_two_views.jpg",
-  "author": "Martin Möller",
-  "licence": "CC BY-SA 2.0 de",
-  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0/de/deed.en",
-  "match": 0.969
+  "title": "File:Steel-string-acoustic-guitar.JPG",
+  "url": "https://commons.wikimedia.org/wiki/File:Steel-string-acoustic-guitar.JPG",
+  "author": "Trude Bergheim Mikkelsen",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "gymnastics": {
   "source": "wikimedia-commons",
