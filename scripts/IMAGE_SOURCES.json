@@ -139,11 +139,11 @@
  },
  "baby": {
   "source": "wikimedia-commons",
-  "title": "File:Smiling baby bathing in a blue plastic tub (3132959300).jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Smiling_baby_bathing_in_a_blue_plastic_tub_(3132959300).jpg",
-  "author": "Tom Reynolds from Melbourne, Australia",
-  "licence": "CC BY 2.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  "title": "File:Baby.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Baby.jpg",
+  "author": "Carin Araujo, http://www.prtc.net/~carin",
+  "licence": "Copyrighted free use",
+  "licenceUrl": ""
  },
  "backpack": {
   "source": "wikimedia-commons",
@@ -3739,12 +3739,8 @@
   "licence": "own work"
  },
  "yoga": {
-  "source": "wikimedia-commons",
-  "title": "File:Yoga pose image.png",
-  "url": "https://commons.wikimedia.org/wiki/File:Yoga_pose_image.png",
-  "author": "user_id:30363",
-  "licence": "CC0",
-  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en"
+  "source": "own",
+  "licence": "own work"
  },
  "yogurt": {
   "source": "unknown",
