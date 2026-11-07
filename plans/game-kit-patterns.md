@@ -747,6 +747,17 @@ P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page b
     `<svg><use>` has a non-transparent computed colour and resolves in the sprite. (b) Emoji → markup breaks textContent
     sinks: trace each string's sink; use innerHTML only for STATIC strings, never for player names or word data (XSS) —
     keep data as text nodes and add the icon as its own element.
+62. **A funnel ratio uses one window for its numerator and its denominator** (CDE 2026-11-07: the optimizer counted
+    Spelling Forge opens from 10-10 but starts only from 10-28, when `g_start` began logging, and read "72 of 115 kids
+    never press Start"; like-for-like it was 43/55 = 78%, in line with the other games — a fix was nearly built for a
+    counting artefact). An event that started logging later clips BOTH sides to its first-seen date; the report prints
+    each event's first-seen date next to the ratio and warns when a ratio's two counts span different windows.
+    Guard: infra/optimizer-pattern.md "Same-window ratios"; CDE tools/learning/optimizer.mjs `startWin`.
+63. **A step of a multi-step flow leads back into the flow, not on to something else** (CDE 2026-11-07: the learning
+    ladder's 5th step launches a game on its own page; the game's end card offered "Next game" first, so 45 launches led
+    to 8 next-step completions and every exit since 11-04 went to another game). When a page is opened AS a step
+    (`?from=<flow>`), its end card's primary action and its home control return to the flow's next step; "play again" stays
+    secondary and unrelated "next" offers drop out. Tester: CDE e2e/ladder-return.spec.js (fails on the old end card).
 
 ## 6. Multi-agent workflow rules
 - One agent per game file; agents never touch sibling games or revert anything beyond
@@ -854,6 +865,19 @@ Each consumer repo carries `scripts/sync-game-kit.mjs` (copies kit files in, sta
 the local copy hash-drifts from the kit. The kit is canonical: fix bugs HERE first, then sync out.
 Site-specific shared layers (arcade HUD, progress, beacons) stay in their repos but must honor the
 contracts above.
+
+## 7b. Committing in the SHARED kit folder (yoga 11-07)
+Several sessions (KDM, CDE, yoga, Factory) commit in `~/projects/shared/game-kit` at the same time, often with
+uncommitted work in progress in the same tree.
+- **Never `git commit --amend`, `rebase` or `reset` here.** Your "last commit" may no longer be yours: on 11-07 an amend
+  rewrote KDM's 1.63.4 under yoga's message, and a follow-up `reset --soft` swept KDM's next commit into yoga's.
+- **Commit fresh, named files only** (`git add <path>`, never `-A`/`-u`/`.`), check `git diff --cached --stat` first, and
+  `git log -1` right before anything that touches history.
+- A file someone else has edited but not committed: stage only your lines (write `HEAD version + your change` to a
+  blob, `git hash-object -w` + `git update-index --cacheinfo`), so their edit stays in their working copy.
+- **Repair** without touching the working tree: `git commit-tree <tree> -p <parent>` to rebuild commits (keep the other
+  author's name/date/message), then `git update-ref refs/heads/main <new> <expected-old>`; tell the owner session its
+  commit has a new SHA. Never `reset --hard`.
 
 ## 8. Content→app funnel + infra gotchas (2026-10-19, yoga-bits + CDE)
 
@@ -1016,3 +1040,57 @@ that had shipped on yoga-bits. All of them run against a site with only a `site-
      - Yoga has 230 one-way links: EN `/poses/`, `/breaths/category/*` and `/breaths/level/*` carry no hreflang, while
        their locale versions point at them.
      - CDE `/he/english-games/toys/` claims an EN page whose cluster names a different `he` URL.
+
+6. **Every text box can be read in both themes: typed text and hint at ≥ 4.5:1 against the box's own background.**
+   - Scope: every visible, enabled `input` (no type, or type text / search / email / number / password / tel / url),
+     `textarea`, `[contenteditable]`, `select`, `[role=combobox]` and `[aria-haspopup=listbox]` trigger. For a select,
+     the shown choice is the text that counts. Check it in light, dark via `prefers-color-scheme`, and dark via the
+     site's class toggle (`.dark` on `<html>`).
+   - **A theme override of text colour ships with the matching field background, in the same change.** Lightening
+     `color` for dark mode (`.dark .text-slate-700`, `dark:text-white`) while the box keeps a light fill
+     (`bg-white/70`) is the CDE 11-04 bug, measured at 1.25:1. The reverse (a dark fill with no light text) fails the
+     same way. Prefer one global rule per theme for every text box: background + colour + border together.
+   - **Always set the placeholder colour, in both themes,** with `opacity: 1`. Browser and Tailwind default greys
+     (slate-400, gray-300, `#757575` on a dark field) fail. Measured 11-04: CDE 2.6, KDM 1.47–3.06, yoga 2.54 / 3.17.
+   - **Measure against the composited background where the box really sits, on every page that uses it.** Composite
+     each ancestor's background-colour and opacity from `<html>` down onto the page canvas, and check each gradient
+     stop. Never assume white: the same component can sit on white on one page and slate-100 on another.
+   - **Resolve colours through the browser, not a regex.** Tailwind v4 computes `oklch()` / `oklab()`, and a parser
+     that only reads `rgb()` gets these wrong. Paint the computed colour on a 1×1 canvas and read the pixel.
+   - Measure the end state. Finish transitions and entrance animations first, because a mid-fade ancestor lowers
+     the contrast.
+   - Gate: `node <kit>/test/input-contrast.mjs --preset=<site> …`, which exits 1 when a box is under the minimum.
+     Negative fixture `test/fixtures/input-contrast/` (the CDE 11-04 CSS) must keep failing: 5 findings in 3 modes.
+     Each site lists the pages that have text boxes, and the clicks that reveal them, in its preset. When a new text
+     box ships, add its page to the preset.
+
+## 8f. Push-limit hooks must cover every worktree (yoga-bits 11-05, from a CDE find)
+A pre-push cooldown / daily cap (KDM, yoga, CDE) is only as good as the copies it runs in. Three ways it silently
+stopped counting:
+- **(a) Relative `core.hooksPath` = no hook in older worktrees.** `core.hooksPath=.githooks` resolves inside each
+  worktree's own checkout. Worktrees on branches older than the hook have no `.githooks/pre-push`, so they ran NO hook
+  (yoga: 3 worktrees, 11-05). Set it ABSOLUTE: `git config core.hooksPath "$PWD/.githooks"` (config is shared by all
+  worktrees), or install the hook in every worktree.
+- **(b) The log/stamp must live in `git rev-parse --git-common-dir`.** `--git-dir` is per worktree
+  (`.git/worktrees/<name>`), so each worktree kept its own cooldown log and its pushes never counted (CDE).
+- **(c) A cooldown guarded by `if [ -f "$STAMP" ]` lets a worktree's FIRST push through** (no stamp there yet, KDM).
+  With (b) the stamp is shared; also cross-check the shared push reflog (`git reflog show origin/main` in the common
+  dir) so a missing or deleted stamp can't open the gate.
+- **(d) A passing dry run of the hook APPENDS to the log**, so the next real push is refused for hours. Test on a copy
+  (`cp .git/deploy-push-log /tmp/…` and restore) or with the log path overridden.
+*Check:* `tools/due.mjs <site>` warns when any worktree has no effective pre-push hook while the main checkout has one.
+
+## 8g. Spoken content stays with its visual (yoga-bits 11-07, owner bug)
+Owner: "the name of the pose is voiced only after the visual has already moved to the next pose". The quiz spoke the
+answer's name 250 ms after the answer (fire-and-forget) and advanced at 1,100 ms (500 in speed mode); names take
+1.5–2.5 s, so most of EVERY name played over the next pose, worse on a cold phone load (clip download first).
+- **Rule:** an auto-advance that follows speech waits for the speech to END (clip `ended` / utterance `onend` /
+  error), capped (yoga 4 s); pause any round timer for the extra wait; stop speech before the next item; preload the
+  clip while its item is on screen; where the pace is too fast for speech (speed modes), don't auto-speak.
+- **A tapped name stops when the card changes** (learn/flashcards/drills), or it plays over the next card.
+- **Why tests missed it:** content tests checked the recordings, game tests stubbed or ignored speech, no test ever
+  timed audio against the screen, and the race only shows with real clip durations.
+- *Check:* `test/speech-sync.mjs` (real audio, nothing stubbed): every clip/utterance timed `playing`→`ended`
+  against a per-frame sample of what's on screen; fails if the visual changes while it plays or it starts late. Run
+  warm AND cold (cache off + throttled). Yoga's `e2e/audio-sync.spec.js` failed on every answer of the old code.
+- Side effect to expect: e2e loops that answer on a fixed sleep get slower rounds → wait for the next item instead.
