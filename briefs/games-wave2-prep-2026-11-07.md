@@ -15,7 +15,7 @@ Same method as the grammar and wave-1 checks: Google suggest, en with gl=us and 
 
 Head terms, for scale: "משחקי אנגלית לילדים" 10 and "english games for kids" 10. The game pages mostly rank behind these hubs, so a game's own query decides only part of its traffic.
 
-**Suggested order if the 11-28 read says to build more games:** Opposites → Blend It → True or False → Simon Says.
+**Suggested order if the 11-28 read says to build more games:** Opposites → True or False → Simon Says. (Blend It dropped 11-07: the owner wants whole-word sound only, no sound per letter.)
 
 ## Per candidate
 
@@ -35,7 +35,8 @@ Head terms, for scale: "משחקי אנגלית לילדים" 10 and "english ga
   - Continuants (æ ʌ ɪ s n) stretched with ː render cleanly.
   - Bare stops (k t p ɡ) come out almost silent (peak 0.02–0.06): they need normalising, or a short schwa ("kuh").
   - Whisper can't judge lone phonemes (it hears "Ha", "Sir"), but it does hear the blended word at the end (cat ✓, pig ✓, sun ✓ after the spelled-out sounds). So the gate for each sound is the **owner's ear**, and the gate for each word is whisper.
-  - Sample sent to the owner: `blend/blend-it-sound-test.mp3`, version 1 bare/normalised vs version 2 schwa. **Waiting on their pick.**
+  - Sample sent to the owner: `blend/blend-it-sound-test.mp3`, version 1 bare/normalised vs version 2 schwa.
+- **Owner decision, 11-07: no sound per letter, only one sound for the whole word.** That removes the blending step, which was the whole point of this game. A child who hears the whole word and picks its picture is already practising that in the existing listening games, so as specced Blend It has nothing left of its own. **Blend It is off the wave-2 list** unless it is redesigned around whole-word audio and adds something the ladder lacks.
 - **Picture style:** the CVC words are mostly objects and animals, so photos. Check that every round is one style (`CDE_DRAWN`).
 - **Ladder slot:** right after `read-it`, the bridge from sounds to reading.
 
@@ -58,4 +59,4 @@ Head terms, for scale: "משחקי אנגלית לילדים" 10 and "english ga
 ## What this depends on
 - The **Pexels/Pixabay keys** gate batches 2–5 (nouns). Opposites and Simon Says also wait on batches 6–7 and their picture style.
 - A **picture decision for adjective pairs** is needed from the owner before Opposites can be specced to build.
-- **Blend It needs an audio spike** before it gets a build estimate.
+- ~~Blend It needs an audio spike~~ Done 11-07; the owner chose whole-word sound only, so Blend It is dropped.
