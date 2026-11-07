@@ -1,6 +1,14 @@
 # Games wave 2 (11-07)
 
-**Update 11-07, late:** the owner said to build. **Opposites** and **True or False** are built on branch `wave2-games`, each with its own e2e spec. The branch is held from main until the **11-14 SEO read**: the new hub cards change /games/ and the cross-links on the /he/ test pages. Simon Says isn't built; it needs 1k batch 6 (verbs, with pictures and audio) first. The prep notes below are kept as written.
+**Update 11-07, late:** the owner said to build. **Opposites** and **True or False** are built on branch `wave2-games`, each with its own e2e spec. The branch is held from main until the **11-14 SEO read**: the new hub cards change /games/ and the cross-links on the /he/ test pages. The prep notes below are kept as written.
+
+**Update 11-08, "build more":** four more games are on the same branch, picked from the 11-07 autocomplete data (scratchpad `demand/suggest.json`) for games we could make without the stock-photo keys:
+- **Feelings:** 13 Fluent faces plus short stories ("רגשות באנגלית" 10/10).
+- **Sentence Builder:** reuses True or False's sentences and clips ("sentence building game" 10/10).
+- **Beginning Sounds:** letter to the first sound, using existing photos ("beginning sounds game" 10/10, "אותיות באנגלית משחק" 10/10).
+- **Simon Says:** 16 Fluent action pictures. This removes the batch-6 dependency described below.
+
+The branch now holds 7 games. All are held until the 11-14 read.
 
 Factory relay of the owner's "do all recommendations", 11-07. **Nothing gets built before the 11-28 wave-1 judge read** (`wave1-judge`). This page covers demand, the words each game needs, where those words come from in the 1,000-word plan, a ladder slot and the picture style. No code, no images.
 
