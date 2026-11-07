@@ -6,8 +6,8 @@
    child with a player, else create-player in the page language) replaces the old
    domain-name link. Game names stay English everywhere (one name per game). */
 (function(){
-  var ORDER=['sound-pairs','read-it','letter-twins','spelling-forge','word-zapper','category-conveyor'];
-  var NAMES={'sound-pairs':'Sound Pairs','read-it':'Read It!','letter-twins':'Letter Twins','spelling-forge':'Spelling Forge','word-zapper':'Word Zapper','category-conveyor':'Category Conveyor'};
+  var ORDER=['sound-pairs','read-it','letter-twins','spelling-forge','word-zapper','category-conveyor','picture-bingo','word-memory','rhyme-time','odd-one-out','missing-letter'];
+  var NAMES={'sound-pairs':'Sound Pairs','read-it':'Read It!','letter-twins':'Letter Twins','spelling-forge':'Spelling Forge','word-zapper':'Word Zapper','category-conveyor':'Category Conveyor','picture-bingo':'Picture Bingo','word-memory':'Word Memory','rhyme-time':'Rhyme Time','odd-one-out':'Odd One Out','missing-letter':'Missing Letter'};
   // Plain labels; the drawn icons (CDE_IC from cde-l10n.js) are added as markup next to them.
   var STR={
     en:{next:'Next game: ',menu:'My menu',start:'More English practice',home:'Children Do English',ladder:'Back to my words'},

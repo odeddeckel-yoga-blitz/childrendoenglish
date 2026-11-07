@@ -16,4 +16,10 @@ export const SPOTLIGHT_GAMES = [
   { id: 'letter-twins', name: 'Letter Twins', icon: 'type', emoji: '🔤' },
   { id: 'sound-pairs', name: 'Sound Pairs', icon: 'ear', emoji: '👂' },
   { id: 'read-it', name: 'Read It!', icon: 'book-open', emoji: '📖' },
+  // games wave 1 (owner 11-07)
+  { id: 'rhyme-time', name: 'Rhyme Time', icon: 'music', emoji: '🎵' },
+  { id: 'odd-one-out', name: 'Odd One Out', icon: 'search', emoji: '🔍' },
+  { id: 'word-memory', name: 'Word Memory', icon: 'layers', emoji: '🃏' },
+  { id: 'missing-letter', name: 'Missing Letter', icon: 'pencil', emoji: '✏️' },
+  { id: 'picture-bingo', name: 'Picture Bingo', icon: 'image', emoji: '🖼️' },
 ];

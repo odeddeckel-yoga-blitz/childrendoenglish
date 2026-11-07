@@ -93,8 +93,12 @@ describe('11-07 spotlight review: the deployed pick drifted from the committed o
       'read-it': { opens: 45, lvl: 23, cmp: 0 }, 'sound-pairs': { opens: 22, lvl: 29, cmp: 1 } } };
     const prev = { word: { id: 'cat', since: T0 }, game: { id: 'spelling-forge', since: T0 },
       history: [{ lane: 'game', from: 'category-conveyor', to: 'spelling-forge', reason: 'max tenure 14d', at: T0 }] };
-    const r = decideSpotlight({ prev, snap: s3, words, games: SPOTLIGHT_GAMES, now: at(RULES.maxTenureDays), live: { game: { spot: 9, exposure: 12, good: 20 } } });
+    const six = SPOTLIGHT_GAMES.slice(0, 6);
+    const r = decideSpotlight({ prev, snap: s3, words, games: six, now: at(RULES.maxTenureDays), live: { game: { spot: 9, exposure: 12, good: 20 } } });
     expect(r.next.game.id).toBe('letter-twins');
+    // wave-1 games (11-07) start at 0 opens, so the next swap gives one of them its launch exposure
+    const r2 = decideSpotlight({ prev, snap: s3, words, games: SPOTLIGHT_GAMES, now: at(RULES.maxTenureDays), live: { game: { spot: 9, exposure: 12, good: 20 } } });
+    expect(SPOTLIGHT_GAMES.slice(6).map((g) => g.id)).toContain(r2.next.game.id);
   });
 });
 

@@ -16,12 +16,19 @@
       var fail = function () { if (!failed) { failed = true; if (fallback) fallback(); } };
       clip.addEventListener('error', fail, { once: true });
       var p = clip.play();
-      if (p && p.catch) p.catch(function (e) { if (!e || e.name !== 'NotAllowedError') fail(); });
+      /* NotAllowedError = blocked autoplay (TTS would be blocked too); AbortError = this clip was cut by the next
+       * cdeSay — neither is a load failure, and a fallback there spoke the device voice over the new word (11-07). */
+      if (p && p.catch) p.catch(function (e) { if (!e || (e.name !== 'NotAllowedError' && e.name !== 'AbortError')) fail(); });
     } catch (e) { if (fallback) fallback(); }
   };
   /* cb once the word (clip or TTS) has finished, or after capMs; at once if nothing is playing. A round must not
    * start while the last word is still playing (kit §8g; 11-07 speech-sync: on a slow line Spelling Forge's reveal
    * word ran ~330 ms into the next round). */
+  /* Stop the current word now (a screen the child left must not keep talking). */
+  window.cdeHush = function () {
+    try { if (clip) clip.pause(); } catch (e) {}
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+  };
   window.cdeSayDone = function (capMs, cb) {
     var tts = function () { try { return !!(window.speechSynthesis && window.speechSynthesis.speaking); } catch (e) { return false; } };
     var playing = clip && !clip.ended && !clip.error && (!clip.paused || clip.readyState < 3);
