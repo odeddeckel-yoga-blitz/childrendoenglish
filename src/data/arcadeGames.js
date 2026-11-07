@@ -25,4 +25,5 @@ export const SPOTLIGHT_GAMES = [
   // games wave 2 (owner 11-07)
   { id: 'opposites', name: 'Opposites', icon: 'repeat', emoji: '🔁' },
   { id: 'true-or-false', name: 'True or False', icon: 'circle-check', emoji: '✅' },
+  { id: 'feelings', name: 'Feelings', icon: 'smile', emoji: '😊' },
 ];
