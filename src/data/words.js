@@ -759,6 +759,8 @@ export const CONFUSABLE_PAIRS = [
   ['gloves', 'mittens'], ['taxi', 'cab'], ['run', 'running'], ['fries', 'potato'],
   // image review 2026-10-11: a jet IS an airplane and a jeep IS a car to a 6-year-old
   ['jet', 'airplane'], ['jeep', 'car'], ['jeep', 'truck'],
+  // owner 11-07: "be careful to mix ice and ice cream" (both cold, ice-cube shots can read as a frozen treat)
+  ['ice', 'icecream'],
   // batch-2 review 2026-10-11: an alligator IS a crocodile to a child; the generated
   // colour spheres for silver/lime/scarlet are indistinguishable from gray/green/red
   ['alligator', 'crocodile'], ['silver', 'gray'], ['lime', 'green'], ['scarlet', 'red'],

@@ -109,6 +109,7 @@ describe('distractor collisions (same meaning never co-appears)', () => {
     expect(collides(byId('jam'), byId('jelly'))).toBe(true);      // confusable pair
     expect(collides(byId('cat'), byId('dog'))).toBe(false);
     for (const [a, b] of CONFUSABLE_PAIRS) if (byId(a) && byId(b)) expect(collides(byId(a), byId(b))).toBe(true);
+    expect(collides(byId('ice'), byId('icecream'))).toBe(true); // owner 11-07: never ice cream as a distractor for ice
   });
   it('getDistractors never returns a colliding word, in any language', () => {
     const es = { taxi: 'taxi', cab: 'taxi' };
