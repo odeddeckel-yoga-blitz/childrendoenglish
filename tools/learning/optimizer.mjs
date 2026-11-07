@@ -49,6 +49,42 @@ const days = Math.min(365, Math.max(1, Number(process.argv[2]) || 28));
 const top = Number((process.argv.find(a => a.startsWith('--top=')) || '').split('=')[1]) || 15;
 const doRivals = process.argv.includes('--rivals');
 
+// --digest (cost plan, owner 11-07): the session reads ~30 lines instead of ~300. The full report is still written to
+// .image-work/optimizer-<days>d-last.txt; stdout gets each section's headline line, every ⚠ flag, and — when a
+// headline changed since the previous digest run — what it said then (.image-work/optimizer-<days>d-headlines.json).
+if (process.argv.includes('--digest')) {
+  const { writeFileSync, readFileSync, existsSync, mkdirSync } = await import('node:fs');
+  const buf = [];
+  const realLog = console.log;
+  console.log = (...a) => buf.push(a.join(' '));
+  process.on('beforeExit', () => {
+    console.log = realLog;
+    mkdirSync('.image-work', { recursive: true });
+    const lines = buf.join('\n').split('\n');
+    writeFileSync(`.image-work/optimizer-${days}d-last.txt`, lines.join('\n') + '\n');
+    const prevPath = `.image-work/optimizer-${days}d-headlines.json`;
+    const prev = existsSync(prevPath) ? JSON.parse(readFileSync(prevPath, 'utf8')) : {};
+    const heads = {};
+    const out = [`optimizer ${days}d digest (full report: .image-work/optimizer-${days}d-last.txt${prev._at ? `; previous digest ${prev._at}` : ''})`];
+    let under = 0;   // detail lines kept under the current heading (the top 3: hardest words, funnels…)
+    for (const l of lines) {
+      const m = /^(?:— |══ )([^:(]{2,60})[:(]/.exec(l);
+      if (m) {
+        under = /snapshot written/.test(l) ? 99 : 0;
+        if (under) continue;
+        const key = m[1].trim();
+        heads[key] = l;
+        out.push(l.length > 220 ? l.slice(0, 217) + '…' : l);
+        if (prev[key] && prev[key] !== l) out.push(`    was: ${prev[key].slice(0, 200)}`);
+      } else if (/⚠|✗|FLAG/.test(l)) out.push('  ' + l.trim().slice(0, 180));
+      else if (l.trim() && under < 3 && /^\s/.test(l)) { under++; out.push('  ' + l.trim().slice(0, 160)); }
+    }
+    heads._at = new Date().toISOString().slice(0, 16) + 'Z';
+    writeFileSync(prevPath, JSON.stringify(heads, null, 1));
+    realLog(out.join('\n'));
+  });
+}
+
 const url = process.env.CDE_DATABASE_URL || process.env.DATABASE_URL || process.env.POSTGRES_URL;
 if (!url) { console.error('Set CDE_DATABASE_URL (neonctl connection-string — see header).'); process.exit(2); }
 const q = neon(url);

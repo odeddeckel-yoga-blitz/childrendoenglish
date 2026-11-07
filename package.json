@@ -25,7 +25,12 @@
     "kit:contrast": "node ~/projects/shared/game-kit/test/input-contrast.mjs --base=https://childrendoenglish.com --pages=/,/new-player,/vocabulary/,/units/",
     "kit:images": "node ~/projects/shared/game-kit/test/image-gate.mjs --config=~/projects/shared/game-kit/test/media-gates/cde.json",
     "kit:audio": "~/.venvs/whisper/bin/python ~/projects/shared/game-kit/test/audio-gate.py --config=~/projects/shared/game-kit/test/media-gates/cde.json",
-    "kit:creds": "node ~/projects/shared/game-kit/tools/cred-health.mjs cde"
+    "kit:creds": "node ~/projects/shared/game-kit/tools/cred-health.mjs cde",
+    "engagement:digest": "node tools/learning/optimizer.mjs 28 --rivals --digest",
+    "spend": "node scripts/spend-check.mjs",
+    "errors": "node scripts/errors-check.mjs",
+    "index-sample": "~/.config/searchconsole/venv/bin/python tools/seo/index-sample.py 20",
+    "kit:all": "node scripts/kit-all.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

@@ -40,8 +40,10 @@ jobs:
         run: node tools/spotlight/hourly.mjs
       - name: Commit if changed
         run: |
+          # Commit (= a Vercel production build) only when the PICKS changed. 30 d to 11-07: 21 of 55 bot commits
+          # changed only the stats snapshot, which the next real build refreshes anyway (cost plan, owner 11-07).
+          if git diff --quiet -- src/data/spotlight.json; then echo "picks unchanged: no commit, no build"; exit 0; fi
           git add -A -- src/data/spotlight.json src/data/cde-stats.json tools/spotlight/
-          if git diff --cached --quiet; then echo "no change"; exit 0; fi
           git config user.name "spotlight-bot"
           git config user.email "spotlight-bot@users.noreply.github.com"
           git commit -m "spotlight: daily keep/swap ($(date -u +%Y-%m-%dT%H:%MZ))"

@@ -13,7 +13,11 @@ for _ in 1 2 3 4 5 6; do
   echo "$cmd" | grep -qE '(^|/)claude( .*)? (-p|--print)( |$)' && exit 0
   pid=$(ps -o ppid= -p "$pid" 2>/dev/null | tr -d ' ')
 done
-git diff --quiet HEAD 2>/dev/null && exit 0
+git diff --quiet HEAD 2>/dev/null && [ -z "$(git ls-files --others --exclude-standard)" ] && exit 0
+# Only code the checks cover (cost plan, owner 11-07): image/audio/log/plan batches used to re-run lint + vitest at
+# every turn end. src/ api/ tools/ scripts/ and page/game JS are what eslint + vitest read.
+CHANGED=$( { git diff --name-only HEAD; git ls-files --others --exclude-standard; } 2>/dev/null )
+echo "$CHANGED" | grep -qE '^(src|api|tools|scripts)/|^public/.*\.(js|mjs)$|^package(-lock)?\.json$|^vite\.config|^eslint' || exit 0
 OUT=$(mktemp)
 if ! { npm run lint --silent && npx vitest run --reporter=dot; } >"$OUT" 2>&1; then
   echo "Stop check failed (lint/unit):" >&2

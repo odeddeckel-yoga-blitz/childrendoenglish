@@ -8,11 +8,15 @@ on:
       - '**/*.md'
       - 'plans/**'
       - 'docs/**'
+      - '.recurring-*.jsonl'
+      - 'tools/seo/snapshots/**'
   pull_request:
     paths-ignore:
       - '**/*.md'
       - 'plans/**'
       - 'docs/**'
+      - '.recurring-*.jsonl'
+      - 'tools/seo/snapshots/**'
 
 concurrency:
   group: ci-${{ github.ref }}
