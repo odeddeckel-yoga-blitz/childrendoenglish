@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Missing Letter Game for Kids: Fill in the Missing Letter (c_t) | Children Do English</title>
+<meta name="description" content="A free missing letter game for kids: see the picture, hear the word and tap the letter that fills the gap, like c_t or ze_ra. Three levels from short vowels to longer words. No ads, no sign-up.">
+<link rel="canonical" href="https://childrendoenglish.com/games/missing-letter/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="theme-color" content="#1e1b4b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Children Do English">
+<meta property="og:title" content="Missing Letter: Fill in the Missing Letter, a Free Game for Kids">
+<meta property="og:description" content="See the picture, hear the word, tap the missing letter. Free, no sign-up.">
+<meta property="og:url" content="https://childrendoenglish.com/games/missing-letter/">
+<meta property="og:image" content="https://childrendoenglish.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Missing Letter","url":"https://childrendoenglish.com/games/missing-letter/","description":"A free English spelling game for kids: each round shows a picture, says the word and shows it with one letter missing (c_t). The child taps the missing letter. Level 1 is the short vowel in three-letter words, level 2 the first or last letter (b, d, p, m, n, c, k), level 3 a letter in the middle of a longer word.","inLanguage":"en","genre":"Educational","gamePlatform":"Web Browser","playMode":"SinglePlayer","applicationCategory":"EducationalApplication","operatingSystem":"Any (modern web browser)","isFamilyFriendly":true,"isAccessibleForFree":true,"typicalAgeRange":"5-9","learningResourceType":"Game","educationalUse":"Practice","keywords":"missing letter game, fill in the missing letter, cvc words, short vowels, spelling, phonics, esl kids","author":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"publisher":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}
+</script>
+<script defer src="/land-beacon.js"></script>
+<style>
+  h1 .ic{color:#fbbf24;}
+  :root{ --bg0:#0b1230; --bg1:#1e1b4b; --ink:#eef2ff; --dim:#a5b4fc; --blue:#60a5fa; --gold:#fbbf24; --grn:#4ade80; --red:#f87171; --glass:rgba(30,27,75,.7); --line:rgba(129,140,248,.35); }
+  *{box-sizing:border-box;}
+  body{margin:0;min-height:100dvh;background:radial-gradient(circle at 50% 0%,var(--bg1),var(--bg0) 70%);background-color:var(--bg0);color:var(--ink);font-family:-apple-system,system-ui,'Segoe UI',sans-serif;}
+  #homePill{position:fixed;left:12px;top:12px;z-index:9;direction:ltr;font:bold 13px/1 -apple-system,system-ui,sans-serif;color:var(--ink);text-decoration:none;background:rgba(11,18,48,.8);border:1px solid rgba(165,180,252,.45);border-radius:999px;padding:9px 14px;}
+  main{max-width:560px;margin:0 auto;padding:60px 16px 32px;text-align:center;}
+  h1{font-size:clamp(30px,8vw,46px);margin:0 0 8px;background:linear-gradient(90deg,var(--blue),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{font-size:17px;line-height:1.55;color:#dbe4ff;margin:0 auto 18px;max-width:440px;}
+  .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+  .pill{background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:15px;font-weight:700;letter-spacing:1px;}
+  button,.ghost,.primary{font-family:inherit;}
+  .primary,#startBtn{display:inline-block;background:linear-gradient(135deg,#6366f1,#3b82f6);color:#fff;border:0;border-radius:14px;padding:15px 28px;font-size:19px;font-weight:800;cursor:pointer;min-height:52px;margin:6px;text-decoration:none;}
+  .ghost{display:inline-block;background:transparent;color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:11px 18px;font-size:16px;font-weight:700;cursor:pointer;margin:6px;text-decoration:none;min-height:46px;}
+  .about{margin-top:28px;text-align:left;font-size:14px;line-height:1.6;color:var(--dim);background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+  .about a{color:var(--blue);}
+  .hud{margin-bottom:10px;}
+  .hud-level{font-size:14px;color:var(--dim);}
+  .hud-label{font-size:19px;font-weight:800;margin:2px 0 8px;}
+  .dots{display:flex;gap:6px;justify-content:center;}
+  .dot{width:11px;height:11px;border-radius:50%;background:rgba(165,180,252,.25);}
+  .dot.done{background:var(--grn);} .dot.now{background:var(--gold);}
+  .pic{width:auto;height:clamp(120px,28vh,230px);max-width:80vw;aspect-ratio:1/1;object-fit:cover;border-radius:18px;display:block;margin:0 auto 10px;border:3px solid var(--line);background:rgba(255,255,255,.06);}
+  .word-row{display:flex;align-items:center;justify-content:center;gap:14px;margin:0 0 12px;direction:ltr;}
+  .gap-word{font-size:clamp(40px,12vw,60px);font-weight:900;letter-spacing:4px;direction:ltr;line-height:1.1;}
+  .gap-word .blank{display:inline-block;min-width:.72em;border-bottom:5px solid var(--gold);color:var(--gold);text-align:center;}
+  .gap-word .blank.filled{border-bottom-color:var(--grn);color:var(--grn);}
+  .gap-word .blank.shown{border-bottom-color:var(--gold);color:var(--gold);}
+  .say{width:56px;height:56px;flex:none;border-radius:50%;border:0;font-size:26px;background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;cursor:pointer;box-shadow:0 6px 20px rgba(99,102,241,.45);display:flex;align-items:center;justify-content:center;}
+  .opts{display:grid;gap:10px;max-width:400px;margin:0 auto;direction:ltr;}
+  .opts.n3{grid-template-columns:repeat(3,1fr);} .opts.n4{grid-template-columns:repeat(4,1fr);}
+  .opt{background:var(--glass);border:3px solid var(--line);border-radius:16px;cursor:pointer;color:var(--ink);min-height:68px;display:flex;align-items:center;justify-content:center;font-size:38px;font-weight:900;line-height:1;transition:transform .12s;}
+  .opt:active{transform:scale(.96);}
+  .opt.ok{border-color:var(--grn);background:rgba(74,222,128,.2);}
+  .opt.no{border-color:var(--red);background:rgba(248,113,113,.18);opacity:.75;}
+  .feedback{min-height:26px;font-size:17px;margin:12px 0 4px;}
+  .feedback .en{direction:ltr;unicode-bidi:isolate;color:var(--gold);font-weight:900;}
+  .tip{font-size:14px;color:var(--dim);margin-top:8px;}
+  .card{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:26px 18px;}
+  .card h2{margin:6px 0;font-size:28px;}
+  .stars{font-size:40px;letter-spacing:4px;color:var(--gold);}
+  .stars .off{color:rgba(165,180,252,.35);}
+  .score{font-size:22px;font-weight:800;color:var(--gold);}
+  [data-cde-lang="he"] main{direction:rtl;}
+  [data-cde-lang="he"] .about{text-align:right;}
+  @media(prefers-reduced-motion:reduce){ .opt{transition:none;} }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does the missing letter game work?","acceptedAnswer":{"@type":"Answer","text":"Each round shows a picture, says the word out loud and shows it with one letter missing, like c_t. Your child taps the letter that fills the gap. After a wrong tap the right letter appears in the word and the word is said again, and your child taps that letter to go on."}},{"@type":"Question","name":"What do the three levels practise?","acceptedAnswer":{"@type":"Answer","text":"Level 1: the short vowel in three-letter words (cat, bed, pig, fox, sun). Level 2: the first or last letter, choosing between letters that look or sound alike (b, d, p; m, n, w; c, k, s). Level 3: a letter in the middle of a longer word (zebra, lemon, robot, donkey)."}},{"@type":"Question","name":"What age is it for?","acceptedAnswer":{"@type":"Answer","text":"About 5 to 9, or any child starting to read and spell in English. Level 1 suits kindergarten and first grade. The buttons can be in English, Hebrew or Spanish; the words stay in English."}},{"@type":"Question","name":"Is it free?","acceptedAnswer":{"@type":"Answer","text":"Yes. No ads, no sign-up and nothing to install. It runs in any phone, tablet or computer browser. The words are read by a computer voice."}}]}</script>
+</head>
+<body>
+<a id="homePill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
+<main>
+  <div id="menu">
+    <h1><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-pencil"/></svg> MISSING LETTER</h1>
+    <p class="sub" data-l10n="sub">One letter is missing. Look at the picture, listen to the word and <b>tap the letter that fills the gap</b>.</p>
+    <div class="pills"><span class="pill" dir="ltr">c_t</span><span class="pill" dir="ltr">_og</span><span class="pill" dir="ltr">ze_ra</span><span class="pill" dir="ltr">l_mon</span></div>
+    <button type="button" id="startBtn" data-l10n="start"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> Start</button>
+    <section class="about">
+      <h2 style="font-size:15px;margin:0 0 4px;color:inherit;">Missing Letter</h2>
+      <p style="margin:0 0 4px;">A free fill-in-the-missing-letter game for kids learning to read and spell in English. Each round shows a picture, says the word and shows it with one letter missing. Your child picks the letter from three or four buttons. Three levels of eight words: short vowels (c_t), first and last letters (_og, be_), and a letter in the middle of a longer word (ze_ra).</p>
+      <p style="margin:0;">No ads, no sign-up. Part of <a href="/">childrendoenglish.com</a>: free vocabulary games, flashcards and quizzes with Hebrew support.</p>
+      <h3 style="font-size:14px;margin:12px 0 4px;color:inherit;">Questions parents ask</h3>
+      <p style="margin:0 0 6px;"><b>How does the missing letter game work?</b> Each round shows a picture, says the word out loud and shows it with one letter missing, like c_t. Your child taps the letter that fills the gap. After a wrong tap the right letter appears in the word and the word is said again, and your child taps that letter to go on.</p>
+      <p style="margin:0 0 6px;"><b>What do the three levels practise?</b> Level 1: the short vowel in three-letter words (cat, bed, pig, fox, sun). Level 2: the first or last letter, choosing between letters that look or sound alike (b, d, p; m, n, w; c, k, s). Level 3: a letter in the middle of a longer word (zebra, lemon, robot, donkey).</p>
+      <p style="margin:0 0 6px;"><b>What age is it for?</b> About 5 to 9, or any child starting to read and spell in English. Level 1 suits kindergarten and first grade. The buttons can be in English, Hebrew or Spanish; the words stay in English.</p>
+      <p style="margin:0 0 6px;"><b>Is it free?</b> Yes. No ads, no sign-up and nothing to install. It runs in any phone, tablet or computer browser. The words are read by a computer voice.</p>
+    </section>
+  </div>
+  <div id="app" aria-live="polite"></div>
+</main>
+<script src="../cde-l10n.js" defer></script>
+<script src="../word-audio.js" defer></script>
+<script src="../end-card.js" defer></script>
+<script src="./l10n.js" defer></script>
+<script src="./game.js" defer></script>
+</body>
+</html>

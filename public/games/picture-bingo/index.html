@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Picture Bingo: English Vocabulary Bingo Game for Kids | Children Do English</title>
+<meta name="description" content="A free English vocabulary bingo game for kids: hear a word and tap its picture on your bingo card until you get a line. Three cards, a class mode for the projector, buttons in English, Hebrew or Spanish. No sign-up.">
+<link rel="canonical" href="https://childrendoenglish.com/games/picture-bingo/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="theme-color" content="#1e1b4b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Children Do English">
+<meta property="og:title" content="Picture Bingo: English Vocabulary Bingo Game for Kids">
+<meta property="og:description" content="Hear an English word, find its picture on your bingo card, get a line. Free, no sign-up.">
+<meta property="og:url" content="https://childrendoenglish.com/games/picture-bingo/">
+<meta property="og:image" content="https://childrendoenglish.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Picture Bingo","url":"https://childrendoenglish.com/games/picture-bingo/","description":"A free English vocabulary bingo game for kids: the game calls an English word and the child taps its picture on a bingo card of pictures. A full row, column or diagonal is bingo. Three cards: two topics, one topic, then a 4 by 4 card with calls that are not on the card.","inLanguage":"en","genre":"Educational","gamePlatform":"Web Browser","playMode":"SinglePlayer","applicationCategory":"EducationalApplication","operatingSystem":"Any (modern web browser)","isFamilyFriendly":true,"isAccessibleForFree":true,"typicalAgeRange":"5-10","learningResourceType":"Game","educationalUse":"Practice","keywords":"english bingo, vocabulary bingo, picture bingo, listening game, esl kids","author":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"publisher":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}
+</script>
+<script defer src="/land-beacon.js"></script>
+<style>
+  /* gradient-text headings use color:transparent — their drawn icon needs its own colour */
+  h1 .ic{color:#fbbf24;}
+  :root{ --bg0:#0b1230; --bg1:#1e1b4b; --ink:#eef2ff; --dim:#a5b4fc; --blue:#60a5fa; --gold:#fbbf24; --grn:#4ade80; --red:#f87171; --glass:rgba(30,27,75,.7); --line:rgba(129,140,248,.35); }
+  *{box-sizing:border-box;}
+  body{margin:0;min-height:100dvh;background:radial-gradient(circle at 50% 0%,var(--bg1),var(--bg0) 70%);color:var(--ink);font-family:-apple-system,system-ui,'Segoe UI',sans-serif;}
+  #homePill{position:fixed;left:12px;top:12px;z-index:9;direction:ltr;font:bold 13px/1 -apple-system,system-ui,sans-serif;color:var(--ink);text-decoration:none;background:rgba(11,18,48,.8);border:1px solid rgba(165,180,252,.45);border-radius:999px;padding:9px 14px;}
+  main{max-width:560px;margin:0 auto;padding:64px 16px 32px;text-align:center;}
+  h1{font-size:clamp(30px,8vw,46px);margin:0 0 8px;background:linear-gradient(90deg,var(--blue),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{font-size:17px;line-height:1.55;color:#dbe4ff;margin:0 auto 18px;max-width:440px;}
+  .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+  .pill{background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:14px;}
+  button,.ghost,.primary{font-family:inherit;}
+  .primary,#startBtn{display:inline-block;background:linear-gradient(135deg,#6366f1,#3b82f6);color:#fff;border:0;border-radius:14px;padding:15px 28px;font-size:19px;font-weight:800;cursor:pointer;min-height:52px;margin:6px;text-decoration:none;}
+  .ghost{display:inline-block;background:transparent;color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:11px 18px;font-size:16px;font-weight:700;cursor:pointer;margin:6px;text-decoration:none;min-height:46px;}
+  #classBtn[aria-pressed="true"]{border-color:var(--gold);color:var(--gold);}
+  .note{font-size:14px;color:var(--dim);margin:2px auto 0;max-width:420px;}
+  .about{margin-top:28px;text-align:left;font-size:14px;line-height:1.6;color:var(--dim);background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+  .about a{color:var(--blue);}
+  /* play screen: header, hear-again, feedback, card, (not-on-my-card) — fits 360×640 without scrolling */
+  main:has(#app.play){padding-top:52px;padding-bottom:12px;}
+  #app.play{--cw:min(100%,440px,calc(100dvh - 248px));}
+  #app.play.decoys{--cw:min(100%,440px,calc(100dvh - 308px));}
+  .hud{display:flex;justify-content:space-between;align-items:baseline;gap:8px;width:var(--cw);margin:0 auto 6px;font-size:14px;color:var(--dim);}
+  .hud-call{font-weight:800;color:var(--ink);white-space:nowrap;}
+  .say{display:flex;align-items:center;justify-content:center;gap:10px;width:var(--cw);min-height:56px;margin:0 auto;border:0;border-radius:16px;background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;font-size:20px;font-weight:800;cursor:pointer;box-shadow:0 6px 22px rgba(99,102,241,.4);}
+  .say .ic{width:1.5em!important;height:1.5em!important;}
+  .feedback{min-height:24px;font-size:16px;line-height:1.35;margin:6px auto;width:var(--cw);}
+  .bingo{font-size:22px;font-weight:900;color:var(--gold);letter-spacing:2px;}
+  .grid{display:grid;gap:6px;width:var(--cw);aspect-ratio:1/1;margin:0 auto;}
+  .n3 .grid{grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:8px;}
+  .n4 .grid{grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);}
+  .sq{position:relative;padding:0;border:3px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;cursor:pointer;min-width:44px;min-height:44px;}
+  .sq img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;}
+  .sq .stamp{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(11,18,48,.45);color:#fff;}
+  .sq .stamp .ic{width:58%!important;height:58%!important;background:var(--grn);color:#0b1230;border-radius:50%;padding:8%;}
+  .sq.marked{border-color:var(--grn);cursor:default;}
+  .sq.marked .stamp{display:flex;}
+  .sq.line{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold);}
+  .noton{display:flex;align-items:center;justify-content:center;gap:8px;width:var(--cw);min-height:52px;margin:10px auto 0;border:2px solid var(--line);border-radius:14px;background:var(--glass);color:var(--ink);font-size:18px;font-weight:800;cursor:pointer;}
+  .shake{animation:pbShake .42s;border-color:var(--red)!important;}
+  @keyframes pbShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+  /* class mode: a projector-sized card */
+  .classmode #app.play{--cw:min(100%,860px,calc(100dvh - 260px));}
+  .classmode #app.play.decoys{--cw:min(100%,860px,calc(100dvh - 330px));}
+  .classmode main:has(#app.play){max-width:900px;}
+  .classmode .say{font-size:26px;min-height:68px;}
+  .classmode .feedback,.classmode .hud{font-size:20px;}
+  .classmode .noton{font-size:24px;min-height:64px;}
+  /* class mode on a wide screen (projector): card left as tall as the screen, controls beside it */
+  @media (min-width:900px) and (min-aspect-ratio:5/4){
+    .classmode main:has(#app.play){max-width:none;padding-top:60px;}
+    .classmode #app.play,.classmode #app.play.decoys{--cw:min(calc(100dvh - 90px),calc(100vw - 420px));display:grid;justify-content:center;align-content:start;column-gap:24px;
+      grid-template-columns:var(--cw) 320px;grid-template-rows:auto auto auto auto 1fr;grid-template-areas:"grid hud" "grid say" "grid fb" "grid noton" "grid .";}
+    .classmode #app.play .grid{grid-area:grid;} .classmode #app.play .hud{grid-area:hud;width:auto;flex-direction:column;align-items:flex-start;}
+    .classmode #app.play .say{grid-area:say;width:100%;margin:0;} .classmode #app.play .feedback{grid-area:fb;width:auto;}
+    .classmode #app.play .noton{grid-area:noton;width:100%;margin:10px 0 0;}
+  }
+  .card{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:26px 18px;}
+  .card h2{margin:6px 0;font-size:28px;}
+  .stars{display:flex;justify-content:center;gap:6px;font-size:40px;}
+  .stars .on{color:var(--gold);} .stars .off{color:rgba(165,180,252,.3);}
+  .score{font-size:20px;font-weight:800;color:var(--gold);}
+  [data-cde-lang="he"] main{direction:rtl;}
+  [data-cde-lang="he"] .about{text-align:right;}
+  @media(prefers-reduced-motion:reduce){ .shake{animation:none;} }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How does Picture Bingo work?","acceptedAnswer":{"@type":"Answer","text":"The game says an English word and the child taps that picture on the bingo card. A wrong tap shakes the picture and the word is said again. When a whole row, column or diagonal is marked, it is bingo and the next card starts."}},{"@type":"Question","name":"What are the three cards?","acceptedAnswer":{"@type":"Answer","text":"Card 1 is 3 by 3 with pictures from two different topics, such as animals and vehicles. Card 2 is 3 by 3 from one topic, so the pictures are closer to each other. Card 3 is 4 by 4 from four topics, and some called words are not on the card: the child taps Not on my card."}},{"@type":"Question","name":"Can I use it with a class or print the bingo cards?","acceptedAnswer":{"@type":"Answer","text":"For a class, turn on Class mode and show the game on a projector or big screen: the card is bigger, the calls are slower and each word is said twice. There are no printable bingo cards; Picture Bingo is an on-screen game."}},{"@type":"Question","name":"Is it free?","acceptedAnswer":{"@type":"Answer","text":"Yes. No ads, no sign-up and nothing to install. It works in any phone, tablet or computer browser, with the buttons in English, Hebrew or Spanish. The words are spoken by a computer voice."}}]}</script>
+</head>
+<body>
+<a id="homePill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
+<main>
+  <div id="menu">
+    <h1><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-image"/></svg> PICTURE BINGO</h1>
+    <p class="sub" data-l10n="sub">Listen to the English word and tap its picture on your card. Mark a full row, column or diagonal to win: <b>BINGO!</b></p>
+    <div class="pills"><span class="pill" dir="ltr">cat</span><span class="pill" dir="ltr">bus</span><span class="pill" dir="ltr">apple</span><span class="pill" dir="ltr">kite</span><span class="pill" dir="ltr">shoes</span></div>
+    <button type="button" id="startBtn" data-l10n="start"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> Start bingo</button>
+    <div><button type="button" id="classBtn" class="ghost" aria-pressed="false">Class mode (projector): off</button></div>
+    <p class="note" data-l10n="classNote">Class mode: a bigger card and slower calls, each word said twice.</p>
+    <section class="about">
+      <h2 style="font-size:15px;margin:0 0 4px;color:inherit;">Picture Bingo</h2>
+      <p style="margin:0 0 4px;">A free English vocabulary bingo game for kids ages 5–10. The card has pictures and no words, so children who can't read yet can play. The game calls a word out loud, and the child finds and taps that picture. Get a full row, column or diagonal and it's bingo. Words come from everyday topics: animals, food, vehicles, clothes, things at home, toys and nature.</p>
+      <p style="margin:0;">No ads, no sign-up. Part of <a href="/">childrendoenglish.com</a>, free vocabulary games, flashcards and quizzes with Hebrew support.</p>
+      <h3 style="font-size:14px;margin:12px 0 4px;color:inherit;">Questions parents ask</h3>
+      <p style="margin:0 0 6px;"><b>How does Picture Bingo work?</b> The game says an English word and the child taps that picture on the bingo card. A wrong tap shakes the picture and the word is said again. When a whole row, column or diagonal is marked, it is bingo and the next card starts.</p>
+      <p style="margin:0 0 6px;"><b>What are the three cards?</b> Card 1 is 3 by 3 with pictures from two different topics, such as animals and vehicles. Card 2 is 3 by 3 from one topic, so the pictures are closer to each other. Card 3 is 4 by 4 from four topics, and some called words are not on the card: the child taps Not on my card.</p>
+      <p style="margin:0 0 6px;"><b>Can I use it with a class or print the bingo cards?</b> For a class, turn on Class mode and show the game on a projector or big screen: the card is bigger, the calls are slower and each word is said twice. There are no printable bingo cards; Picture Bingo is an on-screen game.</p>
+      <p style="margin:0 0 6px;"><b>Is it free?</b> Yes. No ads, no sign-up and nothing to install. It works in any phone, tablet or computer browser, with the buttons in English, Hebrew or Spanish. The words are spoken by a computer voice.</p>
+    </section>
+  </div>
+  <div id="app" aria-live="polite"></div>
+</main>
+<script src="../cde-l10n.js" defer></script>
+<script src="../word-audio.js" defer></script>
+<script src="../end-card.js" defer></script>
+<script src="./l10n.js" defer></script>
+<script src="./game.js" defer></script>
+</body>
+</html>

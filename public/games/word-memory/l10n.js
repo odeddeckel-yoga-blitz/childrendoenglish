@@ -1,0 +1,35 @@
+/* Word Memory — interface strings (see ../cde-l10n.js). The English words on the cards
+   stay English; only the chrome (and the meaning line under a found word) switches. */
+var IC=window.CDE_IC||function(){return '';};
+window.CDE_STRINGS={
+  en:{sub:'A memory game in English. Flip two cards and find a <b>picture and its word</b>. Each word is read aloud when you find it.',
+      pickTopic:'Pick a topic:',start:IC("play")+' Start',
+      tAnimals:IC("paw-print")+' Animals',tFood:IC("apple")+' Food',tToys:IC("puzzle")+' Toys',tHome:IC("house")+' Home',
+      tClothing:IC("shirt")+' Clothing',tTransport:IC("bus")+' Transport',tMixed:IC("dices")+' Mixed',
+      level:'Level',of:'of',moves:'Moves',pairs:'Pairs',
+      cardDown:'Card {n}, face down',cardPic:'Card {n}, picture: {w}',cardWord:'Card {n}, word: {w}',
+      tip:'Find each picture and its English word.',
+      levelDone:'Level done!',movesLine:'{m} moves',starsOf:'{s} of 3 stars',
+      nextLevel:'Next level '+IC("arrow-right"),retry:IC("rotate-ccw")+' Try this level again',
+      allDone:IC("trophy")+' Great memory!',totalMoves:'Total moves: {m}',playAgain:IC("rotate-ccw")+' Play again',otherTopic:IC("layers")+' Pick another topic'},
+  he:{sub:'משחק זיכרון באנגלית. הופכים שני קלפים ומחפשים <b>תמונה והמילה שלה</b>. כל מילה נקראת בקול כשמוצאים אותה. אפשר לשחק לבד או עם כל הכיתה על המקרן.',
+      pickTopic:'בוחרים נושא:',start:IC("play")+' מתחילים',
+      tAnimals:IC("paw-print")+' בעלי חיים',tFood:IC("apple")+' אוכל',tToys:IC("puzzle")+' צעצועים',tHome:IC("house")+' בבית',
+      tClothing:IC("shirt")+' בגדים',tTransport:IC("bus")+' תחבורה',tMixed:IC("dices")+' מעורב',
+      level:'שלב',of:'מתוך',moves:'מהלכים',pairs:'זוגות',
+      cardDown:'קלף {n}, הפוך',cardPic:'קלף {n}, תמונה: {w}',cardWord:'קלף {n}, מילה: {w}',
+      tip:'מוצאים כל תמונה ואת המילה שלה באנגלית.',
+      levelDone:'השלב הושלם!',movesLine:'{m} מהלכים',starsOf:'{s} מתוך 3 כוכבים',
+      nextLevel:'לשלב הבא '+IC("arrow-left"),retry:IC("rotate-ccw")+' לנסות את השלב שוב',
+      allDone:IC("trophy")+' זיכרון של אלופים!',totalMoves:'סך הכול מהלכים: {m}',playAgain:IC("rotate-ccw")+' לשחק שוב',otherTopic:IC("layers")+' לבחור נושא אחר'},
+  es:{sub:'Un juego de memoria en inglés. Voltea dos cartas y encuentra <b>una imagen y su palabra</b>. Cada palabra se lee en voz alta cuando la encuentras.',
+      pickTopic:'Elige un tema:',start:IC("play")+' Empezar',
+      tAnimals:IC("paw-print")+' Animales',tFood:IC("apple")+' Comida',tToys:IC("puzzle")+' Juguetes',tHome:IC("house")+' La casa',
+      tClothing:IC("shirt")+' Ropa',tTransport:IC("bus")+' Transporte',tMixed:IC("dices")+' Mezcla',
+      level:'Nivel',of:'de',moves:'Jugadas',pairs:'Parejas',
+      cardDown:'Carta {n}, boca abajo',cardPic:'Carta {n}, imagen: {w}',cardWord:'Carta {n}, palabra: {w}',
+      tip:'Encuentra cada imagen y su palabra en inglés.',
+      levelDone:'¡Nivel completado!',movesLine:'{m} jugadas',starsOf:'{s} de 3 estrellas',
+      nextLevel:'Siguiente nivel '+IC("arrow-right"),retry:IC("rotate-ccw")+' Repetir este nivel',
+      allDone:IC("trophy")+' ¡Qué buena memoria!',totalMoves:'Jugadas en total: {m}',playAgain:IC("rotate-ccw")+' Jugar otra vez',otherTopic:IC("layers")+' Elegir otro tema'}
+};
