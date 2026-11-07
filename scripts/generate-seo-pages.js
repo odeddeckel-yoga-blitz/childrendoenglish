@@ -321,7 +321,7 @@ const GUIDE_QUIZ_CSS = `
     .mini-quiz{background:#fff;border-radius:0.75rem;padding:1.4rem;margin:0 0 1rem;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,0.08)}
     .mini-quiz h2{font-size:1.1rem;margin:0 0 0.3rem;color:#1e293b}
     .mini-quiz .mq-sub{font-size:0.85rem;color:#4b5a6e;margin:0 0 0.8rem}
-    .say-btn{display:inline-block;margin:0 0 0.9rem;padding:0.55rem 1.2rem;border:0;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:700;font-size:1rem;cursor:pointer}
+    .say-btn{display:inline-block;min-height:44px;margin:0 0 0.9rem;padding:0.55rem 1.2rem;border:0;border-radius:999px;background:#eff6ff;color:#1d4ed8;font-weight:700;font-size:1rem;cursor:pointer}
     .say-btn.say-active{transform:scale(0.97)}
     .mq-options{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap}
     .mq-opt{border:3px solid #e2e8f0;border-radius:0.9rem;padding:0;background:#fff;cursor:pointer;overflow:hidden;transition:transform .12s}
@@ -759,7 +759,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     </div>
 ${wordNav}
     <style>
-      .say-btn{margin-top:0.9rem;padding:0.7rem 1.4rem;border:0;border-radius:999px;background:#7c3aed;color:#fff;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(124,58,237,.35)}
+      .say-btn{min-height:44px;margin-top:0.9rem;padding:0.7rem 1.4rem;border:0;border-radius:999px;background:#7c3aed;color:#fff;font-size:1rem;font-weight:700;cursor:pointer;box-shadow:0 2px 8px rgba(124,58,237,.35)}
       .hero-img-btn{position:relative;display:block;margin:0 auto 1rem;padding:0;border:0;background:none;cursor:pointer;border-radius:0.75rem}
       .hero-img-btn img{margin:0}
       .hero-img-btn:active{transform:scale(0.97)}
