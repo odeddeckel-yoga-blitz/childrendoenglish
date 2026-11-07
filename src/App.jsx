@@ -112,6 +112,11 @@ function SuspenseFallback({ lang = 'en' }) {
 function getInitialState() {
   const registry = loadPlayerRegistry();
   const stats = registry ? loadStats(registry.activePlayerId) : loadStats();
+  // A direct link to the privacy policy or terms (About page, footer, a parent checking
+  // before a child plays) opens that page for everyone, new visitor or returning player.
+  if (window.location.pathname === '/privacy' || window.location.pathname === '/terms') {
+    return { gameState: window.location.pathname.slice(1), registry, stats };
+  }
   // Returning users skip the marketing landing entirely:
   // one player → straight to menu; a family → pick who's playing.
   if (registry?.players?.length >= 2) {
@@ -189,7 +194,8 @@ export default function App() {
   const prevBadgeCount = useRef(stats.badges?.length || 0);
 
   const gameStateRef = useRef(initial.current.gameState);
-  const legalReturnRef = useRef('menu'); // where privacy/terms should return to
+  // where privacy/terms should return to (a direct link with no player yet → the landing)
+  const legalReturnRef = useRef(initial.current.registry?.players?.length ? 'menu' : 'landing');
 
   const navigate = useCallback((newState, direction = 'forward') => {
     // Remember where legal pages were opened from so Back returns there
