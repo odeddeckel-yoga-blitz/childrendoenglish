@@ -4,7 +4,7 @@ import WordCheck from '../components/WordCheck';
 import { getWordById } from '../data/words';
 import { loadLocale } from '../utils/i18n';
 
-vi.mock('../utils/sound', () => ({ speakWord: vi.fn(), playSound: vi.fn(), isTTSAvailable: () => true, initTTS: vi.fn() }));
+vi.mock('../utils/sound', () => ({ whenWordAudioDone: (_ms, cb) => cb(), stopWordAudio: vi.fn(), speakWord: vi.fn(), playSound: vi.fn(), isTTSAvailable: () => true, initTTS: vi.fn() }));
 vi.mock('../utils/learnBeacon', () => ({ sendLearn: vi.fn(), sendLearnBatch: vi.fn() }));
 import { sendLearn, sendLearnBatch } from '../utils/learnBeacon';
 

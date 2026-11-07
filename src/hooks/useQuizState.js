@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { getDistractors } from '../data/words';
 import { fisherYatesShuffle } from '../utils/shuffle';
-import { playSound, speakWord } from '../utils/sound';
+import { playSound, speakWord, whenWordAudioDone } from '../utils/sound';
 import { haptic } from '../utils/haptic';
 import { t } from '../utils/i18n';
 import { analytics } from '../utils/analytics';
@@ -25,6 +25,12 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, onA
   const [showQuitConfirm, setShowQuitConfirm] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState('');
   const feedbackTimeout = useRef(null);
+  const advanceToken = useRef(0); // bumped by quit/unmount so a pending advance (waiting on the word) is dropped
+  // Advance after the feedback beat, but never while the replayed word is still playing (cap 1.8 s more).
+  const advanceLater = useCallback((go) => {
+    const tok = ++advanceToken.current;
+    feedbackTimeout.current = setTimeout(() => whenWordAudioDone(1800, () => { if (tok === advanceToken.current) go(); }), 1200);
+  }, []);
 
   // The question queue: the quiz words plus re-asks of first-try misses
   // (utils/reask.js). A ref mirrors it so the auto-advance timer sees the
@@ -68,7 +74,7 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, onA
   }, [currentIndex, currentWord]);
 
   // Cleanup timeout on unmount
-  useEffect(() => () => clearTimeout(feedbackTimeout.current), []);
+  useEffect(() => () => { clearTimeout(feedbackTimeout.current); advanceToken.current++; }, []);
 
   const handleAnswer = useCallback((option) => {
     if (answered) return;
@@ -114,15 +120,15 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, onA
     }
 
     // Auto-advance
-    feedbackTimeout.current = setTimeout(() => advance(() => onComplete({
+    advanceLater(() => advance(() => onComplete({
       score: finalScore,
       total: scoreTotal,
       mode,
       answers: firstTries,
       retries: retriesRef.current.slice(),
       arcade: { ...arcadeRef.current },
-    })), 1200);
-  }, [answered, currentWord, item, isRetry, scoreTotal, score, streak, answers, onComplete, onAnswer, mode, lang, speakOnCorrect, speakDelay, advance, noteResult]);
+    })));
+  }, [answered, currentWord, item, isRetry, scoreTotal, score, streak, answers, onComplete, onAnswer, mode, lang, speakOnCorrect, speakDelay, advance, advanceLater, noteResult]);
 
   const handleSkip = useCallback(() => {
     if (answered) return;
@@ -139,18 +145,19 @@ export default function useQuizState({ words, mode, lang = 'en', onComplete, onA
     setStreak(0);
     speakWord(currentWord.word);
 
-    feedbackTimeout.current = setTimeout(() => advance(() => onComplete({
+    advanceLater(() => advance(() => onComplete({
       score,
       total: scoreTotal,
       mode,
       answers: firstTries,
       retries: retriesRef.current.slice(),
       arcade: { ...arcadeRef.current },
-    })), 1200);
-  }, [answered, currentWord, item, isRetry, scoreTotal, score, answers, onComplete, onAnswer, mode, lang, advance, noteResult]);
+    })));
+  }, [answered, currentWord, item, isRetry, scoreTotal, score, answers, onComplete, onAnswer, mode, lang, advance, advanceLater, noteResult]);
 
   const handleQuit = useCallback(() => {
     clearTimeout(feedbackTimeout.current);
+    advanceToken.current++;
     // quiz_quit is fired by useQuizFlow's handleQuizComplete, which knows the level
     onComplete({ score, total: answers.length, mode, answers, retries: retriesRef.current.slice(), quit: true, arcade: { ...arcadeRef.current } });
   }, [score, mode, answers, onComplete]);

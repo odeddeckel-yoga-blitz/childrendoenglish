@@ -4,7 +4,7 @@ import { WORDS } from '../data/words';
 import { filterByKnownLetters } from '../utils/letterFilter';
 import { spacedRepetitionSort, updateWordSR } from '../utils/spaced-repetition';
 import { getImageUrl } from '../utils/images';
-import { speakWord } from '../utils/sound';
+import { speakWord, stopWordAudio } from '../utils/sound';
 import { haptic } from '../utils/haptic';
 import { t, gloss } from '../utils/i18n';
 
@@ -29,6 +29,9 @@ export default function FlashcardMode({ stats, lang = 'en', canRead = true, word
     if (onReach && cards.length > 0) onReach(finished ? 'done' : `c${currentIdx + 1}`);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIdx, finished]);
+
+  // A new card stops the last card's word (11-07 speech-sync: a quick "Know it" left ~0.6 s of it over the next picture)
+  useEffect(() => stopWordAudio, [currentIdx]);
 
   // Auto-TTS for pre-readers when card flips to back (reveals word)
   useEffect(() => {

@@ -99,6 +99,30 @@ const playWordFile = (text) => new Promise((resolve) => {
   }
 });
 
+// Stop the word now (a card / screen the child moved past must not keep talking over the next one; kit §8g).
+export const stopWordAudio = () => {
+  try { if (currentWordAudio) currentWordAudio.pause(); } catch { /* gone */ }
+  try { window.speechSynthesis?.cancel(); } catch { /* no TTS */ }
+};
+
+// Calls cb once the word clip (or the TTS fallback) has finished, or after capMs (at once if nothing is playing). The quiz waits on it before moving
+// to the next question, so a replayed word never runs into the next one (kit §8g; 11-07 speech-sync: the 600 ms
+// feedback replay was still playing at the fixed 1,200 ms advance, ~300 ms over every next question).
+export const whenWordAudioDone = (capMs, cb) => {
+  const a = currentWordAudio;
+  const tts = () => { try { return !!window.speechSynthesis?.speaking; } catch { return false; } };
+  if ((!a || a.paused || a.ended) && !tts()) { cb(); return; } // nothing playing: no wait
+  let poll = null;
+  const done = () => {
+    clearTimeout(cap); clearInterval(poll);
+    if (a) { a.removeEventListener('ended', done); a.removeEventListener('pause', done); }
+    cb();
+  };
+  const cap = setTimeout(done, capMs);
+  if (a && !a.paused && !a.ended) { a.addEventListener('ended', done); a.addEventListener('pause', done); }
+  else poll = setInterval(() => { if (!tts()) done(); }, 100);
+};
+
 // Resolves true when the word's audio file started playing (false = blocked or
 // missing; the on-device TTS fallback below can't report whether it spoke).
 export const isSlowAudio = () => { try { return localStorage.getItem('cde_slow') === '1'; } catch { return false; } };

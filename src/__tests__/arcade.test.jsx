@@ -10,6 +10,7 @@ import {
 
 vi.mock('../utils/sound', () => ({
   playSound: vi.fn(),
+  whenWordAudioDone: (_ms, cb) => cb(), stopWordAudio: vi.fn(),
   speakWord: vi.fn(),
   isTTSAvailable: () => true,
   initTTS: vi.fn(),

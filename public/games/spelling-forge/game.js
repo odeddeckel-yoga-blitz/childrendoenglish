@@ -355,7 +355,7 @@ function forgeSuccess(){
   if(S.streak>=3) toast(CDE_IC('flame')+' COMBO ×'+S.streak);
   updateHUD();
   track('word_forged',{word:S.word.en,level:S.level,streak:S.streak});
-  setTimeout(nextWord,1600);
+  setTimeout(()=>{ if(window.cdeSayDone) window.cdeSayDone(1800,nextWord); else nextWord(); },1600);
 }
 function forgeWrong(){
   S.wrongForges++; S.streak=0;
