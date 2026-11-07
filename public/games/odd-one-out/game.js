@@ -63,7 +63,9 @@ var AMBIGUOUS={
 };
 // Drawn pictures (own illustrations / Twemoji, plus Commons files that are drawings, not photos — checked by eye
 // 11-07: table, pencil, microscope, folder). Every other picture used here is a photo.
-var DRAWN=['unicycle','cap','jeans','ketchup','table','oven','box','pencil','microscope','folder',
+// The site-wide style map (public/games/image-style.js, generated from IMAGE_SOURCES) wins; the list below is the
+// fallback if that script fails to load.
+var DRAWN=window.CDE_DRAWN||['unicycle','cap','jeans','ketchup','table','oven','box','pencil','microscope','folder',
   'red','blue','green','yellow','black','white','purple','pink','brown','gray',
   'one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','twenty'];
 function style(id){ return DRAWN.indexOf(id)>=0?'D':'P'; }
@@ -118,16 +120,28 @@ var IC=window.CDE_IC||function(){ return ''; };
 // A round: 3 words of group g + 1 of group o, styles 4-0 or 2-2, shuffled. `used` = words already dealt this level
 // (avoided while possible). Returns {g,o,odd,cards:[ids]}.
 function dealRound(pair, used){
+  // Built, not sampled (11-07): pick a style structure the pair can fill, then the cards for it.
+  //   all photos · all drawings · 2+2 with a drawn odd one · 2+2 with a photo odd one
+  // A 2+2 round is only dealt when BOTH 2+2 kinds are possible, and then each half the time, so the style mix never
+  // points at the odd one; a lone drawing or lone photo never happens.
   var flip=Math.random()<0.5, g=flip?pair[1]:pair[0], o=flip?pair[0]:pair[1];
-  for(var tries=0;tries<400;tries++){
-    var fresh=tries<200;
+  for(var pass=0;pass<2;pass++){
+    var fresh=pass===0;
     var G=GROUPS[g].filter(function(w){ return GROUPS[o].indexOf(w)<0 && (!fresh||!used[w]); });
     var O=GROUPS[o].filter(function(w){ return GROUPS[g].indexOf(w)<0 && (!fresh||!used[w]); });
-    if(G.length<3||!O.length) continue;
-    var three=shuffle(G).slice(0,3), odd=pick(O), cards=three.concat([odd]);
-    var d=cards.filter(function(w){ return style(w)==='D'; }).length;
-    if(d===1||d===3) continue;   // a lone drawing or a lone photo would point at a card
-    return {g:g,o:o,odd:odd,pair:pair[0]+'-'+pair[1],cards:shuffle(cards)};
+    var isD=function(w){ return style(w)==='D'; };
+    var Gd=G.filter(isD), Gp=G.filter(function(w){ return !isD(w); }), Od=O.filter(isD), Op=O.filter(function(w){ return !isD(w); });
+    var modes=[];
+    if(Gp.length>=3&&Op.length) modes.push('P');
+    if(Gd.length>=3&&Od.length) modes.push('D');
+    if(Od.length&&Gd.length>=1&&Gp.length>=2&&Op.length&&Gd.length>=2&&Gp.length>=1) modes.push('mD','mP');
+    if(!modes.length) continue;
+    var m=pick(modes), three, odd;
+    if(m==='P'){ three=shuffle(Gp).slice(0,3); odd=pick(Op); }
+    else if(m==='D'){ three=shuffle(Gd).slice(0,3); odd=pick(Od); }
+    else if(m==='mD'){ three=shuffle(Gd).slice(0,1).concat(shuffle(Gp).slice(0,2)); odd=pick(Od); }
+    else { three=shuffle(Gd).slice(0,2).concat(shuffle(Gp).slice(0,1)); odd=pick(Op); }
+    return {g:g,o:o,odd:odd,pair:pair[0]+'-'+pair[1],cards:shuffle(three.concat([odd]))};
   }
   return null;
 }

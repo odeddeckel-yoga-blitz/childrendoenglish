@@ -20,7 +20,7 @@ test.beforeEach(async ({ page }) => {
   await page.route('**/api/**', (r) => r.fulfill({ status: 204 }));
 });
 
-const data = (page) => page.evaluate(() => ({ FAM: RT.FAM, PH: RT.PH, NEAR: RT.NEAR, RIME: RT.RIME }));
+const data = (page) => page.evaluate(() => ({ FAM: RT.FAM, PH: RT.PH, NEAR: RT.NEAR, RIME: RT.RIME, DRAWN: window.CDE_DRAWN }));
 
 test('every word is an app word with an image and audio, not removed, not a body part', async ({ page }) => {
   await page.goto(PAGE);
@@ -48,8 +48,9 @@ test('every word is an app word with an image and audio, not removed, not a body
 
 test('dealt rounds: true rhyme, no rhyming distractor, no oracle (slot, style, own picture)', async ({ page }) => {
   await page.goto(PAGE);
-  const { FAM, PH, NEAR, RIME } = await data(page);
-  const ph = (w) => { const [on, vo, st] = PH[w].split(' '); return { on, vo, st }; };
+  const { FAM, PH, NEAR, RIME, DRAWN } = await data(page);
+  expect(Array.isArray(DRAWN)).toBe(true); // the site-wide style map loaded (public/games/image-style.js)
+  const ph = (w) => { const [on, vo] = PH[w].split(' '); return { on, vo, st: DRAWN.includes(w) ? 'd' : 'p' }; };
   const near = (a, b) => NEAR.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
   for (const lvl of [0, 1, 2]) {
     const rounds = await page.evaluate((l) => RT.dbg.dealForTest(l, 600), lvl);

@@ -52,7 +52,9 @@ var PH={
   goose:'g uu p',juice:'j uu p'
 };
 var RIME={}; Object.keys(FAM).forEach(function(f){ FAM[f][1].forEach(function(w){ RIME[w]=f; }); });
-var ph=function(w){ var a=PH[w].split(' '); return {on:a[0],vo:a[1],st:a[2]}; };
+// picture style comes from the site-wide map (public/games/image-style.js, generated from IMAGE_SOURCES) when loaded;
+// the third PH tag is the fallback
+var ph=function(w){ var a=PH[w].split(' '); var st=window.CDE_DRAWN?(window.CDE_DRAWN.indexOf(w)>=0?'d':'p'):a[2]; return {on:a[0],vo:a[1],st:st}; };
 var near=function(a,b){ return NEAR.some(function(p){ return (p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a); }); };
 var LEVELS=[{id:'short'},{id:'long'},{id:'mixed'}];
 var ROUNDS=8;

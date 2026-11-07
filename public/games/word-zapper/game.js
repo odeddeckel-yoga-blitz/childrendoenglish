@@ -109,6 +109,10 @@ let POOL=WORDS;
 function applyVariant(){
   const p=V.topic==='all'?WORDS:WORDS.filter(w=>w.topic===V.topic);
   POOL=p.length>=6?p:WORDS;
+  /* one picture style on screen (owner 11-07): a lone drawing/emoji among falling photos gives the target away, so a run
+     uses the pool's photo words when there are enough (public/games/image-style.js) */
+  const D=window.CDE_DRAWN||[], photos=POOL.filter(w=>D.indexOf(w.id)<0);
+  if(photos.length>=6) POOL=photos;
 }
 applyVariant();
 const WORDMODE=()=>V.mode==='words';

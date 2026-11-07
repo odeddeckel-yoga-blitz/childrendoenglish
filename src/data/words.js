@@ -1,5 +1,7 @@
 // 531 curated words across 13 categories, 3 difficulty levels
 
+import { pictureStyle } from './imageStyle.js';
+
 export const WORDS = [
   // === ANIMALS ===
   // Beginner
@@ -833,11 +835,16 @@ export const getDistractors = (word, count = 3, restrictTo = null, glossOf = nul
     w => w.level === word.level,
     () => true,
   ];
-  for (const pool of [restrictTo || WORDS, restrictTo ? WORDS : null]) {
-    if (!pool) break;
-    for (const tier of tiers) {
-      if (picked.length >= count) return picked;
-      take(pool.filter(tier));
+  // One picture style per round (owner 11-07): a lone emoji among photos (or a photo among drawings) gives the
+  // answer away, so every tier is tried with same-style words first; styles mix only if a pool truly runs dry.
+  const style = pictureStyle(word.id);
+  for (const sameStyle of [true, false]) {
+    for (const pool of [restrictTo || WORDS, restrictTo ? WORDS : null]) {
+      if (!pool) break;
+      for (const tier of tiers) {
+        if (picked.length >= count) return picked;
+        take(pool.filter((w) => tier(w) && (!sameStyle || pictureStyle(w.id) === style)));
+      }
     }
   }
   return picked;

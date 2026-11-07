@@ -43,7 +43,10 @@ test('word data: every word is a CDE word with a picture and audio, never remove
     if (REMOVED.includes(id) || BODY.includes(id)) bad.push(id + ': removed / body part');
   }
   expect(bad).toEqual([]);
-  for (const [t, ws] of Object.entries(topics)) expect(ws.length, t).toBeGreaterThanOrEqual(10);
+  // drawn/emoji pictures leave the card topics (one style per card, 11-07): every topic still fills a 5/4 or 4-per-topic
+  // card, and enough topics fill a one-topic card of 9
+  for (const [t, ws] of Object.entries(topics)) expect(ws.length, t).toBeGreaterThanOrEqual(5);
+  expect(Object.values(topics).filter((ws) => ws.length >= 9).length).toBeGreaterThanOrEqual(3);
 });
 
 test('dealing: card sizes, topics, decoys off the card, uniform layout', async ({ page }) => {

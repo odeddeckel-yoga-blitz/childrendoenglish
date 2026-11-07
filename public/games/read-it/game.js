@@ -66,7 +66,11 @@ var shared=function(a,b){ var n=0; for(var i=0;i<Math.min(a.length,b.length);i++
 // Photo distractors: other photo words, closest spelling first (cat → hat, cap),
 // so the child must read every letter rather than guess from the first one.
 function photoChoices(target, strand){
-  var others=shuffle(photosOf(strand).filter(function(w){ return w!==target; }))
+  // one picture style per round (owner 11-07): the options share the target's style when the strand allows
+  var D=window.CDE_DRAWN||[], st=function(w){ return D.indexOf(w)>=0; };
+  var pool=photosOf(strand).filter(function(w){ return w!==target; });
+  var same=pool.filter(function(w){ return st(w)===st(target); });
+  var others=shuffle(same.length>=2?same:pool)
     .sort(function(a,b){ return shared(b,target)-shared(a,target); });
   return shuffle([target, others[0], others[1]]);
 }

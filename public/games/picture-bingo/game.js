@@ -79,13 +79,15 @@ window.S=S; // game-clicks.js reads S.lvl (0-based)
 var token=0; // bumps on every new call / level / leave: stale timers check it
 
 // ---- dealing --------------------------------------------------------------
+// one picture style per card (owner 11-07): drawn/emoji pictures (public/games/image-style.js) leave the topics
+(function(){ var D=window.CDE_DRAWN||[]; Object.keys(TOPICS).forEach(function(t){ TOPICS[t]=TOPICS[t].filter(function(w){ return D.indexOf(w)<0; }); }); })();
 function deal(i){
   var lv=LEVELS[i], words, topics;
   if(lv.id==='two'){
     topics=shuffle(pick(FAR)); var a=Math.random()<0.5?5:4;
     words=shuffle(TOPICS[topics[0]]).slice(0,a).concat(shuffle(TOPICS[topics[1]]).slice(0,9-a));
   } else if(lv.id==='one'){
-    topics=[pick(Object.keys(TOPICS))];
+    topics=[pick(Object.keys(TOPICS).filter(function(t){ return TOPICS[t].length>=9; }))];
     words=shuffle(TOPICS[topics[0]]).slice(0,9);
   } else {
     topics=shuffle(Object.keys(TOPICS)).slice(0,4);

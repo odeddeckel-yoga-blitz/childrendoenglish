@@ -50,10 +50,10 @@ test('word data: CDE words with picture + audio, never removed / body part / amb
     if (BODY.includes(id)) bad.push(`${id}: body part`);
     if (amb[id]) bad.push(`${id}: on the ambiguity list but used`);
     const src = SRC[id]?.source;
-    const isDrawn = src === 'own' || src === 'twemoji' || DRAWN_COMMONS.includes(id);
+    const isDrawn = src === 'own' || src === 'twemoji' || src === 'fluent-emoji' || DRAWN_COMMONS.includes(id);
     if (isDrawn !== drawn.includes(id)) bad.push(`${id}: style ${drawn.includes(id) ? 'drawn' : 'photo'} but source ${src}`);
   }
-  for (const d of drawn) if (!used.includes(d)) bad.push(`${d}: in DRAWN but unused`);
+  // DRAWN is the site-wide style map now (public/games/image-style.js), so it lists words this game doesn't use
   for (const lv of levels) for (const [a, b] of lv.pairs) {
     const both = groups[a].filter((w) => groups[b].includes(w));
     if (both.length) bad.push(`${a}/${b} share ${both.join(',')}`);
