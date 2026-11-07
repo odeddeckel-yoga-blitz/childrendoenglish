@@ -31,7 +31,11 @@ Head terms, for scale: "משחקי אנגלית לילדים" 10 and "english ga
 ### 2. Blend It (phonics blending, the ladder's phonics gap)
 - **Play:** the game says /k/ … /æ/ … /t/, and the child picks the matching picture from 3. Level 2 shows letter tiles lighting up as the sounds play. Level 3 drops the picture: the child hears the sounds and picks the written word.
 - **Words it needs:** CVC words that can be pictured. **They're already here:** Read It uses `/audio/cvc/`, 90 neighbour-checked words. No new batch is needed.
-- **Audio risk:** single phoneme clips (/k/, /æ/). Piper turns lone phonemes into letter names ("kay"). Options: per-phoneme clips cut from words that whisper-check as the bare sound, or a sound-out clip of the stretched word. **Run a whisper/ear spike before any build.**
+- **Audio spike, 11-07** (scratchpad `blend/spike.py`): Piper takes IPA phonemes directly (`phonemes_to_ids` → `phoneme_ids_to_audio`), so it does **not** say letter names.
+  - Continuants (æ ʌ ɪ s n) stretched with ː render cleanly.
+  - Bare stops (k t p ɡ) come out almost silent (peak 0.02–0.06): they need normalising, or a short schwa ("kuh").
+  - Whisper can't judge lone phonemes (it hears "Ha", "Sir"), but it does hear the blended word at the end (cat ✓, pig ✓, sun ✓ after the spelled-out sounds). So the gate for each sound is the **owner's ear**, and the gate for each word is whisper.
+  - Sample sent to the owner: `blend/blend-it-sound-test.mp3`, version 1 bare/normalised vs version 2 schwa. **Waiting on their pick.**
 - **Picture style:** the CVC words are mostly objects and animals, so photos. Check that every round is one style (`CDE_DRAWN`).
 - **Ladder slot:** right after `read-it`, the bridge from sounds to reading.
 
