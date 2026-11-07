@@ -64,13 +64,29 @@ describe('api/land learn-event whitelist', () => {
     process.env.CDE_DATABASE_URL = 'postgres://x';
     const { default: handler } = await import('../land.js');
     calls.length = 0;
-    const batch = [{ e: 'fcr', i: 'c3' }, { e: 'fcr', i: 'done' }, { e: 'ansx', i: 'arrow@airplane' }, { e: 'g_start', i: 'spelling-forge' }, { e: 'pg', i: 'vocabulary_ages-6-8' }, { e: 'cta', i: 'games' }, { e: 'mq', i: 'vocabulary_word' }, { e: 'bt', i: 'start_p6-15' }, { e: 'qs', i: 'new-ladder_start' }, { e: 'aie', i: 'chatgpt' }, { e: 'aiv', i: 'perplexity' }, { e: 'aie', i: 'bing' }, { e: 'sheet', i: 'bingo' }, { e: 'mp', i: 'ee-i_no' }, { e: 'cvc', i: 'o_h_ok' }, { e: 'zv', i: 'words-animals' }, { e: 'b1r', i: '3-hear' }, { e: 'wk', i: 'pin' }, { e: 'rq_ok', i: 'apron' }, { e: 'rs', i: 'lo_retry' }, { e: 'ge', i: 'word-zapper_next' }, { e: 'qr', i: 'printable-flashcards_animals' }, { e: 'ltw', i: 'bd_d_no' }, { e: 't1', i: 'g-letter-twins' }, { e: 'mm_keep', i: 'apron' }, { e: 'pb', i: 'two_ok' }, { e: 'oo', i: 'animals-food_no' }, { e: 'rt', i: 'mixed_ok' }, { e: 'op', i: 'hot_ok' }, { e: 'tf', i: 'is_no' }, { e: 'fe', i: 'shy_ok' }, { e: 'sb', i: 'article_no' }, { e: 'nope', i: 'x' }];
+    const batch = [{ e: 'fcr', i: 'c3' }, { e: 'fcr', i: 'done' }, { e: 'ansx', i: 'arrow@airplane' }, { e: 'g_start', i: 'spelling-forge' }, { e: 'pg', i: 'vocabulary_ages-6-8' }, { e: 'cta', i: 'games' }, { e: 'mq', i: 'vocabulary_word' }, { e: 'bt', i: 'start_p6-15' }, { e: 'qs', i: 'new-ladder_start' }, { e: 'aie', i: 'chatgpt' }, { e: 'aiv', i: 'perplexity' }, { e: 'aie', i: 'bing' }, { e: 'sheet', i: 'bingo' }, { e: 'mp', i: 'ee-i_no' }, { e: 'cvc', i: 'o_h_ok' }, { e: 'zv', i: 'words-animals' }, { e: 'b1r', i: '3-hear' }, { e: 'wk', i: 'pin' }, { e: 'rq_ok', i: 'apron' }, { e: 'rs', i: 'lo_retry' }, { e: 'ge', i: 'word-zapper_next' }, { e: 'qr', i: 'printable-flashcards_animals' }, { e: 'ltw', i: 'bd_d_no' }, { e: 't1', i: 'g-letter-twins' }, { e: 'mm_keep', i: 'apron' }, { e: 'pb', i: 'two_ok' }, { e: 'oo', i: 'animals-food_no' }, { e: 'rt', i: 'mixed_ok' }, { e: 'nope', i: 'x' }];
     const r = res(); await handler({ method: 'POST', body: { batch, l: 'he' } }, r);
     expect(r.code).toBe(204);
     const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
-    expect(written).toEqual(expect.arrayContaining(['fcr:c3', 'fcr:done', 'ansx:arrow@airplane', 'g_start:spelling-forge', 'pg:vocabulary_ages-6-8', 'cta:games', 'mq:vocabulary_word', 'bt:start_p6-15', 'qs:new-ladder_start', 'aie:chatgpt', 'aiv:perplexity', 'sheet:bingo', 'mp:ee-i_no', 'cvc:o_h_ok', 'zv:words-animals', 'b1r:3-hear', 'wk:pin', 'rq_ok:apron', 'rs:lo_retry', 'ge:word-zapper_next', 'qr:printable-flashcards_animals', 'ltw:bd_d_no', 't1:g-letter-twins', 'mm_keep:apron', 'pb:two_ok', 'oo:animals-food_no', 'rt:mixed_ok', 'op:hot_ok', 'tf:is_no', 'fe:shy_ok', 'sb:article_no']));
+    expect(written).toEqual(expect.arrayContaining(['fcr:c3', 'fcr:done', 'ansx:arrow@airplane', 'g_start:spelling-forge', 'pg:vocabulary_ages-6-8', 'cta:games', 'mq:vocabulary_word', 'bt:start_p6-15', 'qs:new-ladder_start', 'aie:chatgpt', 'aiv:perplexity', 'sheet:bingo', 'mp:ee-i_no', 'cvc:o_h_ok', 'zv:words-animals', 'b1r:3-hear', 'wk:pin', 'rq_ok:apron', 'rs:lo_retry', 'ge:word-zapper_next', 'qr:printable-flashcards_animals', 'ltw:bd_d_no', 't1:g-letter-twins', 'mm_keep:apron', 'pb:two_ok', 'oo:animals-food_no', 'rt:mixed_ok']));
     expect(written).not.toContain('aie:bing');
     expect(written.some((w) => w.startsWith('nope'))).toBe(false);
+  });
+});
+
+describe('api/land games wave 2 events', () => {
+  it('records the Opposites / True or False / Feelings / Sentence Builder answer events', async () => {
+    // own batch: the endpoint keeps the first 30 events of a batch, and the list above is near that
+    vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    const { default: handler } = await import('../land.js');
+    calls.length = 0;
+    const batch = [{ e: 'op', i: 'hot_ok' }, { e: 'tf', i: 'is_no' }, { e: 'fe', i: 'shy_ok' }, { e: 'sb', i: 'article_no' }];
+    const r = res(); await handler({ method: 'POST', body: { batch, l: 'en' } }, r);
+    expect(r.code).toBe(204);
+    const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
+    expect(written).toEqual(expect.arrayContaining(['op:hot_ok', 'tf:is_no', 'fe:shy_ok', 'sb:article_no']));
   });
 });
 
