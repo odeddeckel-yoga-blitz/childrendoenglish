@@ -25,6 +25,7 @@
         if (window.TF) return TF.S.lvl + 1;
         if (window.FE) return FE.S.lvl + 1;
         if (window.SB) return SB.S.lvl + 1;
+        if (window.BS) return BS.S.lvl + 1;
         if (window.S && typeof S.lvl === 'number') return S.lvl + 1;   // letter-twins / read-it / sound-pairs (0-based)  (+ rhyme-time, missing-letter, picture-bingo)
       } catch (e) { /* game not up yet */ }
       return 1;

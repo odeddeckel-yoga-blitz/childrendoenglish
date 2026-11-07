@@ -27,4 +27,5 @@ export const SPOTLIGHT_GAMES = [
   { id: 'true-or-false', name: 'True or False', icon: 'circle-check', emoji: '✅' },
   { id: 'feelings', name: 'Feelings', icon: 'smile', emoji: '😊' },
   { id: 'sentence-builder', name: 'Sentence Builder', icon: 'blocks', emoji: '🧱' },
+  { id: 'beginning-sounds', name: 'Beginning Sounds', icon: 'type', emoji: '🔤' },
 ];

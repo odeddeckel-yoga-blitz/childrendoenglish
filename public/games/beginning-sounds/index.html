@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beginning Sounds Game — Which Picture Starts with B? | Children Do English</title>
+<meta name="description" content="A free beginning sounds game for kids learning English letters: see a letter, hear the words and tap the picture that starts with it. 3 levels, no sign-up.">
+<link rel="canonical" href="https://childrendoenglish.com/games/beginning-sounds/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="theme-color" content="#1e1b4b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Children Do English">
+<meta property="og:title" content="Beginning Sounds Game — Which Picture Starts with B?">
+<meta property="og:description" content="B is for bus! Hear the words and find the one that starts with the letter. Free, no sign-up.">
+<meta property="og:url" content="https://childrendoenglish.com/games/beginning-sounds/">
+<meta property="og:image" content="https://childrendoenglish.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "VideoGame", "name": "Beginning Sounds", "url": "https://childrendoenglish.com/games/beginning-sounds/", "description": "A free beginning sounds game for kids learning English: see a letter and tap the picture whose word starts with it. Every word is spoken. Three levels, ending with sound-alike letters like b and p.", "inLanguage": "en", "genre": "Educational", "gamePlatform": "Web Browser", "playMode": "SinglePlayer", "applicationCategory": "EducationalApplication", "operatingSystem": "Any (modern web browser)", "isFamilyFriendly": true, "isAccessibleForFree": true, "typicalAgeRange": "4-8", "learningResourceType": "Game", "educationalUse": "Practice", "keywords": "beginning sounds game, initial sounds, letter sounds, phonics, english letters for kids", "author": {"@type": "Organization", "name": "Children Do English", "url": "https://childrendoenglish.com"}, "publisher": {"@type": "Organization", "name": "Children Do English", "url": "https://childrendoenglish.com"}, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD", "availability": "https://schema.org/InStock"}}
+</script>
+<script defer src="/land-beacon.js"></script>
+<style>
+  /* gradient-text headings use color:transparent — their drawn icon needs its own colour */
+  h1 .ic{color:#fbbf24;}
+  :root{ --bg0:#0b1230; --bg1:#1e1b4b; --ink:#eef2ff; --dim:#a5b4fc; --blue:#60a5fa; --gold:#fbbf24; --grn:#4ade80; --red:#f87171; --glass:rgba(30,27,75,.7); --line:rgba(129,140,248,.35); }
+  *{box-sizing:border-box;}
+  body{margin:0;min-height:100dvh;background:radial-gradient(circle at 50% 0%,var(--bg1),var(--bg0) 70%);color:var(--ink);font-family:-apple-system,system-ui,'Segoe UI',sans-serif;}
+  #homePill{position:fixed;left:12px;top:12px;z-index:9;direction:ltr;font:bold 13px/1 -apple-system,system-ui,sans-serif;color:var(--ink);text-decoration:none;background:rgba(11,18,48,.8);border:1px solid rgba(165,180,252,.45);border-radius:999px;padding:9px 14px;}
+  main{max-width:560px;margin:0 auto;padding:64px 16px 32px;text-align:center;}
+  h1{font-size:clamp(30px,8vw,46px);margin:0 0 8px;background:linear-gradient(90deg,var(--blue),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{font-size:17px;line-height:1.55;color:#dbe4ff;margin:0 auto 18px;max-width:440px;}
+  .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+  .pill{background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:14px;}
+  button,.ghost,.primary{font-family:inherit;}
+  .primary,#startBtn{display:inline-block;background:linear-gradient(135deg,#6366f1,#3b82f6);color:#fff;border:0;border-radius:14px;padding:15px 28px;font-size:19px;font-weight:800;cursor:pointer;min-height:52px;margin:6px;text-decoration:none;}
+  .ghost{display:inline-block;background:transparent;color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:11px 18px;font-size:16px;font-weight:700;cursor:pointer;margin:6px;text-decoration:none;min-height:46px;}
+  .about{margin-top:28px;text-align:left;font-size:14px;line-height:1.6;color:var(--dim);background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+  .about a{color:var(--blue);}
+  .hud{margin-bottom:12px;}
+  .hud-level{font-size:14px;color:var(--dim);}
+  .hud-label{font-size:21px;font-weight:800;margin:3px 0 8px;}
+  .dots{display:flex;gap:6px;justify-content:center;}
+  .dot{width:12px;height:12px;border-radius:50%;background:rgba(165,180,252,.25);}
+  .dot.done{background:var(--grn);} .dot.now{background:var(--gold);}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .grid.three{grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  .bs-card{position:relative;}
+  .grid.three .opt img{height:clamp(84px,17vh,150px);}
+  .grid.three .say{width:44px;height:44px;top:6px;right:6px;}
+  .letter{font:900 clamp(56px,15vw,84px)/1 -apple-system,system-ui,sans-serif;color:var(--gold);margin:0 0 10px;letter-spacing:.04em;}
+  .opt .word .first{color:var(--gold);}
+  .opt .word.late{visibility:hidden;}
+  .grid.shown .opt .word.late{visibility:visible;}
+  .solo{display:flex;justify-content:center;margin:2px 0 10px;}
+  .solo img{width:clamp(120px,28vh,220px);height:clamp(120px,28vh,220px);border-radius:16px;background:#EEF2FB;}
+  .mini{display:flex;justify-content:center;margin:-2px 0 8px;}
+  .mini img{width:72px;height:72px;border-radius:12px;background:#EEF2FB;}
+  .wordopt{min-height:64px;justify-content:center;}
+  .wordopt .word{font-size:24px;}
+  .hud-label .target{color:var(--gold);}
+  .say.inline{position:static;display:inline-flex;vertical-align:middle;margin-inline-start:8px;width:44px;height:44px;}
+  .opt{width:100%;background:var(--glass);border:3px solid var(--line);border-radius:16px;padding:5px;cursor:pointer;color:var(--ink);display:flex;flex-direction:column;align-items:stretch;gap:2px;transition:transform .12s;}
+  .opt:active{transform:scale(.97);}
+  .opt img{width:100%;height:clamp(96px,21vh,180px);object-fit:cover;border-radius:11px;display:block;background:rgba(255,255,255,.06);}
+  .opt .word{font-size:20px;font-weight:800;line-height:1.25;padding:3px 0 1px;}
+  .opt .tag{display:none;font-size:13px;color:var(--dim);line-height:1.2;}
+    .say{position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(11,18,48,.78);color:#fff;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;}
+  .opt.ok{border-color:var(--grn);background:rgba(74,222,128,.18);}
+  .opt.no{border-color:var(--red);background:rgba(248,113,113,.18);}
+  .feedback{min-height:24px;font-size:17px;line-height:1.35;margin:10px 0 4px;}
+  .feedback .reveal{font-weight:800;color:var(--gold);white-space:nowrap;}
+  .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  .next{background:var(--gold);color:#1e1b4b;border:0;border-radius:12px;padding:11px 22px;font-size:17px;font-weight:800;cursor:pointer;margin:2px;min-height:46px;}
+  .tip{font-size:14px;color:var(--dim);margin-top:12px;}
+  .card{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:26px 18px;}
+  .card h2{margin:6px 0;font-size:28px;}
+  .stars{font-size:40px;letter-spacing:4px;}
+  .stars .st{color:rgba(165,180,252,.3);} .stars .st.on{color:var(--gold);}
+  .score{font-size:22px;font-weight:800;color:var(--gold);}
+  @media(max-height:740px){ main{padding-top:52px;} .hud{margin-bottom:8px;} .hud-label{font-size:18px;margin:2px 0 6px;} .opt .word{font-size:18px;} }
+  [data-cde-lang="he"] main{direction:rtl;}
+  [data-cde-lang="he"] .about{text-align:right;}
+  @media(prefers-reduced-motion:reduce){ .opt{transition:none;} }
+</style>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How do you play Beginning Sounds?", "acceptedAnswer": {"@type": "Answer", "text": "Each round shows a big letter and three pictures. The child taps the picture whose word starts with that letter, for example B for bus. Every picture has a speaker button that says its word, and the words appear after the tap with the first letter marked."}}, {"@type": "Question", "name": "What do the three levels practise?", "acceptedAnswer": {"@type": "Answer", "text": "Level 1 uses eleven common letters, and the wrong pictures start with sounds that are easy to tell apart. Level 2 uses all eighteen letters. Level 3 adds a sound-alike trap in every round: b or p, d or t, f or v, m or n, g or k, s or z."}}, {"@type": "Question", "name": "Why are some letters missing?", "acceptedAnswer": {"@type": "Answer", "text": "The game only uses letters whose usual sound is the first sound of the word, so the letter and the sound always match. Vowels, and starts like ch, sh, th or a soft c (as in circle), are left for later."}}, {"@type": "Question", "name": "Is it free?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. No ads, no sign-up and nothing to install. It works in a phone, tablet or computer browser, with the buttons in English, Hebrew or Spanish."}}]}</script>
+</head>
+<body>
+<a id="homePill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
+<main>
+  <div id="menu">
+    <h1><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-type"/></svg> BEGINNING SOUNDS</h1>
+    <p class="sub" data-l10n="sub">See the letter, hear the words and tap the picture that <b>starts with it</b>!</p>
+    <div class="pills"><span class="pill" dir="ltr" lang="en">B → bus</span><span class="pill" dir="ltr" lang="en">M → moon</span><span class="pill" dir="ltr" lang="en">T → tree</span></div>
+    <button type="button" id="startBtn" data-l10n="start"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> Start</button>
+    <section class="about">
+      <h2 style="font-size:15px;margin:0 0 4px;color:inherit;">Beginning Sounds</h2>
+      <p style="margin:0 0 4px;">A free beginning sounds game for kids learning English letters. Each round shows a big letter and three pictures; the child listens to the words and taps the one that starts with the letter. Level 1 uses common letters, level 2 all eighteen, and level 3 adds sound-alike traps such as b and p. Eight rounds per level.</p>
+      <p style="margin:0;">No ads, no sign-up. Part of <a href="/">childrendoenglish.com</a>: free vocabulary games, flashcards and quizzes with Hebrew support.</p>
+      <h3 style="font-size:14px;margin:12px 0 4px;color:inherit;">Questions parents ask</h3>
+      <p style="margin:0 0 6px;"><b>How do you play Beginning Sounds?</b> Each round shows a big letter and three pictures. The child taps the picture whose word starts with that letter, for example B for bus. Every picture has a speaker button that says its word, and the words appear after the tap with the first letter marked.</p>
+      <p style="margin:0 0 6px;"><b>What do the three levels practise?</b> Level 1 uses eleven common letters, and the wrong pictures start with sounds that are easy to tell apart. Level 2 uses all eighteen letters. Level 3 adds a sound-alike trap in every round: b or p, d or t, f or v, m or n, g or k, s or z.</p>
+      <p style="margin:0 0 6px;"><b>Why are some letters missing?</b> The game only uses letters whose usual sound is the first sound of the word, so the letter and the sound always match. Vowels, and starts like ch, sh, th or a soft c (as in circle), are left for later.</p>
+      <p style="margin:0 0 6px;"><b>Is it free?</b> Yes. No ads, no sign-up and nothing to install. It works in a phone, tablet or computer browser, with the buttons in English, Hebrew or Spanish.</p>
+    </section>
+  </div>
+  <div id="app" aria-live="polite"></div>
+</main>
+<script src="../cde-l10n.js" defer></script>
+<script src="../word-audio.js" defer></script>
+<script src="../end-card.js" defer></script>
+<script src="./l10n.js" defer></script>
+<script src="./words.js" defer></script>
+<script src="./game.js" defer></script>
+</body>
+</html>
