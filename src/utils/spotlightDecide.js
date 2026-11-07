@@ -66,10 +66,13 @@ export function judgeLane(lane, cur, live, snap, now) {
   else if (flag?.severity === 'poor') { action = 'swap'; reason = `low engagement after ${exposure} exposures (rate ${flag.rate}) → improver`; }
   else if (tenure >= RULES.maxTenureDays) { action = 'swap'; reason = `max tenure ${RULES.maxTenureDays}d`; }
   else if (!sufficient && tenure >= RULES.idleTenureDays) { action = 'swap'; reason = `no traffic after ${RULES.idleTenureDays}d, rotate`; }
-  return { action, reason, sufficient, tenureDays: Number(tenure.toFixed(2)), spot, exposure, rate, flag };
+  return { action, reason, graduated, sufficient, tenureDays: Number(tenure.toFixed(2)), spot, exposure, rate, flag };
 }
 
-export function decideSpotlight({ prev = null, snap, words, games, now, live = null }) {
+// fillOnly (the prebuild, which has no live counts): only fill an empty lane. Without live counts every pick looks
+// idle, so a build 7+ days into a pick swapped it on the deployed site while the hourly job (live counts) kept it in
+// the repo — 11-06 the live card showed Word Zapper while spotlight.json said Spelling Forge (11-07 spotlight review).
+export function decideSpotlight({ prev = null, snap, words, games, now, live = null, fillOnly = false }) {
   const nowIso = new Date(ms(now)).toISOString();
   const history = [...(prev?.history || [])];
   const changes = [];
@@ -79,7 +82,8 @@ export function decideSpotlight({ prev = null, snap, words, games, now, live = n
 
   for (const lane of ['word', 'game']) {
     const cur = prev?.[lane] || null;
-    const v = judgeLane(lane, cur, live?.[lane] || null, snap, now);
+    const v = cur?.id && fillOnly ? { action: 'keep', reason: 'prebuild keeps the committed pick', sufficient: false }
+      : judgeLane(lane, cur, live?.[lane] || null, snap, now);
     verdicts[lane] = v;
     if (v.flag) flags.push(v.flag);
     if (v.action === 'keep') {
@@ -93,6 +97,10 @@ export function decideSpotlight({ prev = null, snap, words, games, now, live = n
     const pick = lane === 'word' ? pickWord(pool.length ? pool : words, snap) : pickGame(pool.length ? pool : games, snap);
     if (!pick) { out[lane] = cur; continue; }
     if (cur?.id === pick.id) { out[lane] = { ...cur, since: cur.since || nowIso }; continue; } // nothing better to swap to
+    // Only already-graduated candidates left (3 arcade games: one current, one on cooldown) → keep the current pick
+    // rather than spotlight a game that's already played most (11-06: Word Zapper, depth 13, replaced Spelling Forge).
+    const pickGrad = lane === 'word' ? wordGraduated(wordStat(snap, pick.id)) : gameGraduated(gameStat(snap, pick.id));
+    if (cur?.id && pickGrad && !v.graduated) { out[lane] = { ...cur, since: cur.since || nowIso }; continue; }
     out[lane] = lane === 'word'
       ? { id: pick.id, word: pick.word, category: pick.category, he: pick.hebrewTranslation || '', image: pick.imageUrl || '', ans: pick.ans, ok: pick.ok, since: nowIso }
       : { id: pick.id, name: pick.name, emoji: pick.emoji, opens: pick.opens, lvl: pick.lvl, cmp: pick.cmp, since: nowIso };

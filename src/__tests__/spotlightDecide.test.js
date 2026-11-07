@@ -67,6 +67,28 @@ describe('decideSpotlight', () => {
   });
 });
 
+describe('11-07 spotlight review: the deployed pick drifted from the committed one', () => {
+  it('the prebuild (fillOnly, no live counts) never swaps a committed pick, even past idleTenureDays', () => {
+    const r = decideSpotlight({ prev: base(), snap, words, games: ARCADE, now: at(RULES.maxTenureDays + 1), fillOnly: true });
+    expect(r.changes).toEqual([]);
+    expect(r.next.word.id).toBe('cat');
+    expect(r.next.game.id).toBe('category-conveyor');
+  });
+  it('fillOnly still fills an empty lane', () => {
+    const r = decideSpotlight({ prev: { history: [] }, snap, words, games: ARCADE, now: T0, fillOnly: true });
+    expect(r.next.word?.id).toBeTruthy();
+    expect(r.next.game?.id).toBeTruthy();
+  });
+  it('keeps the current game rather than swapping to an already-graduated one', () => {
+    const s2 = { ...snap, games: { 'word-zapper': { opens: 106, lvl: 1374, cmp: 24 }, 'spelling-forge': { opens: 115, lvl: 191, cmp: 5 } } };
+    const prev = { word: { id: 'cat', since: T0 }, game: { id: 'spelling-forge', since: T0 },
+      history: [{ lane: 'game', from: 'category-conveyor', to: 'spelling-forge', reason: 'max tenure 14d', at: T0 }] };
+    const r = decideSpotlight({ prev, snap: s2, words, games: ARCADE, now: at(RULES.maxTenureDays), live: { game: { spot: 9, exposure: 12, good: 20 } } });
+    expect(r.next.game.id).toBe('spelling-forge');
+    expect(r.changes.filter((c) => c.lane === 'game')).toEqual([]);
+  });
+});
+
 describe('diagnoseWord', () => {
   it('names the asset from parent taps first, then from the weakest probe', async () => {
     const { diagnoseWord } = await import('../utils/spotlightDecide');

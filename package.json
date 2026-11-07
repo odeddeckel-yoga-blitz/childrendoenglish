@@ -30,7 +30,8 @@
     "spend": "node scripts/spend-check.mjs",
     "errors": "node scripts/errors-check.mjs",
     "index-sample": "~/.config/searchconsole/venv/bin/python tools/seo/index-sample.py 20",
-    "kit:all": "node scripts/kit-all.mjs"
+    "kit:all": "node scripts/kit-all.mjs",
+    "spotlight:review": "node scripts/spotlight-review.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
