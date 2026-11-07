@@ -24,5 +24,6 @@ test('a ladder arrival is led back to its words, not on to another game', async 
 
 test('an ordinary visit keeps "Next game" as the primary after a good run', async ({ page }) => {
   const primary = await endCard(page, '/games/category-conveyor/index.html');
-  await expect(primary).toHaveAttribute('href', /\/games\/sound-pairs\//);
+  // end-card ORDER: after category-conveyor comes picture-bingo (games wave 1, 11-07)
+  await expect(primary).toHaveAttribute('href', /\/games\/picture-bingo\//);
 });

@@ -61,8 +61,12 @@ async function completeQuiz(page, numQuestions = 10) {
     // Wait for answer options to appear
     const answerBtns = page.locator('.grid.grid-cols-2 button').first();
     await answerBtns.waitFor({ timeout: 5000 });
+    const bar = page.locator('[role="progressbar"]');
+    const before = await bar.getAttribute('aria-valuenow').catch(() => null);
     await answerBtns.click();
-    await page.waitForTimeout(1400); // wait for auto-advance
+    // the quiz moves on once the replayed word has finished (11-07, kit §8g), not after a fixed delay
+    await expect.poll(async () => (await result.isVisible()) || (await bar.getAttribute('aria-valuenow').catch(() => null)) !== before,
+      { timeout: 6000 }).toBe(true);
   }
   await expect(result).toBeVisible({ timeout: 5000 });
 }
@@ -289,6 +293,7 @@ test.describe('Sound Toggle', () => {
 
 test.describe('Quiz Flow', () => {
   test('complete image quiz flow: select level → mode → answer → results', async ({ page }) => {
+    test.setTimeout(90000);
     await setupReturningUser(page);
 
     // Navigate to quiz

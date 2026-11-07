@@ -39,7 +39,8 @@ async function untranslated(page) {
     return Object.entries(en)
       .filter(([k, v]) => typeof v === 'string' && plain(v).length >= 6 && plain(cur[k]) !== plain(v))
       .map(([, v]) => plain(v))
-      .filter((v) => txt.includes(v));
+      // whole words only: es "Transporte" contains en "Transport" but is translated (11-07)
+      .filter((v) => new RegExp('(^|[^\\p{L}])' + v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\p{L}])', 'u').test(txt));
   });
 }
 
