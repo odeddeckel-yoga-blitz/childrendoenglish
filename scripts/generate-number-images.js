@@ -38,6 +38,15 @@ const NUMBERS = {
   forty:    { digit: '40',        bg: '#C8E6C9', fg: '#2E7D32' },
   ninety:   { digit: '90',        bg: '#F3E5F5', fg: '#6A1B9A' },
   sixty:    { digit: '60',        bg: '#FFF3E0', fg: '#E65100' },
+  // batch 1 of the 1,000-word plan (11-07)
+  thirteen:  { digit: '13',        bg: '#FEEBC8', fg: '#9C4221' },
+  fourteen:  { digit: '14',        bg: '#C6F6D5', fg: '#276749' },
+  sixteen:   { digit: '16',        bg: '#BEE3F8', fg: '#2B6CB0' },
+  seventeen: { digit: '17',        bg: '#E9D8FD', fg: '#553C9A' },
+  eighteen:  { digit: '18',        bg: '#FED7E2', fg: '#97266D' },
+  nineteen:  { digit: '19',        bg: '#FEFCBF', fg: '#975A16' },
+  seventy:   { digit: '70',        bg: '#B2F5EA', fg: '#285E61' },
+  eighty:    { digit: '80',        bg: '#FED7D7', fg: '#9B2C2C' },
 };
 
 function createNumberSvg({ digit, bg, fg }) {

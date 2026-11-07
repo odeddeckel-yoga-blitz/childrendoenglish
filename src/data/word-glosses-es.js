@@ -558,4 +558,12 @@ export default {
   'board-game': 'juego de mesa',
   'sand': 'arena',
   'smile': 'sonrisa',
+  'thirteen': 'trece',
+  'fourteen': 'catorce',
+  'sixteen': 'dieciséis',
+  'seventeen': 'diecisiete',
+  'eighteen': 'dieciocho',
+  'nineteen': 'diecinueve',
+  'seventy': 'setenta',
+  'eighty': 'ochenta',
 };

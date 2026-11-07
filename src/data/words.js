@@ -732,6 +732,15 @@ export const WORDS = [
   { id: 'board-game', word: 'board game', level: 'beginner', partOfSpeech: 'noun', category: 'toys', definition: 'A game you play on a board with dice and small pieces', exampleSentence: 'Our family plays a board game every Friday.', phonetic: '/ˈbɔːrd ɡeɪm/', hebrewTranslation: 'משחק קופסה', imageUrl: '/images/board-game.webp' },
   { id: 'sand', word: 'sand', level: 'beginner', partOfSpeech: 'noun', category: 'nature', definition: 'Tiny grains of rock on a beach or in a desert', exampleSentence: 'The children built a castle in the sand.', phonetic: '/sænd/', hebrewTranslation: 'חול', imageUrl: '/images/sand.webp' },
   { id: 'smile', word: 'smile', level: 'beginner', partOfSpeech: 'noun', category: 'feelings', definition: 'A happy look on your face when your mouth curves up', exampleSentence: 'She gave me a big smile.', phonetic: '/smaɪl/', hebrewTranslation: 'חיוך', imageUrl: '/images/smile.webp' },
+  // 1,000-word plan batch 1 (owner review 11-07): the missing teens and tens, drawn like the other numbers
+  { id: 'thirteen', word: 'thirteen', level: 'intermediate', partOfSpeech: 'noun', category: 'numbers', definition: 'Ten and three more, written as 13', exampleSentence: 'My sister is thirteen years old.', phonetic: '/ˌθɜːrˈtiːn/', hebrewTranslation: 'שלוש עשרה', imageUrl: '/images/thirteen.webp' },
+  { id: 'fourteen', word: 'fourteen', level: 'intermediate', partOfSpeech: 'noun', category: 'numbers', definition: 'Ten and four more, written as 14', exampleSentence: 'There are fourteen apples in the box.', phonetic: '/ˌfɔːrˈtiːn/', hebrewTranslation: 'ארבע עשרה', imageUrl: '/images/fourteen.webp' },
+  { id: 'sixteen', word: 'sixteen', level: 'intermediate', partOfSpeech: 'noun', category: 'numbers', definition: 'Ten and six more, written as 16', exampleSentence: 'Our team has sixteen players.', phonetic: '/ˌsɪkˈstiːn/', hebrewTranslation: 'שש עשרה', imageUrl: '/images/sixteen.webp' },
+  { id: 'seventeen', word: 'seventeen', level: 'intermediate', partOfSpeech: 'noun', category: 'numbers', definition: 'Ten and seven more, written as 17', exampleSentence: 'I counted seventeen birds in the tree.', phonetic: '/ˌsɛvənˈtiːn/', hebrewTranslation: 'שבע עשרה', imageUrl: '/images/seventeen.webp' },
+  { id: 'eighteen', word: 'eighteen', level: 'intermediate', partOfSpeech: 'noun', category: 'numbers', definition: 'Ten and eight more, written as 18', exampleSentence: 'There are eighteen pencils in the box.', phonetic: '/ˌeɪˈtiːn/', hebrewTranslation: 'שמונה עשרה', imageUrl: '/images/eighteen.webp' },
+  { id: 'nineteen', word: 'nineteen', level: 'intermediate', partOfSpeech: 'noun', category: 'numbers', definition: 'Ten and nine more, written as 19', exampleSentence: 'We read nineteen pages today.', phonetic: '/ˌnaɪnˈtiːn/', hebrewTranslation: 'תשע עשרה', imageUrl: '/images/nineteen.webp' },
+  { id: 'seventy', word: 'seventy', level: 'advanced', partOfSpeech: 'noun', category: 'numbers', definition: 'Seven groups of ten, written as 70', exampleSentence: 'My grandpa is seventy years old.', phonetic: '/ˈsɛvənti/', hebrewTranslation: 'שבעים', imageUrl: '/images/seventy.webp' },
+  { id: 'eighty', word: 'eighty', level: 'advanced', partOfSpeech: 'noun', category: 'numbers', definition: 'Eight groups of ten, written as 80', exampleSentence: 'The book has eighty pages.', phonetic: '/ˈeɪti/', hebrewTranslation: 'שמונים', imageUrl: '/images/eighty.webp' },
 ];
 
 export const CATEGORIES = [
@@ -756,6 +765,8 @@ export const getWordByName = (name) => WORD_NAME_MAP.get(name?.toLowerCase());
 // wrong, cap 46% wrong under Hebrew while 0% under English = the OTHER word
 // was among the options with the same meaning).
 export const CONFUSABLE_PAIRS = [
+  // 1,000-word batch 1 (11-07): -teen and -ty sound alike to a beginner
+  ['thirteen', 'thirty'], ['fourteen', 'forty'], ['fifteen', 'fifty'], ['sixteen', 'sixty'], ['seventeen', 'seventy'], ['eighteen', 'eighty'], ['nineteen', 'ninety'],
   ['snail', 'seashell'], ['snail', 'worm'], ['toaster', 'kettle'], ['toaster', 'bread'],
   ['jam', 'jelly'], ['cap', 'hat'], ['stairs', 'staircase'], ['purple', 'violet'],
   ['gloves', 'mittens'], ['taxi', 'cab'], ['run', 'running'], ['fries', 'potato'],

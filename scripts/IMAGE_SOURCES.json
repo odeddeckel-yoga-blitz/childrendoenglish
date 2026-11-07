@@ -1068,6 +1068,14 @@
   "source": "own",
   "licence": "own work"
  },
+ "eighteen": {
+  "source": "own",
+  "licence": "own work"
+ },
+ "eighty": {
+  "source": "own",
+  "licence": "own work"
+ },
  "elephant": {
   "source": "wikimedia-commons",
   "title": "File:Elefante africano de sabana (Loxodonta africana), parque nacional de Amboseli, Kenia, 2024-05-22, DD 07.jpg",
@@ -1316,6 +1324,10 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
  "four": {
+  "source": "own",
+  "licence": "own work"
+ },
+ "fourteen": {
   "source": "own",
   "licence": "own work"
  },
@@ -2308,6 +2320,10 @@
   "source": "own",
   "licence": "own work"
  },
+ "nineteen": {
+  "source": "own",
+  "licence": "own work"
+ },
  "ninety": {
   "source": "own",
   "licence": "own work"
@@ -2981,6 +2997,14 @@
   "source": "own",
   "licence": "own work"
  },
+ "seventeen": {
+  "source": "own",
+  "licence": "own work"
+ },
+ "seventy": {
+  "source": "own",
+  "licence": "own work"
+ },
  "shark": {
   "source": "wikimedia-commons",
   "title": "File:Tiburón azul (Prionace glauca), canal Fayal-Pico, islas Azores, Portugal, 2020-07-27, DD 28.jpg",
@@ -3046,6 +3070,10 @@
   "licence": "own work"
  },
  "six": {
+  "source": "own",
+  "licence": "own work"
+ },
+ "sixteen": {
   "source": "own",
   "licence": "own work"
  },
@@ -3361,6 +3389,10 @@
   "licence": "CC BY-SA 4.0",
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "match": 0.965
+ },
+ "thirteen": {
+  "source": "own",
+  "licence": "own work"
  },
  "thirty": {
   "source": "own",
