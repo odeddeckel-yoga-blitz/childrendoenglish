@@ -1,4 +1,6 @@
-# Games wave 2: prep only (11-07)
+# Games wave 2 (11-07)
+
+**Update 11-07, late:** the owner said to build. **Opposites** and **True or False** are built on branch `wave2-games`, each with its own e2e spec. The branch is held from main until the **11-14 SEO read**: the new hub cards change /games/ and the cross-links on the /he/ test pages. Simon Says isn't built; it needs 1k batch 6 (verbs, with pictures and audio) first. The prep notes below are kept as written.
 
 Factory relay of the owner's "do all recommendations", 11-07. **Nothing gets built before the 11-28 wave-1 judge read** (`wave1-judge`). This page covers demand, the words each game needs, where those words come from in the 1,000-word plan, a ladder slot and the picture style. No code, no images.
 

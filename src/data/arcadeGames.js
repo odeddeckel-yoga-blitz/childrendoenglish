@@ -22,4 +22,7 @@ export const SPOTLIGHT_GAMES = [
   { id: 'word-memory', name: 'Word Memory', icon: 'layers', emoji: '🃏' },
   { id: 'missing-letter', name: 'Missing Letter', icon: 'pencil', emoji: '✏️' },
   { id: 'picture-bingo', name: 'Picture Bingo', icon: 'image', emoji: '🖼️' },
+  // games wave 2 (owner 11-07)
+  { id: 'opposites', name: 'Opposites', icon: 'repeat', emoji: '🔁' },
+  { id: 'true-or-false', name: 'True or False', icon: 'circle-check', emoji: '✅' },
 ];
