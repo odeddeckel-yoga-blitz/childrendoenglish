@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-11-06T00:00:00.000Z",
+  "statsFrom": "2026-11-07T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "toaster",
@@ -7,8 +7,8 @@
     "category": "home",
     "he": "טוסטר",
     "image": "/images/toaster.webp",
-    "ans": 24,
-    "ok": 19,
+    "ans": 27,
+    "ok": 22,
     "since": "2026-11-04T10:50:22.318Z"
   },
   "game": {
