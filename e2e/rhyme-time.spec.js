@@ -47,6 +47,7 @@ test('every word is an app word with an image and audio, not removed, not a body
 });
 
 test('dealt rounds: true rhyme, no rhyming distractor, no oracle (slot, style, own picture)', async ({ page }) => {
+  test.setTimeout(90000);   // thousands of dealt rounds: ran 31-33 s under the 2-worker CI load (11-08) vs the 30 s default
   await page.goto(PAGE);
   const { FAM, PH, NEAR, RIME, DRAWN } = await data(page);
   expect(Array.isArray(DRAWN)).toBe(true); // the site-wide style map loaded (public/games/image-style.js)

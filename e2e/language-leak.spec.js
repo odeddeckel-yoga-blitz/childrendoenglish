@@ -57,6 +57,7 @@ async function playABit(page, id) {
 
 for (const lang of ['en', 'es', 'he']) {
   test(`games: no wrong-language text in the ${lang} interface`, async ({ page }) => {
+    test.setTimeout(GAMES.length * 6000);   // ~2-3 s per game; 18 games since wave 2 (11-08) passed the 30 s default
     await page.route('**/api/**', (r) => r.fulfill({ status: 204 }));
     const found = [];
     for (const id of GAMES) {
