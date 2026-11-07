@@ -15,3 +15,4 @@
 {"id":"data-silence","at":"2026-11-04T21:02:11.509Z","result":"ok","note":"21d: no real gaps; quiz -57%/-59% flags = baselines include the 10-18/10-21 bot bursts; g_open=0 on 10-16/10-20 = early low game volume, loads normal"}
 {"id":"credential-health","at":"2026-11-04T21:02:11.586Z","result":"ok","note":"GSC OAuth OK, Bing key OK"}
 {"id":"site-tap-check","at":"2026-11-04T21:02:11.665Z","result":"ok","note":"7 pages (/, games, he, es, vocabulary, units, printable-flashcards) @390x844+320x568: all reachable, no dead cards"}
+{"id":"data-silence","at":"2026-11-07T07:36:55.826Z","result":"ok","note":"no silent days; quiz 'drops' = baselines include the 10-21 bot burst (11-04 Wed 53 vs prior Wed 72)"}
