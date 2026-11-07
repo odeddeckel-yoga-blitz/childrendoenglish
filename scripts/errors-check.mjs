@@ -23,3 +23,4 @@ const real = [...groups].filter(([k]) => !known.some((re) => re.test(k)));
 const ignored = groups.size - real.length;
 console.log(real.length ? `errors (12 h): ${real.length} class(es)` + (ignored ? ` · ${ignored} known-harmless ignored` : '') : `errors (12 h): 0${ignored ? ` (${ignored} known-harmless class ignored)` : ''}`);
 for (const [k, n] of real.sort((a, b) => b[1] - a[1]).slice(0, 10)) console.log(`  ${n}× ${k}`);
+process.exit(real.length ? 1 : 0);   // due.mjs --run-scripts: exit 0 = ok

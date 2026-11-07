@@ -25,3 +25,4 @@ const last = r.at(-1);
 console.log(`data-silence (21 d to ${last.day}): ` + (flags.length ? `${flags.length} flag(s)` : 'ok — no silent days, no >50% drops vs the same weekday') +
   (burst.size ? ` · burst days left out of baselines: ${[...burst].join(', ')}` : '') + ` · yesterday loads ${last.loads}, game opens ${last.gopen}, quizzes ${last.quiz}`);
 for (const f of flags) console.log('  ⚠ ' + f);
+process.exit(flags.length ? 1 : 0);   // due.mjs --run-scripts: exit 0 = ok
