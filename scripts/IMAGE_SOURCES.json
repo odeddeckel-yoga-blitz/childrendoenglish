@@ -111,13 +111,12 @@
   "licence": "own work"
  },
  "astronaut": {
-  "source": "wikimedia-commons",
-  "title": "File:NASA astronaut Chris Williams poses for a photo in a spacesuit (jsc2025e044425).jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:NASA_astronaut_Chris_Williams_poses_for_a_photo_in_a_spacesuit_(jsc2025e044425).jpg",
-  "author": "NASA Johnson Space Center / NASA/James Blair",
-  "licence": "Public domain",
-  "licenceUrl": "",
-  "match": 0.993
+  "source": "fluent-emoji",
+  "title": "Astronaut (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Astronaut",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "avocado": {
   "source": "wikimedia-commons",
@@ -904,8 +903,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
  },
  "doctor": {
-  "source": "own",
-  "licence": "own work"
+  "source": "fluent-emoji",
+  "title": "Health worker (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Health%20worker",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "dog": {
   "source": "wikimedia-commons",
@@ -972,8 +975,12 @@
   "licence": "own work"
  },
  "dragon": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "fluent-emoji",
+  "title": "Dragon (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Dragon",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "drawer": {
   "source": "unknown",
@@ -1119,8 +1126,12 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.5"
  },
  "fairy": {
-  "source": "own",
-  "licence": "own work"
+  "source": "fluent-emoji",
+  "title": "Woman fairy (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Woman%20fairy",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "family": {
   "source": "own",
@@ -1135,8 +1146,12 @@
   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
  "farmer": {
-  "source": "own",
-  "licence": "own work"
+  "source": "fluent-emoji",
+  "title": "Man farmer (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Man%20farmer",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "feather": {
   "source": "wikimedia-commons",
@@ -1367,8 +1382,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "ghost": {
-  "source": "own",
-  "licence": "own work"
+  "source": "fluent-emoji",
+  "title": "Ghost (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Ghost",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "gift": {
   "source": "own",
@@ -1458,12 +1477,20 @@
   "match": 0.994
  },
  "grandma": {
-  "source": "own",
-  "licence": "own work"
+  "source": "fluent-emoji",
+  "title": "Old woman (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Old%20woman",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "grandpa": {
-  "source": "own",
-  "licence": "own work"
+  "source": "fluent-emoji",
+  "title": "Old man (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Old%20man",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "grapes": {
   "source": "wikimedia-commons",
@@ -1527,13 +1554,12 @@
   "licence": "own work"
  },
  "hand": {
-  "source": "wikimedia-commons",
-  "title": "File:Right Hand Palm.png",
-  "url": "https://commons.wikimedia.org/wiki/File:Right_Hand_Palm.png",
-  "author": "Eyefive45",
-  "licence": "CC BY-SA 4.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "match": 0.996
+  "source": "fluent-emoji",
+  "title": "Raised hand (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Raised%20hand",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "hanger": {
   "source": "wikimedia-commons",
@@ -1839,13 +1865,12 @@
   "match": 0.996
  },
  "king": {
-  "source": "wikimedia-commons",
-  "title": "File:Portrait of King George II. by John Shackleton.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Portrait_of_King_George_II._by_John_Shackleton.jpg",
-  "author": "Workshop of John Shackleton",
-  "licence": "Public domain",
-  "licenceUrl": "",
-  "match": 0.981
+  "source": "fluent-emoji",
+  "title": "Prince (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Prince",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "kitchen": {
   "source": "wikimedia-commons",
@@ -2080,12 +2105,12 @@
   "licence": "own work"
  },
  "mask": {
-  "source": "wikimedia-commons",
-  "title": "File:Venice Carnival - Masked Lovers (2010).jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Venice_Carnival_-_Masked_Lovers_(2010).jpg",
-  "author": "Frank Kovalchek from Anchorage, Alaska, USA",
-  "licence": "CC BY 2.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  "source": "fluent-emoji",
+  "title": "Performing arts (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Performing%20arts",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "meadow": {
   "source": "wikimedia-commons",
@@ -2288,8 +2313,12 @@
   "licence": "own work"
  },
  "ninja": {
-  "source": "own",
-  "licence": "own work"
+  "source": "fluent-emoji",
+  "title": "Ninja (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Ninja",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "noodles": {
   "source": "wikimedia-commons",
@@ -2654,8 +2683,12 @@
   "licence": "own work"
  },
  "puzzle": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "fluent-emoji",
+  "title": "Puzzle piece (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Puzzle%20piece",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "quail": {
   "source": "wikimedia-commons",
@@ -2667,13 +2700,12 @@
   "match": 0.943
  },
  "queen": {
-  "source": "wikimedia-commons",
-  "title": "File:Queen Elizabeth II official portrait for 1959 tour (retouched) (cropped) (3-to-4 aspect ratio).jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Queen_Elizabeth_II_official_portrait_for_1959_tour_(retouched)_(cropped)_(3-to-4_aspect_ratio).jpg",
-  "author": "Donald McKague",
-  "licence": "Public domain",
-  "licenceUrl": "",
-  "match": 0.971
+  "source": "fluent-emoji",
+  "title": "Princess (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Princess",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "question": {
   "source": "wikimedia-commons",
@@ -2771,13 +2803,12 @@
   "match": 0.974
  },
  "robot": {
-  "source": "wikimedia-commons",
-  "title": "File:Robot Love (4121424935).jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Robot_Love_(4121424935).jpg",
-  "author": "THOR",
-  "licence": "CC BY 2.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
-  "match": 0.931
+  "source": "fluent-emoji",
+  "title": "Robot (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Robot",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "rocket": {
   "source": "unknown",
@@ -3053,13 +3084,12 @@
   "match": 0.986
  },
  "slide": {
-  "source": "wikimedia-commons",
-  "title": "File:Slide at Thenmala deer rehabilitation center.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Slide_at_Thenmala_deer_rehabilitation_center.jpg",
-  "author": "Vis M",
-  "licence": "CC BY-SA 4.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "match": 0.986
+  "source": "fluent-emoji",
+  "title": "Playground slide (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Playground%20slide",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "smile": {
   "source": "wikimedia-commons",
@@ -3514,8 +3544,12 @@
   "licence": "own work"
  },
  "unicorn": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "fluent-emoji",
+  "title": "Unicorn (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Unicorn",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "unicycle": {
   "source": "own",
@@ -3692,8 +3726,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "wizard": {
-  "source": "own",
-  "licence": "own work"
+  "source": "fluent-emoji",
+  "title": "Man mage (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Man%20mage",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "wolf": {
   "source": "wikimedia-commons",
@@ -3754,8 +3792,12 @@
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
  "yawn": {
-  "source": "own",
-  "licence": "own work"
+  "source": "fluent-emoji",
+  "title": "Yawning face (Fluent Emoji, 3D)",
+  "url": "https://github.com/microsoft/fluentui-emoji/tree/main/assets/Yawning%20face",
+  "author": "Microsoft",
+  "licence": "MIT",
+  "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
  "yellow": {
   "source": "own",
