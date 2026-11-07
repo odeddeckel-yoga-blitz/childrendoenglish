@@ -66,7 +66,7 @@ async function completeQuiz(page, numQuestions = 10) {
     await answerBtns.click();
     // the quiz moves on once the replayed word has finished (11-07, kit §8g), not after a fixed delay
     await expect.poll(async () => (await result.isVisible()) || (await bar.getAttribute('aria-valuenow').catch(() => null)) !== before,
-      { timeout: 6000 }).toBe(true);
+      { timeout: 10000 }).toBe(true);
   }
   await expect(result).toBeVisible({ timeout: 5000 });
 }
@@ -331,7 +331,7 @@ test.describe('Quiz Flow', () => {
     const retryTag = page.getByText('One more try');
     const bar = page.locator('[role="progressbar"]');
     for (let q = 2; q <= 12; q++) {
-      await expect(bar).toHaveAttribute('aria-valuenow', String(q - 1), { timeout: 6000 });
+      await expect(bar).toHaveAttribute('aria-valuenow', String(q - 1), { timeout: 10000 }); // the advance waits for the word (11-07)
       await expect(bar).toHaveAttribute('aria-valuemax', '12');
       if (q === 4 || q === 7) {
         await expect(retryTag).toBeVisible();
