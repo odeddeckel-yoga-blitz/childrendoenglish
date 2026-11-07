@@ -24,3 +24,4 @@
 {"id":"errors-bounce-read","at":"2026-11-07T07:43:37.182Z","result":"found","note":"first read 11-07, 3 days of tallies (thin): see optimizer-read"}
 {"id":"returning-read","at":"2026-11-07T07:43:37.268Z","result":"found","note":"first read 11-07, 3 days of tallies (thin): see optimizer-read"}
 {"id":"speed-read","at":"2026-11-07T07:43:37.359Z","result":"found","note":"first read 11-07, 3 days of tallies (thin): see optimizer-read"}
+{"id":"spotlight-review","at":"2026-11-07T09:03:59.295Z","result":"found","note":"first run 11-07: live card = Word Zapper vs committed Spelling Forge (prebuild re-decided with no live counts); fixed f872222 (fillOnly + no swap to graduated); toaster 79% of 24 OK; forge 1.8 lvl/open, 5% finish"}
