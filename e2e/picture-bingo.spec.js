@@ -208,6 +208,20 @@ for (const vp of [{ width: 360, height: 640 }, { width: 390, height: 844 }]) {
   }
 }
 
+// Linux / Android fonts set wider than a Mac's, so a line that fits here wrapped on CI (11-08: class mode 3-11 px
+// past a 360x640 screen, Received 3). Verdana sets like CI's DejaVu Sans and reproduces it on a Mac.
+test('phone fit 360×640 class mode with wider fonts: no scroll', async ({ page }) => {
+  await open(page, { viewport: { width: 360, height: 640 }, cls: true });
+  await page.addStyleTag({ content: 'body,body *{font-family:Verdana,"DejaVu Sans",sans-serif!important;}' });
+  await page.click('#startBtn');
+  for (const lv of [0, 2]) {
+    await page.evaluate((l) => PB.dbg.startLevel(l), lv);
+    await waitCall(page);
+    const scroll = await page.evaluate(() => document.scrollingElement.scrollHeight - innerHeight);
+    expect(scroll, `level ${lv + 1}`).toBeLessThanOrEqual(1);
+  }
+});
+
 test('class mode: toggle, bigger card on a projector, each call said twice, slower pace', async ({ page }) => {
   await open(page, { viewport: { width: 1280, height: 800 } });
   await page.click('#startBtn');
