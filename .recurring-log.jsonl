@@ -36,3 +36,5 @@
 {"id":"deploy-smoke","at":"2026-11-08T00:04:27.880Z","result":"ok","note":"00:02Z push 98eac60 (CI fix, 8 number words, wave-2 brief): smoke 11 pass/0 fail; seventy.webp live; /he/ 200"}
 {"id":"deploy-smoke","at":"2026-11-08T05:18:10.000Z","result":"ok","note":"05:15Z push 44e430e (Picture Bingo class-mode fit for Linux/Android fonts): smoke 11 pass/0 fail; fix live on /games/picture-bingo/"}
 {"id":"deploy-smoke","at":"2026-11-08T11:18:43.899Z","result":"ok","note":"e3f0019 wave 2 (6 games) live; kit:smoke 11/0; 7 URLs pinged"}
+{"id":"data-silence","at":"2026-11-08T17:19:16.968Z","result":"ok","note":"11-08: recording health ok, no gaps or bursts (7d vs 14d median)"}
+{"id":"spotlight-review","at":"2026-11-08T17:19:17.085Z","result":"ok","note":"11-08: live card matches committed pick (missing-letter); word sixteen; both picks OK (0.3 d up, no plays yet)"}
