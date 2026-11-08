@@ -100,6 +100,9 @@ export function printPageDepth(rows, minViews = 10) {
   const lines = pageDepthSummary(rows).filter((x) => x.pg >= minViews);
   console.log(`\n— static pages by type: depth (÷ views; depth tallies from ${DEPTH_SINCE}, views ≥ ${minViews}) —`);
   console.log('  stayed15 = visible 15 s · quiz-seen = mini-quiz ≥50% on screen · print = print button · dialog = beforeprint · build = maker Build');
+  // Factory 11-08: play-click/quiz-tap before this release were deflated by the return-visit var collision (fixed with
+  // these tallies), so the old 3.0 % word-page rate is void; baselines and the A/B control arm start at the release.
+  console.log('  ⚠ word-page play/quiz rates before this release are void (beacon bug): compare only from the release date on');
   if (!lines.length) { console.log('  no page views yet'); return lines; }
   const c = (a, b) => pct(a, b).padStart(4);
   for (const x of lines) {
