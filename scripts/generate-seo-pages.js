@@ -106,8 +106,7 @@ function buildCrawlMesh(lang = 'en') {
 const WORDS_MOD = await import(join(ROOT, 'src', 'data', 'words.js'));
 // 1,000-word plan batch 1 (added 11-07) is in the app at once but stays off every generated page until the
 // Nov 7–14 SEO reads: even 8 words moved the counts on 576 pages, the /he/ test pages among them.
-// Delete PAGES_HOLD after the 11-14 read (with SEO_TEST_HOLDOUT).
-const PAGES_HOLD = new Set(['thirteen', 'fourteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'seventy', 'eighty']);
+const { PAGES_HOLD } = await import(join(ROOT, 'src', 'data', 'pagesHold.js'));
 const { CATEGORIES } = WORDS_MOD;
 const WORDS = WORDS_MOD.WORDS.filter((w) => !PAGES_HOLD.has(w.id));
 const getWordsByCategory = (c) => WORDS.filter((w) => w.category === c);

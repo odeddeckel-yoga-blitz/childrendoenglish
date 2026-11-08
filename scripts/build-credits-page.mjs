@@ -5,9 +5,11 @@
 //   { source: 'twemoji', licence: 'CC BY 4.0', author: 'Twitter, Inc and other contributors' }
 //   { source: 'fluent-emoji', licence: 'MIT', author: 'Microsoft' }               Fluent Emoji 3D (owner 11-07)
 //   { source: 'own', licence: 'own work' }                                       drawn/generated here
+//   { source: 'pixabay', title: tags, url: photo page, author, licence: 'Pixabay Content License', licenceUrl }  (owner 11-08)
 // Also credits the Lucide interface icons (ISC). Runs in `npm run build` after generate-seo-pages.js.
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
 import { WORDS } from '../src/data/words.js';
+import { PAGES_HOLD } from '../src/data/pagesHold.js';
 
 const SITE = 'https://childrendoenglish.com';
 const SRC = JSON.parse(readFileSync(new URL('./IMAGE_SOURCES.json', import.meta.url), 'utf8'));
@@ -19,15 +21,22 @@ const commons = words.filter((w) => SRC[w.id]?.source === 'wikimedia-commons');
 const twemoji = words.filter((w) => SRC[w.id]?.source === 'twemoji');
 const own = words.filter((w) => SRC[w.id]?.source === 'own');
 const fluent = words.filter((w) => SRC[w.id]?.source === 'fluent-emoji');
+const pixabay = words.filter((w) => SRC[w.id]?.source === 'pixabay');
+// A held word has no /vocabulary/ page yet (pagesHold.js): name it without a link.
+const wordLink = (w) => (PAGES_HOLD.has(w.id) ? `<span class="w">${esc(w.word)}</span>` : `<a class="w" href="/vocabulary/${esc(w.category)}/${esc(w.id)}/">${esc(w.word)}</a>`);
 
 const row = (w) => {
   const s = SRC[w.id];
   const title = esc(String(s.title || '').replace(/^File:/, ''));
   const file = safeUrl(s.url) ? `<a href="${safeUrl(s.url)}" rel="nofollow">${title}</a>` : title;
   const lic = safeUrl(s.licenceUrl) ? `<a href="${safeUrl(s.licenceUrl)}" rel="nofollow license">${esc(s.licence)}</a>` : esc(s.licence);
-  return `<li><a class="w" href="/vocabulary/${esc(w.category)}/${esc(w.id)}/">${esc(w.word)}</a>: ${file} by ${esc(s.author) || 'unknown author'}, ${lic}</li>`;
+  return `<li>${wordLink(w)}: ${file} by ${esc(s.author) || 'unknown author'}, ${lic}</li>`;
 };
-const list = (ws) => ws.map((w) => `<a href="/vocabulary/${esc(w.category)}/${esc(w.id)}/">${esc(w.word)}</a>`).join(', ');
+const list = (ws) => ws.map((w) => (PAGES_HOLD.has(w.id) ? esc(w.word) : `<a href="/vocabulary/${esc(w.category)}/${esc(w.id)}/">${esc(w.word)}</a>`)).join(', ');
+const pxRow = (w) => {
+  const s = SRC[w.id], page = safeUrl(s.url);
+  return `<li>${wordLink(w)}: ${page ? `<a href="${page}" rel="nofollow">photo</a>` : 'photo'} by ${esc(s.author) || 'unknown author'} on Pixabay</li>`;
+};
 
 const html = `<!DOCTYPE html>
 <html lang="en">
@@ -61,11 +70,15 @@ const html = `<!DOCTYPE html>
   <div class="header"><h1>Image credits</h1></div>
   <main class="container">
     <p><a href="/">Children Do English</a> uses photos from <a href="https://commons.wikimedia.org/" rel="nofollow">Wikimedia Commons</a>
-      under their authors' free licences, emoji artwork from Twemoji and Microsoft Fluent Emoji, illustrations we made ourselves, and the Lucide icon set.
+      under their authors' free licences, photos from <a href="https://pixabay.com/" rel="nofollow">Pixabay</a>, emoji artwork from Twemoji and Microsoft Fluent Emoji, illustrations we made ourselves, and the Lucide icon set.
       Each photo below is shown resized and cropped to a square; the file page has the original.</p>
 
     <h2>Photos from Wikimedia Commons (${commons.length})</h2>
     <ul class="credits">${commons.map(row).join('\n')}</ul>
+
+    <h2>Photos from Pixabay (${pixabay.length})</h2>
+    <p>Free to use under the <a href="https://pixabay.com/service/license-summary/" rel="nofollow license">Pixabay Content License</a>; we credit each photographer anyway.</p>
+    <ul class="credits">${pixabay.map(pxRow).join('\n')}</ul>
 
     <h2>Emoji artwork (${twemoji.length})</h2>
     <p>Feelings pictures: <a href="https://github.com/twitter/twemoji" rel="nofollow">Twemoji</a> by Twitter, Inc and other contributors,
@@ -92,4 +105,4 @@ const out = new URL('../dist/image-credits/', import.meta.url);
 if (!existsSync(new URL('../dist/', import.meta.url))) { console.error('build-credits-page: dist/ missing — run after vite build'); process.exit(1); }
 mkdirSync(out, { recursive: true });
 writeFileSync(new URL('index.html', out), html);
-console.log(`image-credits: ${commons.length} Commons · ${twemoji.length} Twemoji · ${fluent.length} Fluent · ${own.length} own · ${WORDS.length - commons.length - twemoji.length - fluent.length - own.length} not listed`);
+console.log(`image-credits: ${commons.length} Commons · ${pixabay.length} Pixabay · ${twemoji.length} Twemoji · ${fluent.length} Fluent · ${own.length} own · ${WORDS.length - commons.length - pixabay.length - twemoji.length - fluent.length - own.length} not listed`);

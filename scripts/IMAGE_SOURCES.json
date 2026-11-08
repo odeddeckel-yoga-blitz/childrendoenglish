@@ -385,6 +385,14 @@
   "url": "https://github.com/twitter/twemoji",
   "licenceUrl": "https://creativecommons.org/licenses/by/4.0/"
  },
+ "bottle": {
+  "source": "pixabay",
+  "title": "water, glass bottles, nature, bottles, drinking water, drink, water bottles, glass, black and white",
+  "url": "https://pixabay.com/photos/water-glass-bottles-bottles-2001912/",
+  "author": "mrganso",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "bowling": {
   "source": "wikimedia-commons",
   "title": "File:20160511 High backswing in bowling - John Hughes - Armed Forces Sports.jpg",
@@ -416,6 +424,14 @@
   "author": "The original uploader was Klaus Höpfner at German Wikipedia. (Original text: Helge Höpfner)",
   "licence": "CC BY-SA 3.0",
   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
+ },
+ "bridge": {
+  "source": "pixabay",
+  "title": "brooklyn bridge, river, illuminated, city lights, bridge, architecture, city, landmark, new york city, urban, hudson, reflection, lights, glow, famous, nature, night, water, waterfront, hudson river",
+  "url": "https://pixabay.com/photos/brooklyn-bridge-river-illuminated-1791001/",
+  "author": "12019",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "broccoli": {
   "source": "wikimedia-commons",
@@ -495,6 +511,14 @@
  "cab": {
   "source": "unknown",
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+ },
+ "cage": {
+  "source": "pixabay",
+  "title": "building, sky, nature, light, samsung wallpaper, outdoor, lock screen wallpaper, architecture, adventure, ipad wallpaper, wallpaper, mobile wallpaper, mobile wallpaper 4k, sky background, hd, structure, angle, window, beautiful wallpaper, phone wallpaper, glass, brick, perspective, birdcage, bird, cage, iphone wallpaper",
+  "url": "https://pixabay.com/photos/building-sky-light-outdoor-5313585/",
+  "author": "picsbyjameslee",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "cake": {
   "source": "wikimedia-commons",
@@ -605,6 +629,14 @@
   "source": "own",
   "licence": "own work"
  },
+ "castle": {
+  "source": "pixabay",
+  "title": "fairytale, neuschwanstein, castle, fairytale castle, fortress, fort, citadel, buildings, architecture, towers, edifice, nature, facade, trees, forest, masonry, landmark, famous, tourist attraction, tourist destination, medieval, scenic, landscape, germany, bavaria, tourism, historical",
+  "url": "https://pixabay.com/photos/fairytale-neuschwanstein-castle-532850/",
+  "author": "derwiki",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "cat": {
   "source": "wikimedia-commons",
   "title": "File:Cat November 2010-1a.jpg",
@@ -683,6 +715,22 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
   "match": 0.98
  },
+ "cinema": {
+  "source": "pixabay",
+  "title": "movie theater, room, movie, cinema lovers, moviegoers, theatre, cinema hall, demonstration, seat, movie theater, movie theater, movie theater, movie theater, movie, movie, movie, movie, movie, theatre, cinema hall",
+  "url": "https://pixabay.com/photos/movie-theater-room-movie-2502213/",
+  "author": "Derks24",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
+ "city": {
+  "source": "pixabay",
+  "title": "sunset, skyscrapers, nature, buildings, city, sunset view, twilight, towers, architecture, city lights, urban, cityscape, skyline, city center, structures, university, landscape",
+  "url": "https://pixabay.com/photos/sunset-skyscrapers-buildings-city-8214498/",
+  "author": "soultrain",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "classroom": {
   "source": "wikimedia-commons",
   "title": "File:Grande salle ENC n1.jpg",
@@ -721,6 +769,14 @@
  "clock": {
   "source": "unknown",
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+ },
+ "cloud": {
+  "source": "pixabay",
+  "title": "clouds, sky, atmosphere, blue sky, cloudscape, white clouds, cloudy, day, nature, daylight",
+  "url": "https://pixabay.com/photos/clouds-sky-atmosphere-blue-sky-49520/",
+  "author": "abogawat",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "coconut": {
   "source": "unknown",
@@ -1153,6 +1209,14 @@
   "licence": "CC BY-SA 3.0",
   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/"
  },
+ "farm": {
+  "source": "pixabay",
+  "title": "old barn, barn, bird, building, nature, countryside, country, abandoned, landscape",
+  "url": "https://pixabay.com/photos/old-barn-barn-bird-building-9594035/",
+  "author": "RonaldPlett",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "farmer": {
   "source": "fluent-emoji",
   "title": "Man farmer (Fluent Emoji, 3D)",
@@ -1268,6 +1332,14 @@
   "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
   "match": 0.996
  },
+ "flour": {
+  "source": "pixabay",
+  "title": "flour, grain, spike, corn stalks, nourishment, grind, barley, flour, flour, flour, flour, flour",
+  "url": "https://pixabay.com/photos/flour-grain-spike-corn-stalks-1528338/",
+  "author": "congerdesign",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "flower": {
   "source": "wikimedia-commons",
   "title": "File:Dülmen, Fröbelstraße, Mohn am Feldrand -- 2021 -- 9174.jpg",
@@ -1276,6 +1348,14 @@
   "licence": "CC BY-SA 4.0",
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "match": 0.955
+ },
+ "fly": {
+  "source": "pixabay",
+  "title": "blowfly, blue bottle fly, insect, pest, bug, ugly, blow-fly, winged, bluebottle, greenbottle, calliphoridae, carrion-fly, cluster fly, gross, nuisance, blowfly, bug, bug, bug, bug, bug, ugly, ugly, ugly, gross",
+  "url": "https://pixabay.com/photos/blowfly-blue-bottle-fly-insect-pest-2151453/",
+  "author": "stevepb",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "folder": {
   "source": "wikimedia-commons",
@@ -1474,6 +1554,14 @@
  "golden": {
   "source": "own",
   "licence": "own work"
+ },
+ "golf": {
+  "source": "pixabay",
+  "title": "golf, golf ball, sport, ball, golf club, leisure, golfing, green sports, green golf, golf, golf, golf, golf, golf",
+  "url": "https://pixabay.com/photos/golf-golf-ball-sport-ball-2571830/",
+  "author": "HeungSoon",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "goose": {
   "source": "unknown",
@@ -2149,6 +2237,14 @@
   "licence": "CC BY-SA 4.0",
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0"
  },
+ "mechanic": {
+  "source": "pixabay",
+  "title": "auto repair, oil change, oil, car wallpapers, auto, shop, repair, work, motor, service, person, automobile, fix, maintenance, vehicle, engine, automotive, change, garage, mechanic, man, car, worker, gray car, gray work, gray shopping, gray change, gray shop, gray garage, gray service",
+  "url": "https://pixabay.com/photos/auto-repair-oil-change-oil-auto-3691962/",
+  "author": "DokaRyan",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "medal": {
   "source": "wikimedia-commons",
   "title": "File:Medals.jpg",
@@ -2473,6 +2569,14 @@
   "source": "unknown",
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
  },
+ "paper": {
+  "source": "pixabay",
+  "title": "back to school, paper, colored paper, stationery, to paint, write, rössler paper, draw, coloured, different colored leaves, writing accessories, office, school, painting paper, colorful, paper, colored paper, stationery, stationery, stationery, stationery, stationery, school",
+  "url": "https://pixabay.com/photos/back-to-school-paper-colored-paper-1559010/",
+  "author": "PIRO4D",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "parachute": {
   "source": "wikimedia-commons",
   "title": "File:USN parachute demo team at Minot AFB.jpg",
@@ -2508,6 +2612,14 @@
   "licence": "CC BY 2.0",
   "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
   "match": 0.963
+ },
+ "path": {
+  "source": "pixabay",
+  "title": "forest, trees, woods, nature, outdoors, path, woodlands, glade, trail, forest path, forest trail, nature path, nature trail, forest, forest, forest, forest, forest",
+  "url": "https://pixabay.com/photos/forest-trees-woods-nature-outdoors-1868028/",
+  "author": "Pexels",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "pea": {
   "source": "wikimedia-commons",
@@ -2630,6 +2742,14 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "match": 0.958
  },
+ "plant": {
+  "source": "pixabay",
+  "title": "houseplant, potted plant, decor, nature, foliage, plant, houseplant, houseplant, houseplant, potted plant, potted plant, potted plant, potted plant, plant, plant, plant, plant, plant",
+  "url": "https://pixabay.com/photos/houseplant-potted-plant-decor-7367379/",
+  "author": "lnitsyk",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "plate": {
   "source": "wikimedia-commons",
   "title": "File:Decorative plate from Poland Bogucice Katowice Porcelana Śląska 1952-1993 01.jpg",
@@ -2705,6 +2825,14 @@
   "author": "Microsoft",
   "licence": "MIT",
   "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
+ },
+ "pyramid": {
+  "source": "pixabay",
+  "title": "pyramid, giza, egypt, nature, royal tomb, egyptian, desert, cairo, black and white",
+  "url": "https://pixabay.com/photos/pyramid-giza-egypt-royal-tomb-3478575/",
+  "author": "8moments",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "quail": {
   "source": "wikimedia-commons",
@@ -3145,6 +3273,14 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
   "match": 0.959
  },
+ "snow": {
+  "source": "pixabay",
+  "title": "snow, landscape, trees, winter landscape, snow landscape, cold, covered in snow, nature, winter, snow, snow, snow, snow, winter, winter, winter, winter, winter",
+  "url": "https://pixabay.com/photos/snow-landscape-trees-7646952/",
+  "author": "NickyPe",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "soccer": {
   "source": "wikimedia-commons",
   "title": "File:Football in Bloomington, Indiana, 1995.jpg",
@@ -3185,6 +3321,14 @@
   "licenceUrl": "",
   "match": 0.98
  },
+ "speaker": {
+  "source": "pixabay",
+  "title": "soundboks, speaker, music, bluetooth, volume, technology, portable, boxing, jukebox, audio, audio system, dj, speaker, speaker, speaker, speaker, speaker",
+  "url": "https://pixabay.com/photos/soundboks-speaker-music-bluetooth-4831442/",
+  "author": "cloudlynx",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "spider": {
   "source": "unknown",
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
@@ -3192,6 +3336,14 @@
  "spoon": {
   "source": "unknown",
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+ },
+ "stadium": {
+  "source": "pixabay",
+  "title": "stadium, bleachers, seats, soccer stadium, football stadium, sports stadium, architecture, madrid, spain, construction, city, football, sports, tourist spot, stadium, stadium, stadium, football stadium, madrid, football, football, football, football, football",
+  "url": "https://pixabay.com/photos/stadium-bleachers-seats-4760441/",
+  "author": "alessandra1barbieri",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "staircase": {
   "source": "wikimedia-commons",
@@ -3232,6 +3384,14 @@
   "licence": "CC BY-SA 4.0",
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
   "match": 0.891
+ },
+ "storm": {
+  "source": "pixabay",
+  "title": "thunder, flash, storm, sky, night, electricity, clouds, dark, nature, energy, black, atmospheric, mystical, landscape, threatening, night sky, threat, light",
+  "url": "https://pixabay.com/photos/thunder-flash-storm-sky-night-4963719/",
+  "author": "Hunt_on_Photos_Studio",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "strawberry": {
   "source": "wikimedia-commons",

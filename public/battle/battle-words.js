@@ -420,6 +420,24 @@ export const BATTLE_WORDS = {
    "w": "spider",
    "he": "עכביש",
    "img": "/images/spider.webp"
+  },
+  {
+   "id": "cage",
+   "w": "cage",
+   "he": "כלוב",
+   "img": "/images/cage.webp"
+  },
+  {
+   "id": "farm",
+   "w": "farm",
+   "he": "חווה",
+   "img": "/images/farm.webp"
+  },
+  {
+   "id": "fly",
+   "w": "fly",
+   "he": "זבוב",
+   "img": "/images/fly.webp"
   }
  ],
  "food": [
@@ -830,6 +848,12 @@ export const BATTLE_WORDS = {
    "w": "water",
    "he": "מים",
    "img": "/images/water.webp"
+  },
+  {
+   "id": "flour",
+   "w": "flour",
+   "he": "קמח",
+   "img": "/images/flour.webp"
   }
  ],
  "home": [
@@ -1168,6 +1192,12 @@ export const BATTLE_WORDS = {
    "w": "sofa",
    "he": "ספה",
    "img": "/images/sofa.webp"
+  },
+  {
+   "id": "bottle",
+   "w": "bottle",
+   "he": "בקבוק",
+   "img": "/images/bottle.webp"
   }
  ],
  "transport": [
@@ -1532,6 +1562,36 @@ export const BATTLE_WORDS = {
    "w": "sand",
    "he": "חול",
    "img": "/images/sand.webp"
+  },
+  {
+   "id": "cloud",
+   "w": "cloud",
+   "he": "ענן",
+   "img": "/images/cloud.webp"
+  },
+  {
+   "id": "path",
+   "w": "path",
+   "he": "שביל",
+   "img": "/images/path.webp"
+  },
+  {
+   "id": "plant",
+   "w": "plant",
+   "he": "צמח",
+   "img": "/images/plant.webp"
+  },
+  {
+   "id": "snow",
+   "w": "snow",
+   "he": "שלג",
+   "img": "/images/snow.webp"
+  },
+  {
+   "id": "storm",
+   "w": "storm",
+   "he": "סערה",
+   "img": "/images/storm.webp"
   }
  ],
  "colors": [
@@ -2242,6 +2302,12 @@ export const BATTLE_WORDS = {
    "w": "painting",
    "he": "ציור בצבע",
    "img": "/images/painting.webp"
+  },
+  {
+   "id": "paper",
+   "w": "paper",
+   "he": "נייר",
+   "img": "/images/paper.webp"
   }
  ],
  "sports": [
@@ -2418,6 +2484,18 @@ export const BATTLE_WORDS = {
    "w": "tennis racket",
    "he": "מחבט טניס",
    "img": "/images/tennis-racket.webp"
+  },
+  {
+   "id": "golf",
+   "w": "golf",
+   "he": "גולף",
+   "img": "/images/golf.webp"
+  },
+  {
+   "id": "stadium",
+   "w": "stadium",
+   "he": "אצטדיון",
+   "img": "/images/stadium.webp"
   }
  ],
  "feelings": [
@@ -3040,6 +3118,48 @@ export const BATTLE_WORDS = {
    "w": "playground",
    "he": "גן שעשועים",
    "img": "/images/playground.webp"
+  },
+  {
+   "id": "bridge",
+   "w": "bridge",
+   "he": "גשר",
+   "img": "/images/bridge.webp"
+  },
+  {
+   "id": "castle",
+   "w": "castle",
+   "he": "טירה",
+   "img": "/images/castle.webp"
+  },
+  {
+   "id": "cinema",
+   "w": "cinema",
+   "he": "קולנוע",
+   "img": "/images/cinema.webp"
+  },
+  {
+   "id": "city",
+   "w": "city",
+   "he": "עיר",
+   "img": "/images/city.webp"
+  },
+  {
+   "id": "mechanic",
+   "w": "mechanic",
+   "he": "מכונאי",
+   "img": "/images/mechanic.webp"
+  },
+  {
+   "id": "pyramid",
+   "w": "pyramid",
+   "he": "פירמידה",
+   "img": "/images/pyramid.webp"
+  },
+  {
+   "id": "speaker",
+   "w": "speaker",
+   "he": "רמקול",
+   "img": "/images/speaker.webp"
   }
  ],
  "toys": [
@@ -3257,7 +3377,7 @@ export const BATTLE_WORDS = {
 };
 
 // Per word: ids that would also be a right answer — never offered as a distractor.
-export const BATTLE_AVOID = {"bird":["penguin","parrot","flamingo","duck","hen","eagle","owl","ostrich","quail","goose","peacock","rooster","chicken"],"horse":["donkey"],"penguin":["bird"],"parrot":["bird"],"flamingo":["bird"],"duck":["bird"],"hen":["bird","rooster","chicken"],"crocodile":["alligator"],"apple":["potato"],"bread":["toaster"],"sandwich":["burger"],"orange":["orange_color"],"cake":["pie"],"juice":["lemonade"],"potato":["apple","fries"],"spaghetti":["noodles","pasta"],"icecream":["ice"],"lemon":["lemonade"],"noodles":["spaghetti","pasta"],"house":["dollhouse","apartment"],"bed":["bedroom"],"chair":["armchair"],"table":["dining-room"],"window":["curtain"],"clock":["watch"],"mirror":["vase"],"bookshelf":["bookstore"],"fireplace":["chimney"],"curtain":["window"],"staircase":["ladder","stairs"],"car":["wheel","jeep"],"bus":["wheel"],"bicycle":["wheel"],"airplane":["jet"],"train":["wheel"],"scooter":["wheel"],"rain":["umbrella"],"mountain":["volcano"],"volcano":["mountain"],"desert":["sand"],"red":["scarlet"],"blue":["navy"],"green":["lime"],"white":["cream"],"orange_color":["orange"],"purple":["violet"],"gray":["silver"],"silver":["gray"],"lime":["green"],"one":["eleven"],"three":["thirteen"],"four":["fourteen"],"five":["fifteen"],"six":["sixteen"],"seven":["seventeen"],"eight":["eighteen"],"nine":["nineteen"],"forty":["fourteen"],"ninety":["nineteen"],"foot":["spoon"],"hat":["cap"],"gloves":["mittens"],"umbrella":["rain"],"backpack":["bag"],"sunglasses":["glasses"],"book":["bookstore"],"paintbrush":["paint_verb","painting"],"ball":["earth","baseball"],"bat":["baseball","tennis-racket"],"rope":["jump-rope"],"net":["goal"],"goal":["net","soccer","gate"],"soccer":["goal"],"tennis":["badminton","table-tennis","tennis-racket"],"archery":["arrow"],"happy":["smile"],"angry":["frustrated"],"nervous":["scared","worried"],"phone":["tablet"],"spoon":["foot"],"toothbrush":["brush"],"bear":["polar-bear"],"pasta":["spaghetti","noodles"],"ladder":["staircase","stairs"],"garden":["park"],"bathtub":["bathroom"],"chimney":["fireplace"],"truck":["jeep"],"taxi":["cab"],"skateboard":["wheel","skateboarding"],"seashell":["snail"],"cream":["white"],"navy":["blue"],"violet":["purple"],"eleven":["one"],"fifteen":["five","fifty"],"thirty":["thirteen"],"fifty":["fifteen"],"library":["bookstore"],"badminton":["tennis"],"frustrated":["angry"],"crayons":["drawing"],"mittens":["gloves"],"scared":["nervous","worried"],"worried":["nervous","scared"],"running":["run"],"wagon":["wheel","cart"],"eagle":["bird"],"slide":["playground"],"dollhouse":["house"],"climbing":["climb_verb"],"scarlet":["red"],"owl":["bird"],"sixty":["sixteen"],"run":["running"],"climb_verb":["climbing"],"paint_verb":["paintbrush"],"stairs":["staircase","ladder"],"alligator":["crocodile"],"ostrich":["bird"],"jam":["jelly"],"ice":["icecream"],"kettle":["toaster"],"toaster":["bread","kettle"],"vase":["mirror","jar"],"jet":["airplane"],"wheel":["car","bus","bicycle","train","scooter","skateboard","wagon","cart"],"arrow":["archery"],"quail":["bird"],"cap":["hat"],"cab":["taxi"],"cart":["wagon","wheel"],"bag":["backpack"],"brush":["toothbrush"],"beach":["sand"],"bean":["pea"],"earth":["ball"],"fries":["potato"],"gate":["goal"],"goose":["bird"],"glasses":["sunglasses","nose"],"hot-dog":["sausage"],"jar":["vase"],"jeep":["car","truck"],"jeans":["pants"],"jelly":["jam"],"jump-rope":["rope"],"kitchen":["dining-room"],"nose":["glasses"],"peacock":["bird"],"rooster":["bird","hen","chicken"],"worm":["snail"],"snail":["seashell","worm"],"seesaw":["playground"],"donkey":["horse"],"polar-bear":["bear"],"burger":["sandwich","meat","meatballs"],"chicken":["bird","hen","rooster"],"lemonade":["juice","lemon"],"meat":["burger","meatballs","sausage"],"meatballs":["burger","meat"],"pea":["bean"],"pie":["cake"],"sausage":["hot-dog","meat"],"apartment":["house"],"armchair":["chair","sofa"],"bathroom":["bathtub"],"bedroom":["bed"],"dining-room":["table","kitchen","living-room"],"living-room":["dining-room","sofa"],"sofa":["armchair","living-room"],"computer":["keyboard","tablet"],"keyboard":["computer"],"tablet":["phone","computer"],"watch":["clock"],"bookstore":["bookshelf","book","library"],"park":["garden","playground"],"playground":["slide","seesaw","park"],"shorts":["pants"],"pants":["jeans","shorts"],"drawing":["crayons","painting"],"painting":["paintbrush","drawing"],"baseball":["ball","bat"],"skateboarding":["skateboard"],"table-tennis":["tennis"],"tennis-racket":["bat","tennis"],"sand":["desert","beach"],"smile":["happy"],"thirteen":["three","thirty"],"fourteen":["four","forty"],"sixteen":["six","sixty"],"seventeen":["seven","seventy"],"eighteen":["eight","eighty"],"nineteen":["nine","ninety"],"seventy":["seventeen"],"eighty":["eighteen"]};
+export const BATTLE_AVOID = {"bird":["penguin","parrot","flamingo","duck","hen","eagle","owl","ostrich","quail","goose","peacock","rooster","chicken","cage"],"horse":["donkey"],"penguin":["bird"],"parrot":["bird","cage"],"flamingo":["bird"],"duck":["bird"],"hen":["bird","rooster","chicken"],"bee":["fly"],"crocodile":["alligator"],"camel":["pyramid"],"apple":["potato"],"bread":["toaster"],"sandwich":["burger"],"orange":["orange_color"],"cake":["pie"],"juice":["lemonade"],"potato":["apple","fries"],"spaghetti":["noodles","pasta"],"icecream":["ice"],"lemon":["lemonade"],"noodles":["spaghetti","pasta"],"house":["dollhouse","apartment"],"bed":["bedroom"],"chair":["armchair"],"table":["dining-room"],"window":["curtain"],"clock":["watch"],"mirror":["vase"],"bookshelf":["bookstore"],"fireplace":["chimney"],"curtain":["window"],"staircase":["ladder","stairs"],"car":["wheel","jeep"],"bus":["wheel"],"bicycle":["wheel"],"airplane":["jet"],"train":["wheel"],"scooter":["wheel"],"tree":["plant"],"flower":["flour","plant"],"rain":["umbrella","storm"],"mountain":["volcano"],"volcano":["mountain"],"desert":["sand","pyramid"],"forest":["path"],"red":["scarlet"],"blue":["navy"],"green":["lime"],"white":["cream"],"orange_color":["orange"],"purple":["violet"],"gray":["silver"],"silver":["gray"],"lime":["green"],"one":["eleven"],"three":["thirteen"],"four":["fourteen"],"five":["fifteen"],"six":["sixteen"],"seven":["seventeen"],"eight":["eighteen"],"nine":["nineteen"],"forty":["fourteen"],"ninety":["nineteen"],"foot":["spoon"],"hat":["cap"],"gloves":["mittens"],"umbrella":["rain"],"backpack":["bag"],"sunglasses":["glasses"],"book":["bookstore"],"paintbrush":["paint_verb","painting"],"ball":["earth","baseball"],"bat":["baseball","tennis-racket"],"rope":["jump-rope"],"net":["goal"],"goal":["net","soccer","gate"],"soccer":["goal"],"tennis":["badminton","table-tennis","tennis-racket"],"archery":["arrow"],"happy":["smile"],"angry":["frustrated"],"nervous":["scared","worried"],"phone":["tablet"],"spoon":["foot"],"toothbrush":["brush"],"bear":["polar-bear"],"pasta":["spaghetti","noodles"],"ladder":["staircase","stairs"],"garden":["park"],"bathtub":["bathroom"],"chimney":["fireplace"],"truck":["jeep"],"taxi":["cab"],"skateboard":["wheel","skateboarding"],"seashell":["snail"],"cream":["white"],"navy":["blue"],"violet":["purple"],"eleven":["one"],"fifteen":["five","fifty"],"thirty":["thirteen"],"fifty":["fifteen"],"library":["bookstore"],"badminton":["tennis"],"frustrated":["angry"],"crayons":["drawing"],"mittens":["gloves"],"scared":["nervous","worried"],"worried":["nervous","scared"],"running":["run"],"wagon":["wheel","cart"],"eagle":["bird"],"slide":["playground"],"dollhouse":["house"],"climbing":["climb_verb"],"scarlet":["red"],"owl":["bird"],"sixty":["sixteen"],"run":["running"],"climb_verb":["climbing"],"paint_verb":["paintbrush"],"stairs":["staircase","ladder"],"alligator":["crocodile"],"ostrich":["bird"],"insect":["fly"],"jam":["jelly"],"ice":["icecream","snow"],"kettle":["toaster"],"toaster":["bread","kettle"],"vase":["mirror","jar"],"jet":["airplane"],"wheel":["car","bus","bicycle","train","scooter","skateboard","wagon","cart"],"arrow":["archery"],"quail":["bird"],"cap":["hat"],"cab":["taxi"],"cart":["wagon","wheel"],"bag":["backpack"],"brush":["toothbrush"],"beach":["sand"],"bean":["pea"],"earth":["ball"],"fries":["potato"],"gate":["goal"],"goose":["bird"],"glasses":["sunglasses","nose"],"hot-dog":["sausage"],"jar":["vase"],"jeep":["car","truck"],"jeans":["pants"],"jelly":["jam"],"jump-rope":["rope"],"kitchen":["dining-room"],"nose":["glasses"],"peacock":["bird"],"rooster":["bird","hen","chicken"],"worm":["snail"],"snail":["seashell","worm"],"seesaw":["playground"],"donkey":["horse"],"polar-bear":["bear"],"burger":["sandwich","meat","meatballs"],"chicken":["bird","hen","rooster"],"lemonade":["juice","lemon"],"meat":["burger","meatballs","sausage"],"meatballs":["burger","meat"],"pea":["bean"],"pie":["cake"],"sausage":["hot-dog","meat"],"apartment":["house"],"armchair":["chair","sofa"],"bathroom":["bathtub"],"bedroom":["bed"],"dining-room":["table","kitchen","living-room"],"living-room":["dining-room","sofa"],"sofa":["armchair","living-room"],"computer":["keyboard","tablet"],"keyboard":["computer"],"tablet":["phone","computer"],"radio":["speaker"],"watch":["clock"],"bookstore":["bookshelf","book","library"],"street":["city"],"park":["garden","playground"],"playground":["slide","seesaw","park"],"shorts":["pants"],"pants":["jeans","shorts"],"drawing":["crayons","painting"],"painting":["paintbrush","drawing"],"baseball":["ball","bat"],"skateboarding":["skateboard"],"table-tennis":["tennis"],"tennis-racket":["bat","tennis"],"sand":["desert","beach"],"smile":["happy"],"thirteen":["three","thirty"],"fourteen":["four","forty"],"sixteen":["six","sixty"],"seventeen":["seven","seventy"],"eighteen":["eight","eighty"],"nineteen":["nine","ninety"],"seventy":["seventeen"],"eighty":["eighteen"],"cage":["bird","parrot"],"city":["street"],"flour":["flower"],"fly":["bee","insect"],"path":["forest"],"plant":["tree","flower"],"pyramid":["camel","desert"],"snow":["ice"],"speaker":["radio"],"storm":["rain"]};
 
 // Textbook-unit topics (≥ 12 photo words): id → { label, ids }.
 export const BATTLE_UNITS = {"u-jet-2-2":{"label":"Jet 2 · Unit 2","ids":["basketball","park","tree","nose","dress","icecream","pants","shirt","shoes","socks","climb_verb","wall"]},"u-jet-2-3":{"label":"Jet 2 · Unit 3","ids":["elephant","lion","scared","turtle","water","hungry","tired","penguin","smile","beach","cake","horse","bicycle","doctor","table"]},"u-jet-2-4":{"label":"Jet 2 · Unit 4","ids":["car","helmet","truck","van","apple","chicken","chocolate","cookie","juice","meat","potato","soup","tomato","angry","bedroom","bread","cheese","living-room","window","wolf","kitchen","monkey","rain","boat","pink","airplane","train"]},"u-jet-2-5":{"label":"Jet 2 · Unit 5","ids":["baby","bear","fire","grass","door","key","king","mouse","queen","bee","fork","knife","star","garden","lake"]},"u-jet-1-1":{"label":"Jet 1 · Unit 1","ids":["apple","green","yellow","orange_color","baby","bag","book","box","notebook","nose","computer","dad","duck","sad","grandma","grandpa","gift","gray","door","house"]},"u-jet-1-2":{"label":"Jet 1 · Unit 2","ids":["elephant","egg","eraser","pencil","bed","table","teacher","pen","hat","chair","run","hen","rabbit","hand","horse","happy","ball"]}};
