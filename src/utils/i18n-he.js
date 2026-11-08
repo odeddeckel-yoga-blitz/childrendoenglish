@@ -471,8 +471,8 @@ export default {
 
   // Trust signals
   trustTitle: 'בנוי למשפחות',
-  trustNoAds: 'ללא פרסומות או מעקב',
-  trustNoAdsDesc: 'אפס פרסומות. בלי עוגיות, בלי מעקב. רק למידה.',
+  trustNoAds: 'ללא פרסומות וללא עוגיות',
+  trustNoAdsDesc: 'אפס פרסומות. בלי עוגיות, בלי מידע אישי. רק למידה.',
   trustOffline: 'עובד אופליין',
   trustOfflineDesc: 'התקינו פעם אחת, השתמשו בכל מקום — ללא צורך באינטרנט.',
   trustProfiles: 'פרופילים מרובים',

@@ -473,8 +473,8 @@ const translations = {
 
     // Trust signals
     trustTitle: 'Built for families',
-    trustNoAds: 'No ads or tracking',
-    trustNoAdsDesc: 'Zero ads. No cookies, no tracking. Just learning.',
+    trustNoAds: 'No ads, no cookies',
+    trustNoAdsDesc: 'Zero ads. No cookies, no personal data. Just learning.',
     trustOffline: 'Works offline',
     trustOfflineDesc: 'Install once, use anywhere — no internet needed.',
     trustProfiles: 'Multiple profiles',

@@ -5,6 +5,7 @@
 // definition (the English sets keep it). Reciprocal hreflang en/es/he.
 // Nothing on /he/ links here until the /he/ head-term test ends (~Nov 14).
 import { printQrBlock } from './qr-svg.mjs';
+import { isPhoto, pictureClaim } from './page-copy.mjs';
 import { sheetsSection, sheetsOut, sheetData, SHEETS_CSS } from './build-unit-pages.mjs';
 import { join } from 'path';
 import { mkdirSync } from 'fs';
@@ -111,15 +112,18 @@ ${body}
 
   const sets = CATEGORIES.map((slug) => ({ slug, he: CATEGORY_NAMES_HE[slug] || slug, en: CATEGORY_NAMES[slug] || slug, words: getWordsByCategory(slug) })).filter((c) => c.words.length);
   const total = sets.reduce((n, c) => n + c.words.length, 0);
+  // "תמונה אמיתית" only when every picture in the set is a photo (page triage 11-08).
+  const pic = (ws) => pictureClaim(ws, isPhoto, { lang: 'he', form: 'one' });
+  const allWords = sets.flatMap((c) => c.words);
 
   for (const c of sets) {
     const path = `/printable-flashcards/${c.slug}/hebrew/`;
     const n = c.words.length;
     const title = `כרטיסיות באנגלית להדפסה: ${c.he} — ${n} כרטיסיות עם תמונות ותרגום לעברית`;
-    const description = `${n} כרטיסיות ${c.he} באנגלית להדפסה, חינם: תמונה אמיתית, המילה באנגלית והתרגום לעברית. מדפיסים, גוזרים ומתרגלים — בלי הרשמה.`;
+    const description = `${n} כרטיסיות ${c.he} באנגלית להדפסה, חינם: ${pic(c.words)}, המילה באנגלית והתרגום לעברית. מדפיסים, גוזרים ומתרגלים — בלי הרשמה.`;
     const steps = PRINT_STEPS_HE(c.he);
     const faq = [
-      { q: `כמה כרטיסיות יש בסט ${c.he}?`, a: `${n} כרטיסיות, למשל: ${c.words.slice(0, 6).map((w) => `${w.word} (${w.hebrewTranslation})`).join(', ')}. כל כרטיסייה עם תמונה אמיתית, המילה באנגלית והתרגום לעברית; 3 כרטיסיות בשורה בהדפסה.` },
+      { q: `כמה כרטיסיות יש בסט ${c.he}?`, a: `${n} כרטיסיות, למשל: ${c.words.slice(0, 6).map((w) => `${w.word} (${w.hebrewTranslation})`).join(', ')}. כל כרטיסייה עם ${pic(c.words)}, המילה באנגלית והתרגום לעברית; 3 כרטיסיות בשורה בהדפסה.` },
       { q: 'האם הכרטיסיות בחינם?', a: 'כן. בלי הרשמה, בלי סימן מים ובלי גרסה בתשלום: פותחים, מדפיסים וגוזרים.' },
       { q: 'איך משחקים עם הכרטיסיות?', a: 'מראים את התמונה והילד אומר את המילה באנגלית; מסתירים את התרגום ומנחשים; או מניחים כמה כרטיסיות על השולחן ומבקשים "תביא לי את ה-…". את ההגייה הנכונה אפשר לשמוע באתר.' },
       { q: 'יש גרסה באנגלית בלבד?', a: `כן: ${SITE}/printable-flashcards/${c.slug}/ — אותן כרטיסיות עם הגייה והגדרה באנגלית.` },
@@ -131,7 +135,7 @@ ${body}
         <div class="fc-he">${escapeHtml(w.hebrewTranslation)}</div>
       </div>`).join('');
     const others = sets.filter((o) => o.slug !== c.slug).map((o) => `<a href="/printable-flashcards/${o.slug}/hebrew/">${escapeHtml(o.he)}</a>`).join('\n        ');
-    const answer = `כרטיסיות ${c.he} באנגלית להדפסה: ${n} כרטיסיות, בכל אחת תמונה אמיתית, המילה באנגלית והתרגום לעברית. לוחצים "הדפסת הכרטיסיות", בוחרים A4 וגוזרים לאורך הקווים המקווקווים — 3 כרטיסיות בשורה.`;
+    const answer = `כרטיסיות ${c.he} באנגלית להדפסה: ${n} כרטיסיות, בכל אחת ${pic(c.words)}, המילה באנגלית והתרגום לעברית. לוחצים "הדפסת הכרטיסיות", בוחרים A4 וגוזרים לאורך הקווים המקווקווים — 3 כרטיסיות בשורה.`;
     const dir = join(flashcardsDir, c.slug, 'hebrew');
     mkdirSync(dir, { recursive: true });
     writePage(join(dir, 'index.html'), page({
@@ -176,11 +180,11 @@ ${body}
   const path = '/printable-flashcards/hebrew/';
   const steps = PRINT_STEPS_HE('הנושא שבחרתם');
   const faq = [
-    { q: 'כמה כרטיסיות באנגלית יש להדפסה?', a: `${total} כרטיסיות ב-${sets.length} נושאים, כולן בחינם. בכל כרטיסייה תמונה אמיתית, המילה באנגלית והתרגום לעברית.` },
+    { q: 'כמה כרטיסיות באנגלית יש להדפסה?', a: `${total} כרטיסיות ב-${sets.length} נושאים, כולן בחינם. בכל כרטיסייה ${pic(allWords)}, המילה באנגלית והתרגום לעברית.` },
     { q: 'לאיזה גיל הכרטיסיות מתאימות?', a: 'לילדים בגילאי 6–12 שלומדים אנגלית: לתרגול בבית, בכיתה ובחוג. מתחילים בנושאים מוכרים — חיות, צבעים, אוכל — ומוסיפים בהדרגה.' },
     { q: 'אפשר להדפיס רשימת מילים משלי?', a: 'כן: ביוצר הכרטיסיות החינמי (/tools/flashcard-maker/) בוחרים מילים ומדפיסים כרטיסיות דו-צדדיות.' },
   ];
-  const answer = `כרטיסיות באנגלית להדפסה לילדים, בחינם: ${total} כרטיסיות ב-${sets.length} נושאים, בכל אחת תמונה אמיתית, המילה באנגלית והתרגום לעברית. בוחרים נושא, מדפיסים וגוזרים.`;
+  const answer = `כרטיסיות באנגלית להדפסה לילדים, בחינם: ${total} כרטיסיות ב-${sets.length} נושאים, בכל אחת ${pic(allWords)}, המילה באנגלית והתרגום לעברית. בוחרים נושא, מדפיסים וגוזרים.`;
   const grid = sets.map((c) => `
       <a href="/printable-flashcards/${c.slug}/hebrew/" class="cat-card">
         <img src="/images/${c.words[0].id}.webp" alt="" width="56" height="56" loading="lazy" />
@@ -191,7 +195,7 @@ ${body}
   writePage(join(dir, 'index.html'), page({
     path,
     title: `כרטיסיות באנגלית להדפסה לילדים — ${total} כרטיסיות עם תמונות ותרגום לעברית, חינם`,
-    description: `כרטיסיות באנגלית להדפסה בחינם: ${total} כרטיסיות ב-${sets.length} נושאים (חיות, צבעים, אוכל ועוד), עם תמונה אמיתית ותרגום לעברית. בלי הרשמה.`,
+    description: `כרטיסיות באנגלית להדפסה בחינם: ${total} כרטיסיות ב-${sets.length} נושאים (חיות, צבעים, אוכל ועוד), עם ${pic(allWords)} ותרגום לעברית. בלי הרשמה.`,
     en: `${SITE}/printable-flashcards/`, es: `${SITE}/printable-flashcards/spanish/`,
     schemas: [
       crumbs([['Children Do English', '/'], ['כרטיסיות להדפסה', path]]),

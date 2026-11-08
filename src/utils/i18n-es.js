@@ -471,8 +471,8 @@ export default {
 
   // Trust signals
   trustTitle: 'Diseñado para familias',
-  trustNoAds: 'Sin anuncios ni rastreo',
-  trustNoAdsDesc: 'Cero anuncios. Sin cookies ni rastreo. Solo aprendizaje.',
+  trustNoAds: 'Sin anuncios ni cookies',
+  trustNoAdsDesc: 'Cero anuncios. Sin cookies ni datos personales. Solo aprendizaje.',
   trustOffline: 'Funciona sin conexión',
   trustOfflineDesc: 'Instálala una vez, úsala donde quieras — sin necesidad de internet.',
   trustProfiles: 'Múltiples perfiles',
