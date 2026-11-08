@@ -97,6 +97,14 @@ describe('generated pages: picture claims', () => {
     expect(meta(page('/vocabulary/feelings/'))).toMatch(/with pictures/);
     expect(meta(page('/vocabulary/colors/'))).not.toMatch(/photo/i);
   });
+  it('set pages make no softer photo claim either ("each with a photo", "con foto", "photo flashcards")', () => {
+    // 11-08: the step-1 copy pass missed these phrasings; /vocabulary/feelings/spanish/ said "Cada palabra tiene foto"
+    // with 24 of 25 pictures drawn. The flashcard maker builds from any word list, so its "photo flashcards" is out of scope.
+    const SOFT = /\beach with a photo\b|\bwith photos\b|\bphoto flashcards\b|\btiene foto\b|\bcon foto\b|\bcada una con foto\b|tarjetas interactivas con foto|se muestra con foto/i;
+    const wordPage = /^\/vocabulary\/[^/]+\/[^/]+\/$/;
+    const bad = [...pages].filter(([p, html]) => !(wordPage.test(p) && !/\/(hebrew|spanish)\/$/.test(p)) && !p.startsWith('/tools/flashcard-maker/') && SOFT.test(text(html))).map(([p]) => p);
+    expect(bad).toEqual([]);
+  });
   it('no page claims a native speaker or a recorded voice (audio is Piper TTS)', () => {
     const CLAIM = /native[- ]speaker|native (audio|voice|pronunciation)|recorded (by|voice|audio)|human voice|real voice|דובר(י)? שפת אם|hablante nativo|voz (humana|grabada)/i;
     const bad = [...pages].filter(([, html]) => CLAIM.test(text(html))).map(([p]) => p);

@@ -151,7 +151,7 @@ const WORDS_N = `${WORD_COUNT}+`;
 const WORDS_N_HE = `<bdi dir="ltr">${WORDS_N}</bdi>`;
 const FACT_WORDS = WORDS_N;
 const FACTS_EN = [
-  `Children Do English has ${FACT_WORDS} English words in ${CATEGORIES.length} topics, each with a photo, audio, a kid-friendly definition and an example sentence.`,
+  `Children Do English has ${FACT_WORDS} English words in ${CATEGORIES.length} topics, each with ${pics(WORDS, 'one')}, audio, a kid-friendly definition and an example sentence.`,
   FACT_ES_N === WORDS.length ? 'Every word has a Hebrew and a Spanish translation.' : `Every word has a Hebrew translation, and ${FACT_ES_N} have a Spanish one.`,
   `Every word's audio uses one computer voice (Piper text-to-speech), the same on every device.`,
   `Each group of 10 words climbs an 11-step practice ladder: flashcards, listening and reading quizzes, spelling, a sentence step and arcade games.`, // persona-ok: the group size, not a catalogue count
@@ -295,7 +295,7 @@ function printGlanceEn(lower, words) {
   return glanceHtml({
     caption: `${escapeHtml(lower.charAt(0).toUpperCase() + lower.slice(1))} flashcards at a glance`,
     rows: [
-      ['What prints', `${words.length} photo flashcards (picture, English word, pronunciation, short definition, Hebrew translation), 3 across with cutting lines. The same page prints bingo cards, a word search and a picture crossword, each with an answer key.`],
+      ['What prints', `${words.length} ${pics(words, 'adj')} flashcards (picture, English word, pronunciation, short definition, Hebrew translation), 3 across with cutting lines. The same page prints bingo cards, a word search and a picture crossword, each with an answer key.`],
       ['How many words', `${words.length} ${escapeHtml(lower)} words${sp ? `: ${sp.counts.map(([l, n]) => `${n} ${LEVEL_EN[l]}`).join(', ')}` : ''}.`],
       ['Ages and grades', sp ? `Ages ${sp.ages} (about grades ${sp.grades}). Start with the beginner words for ages 6-8.` : 'Ages 6-12.'],
     ],
@@ -312,7 +312,7 @@ function printGlanceEs(lower, words) {
   return glanceHtml({
     caption: `Tarjetas de ${escapeHtml(lower)}: resumen`,
     rows: [
-      ['Qué se imprime', `${words.length} tarjetas con foto (imagen, palabra en inglés, pronunciación y traducción al español), 3 por fila con líneas de corte.`],
+      ['Qué se imprime', `${words.length} tarjetas ${pics(words, 'adj', 'es')} (imagen, palabra en inglés, pronunciación y traducción al español), 3 por fila con líneas de corte.`],
       ['Cuántas palabras', `${words.length} palabras${sp ? `: ${sp.counts.map(([l, n]) => `${n} de ${LEVEL_ES[l]}`).join(', ')}` : ''}.`],
       ['Edades', sp ? `De ${sp.lo[0]} a ${sp.hi[1]} años (más o menos de ${sp.lo[2]}.º a ${sp.hi[3]}.º grado). Empieza por las palabras de nivel inicial, para 6 a 8 años.` : 'De 6 a 12 años.'],
     ],
@@ -1407,7 +1407,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
   </div>
 
   <div class="container">
-    <p class="intro">${ES_INTRO_BILINGUAL(lowerEs, words.length)}</p>
+    <p class="intro">${ES_INTRO_BILINGUAL(lowerEs, words.length, words)}</p>
 
     <div class="bilingual-list">
       ${wordRows}
@@ -1438,7 +1438,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
 
 // Spanish page chrome (triage 11-08: the es pages had English H1/nav/breadcrumb/buttons and an
 // intro that switched language mid-sentence). Simple Latin-American Spanish for parents/teachers.
-const ES_INTRO_BILINGUAL = (lower, n) => `Las ${n} palabras de ${escapeHtml(lower)} en inglés, con su traducción al español. Cada palabra tiene foto, pronunciación en inglés y una definición corta en inglés, pensada para niños de 6 a 12 años. Gratis, sin anuncios y sin registro.`;
+const ES_INTRO_BILINGUAL = (lower, n, words) => `Las ${n} palabras de ${escapeHtml(lower)} en inglés, con su traducción al español. Cada palabra tiene ${pics(words, 'one', 'es')}, pronunciación en inglés y una definición corta en inglés, pensada para niños de 6 a 12 años. Gratis, sin anuncios y sin registro.`;
 const ES_FOOTER = `<div class="footer">
     <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">Acerca de</a> &middot; <a href="/privacy" style="color:#5b6779">Privacidad</a> &middot; <a href="/image-credits/" style="color:#5b6779">Créditos de las imágenes</a>
   </div>`;
@@ -2102,7 +2102,7 @@ function buildSpanishLandingPage() {
         <div class="feature-card">
           <div class="feature-icon">&#128196;</div>
           <h3>Tarjetas de memoria</h3>
-          <p>Tarjetas interactivas con foto, pronunciación, definición y traducción al español.</p>
+          <p>Tarjetas interactivas con imagen, pronunciación, definición y traducción al español.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128257;</div>
@@ -2134,7 +2134,7 @@ function buildSpanishLandingPage() {
           <div class="step-num">2</div>
           <div>
             <h3>Aprende palabras nuevas</h3>
-            <p>Cada palabra se muestra con foto, pronunciación en inglés, definición, oración de ejemplo y traducción al español.</p>
+            <p>Cada palabra se muestra con imagen, pronunciación en inglés, definición, oración de ejemplo y traducción al español.</p>
           </div>
         </div>
         <div class="step">
@@ -2237,10 +2237,10 @@ function bilingualFaq(slug, displayName, words, { langName, gloss, flashHref, ap
     .map((w) => `${escapeHtml(w.word)} = ${escapeHtml(gloss(w))}`).join(', ');
   const split = levelSplit(words).map(([l, n]) => `${n} ${LEVEL_LABEL[l].toLowerCase()}`).join(', ');
   return faqBlock([
-    pairs ? { q: `What are the words for ${lower} in ${langName}?`, a: `Here are a few: ${pairs}. All ${words.length} words are listed above, each with a photo, an English definition and the ${langName} word.` } : null,
+    pairs ? { q: `What are the words for ${lower} in ${langName}?`, a: `Here are a few: ${pairs}. All ${words.length} words are listed above, each with ${pics(words, 'one')}, an English definition and the ${langName} word.` } : null,
     { q: 'How many words are on this list?', a: `${words.length} words: ${split}.` },
     { q: 'Is there a game to practise these words?', a: `Yes. <a href="${appHref}">The free Children Do English app</a> turns every word into picture quizzes, listening and spelling practice, with English audio. No ads and no sign-up.` },
-    { q: `Are there printable flashcards for these words in ${langName}?`, a: `Yes: <a href="${flashHref}">${escapeHtml(displayName)} flashcards in English and ${langName}</a>, free to print with photos.` },
+    { q: `Are there printable flashcards for these words in ${langName}?`, a: `Yes: <a href="${flashHref}">${escapeHtml(displayName)} flashcards in English and ${langName}</a>, free to print with ${pics(words)}.` },
   ], 'Questions parents ask');
 }
 // The same FAQ in Spanish for /vocabulary/<cat>/spanish/ (triage 11-08: a Spanish page with an
@@ -2251,7 +2251,7 @@ function bilingualFaqEs(words, { spanishName, flashHref, appHref }) {
     .map((w) => `<span lang="en">${escapeHtml(w.word)}</span> = ${escapeHtml(ES_GLOSSES[w.id])}`).join(', ');
   const split = levelSplit(words).map(([l, n]) => `${n} de ${LEVEL_ES[l]}`).join(', ');
   return faqBlock([
-    pairs ? { q: `¿Cómo se dicen las palabras de ${escapeHtml(lower)} en inglés?`, a: `Algunos ejemplos: ${pairs}. Las ${words.length} palabras están en la lista de arriba, cada una con foto, una definición corta en inglés y la palabra en español.` } : null,
+    pairs ? { q: `¿Cómo se dicen las palabras de ${escapeHtml(lower)} en inglés?`, a: `Algunos ejemplos: ${pairs}. Las ${words.length} palabras están en la lista de arriba, cada una con ${pics(words, 'one', 'es')}, una definición corta en inglés y la palabra en español.` } : null,
     { q: '¿Cuántas palabras tiene esta lista?', a: `${words.length} palabras: ${split}.` },
     { q: '¿Hay un juego para practicar estas palabras?', a: `Sí. <a href="${appHref}">La app gratuita Children Do English</a> convierte cada palabra en juegos con fotos, práctica de escucha y de ortografía, con audio en inglés. Sin anuncios y sin registro.` },
     { q: '¿Hay tarjetas para imprimir con estas palabras?', a: `Sí: <a href="${flashHref}">tarjetas de ${escapeHtml(lower)} en inglés y español</a>, con fotos y gratis para imprimir.` },
