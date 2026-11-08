@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import ES_GLOSSES from '../src/data/word-glosses-es.js';
@@ -46,7 +46,8 @@ function writePage(path, html) {
 // games, the teacher door and a language switch — in the page's language.
 const SITE_HEAD = {
   he: { dir: 'rtl', links: [['/he/', 'Children Do English'], ['/he/english-games/', 'משחקים'], ['/he/#teachers', 'למורים'], ['/', 'EN', 'en', 'English'], ['/es/', 'ES', 'es', 'Español']] },
-  es: { dir: 'ltr', links: [['/es/', 'Children Do English'], ['/games/', 'Juegos'], ['/printable-flashcards/spanish/', 'Tarjetas'], ['/', 'EN', 'en', 'English'], ['/he/', 'עב', 'he', 'עברית']] },
+  // Step 4 (mockup b, 11-08): the es switch names the languages (English · עברית · Español), not codes.
+  es: { dir: 'ltr', links: [['/es/', 'Children Do English'], ['/games/', 'Juegos'], ['/printable-flashcards/spanish/', 'Tarjetas'], ['/', 'English', 'en', 'English'], ['/he/', 'עברית', 'he', 'עברית'], ['/es/', 'Español', 'es', 'Español', true]] },
   en: { dir: 'ltr', links: [['/', 'Children Do English'], ['/games/', 'Games'], ['/printable-flashcards/', 'Printables'], ['/he/', 'עב', 'he', 'עברית'], ['/es/', 'ES', 'es', 'Español']] },
 };
 const gameIcon = (n) => `<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-${n}"/></svg>`;
@@ -58,11 +59,11 @@ function siteHeader(lang) {
     `.cat-links a,.res-links a,.back-link,.play-online{display:inline-flex;align-items:center}` +
     `.lang-variant a,.topics a,.pick-detail select{display:inline-block;min-height:44px;padding:12px 0;box-sizing:border-box}` +
     `.breadcrumb a,.footer a,.teacher-row a,.site-head a{display:inline-block;padding:12px 2px;min-width:44px;text-align:center}` +
-    `.site-head a{color:#1e40af;text-decoration:none}.site-head a:first-child{font-weight:800;color:#0f172a;margin-inline-end:auto}.site-head a:hover{text-decoration:underline}@media print{.site-head{display:none}}@media (max-width:420px){.site-head .sh-name{display:none}}</style>` +
+    `.site-head a{color:#1e40af;text-decoration:none}.site-head a:first-child{font-weight:800;color:#0f172a;margin-inline-end:auto}.site-head a:hover{text-decoration:underline}${lang === 'es' ? '.site-head a.sh-on{color:#0f172a;text-decoration:underline;text-underline-offset:3px}@media (max-width:420px){.site-head{gap:0 .15rem;padding:0 .5rem}}' : ''}@media print{.site-head{display:none}}@media (max-width:420px){.site-head .sh-name{display:none}}</style>` +
     // On phones the home link is just 🏠 (the site name hides) so the row fits one line.
-    h.links.map(([href, text, hl, full], i) => i === 0
+    h.links.map(([href, text, hl, full, current], i) => i === 0
       ? `<a href="${href}" aria-label="Children Do English"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-house"/></svg><span class="sh-name" lang="en" dir="ltr"> Children Do English</span></a>`
-      : `<a href="${href}"${hl ? ` lang="${hl}" dir="${hl === 'he' ? 'rtl' : 'ltr'}" hreflang="${hl}" aria-label="${full}"` : ''}>${text}</a>`).join('') +
+      : `<a href="${href}"${hl ? ` lang="${hl}" dir="${hl === 'he' ? 'rtl' : 'ltr'}" hreflang="${hl}" aria-label="${full}"` : ''}${current ? ' aria-current="true" class="sh-on"' : ''}>${text}</a>`).join('') +
     `</nav>\n`;
 }
 
@@ -1288,7 +1289,19 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
 </html>`;
 }
 
-function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words) {
+// The verb phrase on the play button (mockup b: "Jugar con los animales").
+const ES_PLAY_WITH = {
+  animals: 'los animales', food: 'las comidas y bebidas', home: 'las palabras de la casa', transport: 'los transportes',
+  nature: 'la naturaleza', colors: 'los colores', numbers: 'los números', clothing: 'la ropa', school: 'la escuela',
+  sports: 'los deportes', feelings: 'las emociones', everyday: 'las cosas de todos los días', toys: 'los juguetes',
+};
+const audioFor = (w) => `/audio/${w.word.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-')}.mp3`;
+const hasAudio = (w) => existsSync(join(ROOT, 'public', audioFor(w)));
+
+// `words` (held: SEO_TEST_HOLDOUT out) feeds only the <title>/<meta>/og/twitter, frozen for the 11-14
+// count-led title test; the visible page lists `listWords` (every live word in the category, mockup b:
+// "the count is real"). e2e/es-bilingual.spec.js pins the head to the step-1 snapshot.
+function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words, listWords = words) {
   const url = `${SITE}/vocabulary/${slug}/spanish/`;
   // Per-page overrides (seo-title-overrides.json); {n} = word count so the number never drifts
   const override = TITLE_OVERRIDES[`/vocabulary/${slug}/spanish/`] || {};
@@ -1307,14 +1320,14 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
     ],
   });
 
-  const wordRows = words
+  const wordRows = listWords
     .map(
       (w) => `
       <div class="bilingual-card">
         <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="bi-img" loading="lazy" width="96" height="96" />
         <div class="bi-content">
           <div class="bi-en" lang="en">
-            <a href="/vocabulary/${slug}/${w.id}/" class="bi-word">${escapeHtml(w.word)}</a>
+            <a href="/vocabulary/${slug}/${w.id}/" class="bi-word">${escapeHtml(w.word)}</a>${hasAudio(w) ? `<button type="button" class="bi-say" data-say="${audioFor(w)}" aria-label="Escuchar ${escapeHtml(w.word)}" lang="es">${gameIcon('volume-2')}</button>` : ''}
             <div class="bi-phonetic">${escapeHtml(w.phonetic)}</div>
             <div class="bi-def">${escapeHtml(w.definition)}</div>
           </div>
@@ -1330,9 +1343,12 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
   // English, marked lang="en", until the 11-14 read; then flip ES_BILINGUAL_FAQ_ES.
   const faqOpts = { flashHref: `/printable-flashcards/${slug}/spanish/`, appHref: "/?lang=es&utm_source=seo&utm_medium=faq&utm_content=bilingual_category_es" };
   const faq = ES_BILINGUAL_FAQ_ES
-    ? bilingualFaqEs(words, { spanishName, ...faqOpts })
-    : bilingualFaq(slug, displayName, words, { langName: "Spanish", gloss: (w) => ES_GLOSSES[w.id], ...faqOpts });
+    ? bilingualFaqEs(listWords, { spanishName, ...faqOpts })
+    : bilingualFaq(slug, displayName, listWords, { langName: "Spanish", gloss: (w) => ES_GLOSSES[w.id], ...faqOpts });
   const lowerEs = spanishName.toLowerCase();
+  // Mockup b: the play door sits right under the H1 (it was only at the page bottom, y 8,868 / 18,456),
+  // straight into this topic's quiz with a Spanish UI.
+  const playTopHref = `/new-player?lang=es&topic=${slug}&utm_source=seo&utm_medium=cta_top&utm_content=bilingual_category_es`;
 
   const otherCategoryLinks = CATEGORIES.filter((c) => c !== slug)
     .map((c) => `<a href="/vocabulary/${c}/spanish/">${escapeHtml(CATEGORY_NAMES_ES[c] || c)}</a>`)
@@ -1374,7 +1390,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }
-    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
+    .header { background: #2563eb; color: #fff; padding: 1.25rem 1rem 1.5rem; text-align: center; }
     .header h1 { font-size: 1.6rem; margin-bottom: 0.25rem; }
     .header p { font-size: 0.95rem; }
     .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 960px; margin: 0 auto; }
@@ -1389,6 +1405,15 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
     .bi-en { flex: 1; min-width: 200px; }
     .bi-word { font-size: 1.15rem; font-weight: 700; color: #1e293b; text-decoration: none; display: inline-block; padding: 11px 0; min-width: 44px; }
     .bi-word:hover { text-decoration: underline; color: #2563eb; }
+    .bi-say { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-inline-start: 0.35rem; vertical-align: middle; border: 1px solid #bfdbfe; border-radius: 999px; background: #eff6ff; color: #1e40af; cursor: pointer; font-size: 1rem; }
+    .bi-say:hover, .bi-say.say-active { background: #2563eb; color: #fff; }
+    .es-ctas { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-top: 0.9rem; }
+    .es-play, .es-print { display: inline-flex; align-items: center; gap: 0.45rem; min-height: 48px; padding: 0.6rem 1.25rem; border-radius: 0.6rem; font-weight: 700; font-size: 1rem; text-decoration: none; box-sizing: border-box; }
+    .es-play { background: #fff; color: #1e40af; box-shadow: 0 2px 6px rgba(0,0,0,0.18); }
+    .es-play:hover { background: #dbeafe; }
+    .es-print { color: #fff; border: 2px solid rgba(255,255,255,0.85); }
+    .es-print:hover { background: rgba(255,255,255,0.12); }
+    .tts-line { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; color: #475569; margin: 0 0 0.6rem; }
     .bi-phonetic { font-size: 0.8rem; color: #5b6779; }
     .bi-def { font-size: 0.85rem; color: #475569; margin-top: 0.2rem; }
     .bi-es { text-align: right; min-width: 100px; }
@@ -1417,7 +1442,11 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
 <body>
   <div class="header">
     <h1>${escapeHtml(spanishName)} en inglés y español</h1>
-    <p><span lang="en">${escapeHtml(displayName)}</span> / ${escapeHtml(spanishName)} &mdash; ${words.length} palabras bilingües</p>
+    <p><span lang="en">${escapeHtml(displayName)}</span> / ${escapeHtml(spanishName)} &mdash; ${listWords.length} palabras bilingües</p>
+    <div class="es-ctas">
+      <a class="es-play" href="${playTopHref}">${gameIcon('play')} Jugar con ${ES_PLAY_WITH[slug] || escapeHtml(lowerEs)}</a>
+      <a class="es-print" href="/printable-flashcards/${slug}/spanish/">${gameIcon('printer')} Imprimir tarjetas</a>
+    </div>
   </div>
 
   <div class="breadcrumb">
@@ -1426,8 +1455,9 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
 
   <div class="container">
     ${gameFirstCard(gameForCategory(ROOT, slug, words), { lang: 'es', content: 'bilingual_category_es' })}
-    <p class="intro">${ES_INTRO_BILINGUAL(lowerEs, words.length, words)}</p>
+    <p class="intro">${ES_INTRO_BILINGUAL(lowerEs, listWords.length, listWords)}</p>
 
+    <p class="tts-line">${gameIcon('volume-2')} Toca el altavoz para oír la palabra en inglés &middot; voz generada por computadora</p>
     <div class="bilingual-list">
       ${wordRows}
     </div>
@@ -1451,6 +1481,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
   </div>
 
   ${ES_FOOTER}
+  <script defer src="/vocab-quiz.js"></script>
 </body>
 </html>`;
 }
@@ -5265,14 +5296,15 @@ let spanishBilingualGenerated = 0;
 for (const slug of CATEGORIES) {
   const displayName = CATEGORY_NAMES[slug] || slug;
   const spanishName = CATEGORY_NAMES_ES[slug] || slug;
-  const words = getWordsByCategory(slug).filter((w) => !SEO_TEST_HOLDOUT.has(w.id));
+  const liveWords = getWordsByCategory(slug);
+  const words = liveWords.filter((w) => !SEO_TEST_HOLDOUT.has(w.id));
   if (words.length === 0) continue;
 
   const esCatDir = join(distDir, 'vocabulary', slug, 'spanish');
   mkdirSync(esCatDir, { recursive: true });
-  writePage(join(esCatDir, 'index.html'), buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words), 'utf-8');
+  writePage(join(esCatDir, 'index.html'), buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words, liveWords), 'utf-8');
   spanishBilingualGenerated++;
-  console.log(`  \u2713 /vocabulary/${slug}/spanish/ (${words.length} words)`);
+  console.log(`  \u2713 /vocabulary/${slug}/spanish/ (${liveWords.length} words; head count ${words.length})`);
 }
 
 // --- Generate Hebrew games cluster (/he/english-games/) ---
