@@ -113,7 +113,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.js',
-    exclude: ['e2e/**', 'node_modules/**', 'game-kit/**', 'templates/**'], // templates/ = kit harness CLIs, .spec named but not vitest suites
+    exclude: ['e2e/**', 'node_modules/**', 'game-kit/**', 'templates/**', '.claude/**'], // .claude/worktrees = agent checkouts (11-08) // templates/ = kit harness CLIs, .spec named but not vitest suites
     coverage: {
       provider: 'v8',
       reporter: ['text', 'lcov'],

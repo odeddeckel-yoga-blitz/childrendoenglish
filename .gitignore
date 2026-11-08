@@ -9,3 +9,4 @@ playwright-report
 lighthouse-*.json
 .image-work/
 __pycache__/
+.claude/worktrees/
