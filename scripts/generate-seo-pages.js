@@ -4029,6 +4029,11 @@ const { buildHebrewFlashcards } = await import(join(ROOT, 'scripts', 'build-he-f
 const heFlashcardsGenerated = buildHebrewFlashcards({ SITE, flashcardsDir, writePage, escapeHtml, CATEGORIES, CATEGORY_NAMES, CATEGORY_NAMES_HE, getWordsByCategory, howToSchemaFor, faqSchemaFor, FC_EAGER });
 console.log(`  \u2713 /printable-flashcards/*/hebrew/ (${heFlashcardsGenerated} pages)`);
 
+// --- Printable worksheets from the wave-2 games (scripts/build-worksheets.mjs) — HELD (noindex, unlinked) until the 11-14 read ---
+const { buildWorksheets, WORKSHEETS_HOLD } = await import(join(ROOT, 'scripts', 'build-worksheets.mjs'));
+const worksheetsGenerated = buildWorksheets({ SITE, distDir, publicDir: join(ROOT, 'public'), writePage, escapeHtml });
+console.log(`  \u2713 /printable-worksheets/ (${worksheetsGenerated} pages${WORKSHEETS_HOLD ? ', held: noindex + unlinked' : ''})`);
+
 // Printable flashcards index page
 const fcIndexUrl = `${SITE}/printable-flashcards/`;
 const fcIndexTitle = 'Free Printable English Flashcards for Kids | Children Do English';
