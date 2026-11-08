@@ -1,24 +1,24 @@
 {
-  "statsFrom": "2026-11-07T00:00:00.000Z",
+  "statsFrom": "2026-11-08T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
-    "id": "toaster",
-    "word": "toaster",
-    "category": "home",
-    "he": "טוסטר",
-    "image": "/images/toaster.webp",
-    "ans": 27,
-    "ok": 22,
-    "since": "2026-11-04T10:50:22.318Z"
+    "id": "sixteen",
+    "word": "sixteen",
+    "category": "numbers",
+    "he": "שש עשרה",
+    "image": "/images/sixteen.webp",
+    "ans": 0,
+    "ok": 0,
+    "since": "2026-11-08T10:14:44.081Z"
   },
   "game": {
-    "id": "spelling-forge",
-    "name": "Spelling Forge",
-    "emoji": "🔨",
-    "opens": 115,
-    "lvl": 191,
-    "cmp": 5,
-    "since": "2026-10-25T08:21:30.744Z"
+    "id": "missing-letter",
+    "name": "Missing Letter",
+    "emoji": "✏️",
+    "opens": 1,
+    "lvl": 0,
+    "cmp": 0,
+    "since": "2026-11-08T10:14:44.081Z"
   },
   "history": [
     {
@@ -62,6 +62,20 @@
       "to": "toaster",
       "reason": "graduated (ans≥30, acc≥0.7)",
       "at": "2026-11-04T10:50:22.318Z"
+    },
+    {
+      "lane": "word",
+      "from": "toaster",
+      "to": "sixteen",
+      "reason": "graduated (ans≥30, acc≥0.7)",
+      "at": "2026-11-08T10:14:44.081Z"
+    },
+    {
+      "lane": "game",
+      "from": "spelling-forge",
+      "to": "missing-letter",
+      "reason": "max tenure 14d",
+      "at": "2026-11-08T10:14:44.081Z"
     }
   ]
 }
