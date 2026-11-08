@@ -6,6 +6,7 @@ import { printQrBlock, PRINT_QR_CSS } from './qr-svg.mjs';
 import { sentenceAudio } from './sentence-audio.mjs';
 import { withArticle, isPhoto, pictureClaim, truthfulPictureText, countWord } from './page-copy.mjs';
 import { SPOTLIGHT_GAMES, HUB_ONLY_GAMES } from '../src/data/arcadeGames.js';
+import { WORD_COUNT } from '../src/data/wordCount.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -59,8 +60,8 @@ function siteHeader(lang) {
     `.site-head a{color:#1e40af;text-decoration:none}.site-head a:first-child{font-weight:800;color:#0f172a;margin-inline-end:auto}.site-head a:hover{text-decoration:underline}@media print{.site-head{display:none}}@media (max-width:420px){.site-head .sh-name{display:none}}</style>` +
     // On phones the home link is just 🏠 (the site name hides) so the row fits one line.
     h.links.map(([href, text, hl, full], i) => i === 0
-      ? `<a href="${href}" aria-label="Children Do English"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-house"/></svg><span class="sh-name"> Children Do English</span></a>`
-      : `<a href="${href}"${hl ? ` lang="${hl}" hreflang="${hl}" aria-label="${full}"` : ''}>${text}</a>`).join('') +
+      ? `<a href="${href}" aria-label="Children Do English"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-house"/></svg><span class="sh-name" lang="en" dir="ltr"> Children Do English</span></a>`
+      : `<a href="${href}"${hl ? ` lang="${hl}" dir="${hl === 'he' ? 'rtl' : 'ltr'}" hreflang="${hl}" aria-label="${full}"` : ''}>${text}</a>`).join('') +
     `</nav>\n`;
 }
 
@@ -68,12 +69,29 @@ function siteHeader(lang) {
 // language row; the ~90 links sit in one closed <details> labelled in the page language.
 const _meshCache = {};
 const MESH_MORE = { he: 'עוד דפים באתר', es: 'Más páginas', en: 'More pages' };
+// Row headings in the page's language (triage 11-08: the one mixed "IDIOMAS · שפות · LANGUAGES"
+// heading read as garbage on Hebrew pages). Rows that are Hebrew-only keep their Hebrew heading.
+const MESH_HEAD = {
+  langs: { en: 'Languages', he: 'שפות', es: 'Idiomas' },
+  print: { en: 'Printable Flashcards', he: 'כרטיסיות להדפסה', es: 'Tarjetas imprimibles (solo inglés)' },
+  esPrint: { en: 'Printable flashcards in Spanish', he: 'כרטיסיות להדפסה בספרדית', es: 'Tarjetas imprimibles (inglés y español)' },
+  heVocab: { en: 'Vocabulary in Hebrew', he: 'מילים באנגלית ובעברית', es: 'Vocabulario en inglés y hebreo' },
+  esVocab: { en: 'Vocabulary in Spanish', he: 'מילים באנגלית ובספרדית', es: 'Vocabulario en inglés y español' },
+  games: { en: 'Play Games', he: 'משחקים', es: 'Juegos' },
+  topics: { en: 'Learn by Topic', he: 'מילים לפי נושא (באנגלית)', es: 'Palabras por tema (en inglés)' },
+};
 function buildCrawlMesh(lang = 'en') {
   if (_meshCache[lang]) return _meshCache[lang];
   const cats = CATEGORIES.map((c) => c.id || c.key || c);
   const label = (c) => String(c).charAt(0).toUpperCase() + String(c).slice(1);
+  // [href, text, textLang]: a link whose text is not in the page's language carries its own lang + dir,
+  // so English names don't reorder inside a Hebrew line (and vice versa).
+  const dirOf = (l) => (l === 'he' ? 'rtl' : 'ltr');
   const row = (title, links) =>
-    `<h2>${title}</h2><p>` + links.map(([href, text]) => `<a href="${href}">${text}</a>`).join(' ') + `</p>`;
+    `<h2>${title}</h2><p>` + links.map(([href, text, tl = 'en']) => `<a href="${href}"${tl !== lang ? ` lang="${tl}" dir="${dirOf(tl)}"` : ''}>${text}</a>`).join(' ') + `</p>`;
+  const H = (k) => MESH_HEAD[k][lang] || MESH_HEAD[k].en;
+  const own = (en, es) => (lang === 'es' ? [es, 'es'] : [en, 'en']);
+  const heHead = (t) => (lang === 'he' ? t : `<span lang="he" dir="rtl">${t}</span>`);
   _meshCache[lang] = `\n<nav class="crawl-mesh" aria-label="Explore ChildrenDoEnglish">` +
     `<style>.crawl-mesh{max-width:960px;margin:2rem auto 0;padding:1.2rem 1rem 2.2rem;font-size:.78rem;color:#4b5a6e;border-top:1px solid #e2e8f0}` +
     `.crawl-mesh h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;margin:.8rem 0 .25rem;color:#475569}` +
@@ -82,24 +100,24 @@ function buildCrawlMesh(lang = 'en') {
     `.crawl-mesh summary{cursor:pointer;margin-top:.8rem;font-weight:700;color:#475569}</style>` +
     // Language landings FIRST — hreflang alone gave /he/ zero link equity for
     // months (pos ~21); every generated page now links each language's front door.
-    row('Languages · שפות · Idiomas', [['/', 'English'], ['/he/', 'עברית — לימוד אנגלית לילדים'], ['/es/', 'Español — vocabulario en inglés para niños']]) +
+    row(H('langs'), [['/', 'English', 'en'], ['/he/', 'עברית — לימוד אנגלית לילדים', 'he'], ['/es/', 'Español — vocabulario en inglés para niños', 'es']]) +
     `<details><summary>${MESH_MORE[lang] || MESH_MORE.en}</summary>` +
     // Hebrew games cluster (Oct 2026): targets "משחקים ללימוד אנגלית לילדים" queries.
-    row('משחקים באנגלית', [
-      ['/he/english-games/', 'משחקים ללימוד אנגלית לילדים'],
-      ...HE_GAMES_AGES.map((a) => [`/he/english-games/${a.slug}/`, `גילאי ${a.ages} (${a.grades})`]),
-      ...HE_GAMES_TOPICS.map((t) => [`/he/english-games/${t}/`, `אנגלית לילדים — ${CATEGORY_NAMES_HE[t] || t}`]),
+    row(heHead('משחקים באנגלית'), [
+      ['/he/english-games/', 'משחקים ללימוד אנגלית לילדים', 'he'],
+      ...HE_GAMES_AGES.map((a) => [`/he/english-games/${a.slug}/`, `גילאי <bdi dir="ltr">${a.ages}</bdi> (${a.grades})`, 'he']),
+      ...HE_GAMES_TOPICS.map((t) => [`/he/english-games/${t}/`, `אנגלית לילדים — ${CATEGORY_NAMES_HE[t] || t}`, 'he']),
     ]) +
-    row('אנגלית לפי כיתה', [1, 2, 3, 4, 5, 6].map((n) => [`/he/grade-${n}/`, `אנגלית לכיתה ${'אבגדהו'[n - 1]}׳`])) +
-    row('מילים באנגלית לפי נושא', [['/he/english-words/', 'כל הנושאים'], ['/he/english-words/days-of-the-week/', 'ימות השבוע באנגלית'], ['/he/english-words/months/', 'חודשי השנה באנגלית'], ['/he/english-words/family/', 'בני משפחה באנגלית'], ['/he/english-words/numbers-1-100/', 'מספרים באנגלית'], ['/he/english-words/abc/', 'אותיות באנגלית']]) +
-    row('Printable Flashcards', [['/tools/flashcard-maker/', 'Flashcard maker (free tool)'], ['/printable-flashcards/', 'All flashcards'], ...cats.map((c) => [`/printable-flashcards/${c}/`, label(c)])]) +
+    row(heHead('אנגלית לפי כיתה'), [1, 2, 3, 4, 5, 6].map((n) => [`/he/grade-${n}/`, `אנגלית לכיתה ${'אבגדהו'[n - 1]}׳`, 'he'])) +
+    row(heHead('מילים באנגלית לפי נושא'), [['/he/english-words/', 'כל הנושאים'], ['/he/english-words/days-of-the-week/', 'ימות השבוע באנגלית'], ['/he/english-words/months/', 'חודשי השנה באנגלית'], ['/he/english-words/family/', 'בני משפחה באנגלית'], ['/he/english-words/numbers-1-100/', 'מספרים באנגלית'], ['/he/english-words/abc/', 'אותיות באנגלית']].map(([h, t]) => [h, t, 'he'])) +
+    row(H('print'), [['/tools/flashcard-maker/', 'Flashcard maker (free tool)'], ['/printable-flashcards/', 'All flashcards'], ...cats.map((c) => [`/printable-flashcards/${c}/`, label(c)])]) +
     // Spanish printable sets (Oct 2026): they draw shared/direct visitors but
     // were linked only from their two sibling pages → "unknown to Google".
-    row('Tarjetas imprimibles (inglés y español)', [['/printable-flashcards/spanish/', 'Todas las tarjetas'], ...cats.map((c) => [`/printable-flashcards/${c}/spanish/`, CATEGORY_NAMES_ES[c] || label(c)])]) +
-    row('Vocabulary in Hebrew', cats.map((c) => [`/vocabulary/${c}/hebrew/`, `${label(c)} עברית`])) +
-    row('Vocabulary in Spanish', cats.map((c) => [`/vocabulary/${c}/spanish/`, `${label(c)} español`])) +
-    row('Play Games', [['/games/', 'All games'], ['/games/word-zapper/', 'Word Zapper'], ['/games/spelling-forge/', 'Spelling Forge'], ['/games/category-conveyor/', 'Category Conveyor'], ['/app', 'Practice app']]) +
-    row('Learn by Topic', [['/free-english-practice/', 'Free practice — no sign-up'], ['/vocabulary/', 'All vocabulary'], ...cats.map((c) => [`/vocabulary/${c}/`, label(c)]), ['/guides/', 'Parent guides']]) +
+    row(H('esPrint'), [['/printable-flashcards/spanish/', 'Todas las tarjetas', 'es'], ...cats.map((c) => [`/printable-flashcards/${c}/spanish/`, CATEGORY_NAMES_ES[c] || label(c), 'es'])]) +
+    row(H('heVocab'), cats.map((c) => (lang === 'he' ? [`/vocabulary/${c}/hebrew/`, CATEGORY_NAMES_HE[c] || label(c), 'he'] : [`/vocabulary/${c}/hebrew/`, `${label(c)} <span lang="he" dir="rtl">עברית</span>`]))) +
+    row(H('esVocab'), cats.map((c) => (lang === 'es' ? [`/vocabulary/${c}/spanish/`, CATEGORY_NAMES_ES[c] || label(c), 'es'] : [`/vocabulary/${c}/spanish/`, `${label(c)} español`]))) +
+    row(H('games'), [['/games/', ...own('All games', 'Todos los juegos')], ['/games/word-zapper/', 'Word Zapper'], ['/games/spelling-forge/', 'Spelling Forge'], ['/games/category-conveyor/', 'Category Conveyor'], ['/app', ...own('Practice app', 'App de práctica')]]) +
+    row(H('topics'), [['/free-english-practice/', 'Free practice — no sign-up'], ['/vocabulary/', 'All vocabulary'], ...cats.map((c) => [`/vocabulary/${c}/`, label(c)]), ['/guides/', 'Parent guides']]) +
     `</details></nav>\n`;
   return _meshCache[lang];
 }
@@ -126,7 +144,12 @@ const FACT_GAMES = (await import('fs')).readdirSync(join(ROOT, 'public', 'games'
 const FACT_UNITS_N = FACT_UNITS.filter((u) => !u.test).length;
 const FACT_BAND1_N = Object.keys(FACT_BAND1).length;
 const FACT_ES_N = WORDS.filter((w) => ES_GLOSSES[w.id]).length;
-const FACT_WORDS = `${Math.floor(WORDS.length / 10) * 10}+`; // the one rounded count (persona P5)
+// The one site-wide word count (persona P5), from src/data/wordCount.js: "530+" in every
+// language. Topic/set counts (words.length of one list) stay exact. In Hebrew HTML use
+// WORDS_N_HE so the "+" stays on the right side of the number.
+const WORDS_N = `${WORD_COUNT}+`;
+const WORDS_N_HE = `<bdi dir="ltr">${WORDS_N}</bdi>`;
+const FACT_WORDS = WORDS_N;
 const FACTS_EN = [
   `Children Do English has ${FACT_WORDS} English words in ${CATEGORIES.length} topics, each with a photo, audio, a kid-friendly definition and an example sentence.`,
   FACT_ES_N === WORDS.length ? 'Every word has a Hebrew and a Spanish translation.' : `Every word has a Hebrew translation, and ${FACT_ES_N} have a Spanish one.`,
@@ -171,6 +194,10 @@ const SEO_TEST_HOLDOUT = new Set([
 // The /he/ landing's word stat is part of the held head-term test: frozen at its live value
 // (488) so removing grape + crayon doesn't move it. Delete with SEO_TEST_HOLDOUT after the read.
 const HE_WORD_STAT = 488;
+// The /vocabulary/<cat>/spanish/ FAQ (and its FAQPage schema) stays English, marked lang="en",
+// while those pages' count-led titles are under test; set true after the 11-14 read to ship the
+// Spanish FAQ (bilingualFaqEs).
+const ES_BILINGUAL_FAQ_ES = false;
 const TITLE_OVERRIDES = JSON.parse(readFileSync(new URL('./seo-title-overrides.json', import.meta.url), 'utf8'));
 // Pages the SEO optimizer's link advisor wants boosted (rendered on /vocabulary/)
 const SEO_FEATURED = JSON.parse(readFileSync(new URL('./seo-featured.json', import.meta.url), 'utf8'));
@@ -303,11 +330,12 @@ const PRINT_STEPS_EN = (what) => [
   { name: 'Choose paper', text: 'Pick A4 or Letter in portrait and turn on "Background graphics" so the photos print. Card stock (160-200 gsm) gives sturdier cards; plain paper works if you laminate.' },
   { name: 'Cut', text: 'Cut along the dashed lines. For double-sided cards with the translation on the back, use the free Flashcard Maker, which mirrors the back pages so duplex printing lines up.' },
 ];
+const ES_PRINT_BTN = 'Imprimir estas tarjetas';
 const PRINT_STEPS_ES = (what) => [
   { name: 'Abre el set', text: `Abre esta página de tarjetas de ${what} en una computadora o tableta conectada a tu impresora.` },
-  { name: 'Imprime', text: 'Haz clic en "Print These Flashcards" o pulsa Ctrl+P (Cmd+P en Mac). El encabezado, los enlaces y los botones se ocultan solos; solo se imprimen las tarjetas, 3 por fila, cada una con borde punteado para recortar.' },
+  { name: 'Imprime', text: `Haz clic en "${ES_PRINT_BTN}" o pulsa Ctrl+P (Cmd+P en Mac). El encabezado, los enlaces y los botones se ocultan solos; solo se imprimen las tarjetas, 3 por fila, cada una con borde punteado para recortar.` },
   { name: 'Elige el papel', text: 'Selecciona A4 o Carta en vertical y activa "Gráficos de fondo" para que salgan las fotos. La cartulina (160-200 g) da tarjetas más resistentes; el papel normal sirve si las plastificas.' },
-  { name: 'Recorta', text: 'Recorta por las líneas punteadas. Para tarjetas a doble cara con la traducción al dorso, usa el Flashcard Maker gratuito, que refleja las páginas traseras para que la impresión dúplex coincida.' },
+  { name: 'Recorta', text: 'Recorta por las líneas punteadas. Para tarjetas a doble cara con la traducción al dorso, usa nuestro creador de tarjetas gratuito, que refleja las páginas traseras para que la impresión dúplex coincida.' },
 ];
 
 const LEVEL_LABEL = { beginner: 'Beginner (ages 6-8)', intermediate: 'Intermediate (ages 9-10)', advanced: 'Advanced (ages 11-12)' };
@@ -811,7 +839,7 @@ ${wordNav}
       </div>
     </div>
 
-    <span class="cta-top"><a href="/?utm_source=seo&utm_medium=cta_top&utm_content=vocab_word"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-headphones"/></svg> Practice free &mdash; no ads, no sign-up</a><p>${WORDS.length} words with pictures &amp; audio &middot; works offline</p></span>
+    <span class="cta-top"><a href="/?utm_source=seo&utm_medium=cta_top&utm_content=vocab_word"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-headphones"/></svg> Practice free &mdash; no ads, no sign-up</a><p>${WORDS_N} words with pictures &amp; audio &middot; works offline</p></span>
 
     ${enrichmentHtml}
 
@@ -1268,7 +1296,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
       <div class="bilingual-card">
         <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="bi-img" loading="lazy" width="96" height="96" />
         <div class="bi-content">
-          <div class="bi-en">
+          <div class="bi-en" lang="en">
             <a href="/vocabulary/${slug}/${w.id}/" class="bi-word">${escapeHtml(w.word)}</a>
             <div class="bi-phonetic">${escapeHtml(w.phonetic)}</div>
             <div class="bi-def">${escapeHtml(w.definition)}</div>
@@ -1281,17 +1309,20 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
     )
     .join('\n');
 
-  const faq = bilingualFaq(slug, displayName, words, { langName: "Spanish", gloss: (w) => ES_GLOSSES[w.id], flashHref: `/printable-flashcards/${slug}/spanish/`, appHref: "/?lang=es&utm_source=seo&utm_medium=faq&utm_content=bilingual_category_es" });
+  // The FAQ (and its FAQPage schema) is page content, held with the title test: it stays in
+  // English, marked lang="en", until the 11-14 read; then flip ES_BILINGUAL_FAQ_ES.
+  const faqOpts = { flashHref: `/printable-flashcards/${slug}/spanish/`, appHref: "/?lang=es&utm_source=seo&utm_medium=faq&utm_content=bilingual_category_es" };
+  const faq = ES_BILINGUAL_FAQ_ES
+    ? bilingualFaqEs(words, { spanishName, ...faqOpts })
+    : bilingualFaq(slug, displayName, words, { langName: "Spanish", gloss: (w) => ES_GLOSSES[w.id], ...faqOpts });
+  const lowerEs = spanishName.toLowerCase();
 
   const otherCategoryLinks = CATEGORIES.filter((c) => c !== slug)
-    .map(
-      (c) =>
-        `<a href="/vocabulary/${c}/spanish/">${escapeHtml(CATEGORY_NAMES[c] || c)} / ${escapeHtml(CATEGORY_NAMES_ES[c] || c)}</a>`
-    )
+    .map((c) => `<a href="/vocabulary/${c}/spanish/">${escapeHtml(CATEGORY_NAMES_ES[c] || c)}</a>`)
     .join('\n        ');
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -1367,30 +1398,30 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
 </head>
 <body>
   <div class="header">
-    <h1>${escapeHtml(displayName)} in Spanish and English</h1>
-    <p>${escapeHtml(displayName)} / ${escapeHtml(spanishName)} &mdash; ${words.length} palabras bilingües</p>
+    <h1>${escapeHtml(spanishName)} en inglés y español</h1>
+    <p><span lang="en">${escapeHtml(displayName)}</span> / ${escapeHtml(spanishName)} &mdash; ${words.length} palabras bilingües</p>
   </div>
 
   <div class="breadcrumb">
-    <a href="/">Home</a> &rsaquo; <a href="/vocabulary/">Vocabulary</a> &rsaquo; <a href="/vocabulary/${slug}/">${escapeHtml(displayName)}</a> &rsaquo; Spanish &amp; English
+    <a href="/es/">Inicio</a> &rsaquo; <a href="/vocabulary/">Vocabulario</a> &rsaquo; <a href="/vocabulary/${slug}/">${escapeHtml(spanishName)}</a> &rsaquo; Inglés y español
   </div>
 
   <div class="container">
-    <p class="intro">${escapeHtml(description)}</p>
+    <p class="intro">${ES_INTRO_BILINGUAL(lowerEs, words.length)}</p>
 
     <div class="bilingual-list">
       ${wordRows}
     </div>
 
-    ${faq.html}
+    ${ES_BILINGUAL_FAQ_ES ? faq.html : `<div lang="en">${faq.html}</div>`}
 
     <div class="cta">
       <a href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=bilingual_category_es">Practica estas palabras en la app &rarr;</a>
       <p class="cta-sub">Gratis &middot; Sin anuncios &middot; Interfaz en español &middot; Funciona sin conexión</p>
     </div>
 
-    <a href="/vocabulary/${slug}/" class="back-link">&larr; All ${escapeHtml(displayName)} words</a>
-    <p style="font-size:0.9rem;margin-bottom:1rem"><a href="/printable-flashcards/${slug}/spanish/" style="color:#2563eb;text-decoration:none">Imprimir tarjetas de ${escapeHtml(spanishName.toLowerCase())} en inglés y español &rarr;</a></p>
+    <a href="/vocabulary/${slug}/" class="back-link">&larr; Ver ${escapeHtml(lowerEs)} solo en inglés</a>
+    <p style="font-size:0.9rem;margin-bottom:1rem"><a href="/printable-flashcards/${slug}/spanish/" style="color:#2563eb;text-decoration:none">Imprimir tarjetas de ${escapeHtml(lowerEs)} en inglés y español &rarr;</a></p>
 
     <div class="categories">
       <h2>Más categorías bilingües</h2>
@@ -1400,12 +1431,17 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
     </div>
   </div>
 
-  <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
-  </div>
+  ${ES_FOOTER}
 </body>
 </html>`;
 }
+
+// Spanish page chrome (triage 11-08: the es pages had English H1/nav/breadcrumb/buttons and an
+// intro that switched language mid-sentence). Simple Latin-American Spanish for parents/teachers.
+const ES_INTRO_BILINGUAL = (lower, n) => `Las ${n} palabras de ${escapeHtml(lower)} en inglés, con su traducción al español. Cada palabra tiene foto, pronunciación en inglés y una definición corta en inglés, pensada para niños de 6 a 12 años. Gratis, sin anuncios y sin registro.`;
+const ES_FOOTER = `<div class="footer">
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">Acerca de</a> &middot; <a href="/privacy" style="color:#5b6779">Privacidad</a> &middot; <a href="/image-credits/" style="color:#5b6779">Créditos de las imágenes</a>
+  </div>`;
 
 const HREFLANG_HE = ''; // Only add he hreflang on pages with Hebrew equivalents (homepage, /he/)
 
@@ -1838,7 +1874,7 @@ function buildHebrewLandingPage() {
 function buildSpanishLandingPage() {
   const url = `${SITE}/es/`;
   const title = 'Aprende vocabulario en inglés para niños — gratis | Children Do English';
-  const description = `App gratuita para que los niños de 6 a 12 años aprendan vocabulario en inglés. Más de ${Math.floor(WORDS.length / 10) * 10} palabras con fotos, pronunciación en inglés y traducción al español. Sin anuncios, sin registro.`;
+  const description = `App gratuita para que los niños de 6 a 12 años aprendan vocabulario en inglés. Más de ${WORD_COUNT} palabras con fotos, pronunciación en inglés y traducción al español. Sin anuncios, sin registro.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -2037,7 +2073,7 @@ function buildSpanishLandingPage() {
 
   <!-- Stats bar -->
   <div class="stats-bar">
-    <div class="stat"><div class="stat-num">${WORDS.length}+</div><div class="stat-label">palabras</div></div>
+    <div class="stat"><div class="stat-num">${WORDS_N}</div><div class="stat-label">palabras</div></div>
     <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">categorías</div></div>
     <div class="stat"><div class="stat-num">11</div><div class="stat-label">pasos de práctica</div></div>
     <div class="stat"><div class="stat-num">3</div><div class="stat-label">niveles</div></div>
@@ -2207,6 +2243,20 @@ function bilingualFaq(slug, displayName, words, { langName, gloss, flashHref, ap
     { q: `Are there printable flashcards for these words in ${langName}?`, a: `Yes: <a href="${flashHref}">${escapeHtml(displayName)} flashcards in English and ${langName}</a>, free to print with photos.` },
   ], 'Questions parents ask');
 }
+// The same FAQ in Spanish for /vocabulary/<cat>/spanish/ (triage 11-08: a Spanish page with an
+// English FAQ). English words stay marked lang="en".
+function bilingualFaqEs(words, { spanishName, flashHref, appHref }) {
+  const lower = spanishName.toLowerCase();
+  const pairs = words.filter((w) => ES_GLOSSES[w.id]).slice(0, 6)
+    .map((w) => `<span lang="en">${escapeHtml(w.word)}</span> = ${escapeHtml(ES_GLOSSES[w.id])}`).join(', ');
+  const split = levelSplit(words).map(([l, n]) => `${n} de ${LEVEL_ES[l]}`).join(', ');
+  return faqBlock([
+    pairs ? { q: `¿Cómo se dicen las palabras de ${escapeHtml(lower)} en inglés?`, a: `Algunos ejemplos: ${pairs}. Las ${words.length} palabras están en la lista de arriba, cada una con foto, una definición corta en inglés y la palabra en español.` } : null,
+    { q: '¿Cuántas palabras tiene esta lista?', a: `${words.length} palabras: ${split}.` },
+    { q: '¿Hay un juego para practicar estas palabras?', a: `Sí. <a href="${appHref}">La app gratuita Children Do English</a> convierte cada palabra en juegos con fotos, práctica de escucha y de ortografía, con audio en inglés. Sin anuncios y sin registro.` },
+    { q: '¿Hay tarjetas para imprimir con estas palabras?', a: `Sí: <a href="${flashHref}">tarjetas de ${escapeHtml(lower)} en inglés y español</a>, con fotos y gratis para imprimir.` },
+  ], 'Preguntas de padres y maestros');
+}
 
 // Hebrew FAQ for /he/english-games/<age>/ and /<topic>/. English words sit in
 // LTR spans so a mixed list doesn't reorder.
@@ -2307,7 +2357,7 @@ const HE_GAMES_TOPIC_INTROS = {
 
 // "530+" style rounded count, derived from WORDS (never hardcoded): the one word
 // count every page shows (persona standard P5).
-const HE_GAMES_WORDS_ROUNDED = Math.floor(WORDS.length / 10) * 10;
+const HE_GAMES_WORDS_ROUNDED = WORD_COUNT;
 
 const HE_GAMES_CSS = `
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -2511,7 +2561,7 @@ function buildHebrewGamesHubPage() {
   </div>
 
   <div class="stats-bar">
-    <div class="stat"><div class="stat-num">${WORDS.length}+</div><div class="stat-label">מילים</div></div>
+    <div class="stat"><div class="stat-num">${WORDS_N_HE}</div><div class="stat-label">מילים</div></div>
     <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">קטגוריות</div></div>
     <div class="stat"><div class="stat-num">11</div><div class="stat-label">שלבי תרגול</div></div>
     <div class="stat"><div class="stat-num">3</div><div class="stat-label">רמות קושי</div></div>
@@ -2560,7 +2610,7 @@ function buildHebrewGamesHubPage() {
   <div class="section">
     <div class="container">
       <h2 class="section-title">עובדות בקצרה</h2>
-      <ul class="facts" style="max-width:40rem;margin:0 auto 1.5rem;line-height:1.9">${FACTS_HE.map((f) => `\n        <li>${escapeHtml(f).replace(/(Children Do English|Band I|TTS)/g, '<bdi lang="en" dir="ltr">$1</bdi>')}</li>`).join('')}
+      <ul class="facts" style="max-width:40rem;margin:0 auto 1.5rem;line-height:1.9">${FACTS_HE.map((f) => `\n        <li>${escapeHtml(f).replace(/(Children Do English|Band I|TTS)/g, '<bdi lang="en" dir="ltr">$1</bdi>').replace(/(\d+\+)/g, '<bdi dir="ltr">$1</bdi>')}</li>`).join('')}
       </ul>
       <h2 class="section-title">עוד חומרי לימוד בחינם</h2>
       <p style="text-align:center;color:#475569;margin-bottom:0.9rem">רשימות מילים דו-לשוניות אנגלית-עברית, לכל קטגוריה:</p>
@@ -2913,11 +2963,11 @@ document.addEventListener('DOMContentLoaded', function () {
 function buildFlashcardMakerPage() {
   const url = `${SITE}/tools/flashcard-maker/`;
   const title = 'Free Printable Flashcard Maker — Photo Cards, Double-Sided, No Login | Children Do English';
-  const description = `Make printable flashcards free: ${Math.floor(WORDS.length / 10) * 10}+ ${pics(WORDS, 'adj')} English words or paste your own list. 4, 6 or 9 cards per page, Hebrew or Spanish backs, and mirrored back pages so double-sided printing lines up. No login, no watermark, no paywall.`;
+  const description = `Make printable flashcards free: ${WORDS_N} ${pics(WORDS, 'adj')} English words or paste your own list. 4, 6 or 9 cards per page, Hebrew or Spanish backs, and mirrored back pages so double-sided printing lines up. No login, no watermark, no paywall.`;
   const faq = [
     ['Is the flashcard maker really free?', 'Yes — every feature is free: photo cards, all card sizes, double-sided backs and printing. No login, no watermark, no paid tier.'],
     ['How does double-sided printing work?', 'Back pages are mirrored (each row’s columns are reversed), so when your printer flips the sheet on the long edge, every back lands exactly behind its front. Print all pages double-sided and cut along the lines.'],
-    ['Can I use my own word list?', `Yes — choose “Paste a list” and enter any words, one per line. Words from our ${Math.floor(WORDS.length / 10) * 10}+ word vocabulary get their photo automatically; other words become text cards.`],
+    ['Can I use my own word list?', `Yes — choose “Paste a list” and enter any words, one per line. Words from our ${WORDS_N} word vocabulary get their photo automatically; other words become text cards.`],
   ];
   const faqLd = JSON.stringify({ '@context': 'https://schema.org', '@type': 'FAQPage',
     mainEntity: faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) });
@@ -2966,13 +3016,13 @@ function buildFlashcardMakerPage() {
 <body>
 <div class="wrap">
   <h1>Free Printable Flashcard Maker</h1>
-  <p class="sub">Photo flashcards for kids — pick from ${Math.floor(WORDS.length / 10) * 10}+ ${pics(WORDS, 'adj')} English words or paste your own list. Free, no login, no watermark.</p>
+  <p class="sub">Photo flashcards for kids — pick from ${WORDS_N} ${pics(WORDS, 'adj')} English words or paste your own list. Free, no login, no watermark.</p>
   <p class="hero-cite">The Children Do English flashcard maker creates printable photo flashcards with 4, 6 or 9 cards per page, Hebrew or Spanish card backs, and mirrored back pages so double-sided printing aligns perfectly — completely free.</p>
   ${glanceHtml({
     caption: 'The flashcard maker at a glance',
     rows: [
       ['What it makes', 'Double-sided photo flashcards: the picture and English word on the front, the Hebrew, Spanish or English word on the back. 4, 6 or 9 cards per A4 or Letter page.'],
-      ['How many words', `Pick any of ${WORDS.length} photo words in ${CATEGORIES.length} topics, all words starting with one letter, or paste your own list (unknown words become text cards).`],
+      ['How many words', `Pick any of ${WORDS_N} photo words in ${CATEGORIES.length} topics, all words starting with one letter, or paste your own list (unknown words become text cards).`],
       ['Ages and grades', 'Ages 6-12 (about grades 1-7). Beginner topics such as animals, colors and food suit ages 6-8.'],
     ],
     stepsHeading: 'How to use it for one lesson (25 minutes)',
@@ -3074,7 +3124,7 @@ mkdirSync(join(distDir, 'vocabulary'), { recursive: true });
 
 const vocabIndexUrl = `${SITE}/vocabulary/`;
 const vocabIndexTitle = 'Free English Vocabulary Practice for Kids — No Sign-Up, No App';
-const vocabIndexDesc = `Practice ${WORDS.length} English words in ${CATEGORIES.length} topics with ${pics(WORDS)}, audio and picture quizzes. Free online — no sign-up, no app, no ads. Ages 6-12.`;
+const vocabIndexDesc = `Practice ${WORDS_N} English words in ${CATEGORIES.length} topics with ${pics(WORDS)}, audio and picture quizzes. Free online — no sign-up, no app, no ads. Ages 6-12.`;
 
 const vocabIndexBreadcrumb = JSON.stringify({
   '@context': 'https://schema.org',
@@ -3185,7 +3235,7 @@ const vocabIndexHtml = `<!DOCTYPE html>
 <body>
   <div class="header">
     <h1>English Vocabulary for Kids</h1>
-    <p>${WORDS.length} words across ${CATEGORIES.length} categories</p>
+    <p>${WORDS_N} words across ${CATEGORIES.length} categories</p>
   </div>
 
   <div class="breadcrumb">
@@ -3267,12 +3317,12 @@ const wordEntries = CATEGORIES.flatMap((slug) =>
 {
   const url = `${SITE}/free-english-practice/`;
   const title = 'Free English Practice Online — No Sign-Up, No App, No Ads';
-  const desc = `Start practising English words in one tap: ${pics(WORDS)}, audio and 10-word picture quizzes. No account, no email, no download — ${WORDS.length} words, free in the browser.`;
+  const desc = `Start practising English words in one tap: ${pics(WORDS)}, audio and 10-word picture quizzes. No account, no email, no download — ${WORDS_N} words, free in the browser.`;
   const byLevel = AGE_BRACKETS.map((b) => ({ ...b, n: WORDS.filter((w) => w.level === b.level).length }));
   const cats = CATEGORIES.map((c) => ({ c, name: CATEGORY_NAMES[c] || c, n: WORDS.filter((w) => w.category === c).length })).sort((a, b) => b.n - a.n);
   const cta = (where) => `/app?utm_source=seo&utm_medium=cta&utm_content=no_signup_${where}`;
   const faq = [
-    { q: 'Can I practise English online for free without signing up?', a: `Yes. Children Do English needs no account, no email and no password. Open the page, type a nickname (it stays on your device) and the first 10-word picture quiz starts. All ${WORDS.length} words, ${CATEGORIES.length} topics and the games are free, with no ads.` },
+    { q: 'Can I practise English online for free without signing up?', a: `Yes. Children Do English needs no account, no email and no password. Open the page, type a nickname (it stays on your device) and the first 10-word picture quiz starts. All ${WORDS_N} words, ${CATEGORIES.length} topics and the games are free, with no ads.` },
     { q: 'Do I need to download an app?', a: 'No. Everything runs in the web browser on a phone, tablet or computer. If you want, you can add it to your home screen, and it then also works offline — but that is optional.' },
     { q: 'How is progress saved without an account?', a: 'Progress is saved in the browser on your device, never on our servers. Several kids can share one device with their own nicknames. Clearing the browser data erases the progress.' },
     { q: 'Who is it for?', a: `Kids aged 6-12 and other beginners. There are three levels: beginner (${byLevel[0].n} words), intermediate (${byLevel[1].n}) and advanced (${byLevel[2].n}). Translations and menus are available in Hebrew and Spanish.` },
@@ -3334,7 +3384,7 @@ const wordEntries = CATEGORIES.flatMap((slug) =>
   <div class="breadcrumb"><a href="/">Home</a> &rsaquo; Free English practice</div>
   <div class="container">
     <div class="section">
-      <p class="answer">You can practise English vocabulary here right now, with no sign-up: open the practice, type a nickname, and a 10-word picture quiz starts. ${WORDS.length} words in ${CATEGORIES.length} topics, each with ${pics(WORDS, 'one')} and audio. It is free, has no ads, and progress stays on your device.</p>
+      <p class="answer">You can practise English vocabulary here right now, with no sign-up: open the practice, type a nickname, and a 10-word picture quiz starts. ${WORDS_N} words in ${CATEGORIES.length} topics, each with ${pics(WORDS, 'one')} and audio. It is free, has no ads, and progress stays on your device.</p>
       <div class="cta"><a href="${cta('top')}">Start practising — no sign-up &rarr;</a></div>
     </div>
 
@@ -3533,7 +3583,7 @@ const aboutHtml = `<!DOCTYPE html>
     <div class="section">
       <h2>What's Inside</h2>
       <div class="stats">
-        <div class="stat"><div class="stat-num">${WORDS.length}</div><div class="stat-label">Words</div></div>
+        <div class="stat"><div class="stat-num">${WORDS_N}</div><div class="stat-label">Words</div></div>
         <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">Categories</div></div>
         <div class="stat"><div class="stat-num">4</div><div class="stat-label">Quiz Modes</div></div>
         <div class="stat"><div class="stat-num">3</div><div class="stat-label">Difficulty Levels</div></div>
@@ -3805,17 +3855,17 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
   const faqSchema = faqSchemaFor([
     { q: `¿Cuántas tarjetas de ${lowerEs} hay en este set?`, a: `${words.length} tarjetas. Cada una tiene ${pics(words, 'one', 'es')}, la palabra en inglés, su pronunciación fonética y la traducción al español. Se imprimen 3 por fila con bordes punteados para recortar.` },
     { q: '¿Las tarjetas son gratis?', a: 'Sí. Sin registro, sin marca de agua y sin versión de pago: abre la página, imprime y recorta.' },
-    { q: '¿Se pueden imprimir a doble cara?', a: 'Este set se imprime a una cara, con todo al frente. Para tarjetas a doble cara con la traducción al dorso, usa el Flashcard Maker gratuito en /tools/flashcard-maker/, que refleja las páginas traseras para que la impresión dúplex coincida.' },
+    { q: '¿Se pueden imprimir a doble cara?', a: 'Este set se imprime a una cara, con todo al frente. Para tarjetas a doble cara con la traducción al dorso, usa nuestro creador de tarjetas gratuito en /tools/flashcard-maker/, que refleja las páginas traseras para que la impresión dúplex coincida.' },
   ]);
-  const answerFirst = `Tarjetas de ${lowerEs} para imprimir: ${words.length} tarjetas, cada una con ${pics(words, 'one', 'es')}, la palabra en inglés, su pronunciación y la traducción al español. Haz clic en Print, elige A4 o Carta y recorta por las líneas punteadas; salen 3 tarjetas por fila.`;
+  const answerFirst = `Tarjetas de ${lowerEs} para imprimir: ${words.length} tarjetas, cada una con ${pics(words, 'one', 'es')}, la palabra en inglés, su pronunciación y la traducción al español. Haz clic en "${ES_PRINT_BTN}", elige A4 o Carta y recorta por las líneas punteadas; salen 3 tarjetas por fila.`;
 
   const flashcardCards = words
     .map(
       (w, i) => `
       <div class="flashcard">
         <img src="/images/${w.id}.webp" alt="${escapeHtml(w.word)}" class="fc-img" width="160" height="160"${i >= FC_EAGER ? ' loading="lazy"' : ''} />
-        <div class="fc-word">${escapeHtml(w.word)}</div>
-        <div class="fc-phonetic">${escapeHtml(w.phonetic)}</div>
+        <div class="fc-word" lang="en">${escapeHtml(w.word)}</div>
+        <div class="fc-phonetic" lang="en">${escapeHtml(w.phonetic)}</div>
         <div class="fc-es">${escapeHtml(ES_GLOSSES[w.id] || '')}</div>
       </div>`
     )
@@ -3823,11 +3873,11 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
 
   const categoryLinks = CATEGORIES
     .filter((c) => c !== slug)
-    .map((c) => `<a href="/printable-flashcards/${c}/spanish/">${escapeHtml(CATEGORY_NAMES[c] || c)} / ${escapeHtml(CATEGORY_NAMES_ES[c] || c)}</a>`)
+    .map((c) => `<a href="/printable-flashcards/${c}/spanish/">${escapeHtml(CATEGORY_NAMES_ES[c] || c)}</a>`)
     .join('\n        ');
 
   return `<!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -3906,22 +3956,22 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
 </head>
 <body>
   <div class="header">
-    <h1>Printable ${escapeHtml(displayName)} Flashcards in English and Spanish</h1>
-    <p>${words.length} bilingual flashcards &mdash; ${escapeHtml(displayName)} / ${escapeHtml(spanishName)}</p>
+    <h1>Tarjetas de ${escapeHtml(lowerEs)} para imprimir, en inglés y español</h1>
+    <p>${words.length} tarjetas bilingües &mdash; <span lang="en">${escapeHtml(displayName)}</span> / ${escapeHtml(spanishName)}</p>
   </div>
 
   <div class="breadcrumb">
-    <a href="/">Home</a> &rsaquo; <a href="/printable-flashcards/">Printable Flashcards</a> &rsaquo; <a href="/printable-flashcards/${slug}/">${escapeHtml(displayName)}</a> &rsaquo; Spanish &amp; English
+    <a href="/es/">Inicio</a> &rsaquo; <a href="/printable-flashcards/spanish/">Tarjetas para imprimir</a> &rsaquo; ${escapeHtml(spanishName)}
   </div>
 
   <div class="container">
     <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
-    <button class="print-btn" data-print>Print These Flashcards</button>
+    <button class="print-btn" data-print>${ES_PRINT_BTN}</button>
     <a class="play-online no-print" href="/?lang=es&utm_source=seo&utm_medium=cta&utm_content=flashcard_top_es"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> ¿Prefieres jugar? Practica en línea gratis, en español &rarr;</a>
     <script defer src="/print-btn.js"></script>
     ${printGlanceEs(lowerEs, words)}
     ${howToHtml(`Cómo imprimir las tarjetas de ${lowerEs}`, steps)}
-    <p class="lang-variant"><a href="/printable-flashcards/${slug}/">View the English-only version &rarr;</a></p>
+    <p class="lang-variant"><a href="/printable-flashcards/${slug}/">Ver la versión solo en inglés &rarr;</a></p>
     ${printQrBlock(`${SITE}/printable-flashcards/${slug}/spanish/`, 'Escanea para jugar con estas palabras &mdash; gratis, sin registro')}
 
     <div class="grid">
@@ -3934,16 +3984,14 @@ function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, wor
     </div>
 
     <div class="categories">
-      <h2>More Printable Flashcards in Spanish</h2>
+      <h2>Más tarjetas para imprimir en inglés y español</h2>
       <div class="cat-links">
         ${categoryLinks}
       </div>
     </div>
   </div>
 
-  <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
-  </div>
+  ${ES_FOOTER}
 </body>
 </html>`;
 }
@@ -3984,20 +4032,20 @@ console.log(`  \u2713 /printable-flashcards/*/hebrew/ (${heFlashcardsGenerated} 
 // Printable flashcards index page
 const fcIndexUrl = `${SITE}/printable-flashcards/`;
 const fcIndexTitle = 'Free Printable English Flashcards for Kids | Children Do English';
-const fcIndexDesc = `Free printable English vocabulary flashcards for kids ages 6-12. ${WORDS.length} words across ${CATEGORIES.length} categories with pictures, definitions, and Hebrew translations. Just print and cut!`;
+const fcIndexDesc = `Free printable English vocabulary flashcards for kids ages 6-12. ${WORDS_N} words across ${CATEGORIES.length} categories with pictures, definitions, and Hebrew translations. Just print and cut!`;
 
 const fcIndexSteps = PRINT_STEPS_EN('English');
 const fcIndexHowTo = howToSchemaFor({
   name: 'How to print free English flashcards for kids',
-  description: `Pick one of ${CATEGORIES.length} categories (${WORDS.length} words), press print, and cut along the dashed lines.`,
+  description: `Pick one of ${CATEGORIES.length} categories (${WORDS_N} words), press print, and cut along the dashed lines.`,
   steps: [{ name: 'Pick a category', text: `Choose one of the ${CATEGORIES.length} sets below (animals, food, colors and more); every card has ${pics(WORDS, 'one')}, the English word, pronunciation, definition and Hebrew translation.` }, ...fcIndexSteps.slice(1)],
   supplies: ['Printer paper or card stock (A4 or Letter)'], tools: ['Printer', 'Scissors'],
 });
 const fcIndexFaq = faqSchemaFor([
-  { q: 'How many printable English flashcards are there?', a: `${WORDS.length} cards in ${CATEGORIES.length} category sets, all free. Each card has ${pics(WORDS, 'one')}, the English word, its pronunciation, a kid-friendly definition and the Hebrew translation; a Spanish version of every set is at /printable-flashcards/spanish/.` },
+  { q: 'How many printable English flashcards are there?', a: `${WORDS_N} cards in ${CATEGORIES.length} category sets, all free. Each card has ${pics(WORDS, 'one')}, the English word, its pronunciation, a kid-friendly definition and the Hebrew translation; a Spanish version of every set is at /printable-flashcards/spanish/.` },
   { q: 'Can I print the flashcards double-sided?', a: 'The category sets print single-sided. For double-sided cards with the translation on the back, or your own word list, use the free Flashcard Maker at /tools/flashcard-maker/.' },
 ]);
-const fcIndexAnswer = `Free printable English flashcards for kids: ${WORDS.length} cards in ${CATEGORIES.length} sets, each with ${pics(WORDS, 'one')}, the English word, pronunciation, definition and Hebrew translation. Pick a category, press print, cut along the dashed lines.`;
+const fcIndexAnswer = `Free printable English flashcards for kids: ${WORDS_N} cards in ${CATEGORIES.length} sets, each with ${pics(WORDS, 'one')}, the English word, pronunciation, definition and Hebrew translation. Pick a category, press print, cut along the dashed lines.`;
 const fcIndexBreadcrumb = JSON.stringify({
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -4081,7 +4129,7 @@ const fcIndexHtml = `<!DOCTYPE html>
 <body>
   <div class="header">
     <h1>Free Printable English Flashcards for Kids</h1>
-    <p>${WORDS.length} vocabulary flashcards across ${CATEGORIES.length} categories</p>
+    <p>${WORDS_N} vocabulary flashcards across ${CATEGORIES.length} categories</p>
   </div>
 
   <div class="breadcrumb">
@@ -4117,18 +4165,18 @@ const esFcIndexSteps = PRINT_STEPS_ES('vocabulario');
 const esFcIndexHowTo = howToSchemaFor({
   lang: 'es',
   name: 'Cómo imprimir tarjetas de vocabulario en inglés y español',
-  description: `Elige una de ${CATEGORIES.length} categorías (${WORDS.length} palabras), imprime y recorta por las líneas punteadas.`,
+  description: `Elige una de ${CATEGORIES.length} categorías (${WORDS_N} palabras), imprime y recorta por las líneas punteadas.`,
   steps: [{ name: 'Elige una categoría', text: `Elige uno de los ${CATEGORIES.length} sets (animales, comida, colores y más); cada tarjeta tiene ${pics(WORDS, 'one', 'es')}, la palabra en inglés, su pronunciación y la traducción al español.` }, ...esFcIndexSteps.slice(1)],
   supplies: ['Papel o cartulina (A4 o Carta)'], tools: ['Impresora', 'Tijeras'],
 });
 const esFcIndexFaq = faqSchemaFor([
-  { q: '¿Cuántas tarjetas imprimibles de inglés hay?', a: `${WORDS.length} tarjetas en ${CATEGORIES.length} sets por categoría, todas gratis, con ${pics(WORDS, 'one', 'es')}, la palabra en inglés, su pronunciación y la traducción al español.` },
-  { q: '¿Se pueden imprimir a doble cara?', a: 'Los sets por categoría se imprimen a una cara. Para tarjetas a doble cara con la traducción al dorso, o con tu propia lista de palabras, usa el Flashcard Maker gratuito en /tools/flashcard-maker/.' },
+  { q: '¿Cuántas tarjetas imprimibles de inglés hay?', a: `${WORDS_N} tarjetas en ${CATEGORIES.length} sets por categoría, todas gratis, con ${pics(WORDS, 'one', 'es')}, la palabra en inglés, su pronunciación y la traducción al español.` },
+  { q: '¿Se pueden imprimir a doble cara?', a: 'Los sets por categoría se imprimen a una cara. Para tarjetas a doble cara con la traducción al dorso, o con tu propia lista de palabras, usa nuestro creador de tarjetas gratuito en /tools/flashcard-maker/.' },
 ]);
-const esFcIndexAnswer = `Tarjetas de vocabulario en inglés y español para imprimir gratis: ${WORDS.length} tarjetas en ${CATEGORIES.length} sets, cada una con ${pics(WORDS, 'one', 'es')}, la palabra en inglés, su pronunciación y la traducción al español. Elige una categoría, imprime y recorta por las líneas punteadas.`;
+const esFcIndexAnswer = `Tarjetas de vocabulario en inglés y español para imprimir gratis: ${WORDS_N} tarjetas en ${CATEGORIES.length} sets, cada una con ${pics(WORDS, 'one', 'es')}, la palabra en inglés, su pronunciación y la traducción al español. Elige una categoría, imprime y recorta por las líneas punteadas.`;
 const esFcIndexUrl = `${SITE}/printable-flashcards/spanish/`;
 const esFcIndexTitle = 'Tarjetas Imprimibles de Vocabulario en Ingl\u00e9s y Espa\u00f1ol \u2014 Gratis | Children Do English';
-const esFcIndexDesc = `Tarjetas de vocabulario en ingl\u00e9s listas para imprimir, con ${pics(WORDS, 'many', 'es')} y traducci\u00f3n al espa\u00f1ol. ${WORDS.length} palabras en ${CATEGORIES.length} categor\u00edas. \u00a1Solo imprime y recorta!`;
+const esFcIndexDesc = `Tarjetas de vocabulario en ingl\u00e9s listas para imprimir, con ${pics(WORDS, 'many', 'es')} y traducci\u00f3n al espa\u00f1ol. ${WORDS_N} palabras en ${CATEGORIES.length} categor\u00edas. \u00a1Solo imprime y recorta!`;
 
 const esFcIndexBreadcrumb = JSON.stringify({
   '@context': 'https://schema.org',
@@ -4151,7 +4199,7 @@ const esFcCategoryCards = CATEGORIES.map((slug) => {
   return `
       <a href="/printable-flashcards/${slug}/spanish/" class="cat-card">
         <div style="display:flex;gap:0.3rem;margin-bottom:0.5rem">${previewImgs}</div>
-        <h2>${escapeHtml(name)} / ${escapeHtml(spanishName)}</h2>
+        <h2>${escapeHtml(spanishName)} <span lang="en" style="font-weight:400">(${escapeHtml(name)})</span></h2>
         <p class="word-count">${words.length} tarjetas</p>
       </a>`;
 }).join('\n');
@@ -4217,11 +4265,11 @@ const esFcIndexHtml = `<!DOCTYPE html>
 <body>
   <div class="header">
     <h1>Tarjetas Imprimibles de Vocabulario en Ingl\u00e9s y Espa\u00f1ol</h1>
-    <p>${WORDS.length} tarjetas biling\u00fces en ${CATEGORIES.length} categor\u00edas</p>
+    <p>${WORDS_N} tarjetas biling\u00fces en ${CATEGORIES.length} categor\u00edas</p>
   </div>
 
   <div class="breadcrumb">
-    <a href="/">Home</a> &rsaquo; <a href="/printable-flashcards/">Printable Flashcards</a> &rsaquo; Espa\u00f1ol
+    <a href="/es/">Inicio</a> &rsaquo; Tarjetas para imprimir
   </div>
 
   <div class="container">
@@ -4238,9 +4286,7 @@ const esFcIndexHtml = `<!DOCTYPE html>
     </div>
   </div>
 
-  <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/es/" style="color:#5b6779">Espa\u00f1ol</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
-  </div>
+  ${ES_FOOTER}
 </body>
 </html>`;
 
@@ -4328,7 +4374,7 @@ const GUIDES = [
         h2: 'Free Tools to Get Started',
         content: `<p><a href="/">Children Do English</a> is a free, ad-free vocabulary app designed specifically for kids ages 6-12. It includes:</p>
 <ul>
-  <li><strong>${WORDS.length} words</strong> across ${CATEGORIES.length} categories</li>
+  <li><strong>${WORDS_N} words</strong> across ${CATEGORIES.length} categories</li>
   <li>Image quizzes, word quizzes, audio challenges, and flashcards</li>
   <li>Built-in spaced repetition for smart review</li>
   <li>Hebrew translations for bilingual families</li>
@@ -4546,7 +4592,7 @@ const GUIDES = [
         h2: 'Free Picture Vocabulary Resources',
         content: `<p>Ready to get started with picture-based vocabulary learning? Here are free resources:</p>
 <ul>
-  <li><strong><a href="/">Children Do English App</a></strong> &mdash; ${WORDS.length} words with pictures, audio, definitions, and quizzes. Free, no ads, works offline.</li>
+  <li><strong><a href="/">Children Do English App</a></strong> &mdash; ${WORDS_N} words with pictures, audio, definitions, and quizzes. Free, no ads, works offline.</li>
   <li><strong><a href="/vocabulary/">Browse All Categories</a></strong> &mdash; Explore ${CATEGORIES.length} vocabulary categories with pictures and pronunciation</li>
   <li><strong><a href="/printable-flashcards/">Printable Flashcards</a></strong> &mdash; Download and print picture flashcards for offline practice</li>
 </ul>
@@ -4558,7 +4604,7 @@ const GUIDES = [
     slug: 'english-vocabulary-for-bilingual-hebrew-english-kids',
     heroImage: '/og/feelings.png',
     title: 'English Vocabulary for Bilingual Hebrew-English Kids — A Parent\'s Guide',
-    description: `Help your bilingual Hebrew-English child build English vocabulary. ${Math.floor(WORDS.length / 10) * 10}+ words with Hebrew translations, phonetics, and pictures. Free app for kids 6-12.`,
+    description: `Help your bilingual Hebrew-English child build English vocabulary. ${WORDS_N} words with Hebrew translations, phonetics, and pictures. Free app for kids 6-12.`,
     h1: 'English Vocabulary for Bilingual Hebrew-English Kids',
     sections: [
       {
@@ -4648,7 +4694,7 @@ const GUIDES = [
         h2: 'A Free App Built for Hebrew-English Families',
         content: `<p><a href="/">Children Do English</a> was specifically designed for bilingual Hebrew-English families. Every feature considers the needs of children navigating two languages:</p>
 <ul>
-  <li><strong>${WORDS.length} words with Hebrew translations</strong> &mdash; Every word includes an accurate Hebrew translation alongside the English definition</li>
+  <li><strong>${WORDS_N} words with Hebrew translations</strong> &mdash; Every word includes an accurate Hebrew translation alongside the English definition</li>
   <li><strong>Phonetic pronunciation</strong> &mdash; IPA-based phonetics help kids pronounce English sounds that don't exist in Hebrew</li>
   <li><strong>Picture-based learning</strong> &mdash; Visual anchors reduce reliance on translation</li>
   <li><strong>Audio pronunciation</strong> &mdash; Clear computer-voice audio (TTS) for every word</li>
@@ -4717,7 +4763,7 @@ const GUIDES = [
   <li><strong>Works offline</strong> &mdash; after the first visit, the app works without internet.</li>
   <li><strong>Multiple player profiles</strong> &mdash; siblings can each track their own progress on the same device.</li>
 </ul>
-<p><strong>Limitations:</strong> vocabulary only (${WORDS.length} words), so kids who want grammar lessons or conversation practice need another resource alongside it.</p>
+<p><strong>Limitations:</strong> vocabulary only (${WORDS_N} words), so kids who want grammar lessons or conversation practice need another resource alongside it.</p>
 <p><strong>Best for:</strong> Hebrew-speaking families who want a focused, free vocabulary tool.</p>`,
       },
       {
@@ -4813,7 +4859,7 @@ const GUIDE_GEO = {
   'best-english-learning-apps-for-kids': {
     answer: 'For Hebrew-speaking families, Children Do English is a free, ad-free vocabulary app in Hebrew that also works offline; Duolingo is a broad language course whose free plan shows ads, and Lingokids and Khan Academy Kids are made for ages 2-8. The deciding factor is consistency: ten minutes a day on any good app beats an hour of sporadic use.',
     faq: [
-      { q: 'What is the best free English learning app for kids?', a: `For vocabulary, Children Do English: free, no ads, ${Math.floor(WORDS.length / 10) * 10}+ words with ${pics(WORDS)}, spoken audio, Hebrew and Spanish translations, and it works offline. For a broad language course, Duolingo has a free plan that shows ads.` },
+      { q: 'What is the best free English learning app for kids?', a: `For vocabulary, Children Do English: free, no ads, ${WORDS_N} words with ${pics(WORDS)}, spoken audio, Hebrew and Spanish translations, and it works offline. For a broad language course, Duolingo has a free plan that shows ads.` },
       { q: 'Is Duolingo good for kids learning English?', a: 'Its gamified lessons help build a daily habit and it covers grammar and conversation, not just vocabulary. The free plan shows ads between lessons; no ads and offline lessons come with the paid Super plan. For young children learning to read, Duolingo makes a separate app, Duolingo ABC.' },
       { q: 'Which English app is best for ages 2-8?', a: 'Lingokids (songs, animated characters and mini-games; a free version and a paid Plus plan) and Khan Academy Kids (free, no ads, no subscriptions). Starfall offers early-reading activities, some free.' },
     ],
@@ -4902,7 +4948,7 @@ for (const guide of GUIDES) {
   const midCta = `
     <div class="mid-cta">
       <a href="/?utm_source=seo&utm_medium=cta&utm_content=guide_mid">Try Children Do English Free &rarr;</a>
-      <p>${WORDS.length} words &middot; No ads &middot; Works offline</p>
+      <p>${WORDS_N} words &middot; No ads &middot; Works offline</p>
     </div>`;
 
   // Build table of contents
@@ -5440,7 +5486,7 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
   const gamesFaq = [
     { q: 'Are these English games really free?', a: `Yes. All ${GAMES.length} games are free, with no ads, no sign-up and nothing to install. They run in the browser on phones, tablets, Chromebooks and computers.` },
     { q: 'Which game should a young child start with?', a: 'Word Zapper. The word is spoken aloud and the child taps the matching photo, so it works before a child can read. Category Conveyor is next; Spelling Forge suits kids who already know their letters.' },
-    { q: 'What do kids learn from these games?', a: `They practise the same ${WORDS.length} everyday English words as the rest of Children Do English, each with ${pics(WORDS, 'one')} and spoken audio: listening (Word Zapper), word meaning and categories (Category Conveyor) and spelling (Spelling Forge). Sound Pairs trains the ear on sounds learners confuse, like ship / sheep and pen / pan, and Read It! practises reading short words one sound at a time.` },
+    { q: 'What do kids learn from these games?', a: `They practise the same ${WORDS_N} everyday English words as the rest of Children Do English, each with ${pics(WORDS, 'one')} and spoken audio: listening (Word Zapper), word meaning and categories (Category Conveyor) and spelling (Spelling Forge). Sound Pairs trains the ear on sounds learners confuse, like ship / sheep and pen / pan, and Read It! practises reading short words one sound at a time.` },
     { q: 'Can I use them in class?', a: 'Yes. Each game is a single page that works on a projector or on each child’s device. For a whole-class game, Class Battle lets kids join from their own devices with a room code.' },
   ];
   const gamesDir = join(distDir, 'games');
@@ -5501,7 +5547,7 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
     <h2>Questions parents and teachers ask</h2>
     ${gamesFaq.map((f) => `<h3>${escapeHtml(f.q)}</h3><p>${escapeHtml(f.a)}</p>`).join('\n    ')}
   </section>
-  <p><a class="back" href="/">← Children Do English home</a> · <a class="back" href="/vocabulary/">Browse all ${WORDS.length} words</a></p>
+  <p><a class="back" href="/">← Children Do English home</a> · <a class="back" href="/vocabulary/">Browse all ${WORDS_N} words</a></p>
 </div></body></html>`;
   writePage(join(gamesDir, 'index.html'), html);
   console.log('Games hub written: /games/');

@@ -406,7 +406,7 @@ export default {
 
   // Features
   featureLearnTitle: 'Aprender Palabras',
-  featureLearnDesc: 'Explora más de 480 palabras con imágenes, audio y traducciones',
+  featureLearnDesc: 'Explora {{n}}+ palabras con imágenes, audio y traducciones',
   featureFlashcardsTitle: 'Tarjetas',
   featureFlashcardsDesc: 'Desliza tarjetas con repetición espaciada',
   featureQuizTitle: 'Quizzes Divertidos',

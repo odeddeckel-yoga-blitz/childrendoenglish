@@ -9,6 +9,7 @@ import { isPhoto, pictureClaim } from './page-copy.mjs';
 import { sheetsSection, sheetsOut, sheetData, SHEETS_CSS } from './build-unit-pages.mjs';
 import { join } from 'path';
 import { mkdirSync } from 'fs';
+import { WORD_COUNT } from '../src/data/wordCount.js';
 
 const PRINT_STEPS_HE = (what) => [
   { name: 'פותחים את הסט', text: `פותחים את עמוד הכרטיסיות של ${what} במחשב או בטאבלט שמחובר למדפסת.` },
@@ -111,10 +112,12 @@ ${body}
 </html>`;
 
   const sets = CATEGORIES.map((slug) => ({ slug, he: CATEGORY_NAMES_HE[slug] || slug, en: CATEGORY_NAMES[slug] || slug, words: getWordsByCategory(slug) })).filter((c) => c.words.length);
-  const total = sets.reduce((n, c) => n + c.words.length, 0);
   // "תמונה אמיתית" only when every picture in the set is a photo (page triage 11-08).
   const pic = (ws) => pictureClaim(ws, isPhoto, { lang: 'he', form: 'one' });
   const allWords = sets.flatMap((c) => c.words);
+  // The site-wide count (persona P5: one number everywhere, src/data/wordCount.js). In Hebrew
+  // text it sits between LRMs so the "+" stays on the number's right; the title and meta say "יותר מ-N".
+  const total = `\u200E${WORD_COUNT}+\u200E`;
 
   for (const c of sets) {
     const path = `/printable-flashcards/${c.slug}/hebrew/`;
@@ -194,8 +197,8 @@ ${body}
   mkdirSync(dir, { recursive: true });
   writePage(join(dir, 'index.html'), page({
     path,
-    title: `כרטיסיות באנגלית להדפסה לילדים — ${total} כרטיסיות עם תמונות ותרגום לעברית, חינם`,
-    description: `כרטיסיות באנגלית להדפסה בחינם: ${total} כרטיסיות ב-${sets.length} נושאים (חיות, צבעים, אוכל ועוד), עם ${pic(allWords)} ותרגום לעברית. בלי הרשמה.`,
+    title: `כרטיסיות באנגלית להדפסה לילדים — יותר מ-${WORD_COUNT} כרטיסיות עם תמונות ותרגום לעברית, חינם`,
+    description: `כרטיסיות באנגלית להדפסה בחינם: יותר מ-${WORD_COUNT} כרטיסיות ב-${sets.length} נושאים (חיות, צבעים, אוכל ועוד), עם ${pic(allWords)} ותרגום לעברית. בלי הרשמה.`,
     en: `${SITE}/printable-flashcards/`, es: `${SITE}/printable-flashcards/spanish/`,
     schemas: [
       crumbs([['Children Do English', '/'], ['כרטיסיות להדפסה', path]]),

@@ -4,9 +4,18 @@ import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import asyncCss from './vite-plugin-async-css.js';
 import { SW_FALLBACK_ALLOW } from './sw-routes.js';
+import { WORD_COUNT } from './src/data/wordCount.js';
+
+// index.html's prerendered copy and meta write the one word count as %WORD_COUNT% (persona P5:
+// the same number as the app and every generated page; it was a stale hand-typed 480).
+const wordCountHtml = () => ({
+  name: 'cde-word-count',
+  transformIndexHtml: { order: 'pre', handler: (html) => html.replaceAll('%WORD_COUNT%', String(WORD_COUNT)) },
+});
 
 export default defineConfig({
   plugins: [
+    wordCountHtml(),
     react(),
     tailwindcss(),
     asyncCss(),

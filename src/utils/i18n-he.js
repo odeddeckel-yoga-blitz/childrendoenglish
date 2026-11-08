@@ -406,7 +406,7 @@ export default {
 
   // Features
   featureLearnTitle: 'למדו מילים',
-  featureLearnDesc: 'גלו מעל 480 מילים עם תמונות, שמע ותרגומים',
+  featureLearnDesc: 'גלו יותר מ-{{n}} מילים עם תמונות, שמע ותרגומים',
   featureFlashcardsTitle: 'כרטיסיות',
   featureFlashcardsDesc: 'החליקו כרטיסים עם חזרה מרווחת',
   featureQuizTitle: 'חידונים מהנים',

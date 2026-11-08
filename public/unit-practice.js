@@ -239,7 +239,7 @@
       var big = elh('button', { type: 'button', class: 'big-say', 'aria-label': 'השמעת המילה' }, ic('volume-2'));
       big.addEventListener('click', function () { say(it.audio); });
       box.appendChild(big);
-      var slow = el('button', { type: 'button', class: 'slow-say', 'aria-pressed': slowOn() ? 'true' : 'false', 'aria-label': 'השמעה איטית' }, ic('turtle') + ' לאט');
+      var slow = elh('button', { type: 'button', class: 'slow-say', 'aria-pressed': slowOn() ? 'true' : 'false', 'aria-label': 'השמעה איטית' }, ic('turtle') + ' לאט');
       slow.addEventListener('click', function () {
         var on = !slowOn();
         try { localStorage.setItem(SLOW_KEY, on ? '1' : '0'); } catch (e) { /* storage off: this tap only */ }

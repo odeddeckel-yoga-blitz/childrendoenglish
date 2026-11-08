@@ -6,6 +6,7 @@ import { mkdtempSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { tmpdir } from 'os';
 import { join, dirname } from 'path';
 import { buildHebrewFlashcards } from '../../scripts/build-he-flashcards.mjs';
+import { WORD_COUNT } from '../data/wordCount';
 
 const escapeHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const W = (id, word, he) => ({ id, word, hebrewTranslation: he });
@@ -48,6 +49,14 @@ describe('Hebrew printable flashcards', () => {
     const html = build().read('hebrew');
     expect(html).toContain('href="/printable-flashcards/animals/hebrew/"');
     expect(html).toContain('href="/printable-flashcards/food/hebrew/"');
-    expect(html).toContain('10 כרטיסיות');
+    expect(html).toContain('8 כרטיסיות');
+    expect(html).toContain('2 כרטיסיות');
+  });
+
+  it('the index total is the one site-wide count (WORD_COUNT+), not a sum that drifts from it', () => {
+    const html = build().read('hebrew');
+    expect(html).toContain(`‎${WORD_COUNT}+‎ כרטיסיות`);
+    expect(html).toContain(`<title>כרטיסיות באנגלית להדפסה לילדים — יותר מ-${WORD_COUNT} כרטיסיות`);
+    expect(html).not.toContain('10 כרטיסיות');
   });
 });

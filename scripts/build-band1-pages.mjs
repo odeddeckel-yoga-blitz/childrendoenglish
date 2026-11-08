@@ -10,7 +10,7 @@
 // bingo / word search, share. Nothing on /he/ links here before Nov 14.
 import { join } from 'path';
 import { mkdirSync } from 'fs';
-import { wordSetKit } from './build-unit-pages.mjs';
+import { wordSetKit, heBidi, ltrRun } from './build-unit-pages.mjs';
 
 export const BAND_CHIPS = {
   pre: { label: 'Pre-Band I', cls: 'chip-pre' },
@@ -89,8 +89,8 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
   const topics = band1Topics({ WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE });
   const covered = topics.reduce((n, t) => n + t.bandCount, 0);
   const footerNote = 'רשימת Band I היא של משרד החינוך. האתר אינו מטעם משרד החינוך: אנחנו רק מסמנים אילו מהמילים שלנו נמצאות ב-Band I — הרשימה עצמה אינה מועתקת לכאן.';
-  const legend = `<p class="aligned">כל מילה מסומנת לפי הרמה שלה ברשימת Band I של משרד החינוך:
-        <span class="chip chip-pre">Pre-Band I</span> <span class="chip chip-c1">Band I · Core I</span> <span class="chip chip-c2">Band I · Core II</span>.
+  const legend = `<p class="aligned">כל מילה מסומנת לפי הרמה שלה ברשימת <bdi lang="en" dir="ltr">Band I</bdi> של משרד החינוך:
+        <span class="chip chip-pre" lang="en" dir="ltr">Pre-Band I</span> <span class="chip chip-c1" lang="en" dir="ltr">Band I · Core I</span> <span class="chip chip-c2" lang="en" dir="ltr">Band I · Core II</span>.
         מילים עם <span class="chip chip-extra">בונוס · מחוץ לרשימה</span> הן תוספת שלנו מאותו נושא.</p>`;
 
   topics.forEach((t, ti) => {
@@ -107,7 +107,7 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
       title: `מילים באנגלית Band I: ${name} — עם הגייה, תמונה ותרגום`,
       description: `${t.bandCount} מילים מתוך Band I בנושא ${name}, עם תמונה, הגייה באנגלית, תרגום לעברית ומשפט לדוגמה — ${sample}… ותרגול, הכתבה ודפי פעילות. חינם.`,
       crumbItems: [['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/'], [name, path]],
-      navHtml: `<a href="/he/">עברית</a> › <a href="/band-1/"><span lang="en" dir="ltr">Band I</span> לפי נושאים</a> › ${escapeHtml(name)}`,
+      navHtml: `<a href="/he/">עברית</a> › <a href="/band-1/"><span lang="en" dir="ltr">Band I</span> לפי נושאים</a> › ${heBidi(name)}`,
       h1Html: `מילים באנגלית <span lang="en" dir="ltr">Band I</span>: ${escapeHtml(t.he)}`,
       answer: `${t.bandCount} מילים מרשימת Band I בנושא ${name}, כל אחת עם תמונה, הגייה, תרגום ומשפט לדוגמה, ועוד ${t.words.length - t.bandCount} מילות בונוס מחוץ לרשימה. לוחצים על כפתור ההשמעה כדי לשמוע, ומתרגלים למטה.`,
       listHeading: `המילים בנושא ${name}`,
@@ -132,7 +132,7 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
   const dir = join(distDir, 'band-1');
   mkdirSync(dir, { recursive: true });
   const cards = topics.map((t) => `
-        <a class="unit-card" href="/band-1/${t.slug}/"><strong>${escapeHtml(t.short || t.he)}</strong><span>${t.bandCount} מילים מתוך <span lang="en" dir="ltr">Band I</span> · <span lang="en" dir="ltr">${escapeHtml(t.words.filter((w) => w.tag !== 'extra').slice(0, 4).map((w) => w.en).join(', '))}</span>…</span></a>`).join('');
+        <a class="unit-card" href="/band-1/${t.slug}/"><strong>${heBidi(t.short || t.he)}</strong><span>${t.bandCount} מילים מתוך ${ltrRun('Band I')} · ${heBidi(t.words.filter((w) => w.tag !== 'extra').slice(0, 4).map((w) => w.en).join(', ') + '…')}</span></a>`).join('');
   writePage(join(dir, 'index.html'), kit.shell({
     path, test: false, footerNote,
     title: 'Band I באנגלית לפי נושאים — מילים עם הגייה, תמונה ותרגום לעברית',
@@ -149,7 +149,7 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
   <header class="hero"><h1>מילים באנגלית <span lang="en" dir="ltr">Band I</span> לפי נושאים</h1>
     <p class="answer">${covered} מילים מרשימת <span lang="en" dir="ltr">Band I</span> של משרד החינוך, עם תמונה, הגייה, תרגום ותרגול, מסודרות לפי ${topics.length} נושאים. בכל נושא נוספו גם כמה מילות בונוס מחוץ לרשימה, מסומנות.</p></header>
   <main class="container"><section class="section">
-  <p class="center"><a class="cta" href="/band-1/review/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-backpack"/></svg> מסלול חזרה: כל Band I ב-${PATH_SETS} סטים קצרים ←</a></p>
+  <p class="center"><a class="cta" href="/band-1/review/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-backpack"/></svg> מסלול חזרה: כל ${ltrRun('Band I')} ב-${PATH_SETS} סטים קצרים ←</a></p>
   <p class="center"><a class="cta" href="/band-1/reading/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-book-open"/></svg> קטעי קריאה קצרים עם הקראה ושאלות ←</a></p>
   <div class="unit-grid">${cards}
   </div>
@@ -195,7 +195,7 @@ function buildReviewPath({ distDir, writePage, escapeHtml, kit, footerNote, lege
   }
 
   const cards = sets.map((s) => `
-        <a class="unit-card step-card" href="${hubPath}set-${s.n}/" data-step-card="${s.n}"><strong>סט ${s.n}<span class="step-done" aria-hidden="true"> <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-check"/></svg></span></strong><span>${escapeHtml(s.he)} · ${s.bandCount} מילים · <span lang="en" dir="ltr">${escapeHtml(s.words.slice(0, 3).map((w) => w.en).join(', '))}</span>…</span></a>`).join('');
+        <a class="unit-card step-card" href="${hubPath}set-${s.n}/" data-step-card="${s.n}"><strong>סט ${s.n}<span class="step-done" aria-hidden="true"> <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-check"/></svg></span></strong><span>${heBidi(s.he)} · ${s.bandCount} מילים · ${heBidi(s.words.slice(0, 3).map((w) => w.en).join(', ') + '…')}</span></a>`).join('');
   writePage(join(distDir, 'band-1', 'review', 'index.html'), kit.shell({
     path: hubPath, test: false, footerNote,
     title: `חזרה על Band I לפני חטיבת הביניים — ${sets.length} סטים קצרים עם הגייה ותרגול`,

@@ -20,6 +20,25 @@ import { join } from 'path';
 import { mkdirSync } from 'fs';
 
 export const audioKey = (en) => en.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
+
+// Bidi for Hebrew pages (triage 11-08: "cat, dog, ועוד" / "…milk" garbled on the Band I review
+// and unit pages). heBidi(text) escapes plain text and wraps each English run — words, with the
+// spaces, commas, colons, slashes, digits and a trailing "…" between them — in an LTR isolate,
+// so the run keeps its order and its ellipsis inside a Hebrew line. Text only, never markup.
+const escText = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+// A digit joins the run only straight after a space ("Unit 1"), so "Band I · 14 מילים" splits.
+const LATIN_RUN = /[A-Za-z](?:[A-Za-z0-9'’\-]|[ ,.:·/&+](?=[ ,.:·/&+]*[A-Za-z])| (?=\d))*(?:…|\.\.\.)?/g;
+export const ltrRun = (html) => `<bdi lang="en" dir="ltr">${html}</bdi>`;
+export function heBidi(text) {
+  const s = String(text);
+  let out = '', at = 0;
+  for (const m of s.matchAll(LATIN_RUN)) {
+    out += escText(s.slice(at, m.index)) + ltrRun(escText(m[0]));
+    at = m.index + m[0].length;
+  }
+  return out + escText(s.slice(at));
+}
+const chipAttrs = (label) => (/[֐-׿]/.test(label) ? 'lang="he" dir="rtl"' : 'lang="en" dir="ltr"');
 // Deterministic so a rebuild doesn't reshuffle every page's options.
 const hashOf = (s) => [...s].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 
@@ -132,7 +151,7 @@ ${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join(
 ${body}
   <footer class="footer">
     <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/he/">עברית</a> &middot; <a href="/about/">אודות</a> &middot; <a href="/privacy">פרטיות</a>
-    ${footerNote ? `<p class="not-affiliated">${escapeHtml(footerNote)}</p>` : ''}
+    ${footerNote ? `<p class="not-affiliated">${heBidi(footerNote)}</p>` : ''}
   </footer>
 </body>
 </html>`;
@@ -161,7 +180,7 @@ ${body}
     const rows = items.map((it) => `
           <tr>
             <td class="col-img">${it.img ? `<img src="${it.img}" alt="${escapeHtml(it.en)}" width="56" height="56" loading="lazy" />` : ''}</td>
-            <td class="col-en" lang="en" dir="ltr">${escapeHtml(it.en)}${it.chip ? ` <span class="chip ${it.chip.cls}" lang="he" dir="rtl">${escapeHtml(it.chip.label)}</span>` : ''}${it.ex ? `<span class="ex">${escapeHtml(it.ex)}${sentenceAudio(it.ex) ? ` <button type="button" class="say say-ex" data-say="${sentenceAudio(it.ex)}" aria-label="השמעת המשפט"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>` : ''}</span>` : ''}</td>
+            <td class="col-en" lang="en" dir="ltr">${escapeHtml(it.en)}${it.chip ? ` <span class="chip ${it.chip.cls}" ${chipAttrs(it.chip.label)}>${escapeHtml(it.chip.label)}</span>` : ''}${it.ex ? `<span class="ex">${escapeHtml(it.ex)}${sentenceAudio(it.ex) ? ` <button type="button" class="say say-ex" data-say="${sentenceAudio(it.ex)}" aria-label="השמעת המשפט"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>` : ''}</span>` : ''}</td>
             <td class="col-say"><button type="button" class="say" data-say="${it.audio}" aria-label="השמעה: ${escapeHtml(it.en)}"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button></td>
             <td class="col-he">${escapeHtml(it.he)}</td>
           </tr>`).join('');
@@ -177,16 +196,16 @@ ${body}
   <nav class="breadcrumb" aria-label="breadcrumb">${navHtml}</nav>
   <header class="hero">
     <h1>${h1Html}</h1>
-    <p class="answer">${escapeHtml(answer)}</p>
+    <p class="answer">${heBidi(answer)}</p>
     <p class="jump-row"><a class="jump-btn" href="#practice-h"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> תרגול</a></p>
     ${pin ? `<p class="pin-row"><button type="button" class="pin-btn" data-pin-unit="${path}" data-pin-name="${escapeHtml(pin)}" aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-pin"/></svg> זו היחידה שלנו השבוע</button></p>
     <p class="pin-hint" hidden>נשמר במכשיר הזה: האפליקציה תיפתח עם כרטיס ליחידה הזו.</p>` : ''}
   </header>
   <main class="container">
     <section class="section" aria-labelledby="words-h">
-      <h2 id="words-h" class="section-title">${escapeHtml(listHeading)}</h2>
+      <h2 id="words-h" class="section-title">${heBidi(listHeading)}</h2>
       <table class="words">
-        <thead><tr><th scope="col"><span class="sr">תמונה</span></th><th scope="col">English</th><th scope="col"><span class="sr">השמעה</span></th><th scope="col">עברית</th></tr></thead>
+        <thead><tr><th scope="col"><span class="sr">תמונה</span></th><th scope="col"><bdi lang="en" dir="ltr">English</bdi></th><th scope="col"><span class="sr">השמעה</span></th><th scope="col">עברית</th></tr></thead>
         <tbody>${rows}
         </tbody>
       </table>
@@ -223,17 +242,17 @@ ${body}
       <p class="center"><a href="${battleHref.replace('/battle/', '/projector/')}&amp;lang=he"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-projector"/></svg> או בלי מכשירים: מצב מקרן, כל הכיתה עונה יחד בקול</a></p>` : ''}
       <p class="center">
         <a class="share-btn" href="https://wa.me/?text=${shareText}%20${pageUrl}" target="_blank" rel="noopener">שליחה בוואטסאפ</a>
-        <a class="share-btn" href="https://classroom.google.com/share?url=${pageUrl}" target="_blank" rel="noopener">שיתוף ב-Google Classroom</a>
-        <a class="share-btn" href="https://teams.microsoft.com/share?href=${pageUrl}&amp;msgText=${shareText}" target="_blank" rel="noopener">שיתוף ב-Teams</a>
+        <a class="share-btn" href="https://classroom.google.com/share?url=${pageUrl}" target="_blank" rel="noopener">שיתוף ב-${ltrRun('Google Classroom')}</a>
+        <a class="share-btn" href="https://teams.microsoft.com/share?href=${pageUrl}&amp;msgText=${shareText}" target="_blank" rel="noopener">שיתוף ב-${ltrRun('Teams')}</a>
         <button type="button" class="share-btn" data-copy="${SITE}${path}">העתקת קישור</button>
         <button type="button" class="share-btn" data-copy-list><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-clipboard-list"/></svg> העתקת הרשימה (אנגלית ⇥ עברית)</button>
       </p>
-      <p class="center sheet-hint">"העתקת הרשימה" מעתיקה את המילים בשתי עמודות (אנגלית, עברית) — מדביקים ב-Google Sheets, ב-Excel, או ב-Quizlet ובכלים דומים דרך "ייבוא".</p>
+      <p class="center sheet-hint">${heBidi('"העתקת הרשימה" מעתיקה את המילים בשתי עמודות (אנגלית, עברית) — מדביקים ב-Google Sheets, ב-Excel, או ב-Quizlet ובכלים דומים דרך "ייבוא".')}</p>
     </section>
     <section class="section" aria-labelledby="faq-h">
       <h2 id="faq-h" class="section-title">שאלות נפוצות</h2>
       <div class="faq">${faqPairs.map(([q, a]) => `
-        <div class="faq-item"><h3>${escapeHtml(q)}</h3><p>${escapeHtml(a)}</p></div>`).join('')}
+        <div class="faq-item"><h3>${heBidi(q)}</h3><p>${heBidi(a)}</p></div>`).join('')}
       </div>
     </section>
     <p class="center more"><a class="cta" href="/new-player?lang=he&amp;utm_source=seo&amp;${ctaUtm}">עוד מילים ומשחקים באפליקציה ←</a></p>
@@ -296,7 +315,7 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
       title: `${fullName} – מילים באנגלית עם הגייה, תרגום ומשחקים`,
       description: `כל ${u.words.length} המילים של ${unitName}: הגייה באנגלית, תרגום לעברית ומשחקי תרגול — ${sample}… חינם, בלי הרשמה.`,
       crumbItems: [['עברית', '/he/'], ['יחידות לימוד', '/units/'], [book.name, `/units/${u.book}/`], [`Unit ${u.unit}`, path]],
-      navHtml: `<a href="/he/">עברית</a> › <a href="/units/">יחידות לימוד</a> › <a href="/units/${u.book}/">${escapeHtml(book.name)}</a> › Unit ${u.unit}`,
+      navHtml: `<a href="/he/">עברית</a> › <a href="/units/">יחידות לימוד</a> › <a href="/units/${u.book}/">${heBidi(book.name)}</a> › ${ltrRun(`Unit ${u.unit}`)}`,
       h1Html: `<span lang="en" dir="ltr">${escapeHtml(fullName)}</span> – מילים באנגלית עם הגייה, תרגום ומשחקים`,
       answer: `כל ${u.words.length} המילים של היחידה עם הגייה באנגלית ותרגום לעברית${u.grade ? ` (כיתה ${u.grade})` : ''}. לוחצים על כפתור ההשמעה כדי לשמוע, ואז מתרגלים למטה.`,
       listHeading: 'המילים של היחידה',
@@ -328,14 +347,14 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
     const title = `${book.name} – מילים באנגלית לכל יחידה, עם הגייה ותרגום`;
     const description = `רשימות המילים של ${book.name} לפי יחידות, עם הגייה באנגלית, תרגום לעברית ומשחקי תרגול. חינם, בלי הרשמה.`;
     const list = units.map((u) => `
-        <a class="unit-card" href="/units/${b}/unit-${u.unit}/"><strong lang="en" dir="ltr">Unit ${u.unit}${u.title ? `: ${escapeHtml(u.title)}` : ''}</strong><span>${u.words.length} מילים · ${escapeHtml(u.words.slice(0, 4).map((w) => w.en).join(', '))}…</span></a>`).join('');
+        <a class="unit-card" href="/units/${b}/unit-${u.unit}/"><strong lang="en" dir="ltr">Unit ${u.unit}${u.title ? `: ${escapeHtml(u.title)}` : ''}</strong><span>${u.words.length} מילים · ${heBidi(u.words.slice(0, 4).map((w) => w.en).join(', ') + '…')}</span></a>`).join('');
     const dir = join(distDir, 'units', b);
     mkdirSync(dir, { recursive: true });
     writePage(join(dir, 'index.html'), shell({
       path, title, description, test,
       schemas: [crumbs([['עברית', '/he/'], ['יחידות לימוד', '/units/'], [book.name, path]])],
       body: `
-  <nav class="breadcrumb" aria-label="breadcrumb"><a href="/he/">עברית</a> › <a href="/units/">יחידות לימוד</a> › ${escapeHtml(book.name)}</nav>
+  <nav class="breadcrumb" aria-label="breadcrumb"><a href="/he/">עברית</a> › <a href="/units/">יחידות לימוד</a> › ${heBidi(book.name)}</nav>
   <header class="hero"><h1><span lang="en" dir="ltr">${escapeHtml(book.name)}</span> – מילים באנגלית לכל יחידה</h1>
     <p class="answer">בחרו יחידה כדי לשמוע את המילים, לראות את התרגום ולתרגל.</p></header>
   <main class="container"><section class="section"><div class="unit-grid">${list}
