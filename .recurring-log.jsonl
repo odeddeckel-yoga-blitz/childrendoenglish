@@ -31,3 +31,4 @@
 {"id":"deploy-smoke","at":"2026-11-07T11:11:20.170Z","result":"ok","note":"11-07 10:58Z push (8f5bb02): smoke 11/11; live /privacy + /terms open the pages; spotlight card = spelling-forge (committed pick); say-btn min-height live"}
 {"id":"deploy-smoke","at":"2026-11-07T14:52:14.609Z","result":"ok","note":"11-07 14:25Z push dccfa9b (games wave 1 + owner picks + style gate): smoke 11/11; all 5 new games start live with 0 errors; 7 URLs pinged Google+IndexNow. CI cancelled at the 25-min job limit (suite grew) → workers 2 on CI, ships next push"}
 {"id":"deploy-smoke","at":"2026-11-08T00:04:27.880Z","result":"ok","note":"00:02Z push 98eac60 (CI fix, 8 number words, wave-2 brief): smoke 11 pass/0 fail; seventy.webp live; /he/ 200"}
+{"id":"deploy-smoke","at":"2026-11-08T05:18:10.000Z","result":"ok","note":"05:15Z push 44e430e (Picture Bingo class-mode fit for Linux/Android fonts): smoke 11 pass/0 fail; fix live on /games/picture-bingo/"}
