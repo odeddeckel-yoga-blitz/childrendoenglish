@@ -762,6 +762,12 @@ export const WORDS = [
   { id: 'speaker', word: 'speaker', level: 'intermediate', partOfSpeech: 'noun', category: 'everyday', definition: 'A box that plays music and sounds out loud', exampleSentence: 'Turn up the music on the speaker.', phonetic: '/ˈspiːkər/', hebrewTranslation: 'רמקול', imageUrl: '/images/speaker.webp' },
   { id: 'stadium', word: 'stadium', level: 'intermediate', partOfSpeech: 'noun', category: 'sports', definition: 'A huge place with many seats where people watch sports', exampleSentence: 'We watched a football match at the stadium.', phonetic: '/ˈsteɪdiəm/', hebrewTranslation: 'אצטדיון', imageUrl: '/images/stadium.webp' },
   { id: 'storm', word: 'storm', level: 'intermediate', partOfSpeech: 'noun', category: 'nature', definition: 'Very bad weather with strong wind, rain and lightning', exampleSentence: 'The storm was very loud last night.', phonetic: '/stɔːrm/', hebrewTranslation: 'סערה', imageUrl: '/images/storm.webp' },
+  // round 2 (owner picks 11-08): four Pixabay photos + a drawn circle (scripts/generate-illustrations.mjs)
+  { id: 'cereal', word: 'cereal', level: 'intermediate', partOfSpeech: 'noun', category: 'food', definition: 'Small dry pieces of grain you eat with milk for breakfast', exampleSentence: 'I eat cereal with milk every morning.', phonetic: '/ˈsɪriəl/', hebrewTranslation: 'דגני בוקר', imageUrl: '/images/cereal.webp' },
+  { id: 'circle', word: 'circle', level: 'beginner', partOfSpeech: 'noun', category: 'everyday', definition: 'A round shape, like the letter O', exampleSentence: 'Draw a circle on the paper.', phonetic: '/ˈsɜːrkəl/', hebrewTranslation: 'עיגול', imageUrl: '/images/circle.webp' },
+  { id: 'rock', word: 'rock', level: 'beginner', partOfSpeech: 'noun', category: 'nature', definition: 'A big hard piece of stone', exampleSentence: 'We sat on a big rock.', phonetic: '/rɑːk/', hebrewTranslation: 'סלע', imageUrl: '/images/rock.webp' },
+  { id: 'shower', word: 'shower', level: 'beginner', partOfSpeech: 'noun', category: 'home', definition: 'Water that comes down from above to wash your body', exampleSentence: 'I take a shower after football.', phonetic: '/ˈʃaʊər/', hebrewTranslation: 'מקלחת', imageUrl: '/images/shower.webp' },
+  { id: 'wave', word: 'wave', level: 'intermediate', partOfSpeech: 'noun', category: 'nature', definition: 'A line of water that rises and moves across the sea', exampleSentence: 'A big wave hit the beach.', phonetic: '/weɪv/', hebrewTranslation: 'גל', imageUrl: '/images/wave.webp' },
 ];
 
 export const CATEGORIES = [
@@ -788,7 +794,7 @@ export const getWordByName = (name) => WORD_NAME_MAP.get(name?.toLowerCase());
 export const CONFUSABLE_PAIRS = [
   // 1,000-word batch 1 (11-07): -teen and -ty sound alike to a beginner
   // batch 1 photo words (11-08): flour/flower sound the same; a storm photo shows rain, a speaker looks like a radio, a plant like a flower
-  ['flour', 'flower'], ['storm', 'rain'], ['speaker', 'radio'], ['plant', 'flower'], ['plant', 'tree'], ['path', 'forest'], ['cage', 'bird'], ['cage', 'parrot'], ['fly', 'bee'], ['fly', 'insect'], ['city', 'street'], ['snow', 'ice'], ['pyramid', 'desert'], ['pyramid', 'camel'],
+  ['flour', 'flower'], ['storm', 'rain'], ['speaker', 'radio'], ['plant', 'flower'], ['plant', 'tree'], ['path', 'forest'], ['cage', 'bird'], ['cage', 'parrot'], ['fly', 'bee'], ['fly', 'insect'], ['city', 'street'], ['snow', 'ice'], ['pyramid', 'desert'], ['pyramid', 'camel'], ['rock', 'mountain'], ['wave', 'ocean'], ['wave', 'beach'], ['shower', 'bathtub'], ['circle', 'ball'], ['circle', 'ring'], ['circle', 'moon'], ['cereal', 'milk'],
   ['thirteen', 'thirty'], ['fourteen', 'forty'], ['fifteen', 'fifty'], ['sixteen', 'sixty'], ['seventeen', 'seventy'], ['eighteen', 'eighty'], ['nineteen', 'ninety'],
   ['snail', 'seashell'], ['snail', 'worm'], ['toaster', 'kettle'], ['toaster', 'bread'],
   ['jam', 'jelly'], ['cap', 'hat'], ['stairs', 'staircase'], ['purple', 'violet'],

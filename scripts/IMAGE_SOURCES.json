@@ -658,6 +658,14 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
   "match": 0.974
  },
+ "cereal": {
+  "source": "pixabay",
+  "title": "corn flakes, milk, berry, blueberries, black currants, garden, bio, vegan, vegetarian, almond milk, spelt, oats, rice milk, soy, food, meal, dessert, healthy, dairy product, fruit, vitamins, low in calories, cereal, nature, diet, sugar-free, fructose, diabetes, grain, breakfast, break, low carb, detox, cereal bowl, fresh, fruit salad",
+  "url": "https://pixabay.com/photos/corn-flakes-milk-berry-blueberries-2546097/",
+  "author": "silviarita",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "chair": {
   "source": "wikimedia-commons",
   "title": "File:Fauteuil Riviera Chaise Bleue Neptune SBR.jpg",
@@ -2954,6 +2962,14 @@
   "licence": "MIT",
   "licenceUrl": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
  },
+ "rock": {
+  "source": "pixabay",
+  "title": "stone, boulder, individually, alone, boulder, boulder, boulder, boulder, boulder",
+  "url": "https://pixabay.com/photos/stone-boulder-individually-alone-237255/",
+  "author": "Kapa65",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "rocket": {
   "source": "unknown",
   "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
@@ -3185,6 +3201,14 @@
   "licence": "CC BY-SA 3.0",
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
   "match": 0.992
+ },
+ "shower": {
+  "source": "pixabay",
+  "title": "shower, water, wet, bathroom, stream, wash, pouring, nature, brown water, brown bathroom, brown shower",
+  "url": "https://pixabay.com/photos/shower-water-wet-bathroom-stream-653671/",
+  "author": "kboyd",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "shy": {
   "source": "twemoji",
@@ -3870,6 +3894,14 @@
   "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
   "match": 0.881
  },
+ "wave": {
+  "source": "pixabay",
+  "title": "big waves, surfers, nature, indonesia, ocean, sea, wave, surfing, seascape, surf, water, blue water, blue sea, blue waves",
+  "url": "https://pixabay.com/photos/big-waves-surfers-indonesia-ocean-2193828/",
+  "author": "Kanenori",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
  "whale": {
   "source": "wikimedia-commons",
   "title": "File:Mother and baby sperm whale.jpg",
@@ -4049,5 +4081,9 @@
   "author": "Tony Hisgett from Birmingham, UK",
   "licence": "CC BY 2.0",
   "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+ },
+ "circle": {
+  "source": "own",
+  "licence": "own work"
  }
 }

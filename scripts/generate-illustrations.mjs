@@ -798,6 +798,13 @@ const ILLUSTRATIONS = {
       fill="none" stroke="#2B6CB0" stroke-width="30" stroke-linejoin="miter" stroke-linecap="round"/>
   </svg>`,
 
+  // circle: owner chose a plain drawn circle over photos (11-08, Pixabay round 2); a ring, not a
+  // filled disc, so it can't read as ball/dot. Same line weight and colours as zigzag.
+  circle: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
+    ${bgRect('#FEFCBF')}
+    <circle cx="256" cy="256" r="160" fill="none" stroke="#2B6CB0" stroke-width="30"/>
+  </svg>`,
+
   unicycle: `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512">
     ${bgRect('#E0F2FE')}
     <!-- seat post + saddle -->

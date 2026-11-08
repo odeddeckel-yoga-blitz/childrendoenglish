@@ -586,4 +586,9 @@ export default {
   'speaker': 'altavoz',
   'stadium': 'estadio',
   'storm': 'tormenta',
+  'cereal': 'cereales',
+  'circle': 'círculo',
+  'rock': 'roca',
+  'shower': 'ducha',
+  'wave': 'ola',
 };

@@ -6,4 +6,5 @@ export const PAGES_HOLD = new Set([
   'thirteen', 'fourteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'seventy', 'eighty',
   // batch 1 photo words (owner picks 11-08, Pixabay)
   'bottle', 'bridge', 'cage', 'castle', 'cinema', 'city', 'cloud', 'farm', 'flour', 'fly', 'golf', 'mechanic', 'paper', 'path', 'plant', 'pyramid', 'snow', 'speaker', 'stadium', 'storm',
+  'cereal', 'circle', 'rock', 'shower', 'wave',
 ]);
