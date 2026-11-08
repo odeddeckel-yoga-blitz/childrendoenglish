@@ -63,6 +63,54 @@ export function controlsSummary(rows) {
   }));
 }
 
+// Static-page depth (measure step 2, 11-08): the page key (pg's item) → page type, the unit the layout work is judged by.
+export const DEPTH_SINCE = '2026-11-08';
+export function pageType(key) {
+  if (key === 'vocabulary_word') return 'word';
+  if (/^vocabulary_ages-/.test(key)) return 'age';
+  if (/^vocabulary_[^_]+_(hebrew|spanish)$/.test(key)) return 'bilingual';
+  if (/^vocabulary(_[^_]+)?$/.test(key)) return 'category';
+  if (/^printable-flashcards(_(hebrew|spanish))?$/.test(key)) return 'printable-index';
+  if (/^printable-flashcards_/.test(key)) return 'printable';
+  if (key === 'tools_flashcard-maker') return 'maker';
+  if (/^((he|es)_)?(for-)?teachers(_|$)/.test(key)) return 'teachers';
+  if (/^guides(_|$)/.test(key)) return 'guide';
+  if (/^units(_|$)/.test(key)) return 'unit';
+  if (/^band-1(_|$)/.test(key)) return 'band1';
+  if (key === 'games') return 'games-hub';
+  if (/^games_/.test(key)) return 'game';
+  if (/^he(_|$)/.test(key)) return 'he-pages';
+  if (/^es(_|$)/.test(key)) return 'es-pages';
+  return 'other';
+}
+const DEPTH_EVS = ['pg', 'cta', 'mq', 'mqv', 's15', 'prc', 'bpr', 'fmb'];
+// rows: {item, ev, lang, n} → one line per page type × interface language, each rate ÷ that line's page views (pg).
+export function pageDepthSummary(rows) {
+  const by = {};
+  for (const r of rows) {
+    if (!DEPTH_EVS.includes(r.ev)) continue;
+    const k = `${pageType(r.item)}|${r.lang || 'en'}`;
+    const o = (by[k] ||= Object.fromEntries(DEPTH_EVS.map((e) => [e, 0])));
+    o[r.ev] += r.n;
+  }
+  return Object.entries(by).map(([k, v]) => { const [type, lang] = k.split('|'); return { type, lang, ...v }; })
+    .sort((a, b) => b.pg - a.pg);
+}
+export function printPageDepth(rows, minViews = 10) {
+  const lines = pageDepthSummary(rows).filter((x) => x.pg >= minViews);
+  console.log(`\n— static pages by type: depth (÷ views; depth tallies from ${DEPTH_SINCE}, views ≥ ${minViews}) —`);
+  console.log('  stayed15 = visible 15 s · quiz-seen = mini-quiz ≥50% on screen · print = print button · dialog = beforeprint · build = maker Build');
+  if (!lines.length) { console.log('  no page views yet'); return lines; }
+  const c = (a, b) => pct(a, b).padStart(4);
+  for (const x of lines) {
+    const extra = [x.mqv || x.mq ? `quiz-seen ${c(x.mqv, x.pg)}  quiz-tap ${c(x.mq, x.pg)}` : '',
+      x.prc || x.bpr || /printable|maker/.test(x.type) ? `print ${c(x.prc, x.pg)}  dialog ${c(x.bpr, x.pg)}` : '',
+      x.type === 'maker' ? `build ${c(x.fmb, x.pg)}` : ''].filter(Boolean).join('  ');
+    console.log(`  ${(x.type + ' ' + x.lang).padEnd(20)} views ${String(x.pg).padStart(5)}  stayed15 ${c(x.s15, x.pg)}  play-click ${c(x.cta, x.pg)}  ${extra}`);
+  }
+  return lines;
+}
+
 export async function standingSections(q, days) {
   const since = `GREATEST(CURRENT_DATE - ${Number(days)}, DATE '${SECTIONS_SINCE}')`;
   const learn = await q.query(`SELECT ev, item, sum(n)::int AS n FROM cde_learn WHERE day >= ${since}

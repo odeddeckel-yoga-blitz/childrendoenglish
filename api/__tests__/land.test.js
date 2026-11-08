@@ -146,3 +146,32 @@ describe('api/land component clicks (kit infra/kpi)', () => {
     expect(calls.filter((c) => /INSERT INTO component_daily/.test(c.sql))).toHaveLength(1);
   });
 });
+
+describe('api/land static-page depth events (measure step 2, 11-08)', () => {
+  let handler;
+  beforeEach(async () => {
+    vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    ({ default: handler } = await import('../land.js'));
+    calls.length = 0;
+  });
+
+  it('records mqv/s15/prc/bpr/fmb with a page key and drops other item shapes', async () => {
+    const good = [{ e: 'mqv', i: 'vocabulary_word' }, { e: 's15', i: 'vocabulary_word' }, { e: 's15', i: 'printable-flashcards_animals_spanish' },
+      { e: 'prc', i: 'printable-flashcards_animals' }, { e: 'bpr', i: 'tools_flashcard-maker' }, { e: 'fmb', i: 'tools_flashcard-maker' },
+      { e: 'prc', i: 'tools_flashcard-maker' }];
+    const bad = [{ e: 'mqv', i: 'cat@img' }, { e: 's15', i: 'Vocabulary_Word' }, { e: 'fmb', i: '' }];
+    const r = res(); await handler({ method: 'POST', body: { batch: [...good, ...bad], l: 'es' } }, r);
+    expect(r.code).toBe(204);
+    const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
+    expect(written.sort()).toEqual(good.map((x) => `${x.e}:${x.i}`).sort());
+  });
+
+  it('counts a landing on the reserved teachers page class, not on an unknown one', async () => {
+    await handler({ method: 'POST', body: { g: 'teachers', s: 'seo', l: 'he' } }, res());
+    await handler({ method: 'POST', body: { g: 'parents', s: 'seo', l: 'he' } }, res());
+    const landed = calls.filter((c) => /INSERT INTO cde_land/i.test(c.sql)).map((c) => c.values[0]);
+    expect(landed).toEqual(['teachers']);
+  });
+});

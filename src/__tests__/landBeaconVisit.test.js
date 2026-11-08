@@ -9,10 +9,20 @@ const pad = (n) => String(n).padStart(2, '0');
 const ymd = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 const daysAgo = (n) => { const d = new Date(); d.setDate(d.getDate() - n); return ymd(d); };
 
+// Every listener a beacon load adds is removed after each test, so one test's page never answers another's events.
+const LISTENERS = [];
+function exec() {
+  const wrap = (t) => { const orig = t.addEventListener; t.addEventListener = function (...a) { LISTENERS.push([t, ...a]); return orig.apply(this, a); }; return () => { t.addEventListener = orig; }; };
+  const undo = [wrap(document), wrap(window)];
+  delete window.__cdeLand; // each test is a fresh page load
+  try { new Function(SRC)(); } finally { undo.forEach((u) => u()); }
+}
+afterEach(() => { for (const [t, type, fn, opt] of LISTENERS.splice(0)) t.removeEventListener(type, fn, opt); });
+
 function run() {
   const sent = [];
   navigator.sendBeacon = vi.fn((url, body) => { sent.push(JSON.parse(body)); return true; });
-  new Function(SRC)();
+  exec();
   return sent.filter((b) => b.batch).map((b) => b.batch[0]);
 }
 const visits = () => run().filter((x) => x.e === 'vis');
@@ -54,7 +64,7 @@ describe('land-beacon per-page play clicks', () => {
     document.body.innerHTML = html;
     const add = vi.spyOn(document, 'addEventListener');
     const sent = run();
-    handler = add.mock.calls.filter((c) => c[0] === 'click').map((c) => c[1]).at(-1);
+    handler = add.mock.calls.filter((c) => c[0] === 'click').map((c) => c[1])[0]; // the play-click listener (the depth one follows it)
     add.mockRestore();
     return sent;
   }
@@ -96,17 +106,12 @@ describe('land-beacon AI attribution', () => {
     Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => state });
     const sent = [];
     navigator.sendBeacon = vi.fn((url, body) => { sent.push(JSON.parse(body)); return true; });
-    const add = vi.spyOn(document, 'addEventListener');
-    new Function(SRC)();
-    added.push(...add.mock.calls);
-    add.mockRestore();
+    exec();
     return sent;
   }
-  const added = []; // each load's listeners — removed after the test so loads don't leak into each other
   const ai = (sent) => sent.filter((b) => b.batch && /^ai[ev]$/.test(b.batch[0].e)).map((b) => `${b.batch[0].e}_${b.batch[0].i}`);
   beforeEach(() => { vi.useFakeTimers(); state = 'visible'; });
   afterEach(() => {
-    for (const [type, fn, opt] of added.splice(0)) document.removeEventListener(type, fn, opt);
     vi.useRealTimers();
     delete document.referrer; delete document.visibilityState;
     if (ref) Object.defineProperty(Document.prototype, 'referrer', ref);
@@ -140,5 +145,135 @@ describe('land-beacon AI attribution', () => {
     expect(ai(land('https://www.phind.com/'))).toEqual(['aie_other']);
     expect(ai(land('https://www.google.com/'))).toEqual([]);
     expect(ai(land(''))).toEqual([]);
+  });
+});
+
+// Static-page depth (measure step 2, 11-08): mqv / s15 / prc / bpr / fmb, item = the page key, each once per page view
+// and only under its condition.
+describe('land-beacon page depth', () => {
+  const vis = Object.getOwnPropertyDescriptor(Document.prototype, 'visibilityState');
+  let state = 'visible', ios = [], sent = [];
+  class FakeIO {
+    constructor(cb) { this.cb = cb; this.off = false; ios.push(this); }
+    observe(el) { this.el = el; }
+    disconnect() { this.off = true; }
+    fire(ratio) { if (!this.off) this.cb([{ target: this.el, intersectionRatio: ratio, isIntersecting: ratio > 0 }]); }
+  }
+  function load(path, html = '', stored = {}) {
+    localStorage.clear();
+    for (const [k, v] of Object.entries(stored)) localStorage.setItem(k, v);
+    window.history.replaceState(null, '', path);
+    document.body.innerHTML = html;
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => state });
+    sent = [];
+    navigator.sendBeacon = vi.fn((url, body) => { sent.push(JSON.parse(body)); return true; });
+    exec();
+  }
+  // localStorage starts empty, so the first-day vis tally is sent too: it must not change the page key (11-08 hoist fix).
+  const depth = () => sent.filter((b) => b.batch).map((b) => b.batch[0]).filter((x) => /^(mqv|s15|prc|bpr|fmb)$/.test(x.e)).map((x) => `${x.e}:${x.i}`);
+  const hide = (h) => { state = h ? 'hidden' : 'visible'; document.dispatchEvent(new Event('visibilitychange')); };
+  const tap = (sel) => document.querySelector(sel).dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+  beforeEach(() => { vi.useFakeTimers(); state = 'visible'; ios = []; window.IntersectionObserver = FakeIO; });
+  afterEach(() => {
+    vi.useRealTimers();
+    delete window.IntersectionObserver;
+    delete document.visibilityState;
+    if (vis) Object.defineProperty(Document.prototype, 'visibilityState', vis);
+  });
+
+  it('mqv: once, only when the mini-quiz is ≥50% on screen while the tab is visible', () => {
+    // a first-day visitor with a stored key (no cde_seen): that key used to overwrite the page key (11-08 hoist fix)
+    load('/vocabulary/animals/dog/', '<div class="mini-quiz"><button class="mq-opt" id="o"></button></div>', { 'childrendoenglish-analytics-consent': 'declined' });
+    expect(ios).toHaveLength(1);
+    ios[0].fire(0.3);
+    expect(depth()).toEqual([]);
+    hide(true); ios[0].fire(0.8);
+    expect(depth()).toEqual([]); // on screen but the tab is hidden
+    hide(false);
+    expect(depth()).toEqual(['mqv:vocabulary_word']);
+    ios[0].fire(0.2); ios[0].fire(1); hide(true); hide(false);
+    expect(depth()).toEqual(['mqv:vocabulary_word']);
+    tap('#o');
+    expect(sent.map((b) => b.batch?.[0]).filter((x) => x?.e === 'mq')).toEqual([{ e: 'mq', i: 'vocabulary_word' }]);
+  });
+
+  it('no mini-quiz on the page → no observer, no mqv', () => {
+    load('/printable-flashcards/animals/', '<button data-print id="p">Print</button>');
+    expect(ios).toHaveLength(0);
+  });
+
+  it('s15: 15 s of VISIBLE time in total, once', () => {
+    load('/vocabulary/animals/dog/');
+    vi.advanceTimersByTime(10000);
+    hide(true); vi.advanceTimersByTime(60000);
+    expect(depth()).toEqual([]);
+    hide(false); vi.advanceTimersByTime(4900);
+    expect(depth()).toEqual([]);
+    vi.advanceTimersByTime(200);
+    expect(depth()).toEqual(['s15:vocabulary_word']);
+    hide(true); hide(false); vi.advanceTimersByTime(60000);
+    expect(depth()).toEqual(['s15:vocabulary_word']);
+  });
+
+  it('s15: a tab opened in the background starts counting only once shown', () => {
+    state = 'hidden';
+    load('/guides/learn-english-words-with-pictures/');
+    vi.advanceTimersByTime(30000);
+    expect(depth()).toEqual([]);
+    hide(false); vi.advanceTimersByTime(15000);
+    expect(depth()).toEqual(['s15:guides_learn-english-words-with-pictures']);
+  });
+
+  it('printable page: prc once per view on the print button, bpr once per print dialog, nothing for other taps', () => {
+    load('/printable-flashcards/animals/spanish/', '<button data-print><span id="p">Print</span></button><a id="x" href="/vocabulary/">x</a>');
+    tap('#x');
+    expect(depth()).toEqual([]);
+    tap('#p'); tap('#p');
+    window.dispatchEvent(new Event('beforeprint')); window.dispatchEvent(new Event('beforeprint'));
+    expect(depth()).toEqual(['prc:printable-flashcards_animals_spanish', 'bpr:printable-flashcards_animals_spanish']);
+    expect(sent.find((b) => b.batch?.[0].e === 'prc').l).toBe('es');
+  });
+
+  it('flashcard maker: fmb on Build, prc on its Print button, each once', () => {
+    load('/tools/flashcard-maker/', '<button id="fmBuild">Build</button><button id="fmPrint">Print</button>');
+    tap('#fmBuild'); tap('#fmBuild'); tap('#fmPrint'); tap('#fmPrint');
+    expect(depth()).toEqual(['fmb:tools_flashcard-maker', 'prc:tools_flashcard-maker']);
+  });
+
+  it('the SPA (#root) sends none of them', () => {
+    load('/app', '<div id="root"></div><div class="mini-quiz"></div><button data-print id="p"></button>');
+    tap('#p'); vi.advanceTimersByTime(20000); window.dispatchEvent(new Event('beforeprint'));
+    expect(ios).toHaveLength(0);
+    expect(depth()).toEqual([]);
+  });
+});
+
+describe('land-beacon run-once guard', () => {
+  it('a page that includes the beacon twice still sends one pg (the flashcard maker did, until 11-08)', () => {
+    localStorage.clear();
+    window.history.replaceState(null, '', '/tools/flashcard-maker/');
+    document.body.innerHTML = '';
+    const sent = [];
+    navigator.sendBeacon = vi.fn((url, body) => { sent.push(JSON.parse(body)); return true; });
+    exec();
+    new Function(SRC)(); // the second include: same window, no reset
+    expect(sent.filter((b) => b.batch?.[0].e === 'pg')).toHaveLength(1);
+    expect(sent.filter((b) => b.g)).toHaveLength(1);
+  });
+});
+
+describe('land-beacon page class', () => {
+  it('reserves teachers for the /teachers page (and its he/es and for- variants)', () => {
+    for (const p of ['/teachers/', '/for-teachers/', '/he/teachers/', '/es/teachers/']) {
+      localStorage.clear();
+      window.history.replaceState(null, '', p);
+      document.body.innerHTML = '';
+      const sent = [];
+      navigator.sendBeacon = vi.fn((url, body) => { sent.push(JSON.parse(body)); return true; });
+      exec();
+      expect(sent[0].g, p).toBe('teachers');
+      expect(sent.find((b) => b.batch?.[0].e === 'pg').batch[0].i, p).toMatch(/teachers$/);
+    }
   });
 });

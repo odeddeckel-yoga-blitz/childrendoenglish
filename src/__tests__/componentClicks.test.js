@@ -52,6 +52,7 @@ describe('component clicks config', () => {
     expect(tpl('/band-1/reading/')).toBe('band1-reading-hub');
     expect(tpl('/band-1/food/')).toBe('band1-topic');
     expect(tpl('/guides/best-english-learning-apps-for-kids/')).toBe('guide');
+    for (const p of ['/teachers/', '/for-teachers/', '/he/teachers/', '/es/teachers/']) expect(tpl(p), p).toBe('teachers'); // reserved 11-08
   });
 
   it('counts only navigation views in the SPA (quizzes keep the /app URL)', () => {

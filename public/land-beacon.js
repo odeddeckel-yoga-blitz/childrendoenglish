@@ -7,6 +7,8 @@
   // Page class of a path (the landing tally's page field; also the class of a referrer page for vp).
   function pageClass(path) {
     if (path === '/' || path === '') return 'home';
+    // Reserved 11-08 (measure step 2): the teacher page doesn't exist yet; its views get their own class when it ships.
+    if (/^\/((he|es)\/)?(for-)?teachers(\/|$)/.test(path)) return 'teachers';
     if (path.indexOf('/he/') === 0 || path.indexOf('/he') === 0 && path.length <= 4 || (path.indexOf('/vocabulary/') === 0 && path.indexOf('/hebrew') > -1)) return 'hebrew';
     if (path.indexOf('/es') === 0 || (path.indexOf('/vocabulary/') === 0 && path.indexOf('/spanish') > -1)) return 'spanish';
     if (path.indexOf('/units') === 0) return 'unit';
@@ -19,6 +21,9 @@
     if (/^\/(app|learn|quiz|flashcards|players|new-player|path|review|my-words|progress|badges)/.test(path)) return 'app';
     return 'other';
   }
+  // Once per page load even when a page includes this file twice (the flashcard maker did until 11-08: every tally ×2).
+  if (window.__cdeLand) return;
+  window.__cdeLand = true;
   try {
     // Owner opt-out: visiting any page once with ?internal=1 marks THIS browser
     // as internal traffic forever (localStorage write is the owner's own choice,
@@ -115,6 +120,37 @@
           var u = new URL(a.href, location.href);
           if (u.hostname.replace(/^www\./, '') === self && PLAY.test(u.pathname)) { clicked = true; send('cta'); }
         }, true);
+        /* Page depth (measure step 2, 11-08): same model and the same page key, each at most ONCE per page view.
+           mqv = the mini-quiz is >=50 % on screen while the tab is visible (seen, whether or not it is tapped);
+           s15 = the tab has been visible 15 s in total (clock paused while hidden): splits instant bounces from
+           read-and-leave; prc = a print button tapped ([data-print] on the printable sheets, #fmPrint on the
+           flashcard maker); bpr = the browser's print dialog opened (beforeprint: the button or Ctrl/Cmd+P);
+           fmb = the flashcard maker's Build button. Own scope: the names below must not hoist into the blocks around. */
+        (function () {
+          var once = {};
+          var send1 = function (e) { if (once[e]) return; once[e] = true; send(e); };
+          var shown = function () { return document.visibilityState === 'visible'; };
+          var quiz = document.querySelector('.mini-quiz');
+          if (quiz && window.IntersectionObserver) {
+            var inView = false, io = null;
+            var check = function () { if (!once.mqv && inView && shown()) { send1('mqv'); if (io) io.disconnect(); } };
+            io = new IntersectionObserver(function (es) { inView = es[es.length - 1].intersectionRatio >= 0.49; check(); }, { threshold: 0.5 });
+            io.observe(quiz);
+            document.addEventListener('visibilitychange', check);
+          }
+          var left = 15000, t0 = 0, timer = null;
+          var start = function () { if (once.s15 || timer || !shown()) return; t0 = Date.now(); timer = setTimeout(function () { timer = null; send1('s15'); }, left); };
+          var stop = function () { if (!timer) return; clearTimeout(timer); timer = null; left -= Date.now() - t0; };
+          document.addEventListener('visibilitychange', function () { if (shown()) start(); else stop(); });
+          start();
+          document.addEventListener('click', function (ev) {
+            var t = ev.target;
+            if (!t || !t.closest) return;
+            if (t.closest('[data-print], #fmPrint')) send1('prc');
+            else if (t.closest('#fmBuild')) send1('fmb');
+          }, true);
+          window.addEventListener('beforeprint', function () { send1('bpr'); });
+        })();
       }
     } catch (e) { /* never break the page */ }
     /* t1 (kit R2X7 "verified session"): once per page load, the first TRUSTED
@@ -159,8 +195,10 @@
           b = gap <= 1 ? 'r1' : gap <= 7 ? 'r2-7' : gap <= 30 ? 'r8-30' : 'r31p';
         } else {
           for (var k = 0; k < localStorage.length; k++) {
-            var key = localStorage.key(k) || '';
-            if (key.indexOf('childrendoenglish-') === 0 || key === 'cde_lang' || key === 'cde-lang-suggest-done') { b = 'rpre'; break; }
+            // lk, not key: a var named key here is the SAME variable as the page key above (function scope), and
+            // overwrote it with a storage key for every later cta/mq of a first-day visitor (fixed 11-08).
+            var lk = localStorage.key(k) || '';
+            if (lk.indexOf('childrendoenglish-') === 0 || lk === 'cde_lang' || lk === 'cde-lang-suggest-done') { b = 'rpre'; break; }
           }
         }
         localStorage.setItem('cde_seen', today);

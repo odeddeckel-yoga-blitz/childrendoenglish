@@ -41,6 +41,7 @@
  */
 import { neon } from '@neondatabase/serverless';
 import { WORDS } from '../../src/data/words.js';
+import { printPageDepth, DEPTH_SINCE } from './standing-sections.mjs';
 
 const TARGET_WRONG = 0.25; // above this wrong-rate a word is "hard"
 const FLOOR = 10;          // min attempts before we trust a word's rate
@@ -309,6 +310,12 @@ if (fcr.length > 0) {
 // each other and against untouched pages (vocabulary_<category>, guides_*).
 const pages = await q`SELECT item, ev, sum(n)::int AS n FROM cde_learn
   WHERE day >= CURRENT_DATE - ${days}::int AND ev IN ('pg', 'cta', 'mq') GROUP BY item, ev`;
+// Per page type × language (measure step 2): stayed15 · quiz-seen · print · build rates, from DEPTH_SINCE so the
+// denominator (pg) covers the same days as the depth tallies.
+const depthRows = await q`SELECT item, ev, lang, sum(n)::int AS n FROM cde_learn
+  WHERE day >= GREATEST(CURRENT_DATE - ${days}::int, ${DEPTH_SINCE}::date)
+    AND ev IN ('pg', 'cta', 'mq', 'mqv', 's15', 'prc', 'bpr', 'fmb') GROUP BY item, ev, lang`;
+printPageDepth(depthRows);
 if (pages.length > 0) {
   const by = {};
   const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '—');

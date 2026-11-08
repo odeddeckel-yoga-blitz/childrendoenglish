@@ -26,7 +26,7 @@ function openPage(url, referrer) {
   Object.defineProperty(document, 'referrer', { value: referrer, configurable: true });
   const sent = [];
   navigator.sendBeacon = vi.fn((u, body) => { sent.push(JSON.parse(body)); return true; });
-  new Function(SRC)();
+  delete window.__cdeLand; new Function(SRC)(); // each call is a fresh page load (run-once guard)
   return sent.filter((b) => b.batch).flatMap((b) => b.batch).filter((x) => ['g2', 'g3', 'hop', 'vp', 'jserr', 'rets'].includes(x.e));
 }
 
@@ -71,7 +71,7 @@ describe('land-beacon on game pages (shares the tab list with the app)', () => {
     Object.defineProperty(document, 'referrer', { value: '', configurable: true });
     const sent = [];
     navigator.sendBeacon = vi.fn((u, body) => { sent.push(JSON.parse(body)); return true; });
-    new Function(SRC)();
+    delete window.__cdeLand; new Function(SRC)();
     expect(sent.flatMap((b) => b.batch || []).filter((x) => x.e === 'vis' || x.e === 'rets'))
       .toEqual([{ e: 'vis', i: 'r2-7' }, { e: 'rets', i: 'g-sound-pairs' }]);
   });

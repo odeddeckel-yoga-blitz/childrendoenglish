@@ -2807,6 +2807,8 @@ function buildHebrewGamesTopicPage(slug) {
 // photo flashcards with the duplex-alignment wedge (mirrored back pages).
 // tool.js is generated: word data + the UNIT-TESTED sheet logic injected
 // verbatim from src/utils/flashcardSheets.js (single source of truth).
+// The page must NOT include land-beacon.js itself: writePage() adds it, and a second include ran the beacon twice
+// (every maker tally ×2 until 11-08).
 function buildFlashcardToolJs() {
   const logicSrc = readFileSync(join(ROOT, 'src', 'utils', 'flashcardSheets.js'), 'utf-8');
   const m = logicSrc.match(/\/\* flashcard-logic:start \*\/([\s\S]*?)\/\* flashcard-logic:end \*\//);
@@ -3018,7 +3020,6 @@ function buildFlashcardMakerPage() {
   </div>
 </div>
 <footer>Made by <a href="/">Children Do English</a> — free English vocabulary for kids · info@childrendoenglish.com</footer>
-<script defer src="/land-beacon.js"></script>
 <script defer src="/tools/flashcard-maker/tool.js"></script>
 </body>
 </html>`;

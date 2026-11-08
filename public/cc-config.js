@@ -14,6 +14,7 @@ export const CC_CONFIG = {
   ],
   // First match wins; one-segment routes fall back to the kit's route rule ('/' → home, '/games' → games, …).
   templates: [
+    { name: 'teachers', re: /^\/((he|es)\/)?(for-)?teachers$/ }, // reserved 11-08: the page ships later; before he-hub
     { name: 'he-games-age', re: /^\/he\/english-games\/ages-[^/]+$/ },
     { name: 'he-games-topic', re: /^\/he\/english-games\/[^/]+$/ },
     { name: 'he-words-set', re: /^\/he\/english-words\/[^/]+$/ },

@@ -7,7 +7,8 @@
 import { neon } from '@neondatabase/serverless';
 import { parseComponentBeacon, pgComponentStore } from './_lib/component-clicks-server.mjs';
 
-const PAGES = new Set(['home', 'vocab', 'hebrew', 'spanish', 'games', 'tool', 'flashcards', 'guide', 'app', 'unit', 'battle', 'other']);
+// 'teachers' is reserved (11-08): the /teachers page doesn't exist yet; land-beacon.js already classes its path.
+const PAGES = new Set(['home', 'vocab', 'hebrew', 'spanish', 'games', 'tool', 'flashcards', 'guide', 'app', 'unit', 'battle', 'teachers', 'other']);
 const LANGS_OK = new Set(['en', 'he', 'es', 'ar']);
 const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 
@@ -35,13 +36,19 @@ const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
 // ltw = Letter Twins answer per level and first letter (<bd|pb|pq|all>_<b|d|p|q>_<ok|no>) — public/games/letter-twins;
 // qr = a printed sheet's QR code scanned (item = page path key, public/print-btn.js);
 // bt = Class Battle use (create | start_p<1|2-5|6-15|16+> | join) — public/battle/battle.js.
+// mqv/s15/prc/bpr/fmb = static-page depth (measure step 2, 11-08), item = the same page key as pg, each once per
+// page view: mini-quiz >=50 % on screen while visible / visible 15 s in total / print button tapped / print dialog
+// opened (beforeprint) / flashcard-maker Build tapped — public/land-beacon.js.
 const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'g_start', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb', 'ansx', 'fcr', 'pg', 'cta', 'mq', 'bt', 'qs', 'aie', 'aiv', 'sheet', 'mp', 'cvc', 'zv', 'b1r', 'wk', 'rq_ok', 'rq_no', 'rs', 'ge', 'qr', 'ltw', 't1', 'mm_menu', 'mm_ret', 'mm_pick', 'mm_mast', 'mm_tmast', 'mm_keep', 'mm_slip', 'pb', 'oo', 'rt', 'op', 'tf', 'fe', 'sb', 'bs', 'ss',
   // Standing optimizer sections (kit 1.59 §5.55, owner 11-04): movement between activities, page class → game,
   // returning-day start surface, script errors, phone load-speed buckets. Item shapes are pinned in EV_ITEM below.
-  'g2', 'g3', 'hop', 'vp', 'rets', 'jserr', 'cwv']);
+  'g2', 'g3', 'hop', 'vp', 'rets', 'jserr', 'cwv',
+  // Static-page depth (measure step 2, 11-08): item = a page key (no @), pinned in EV_ITEM.
+  'mqv', 's15', 'prc', 'bpr', 'fmb']);
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
 const AI_ATTR_RE = /^ai[ev]_(chatgpt|perplexity|copilot|gemini|claude|other)$/; // fixed engine enum (kit spec)
 const SURF = '(g-[a-z0-9-]{1,30}|app|pg-[a-z]{1,12})';
+const PAGE_KEY = /^[a-z0-9_-]{1,40}$/; // pg's item: the page path as a key (vocabulary_word for every word page)
 const HOW = /^(ladder|menu|hub|game|app|page|ext|direct)$/;
 const EV_ITEM = {
   g2: HOW, g3: HOW,
@@ -50,6 +57,7 @@ const EV_ITEM = {
   rets: new RegExp(`^${SURF}$`),
   jserr: new RegExp(`^${SURF}$`),
   cwv: new RegExp(`^(lcp|cls|inp)_(good|ni|poor)@${SURF}$`),
+  ...Object.fromEntries(['mqv', 's15', 'prc', 'bpr', 'fmb'].map((e) => [e, PAGE_KEY])),
 };
 
 // Classify a DB failure so the function log names the REAL cause — the beacon
