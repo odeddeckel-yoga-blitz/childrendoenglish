@@ -7,7 +7,7 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 2 : undefined,   // 2 on CI (11-07): the 5 wave-1 game specs pushed one worker past the 25-min job limit
+  workers: process.env.CI ? 3 : undefined,   // CI (public repo: 4-CPU runner): 2 since 11-07; 3 since 11-08, when the wave-2 specs took 2 workers to 22.6 of the 25-min job limit
   reporter: 'html',
   use: {
     baseURL: 'http://localhost:5199',

@@ -22,7 +22,11 @@ export const SPOTLIGHT_GAMES = [
   { id: 'word-memory', name: 'Word Memory', icon: 'layers', emoji: '🃏' },
   { id: 'missing-letter', name: 'Missing Letter', icon: 'pencil', emoji: '✏️' },
   { id: 'picture-bingo', name: 'Picture Bingo', icon: 'image', emoji: '🖼️' },
-  // games wave 2 (owner 11-07)
+];
+
+// Games wave 2 (owner 11-07, live 11-08): on /games/ and last in the end card's next-game order, but NOT home
+// spotlight candidates until the wave1-judge read (11-28), so wave 1's spotlight clicks are judged on their own.
+export const HUB_ONLY_GAMES = [
   { id: 'opposites', name: 'Opposites', icon: 'repeat', emoji: '🔁' },
   { id: 'true-or-false', name: 'True or False', icon: 'circle-check', emoji: '✅' },
   { id: 'feelings', name: 'Feelings', icon: 'smile', emoji: '😊' },

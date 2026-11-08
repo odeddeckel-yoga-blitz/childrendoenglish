@@ -6,7 +6,11 @@
    child with a player, else create-player in the page language) replaces the old
    domain-name link. Game names stay English everywhere (one name per game). */
 (function(){
-  var ORDER=['beginning-sounds','sound-pairs','read-it','letter-twins','spelling-forge','word-zapper','category-conveyor','picture-bingo','simon-says','word-memory','rhyme-time','odd-one-out','opposites','feelings','missing-letter','true-or-false','sentence-builder'];
+  // Two loops, each game's next is the one after it in its own loop. Wave 2 (live 11-08) has its own loop until the
+  // wave1-judge read (11-28): that read and ladder-return (11-14) measure the older games' next-game flow, so no older
+  // game may lead into a new one yet. After 11-28, merge the loops.
+  var LOOPS=[['sound-pairs','read-it','letter-twins','spelling-forge','word-zapper','category-conveyor','picture-bingo','word-memory','rhyme-time','odd-one-out','missing-letter'],
+    ['beginning-sounds','simon-says','opposites','feelings','true-or-false','sentence-builder']];
   var NAMES={'sound-pairs':'Sound Pairs','read-it':'Read It!','letter-twins':'Letter Twins','spelling-forge':'Spelling Forge','word-zapper':'Word Zapper','category-conveyor':'Category Conveyor','picture-bingo':'Picture Bingo','word-memory':'Word Memory','rhyme-time':'Rhyme Time','odd-one-out':'Odd One Out','missing-letter':'Missing Letter','opposites':'Opposites','true-or-false':'True or False','feelings':'Feelings','sentence-builder':'Sentence Builder','beginning-sounds':'Beginning Sounds','simon-says':'Simon Says'};
   // Plain labels; the drawn icons (CDE_IC from cde-l10n.js) are added as markup next to them.
   var STR={
@@ -48,7 +52,8 @@
     if(!wrap){ wrap=document.createElement('div'); wrap.className='cde-end'; again.parentNode.insertBefore(wrap,again); }
     wrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;margin-top:6px;';
     wrap.textContent='';
-    var nid=ORDER[(ORDER.indexOf(o.game)+1)%ORDER.length];
+    var loop=LOOPS.filter(function(l){ return l.indexOf(o.game)>=0; })[0]||LOOPS[0];
+    var nid=loop[(loop.indexOf(o.game)+1)%loop.length];
     var next=document.createElement('a');
     next.className=again.className;
     next.href='/games/'+nid+'/'+(lang!=='en'?'?lang='+lang:'');

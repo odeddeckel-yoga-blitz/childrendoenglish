@@ -82,3 +82,13 @@ Head terms, for scale: "משחקי אנגלית לילדים" 10 and "english ga
 - The **Pexels/Pixabay keys** gate batches 2–5 (nouns). Opposites and Simon Says also wait on batches 6–7 and their picture style.
 - ~~Picture decision for adjective pairs~~ Decided 11-07: Fluent 3D icons.
 - ~~Blend It needs an audio spike~~ Done 11-07; the owner chose whole-word sound only, so Blend It is dropped.
+
+## 2026-11-08: released early, with guardrails (owner "go with the recommendations")
+
+All 7 games go live on /games/ (hub cards, their own URLs, sitemap). To keep the running reads clean:
+- **Spotlight:** the games are `HUB_ONLY_GAMES` in src/data/arcadeGames.js, never home spotlight candidates until the wave1-judge read (11-28).
+- **End card:** two next-game loops in public/games/end-card.js. Older games lead only to older games, unchanged, for wave1-judge (11-28) and ladder-return (11-14). The new games lead to each other.
+- **/he/ and the SEO holdout pages:** untouched. Wave 2 adds nothing to HE_ARCADE_GAMES or the title-test pages.
+- Gate: src/__tests__/wave2Hold.test.js. Lift both guardrails at read `wave2-guardrails-off` (11-28).
+- CI moved to 3 Playwright workers: with 2, the wave-2 suite ran 22.6 of 25 min.
+- The owner keeps the current pictures as the baseline (Fluent Opposites, the number pictures); revisit once the Pexels/Pixabay keys arrive.
