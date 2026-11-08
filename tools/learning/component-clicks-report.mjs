@@ -26,7 +26,20 @@ function judge (comps, minImp, bottomPct) {
 }
 
 // rows: [{tpl, route, comp, imp, clk}]; inventory: {tpl: [comp]} (optional)
+// v1.64: '_view' / '_view.tap' are per-page-view markers, not components (see noTapViews).
+export function noTapViews (rows) {
+  const out = {}
+  for (const r of rows) {
+    if (r.comp !== '_view' && r.comp !== '_view.tap') continue
+    const t = (out[r.tpl] ||= { views: 0, tapped: 0 })
+    if (r.comp === '_view') t.views += r.imp; else t.tapped += r.clk
+  }
+  for (const t of Object.values(out)) t.noTap = t.views ? +(1 - t.tapped / t.views).toFixed(3) : null
+  return out   // { tpl: { views, tapped, noTap } } — share of page views that ended with no tap at all
+}
+
 export function deadComponents (rows, inventory = {}, opts = {}) {
+  rows = rows.filter((r) => !String(r.comp).startsWith('_view'))
   const { minImp, bottomPct, urlMinTplImp } = { ...DEFAULTS, ...opts }
   const byTplComp = sumBy(rows, (r) => r.tpl + '\u0000' + r.comp)
   const tpls = new Map()

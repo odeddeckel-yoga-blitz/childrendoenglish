@@ -58,11 +58,17 @@ export function pgComponentStore (query) {
         [day, rec.tpl, rec.route, rec.items.map((x) => x[0]), rec.items.map((x) => x[1]), rec.items.map((x) => x[2])])
     },
     // Summed over the window: [{tpl, route, comp, imp, clk}] — the input of component-clicks-report.mjs.
-    async report (days = 7) {
+    // v1.65 (KDM 11-08): ORDER BY tpl cut every template after the alphabet's 20,000th row (in-game 'game-*' rows filled
+    // it, so 'home' and the listing pages came back empty). Now: optional template-prefix filter { only, skip } and the
+    // cut drops the least-seen rows, never whole templates by name.
+    async report (days = 7, { only, skip } = {}) {
       await init()
+      const where = ['day >= $1::date'], params = [since(days)]
+      if (only) { params.push(String(only) + '%'); where.push(`tpl LIKE $${params.length}`) }
+      if (skip) { params.push(String(skip) + '%'); where.push(`tpl NOT LIKE $${params.length}`) }
       return await query(
         `SELECT tpl, route, comp, SUM(imp)::int AS imp, SUM(clk)::int AS clk FROM component_daily
-         WHERE day >= $1::date GROUP BY tpl, route, comp ORDER BY tpl, imp DESC LIMIT 20000`, [since(days)])
+         WHERE ${where.join(' AND ')} GROUP BY tpl, route, comp ORDER BY imp DESC, tpl LIMIT 20000`, params)
     },
   }
 }
@@ -76,11 +82,11 @@ export function memoryComponentStore () {
         const t = m.get(k) || [0, 0]; t[0] += imp; t[1] += clk; m.set(k, t)
       }
     },
-    async report (days = 7) {
+    async report (days = 7, { only, skip } = {}) {
       const cut = since(days), agg = new Map()
       for (const [k, [imp, clk]] of m) {
         const [day, tpl, route, comp] = k.split('|')
-        if (day < cut) continue
+        if (day < cut || (only && !tpl.startsWith(only)) || (skip && tpl.startsWith(skip))) continue
         const kk = [tpl, route, comp].join('|'), t = agg.get(kk) || [0, 0]
         t[0] += imp; t[1] += clk; agg.set(kk, t)
       }
