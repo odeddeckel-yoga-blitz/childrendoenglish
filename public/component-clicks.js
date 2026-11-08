@@ -60,7 +60,10 @@ function sectionOf (el, doc) {
 }
 
 // Ids for every candidate on the page, in document order. Index = position among same section+role.
-export function componentIds (doc) {
+// v1.65 (KDM listing pages 11-08): options.name(el) may return a readable base ('main.game', 'header.to-grade') for an
+// element without data-c; the index is appended per base, so ids say WHAT a control is instead of 'main-content.link12'.
+// Static structure only (href shape, landmark) — never element text. A falsy return keeps the default id.
+export function componentIds (doc, name) {
   const out = new Map(), seen = new Map()
   for (const el of doc.querySelectorAll(CAND)) {
     if (el.closest('[data-c-ignore]')) continue
@@ -69,7 +72,9 @@ export function componentIds (doc) {
     const dc = el.getAttribute('data-c')
     if (dc) id = clean(dc, 60)
     else {
-      const base = sectionOf(el, doc) + '.' + roleOf(el)
+      let named = ''
+      if (name) { try { named = String(name(el) || '').toLowerCase().replace(/[^a-z0-9_.-]+/g, '-').replace(/^[-.]+|[-.]+$/g, '').slice(0, 40) } catch (e) { named = '' } }
+      const base = named || (sectionOf(el, doc) + '.' + roleOf(el))
       const n = seen.get(base) || 0; seen.set(base, n + 1)
       id = base + n
     }
@@ -93,12 +98,13 @@ export function installComponentClicks (opts = {}) {
     try { return !!(opts.skip && opts.skip()) } catch (e) { return true }
   }
 
-  let route, tpl, active, ids, tally, shown, timers, io
+  let route, tpl, active, ids, tally, shown, timers, io, viewSent, tapped, tapSent
   function begin () {
     route = normRoute(w.location.pathname)
     active = !exclude.some((re) => re.test(route))
     tpl = active ? templateFor(route, templates, doc) : ''
     ids = new Map(); tally = new Map(); shown = new WeakSet(); timers = new Map()
+    viewSent = false; tapped = false; tapSent = false
     if (io) io.disconnect()
     io = null
     if (active && typeof w.IntersectionObserver === 'function') {
@@ -123,12 +129,18 @@ export function installComponentClicks (opts = {}) {
   }
   function rescan () {
     if (!active) return
-    ids = componentIds(doc)
+    ids = componentIds(doc, opts.name)
     if (io) for (const el of ids.keys()) if (!shown.has(el)) io.observe(el)
   }
+  // v1.64 (KDM home review 11-08): '_view' once per page view and '_view.tap' once after its first click, so views that
+  // end with no tap (a bounce proxy) = _view − _view.tap, including views where nothing stayed on screen for 1 s.
   function flush () {
-    if (!active || !tally.size) return
-    const items = [...tally].map(([id, t]) => [id, t[0], t[1]])
+    if (!active) return
+    const marks = []
+    if (!viewSent) { marks.push(['_view', 1, 0]); viewSent = true }
+    if (tapped && !tapSent) { marks.push(['_view.tap', 1, 1]); tapSent = true }
+    if (!tally.size && !marks.length) return
+    const items = [...[...tally].map(([id, t]) => [id, t[0], t[1]]), ...marks]
     tally = new Map()
     if (!send || blocked()) return
     for (let i = 0; i < items.length; i += maxItems) {
@@ -142,7 +154,7 @@ export function installComponentClicks (opts = {}) {
     let id = ids.get(el)
     if (!id) { rescan(); id = ids.get(el) }
     if (!id) { const outer = el.parentElement && el.parentElement.closest(CAND); id = outer && ids.get(outer) }
-    if (id) bump(id, 1)
+    if (id) { bump(id, 1); tapped = true }
   }
   function checkRoute () { if (normRoute(w.location.pathname) !== route) { flush(); begin() } }
 
@@ -160,7 +172,7 @@ export function installComponentClicks (opts = {}) {
   if (mo) mo.observe(doc.body || doc.documentElement, { childList: true, subtree: true })
   const iv = w.setInterval(checkRoute, 1000)   // client-side route change that adds no DOM node yet
 
-  const api = () => ({ active, tpl, route, inventory: active ? [...new Set(componentIds(doc).values())] : [] })
+  const api = () => ({ active, tpl, route, inventory: active ? [...new Set(componentIds(doc, opts.name).values())] : [] })
   try { w.__componentClicks = api } catch (e) { /* ignore */ }
   return { flush, inspect: api, stop () {   // full teardown (React StrictMode mounts effects twice in dev: no double counting)
     flush(); doc.removeEventListener('click', onClick, true); w.removeEventListener('pagehide', flush)
@@ -173,6 +185,7 @@ export function installComponentClicks (opts = {}) {
 //   { endpoint: '/api/land',                        // POST target; the body is {cc:{…}} (sendBeacon, fail-quiet)
 //     exclude:  [/^\/games\//],                     // leaf content pages: never tracked
 //     templates: [{ name: 'grade-landing', re: /^\/math-games-for-grade\/\d+$/ }],   // optional, first match wins
+//     name: (el) => 'main.game',                     // optional (v1.65): readable id base per element, index appended
 //     internal: { param: 'internal', key: 'kdm_dev' } }   // ?internal=1 sets localStorage[key]='1' → never send
 export function checkConfig (cfg) {
   const errs = []
@@ -180,6 +193,7 @@ export function checkConfig (cfg) {
   if (typeof cfg.endpoint !== 'string' || !cfg.endpoint.startsWith('/')) errs.push('endpoint: a same-origin path like /api/land')
   if (!Array.isArray(cfg.exclude) || !cfg.exclude.every((r) => r instanceof RegExp)) errs.push('exclude: RegExp[] of leaf routes')
   if (cfg.templates && !(Array.isArray(cfg.templates) && cfg.templates.every((t) => t && typeof t.name === 'string' && t.re instanceof RegExp))) errs.push('templates: [{name, re: RegExp}]')
+  if (cfg.name && typeof cfg.name !== 'function') errs.push('name: (element) => readable id base, or omit')
   if (cfg.internal && !(typeof cfg.internal.param === 'string' && typeof cfg.internal.key === 'string')) errs.push('internal: {param, key}')
   return errs
 }
@@ -195,5 +209,5 @@ export function installFromConfig (cfg, w = typeof window !== 'undefined' ? wind
     } catch (e) { return false }
   }
   const send = (p) => { try { w.navigator.sendBeacon(cfg.endpoint, JSON.stringify(p)) } catch (e) { /* fail-quiet */ } }
-  return installComponentClicks({ window: w, send, skip, exclude: cfg.exclude, templates: cfg.templates || [] })
+  return installComponentClicks({ window: w, send, skip, exclude: cfg.exclude, templates: cfg.templates || [], name: cfg.name })
 }

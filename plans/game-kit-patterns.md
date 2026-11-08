@@ -240,6 +240,95 @@ and `test/persona-counts.mjs` (P5, static) — run from the site root; both exit
 Adoption order that worked for KDM: P1 toast fix (1 h, visible bug) → P1 end screen → P2 Play buttons → P4 markers →
 P3 teacher page → P5 counts. Calibrate `persona-check` on one known-bad page before trusting a green run.
 
+## 3f. Page-quality standard — "does it look professional?" (KDM + CDE + yoga reviews, 2026-11-08; owner GO)
+The owner judged the home, game entry and listing pages of KDM, then every page type of CDE and yoga-bits. Each review
+used site data, research, two rounds with Gemini and the personas. The same faults showed up on all three sites, and
+the pages that already worked shared one shape. These rules apply to every NEW page, template, home, landing and
+game entry page. They also apply to any existing page a session touches.
+Sources: site-factory/briefs/{kdm-home-review,kdm-game-page-review,kdm-pages-triage,cde-pages-triage,yoga-pages-triage}/
+Review artifacts:
+- KDM: home 9SERd2keFAtGYH7ix3Txm2, game page SgeXyfPKuwZkLgvuvomRcS, page families FkjsFWb8Gjr7VQ2dqTTmGi;
+- CDE: 2kRuRcG41hXWfur7erizc9;
+- yoga: Buqq6gCy7xMuSTTJfmKgZw.
+
+**Q1 · One clear action on the first screen.** Measure at 390×844 and 1366×**668**. A real Chromebook shows about
+100 px less than 768.
+- Every page's main action (PLAY, the mini-quiz, Start, a game card) is visible without scrolling.
+- Measured: what worked on every site had this, and what failed buried it:
+  - worked: CDE hub 60% → game, in-game first tap 80%;
+  - failed: CDE word-page quiz at y≈1,140 (97% left with no tap); Spanish play link at y 8,868; yoga quiz above the how-to.
+- Text, FAQ, SEO paragraphs and "for parents" go BELOW the first action.
+
+**Q2 · Answer the search first, then invite play.** A content page (word, pose, topic) shows what was searched in
+the first screen: picture + name + pronunciation/one audio + the first step or definition. A widget about OTHER
+items goes after it (yoga: 5.4% answered a quiz placed above the steps).
+
+**Q3 · Say it once.** No banner that repeats the card under it. No description written three times. One audio
+control per item. Templated sentences shared by >10 pages get rewritten per item. Google's spam policy names
+cookie-cutter pages:
+- CDE 530 word pages: banner = card, at 0.10% CTR;
+- KDM: description written 3×;
+- yoga: 35–38 FAQs sharing sentences.
+
+**Q4 · Use the screen.** No phone-width column centred on a laptop or Chromebook for a HOME, LISTING or STUDY page.
+- At ≥1024 px use the width: a game grid of 4 columns at ~285 px (KDM, measured: 3 fit too few, 5–7 shrink the
+  screenshot below ~85 px), or a 2-column hero.
+- In-game play may stay centred.
+- The owner called the phone-card look "unprofessional" on all three sites.
+
+**Q5 · Show the product.** Cards and heroes use a real screenshot of the game/app (KDM card-shots, CDE hub), not an
+emoji or a stock icon. Landing pages show a picture of the product before any paragraph. Gemini's "ghost town" read
+appeared on every page that had none.
+
+**Q6 · One design system per site.**
+- One page frame (header, width, footer) shared by app, content and tool pages. Yoga app vs Astro and the CDE
+  banner vs app vs flashcard maker read as different sites.
+- ONE primary button colour; secondary actions are outline or text.
+- One icon family. No emoji as UI chrome next to drawn icons; flags are not language labels.
+- Contrast ≥4.5:1 on every text token, measured. KDM teal 1.79:1 and CDE grey labels 2.4:1 went unseen for weeks;
+  recurring `a11y-scan` covers it.
+- The phone nav is ONE row (≤64 px, a menu button). Yoga's wrapped to 3 rows / ~230 px on every page.
+- No sticky full-width bars on laptop.
+
+**Q7 · A localized page is localized everywhere.**
+- `<html lang>` and `dir` match the page. Every string comes from i18n: H1, nav, breadcrumb, buttons, TOC headings,
+  tags, footer.
+- Mixed-language runs use `<bdi>`/`dir=ltr`.
+- Language switch = language names in their own script ("עברית · Español"), never codes or flags.
+- Found: CDE Spanish pages `lang=en` with an English H1 and buttons; the CDE hub all English for Hebrew users (its
+  largest audience); yoga's 325 locale posts with English "Contents"/tags; CDE Band I bidi garbling.
+- Add an RTL render test that fails on garbling.
+
+**Q8 · Copy a person would write.**
+- Generated copy needs grammar tests: a/an ("is a adjective" was on 228 CDE pages).
+- No count typed by hand. Every "N games/words" comes from what the page actually renders (P5): 488 vs 530,
+  "Five games" vs 17, registry 15 vs hub 17.
+
+**Q9 · Trust lines are verifiable or absent.**
+- No "open-source" for a private repo; no "real photos" on drawn/emoji images (the claim follows image-style per item).
+- No "no tracking" while analytics run; say what runs ("no personal data, cookieless analytics").
+- No "Common Core aligned" without per-item codes; no native-speaker claims for TTS ("computer voice").
+- No invented reviewers or credentials. A named real person + method + sources + contact on /about.
+- Health-adjacent: hedge benefits (ASA 2024: relaxation/tension/well-being OK; no medical or breathing-condition claims).
+
+**Q10 · The teacher has a door, not a gate.** A visible "Teachers" link on the home page and in the nav leads to
+one /teachers page with ≤3 big actions first (P3). No "Grown-ups" gate, no "Teacher mode" toggle, no flip cards or
+tabs that hide text (crawlers and AI read visible text). NN/g: no horizontal carousels for young kids.
+
+**How to run a page-quality review** (each step was needed at least once):
+1. **Site triage**: every page type × count × bot-filtered visitors (exclude no-referrer crawler countries: CDE
+   Singapore was ~50% of WA, yoga China ~25%) × search × next-step rate × no-tap rate × language. Screenshots at both
+   folds. A ranked shortlist by traffic × how bad.
+2. **Research** (web only) + Factory's own look.
+3. **Gemini, two rounds.** Round 1 critique; round 2 = the real data + objections. Round 1 always guessed metrics and
+   proposed text-hiding patterns (flip cards, tabs, gates) that it withdrew after the challenge.
+4. **Measure before changing**: add "action seen" + "stayed 15 s" signals. Fix beacon bugs first; CDE found a
+   double-loaded beacon and a var collision that voided the old baselines.
+5. **Mockups → owner OK → build on HALF of a page family** (deterministic split, logged), the other half as control.
+   Judge as difference in differences (see LESSONS 11-08 entry-B). Use 2–4 school weeks with a GSC/Bing-AI guardrail.
+6. **One visible change per page family per read window.** Bug fixes (lang, bidi, grammar, false claims) ship first,
+   on their own, judged by CTR. Don't push into a running read (CDE waited for the 11-14 title holdout).
+
 ## 4. Robustness contracts (each was a shipped bug)
 - **Touch drag needs `touch-action:none` on the drag source** (kidsdomath 2026-10-20). The template's
   `*{touch-action:manipulation}` (double-tap-zoom guard) lets the browser treat a finger-drag as a
