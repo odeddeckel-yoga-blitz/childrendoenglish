@@ -7,7 +7,7 @@
   // Page class of a path (the landing tally's page field; also the class of a referrer page for vp).
   function pageClass(path) {
     if (path === '/' || path === '') return 'home';
-    // Reserved 11-08 (measure step 2): the teacher page doesn't exist yet; its views get their own class when it ships.
+    // The teacher door (/teachers/, step 4 11-08; class reserved in measure step 2). /he/ and /es/ teacher paths too.
     if (/^\/((he|es)\/)?(for-)?teachers(\/|$)/.test(path)) return 'teachers';
     if (path.indexOf('/he/') === 0 || path.indexOf('/he') === 0 && path.length <= 4 || (path.indexOf('/vocabulary/') === 0 && path.indexOf('/hebrew') > -1)) return 'hebrew';
     if (path.indexOf('/es') === 0 || (path.indexOf('/vocabulary/') === 0 && path.indexOf('/spanish') > -1)) return 'spanish';

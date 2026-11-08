@@ -83,6 +83,29 @@ function parsePasteList(text, byWord) {
   }
   return out;
 }
+/** One picture style per sheet (owner 11-07: a lone drawing among photos gives the answer away, and a mixed sheet
+ *  looks unfinished). A card's style: 'photo' or 'drawn' (word.d = 1 for the DRAWN set in src/data/imageStyle.js),
+ *  or 'text' for a pasted word with no picture. mode 'photo' / 'drawn' keeps that style only (text cards stay: they
+ *  have no picture to clash); 'both' keeps every card but puts each style on its own sheets: photos, then drawings,
+ *  then text cards, each group in its original order. */
+const PICTURE_MODES = ['both', 'photo', 'drawn'];
+function cardStyle(w) {
+  if (!w || !w.img) return 'text';
+  return w.d ? 'drawn' : 'photo';
+}
+function styleGroups(words, mode) {
+  const by = { photo: [], drawn: [], text: [] };
+  for (const w of words) by[cardStyle(w)].push(w);
+  if (mode === 'photo') return [by.photo, by.text].filter((g) => g.length);
+  if (mode === 'drawn') return [by.drawn, by.text].filter((g) => g.length);
+  return [by.photo, by.drawn, by.text].filter((g) => g.length);
+}
+/** buildSheets per style group: no sheet (front or back) ever holds two picture styles. */
+function buildStyledSheets(words, perPage, mode) {
+  const out = [];
+  for (const g of styleGroups(words, mode)) out.push(...buildSheets(g, perPage));
+  return out;
+}
 /* flashcard-logic:end */
 
-export { FLASHCARD_LAYOUTS, chunkWords, mirrorPage, buildSheets, parsePasteList, PASTE_MAX_ITEMS, PASTE_MAX_LEN };
+export { FLASHCARD_LAYOUTS, chunkWords, mirrorPage, buildSheets, parsePasteList, PASTE_MAX_ITEMS, PASTE_MAX_LEN, PICTURE_MODES, cardStyle, styleGroups, buildStyledSheets };

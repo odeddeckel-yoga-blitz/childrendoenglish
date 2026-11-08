@@ -8,6 +8,8 @@ import { withArticle, isPhoto, pictureClaim, truthfulPictureText, countWord } fr
 import { SPOTLIGHT_GAMES, HUB_ONLY_GAMES } from '../src/data/arcadeGames.js';
 import { WORD_COUNT } from '../src/data/wordCount.js';
 import { gameForCategory, gameFirstCard, GAME_FIRST_CSS } from './game-first.mjs';
+import { DRAWN } from '../src/data/imageStyle.js';
+import { PILL_CSS, buildTeachersHtml } from './build-teachers-page.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -48,7 +50,9 @@ const SITE_HEAD = {
   he: { dir: 'rtl', links: [['/he/', 'Children Do English'], ['/he/english-games/', 'משחקים'], ['/he/#teachers', 'למורים'], ['/', 'EN', 'en', 'English'], ['/es/', 'ES', 'es', 'Español']] },
   // Step 4 (mockup b, 11-08): the es switch names the languages (English · עברית · Español), not codes.
   es: { dir: 'ltr', links: [['/es/', 'Children Do English'], ['/games/', 'Juegos'], ['/printable-flashcards/spanish/', 'Tarjetas'], ['/', 'English', 'en', 'English'], ['/he/', 'עברית', 'he', 'עברית'], ['/es/', 'Español', 'es', 'Español', true]] },
-  en: { dir: 'ltr', links: [['/', 'Children Do English'], ['/games/', 'Games'], ['/printable-flashcards/', 'Printables'], ['/he/', 'עב', 'he', 'עברית'], ['/es/', 'ES', 'es', 'Español']] },
+  // 'Teachers' (step 4, 11-08): the teacher door in the English header (kit §3f Q10); /teachers/ is English only for now.
+  // The language links use names, as on the es header (mockups a/b).
+  en: { dir: 'ltr', links: [['/', 'Children Do English'], ['/games/', 'Games'], ['/printable-flashcards/', 'Printables'], ['/teachers/', 'Teachers'], ['/he/', 'עברית', 'he', 'עברית'], ['/es/', 'Español', 'es', 'Español']] },
 };
 const gameIcon = (n) => `<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-${n}"/></svg>`;
 function siteHeader(lang) {
@@ -59,7 +63,7 @@ function siteHeader(lang) {
     `.cat-links a,.res-links a,.back-link,.play-online{display:inline-flex;align-items:center}` +
     `.lang-variant a,.topics a,.pick-detail select{display:inline-block;min-height:44px;padding:12px 0;box-sizing:border-box}` +
     `.breadcrumb a,.footer a,.teacher-row a,.site-head a{display:inline-block;padding:12px 2px;min-width:44px;text-align:center}` +
-    `.site-head a{color:#1e40af;text-decoration:none}.site-head a:first-child{font-weight:800;color:#0f172a;margin-inline-end:auto}.site-head a:hover{text-decoration:underline}${lang === 'es' ? '.site-head a.sh-on{color:#0f172a;text-decoration:underline;text-underline-offset:3px}@media (max-width:420px){.site-head{gap:0 .15rem;padding:0 .5rem}}' : ''}@media print{.site-head{display:none}}@media (max-width:420px){.site-head .sh-name{display:none}}</style>` +
+    `.site-head a{color:#1e40af;text-decoration:none}.site-head a:first-child{font-weight:800;color:#0f172a;margin-inline-end:auto}.site-head a:hover{text-decoration:underline}${lang === 'es' ? '.site-head a.sh-on{color:#0f172a;text-decoration:underline;text-underline-offset:3px}' : ''}@media print{.site-head{display:none}}@media (max-width:420px){.site-head .sh-name{display:none}.site-head{gap:0 .15rem;padding:0 .5rem}}</style>` +
     // On phones the home link is just 🏠 (the site name hides) so the row fits one line.
     h.links.map(([href, text, hl, full, current], i) => i === 0
       ? `<a href="${href}" aria-label="Children Do English"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-house"/></svg><span class="sh-name" lang="en" dir="ltr"> Children Do English</span></a>`
@@ -119,6 +123,8 @@ function buildCrawlMesh(lang = 'en') {
     row(H('heVocab'), cats.map((c) => (lang === 'he' ? [`/vocabulary/${c}/hebrew/`, CATEGORY_NAMES_HE[c] || label(c), 'he'] : [`/vocabulary/${c}/hebrew/`, `${label(c)} <span lang="he" dir="rtl">עברית</span>`]))) +
     row(H('esVocab'), cats.map((c) => (lang === 'es' ? [`/vocabulary/${c}/spanish/`, CATEGORY_NAMES_ES[c] || label(c), 'es'] : [`/vocabulary/${c}/spanish/`, `${label(c)} español`]))) +
     row(H('games'), [['/games/', ...own('All games', 'Todos los juegos')], ['/games/word-zapper/', 'Word Zapper'], ['/games/spelling-forge/', 'Spelling Forge'], ['/games/category-conveyor/', 'Category Conveyor'], ['/app', ...own('Practice app', 'App de práctica')]]) +
+    // The teacher page is English only; the /he/ mesh stays untouched under the holdout (11-14).
+    (lang === 'en' ? row('For teachers', [['/teachers/', 'For teachers: units, Band I, printables, Class Battle']]) : '') +
     row(H('topics'), [['/free-english-practice/', 'Free practice — no sign-up'], ['/vocabulary/', 'All vocabulary'], ...cats.map((c) => [`/vocabulary/${c}/`, label(c)]), ['/guides/', 'Parent guides']]) +
     `</details></nav>\n`;
   return _meshCache[lang];
@@ -2925,7 +2931,7 @@ function buildFlashcardToolJs() {
   if (!m) throw new Error('flashcard-logic block not found');
   const data = WORDS.map((w) => ({
     id: w.id, w: w.word, he: w.hebrewTranslation, es: ES_GLOSSES[w.id] || '',
-    cat: w.category, img: `/images/${w.id}.webp`,
+    cat: w.category, img: `/images/${w.id}.webp`, d: DRAWN.has(w.id) ? 1 : 0,
   }));
   return `/* Generated by generate-seo-pages.js — do not edit. CSP-safe external tool script. */
 'use strict';
@@ -2936,8 +2942,10 @@ var CATS = Array.from(new Set(FM_WORDS.map(function (w) { return w.cat; })));
 
 function $(id) { return document.getElementById(id); }
 
+function picked(name) { var el = document.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ''; }
+
 function selectedWords() {
-  var mode = document.querySelector('input[name="pick"]:checked').value;
+  var mode = picked('pick');
   if (mode === 'category') {
     var cat = $('fmCat').value;
     return FM_WORDS.filter(function (w) { return cat === 'all' || w.cat === cat; });
@@ -2975,13 +2983,15 @@ function cardBack(w, lang) {
 }
 
 function render() {
-  var words = selectedWords();
-  var per = Number(document.querySelector('input[name="per"]:checked').value);
-  var lang = document.querySelector('input[name="back"]:checked').value;
+  var per = Number(picked('per'));
+  var lang = picked('back');
+  // One picture style per sheet (DRAWN set): photos, drawings and text cards each get their own pages.
+  var groups = styleGroups(selectedWords(), picked('pics') || 'both');
+  var words = [].concat.apply([], groups);
   var host = $('fmSheets'); host.textContent = '';
   $('fmCount').textContent = String(words.length);
-  if (words.length === 0) return;
-  var sheets = buildSheets(words, per);
+  if (words.length === 0) { $('fmPrint').disabled = true; return; }
+  var sheets = buildStyledSheets(words, per, picked('pics') || 'both');
   sheets.forEach(function (sheet) {
     var pg = document.createElement('section');
     pg.className = 'sheet per' + per + ' ' + sheet.side;
@@ -2996,8 +3006,10 @@ function render() {
 document.addEventListener('DOMContentLoaded', function () {
   var sel = $('fmCat');
   CATS.forEach(function (c) {
-    var o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o);
+    var n = FM_WORDS.filter(function (w) { return w.cat === c; }).length;
+    var o = document.createElement('option'); o.value = c; o.textContent = c.charAt(0).toUpperCase() + c.slice(1) + ' (' + n + ' words)'; sel.appendChild(o);
   });
+  $('fmCat').options[0].textContent = 'All words (' + FM_WORDS.length + ')';
   'abcdefghijklmnopqrstuvwxyz'.split('').forEach(function (L) {
     var o = document.createElement('option'); o.value = L; o.textContent = L.toUpperCase(); $('fmLetter').appendChild(o);
   });
@@ -3009,6 +3021,14 @@ document.addEventListener('DOMContentLoaded', function () {
       $('pick-' + r.value).hidden = false;
     });
   });
+  // Settings from the /teachers/ form (?cat=animals&back=he&per=6&pics=both): preset the form and show the cards.
+  try {
+    var q = new URLSearchParams(location.search);
+    var setRadio = function (name, v) { var el = document.querySelector('input[name="' + name + '"][value="' + v + '"]'); if (el) el.checked = true; };
+    ['back', 'per', 'pics'].forEach(function (k) { if (/^[a-z0-9]{1,8}$/.test(q.get(k) || '')) setRadio(k, q.get(k)); });
+    var qc = q.get('cat');
+    if (qc && (qc === 'all' || CATS.indexOf(qc) > -1)) { sel.value = qc; render(); }
+  } catch (e) { /* old browser: the form still works */ }
 });
 `;
 }
@@ -3039,16 +3059,24 @@ function buildFlashcardMakerPage() {
 <script type="application/ld+json">${faqLd}</script>
 <script type="application/ld+json">${appLd}</script>
 <style>
-  *{box-sizing:border-box} [hidden]{display:none!important} body{font-family:system-ui,sans-serif;margin:0;background:#f8fafc;color:#1e293b}
-  .wrap{max-width:900px;margin:0 auto;padding:1.5rem 1rem}
-  h1{font-size:1.7rem} .sub{color:#4b5a6e}
-  .panel{background:#fff;border-radius:1rem;padding:1.2rem;box-shadow:0 1px 4px rgba(15,23,42,.08);margin:1rem 0}
-  .row{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin:.5rem 0}
-  label{font-weight:600;font-size:.95rem} select,textarea{padding:.5rem;border:1px solid #cbd5e1;border-radius:.5rem;font-size:1rem}
-  textarea{width:100%;min-height:90px}
-  .btn{padding:.8rem 1.6rem;border:0;border-radius:999px;background:#2563eb;color:#fff;font-weight:800;font-size:1rem;cursor:pointer}
-  .btn[disabled]{opacity:.4;cursor:not-allowed} .btn.ghost{background:#eff6ff;color:#1d4ed8}
-  .hero-cite{font-size:.9rem;color:#4b5a6e;max-width:40rem}
+  *{box-sizing:border-box} [hidden]{display:none!important}
+  body{font:16px/1.55 system-ui,-apple-system,'Segoe UI',sans-serif;margin:0;background:#f8fafc;color:#1e293b}
+  a{color:#1d4ed8}
+  .ic{width:1.15em;height:1.15em;vertical-align:-.2em;flex:none}
+  .fm-band{background:#eff6ff;border-bottom:1px solid #bfdbfe;padding:12px 16px 14px}
+  .wrap{max-width:900px;margin:0 auto}
+  .fm-body{padding:14px 16px 1.5rem}
+  .fm-band .wrap{padding:0 16px}
+  .breadcrumb{font-size:.85rem;color:#475569;margin:0 0 2px} .breadcrumb a{text-decoration:none}
+  h1{font-size:clamp(1.45rem,3.6vw,1.9rem);line-height:1.2;margin:0 0 4px;color:#1e3a8a;font-weight:800}
+  .sub{color:#334155;margin:0}
+  .panel{background:#fff;border:1px solid #e2e8f0;border-radius:16px;padding:16px 18px 18px;margin:0 0 1rem}
+  .fm-form{display:grid;gap:14px}
+  textarea{width:100%;min-height:90px;padding:.6rem;border:1.5px solid #bfdbfe;border-radius:12px;font:1rem system-ui,sans-serif}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .count{color:#475569;font-weight:600}
+  .hint{font-size:.85rem;color:#475569;margin:6px 0 0;flex-basis:100%}
+  .hero-cite{font-size:.9rem;color:#475569;max-width:40rem}
   .sheet{display:grid;gap:4mm;background:#fff;margin:1rem auto;padding:8mm;box-shadow:0 1px 6px rgba(15,23,42,.12);width:100%;max-width:210mm}
   .per4{grid-template-columns:1fr 1fr;grid-template-rows:repeat(2,1fr)}
   .per6{grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr)}
@@ -3059,23 +3087,71 @@ function buildFlashcardMakerPage() {
   .per9 .card img{max-height:24mm}
   .cw{font-size:1.25rem;font-weight:800;margin:.4rem 0 0} .cg{font-size:1.35rem;font-weight:700;margin:0}
   .rtl{direction:rtl} .card.empty{border-style:dotted}
-  footer{color:#5b6779;font-size:.85rem;text-align:center;padding:1.5rem}
+  footer{color:#475569;font-size:.85rem;text-align:center;padding:1.5rem}
+  ${PILL_CSS}
   @media print{
-    body{background:#fff} .wrap .panel,.wrap h1,.wrap .sub,.wrap .hero-cite,.no-print,footer{display:none!important}
+    body{background:#fff} .fm-band,.wrap .panel,.wrap .hero-cite,.glance,.no-print,footer{display:none!important}
     .sheet{box-shadow:none;margin:0;padding:6mm;width:auto;max-width:none;page-break-after:always;height:96vh}
   }
 </style>
 </head>
 <body>
-<div class="wrap">
+<header class="fm-band"><div class="wrap">
+  <nav class="breadcrumb" aria-label="breadcrumb"><a href="/">Home</a> › <a href="/teachers/">Teachers</a> › Flashcard maker</nav>
   <h1>Free Printable Flashcard Maker</h1>
-  <p class="sub">Photo flashcards for kids — pick from ${WORDS_N} ${pics(WORDS, 'adj')} English words or paste your own list. Free, no login, no watermark.</p>
-  <p class="hero-cite">The Children Do English flashcard maker creates printable photo flashcards with 4, 6 or 9 cards per page, Hebrew or Spanish card backs, and mirrored back pages so double-sided printing aligns perfectly — completely free.</p>
+  <p class="sub">Pick words, pick a back side, print. ${WORDS_N} English words with ${pics(WORDS)}, or paste your own list. No login, no watermark.</p>
+</div></header>
+<div class="wrap fm-body">
+  <div class="panel">
+    <div class="fm-form">
+      <fieldset class="pills"><legend>Words</legend>
+        <label class="pill"><input type="radio" name="pick" value="category" checked><span>By topic</span></label>
+        <label class="pill"><input type="radio" name="pick" value="letter"><span>By letter</span></label>
+        <label class="pill"><input type="radio" name="pick" value="paste"><span>Paste a list</span></label>
+      </fieldset>
+      <div id="pick-category" class="pick-detail">
+        <label class="fld-label" for="fmCat">Topic</label>
+        <select class="sel" id="fmCat"><option value="all">All words</option></select>
+      </div>
+      <div id="pick-letter" class="pick-detail" hidden>
+        <label class="fld-label" for="fmLetter">Letter</label><select class="sel" id="fmLetter"></select>
+      </div>
+      <div id="pick-paste" class="pick-detail" hidden>
+        <label class="fld-label" for="fmPaste">Your words (one per line; known words get their picture)</label>
+        <textarea id="fmPaste" maxlength="8000" spellcheck="false" autocomplete="off" placeholder="dog&#10;banana&#10;rocket ship"></textarea>
+      </div>
+      <fieldset class="pills"><legend>Back of the card</legend>
+        <label class="pill"><input type="radio" name="back" value="en"><span>No translation</span></label>
+        <label class="pill"><input type="radio" name="back" value="he" checked><span>Hebrew</span></label>
+        <label class="pill"><input type="radio" name="back" value="es"><span>Spanish</span></label>
+      </fieldset>
+      <fieldset class="pills"><legend>Cards per page</legend>
+        <label class="pill"><input type="radio" name="per" value="4"><span>4</span></label>
+        <label class="pill"><input type="radio" name="per" value="6" checked><span>6</span></label>
+        <label class="pill"><input type="radio" name="per" value="9"><span>9</span></label>
+      </fieldset>
+      <fieldset class="pills"><legend>Pictures</legend>
+        <label class="pill"><input type="radio" name="pics" value="both" checked><span>Photos and drawings</span></label>
+        <label class="pill"><input type="radio" name="pics" value="photo"><span>Photos only</span></label>
+        <label class="pill"><input type="radio" name="pics" value="drawn"><span>Drawings only</span></label>
+        <p class="hint">One picture style per sheet: photos and drawings never share a page.</p>
+      </fieldset>
+      <div class="actions">
+        <button id="fmBuild" class="btn" type="button">Build my flashcards</button>
+        <button id="fmPrint" class="btn ghost" type="button" disabled><svg class="ic" aria-hidden="true" focusable="false"><use href="/icons.svg#i-printer"/></svg> Print (double-sided)</button>
+        <span class="count"><span id="fmCount">0</span> cards</span>
+      </div>
+    </div>
+  </div>
+
+  <div id="fmSheets"></div>
+
+  <p class="hero-cite no-print">The Children Do English flashcard maker creates printable flashcards with 4, 6 or 9 cards per page, Hebrew or Spanish card backs, and mirrored back pages so double-sided printing lines up — completely free.</p>
   ${glanceHtml({
     caption: 'The flashcard maker at a glance',
     rows: [
-      ['What it makes', 'Double-sided photo flashcards: the picture and English word on the front, the Hebrew, Spanish or English word on the back. 4, 6 or 9 cards per A4 or Letter page.'],
-      ['How many words', `Pick any of ${WORDS_N} photo words in ${CATEGORIES.length} topics, all words starting with one letter, or paste your own list (unknown words become text cards).`],
+      ['What it makes', 'Double-sided picture flashcards: the picture and English word on the front, the Hebrew, Spanish or English word on the back. 4, 6 or 9 cards per A4 or Letter page.'],
+      ['How many words', `Pick any of ${WORDS_N} words with ${pics(WORDS)} in ${CATEGORIES.length} topics, all words starting with one letter, or paste your own list (unknown words become text cards).`],
       ['Ages and grades', 'Ages 6-12 (about grades 1-7). Beginner topics such as animals, colors and food suit ages 6-8.'],
     ],
     stepsHeading: 'How to use it for one lesson (25 minutes)',
@@ -3085,44 +3161,6 @@ function buildFlashcardMakerPage() {
       ['Practice', '10 min', 'Pairs quiz each other: one shows the photo, the other says the English word. Wrong cards go in a pile to review next lesson.'],
     ],
   })}
-
-  <div class="panel">
-    <div class="row" role="radiogroup" aria-label="Pick words">
-      <label><input type="radio" name="pick" value="category" checked> By category</label>
-      <label><input type="radio" name="pick" value="letter"> By letter</label>
-      <label><input type="radio" name="pick" value="paste"> Paste a list</label>
-    </div>
-    <div id="pick-category" class="pick-detail row">
-      <label for="fmCat">Category</label>
-      <select id="fmCat"><option value="all">All words</option></select>
-    </div>
-    <div id="pick-letter" class="pick-detail row" hidden>
-      <label for="fmLetter">Letter</label><select id="fmLetter"></select>
-    </div>
-    <div id="pick-paste" class="pick-detail" hidden>
-      <label for="fmPaste">Your words (one per line — known words get photos)</label>
-      <textarea id="fmPaste" maxlength="8000" spellcheck="false" autocomplete="off" placeholder="dog&#10;banana&#10;rocket ship"></textarea>
-    </div>
-    <div class="row" role="radiogroup" aria-label="Cards per page">
-      <label>Cards per page:</label>
-      <label><input type="radio" name="per" value="4" checked> 4</label>
-      <label><input type="radio" name="per" value="6"> 6</label>
-      <label><input type="radio" name="per" value="9"> 9</label>
-    </div>
-    <div class="row" role="radiogroup" aria-label="Back of card">
-      <label>Back of card:</label>
-      <label><input type="radio" name="back" value="he" checked> עברית</label>
-      <label><input type="radio" name="back" value="es"> Español</label>
-      <label><input type="radio" name="back" value="en"> English</label>
-    </div>
-    <div class="row">
-      <button id="fmBuild" class="btn">Build my flashcards</button>
-      <button id="fmPrint" class="btn ghost" disabled>Print (double-sided)</button>
-      <span><span id="fmCount">0</span> cards</span>
-    </div>
-  </div>
-
-  <div id="fmSheets"></div>
 
   <div class="panel no-print">
     ${faq.map(([q, a]) => `<h2 style="font-size:1.05rem">${escapeHtml(q)}</h2><p style="color:#475569;font-size:.95rem">${escapeHtml(a)}</p>`).join('\n    ')}
@@ -5621,4 +5659,14 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
   writePage(join(fmDir, 'index.html'), buildFlashcardMakerPage(), 'utf-8');
   writeFileSync(join(fmDir, 'tool.js'), buildFlashcardToolJs(), 'utf-8');
   console.log('Flashcard maker written: /tools/flashcard-maker/');
+
+  // /teachers/ (step 4, 11-08): the teacher door; scripts/build-teachers-page.mjs. Counts come from the data.
+  const teachersDir = join(distDir, 'teachers');
+  mkdirSync(teachersDir, { recursive: true });
+  writePage(join(teachersDir, 'index.html'), buildTeachersHtml({
+    SITE, escapeHtml, WORDS, CATEGORIES, CATEGORY_NAMES, CATEGORY_NAMES_ES, ES_GLOSSES, DRAWN,
+    BOOKS, UNITS, BAND1_BY_ID, band1FileText: readFileSync(join(ROOT, 'src', 'data', 'band1.js'), 'utf-8').slice(0, 600),
+    gamesCount: SPOTLIGHT_GAMES.length + HUB_ONLY_GAMES.length, wordsLabel: WORDS_N,
+  }));
+  console.log('Teachers page written: /teachers/');
 }

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildSheets, mirrorPage, FLASHCARD_LAYOUTS, parsePasteList, PASTE_MAX_ITEMS, PASTE_MAX_LEN } from '../utils/flashcardSheets';
+import { buildSheets, mirrorPage, FLASHCARD_LAYOUTS, parsePasteList, PASTE_MAX_ITEMS, PASTE_MAX_LEN, cardStyle, styleGroups, buildStyledSheets } from '../utils/flashcardSheets';
 
 const W = (n) => Array.from({ length: n }, (_, i) => ({ id: 'w' + i }));
 
@@ -86,5 +86,34 @@ describe('parsePasteList (Paste a list guards)', () => {
     expect(parsePasteList(many, {})).toHaveLength(PASTE_MAX_ITEMS);
     expect(parsePasteList(' , ;\n\n dog, DOG ,dog', byWord)).toHaveLength(1);
     expect(parsePasteList(null, byWord)).toEqual([]);
+  });
+});
+
+describe('one picture style per sheet (step 4, 11-08)', () => {
+  const P = (n) => Array.from({ length: n }, (_, i) => ({ id: 'p' + i, img: '/images/p' + i + '.webp' }));
+  const D = (n) => Array.from({ length: n }, (_, i) => ({ id: 'd' + i, img: '/images/d' + i + '.webp', d: 1 }));
+  const T = (n) => Array.from({ length: n }, (_, i) => ({ id: null, w: 't' + i, img: null }));
+  // photos and drawings interleaved, plus two pasted text words
+  const mixed = [...P(5), ...D(3)].sort((a, b) => a.id.slice(1) - b.id.slice(1)).concat(T(2));
+
+  it('classes a card as photo, drawn or text', () => {
+    expect(cardStyle(P(1)[0])).toBe('photo');
+    expect(cardStyle(D(1)[0])).toBe('drawn');
+    expect(cardStyle(T(1)[0])).toBe('text');
+  });
+
+  it('"both" keeps every card and never mixes styles on one sheet', () => {
+    const sheets = buildStyledSheets(mixed, 4, 'both');
+    const fronts = sheets.filter((s) => s.side === 'front');
+    expect(fronts.flatMap((s) => s.cells).filter(Boolean)).toHaveLength(10);
+    for (const s of sheets) expect(new Set(s.cells.filter(Boolean).map(cardStyle)).size).toBeLessThanOrEqual(1);
+    // the old buildSheets put a drawing on the first photo sheet
+    expect(new Set(buildSheets(mixed, 4)[0].cells.map(cardStyle)).size).toBeGreaterThan(1);
+  });
+
+  it('"photo" / "drawn" keep that style (and text cards) only', () => {
+    expect(styleGroups(mixed, 'photo').flat().map(cardStyle).filter((s) => s === 'drawn')).toEqual([]);
+    expect(styleGroups(mixed, 'drawn').flat().map(cardStyle).filter((s) => s === 'photo')).toEqual([]);
+    expect(styleGroups(mixed, 'drawn').flat()).toHaveLength(5);
   });
 });
