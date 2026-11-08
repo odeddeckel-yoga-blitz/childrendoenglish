@@ -62,8 +62,10 @@
   .shake{animation:pbShake .42s;border-color:var(--red)!important;}
   @keyframes pbShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
   /* class mode: a projector-sized card */
-  .classmode #app.play{--cw:min(100%,860px,calc(100dvh - 260px));}
-  .classmode #app.play.decoys{--cw:min(100%,860px,calc(100dvh - 330px));}
+  /* the controls under the card take ~11 px more with Linux / Android fonts than on a Mac (CI 11-08: 651 px on a
+     640 px phone), so the card leaves 20 px more room */
+  .classmode #app.play{--cw:min(100%,860px,calc(100dvh - 280px));}
+  .classmode #app.play.decoys{--cw:min(100%,860px,calc(100dvh - 350px));}
   .classmode main:has(#app.play){max-width:900px;}
   .classmode .say{font-size:26px;min-height:68px;}
   .classmode .feedback,.classmode .hud{font-size:20px;}
