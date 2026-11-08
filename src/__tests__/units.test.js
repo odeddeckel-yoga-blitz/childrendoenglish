@@ -44,6 +44,14 @@ describe('textbook-unit pages', () => {
     expect(read('/units/')).toContain('href="/units/jet-2/"');
   });
 
+  it('a live book lists only its live units: a test unit in it stays linked from nowhere', () => {
+    const live = { ...UNITS[0], book: 'jet-2', unit: 3, test: false, source: 'https://example.com/list.pdf' };
+    const { read } = build([live, { ...UNITS[0], book: 'jet-2', unit: 4, test: true }]);
+    expect(read('/units/jet-2/')).toContain('href="/units/jet-2/unit-3/"');
+    expect(read('/units/jet-2/')).not.toContain('href="/units/jet-2/unit-4/"');
+    expect(read('/units/jet-2/unit-4/')).toContain('content="noindex, nofollow"');
+  });
+
   it('a live unit is indexable and enters the sitemap with its book index and the hub', () => {
     const live = { ...UNITS[0], book: 'jet-2', unit: 3, title: undefined, test: false, source: 'https://example.com/list.pdf' };
     const { urls, read } = build([live]);

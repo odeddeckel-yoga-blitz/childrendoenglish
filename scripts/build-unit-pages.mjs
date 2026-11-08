@@ -339,10 +339,12 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
 
   // --- book indexes ---
   for (const b of books) {
-    const units = UNITS.filter((u) => u.book === b).sort((a, c) => a.unit - c.unit);
-    if (!units.length) continue;
+    const all = UNITS.filter((u) => u.book === b).sort((a, c) => a.unit - c.unit);
+    if (!all.length) continue;
     const book = BOOKS[b];
     const test = liveUnitsOf(b).length === 0;
+    // a live book lists only its live units: a test unit stays linked from nowhere (11-08: FF U1/U4 held to 11-14)
+    const units = test ? all : all.filter((u) => !isTest(u));
     const path = `/units/${b}/`;
     const title = `${book.name} – מילים באנגלית לכל יחידה, עם הגייה ותרגום`;
     const description = `רשימות המילים של ${book.name} לפי יחידות, עם הגייה באנגלית, תרגום לעברית ומשחקי תרגול. חינם, בלי הרשמה.`;
