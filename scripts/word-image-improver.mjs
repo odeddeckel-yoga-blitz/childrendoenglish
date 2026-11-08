@@ -72,6 +72,21 @@ async function searchCandidates(term, limit = 6) {
     });
 }
 
+// Pixabay (owner 11-08; Pexels keys paused): official API only, key in ~/.config/cde/pixabay-key, never printed.
+// webformatURL is ≤640 px (full size needs Pixabay approval); we download and self-host, never hotlink.
+async function searchPixabay(term, limit = 9) {
+  const keyFile = join(process.env.HOME, '.config', 'cde', 'pixabay-key');
+  if (!existsSync(keyFile)) throw new Error('no Pixabay key at ~/.config/cde/pixabay-key');
+  const q = new URLSearchParams({ key: readFileSync(keyFile, 'utf8').trim(), q: term, image_type: 'photo', safesearch: 'true', per_page: '30' });
+  const res = await fetch(`https://pixabay.com/api/?${q}`, { headers: UA });   // Pixabay 403s a client with no User-Agent
+  if (!res.ok) throw new Error(`Pixabay HTTP ${res.status}`);
+  return (await res.json()).hits
+    .filter(h => h.webformatWidth >= 300 && h.webformatHeight >= 300)
+    .slice(0, limit)
+    .map(h => ({ source: 'pixabay', url: h.webformatURL, title: h.tags, page: h.pageURL, author: h.user,
+      licence: 'Pixabay Content License', licenceUrl: 'https://pixabay.com/service/license-summary/' }));
+}
+
 async function download(url, filepath) {
   const res = await fetch(url, { headers: UA });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -98,6 +113,7 @@ async function buildSheet(word, files) {
 
 const [cmd, word, third] = process.argv.slice(2);
 const termsArg = process.argv.find(a => a.startsWith('--terms='));
+const pixabay = process.argv.includes('--src=pixabay');
 
 if (cmd === 'candidates' && word) {
   const terms = termsArg ? termsArg.slice(8).split(',') : [word];
@@ -108,7 +124,7 @@ if (cmd === 'candidates' && word) {
   const seen = new Set();
   const files = [];
   for (const term of terms) {
-    const cands = await searchCandidates(term.trim(), 5);
+    const cands = pixabay ? await searchPixabay(term.trim(), Math.ceil(9 / terms.length)) : await searchCandidates(term.trim(), 5);
     for (const c of cands) {
       if (seen.has(c.url) || files.length >= 9) continue;
       seen.add(c.url);
@@ -134,7 +150,7 @@ if (cmd === 'candidates' && word) {
   const all = existsSync(srcFile) ? JSON.parse(readFileSync(srcFile, 'utf8')) : {};
   if (existsSync(meta)) {
     const c = JSON.parse(readFileSync(meta, 'utf8'));
-    all[word] = { source: 'wikimedia-commons', title: c.title, url: c.page, author: c.author, licence: c.licence, licenceUrl: c.licenceUrl };
+    all[word] = { source: c.source || 'wikimedia-commons', title: c.title, url: c.page, author: c.author, licence: c.licence, licenceUrl: c.licenceUrl };
     if (!c.licence) console.warn(`⚠ ${word}: Commons gave no licence name — check ${c.page} before shipping`);
   } else {
     all[word] = { source: 'unknown', note: 'picked from a candidate with no source record — fix before shipping' };
@@ -166,5 +182,5 @@ if (cmd === 'candidates' && word) {
   const sameCat = WORDS.filter(w => w.id !== target.id && w.category === target.category).map(w => w.word);
   console.log(`category ${target.category}: ${sameCat.join(', ')}`);
 } else {
-  console.log('usage: word-image-improver.mjs candidates <word> [--terms="t1,t2"] | pick <word> <idx> | rivals <word>');
+  console.log('usage: word-image-improver.mjs candidates <word> [--terms="t1,t2"] [--src=pixabay] | pick <word> <idx> | rivals <word>');
 }
