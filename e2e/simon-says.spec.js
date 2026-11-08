@@ -195,6 +195,31 @@ for (const vp of [{ width: 360, height: 640 }, { width: 390, height: 844 }]) {
   });
 }
 
+// CI's Linux fonts wrap wider than the Mac's: level 3's Next sat 15 px below a 360×640 screen on some deals (11-08).
+// Verdana stands in for them; every level-3 round is dealt, not a random 8.
+test('phone fit 360x640 level 3, every round, with wider fonts: Next on screen after a miss', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 640 });
+  await open(page);
+  await page.addStyleTag({ content: 'body,body *{font-family:Verdana,"DejaVu Sans",sans-serif!important;}' });
+  await page.click('#startBtn');
+  await page.evaluate(() => SS.dbg.startLevel(2));
+  const over = await page.evaluate(async () => {
+    const seen = new Map(), out = [];
+    for (let n = 0; n < 60; n++) for (const r of SS.dbg.plan(2)) seen.set(r.text, r);
+    for (const r of seen.values()) {
+      SS.dbg.state.rounds = [r]; SS.dbg.state.round = 0; SS.dbg.redraw();
+      await new Promise((f) => setTimeout(f, 30));
+      SS.dbg.missForTest();
+      await new Promise((f) => setTimeout(f, 60));
+      const bottom = document.getElementById('nextBtn').getBoundingClientRect().bottom;
+      if (bottom > innerHeight) out.push(`${r.text} ${r.opts.join(',')} → ${Math.round(bottom)}`);
+    }
+    return { n: seen.size, out };
+  });
+  expect(over.n).toBeGreaterThanOrEqual(30);
+  expect(over.out).toEqual([]);
+});
+
 const HEB = /[֐-׿]/;
 for (const lang of ['en', 'he', 'es']) {
   test(`language (${lang}): menu + play + reveal, no wrong-language interface text`, async ({ page }) => {
