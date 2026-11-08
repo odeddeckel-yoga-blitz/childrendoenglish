@@ -8,8 +8,10 @@ import { withArticle, isPhoto, pictureClaim, truthfulPictureText, countWord } fr
 import { SPOTLIGHT_GAMES, HUB_ONLY_GAMES } from '../src/data/arcadeGames.js';
 import { WORD_COUNT } from '../src/data/wordCount.js';
 import { gameForCategory, gameFirstCard, GAME_FIRST_CSS } from './game-first.mjs';
-import { DRAWN } from '../src/data/imageStyle.js';
+import { DRAWN, pictureStyle } from '../src/data/imageStyle.js';
 import { PILL_CSS, buildTeachersHtml } from './build-teachers-page.mjs';
+import { wordPageVariant } from '../src/data/wordPageVariant.js';
+import { buildWordPageABody, WORD_A_CSS } from './word-page-a.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -709,7 +711,10 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     enrichmentHtml = `${aboutParagraph}\n    ${sentencesHtml}\n    ${funFactHtml}\n    ${collocationsHtml}\n    ${relatedHtml}`;
   }
 
-  return `<!DOCTYPE html>
+  // Step 4 A/B (src/data/wordPageVariant.js): head is shared; the body is Option A (scripts/word-page-a.mjs) or today's.
+  const arm = wordPageVariant(word.id);
+  const pic = pictureStyle(word.id);
+  const head = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -743,7 +748,32 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
   <!-- Structured Data -->
   <script type="application/ld+json">${breadcrumbSchema}</script>
   <script type="application/ld+json">${definedTermSchema}</script>
-  <script type="application/ld+json">${faqSchema}</script>
+  <script type="application/ld+json">${faqSchema}</script>`;
+
+  if (arm === 'a') {
+    const below = `${wordNav}
+    ${enrichmentHtml}
+    <div class="wa-faq">
+      <h2>Questions about &ldquo;${escapeHtml(word.word)}&rdquo;</h2>
+      <h3>What does &ldquo;${escapeHtml(word.word)}&rdquo; mean?</h3><p>${escapeHtml(answerFirst)}</p>
+      <h3 lang="he" dir="rtl">איך אומרים ${escapeHtml(he)} באנגלית?</h3><p lang="he" dir="rtl">${escapeHtml(he)} באנגלית זה <bdi lang="en" dir="ltr">${escapeHtml(word.word)}</bdi> (<bdi dir="ltr">${escapeHtml(word.phonetic)}</bdi>).</p>
+    </div>
+    <a href="/vocabulary/${categorySlug}/" class="back-link">&larr; All ${escapeHtml(categoryDisplayName)} words</a>
+    <p style="font-size:0.9rem;margin:0.75rem 0 1.5rem"><a href="/printable-flashcards/${categorySlug}/" style="color:#1d4ed8;text-decoration:none">Printable ${escapeHtml(categoryDisplayName)} flashcards</a> &middot; <a href="/vocabulary/${categorySlug}/hebrew/" style="color:#1d4ed8;text-decoration:none">${escapeHtml(categoryDisplayName)} words with Hebrew translations</a> &middot; <a href="/vocabulary/${categorySlug}/spanish/" style="color:#1d4ed8;text-decoration:none">${escapeHtml(categoryDisplayName)} words with Spanish translations</a></p>
+    <div class="categories">
+      <h2>Explore More Categories</h2>
+      <div class="cat-links">
+        ${categoryLinks}
+      </div>
+    </div>`;
+    return `${head}
+  <style>${WORD_A_CSS}  </style>
+</head>
+${buildWordPageABody({ word, categorySlug, categoryDisplayName, categoryWords, allWords: WORDS, esGloss, audioFile, pic, below })}
+</html>`;
+  }
+
+  return `${head}
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -793,7 +823,7 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
   </style>
 </head>
-<body>
+<body data-wv="b" data-pic="${pic}">
   <div class="header">
     <h1>${escapeHtml(capitalWord)} <span lang="he" dir="rtl" style="display:block;font-size:0.72em;font-weight:700">${escapeHtml(he)} באנגלית</span></h1>
     <p lang="he" dir="rtl" style="font-size:1rem;margin-top:0.25rem">איך אומרים ${escapeHtml(he)} באנגלית? <bdi lang="en" dir="ltr"><strong>${escapeHtml(word.word)}</strong></bdi></p>

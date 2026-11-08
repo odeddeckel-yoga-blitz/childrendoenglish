@@ -75,6 +75,21 @@ describe('land-beacon per-page play clicks', () => {
     expect(load('/vocabulary/animals/dog/')).toEqual([{ e: 'pg', i: 'vocabulary_word' }]);
     expect(load('/vocabulary/animals/spanish/')).toEqual([{ e: 'pg', i: 'vocabulary_animals_spanish' }]);
   });
+  it('word-page A/B (step 4): the body markers split the key by arm and picture style', () => {
+    const mark = (wv, pic) => { document.body.setAttribute('data-wv', wv); document.body.setAttribute('data-pic', pic); };
+    try {
+      mark('a', 'drawn');
+      expect(load('/vocabulary/feelings/nervous/', '<div class="mini-quiz"><button class="mq-opt" id="o"></button></div>')).toEqual([{ e: 'pg', i: 'vocabulary_word-a-drawn' }]);
+      expect(click('#o')).toEqual([{ e: 'mq', i: 'vocabulary_word-a-drawn' }]);
+      mark('b', 'photo');
+      expect(load('/vocabulary/animals/cat/', '<a id="p" href="/new-player?topic=animals">play</a>')).toEqual([{ e: 'pg', i: 'vocabulary_word-b-photo' }]);
+      expect(click('#p')).toEqual([{ e: 'cta', i: 'vocabulary_word-b-photo' }]);
+      mark('x', 'photo'); // anything else → the old shared key
+      expect(load('/vocabulary/animals/cat/')).toEqual([{ e: 'pg', i: 'vocabulary_word' }]);
+      mark('a', 'drawn'); // markers only count on word pages
+      expect(load('/vocabulary/animals/')).toEqual([{ e: 'pg', i: 'vocabulary_animals' }]);
+    } finally { document.body.removeAttribute('data-wv'); document.body.removeAttribute('data-pic'); }
+  });
   it('counts one cta for a link into the app or a game, none for other links', () => {
     load('/games/', '<a id="hub" href="/games/">hub</a><a id="g" href="/games/word-zapper/">play</a><a id="v" href="/vocabulary/">words</a><a id="h" href="/?utm_source=seo">home</a>');
     expect(click('#hub')).toEqual([]);

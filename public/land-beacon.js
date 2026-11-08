@@ -121,7 +121,12 @@
     try {
       if (!document.getElementById('root')) {
         var seg = p.split('/').filter(Boolean), key;
-        if (seg[0] === 'vocabulary' && seg.length === 3 && seg[2] !== 'hebrew' && seg[2] !== 'spanish') key = 'vocabulary_word';
+        if (seg[0] === 'vocabulary' && seg.length === 3 && seg[2] !== 'hebrew' && seg[2] !== 'spanish') {
+          /* Word-page A/B (step 4, src/data/wordPageVariant.js): <body data-wv="a|b" data-pic="photo|drawn"> →
+             vocabulary_word-<arm>-<pic>, so every depth tally splits by arm and picture style. No markers → old key. */
+          var bd = document.body, wv = bd && bd.getAttribute('data-wv'), wp = bd && bd.getAttribute('data-pic');
+          key = /^[ab]$/.test(wv || '') && /^(photo|drawn)$/.test(wp || '') ? 'vocabulary_word-' + wv + '-' + wp : 'vocabulary_word';
+        }
         else key = (seg.join('_') || 'root').toLowerCase().replace(/[^a-z0-9_-]/g, '-').slice(0, 40);
         // act (push method v2, 11-11) = "any action": once per page view, sent with the FIRST of a play click, a mini-quiz
         // tap, 15 s visible, a print (button or dialog) or a maker Build — the high-rate metric small CDE pages are read by.

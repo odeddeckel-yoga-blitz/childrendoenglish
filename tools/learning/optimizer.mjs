@@ -41,7 +41,9 @@
  */
 import { neon } from '@neondatabase/serverless';
 import { WORDS } from '../../src/data/words.js';
-import { printPageDepth, DEPTH_SINCE } from './standing-sections.mjs';
+import { printPageDepth, printWordAb, DEPTH_SINCE } from './standing-sections.mjs';
+import { wordPageUrls } from '../../src/data/wordPageVariant.js';
+import { PAGES_HOLD } from '../../src/data/pagesHold.js';
 
 const TARGET_WRONG = 0.25; // above this wrong-rate a word is "hard"
 const FLOOR = 10;          // min attempts before we trust a word's rate
@@ -49,6 +51,16 @@ const FLOOR = 10;          // min attempts before we trust a word's rate
 const days = Math.min(365, Math.max(1, Number(process.argv[2]) || 28));
 const top = Number((process.argv.find(a => a.startsWith('--top=')) || '').split('=')[1]) || 15;
 const doRivals = process.argv.includes('--rivals');
+
+// --word-ab-urls=a|b: the live word-page URLs of one A/B arm (src/data/wordPageVariant.js), one per line, for a
+// Google CTR read per arm (GSC page filter / tools/seo). No DB needed.
+const abArg = process.argv.find((a) => a.startsWith('--word-ab-urls='));
+if (abArg) {
+  const arm = abArg.split('=')[1];
+  if (!/^[ab]$/.test(arm)) { console.error('--word-ab-urls=a or --word-ab-urls=b'); process.exit(2); }
+  console.log(wordPageUrls(WORDS.filter((w) => !PAGES_HOLD.has(w.id)), arm).join('\n'));
+  process.exit(0);
+}
 
 // --digest (cost plan, owner 11-07): the session reads ~30 lines instead of ~300. The full report is still written to
 // .image-work/optimizer-<days>d-last.txt; stdout gets each section's headline line, every ⚠ flag, and — when a
@@ -316,6 +328,7 @@ const depthRows = await q`SELECT item, ev, lang, sum(n)::int AS n FROM cde_learn
   WHERE day >= GREATEST(CURRENT_DATE - ${days}::int, ${DEPTH_SINCE}::date)
     AND ev IN ('pg', 'cta', 'mq', 'mqv', 's15', 'prc', 'bpr', 'fmb') GROUP BY item, ev, lang`;
 printPageDepth(depthRows);
+printWordAb(depthRows);
 if (pages.length > 0) {
   const by = {};
   const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '—');

@@ -4,6 +4,8 @@
 // component_daily); the client halves are public/land-beacon.js, src/utils/activityFlow.js and public/games/game-clicks.js.
 // The new tallies start 2026-11-04 — until ~Nov 11 every line here is thin; judge shares, not counts.
 
+import { parseWordPageKey, WORD_PAGE_AB } from '../../src/data/wordPageVariant.js';
+
 export const SECTIONS_SINCE = '2026-11-04';
 const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '—');
 
@@ -66,7 +68,7 @@ export function controlsSummary(rows) {
 // Static-page depth (measure step 2, 11-08): the page key (pg's item) → page type, the unit the layout work is judged by.
 export const DEPTH_SINCE = '2026-11-08';
 export function pageType(key) {
-  if (key === 'vocabulary_word') return 'word';
+  if (parseWordPageKey(key)) return 'word'; // vocabulary_word, or vocabulary_word-<arm>-<pic> during the word-page A/B
   if (/^vocabulary_ages-/.test(key)) return 'age';
   if (/^vocabulary_[^_]+_(hebrew|spanish)$/.test(key)) return 'bilingual';
   if (/^vocabulary(_[^_]+)?$/.test(key)) return 'category';
@@ -112,6 +114,32 @@ export function printPageDepth(rows, minViews = 10) {
     console.log(`  ${(x.type + ' ' + x.lang).padEnd(20)} views ${String(x.pg).padStart(5)}  stayed15 ${c(x.s15, x.pg)}  play-click ${c(x.cta, x.pg)}  ${extra}`);
   }
   return lines;
+}
+
+// Word-page A/B (step 4, src/data/wordPageVariant.js): the word rows split by arm (a = Option A, b = today's page) and
+// picture style (photo / drawn). Judge by quiz-tap ÷ views and play-click ÷ views per arm, ≥ 14 days after the release.
+export function wordAbSummary(rows) {
+  const z = () => Object.fromEntries(DEPTH_EVS.map((e) => [e, 0]));
+  const out = { a: { all: z(), photo: z(), drawn: z() }, b: { all: z(), photo: z(), drawn: z() } };
+  for (const r of rows) {
+    const k = parseWordPageKey(r.item);
+    if (!k || !k.arm || !DEPTH_EVS.includes(r.ev)) continue;
+    out[k.arm].all[r.ev] += r.n; out[k.arm][k.pic][r.ev] += r.n;
+  }
+  return out;
+}
+export function printWordAb(rows) {
+  const s = wordAbSummary(rows);
+  console.log(`\n— word-page A/B (Option A vs today's page; from ${WORD_PAGE_AB.start}, read ≥ 14 days after; Google CTR per arm: optimizer.mjs --word-ab-urls=a|b → GSC page filter) —`);
+  if (!s.a.all.pg && !s.b.all.pg) { console.log('  no A/B page views yet'); return s; }
+  const c = (a, b) => pct(a, b).padStart(4);
+  for (const arm of ['a', 'b']) {
+    for (const part of ['all', 'photo', 'drawn']) {
+      const x = s[arm][part];
+      console.log(`  ${(arm === 'a' ? 'A (new)' : 'B (old)') + ' ' + part}`.padEnd(18) + ` views ${String(x.pg).padStart(5)}  quiz-tap ${c(x.mq, x.pg)}  play-click ${c(x.cta, x.pg)}  quiz-seen ${c(x.mqv, x.pg)}  stayed15 ${c(x.s15, x.pg)}`);
+    }
+  }
+  return s;
 }
 
 export async function standingSections(q, days) {

@@ -1,6 +1,6 @@
 // Pure helpers of tools/learning/standing-sections.mjs (kit 1.59 §5.55 report sections).
 import { describe, it, expect } from 'vitest';
-import { flowSummary, speedSummary, controlsSummary, pageType, pageDepthSummary } from '../../tools/learning/standing-sections.mjs';
+import { flowSummary, speedSummary, controlsSummary, pageType, pageDepthSummary, wordAbSummary } from '../../tools/learning/standing-sections.mjs';
 
 describe('standing sections', () => {
   it('flow: g2/g3 totals, how mix, top moves, dead ends (≥10 arrivals, <20% move on)', () => {
@@ -37,7 +37,7 @@ describe('standing sections', () => {
 describe('static-page depth by type (measure step 2)', () => {
   it('maps page keys to types', () => {
     const cases = {
-      vocabulary_word: 'word', 'vocabulary_ages-6-8': 'age', vocabulary_animals: 'category', vocabulary: 'category',
+      vocabulary_word: 'word', 'vocabulary_word-a-photo': 'word', 'vocabulary_word-b-drawn': 'word', 'vocabulary_ages-6-8': 'age', vocabulary_animals: 'category', vocabulary: 'category',
       vocabulary_animals_spanish: 'bilingual', 'printable-flashcards_animals': 'printable', 'printable-flashcards_animals_hebrew': 'printable',
       'printable-flashcards_transportation_span': 'printable', // the 40-char key cap
       'printable-flashcards_spanish': 'printable-index', 'tools_flashcard-maker': 'maker', teachers: 'teachers', he_teachers: 'teachers',
@@ -55,5 +55,19 @@ describe('static-page depth by type (measure step 2)', () => {
     expect(d[0]).toMatchObject({ type: 'word', lang: 'en', pg: 100, s15: 30, mqv: 20, mq: 2 });
     expect(d[1]).toMatchObject({ type: 'printable', lang: 'es', pg: 15, prc: 3, bpr: 0 });
     expect(d).toHaveLength(2);
+  });
+  it('word-page A/B: split by arm and picture style; the pre-test key and other pages stay out', () => {
+    const s = wordAbSummary([
+      { item: 'vocabulary_word-a-photo', ev: 'pg', lang: 'en', n: 60 }, { item: 'vocabulary_word-a-drawn', ev: 'pg', lang: 'he', n: 40 },
+      { item: 'vocabulary_word-a-photo', ev: 'mq', lang: 'en', n: 6 }, { item: 'vocabulary_word-a-drawn', ev: 'cta', lang: 'he', n: 2 },
+      { item: 'vocabulary_word-b-photo', ev: 'pg', lang: 'en', n: 90 }, { item: 'vocabulary_word-b-photo', ev: 'mq', lang: 'en', n: 1 },
+      { item: 'vocabulary_word', ev: 'pg', lang: 'en', n: 500 }, { item: 'vocabulary_animals', ev: 'pg', lang: 'en', n: 50 },
+      { item: 'vocabulary_word-a-photo', ev: 'ans_ok', lang: 'en', n: 9 },
+    ]);
+    expect(s.a.all).toMatchObject({ pg: 100, mq: 6, cta: 2 });
+    expect(s.a.photo).toMatchObject({ pg: 60, mq: 6, cta: 0 });
+    expect(s.a.drawn).toMatchObject({ pg: 40, mq: 0, cta: 2 });
+    expect(s.b.all).toMatchObject({ pg: 90, mq: 1 });
+    expect(s.b.drawn.pg).toBe(0);
   });
 });

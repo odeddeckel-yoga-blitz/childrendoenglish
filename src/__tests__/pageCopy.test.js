@@ -56,9 +56,10 @@ describe('generated pages: a / an', () => {
   const isWordCatAge = (p) => /^\/vocabulary\/[^/]+\/([^/]+\/)?$/.test(p) && !/\/(hebrew|spanish)\/$/.test(p);
   it('word, category and age pages never say "a" before a vowel sound', () => {
     const bad = [];
+    // letter-aware boundary: the "a" ending a Spanish gloss like "piña" (Option A word pages) is not an article
     for (const [p, html] of pages) {
       if (!isWordCatAge(p)) continue;
-      for (const m of text(html).matchAll(/\ba ([aeiou][\w-]*)/gi)) if (!OK.test(m[1])) bad.push(`${p}: a ${m[1]}`);
+      for (const m of text(html).matchAll(/(?<![\p{L}\p{N}_])a ([aeiou][\w-]*)/giu)) if (!OK.test(m[1])) bad.push(`${p}: a ${m[1]}`);
     }
     expect(pages.size).toBeGreaterThan(500);
     expect(bad.slice(0, 10)).toEqual([]);
