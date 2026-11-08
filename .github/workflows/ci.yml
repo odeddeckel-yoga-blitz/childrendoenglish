@@ -58,9 +58,9 @@ jobs:
         run: npm run build
 
       - name: Install Playwright browsers
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright E2E tests
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
         run: npx playwright test
