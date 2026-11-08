@@ -71,7 +71,8 @@ test('printables: at-a-glance numbers match the cards, and every sheet button pr
   const cards = await page.locator('.flashcard').count();
   const glance = page.locator('.glance');
   await expect(glance.locator('caption')).toContainText('at a glance');
-  await expect(glance.locator('tr').first()).toContainText(`${cards} photo flashcards`);
+  // 'real-photo' only when every card's picture is a photo (page-copy.mjs); food has 2 drawn pictures.
+  await expect(glance.locator('tr').first()).toContainText(new RegExp(`${cards} (real-photo|picture) flashcards`));
   await expect(glance.locator('ol li')).toHaveCount(3);
   await page.evaluate(() => { window.__prints = 0; window.print = () => { window.__prints++; }; });
   const prints = () => page.evaluate(() => window.__prints);
