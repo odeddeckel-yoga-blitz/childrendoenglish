@@ -5,6 +5,7 @@ import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 import { instrumentSpeech, checkSpeech } from './lib/speech-sync.mjs';
+import { cold } from './lib/cold-net.mjs';
 
 const URL = '/games/sentence-builder/index.html';
 const PUB = path.resolve('public');
@@ -243,11 +244,12 @@ test('contrast: play-screen text is WCAG AA on the dark theme', async ({ page })
   expect(bad).toEqual([]);
 });
 
-test('speech sync (warm): a sentence never plays over the next round', async ({ page }) => {
+for (const mode of ['warm', 'cold']) test(`speech sync (${mode}): a sentence never plays over the next round`, async ({ page }) => {
   test.skip(!!process.env.CI, 'speech-sync needs real audio output (CI has none)');
   test.setTimeout(90000);
   await instrumentSpeech(page, { audio: /\/audio\/[a-z0-9-]+\.mp3/, visual: () => (window.SB && SB.dbg.roundKey) || '', answerSel: '#app .bank .tile' });
   await open(page);
+  if (mode === 'cold') await cold(page);
   await page.click('#startBtn');
   for (let i = 0; i < 4; i++) {
     await page.waitForTimeout(700);
