@@ -139,6 +139,11 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
   any input). Start unanswered, inviting the action. And never mark an anchor/reference with a bare colored cell
   the player must decode: label it (a 🚩 START flag + a one-line on-canvas legend, "🚩 = start · tap where you
   land"). Every persistent highlight earns an on-screen word or legend.
+- **Answer options that name things on the board carry the board's mark** (2026-11-08, natural-selection). Two
+  variant options with the SAME emoji (🦌 Fast deer / 🦌 Slow deer, 📈 / 📈) say nothing, and the only link to the
+  board's tan/brown dots was a small canvas legend. Give each such option the board token itself (a swatch: same fill
+  + ring) so the prediction reads straight off the picture. Neutral, identical icons on ALL options (no option
+  favoured) are fine; a shared icon on two options that the board tells apart is not.
 
 ## The mechanic (design rubric)
 

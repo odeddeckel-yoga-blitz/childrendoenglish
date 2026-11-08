@@ -31,7 +31,11 @@ export async function instrumentSpeech (page, { audio = /./, visual, answerSel =
     if (window.speechSynthesis) {
       const speak = window.speechSynthesis.speak.bind(window.speechSynthesis)
       window.speechSynthesis.speak = (u) => { const id = 'tts:' + (u.text || '').slice(0, 40)
-        u.addEventListener('start', () => log.push({ e: 'start', t: t(), src: id })); u.addEventListener('end', () => log.push({ e: 'end', t: t(), src: id })); return speak(u) }
+        log.push({ e: 'queued', t: t(), src: id })
+        u.addEventListener('start', () => log.push({ e: 'start', t: t(), src: id })); u.addEventListener('end', () => log.push({ e: 'end', t: t(), src: id }))
+        // speechSynthesis.cancel() ends an utterance with 'error' (interrupted/canceled), never 'end' (KDM 11-08): without
+        // this a cancelled line read as still playing forever and every later screen change flagged it.
+        u.addEventListener('error', () => log.push({ e: 'cut', t: t(), src: id })); return speak(u) }
     }
     let last = ''
     const frame = () => { let v = ''; try { v = String(vis() || '') } catch (e) {} if (v && v !== last) { log.push({ e: 'visual', t: t(), src: v }); last = v } requestAnimationFrame(frame) }
@@ -40,20 +44,32 @@ export async function instrumentSpeech (page, { audio = /./, visual, answerSel =
   }, { audioSrc: audio.source, visualSrc: visual ? visual.toString() : '', answerSel })
 }
 // A clip is wrong if the visual changes while it is still playing (60 ms grace), or it starts > maxStartMs after the answer.
-export function checkSpeech (log, { maxStartMs = 1500, graceMs = 60, chainMs = 600 } = {}) {
+export function checkSpeech (log, { maxStartMs = 1500, graceMs = 60, ownMs = 150, chainMs = 600 } = {}) {
+  // A clip that starts with its own screen (the app speaks the new question in the same tick it renders it) is logged a
+  // frame BEFORE the visual (KDM /play 11-08: start 12553, visual 12554). A visual change within ownMs after the start
+  // is the clip's OWN screen, not a change it played over.
   const problems = [], spoken = log.filter((x) => x.e === 'start')
   for (const s of spoken) {
     const stop = log.find((x) => (x.e === 'end' || x.e === 'cut') && x.src === s.src && x.t >= s.t), end = stop ? stop.t : Infinity
-    const shown = [...log].reverse().find((x) => x.e === 'visual' && x.t <= s.t), change = log.find((x) => x.e === 'visual' && x.t > s.t && x.t < end - graceMs)
+    const own = log.find((x) => x.e === 'visual' && x.t > s.t && x.t <= s.t + ownMs)
+    const shown = own || [...log].reverse().find((x) => x.e === 'visual' && x.t <= s.t), change = log.find((x) => x.e === 'visual' && x !== own && x.t > s.t && x.t < end - graceMs)
     if (change) problems.push(`"${s.src}" still playing when the visual changed ${shown?.src} → ${change.src} (${Math.round(end - change.t)} ms over the next one)`)
     const answer = [...log].reverse().find((x) => x.e === 'answer' && x.t <= s.t)
     // late-start = the answer's own feedback speech lagging. A visual change between the answer and the start means this
     // is the NEXT item's word (CDE plays each question's word as it appears, 11-07), not late feedback.
-    const movedOn = answer && log.some((x) => x.e === 'visual' && x.t > answer.t && x.t <= s.t)
-    // a word chained straight after another (target, then the tapped word) starts when the first one ends, not late:
-    // only the first word of the chain is feedback lag (CDE Read It / Rhyme Time pairs, 11-08; sent to the kit)
+    const movedOn = answer && log.some((x) => x.e === 'visual' && x.t > answer.t && x.t <= s.t + ownMs)
+    // A word chained ≤ chainMs after another word's END (after this answer) is a sequence, not late feedback (CDE Read It's
+    // slow pairs, 11-08): the first word started on time and this one follows it.
     const chained = log.some((x) => x.e === 'end' && x.t <= s.t && s.t - x.t <= chainMs && (!answer || x.t > answer.t))
     if (answer && !movedOn && !chained && s.t - answer.t > maxStartMs) problems.push(`"${s.src}" started ${Math.round(s.t - answer.t)} ms after the answer`)
+  }
+  // A line queued for one screen that never started before the screen changed and was then cut = never heard at all
+  // (KDM /play 11-08: a question's read-out queued behind a long answer line, cut by the next answer).
+  for (const q of log.filter((x) => x.e === 'queued')) {
+    const started = log.find((x) => x.e === 'start' && x.src === q.src && x.t >= q.t)
+    const cut = log.find((x) => x.e === 'cut' && x.src === q.src && x.t >= q.t && (!started || x.t < started.t))
+    const moved = cut && log.some((x) => x.e === 'visual' && x.t > q.t + ownMs && x.t < cut.t)
+    if (cut && moved) problems.push(`"${q.src}" queued ${Math.round(q.t)} ms, never heard: the screen changed and it was cut before it started`)
   }
   return { spoken: spoken.length, problems }
 }

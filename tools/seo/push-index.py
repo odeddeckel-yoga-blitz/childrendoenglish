@@ -32,15 +32,21 @@ print('sitemap resubmitted')
 
 idx = build('indexing', 'v3', credentials=creds)
 urls = open(sys.argv[1]).read().split() if len(sys.argv) > 1 else []
-ok = fail = 0
-for u in urls:
-    try:
-        idx.urlNotifications().publish(body={'url': u, 'type': 'URL_UPDATED'}).execute()
-        ok += 1
-    except Exception as e:
-        fail += 1
-        if fail <= 2: print('fail:', u, str(e)[:100])
-print(f'Google indexing pings: {ok} ok, {fail} failed')
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+try:
+    from index_ping import ping_all   # stops at the first quota 429 (KDM 11-08); a site that hasn't synced it gets the old loop
+except ImportError:
+    def ping_all(urls, publish):
+        ok, failed = [], []
+        for u in urls:
+            try: publish(u); ok.append(u)
+            except Exception as e: failed.append((u, str(e)[:100]))
+        return ok, failed
+ok_urls, failed = ping_all(urls, lambda u: idx.urlNotifications().publish(body={'url': u, 'type': 'URL_UPDATED'}).execute())
+for u, why in failed: print('fail:', u, why)   # every failed URL (11-08: the output was cut to its last 400 chars)
+print(f'Google indexing pings: {len(ok_urls)} ok, {len(failed)} failed')
+if os.environ.get('INDEX_FAILED_OUT'):   # index_coverage.py logs only the accepted ids
+    open(os.environ['INDEX_FAILED_OUT'], 'w').write(''.join(u + '\n' for u, _ in failed))
 
 # --- IndexNow (Bing/Yandex/etc.) — one POST covers every participating engine.
 # Key file must be hosted at https://<host>/<key>.txt (public by design); the
