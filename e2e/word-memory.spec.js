@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import { instrumentSpeech, checkSpeech } from './lib/speech-sync.mjs';
+import { cold } from './lib/cold-net.mjs';
 
 // Word Memory (/games/word-memory/): picture ↔ English word concentration game.
 const URL = '/games/word-memory/index.html';
@@ -234,7 +235,7 @@ test('contrast: menu, HUD and card text meet WCAG AA', async ({ page }) => {
   for (const [k, v] of Object.entries(all)) expect(v, k).toBeGreaterThanOrEqual(4.5);
 });
 
-test('speech-sync: a word is never still playing when the next card turns or the board changes (warm)', async ({ page }) => {
+for (const mode of ['warm', 'cold']) test(`speech-sync: a word is never still playing when the next card turns or the board changes (${mode})`, async ({ page }) => {
   test.skip(!!process.env.CI, 'speech-sync needs real audio output (CI has none)');
   test.setTimeout(90000);
   await instrumentSpeech(page, {
@@ -243,6 +244,7 @@ test('speech-sync: a word is never still playing when the next card turns or the
     answerSel: '.mc',
   });
   await open(page);
+  if (mode === 'cold') await cold(page);
   await page.click('#startBtn');
   // warm the cache: one real run of the level's words
   await page.evaluate(() => Promise.all(WM.dbg.state.deck.map((c) => fetch('/audio/' + c.id + '.mp3'))));

@@ -5,6 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { WORDS } from '../src/data/words.js';
 import { instrumentSpeech, checkSpeech } from './lib/speech-sync.mjs';
+import { cold } from './lib/cold-net.mjs';
 
 const URL = '/games/missing-letter/index.html';
 const PUB = path.resolve('public');
@@ -292,11 +293,12 @@ test('contrast: menu and play text ≥ 4.5:1 (≥ 3:1 for large text) on its rea
   expect(await measure()).toEqual([]);
 });
 
-test('speech sync (warm): each word stays with its round', async ({ page }) => {
+for (const mode of ['warm', 'cold']) test(`speech sync (${mode}): each word stays with its round`, async ({ page }) => {
   test.skip(!!process.env.CI, 'speech-sync needs real audio output (CI has none)');
   test.setTimeout(90000);
   await instrumentSpeech(page, { audio: /\/audio\/[a-z0-9-]+\.mp3/, visual: () => (window.ML && ML.dbg.item ? ML.dbg.round + ':' + ML.dbg.item.word : ''), answerSel: '#app .opt' });
   await open(page);
+  if (mode === 'cold') await cold(page);
   await page.click('#startBtn');
   for (let i = 0; i < 5; i++) {
     await page.waitForTimeout(1300);   // the child listens, then taps

@@ -6,14 +6,35 @@
  * NOT a load failure — TTS would be blocked the same way. */
 (function () {
   var clip = null;
-  window.cdeSay = function (text, fallback) {
+  var keyOf = function (text) { return String(text).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-'); };
+  /* Words loaded ahead (cdePreload): on a slow line a word fetched only when it is due started up to ~1 s after the
+   * word before it (Rhyme Time's pair after an answer, cold speech-sync 11-08). The same element is played later, so it
+   * works with the cache off too. */
+  var pre = {}, preOrder = [];
+  window.cdePreload = function (words) {
+    try {
+      (words || []).forEach(function (w) {
+        var key = keyOf(w);
+        if (!key || pre[key]) return;
+        var a = new Audio('/audio/' + key + '.mp3'); a.preload = 'auto';
+        pre[key] = a; preOrder.push(key);
+        if (preOrder.length > 40) delete pre[preOrder.shift()];
+      });
+    } catch (e) {}
+  };
+  /* src (optional): play this file instead of /audio/<word>.mp3 (True or False's sentence clips). */
+  window.cdeSay = function (text, fallback, src) {
     try {
       if (clip) clip.pause();
       try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
-      var key = String(text).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
-      clip = new Audio('/audio/' + key + '.mp3');
+      var key = keyOf(text), ready = !src && pre[key];
+      if (ready && !ready.error) { clip = ready; try { clip.currentTime = 0; } catch (e) {} }
+      else clip = new Audio(src || '/audio/' + key + '.mp3');
       var failed = false;
       var fail = function () { if (!failed) { failed = true; if (fallback) fallback(); } };
+      /* a preloaded element is played again later: drop the last word's handler, or its fallback would speak it */
+      if (clip.__cdeFail) clip.removeEventListener('error', clip.__cdeFail);
+      clip.__cdeFail = fail;
       clip.addEventListener('error', fail, { once: true });
       var p = clip.play();
       /* NotAllowedError = blocked autoplay (TTS would be blocked too); AbortError = this clip was cut by the next

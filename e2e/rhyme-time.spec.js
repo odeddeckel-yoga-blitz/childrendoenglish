@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { instrumentSpeech, checkSpeech } from './lib/speech-sync.mjs';
+import { cold } from './lib/cold-net.mjs';
 
 const PAGE = '/games/rhyme-time/index.html';
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
@@ -133,8 +134,12 @@ test('play screen: nothing pre-highlighted, no word text on options, idle reveal
 });
 
 test('wrong tap: both words play, tip names the rhyme, the right picture is marked', async ({ page }) => {
-  const played = [];
-  page.on('request', (r) => { const m = r.url().match(/\/audio\/([a-z-]+)\.mp3/); if (m) played.push(m[1]); });
+  // plays, not downloads: a preloaded word (cdePreload) is fetched once and played again from the same element
+  await page.addInitScript(() => {
+    window.__played = [];
+    const play = HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play = function (...a) { const m = String(this.src).match(/\/audio\/([a-z-]+)\.mp3/); if (m) window.__played.push(m[1]); return play.apply(this, a); };
+  });
   await page.goto(PAGE);
   await page.click('#startBtn');
   await page.waitForTimeout(600);
@@ -146,6 +151,7 @@ test('wrong tap: both words play, tip names the rhyme, the right picture is mark
   const fb = await page.locator('#app .feedback').innerText();
   for (const w of [r.target, r.answer, wrong]) expect(fb).toContain(w);
   await page.waitForTimeout(2500);
+  const played = await page.evaluate(() => window.__played);
   expect(played).toContain(wrong);
   expect(played.filter((w) => w === r.target).length).toBeGreaterThanOrEqual(2);
   await expect(page.locator('#nextBtn')).toBeVisible();
@@ -266,11 +272,12 @@ test('contrast: body text is WCAG AA on the darkest and lightest backgrounds of 
   expect(c).toBe('rgb(199, 210, 254)');
 });
 
-test('speech-sync (warm): a word is never still playing when the round changes', async ({ page }) => {
+for (const mode of ['warm', 'cold']) test(`speech-sync (${mode}): a word is never still playing when the round changes`, async ({ page }) => {
   test.skip(!!process.env.CI, 'speech-sync needs real audio output (CI has none)');
   test.setTimeout(90000);
   await instrumentSpeech(page, { audio: /\/audio\/[a-z0-9-]+\.mp3/, visual: () => document.querySelector('#rtTarget')?.getAttribute('data-word') || '', answerSel: '.opt, #nextBtn' });
   await page.goto(PAGE);
+  if (mode === 'cold') await cold(page);
   await page.click('#startBtn');
   for (let i = 0; i < 5; i++) {
     await page.waitForTimeout(1500); // a child listens, then taps

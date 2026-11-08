@@ -5,6 +5,7 @@ import { test, expect } from '@playwright/test';
 import fs from 'node:fs';
 import { WORDS } from '../src/data/words.js';
 import { instrumentSpeech, checkSpeech } from './lib/speech-sync.mjs';
+import { cold } from './lib/cold-net.mjs';
 
 const URL = '/games/picture-bingo/index.html';
 const REMOVED = 'soap roof blanket grape crayon baby drizzle rainy windy cloudy sunny karate gymnasium lunchbox homework skirt pajamas forehead chin neck cloud snow ice storm fog hail hurricane tornado frost avalanche dancing wrestling treasure head nose mouth arm shoulder knee elbow ankle wrist chest hip cheek belly desk chalk marker overalls apron ferry pair ivory coral teal pebble attic basket sticker ribbon whisper rug back teeth lips tummy leg face palm toe tongue hair bandana slippers bowtie textbook glue hiking jumping fencing blocks swing pinwheel sled marble puppet yoga bracelet beret poncho poster grumpy cheerful diving pond garage raft'.split(' ');
@@ -292,21 +293,26 @@ test('contrast: play-screen text is readable (WCAG AA; 3:1 for large bold button
   expect(r.say).toBeGreaterThanOrEqual(3);
 });
 
-test('speech-sync (real audio, warm): a call has finished before the next call shows', async ({ page }) => {
+for (const mode of ['warm', 'cold']) test(`speech-sync (real audio, ${mode}): a call has finished before the next call shows`, async ({ page }) => {
   test.skip(!!process.env.CI, 'speech-sync needs real audio output (CI has none)');
   test.setTimeout(60000);
   await instrumentSpeech(page, { audio: /\/audio\/[a-z0-9-]+\.mp3/, visual: () => document.getElementById('hud')?.getAttribute('data-call') || '', answerSel: '.sq, #notOn' });
   await page.route('**/api/**', (r) => r.fulfill({ status: 204 }));
   await page.goto(URL);
+  if (mode === 'cold') await cold(page);
   await page.waitForFunction(() => window.PB && document.readyState === 'complete');
-  // warm: fetch every card word once
-  await page.evaluate(() => Promise.all(Object.values(PB.TOPICS).flat().map((w) => fetch('/audio/' + w + '.mp3'))));
+  // warm: fetch every card word once (cold skips it: with the cache off it only queued ~100 clips ahead of the call on
+  // the slow line, which no child's browser does)
+  if (mode === 'warm') await page.evaluate(() => Promise.all(Object.values(PB.TOPICS).flat().map((w) => fetch('/audio/' + w + '.mp3'))));
   await page.click('#startBtn');
   for (const lv of [0, 2]) {
-    if (lv) await page.evaluate(() => PB.dbg.startLevel(2));
+    // the jump to level 3 is the test's shortcut, not a child's: it waits for the word to end first
+    if (lv) await page.evaluate(() => new Promise((r) => window.cdeSayDone(4000, r)).then(() => PB.dbg.startLevel(2)));
     for (let k = 0; k < 5; k++) {
       await page.waitForFunction(() => PB.dbg.call && !PB.dbg.busy, null, { timeout: 10000 }).catch(() => {});
       if (await page.locator('#app .card').count()) break;
+      // a child taps only after the word has started (on a slow line it starts late): wait for this call's word
+      await page.waitForFunction(() => { const l = window.__sync, v = l.map((x) => x.e).lastIndexOf('visual'); return l.slice(v).some((x) => x.e === 'start'); }, null, { timeout: 8000 }).catch(() => {});
       await page.waitForTimeout(k % 2 ? 150 : 900); // fast taps (mid-word) and a child's pace
       await page.evaluate(() => PB.dbg.solveForTest());
     }

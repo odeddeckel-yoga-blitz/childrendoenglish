@@ -208,6 +208,7 @@ function render(){
     both(w);
   }
   S.choose=choose;
+  if(window.cdePreload) window.cdePreload([r.target].concat(r.options));
   setTimeout(function(){ if(live()) say(r.target); }, 250);
 }
 

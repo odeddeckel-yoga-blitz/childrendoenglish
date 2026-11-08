@@ -40,7 +40,7 @@ export async function instrumentSpeech (page, { audio = /./, visual, answerSel =
   }, { audioSrc: audio.source, visualSrc: visual ? visual.toString() : '', answerSel })
 }
 // A clip is wrong if the visual changes while it is still playing (60 ms grace), or it starts > maxStartMs after the answer.
-export function checkSpeech (log, { maxStartMs = 1500, graceMs = 60 } = {}) {
+export function checkSpeech (log, { maxStartMs = 1500, graceMs = 60, chainMs = 600 } = {}) {
   const problems = [], spoken = log.filter((x) => x.e === 'start')
   for (const s of spoken) {
     const stop = log.find((x) => (x.e === 'end' || x.e === 'cut') && x.src === s.src && x.t >= s.t), end = stop ? stop.t : Infinity
@@ -50,7 +50,10 @@ export function checkSpeech (log, { maxStartMs = 1500, graceMs = 60 } = {}) {
     // late-start = the answer's own feedback speech lagging. A visual change between the answer and the start means this
     // is the NEXT item's word (CDE plays each question's word as it appears, 11-07), not late feedback.
     const movedOn = answer && log.some((x) => x.e === 'visual' && x.t > answer.t && x.t <= s.t)
-    if (answer && !movedOn && s.t - answer.t > maxStartMs) problems.push(`"${s.src}" started ${Math.round(s.t - answer.t)} ms after the answer`)
+    // a word chained straight after another (target, then the tapped word) starts when the first one ends, not late:
+    // only the first word of the chain is feedback lag (CDE Read It / Rhyme Time pairs, 11-08; sent to the kit)
+    const chained = log.some((x) => x.e === 'end' && x.t <= s.t && s.t - x.t <= chainMs && (!answer || x.t > answer.t))
+    if (answer && !movedOn && !chained && s.t - answer.t > maxStartMs) problems.push(`"${s.src}" started ${Math.round(s.t - answer.t)} ms after the answer`)
   }
   return { spoken: spoken.length, problems }
 }

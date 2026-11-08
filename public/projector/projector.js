@@ -103,6 +103,8 @@ function next() {
   if (!S.shown) { reveal(); return; } // Next on a hidden card reveals first, so nothing is skipped by accident
   S.i = (S.i + 1) % S.deck.length;
   if (S.i === 0) S.deck = shuffle(S.deck);
+  // the last card's word stops with its card: it ran ~1 s over the next picture when a teacher moved on quickly (11-08)
+  if (window.cdeHush) window.cdeHush();
   S.shown = false; render();
 }
 function start() {
@@ -113,6 +115,7 @@ function start() {
   render();
 }
 function back() {
+  if (window.cdeHush) window.cdeHush();
   $('show').hidden = true; $('setup').hidden = false;
   try { if (document.fullscreenElement) document.exitFullscreen(); } catch { /* not supported */ }
 }
