@@ -33,3 +33,4 @@
 {"id":"deploy-smoke","at":"2026-11-08T08:21:49.000Z","result":"ok","note":"08:16Z push bac38be (bingo class-mode fit, CI e2e on PRs, speech-sync sweep: Projector hush, Rhyme Time preload): smoke 11 pass/0 fail; cdeHush/cdePreload live"}
 {"id":"kit-sync","at":"2026-11-08T08:21:57.004Z","result":"ok","note":""}
 {"id":"speech-sync-sweep","at":"2026-11-08T08:21:57.000Z","result":"found","note":"11-08 (Factory relay): every spoken screen warm+cold except Class Battle (live API). Found: Projector word over next card (fixed cdeHush), Rhyme Time cold pair lag (fixed cdePreload), checker chained-word false alarm (kit aad295b). Live 08:16Z bac38be"}
+{"id":"deploy-smoke","at":"2026-11-08T00:04:27.880Z","result":"ok","note":"00:02Z push 98eac60 (CI fix, 8 number words, wave-2 brief): smoke 11 pass/0 fail; seventy.webp live; /he/ 200"}
