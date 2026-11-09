@@ -217,6 +217,886 @@
       "source": "/vocabulary/clothing/apron/",
       "destination": "/vocabulary/clothing/",
       "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/climb_verb",
+      "destination": "/vocabulary/everyday/climb_verb/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/climb_verb/",
+      "destination": "/vocabulary/everyday/climb_verb/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/cook_verb",
+      "destination": "/vocabulary/everyday/cook_verb/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/cook_verb/",
+      "destination": "/vocabulary/everyday/cook_verb/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/paint_verb",
+      "destination": "/vocabulary/everyday/paint_verb/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/paint_verb/",
+      "destination": "/vocabulary/everyday/paint_verb/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/read_verb",
+      "destination": "/vocabulary/everyday/read_verb/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/read_verb/",
+      "destination": "/vocabulary/everyday/read_verb/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/run",
+      "destination": "/vocabulary/everyday/run/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/run/",
+      "destination": "/vocabulary/everyday/run/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/write",
+      "destination": "/vocabulary/everyday/write/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/actions/write/",
+      "destination": "/vocabulary/everyday/write/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/ear",
+      "destination": "/vocabulary/everyday/ear/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/ear/",
+      "destination": "/vocabulary/everyday/ear/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/eye",
+      "destination": "/vocabulary/everyday/eye/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/eye/",
+      "destination": "/vocabulary/everyday/eye/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/finger",
+      "destination": "/vocabulary/everyday/finger/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/finger/",
+      "destination": "/vocabulary/everyday/finger/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/foot",
+      "destination": "/vocabulary/everyday/foot/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/foot/",
+      "destination": "/vocabulary/everyday/foot/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/hand",
+      "destination": "/vocabulary/everyday/hand/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/hand/",
+      "destination": "/vocabulary/everyday/hand/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/nose",
+      "destination": "/vocabulary/everyday/nose/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/nose/",
+      "destination": "/vocabulary/everyday/nose/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/thumb",
+      "destination": "/vocabulary/everyday/thumb/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/thumb/",
+      "destination": "/vocabulary/everyday/thumb/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/tooth",
+      "destination": "/vocabulary/everyday/tooth/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/body/tooth/",
+      "destination": "/vocabulary/everyday/tooth/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/family/baby",
+      "destination": "/vocabulary/everyday/baby/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/family/baby/",
+      "destination": "/vocabulary/everyday/baby/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/family/dad",
+      "destination": "/vocabulary/everyday/dad/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/family/dad/",
+      "destination": "/vocabulary/everyday/dad/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/family/grandma",
+      "destination": "/vocabulary/everyday/grandma/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/family/grandma/",
+      "destination": "/vocabulary/everyday/grandma/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/family/grandpa",
+      "destination": "/vocabulary/everyday/grandpa/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/family/grandpa/",
+      "destination": "/vocabulary/everyday/grandpa/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/family/mom",
+      "destination": "/vocabulary/everyday/mom/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/family/mom/",
+      "destination": "/vocabulary/everyday/mom/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/weather/ice",
+      "destination": "/vocabulary/nature/ice/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/weather/ice/",
+      "destination": "/vocabulary/nature/ice/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/bandana",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/bandana/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/beret",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/beret/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/boots",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/boots/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/bowtie",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/bowtie/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/bracelet",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/bracelet/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/collar",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/collar/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/overalls",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/overalls/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/pajamas",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/pajamas/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/pocket",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/pocket/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/poncho",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/poncho/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/skirt",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/skirt/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/slippers",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/clothing/slippers/",
+      "destination": "/vocabulary/clothing/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/colors/coral",
+      "destination": "/vocabulary/colors/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/colors/coral/",
+      "destination": "/vocabulary/colors/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/colors/ivory",
+      "destination": "/vocabulary/colors/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/colors/ivory/",
+      "destination": "/vocabulary/colors/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/colors/orange",
+      "destination": "/vocabulary/food/orange/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/colors/orange/",
+      "destination": "/vocabulary/food/orange/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/colors/teal",
+      "destination": "/vocabulary/colors/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/colors/teal/",
+      "destination": "/vocabulary/colors/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/basket",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/basket/",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/drum",
+      "destination": "/vocabulary/toys/drum/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/drum/",
+      "destination": "/vocabulary/toys/drum/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/kite",
+      "destination": "/vocabulary/toys/kite/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/kite/",
+      "destination": "/vocabulary/toys/kite/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/puzzle",
+      "destination": "/vocabulary/toys/puzzle/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/puzzle/",
+      "destination": "/vocabulary/toys/puzzle/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/ribbon",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/ribbon/",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/scissors-item",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/scissors-item/",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/soap",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/soap/",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/sticker",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/sticker/",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/treasure",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/treasure/",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/whisper",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/everyday/whisper/",
+      "destination": "/vocabulary/everyday/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/feelings/cheerful",
+      "destination": "/vocabulary/feelings/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/feelings/cheerful/",
+      "destination": "/vocabulary/feelings/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/feelings/grumpy",
+      "destination": "/vocabulary/feelings/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/feelings/grumpy/",
+      "destination": "/vocabulary/feelings/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/attic",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/attic/",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/basement",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/basement/",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/blanket",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/blanket/",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/garage",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/garage/",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/roof",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/roof/",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/rug",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/home/rug/",
+      "destination": "/vocabulary/home/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/nature/butterfly",
+      "destination": "/vocabulary/animals/butterfly/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/nature/butterfly/",
+      "destination": "/vocabulary/animals/butterfly/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/nature/mushroom",
+      "destination": "/vocabulary/food/mushroom/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/nature/mushroom/",
+      "destination": "/vocabulary/food/mushroom/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/nature/pebble",
+      "destination": "/vocabulary/nature/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/nature/pebble/",
+      "destination": "/vocabulary/nature/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/nature/pond",
+      "destination": "/vocabulary/nature/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/nature/pond/",
+      "destination": "/vocabulary/nature/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/numbers/pair",
+      "destination": "/vocabulary/numbers/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/numbers/pair/",
+      "destination": "/vocabulary/numbers/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/chalk",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/chalk/",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/desk",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/desk/",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/gymnasium",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/gymnasium/",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/homework",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/homework/",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/lunchbox",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/lunchbox/",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/marker",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/marker/",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/poster",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/poster/",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/principal",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/principal/",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/textbook",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/school/textbook/",
+      "destination": "/vocabulary/school/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/dancing",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/dancing/",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/diving",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/diving/",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/fencing",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/fencing/",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/hiking",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/hiking/",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/jumping",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/jumping/",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/karate",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/karate/",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/trampoline",
+      "destination": "/vocabulary/toys/trampoline/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/trampoline/",
+      "destination": "/vocabulary/toys/trampoline/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/wrestling",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/sports/wrestling/",
+      "destination": "/vocabulary/sports/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/blocks",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/blocks/",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/costume",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/costume/",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/pinwheel",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/pinwheel/",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/puppet",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/puppet/",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/sled",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/sled/",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/stickers",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/stickers/",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/swing",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/toys/swing/",
+      "destination": "/vocabulary/toys/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/transport/ferry",
+      "destination": "/vocabulary/transport/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/transport/ferry/",
+      "destination": "/vocabulary/transport/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/transport/raft",
+      "destination": "/vocabulary/transport/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/transport/raft/",
+      "destination": "/vocabulary/transport/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/transport/skateboard",
+      "destination": "/vocabulary/toys/skateboard/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/transport/skateboard/",
+      "destination": "/vocabulary/toys/skateboard/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/:cat(actions|body|family|weather)",
+      "destination": "/vocabulary/",
+      "permanent": true
+    },
+    {
+      "source": "/vocabulary/:cat(actions|body|family|weather)/:path*",
+      "destination": "/vocabulary/",
+      "permanent": true
+    },
+    {
+      "source": "/printable-flashcards/:cat(actions|body|family|weather)",
+      "destination": "/printable-flashcards/",
+      "permanent": true
+    },
+    {
+      "source": "/printable-flashcards/:cat(actions|body|family|weather)/:path*",
+      "destination": "/printable-flashcards/",
+      "permanent": true
     }
   ]
 }

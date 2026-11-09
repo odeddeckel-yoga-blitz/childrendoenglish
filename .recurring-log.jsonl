@@ -40,3 +40,4 @@
 {"id":"spotlight-review","at":"2026-11-08T17:19:17.085Z","result":"ok","note":"11-08: live card matches committed pick (missing-letter); word sixteen; both picks OK (0.3 d up, no plays yet)"}
 {"id":"deploy-smoke","at":"2026-11-09T00:07:22.857Z","result":"ok","note":"00:05Z 11-09 push 1046248 (Simon fit + page-depth beacon events + 25 held photo words): smoke 10 pass, liveLocal ✗ only because local HEAD = kit-sync branch (live = origin/main); simon-says CSS, beacon mqv/s15, cereal/circle/wave assets, /image-credits/ 24 Pixabay live; 2 URLs pinged"}
 {"id":"ci-health","at":"2026-11-09T00:22:03.678Z","result":"ok","note":"after 00:05Z 11-09 push 1046248: CI green"}
+{"id":"deploy-smoke","at":"2026-11-09T05:45:16.524Z","result":"ok","note":"05:44Z 11-09 push 2e59941 (kit 1.65.0: component clicks _view marks + readable ids + report fix; PATTERNS §3f): smoke 11 pass/0 fail; component-clicks.js _view.tap live"}
