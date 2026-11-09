@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-11-08T00:00:00.000Z",
+  "statsFrom": "2026-11-09T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "sixteen",
@@ -7,17 +7,17 @@
     "category": "numbers",
     "he": "שש עשרה",
     "image": "/images/sixteen.webp",
-    "ans": 0,
-    "ok": 0,
+    "ans": 4,
+    "ok": 3,
     "since": "2026-11-08T10:14:44.081Z"
   },
   "game": {
     "id": "missing-letter",
     "name": "Missing Letter",
     "emoji": "✏️",
-    "opens": 1,
-    "lvl": 0,
-    "cmp": 0,
+    "opens": 11,
+    "lvl": 17,
+    "cmp": 5,
     "since": "2026-11-08T10:14:44.081Z"
   },
   "history": [
