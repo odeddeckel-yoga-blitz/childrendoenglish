@@ -14,10 +14,14 @@ const liveWords = new Set(WORDS.filter((w) => !PAGES_HOLD.has(w.id)).map((w) => 
 const cats = new Set(WORDS.map((w) => w.category));
 const livePage = (p) => liveWords.has(p) || p === '/vocabulary/' || p === '/printable-flashcards/' ||
   [...cats].some((c) => p === `/vocabulary/${c}/`);
-// vercel.json sources: exact paths, or ':name(a|b)' / ':path*' segments.
-const toRe = (src) => new RegExp('^' + src.replace(/[.]/g, '\\.')
-  .replace(/\/:path\*/g, '(?:/.*)?').replace(/:\w+\(([^)]+)\)/g, '(?:$1)') + '/?$');
+// vercel.json sources: exact paths, or ':name(regex)' segments. Exact sources match only themselves (no implied
+// trailing slash: Vercel needs both spellings listed), and ':path*' is refused because it missed '/weather/fog/' (11-09).
+const toRe = (src) => {
+  if (src.includes(':path*')) throw new Error(`use :path(.*) not :path* in ${src}`);
+  return new RegExp('^' + src.replace(/:\w+\(([^)]+)\)/g, '(?:$1)') + '$');
+};
 const target = (p) => { const r = redirects.find((x) => toRe(x.source).test(p)); return r && r.destination; };
+const bothSpellings = (p) => [p, p.replace(/\/$/, '')];
 
 describe('removed and moved word pages', () => {
   it('every word page live now is recorded (run node scripts/record-published-words.mjs)', () => {
@@ -25,13 +29,17 @@ describe('removed and moved word pages', () => {
     expect(missing).toEqual([]);
   });
   it('every page ever published is live or redirects to a live page', () => {
-    const broken = published.filter((p) => !liveWords.has(p)).filter((p) => { const d = target(p); return !d || !livePage(d); });
+    const broken = published.filter((p) => !liveWords.has(p))
+      .flatMap(bothSpellings).filter((p) => { const d = target(p); return !d || !livePage(d); });
     expect(broken).toEqual([]);
   });
   it('a moved word goes to its new page, not just the category', () => {
     expect(target('/vocabulary/body/hand/')).toBe('/vocabulary/everyday/hand/');
     expect(target('/vocabulary/colors/orange')).toBe('/vocabulary/food/orange/');
     expect(target('/vocabulary/weather/fog/')).toBe('/vocabulary/');
+    expect(target('/vocabulary/weather/fog')).toBe('/vocabulary/');
+    expect(target('/printable-flashcards/family/')).toBe('/printable-flashcards/');
+    expect(target('/vocabulary/weather')).toBe('/vocabulary/');
     expect(target('/vocabulary/clothing/beret/')).toBe('/vocabulary/clothing/');
   });
 });

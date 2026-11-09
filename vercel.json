@@ -1084,7 +1084,7 @@
       "permanent": true
     },
     {
-      "source": "/vocabulary/:cat(actions|body|family|weather)/:path*",
+      "source": "/vocabulary/:cat(actions|body|family|weather)/:path(.*)",
       "destination": "/vocabulary/",
       "permanent": true
     },
@@ -1094,7 +1094,7 @@
       "permanent": true
     },
     {
-      "source": "/printable-flashcards/:cat(actions|body|family|weather)/:path*",
+      "source": "/printable-flashcards/:cat(actions|body|family|weather)/:path(.*)",
       "destination": "/printable-flashcards/",
       "permanent": true
     }
