@@ -9,7 +9,7 @@
  * It asserts, headless, over a real browser:
  *   1. Loads with ZERO page errors, has #cv + #hubBack, and is ENGLISH-ONLY (no #langBtn, dir≠rtl).
  *   2. Reachability invariant: ≥500 generated (mode,target) across all levels are dbg.reachable().
- *   3. Win-flow: dbg.solveForTest() clears every level 1..MAX across all 3 modes → Game.screen==='win'.
+ *   3. Win-flow: dbg.solveForTest() clears every level 1..MAX across all 3 modes → window.Game.screen==='win'.
  *   4. Mobile smoke (390×844): loads clean, #cv + #actBtn present, no errors.
  *
  * REQUIRES the game to expose the dbg contract (the template ships it):
@@ -71,20 +71,20 @@ try {
     // a round may be not-ready (Line.dbg.busy: real-or-ai's picture still loading; CHECK is ignored meanwhile) —
     // wait on a REAL timer, up to 90 s in total, without spending the 400-move budget
     let busyMs = 0
-    Game.start()
-    for (let g = 0; g < 400 && Game.screen !== 'win'; g++) {
-      if (Game.screen === 'play' && Line.dbg.busy) {
-        if (busyMs > 90000) return { ok: false, why: 'dbg.busy never cleared (90 s)', level: Game.level }
+    window.Game.start()
+    for (let g = 0; g < 400 && window.Game.screen !== 'win'; g++) {
+      if (window.Game.screen === 'play' && Line.dbg.busy) {
+        if (busyMs > 90000) return { ok: false, why: 'dbg.busy never cleared (90 s)', level: window.Game.level }
         await new Promise((r) => realST(r, 50)); busyMs += 50; g--; continue
       }
-      if (Game.screen === 'play') {
+      if (window.Game.screen === 'play') {
         modes.add(Line.dbg.o.mode); Line.dbg.solveForTest()
         if (!Line.dbg.solved()) return { ok: false, why: 'solveForTest did not solve', o: Line.dbg.o }
         Line.commit()
-      } else if (Game.screen === 'result') { Game.next() }
-      else return { ok: false, why: 'stuck on ' + Game.screen }
+      } else if (window.Game.screen === 'result') { window.Game.next() }
+      else return { ok: false, why: 'stuck on ' + window.Game.screen }
     }
-    return { ok: Game.screen === 'win', modes: [...modes], level: Game.level }
+    return { ok: window.Game.screen === 'win', modes: [...modes], level: window.Game.level }
   })
   if (!win.ok) fail('did not reach win screen', win)
   if (win.modes.length < 3) console.warn('⚠ only', win.modes.length, 'modes exercised (spec wants 3):', win.modes)
@@ -96,7 +96,7 @@ try {
   const mErr = []
   m.on('pageerror', (e) => mErr.push(String(e)))
   await m.goto(url, { waitUntil: 'networkidle' })
-  await m.evaluate(() => Game.start())
+  await m.evaluate(() => window.Game.start())
   await m.waitForTimeout(300)
   // Choice games (angle-aim, pattern-parade, shape-sort-shack) have no #actBtn — their tap targets ARE the
   // commit (#choices). Accept either primary control; the point is that the phone layout rendered one.

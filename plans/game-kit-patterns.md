@@ -501,6 +501,13 @@ tabs that hide text (crawlers and AI read visible text). NN/g: no horizontal car
 - **A tap target is ≥ 32 px in both directions on a phone** (KDM hundred-chart-hunt: chart rows were 21 px tall at
   390 px — a finger lands on the row above; real-input run 11-02). Grids that can't fit give the board more height on
   narrow screens rather than shrinking rows.
+- **A miss-triggered helper describes the round ON SCREEN** (KDM cash-register 2026-11-09). Arcade games move on after a
+  miss, but `showDrone(o)` ran only inside `miss()`, so the helper kept quoting the missed customer's goal ("🎯 40¢" for
+  a 75¢ order) until the next correct serve. Its build advice said "keep adding coins" after an overshoot. Rule:
+  re-render (or hide) the helper wherever a new round starts, and phrase it for both directions (too little → add,
+  too much → take one out). Gate: `tools/game-review/hint-stale-probe.mjs` (KDM) fails when a visible helper still
+  quotes the missed round's numbers after the round changes. On 11-09 it flagged prime-factory, pie-lab and
+  true-false-circuit.
 
 ## 5. Verification protocol (non-negotiable, per game)
 1. `node test/playthrough.mjs <game>` — dbg contract, 560-round reachability sweep, win flow,

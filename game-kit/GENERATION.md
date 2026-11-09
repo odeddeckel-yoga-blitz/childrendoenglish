@@ -352,6 +352,11 @@ Pre-readers can't parse instructions. Every game must have:
    bobbing ↕ / grab glyph over every bar) so "all of these are grabbable" is shown, not hidden behind a
    select-then-adjust step. A cue on only the stepper teaches the wrong affordance — see the hidden-multi-select
    anti-pattern. For canvas-drag games, glow the drag handle.
+   ⚠ **First-play cue points at the INPUT, never at text (KDM stem-leaf-station 11-09).** When the inputs are drawn on
+   the canvas, the first cue (a bobbing kit tap hand, `#i-tap`) sits ON the first input until the child's first tap.
+   Pulsing an explanatory text card instead drew the eye away from the plot: as Game of the Day, 51% of PLAY-pressers
+   never made a first move. A worked example inside a help card must not reuse the input's chip style (outlined box) —
+   PATTERNS §4 "whatever looks tappable must be tappable".
    ⚠ **Cue coherence — a shared/reused first-play cue (e.g. an auto finger walkthrough) must resolve to a REAL
    discrete input control, NEVER fall back to the bare `#cv` canvas as a phantom demo.** If the cue logic
    targets a tagged container (e.g. `#ctlBox`/`#tiles`/`#choices`) and falls through to the canvas when none of
@@ -402,6 +407,27 @@ polish will matter.
 5. Only then cut the quota (`need` 3 → 2). A board game can also auto-consequence moves (logic-grid: a ✓ crosses out
    its row and column) — half the taps, no pedagogy lost.
 Never add a step that lands on the answer, and keep `reachable()` true for every generated round.
+**KDM 11-08 workload batch (5 games, 150/75/69/54/48 → 24/21/15/27/15 taps per level-up):**
+- The bigger step must not BE the thing being taught. On convert-lab a "+100" on m→cm rounds was the ×100 factor
+  itself; use 5 small steps (+50) instead. A step equal to one tick, line, group or ten is fine. That is the unit the
+  child reads or counts in (temp-trek ±5° = 1 tick, liquid-lab ±100 ml = 1 line, equal-groups ±P = 1 group,
+  subtract-squad ±10 = 1 ten).
+- Show the bigger pair by what the child already SEES (the starting number, the mode, the unit pair), never by the
+  answer. "+10 appears only when the answer is > 10" leaks the answer's size.
+- The new row must not push the commit button below a 320×568 fold (tap-reach caught 3 of 5). On ≤ 600 px tall
+  screens the picture gives up the room (46% → 38%) and the repeated panel hint folds away.
+- Measure the step ON THE SAME ROUND as the distance. Games whose step is part of the question (times-table-tower
+  steps by the row b, skip-trip by the skip) read 108 / 51 taps when the step came from one round and the distance
+  from another. Their real cost was 27 / 18. workload-scan does this since 11-08.
+**KDM 11-09 cash-register (Google arrivals 0.51 level-ups/open; 60% of opens never cleared L1):**
+- A palette of denominations / tools shows only what the level's rounds can use. Add each one on the level that first
+  needs it and name it in the level-up toast. $1 and $5 sat on the L1 panel for 40¢ goals, so a 7-year-old's first
+  tap overshot to $1.40. Keep the fixed spots: the extra buttons append after the base set, they never reshuffle it.
+- Money inputs look like the money. Draw coins as coins (face colour, relative size) and bills as bills, the same
+  faces that land in the tray. Text-only "25¢" keys hide the cause→effect link, and a "cash register game" searcher
+  sees a keypad, not a till.
+- One running total per screen region. A second copy of the same readout on a phone panel ("which one counts?")
+  costs the room the status line needs. Keep the one next to the goal.
 
 ## Readout honesty (before you call a game "done")
 - A readout that shows a value the child has NOT entered must either stay hidden until they stage one or carry
@@ -431,6 +457,28 @@ but they bend three contracts, so do this explicitly (see kidsdomath `plans/arca
   cancels), and **a tap on the player's own cell commits** (CHOMP/ENGULF). Moving one square per tap made a phone child
   tap 5× to reach a number and then hunt for a separate button. The commit stays a deliberate second tap — never
   auto-eat on arrival (that would be a tap-the-choice quiz). First-play copy says it: "Tap a number to walk there, then CHOMP."
+
+- **Elimination games: the action is POSITIVE, and a clue is a SHAPE (2026-11-09 — kidsdomath number-detective
+  rebuild 2).** Never make the child mark what a clue rules OUT ("the number is EVEN" → stamp the ODD ones): their
+  first instinct is to tap what fits, and number-detective's 09-26 stamp design had a wrong stamp in 86% of level-1 cases
+  and needed up to 38 stamps per level-up (depth 0.8 → 0.23; 20 patches brought it only to 0.96). Ask "which suspects
+  FIT? circle them"; lay numbers out so each clue is a row, a column or a band (hundred-chart: tens digit = row, ones
+  digit = column) and let one swipe circle a run; faded suspects are skipped by the swipe. Generate cases under a
+  gesture budget (≤ 15 per level-up, + the commit). Gate: `tools/game-review/deduction-probe.mjs` (real pointer: a
+  fitting tap must not bounce; careful play ≤ 15 gestures per level-up) — it fails on the stamp design.
+
+## Search intent — a tool query gets a free mode (2026-11-09 — kidsdomath balance-scale, the #1 Google game)
+- Read the page's Search Console queries before redesigning a level. When ≥ ~40% of clicks ask for a TOOL ("virtual
+  balance scale", "pan balance simulator", "interactive …", "… manipulative"), the arrivals are often teachers previewing
+  something to project (balance-scale: 48% of search opens in school hours, desktop) — they press PLAY, tap twice, see
+  a 3-round quiz and leave. balance-scale search funnel: touched/PLAY 0.68 (site 0.98), cleared/touched 0.30 (0.68) with
+  an 8-tap level 1 — not difficulty.
+- Give the menu a second, quieter door next to PLAY: a **free mode** ("🧪 FREE SCALE — load the pans yourself") that is
+  the manipulative itself — every control live, no target, no score, no LOCK IN, the state read back as a number sentence
+  (`5 > 3`, `4 = 4`), and one button into the levels ("▶ PLAY THE LEVELS").
+- Run it under its own screen name (`Game.screen = 'free'`, reusing the #play overlay) so the level funnel (play@ / tap1@
+  / clear1@ watch `screen === 'play'`) keeps measuring only the levels. No idle helper, no misses, no streaks in it.
+- Tester: `review-game.mjs` prints the entry funnel per source vs the site and flags **TOOL INTENT** from the query mix.
 
 ## PLAY must be reachable by a real tap (2026-10-17 — kidsdomath, catalogue-wide)
 - **Never centre a full-screen, possibly-tall column with `justify-content:center`.** Overflow goes UP as well as down, and
@@ -491,6 +539,9 @@ value) catch the first two mechanically. Deliberate live-feedback builders (mirr
 - **`showDrone()` must redraw the canvas** (`pushFX()`) when the canvas reads the hint flag — on the idle path the guide never appeared.
 - **Respawn ≥ ~900 ms after `celebrate()` and clear particles in respawn** — 360 ms left the burst over the next board (the source of
   the "leftover confetti" vision noise in every wave).
+  The beat is a wait: its status says what happened and what comes ("✅ Balanced! Next scale coming…", never a leftover
+  "LOCK it in!"), steppers + commit are `disabled` until the next deal, and input during it is ignored. Advisory gate:
+  `contract-lint` lists `fast-respawn` (127 games under 800 ms at 2026-11-09; balance-scale fixed at 900 ms).
 - **Reset the status line in build()/respawn()** — a stale "✅ Tower rebuilt in 15 moves" sat beside a fresh puzzle.
 - **Tap-to-commit games** (tapping the answer commits) keep `#actBtn` only as a hidden contract stub; the probes skip it.
 - **Every wait is announced and looks disabled** (arcade vision + model playtest, 2026-10-12 — 7 of 9 playtest stalls):
