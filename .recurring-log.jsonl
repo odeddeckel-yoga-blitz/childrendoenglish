@@ -44,3 +44,5 @@
 {"id":"deploy-smoke","at":"2026-11-09T11:30:47.360Z","result":"ok","note":"11:28Z 11-09 push 630918c (157 removed/moved word pages 301, GSC 404 report): smoke 11/0; 314/314 old URLs redirect live"}
 {"id":"deploy-smoke","at":"2026-11-10T06:24:41.613Z","result":"ok","note":"05:59Z 11-10 push 40e63b4 (kit sync 1.65.0 @ 83ee691 + 11-09 log commit): CI green, home 200; test/docs-only change"}
 {"id":"persona-ux-audit","at":"2026-11-10T20:37:48.677Z","result":"ok","note":"prod: cde-persona P1/P2/P4 6/6 en + 6/6 he; persona-counts P5 0 in src+scripts; wave games: 10/11 specs assert the end-card primary, picture-bingo did not → added (one visible primary). Gap: cde-persona plays only the 6 original games (P2 one-tap start not run on the 11 wave games)"}
+{"id":"data-silence","at":"2026-11-10T20:38:35.709Z","result":"ok","note":"11-10: recording health ok, no gaps or bursts (7d vs 14d med)"}
+{"id":"spotlight-review","at":"2026-11-10T20:38:35.823Z","result":"ok","note":"11-10: both picks OK (word sixteen 83% right; game missing-letter 31% finished); live card matches committed pick"}
