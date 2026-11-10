@@ -175,6 +175,7 @@ test('full run to the end card: bingo lines, no errors, no beacon under automati
   await expect(page.locator('#app .card h2')).toContainText('All three cards done');
   await expect(page.locator('.cde-end')).toBeVisible();
   await expect(page.locator('.cde-end a[href*="/games/"]')).toBeVisible();
+  await expect(page.locator('.cde-end [data-kdm-primary]:visible')).toHaveCount(1); // persona P1: one primary on the end card
   expect(h.errors()).toEqual([]);
   expect(h.land.filter((u) => u.includes('/api/land'))).toEqual([]);
 });
