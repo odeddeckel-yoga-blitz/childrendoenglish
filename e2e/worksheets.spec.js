@@ -105,3 +105,15 @@ test('held: no built page outside /printable-worksheets/ links to it, and the si
   try { hits = execFileSync('grep', ['-rl', '--include=*.html', 'printable-worksheets', DIST], { encoding: 'utf-8' }); } catch { /* grep exit 1 = none */ }
   expect(hits.split('\n').filter((f) => f && !f.includes('/printable-worksheets/'))).toEqual([]);
 });
+
+test('released: indexable, in the sitemap, linked from the printables index and /games/ but not yet from a game page', async () => {
+  test.skip(WORKSHEETS_HOLD, 'held');
+  expect(readFileSync(join(DIST, 'sitemap.xml'), 'utf-8')).toContain(`${'https://childrendoenglish.com'}/printable-worksheets/`);
+  expect(readFileSync(join(DIST, 'printable-worksheets', 'index.html'), 'utf-8')).not.toMatch(/name="robots" content="noindex/);
+  for (const p of ['printable-flashcards/index.html', 'games/index.html']) expect(readFileSync(join(DIST, p), 'utf-8')).toContain('href="/printable-worksheets/"');
+  // the game pages are locked until the 11-28 game reads (push method v2: lock units, not sites)
+  const { execFileSync } = await import('node:child_process');
+  let hits = '';
+  try { hits = execFileSync('grep', ['-rl', '--include=*.html', 'printable-worksheets', join(DIST, 'games')], { encoding: 'utf-8' }); } catch { /* none */ }
+  expect(hits.split('\n').filter((f) => f && !f.endsWith(join('games', 'index.html')))).toEqual([]);
+});

@@ -10,7 +10,9 @@ import { readFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import vm from 'vm';
 
-export const WORKSHEETS_HOLD = true;
+// Released 11-11 (owner 11-10, push method v2: only the title-holdout pages wait for the 11-14 read). Linked from the
+// printable-flashcards index and /games/; the 3 game pages link after the 11-28 game reads.
+export const WORKSHEETS_HOLD = false;
 
 // the games' data files are browser scripts (window.X = …): run them in a sandbox to read the same lists the games use
 function gameData(publicDir, file, global) {

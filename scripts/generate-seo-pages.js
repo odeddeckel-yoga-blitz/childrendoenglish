@@ -4145,6 +4145,7 @@ const fcIndexHtml = `<!DOCTYPE html>
     <p class="intro answer-first">${escapeHtml(fcIndexAnswer)}</p>
     ${howToHtml('How to print the flashcards', [{ name: 'Pick a category', text: `Choose one of the ${CATEGORIES.length} sets below.` }, ...fcIndexSteps.slice(1)])}
     <p style="font-size:0.9rem;margin-bottom:1rem"><a href="/printable-flashcards/spanish/" style="color:#2563eb;text-decoration:none">Ver tarjetas imprimibles en inglés y español &rarr;</a></p>
+    ${WORKSHEETS_HOLD ? '' : '<p style="font-size:0.9rem;margin-bottom:1rem"><a href="/printable-worksheets/" style="color:#2563eb;text-decoration:none">Printable worksheets from the games: match opposites, name the feeling, act it out &rarr;</a></p>'}
 
     <div class="grid">
       ${fcCategoryCards}
@@ -5547,6 +5548,7 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
   <section class="more">
     <h2>Want step-by-step practice too?</h2>
     <p>The free <a href="/app">practice app</a> takes each group of words up a ladder: flashcards first, then listening, picture quizzes, spelling and sentences. It remembers which words your child still mixes up and brings them back. Teachers can run a live <a href="/battle/">Class Battle</a> where kids join with a room code.</p>
+    ${WORKSHEETS_HOLD ? '' : '<p>To practise on paper, print a <a href="/printable-worksheets/">worksheet from the games</a>: one page each, with the answer key on the second page.</p>'}
   </section>
   <section class="more faq">
     <h2>Questions parents and teachers ask</h2>
