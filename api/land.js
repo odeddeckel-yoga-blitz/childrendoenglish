@@ -44,7 +44,12 @@ const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_
   // returning-day start surface, script errors, phone load-speed buckets. Item shapes are pinned in EV_ITEM below.
   'g2', 'g3', 'hop', 'vp', 'rets', 'jserr', 'cwv',
   // Static-page depth (measure step 2, 11-08): item = a page key (no @), pinned in EV_ITEM.
-  'mqv', 's15', 'prc', 'bpr', 'fmb']);
+  'mqv', 's15', 'prc', 'bpr', 'fmb',
+  // Push method v2 (11-11): act = any action on a static page (once per view, item = its page key); jserrsig = a script
+  // error's signature <file>_<line>_<type> (kit land-beacon.md §jserr; never message text), next to the plain jserr.
+  'act', 'jserrsig']);
+// distinct error signatures recorded per day; past this a NEW signature is dropped (a known one still counts)
+export const JSERRSIG_DAY_CAP = 50;
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
 const AI_ATTR_RE = /^ai[ev]_(chatgpt|perplexity|copilot|gemini|claude|other)$/; // fixed engine enum (kit spec)
 const SURF = '(g-[a-z0-9-]{1,30}|app|pg-[a-z]{1,12})';
@@ -57,7 +62,8 @@ const EV_ITEM = {
   rets: new RegExp(`^${SURF}$`),
   jserr: new RegExp(`^${SURF}$`),
   cwv: new RegExp(`^(lcp|cls|inp)_(good|ni|poor)@${SURF}$`),
-  ...Object.fromEntries(['mqv', 's15', 'prc', 'bpr', 'fmb'].map((e) => [e, PAGE_KEY])),
+  ...Object.fromEntries(['mqv', 's15', 'prc', 'bpr', 'fmb', 'act'].map((e) => [e, PAGE_KEY])),
+  jserrsig: /^[a-z0-9-]{1,24}_\d{1,5}_(type|ref|range|syntax|other)$/,
 };
 
 // Classify a DB failure so the function log names the REAL cause — the beacon
@@ -149,6 +155,11 @@ export default async function handler(req, res) {
           }
           for (const [k, n] of tally) {
             const [e, i] = k.split('\u0000');
+            if (e === 'jserrsig') {
+              const [cap] = await q`SELECT bool_or(item = ${i}) AS known, count(*)::int AS seen FROM cde_learn
+                WHERE day = CURRENT_DATE AND ev = 'jserrsig'`;
+              if (cap && !cap.known && cap.seen >= JSERRSIG_DAY_CAP) continue;
+            }
             await q`INSERT INTO cde_learn (day, ev, item, lang, n) VALUES (CURRENT_DATE, ${e}, ${i}, ${l}, ${n})
                     ON CONFLICT (day, ev, item, lang) DO UPDATE SET n = cde_learn.n + ${n}`;
           }

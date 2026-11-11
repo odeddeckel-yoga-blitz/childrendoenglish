@@ -7,6 +7,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 let mode = 'ok';
 const calls = [];
+let capRow = null; // the jserrsig daily-cap SELECT's answer (null = no rows yet)
 const fail = () => {
   if (mode === 'quota') throw Object.assign(new Error('Server error (HTTP status 402): Your project has exceeded the compute time quota'), { status: 402 });
   if (mode === 'auth') throw new Error('password authentication failed for user "neondb_owner"');
@@ -15,7 +16,7 @@ vi.mock('@neondatabase/serverless', () => ({
   neon: () => Object.assign(async (strings, ...values) => {
     calls.push({ sql: strings.join('?'), values });
     fail();
-    return [];
+    return /bool_or/.test(strings.join('?')) && capRow ? [capRow] : [];
   }, {
     query: async (text, params) => { calls.push({ sql: text, values: params }); fail(); return []; },
   }),
@@ -105,6 +106,40 @@ describe('api/land standing-section events (kit 1.59 §5.55)', () => {
     expect(r.code).toBe(204);
     const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
     expect(written.sort()).toEqual(good.map((x) => `${x.e}:${x.i}`).sort());
+  });
+});
+
+describe('api/land any action + error signature (push method v2, 11-11)', () => {
+  let handler;
+  beforeEach(async () => {
+    vi.resetModules();
+    mode = 'ok'; capRow = null;
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    ({ default: handler } = await import('../land.js'));
+    calls.length = 0;
+  });
+  const written = () => calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
+
+  it('records act per page key and jserrsig only as <file>_<line>_<type> (no message text)', async () => {
+    const good = [{ e: 'act', i: 'vocabulary_word' }, { e: 'act', i: 'printable-flashcards_animals' },
+      { e: 'jserrsig', i: 'category-conveyor-game_412_type' }, { e: 'jserrsig', i: 'inline_0_other' }];
+    const bad = [{ e: 'act', i: 'vocabulary@word' }, { e: 'jserrsig', i: 'game_12_TypeError' }, { e: 'jserrsig', i: 'cannot read x_1_type' },
+      { e: 'jserrsig', i: 'a-very-long-script-file-name-x_1_type' }, { e: 'jserrsig', i: 'game_123456_type' }, { e: 'jserrsig', i: 'game_1' }];
+    const r = res(); await handler({ method: 'POST', body: { batch: [...good, ...bad], l: 'en' } }, r);
+    expect(r.code).toBe(204);
+    expect(written().sort()).toEqual(good.map((x) => `${x.e}:${x.i}`).sort());
+  });
+
+  it('drops a NEW signature once 50 distinct ones are in today, still counts a known one', async () => {
+    capRow = { known: false, seen: 50 };
+    await handler({ method: 'POST', body: { batch: [{ e: 'jserrsig', i: 'game_9_ref' }] } }, res());
+    expect(written()).toEqual([]);
+    capRow = { known: true, seen: 50 };
+    await handler({ method: 'POST', body: { batch: [{ e: 'jserrsig', i: 'game_9_ref' }] } }, res());
+    expect(written()).toEqual(['jserrsig:game_9_ref']);
+    capRow = { known: false, seen: 49 };
+    await handler({ method: 'POST', body: { batch: [{ e: 'jserrsig', i: 'game_10_ref' }] } }, res());
+    expect(written()).toEqual(['jserrsig:game_9_ref', 'jserrsig:game_10_ref']);
   });
 });
 

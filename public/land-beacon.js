@@ -107,7 +107,14 @@
         var seg = p.split('/').filter(Boolean), key;
         if (seg[0] === 'vocabulary' && seg.length === 3 && seg[2] !== 'hebrew' && seg[2] !== 'spanish') key = 'vocabulary_word';
         else key = (seg.join('_') || 'root').toLowerCase().replace(/[^a-z0-9_-]/g, '-').slice(0, 40);
-        var send = function (e) { navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: e, i: key }], l: l })); };
+        // act (push method v2, 11-11) = "any action": once per page view, sent with the FIRST of a play click, a mini-quiz
+        // tap, 15 s visible, a print (button or dialog) or a maker Build — the high-rate metric small CDE pages are read by.
+        var acted = false;
+        var send = function (e) {
+          var b = [{ e: e, i: key }];
+          if (!acted && /^(cta|mq|s15|prc|bpr|fmb)$/.test(e)) { acted = true; b.push({ e: 'act', i: key }); }
+          navigator.sendBeacon('/api/land', JSON.stringify({ batch: b, l: l }));
+        };
         send('pg');
         var PLAY = /^\/(app|play|learn|quiz|flashcards|new-player|players|my-words|letters|path|daily-review|battle|games\/[a-z0-9-]+)?\/?$/;
         var clicked = false, tapped = false;
@@ -215,6 +222,24 @@
       // Errors × bounce: at most ONE jserr per page load when a script of OURS throws (same-origin file; extension and
       // cross-origin "Script error." events are skipped).
       var errSent = false;
+      // Error signature (kit land-beacon.md §jserr, owner OK 11-11): <file>_<line>_<type>, never message text (a message
+      // can carry what a child typed). file = our script's basename, slugged, ≤ 24 chars; a game's own file is prefixed
+      // with the game id (every game has a game.js); line 1–99999 else 0; type from the error's constructor.
+      var errSig = function (ev) {
+        var err = ev.type === 'error' ? ev.error : ev.reason, url = '', line = 0;
+        if (ev.type === 'error') { url = ev.filename || ''; line = ev.lineno || 0; }
+        else { var m = /(https?:\/\/[^\s)]+?):(\d+):\d+/.exec(String((err && err.stack) || '')); if (m) { url = m[1]; line = +m[2]; } }
+        var file = 'inline';
+        if (url && url.split('#')[0] !== location.href.split('#')[0]) {
+          var path = new URL(url, location.href).pathname, gm2 = /^\/games\/([a-z0-9-]+)\/[^/]+$/.exec(path);
+          var base = path.split('/').pop().replace(/\.[a-z0-9]+$/i, '') || 'index';
+          file = ((gm2 ? gm2[1] + '-' : '') + base).toLowerCase().replace(/[^a-z0-9]/g, '-').slice(0, 24);
+        }
+        line = line >= 1 && line <= 99999 ? Math.floor(line) : 0;
+        var name = (err && err.constructor && err.constructor.name) || '';
+        var type = { TypeError: 'type', ReferenceError: 'ref', RangeError: 'range', SyntaxError: 'syntax' }[name] || 'other';
+        return file + '_' + line + '_' + type;
+      };
       var onErr = function (ev) {
         try {
           if (errSent || !ev) return;
@@ -222,6 +247,7 @@
           if (ev.type === 'error' && (f ? f.indexOf(location.origin) !== 0 : (!ev.error || /^Script error\.?$/.test(ev.message || '')))) return;
           if (ev.type === 'unhandledrejection' && f.indexOf(location.origin) < 0) return;
           errSent = true; tally('jserr', surf);
+          tally('jserrsig', errSig(ev));
         } catch (x) { /* never break the page */ }
       };
       window.addEventListener('error', onErr);
