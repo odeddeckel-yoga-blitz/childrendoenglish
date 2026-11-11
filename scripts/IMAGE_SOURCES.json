@@ -210,12 +210,12 @@
   "match": 0.782
  },
  "bat": {
-  "source": "wikimedia-commons",
-  "title": "File:Fourbats.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Fourbats.jpg",
-  "author": "The original uploader was Anetode at English Wikipedia.",
-  "licence": "CC BY 2.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
+  "source": "pixabay",
+  "title": "baseball, baseball bat, sport, lawn, grass, green, nature, game, sporty, activities, baseball, baseball bat, baseball bat, baseball bat, baseball bat, baseball bat",
+  "url": "https://pixabay.com/photos/baseball-baseball-bat-sport-lawn-1646091/",
+  "author": "Marisa_Sias",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "bathroom": {
   "source": "unknown",
@@ -730,6 +730,10 @@
   "author": "Derks24",
   "licence": "Pixabay Content License",
   "licenceUrl": "https://pixabay.com/service/license-summary/"
+ },
+ "circle": {
+  "source": "own",
+  "licence": "own work"
  },
  "city": {
   "source": "pixabay",
@@ -1765,12 +1769,12 @@
   "match": 0.995
  },
  "horse": {
-  "source": "wikimedia-commons",
-  "title": "File:IcelandicHorseInWinter.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:IcelandicHorseInWinter.jpg",
-  "author": "Andreas Tille",
-  "licence": "CC BY-SA 3.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0"
+  "source": "pixabay",
+  "title": "horse, arabian thoroughbred, nature, meadow, mare, trot, stallion, arabian horse, white, summer, animal photography, main and state stud marbach, freedom, famous, beauty, wildlife, gallop, happy, independence, sense of freedom",
+  "url": "https://pixabay.com/photos/horse-arabian-thoroughbred-nature-10345476/",
+  "author": "arabervollblut",
+  "licence": "Pixabay Content License",
+  "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "hose": {
   "source": "unknown",
@@ -4081,9 +4085,5 @@
   "author": "Tony Hisgett from Birmingham, UK",
   "licence": "CC BY 2.0",
   "licenceUrl": "https://creativecommons.org/licenses/by/2.0"
- },
- "circle": {
-  "source": "own",
-  "licence": "own work"
  }
 }
