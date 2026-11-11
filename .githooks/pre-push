@@ -21,6 +21,14 @@ while read -r lref lsha rref rsha; do
 done
 [ "$prod" = 1 ] || exit 0
 
+# Unit locks (push method v2, owner 11-11; kit PATTERNS §3g): a push may not change a page that an open read holds
+# (reads.jsonl + tools/reads/snap/). Judged on the BUILT pages, so run the gate (npm run build) first.
+#   This push IS that read's change:    CDE_READ_AS=<read id> git push
+#   A fix that must touch a held page:  CDE_READ_SKIP=1 git push   (say so in the read's notes)
+if [ "${CDE_READ_SKIP:-0}" != "1" ]; then
+  node "$(git rev-parse --show-toplevel)/tools/reads/locks.mjs" check || { echo "🔒 push blocked by a unit lock (see above)." >&2; exit 1; }
+fi
+
 now=$(date +%s)
 today=$(date -u +%Y-%m-%d)
 if [ "${CDE_PUSH_NOW:-0}" != "1" ] && [ -f "$LOG" ]; then
