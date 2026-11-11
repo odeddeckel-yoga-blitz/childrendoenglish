@@ -1,23 +1,23 @@
 {
-  "statsFrom": "2026-11-10T00:00:00.000Z",
+  "statsFrom": "2026-11-11T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
-    "id": "sixteen",
-    "word": "sixteen",
-    "category": "numbers",
-    "he": "שש עשרה",
-    "image": "/images/sixteen.webp",
-    "ans": 23,
-    "ok": 19,
-    "since": "2026-11-08T10:14:44.081Z"
+    "id": "golf",
+    "word": "golf",
+    "category": "sports",
+    "he": "גולף",
+    "image": "/images/golf.webp",
+    "ans": 0,
+    "ok": 0,
+    "since": "2026-11-11T10:50:37.298Z"
   },
   "game": {
     "id": "missing-letter",
     "name": "Missing Letter",
     "emoji": "✏️",
-    "opens": 29,
-    "lvl": 32,
-    "cmp": 8,
+    "opens": 37,
+    "lvl": 44,
+    "cmp": 11,
     "since": "2026-11-08T10:14:44.081Z"
   },
   "history": [
@@ -76,6 +76,13 @@
       "to": "missing-letter",
       "reason": "max tenure 14d",
       "at": "2026-11-08T10:14:44.081Z"
+    },
+    {
+      "lane": "word",
+      "from": "sixteen",
+      "to": "golf",
+      "reason": "graduated (ans≥30, acc≥0.7)",
+      "at": "2026-11-11T10:50:37.298Z"
     }
   ]
 }
