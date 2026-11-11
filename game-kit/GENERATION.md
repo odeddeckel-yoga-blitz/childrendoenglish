@@ -93,7 +93,11 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
 - **Scaffold ghosts that contain the answer.** A goal label ('goal 700'), ghost outline at the solution,
   pre-highlighted correct chips, or counts printed on the bars the question asks about — all defeat the mode.
   Ghosts/targets are either the task statement itself (fill-to-the-line modes) or a RESCUE that appears only
-  via the miss-3 / 14s-idle scaffold path (`droneShown`), never the default render.
+  at stage 2 (`droneFull`), never the default render — and never at stage 1 (`droneShown`), which the 14 s IDLE
+  path opens: a board ring on the answer cell IS the answer even while the drone LED says `= ?` (KDM
+  hundred-chart-hunt 2026-11-10: a slow reader got a gold 🎯 box on 5 for "1 more than 4"). Stage 1 may light the
+  METHOD on the board (the direction key, the start cell), not the destination. Static check:
+  `grep -E "(teach|guide|ghost|scaffold|target)\s*:\s*\(?droneShown\b"` on the FX config, then read the draw.
 - **Answer-key hints.** The drone rescue must be TWO-STAGE (the template ships it): stage 1 (3 misses or 14s
   idle) teaches the METHOD with the live puzzle's numbers — 'change = paid − price' + LED `10 − 7` — and
   NEVER contains the final answer — and CHECK that it doesn't by construction: if your "collected form" or
@@ -144,6 +148,21 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
   board's tan/brown dots was a small canvas legend. Give each such option the board token itself (a swatch: same fill
   + ring) so the prediction reads straight off the picture. Neutral, identical icons on ALL options (no option
   favoured) are fine; a shared icon on two options that the board tells apart is not.
+  **Never let an option's icon CONTRADICT the board** (2026-11-10, KDM earths-layers): cards said 🟡 Outer Core /
+  ⚪ Inner Core while the cutaway painted the CENTER yellow, so a child who learned "the yellow middle" from a reveal
+  was lured to the wrong card (L1 first-try 47%, chance 33%). Give the cards the board's own colour (one shared
+  constant for canvas + cards) and keep the PREDICT picture neutral, so the swatch only pays off after a reveal.
+  **Nor let an option's icon MATCH the stage** (2026-11-10, KDM by-eye pass on 17 science games): 🍋 Acid under
+  "🍋 ADD: LEMON JUICE", 💧 Neutral under "💧 PURE WATER", 📷/👓/🔍 job cards under the 📷 Camera / 👓 Glasses drawn on
+  the stage, 🧊/💧/💨 packing cards under SOLID/LIQUID/GAS, ❄️ "body cools down" under "❄️ winter is here": the child
+  matches pictures, not ideas. Icons describe the option, never repeat the given. Also: the right card is never the
+  only one with its own icon while the wrong ones share one (🥬 Celery / 🥬 Lettuce vs 🥒 Cucumber) — one emoji per
+  item; and a "why is it <colour>?" question never gets the colour swatch on the right reason only (🔵 "Air scatters
+  blue", 🟠 "long air path" on "why is a sunset red?"). Where no emoji is the colour (cyan, magenta), use a swatch.
+  Tester: `test/canvas-oracle.mjs` [icon-on-stage] [icon-odd] [colour-echo].
+- **A "which part?" question marks the part on the picture** (2026-11-10, earths-layers). "Which layer is right below
+  the Crust?" over four blank rings with a ? in the centre: nothing showed which ring was asked. Label the part the
+  question already names and put the ? on the asked part — never label a part that is an option.
 
 ## The mechanic (design rubric)
 
@@ -423,6 +442,9 @@ Never add a step that lands on the answer, and keep `reachable()` true for every
 - A palette of denominations / tools shows only what the level's rounds can use. Add each one on the level that first
   needs it and name it in the level-up toast. $1 and $5 sat on the L1 panel for 40¢ goals, so a 7-year-old's first
   tap overshot to $1.40. Keep the fixed spots: the extra buttons append after the base set, they never reshuffle it.
+- Same for stepper rows (11-10, KDM more-less-meadow): a "1 more / 1 less" round hides the ±10 row, a "10 more" round
+  hides ±1; a MIXED round keeps both, because choosing the row is the skill. The idle/miss copy names the row on screen
+  ("tap +1 to add a cube", "tap +10 to add a rod") — never a row that is hidden.
 - Money inputs look like the money. Draw coins as coins (face colour, relative size) and bills as bills, the same
   faces that land in the tray. Text-only "25¢" keys hide the cause→effect link, and a "cash register game" searcher
   sees a keypad, not a till.
@@ -563,6 +585,45 @@ value) catch the first two mechanically. Deliberate live-feedback builders (mirr
 Build these into the generator, not into a later fix pass:
 - **Not-ready commit = gold nudge, not a miss.** In commit(): if nothing is picked / the dial is untouched / the
   answer is incomplete, set a gold "what's left" status and return BEFORE any `missSince++`.
+- **An unchanged re-commit is not a new miss** (2026-11-10, KDM recipe-rescale). Keep `lastMiss` (the value/selection of
+  the last miss, cleared on every deal); a commit that equals it sets a gold "✋ 3 was already checked — change it with +
+  or − first" and returns before `missSince++`. Make `dbg.wrongForTest()` pick a value ≠ `lastMiss` so test misses still
+  count. Miss copy names the CONTROL, never the commit button's verb: recipe-rescale said "1 is too little — add more!"
+  beside "✓ ADD TO BOWL", so pressing it again was the obvious move and the 3rd press voided the round's star under the
+  clean quota. Probe: `early-commit-probe.mjs --recommit` (41 of 69 judged stepper games flagged on 11-10).
+  The probe must TOUCH the board before its wrong answer (11-10, KDM more-less-meadow): the injected ready-guard swallows
+  commits on an untouched board, so a dbg-driven wrong answer + re-presses read OK while real taps (−1, LOCK IN ×3, fix,
+  LOCK IN) left the round at ★0. With the touch, 93 of 133 ready-guard games flag. Judge a re-press probe by real taps once.
+  Template: `template/index.html` commit() now keeps `lastMiss` (11-10) — new games get the rule free. Retrofit for older
+  games (KDM, 172 games, catalogue --recommit 170 → 0 of its own): ONE shared script `_shared/kdm-repress-guard.js` wraps
+  the method #actBtn calls (Line.commit / lock / seal / forge / engage, every alias — so click and Enter match) and
+  swallows a commit only when round, `made`, JSON of `Line.dbg.o` + form values and the button's words are unchanged
+  since the last unsolved commit AND no pointer/key hit the board since; a solved board always commits, anything
+  unreadable fails open. A probe that commits through `dbg.wrongForTest` (past Line.commit) must call
+  `__kdmRepress.noteMiss()`. Probes must load shared scripts (http, not file://) or a shared fix is invisible to them.
+  Two-step rounds (11-10, KDM map-scale-ruler: measure → CHECK, then convert → LOCK IN) keep `lastMiss` per STEP (clear
+  it when a step passes) and key it on the ANSWER, not on helper state (sliding the ruler is not a new answer). The probe
+  solves + commits each step until the round counts and stops when a new question is dealt: one solve+commit per round
+  read "control did not count" and left two-step games unjudged; with it, map-scale-ruler's 3rd re-press voiding ★ showed.
+- **A wrong board MOVE counts once per item; the big drawn piece answers a finger** (2026-11-10, KDM frequency-forge).
+  Sort/drop games: every wrong-cell tap was `missSince++`, so poking one cell 3× on the first survey card voided the star
+  of a fully sorted table (★0/3). Count at most ONE miss per item (the first wrong cell, a real `FX.setShake(≥6)` so the
+  first-try tally sees it); the same wrong cell again is a gentle "✋ already tried — this card is A and B". A tap on the
+  card itself (or a drop off the table) did NOTHING: make it answer (cells pulse + "slide it onto a glowing cell, or tap
+  the cell where A meets B"). The commit glow follows STAGING (`readyPulse(staged())`: every item placed / every dial
+  moved / a verdict picked), never `locked && solved()`, which lit only after the commit. Probes:
+  `early-commit-probe.mjs --repoke` (same wrong board move ×3; a helper that commits is unjudged unless
+  `dbg.wrongIsMove===true`) and `dead-touch-probe.mjs` (tap + drag on every DRAWN board point; flags ≥60% dead).
+- **In a two-choice round, only a first-try answer earns progress; after a miss the round is practice, and the
+  explanation may name the answer** (owner 2026-11-10, KDM front-label-detective). With TRUE/MISLEADING, EVEN/ODD,
+  yes/no or two cards, one miss leaves one option: the clean quota (≤ 2 misses) made every round a free ⭐ for a guesser.
+  So `if(missSince===0) made++`; after a miss the round still finishes (the child picks the right one, sees it confirmed,
+  gets the next deal) with a kind, visible "🌱 Practice round — the next one counts" and a "· 🌱 practice" tag on the
+  ⭐ pill — never a scolding. Because elimination gives the answer away anyway, the miss line may NAME it, but it points
+  at the evidence on screen: "Look at Sodium (lit up): the label says 610 mg, so the claim is MISLEADING." Keep the
+  re-press rule (an unchanged re-commit is not a miss). Declare `dbg.firstTryOnly = true`: kid-sim then reports `slip`
+  as voiding by design and `--personas=coin` (a 50% guesser) must still clear L1; `early-commit-probe --recommit`
+  judges such games by miss shakes (exactly one from a wrong commit + unchanged re-presses).
 - **Level 1 is never luck.** If later steps depend on earlier choices, generate the last step from the earlier ones so
   every route a careful child takes can finish.
 - **Level 1 never has one answer.** Open with the canonical case, then mix contrast cases whose correct answer is a
@@ -571,9 +632,49 @@ Build these into the generator, not into a later fix pass:
   compared actually differ).
 - **Nothing on screen answers the question before the prediction** — reveal-only labels after LOCK IN.
 - **Name every wrong part after a wrong commit; show a method after the first miss on any answer a child can't do in
-  their head** (count-by ladder, first rungs only).
+  their head** (count-by ladder, first rungs only). **In a multi-mode game, check every mode:** a mode whose board does
+  not draw the relationship live needs it drawn after the first miss, not after the 3-miss helper (2026-11-10 KDM
+  multiplication-comparison: "how many times" and "find the unit" modes lay red copies live ("find the unit" = L3: 87% first-try);
+  "build ×N" drew the red copies only with the helper and read 43% at L1, the steepest later drop was its L4 return;
+  now the red outlines show along blue's lane after one miss, the first try stays unaided).
 - **Copy is tier-aware**: never name a control that's hidden at this level; say how many to find.
+- **Calm mode is the game a K–2 child plays — write it for that game** (2026-11-10, KDM even-steven). kdm-calm is ON by
+  default when the lowest grade is ≤ 2 and stops the fall/timers, yet the task line said "Zap the lowest number before it
+  crosses the red line!" over one number that never moved, under a red danger line it could never reach. Pick the task
+  line, menu copy and danger art from `window.KDM_CALM` at start(). Level-up rules must not lean on a speed path calm
+  turns off: "4 fast in a row OR 6 correct" made the default child sort 6 on L1 while a timed child left after 4 → L1
+  needs the fast-path count (4 for a 2-way tap; 3 lucky guesses happen 1 in 8). A wrong tap's "this one" glow on the
+  right button is cleared on the next correct answer, or it points at the NEXT round's answer. Static scan:
+  `grep -l 'kdm-calm.js" data-grade-lo="[0-2]"' public/games/*/index.html | xargs grep -lE 'crosses the|before it (lands|hits|reaches|escapes)|march(es)? off|[Ff]alling'`
+  and for the quota `… | xargs grep -lE 'fastStreak>=[0-9]+ *\|\|'` (ruler-ranger 11-10: "measure it before it marches
+  off" + "4 fast OR 6 correct" → 6 reads on L1 for the default child; now 3 on L1, 4 on L2).
+  **Timed and arcade games too: the level-up never needs speed.** A level comes from N correct in a row (L1 = 3, then 4)
+  at any speed; "under N s" only earns score. 2026-11-10 KDM vector-vanguard levelled only when every 4th consecutive hit
+  landed under 3 s — reading + dialling ROWS and COLUMNS + FIRE — so a slow, always-correct child never left L1 (beacon
+  28 d: 3.8% cleared L1, arcade line 40.5%). In an arcade, pace the spawns to a slow correct answerer instead (fleets every
+  ~0.85 × their answer time), or they pile up and land while the child dials. Show the run on the level pill (●●○).
+  Static scan: `grep -nE '(react|rt|elapsed)\s*<\s*[0-9.]+\s*&&[^;]*(streak|Streak)' public/games/*/index.html`, and
+  fast-path quotas far above the slow one (`fastStreak>=4` beside `…InTier>=10`).
+- **A child who does exactly what the task line says must be able to succeed.** "Tap +, then CHECK" over a stepper whose
+  answer is never one press away is a miss on every round. Say how many ("tap + that many times") or until what. The
+  input's label names what it holds (PETALS ON THE NEW FLOWER, not a subtitle asking for the jump). Method text is per
+  rule kind: "do that jump once more" on a doubling round gives 12 for 2, 4, 8. 2026-11-10 pattern-garden: search
+  children cleared L1 at 35% (site 59%). KDM gate: tools/game-review/literal-follower-probe.mjs.
 - **Anything drawn like a button responds** (pick it, or nudge toward the real control).
+- **The big drawn shape is a handle too** (2026-11-10, KDM box-plot-builder). On a canvas build game the finger goes to
+  the largest thing it sees — the box, a whisker tip, the median line, a bar top — not to the small tag under the axis.
+  A touch there grabs the handle drawn nearest in x (within ~1.5 units) and drags it; a stack of handles on one value
+  hands the finger the one that can move that way (rightmost going right). Show the dragged value in a pill the finger
+  doesn't cover. box-plot-builder: 35 children touched the board in 28 d, 6 L1 rounds ever reached LOCK IN (site 1.54
+  per toucher), 0 cleared L1 — the box ignored a finger and L1 asked for all five flags. L1 now sets Q1/Q3 (locked tags)
+  and asks for MIN/MED/MAX; L2 adds the quartiles. Position words ("the 4th from the left") point only at things shown
+  IN ORDER — the data chips sat unsorted under that sentence. KDM gate: real-input driver that grabs the shape
+  (tools/game-review/real-input/box-plot-builder.mjs) + review-game NEVER COMMITTED (tap1 vs ft1_ tallies).
+  In a READ game (the bars are the data, the answer goes in a stepper or chips — KDM bar-graph-builder, 11-10) the
+  drawn shape is not a handle: a finger on it must not set the value (that reads the graph for the child), but it must
+  not do nothing either — name the input ("Count the squares up the 🏀 bar, then set that number with + below") and
+  pulse the stepper. Compare ratios only over the window in which BOTH counts exist: ft1_ tallies started 2026-10-31,
+  tap1 is older, so a 28-day tap1-vs-ft1 ratio flagged 18 games whose traffic had fallen (9-day window: 1).
 - **Emit the funnel events**: open, play, tap1, clear1 (even without a result card — reaching L2 implies it), levelup.
 - **One commit, one target set (grades ≤5).** A commit must not need a second pick on something the child can't see
   next to the buttons (on phones the chart/scene sits above the fold). If the heading already names what to check, the

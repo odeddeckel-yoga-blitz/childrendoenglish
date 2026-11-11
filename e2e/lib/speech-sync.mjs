@@ -44,7 +44,10 @@ export async function instrumentSpeech (page, { audio = /./, visual, answerSel =
   }, { audioSrc: audio.source, visualSrc: visual ? visual.toString() : '', answerSel })
 }
 // A clip is wrong if the visual changes while it is still playing (60 ms grace), or it starts > maxStartMs after the answer.
-export function checkSpeech (log, { maxStartMs = 1500, graceMs = 60, ownMs = 150, chainMs = 600 } = {}) {
+// A line that waits > maxQueueMs between speak() and its start (or its cut / the end of the log, if it never starts) is
+// a backlog: speech queues faster than it plays (KDM /play assessment 11-08/11-10: a praise line spoken right after
+// cancel() stuck unstarted and the next question queued behind it).
+export function checkSpeech (log, { maxStartMs = 1500, graceMs = 60, ownMs = 150, chainMs = 600, maxQueueMs = 3000 } = {}) {
   // A clip that starts with its own screen (the app speaks the new question in the same tick it renders it) is logged a
   // frame BEFORE the visual (KDM /play 11-08: start 12553, visual 12554). A visual change within ownMs after the start
   // is the clip's OWN screen, not a change it played over.
@@ -66,10 +69,15 @@ export function checkSpeech (log, { maxStartMs = 1500, graceMs = 60, ownMs = 150
   // A line queued for one screen that never started before the screen changed and was then cut = never heard at all
   // (KDM /play 11-08: a question's read-out queued behind a long answer line, cut by the next answer).
   for (const q of log.filter((x) => x.e === 'queued')) {
-    const started = log.find((x) => x.e === 'start' && x.src === q.src && x.t >= q.t)
+    // The same text queued again later ("Super star!" twice) is a different line: look only up to its next queueing.
+    const again = log.find((x) => x.e === 'queued' && x.src === q.src && x !== q && x.t >= q.t && log.indexOf(x) > log.indexOf(q))
+    const started = log.find((x) => x.e === 'start' && x.src === q.src && x.t >= q.t && (!again || x.t < again.t))
     const cut = log.find((x) => x.e === 'cut' && x.src === q.src && x.t >= q.t && (!started || x.t < started.t))
     const moved = cut && log.some((x) => x.e === 'visual' && x.t > q.t + ownMs && x.t < cut.t)
-    if (cut && moved) problems.push(`"${q.src}" queued ${Math.round(q.t)} ms, never heard: the screen changed and it was cut before it started`)
+    // "queued at" = a timestamp, not a wait: "queued 21374 ms" was read as 21 s in the queue (11-08); the wait is below.
+    if (cut && moved) problems.push(`"${q.src}" queued at ${(q.t / 1000).toFixed(1)} s, never heard: the screen changed and it was cut before it started`)
+    const until = started ? started.t : cut ? cut.t : (log.length ? log[log.length - 1].t : q.t)
+    if (until - q.t > maxQueueMs) problems.push(`"${q.src}" waited ${Math.round(until - q.t)} ms in the queue${started ? ' before it started' : ' and never started'} (backlog > ${maxQueueMs} ms)`)
   }
   return { spoken: spoken.length, problems }
 }

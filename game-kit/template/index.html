@@ -131,7 +131,12 @@
 </head>
 <body>
 <div id="stage">
-  <a id="hubBack" href="/" aria-label="All KidsDoMath games">🏠 All games</a>
+  <!-- hubBack v2 (PATTERNS §5.61: drawn icon, no emoji in chrome). SITE SLOTS — keep the markup shape, edit the values:
+       href = the site's game hub · aria-label = "All <Site> games" · sprite = the kit icon sprite (infra/icons/sprite.svg)
+       copied to the site's /icons/ui/sprite.svg (the kit default URL, same-origin for <use>). A site without the sprite
+       deletes the <svg> and keeps the text span. .kdm-hb-t lets a pill-compact helper hide the words where the pill would
+       cover a control. The same markup is the T.hubBack string below (applyText writes it with innerHTML). -->
+  <a id="hubBack" href="/" aria-label="All KidsDoMath games"><svg class="kdm-ic" width="1.2em" height="1.2em" style="display:inline-block;vertical-align:-0.2em;flex:none" aria-hidden="true" focusable="false"><use href="/icons/ui/sprite.svg#i-home"/></svg> <span class="kdm-hb-t">All games</span></a>
   <canvas id="cv" role="img" aria-label="Game play area"></canvas>
   <div id="errPill" role="button" tabindex="0">⚠️ Something broke — tap to reload</div>
 
@@ -195,7 +200,7 @@ const ltr=s=>s;   // passthrough (kept so any copied game that calls ltr() still
 const T={
   title:'GAME TEMPLATE', sub:'⟨One-line pitch: the math IS the mechanic.⟩',
   p1:'⟨mode 1⟩', p2:'⟨mode 2⟩', p3:'⟨mode 3⟩',
-  start:'▶ START', hubBack:'🏠 All games', resume:n=>'▶ Continue · LV '+n,
+  start:'▶ START', hubBack:'<svg class="kdm-ic" width="1.2em" height="1.2em" style="display:inline-block;vertical-align:-0.2em;flex:none" aria-hidden="true" focusable="false"><use href="/icons/ui/sprite.svg#i-home"/></svg> <span class="kdm-hb-t">All games</span>', resume:n=>'▶ Continue · LV '+n,
   tag:'⟨No quizzes — describe how manipulating the game does the math.⟩',
   level:n=>'LV '+n, quota:(a,b)=>'⭐ '+a+'/'+b,
   order_match:t=>'Order: set the dial to <b>'+t+'</b>.',
@@ -213,7 +218,7 @@ const T={
   // LED only appears at stage 2 (3 further misses). The idle path never escalates past stage 1.
   drone_match:t=>'🤖 Helper: read the target, then step toward it — count your jumps.',
   drone_more:t=>'🤖 Helper: "more than '+t+'" means BIGGER than '+t+' — go past it.',
-  st_low:'📉 too low — go higher!', st_high:'📈 too high — come down!',
+  st_low:'📉 too low — go higher!', st_high:'📈 too high — come down!', st_same:v=>v+' was already checked — change it with + or − first.',
 };
 function L(k,...a){ let v=T[k]; if(v===undefined)return k; return typeof v==='function'?v(...a):v; }
 function applyText(){
@@ -325,7 +330,7 @@ const Game=(()=>{
 
 /* ==================== Line (the puzzle) — ⟨REPLACE generators + solved()⟩ ==================== */
 const Line=(()=>{
-  let O=null, made=0, need=3, usedScaffold=0, missSince=0, droneShown=false, droneFull=false, idleT=null;
+  let O=null, made=0, need=3, usedScaffold=0, missSince=0, droneShown=false, droneFull=false, idleT=null, lastMiss=null;
   const cuedModes=new Set();   // which modes have shown their first-play cue (cue each mode's DEBUT, not just level 1)
   let locked=false; // commit-lock: block re-committing an already-solved target during the post-solve respawn window (prevents double-counting a solve)
 
@@ -340,7 +345,7 @@ const Line=(()=>{
   const LEVELS=[ ()=>genMatch(1), ()=>genMore(1), ()=>genMatch(2), ()=>genMore(2), ()=>genMatch(3), ()=>genMore(2), ()=>genMatch(3), ()=>genMore(3) ];
 
   function build(level, firstPlay){
-    O=window.__kdmFreshO(LEVELS[(level-1)%LEVELS.length]); made=0; need=3; usedScaffold=0; missSince=0; droneShown=false; droneFull=false; locked=false;
+    O=window.__kdmFreshO(LEVELS[(level-1)%LEVELS.length]); made=0; need=3; usedScaffold=0; missSince=0; droneShown=false; droneFull=false; locked=false; lastMiss=null;
     $('drone').style.display='none';
     renderPanel(); renderOrder(); refresh();
     if(!cuedModes.has(O.mode)){ cuedModes.add(O.mode); cueControls(); }  // KOC: cue each mode's FIRST appearance
@@ -367,13 +372,17 @@ const Line=(()=>{
       locked=true; FX.celebrate(); /* kdm-clean-quota v1 */if(missSince<=2)made++; refresh();
       if(made>=need) setTimeout(()=>Game.roundClear(usedScaffold>0),520);
       else setTimeout(respawn,360);
-    }else{ FX.setShake(8); missSince++; refresh();
+    }else{
+      // An unchanged re-commit is not a new miss (GENERATION 'Level-1 kid traps', KDM 11-10): a confused child pressing
+      // CHECK again on the same wrong answer stacked misses and the clean quota voided the round's star.
+      if(lastMiss===O.val){ $('statusLine').textContent=L('st_same',O.val); $('statusLine').style.color='var(--gold)'; return; }
+      lastMiss=O.val; FX.setShake(8); missSince++; refresh();
       // commit-gated directional nudge (numeric dial) — never live in refresh(), or the oracle returns
       $('statusLine').textContent = O.val<O.T ? L('st_low') : L('st_high');
       if(missSince>=3 && !droneShown) showDrone();                                   // KOC: stage-1 method rescue
       else if(droneShown && !droneFull && missSince>=6) showDrone(true); }           // last resort: answer LED
   }
-  function respawn(){ locked=false; const lvl=Game.level; O=window.__kdmFreshO(LEVELS[(lvl-1)%LEVELS.length]); missSince=0; droneShown=false; droneFull=false; $('drone').style.display='none'; renderPanel(); renderOrder(); refresh(); resetIdle(); }
+  function respawn(){ locked=false; lastMiss=null; const lvl=Game.level; O=window.__kdmFreshO(LEVELS[(lvl-1)%LEVELS.length]); missSince=0; droneShown=false; droneFull=false; $('drone').style.display='none'; renderPanel(); renderOrder(); refresh(); resetIdle(); }
 
   /* ---- KOC onboarding kit ---- */
   function resetIdle(){ clearIdle(); idleT=setTimeout(()=>{ if(!droneShown && !solved()) showDrone(); }, 14000); }  // ~14s idle → help (canonical: 14s / 3 misses)
@@ -423,7 +432,8 @@ const Line=(()=>{
     // feedback. REQUIRED — without it the review harness can't tell a "wrong" beat from a solved
     // one and the feedback-quality check can't judge your wrong-answer response. Build a
     // non-solving value here (off-by-one below; adapt to YOUR mechanic), then commit().
-    wrongForTest(){ O.val = (O.mode==='match'?O.T:O.T+1) + 1; onInput(); commit(); },
+    // (an unchanged re-commit is not a miss, so each test miss uses a value ≠ lastMiss)
+    wrongForTest(){ const t=O.mode==='match'?O.T:O.T+1; O.val = [t+1,t+2,t-1,t+3].find(v=>v>=0&&v!==lastMiss); onInput(); commit(); },
     // jumpToLevel: REQUIRED contract member — jump straight to a deep level so deep-level
     // clarity checks (hud-logic-mismatch.mjs) can reach a round where the mode has shifted
     // (a reserve/keep/band appears). Steppers get it free via Game.start(lvl); a REAL-TIME

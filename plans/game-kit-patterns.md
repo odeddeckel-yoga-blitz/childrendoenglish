@@ -328,6 +328,27 @@ tabs that hide text (crawlers and AI read visible text). NN/g: no horizontal car
    Judge as difference in differences (see LESSONS 11-08 entry-B). Use 2–4 school weeks with a GSC/Bing-AI guardrail.
 6. **One visible change per page family per read window.** Bug fixes (lang, bidi, grammar, false claims) ship first,
    on their own, judged by CTR. Don't push into a running read (CDE waited for the 11-14 title holdout).
+   Since 11-10 the read length comes from traffic and only the touched units are frozen: see §3g.
+
+## 3g. Push method v2: lanes, unit locks, test length from traffic (owner adopted 2026-11-10)
+Brief: site-factory/briefs/push-method-v2-2026-11-10.md (power table per surface from 14 d of KDM/CDE/yoga beacons).
+- **Lock units, not sites.** Every change that needs a read is a row in `<repo>/reads.jsonl`
+  (`tools/reads.mjs <site> add --id= --lane= --units= --metric= --split=`). Only those units are frozen. The pre-push
+  hook runs `reads.mjs <site> locks --check-units=<touched units> [--as=<this change's read id>]`; exit 1 = a unit is
+  held by another open read. A visitor-arm read never blocks: the second test gets its own salt.
+- **Four lanes.** fix = no test, next push, 24 h guardrail (`verdict --guardrail`: treated units vs their own prior 7 d,
+  ROLLBACK if it fell > 2 SE and > 10%). games = batch every ready game, judge per fix TYPE pooled vs untouched games
+  (DiD, unit bootstrap CI, weekday-matched pre window), 5–7 school days. pages/template = visitor split, length from
+  `reads.mjs size`, min 5 school days, day-2 early stop only at |z| > 2.8. seo = page holdout, 14–28 d.
+- **Size before you start.** `reads.mjs <site> size --rate=<base> --perday=<opens/day> [--lift=0.1]`. One KDM game,
+  every CDE word page and most yoga pages can't be read alone (100+ days for +10%): ship on the quality bar +
+  guardrail, or judge on a high-rate metric (any action, engaged, tap1).
+- **Visitor split = `infra/arm-bit.js`.** `kitArm(salt)` keeps one random number per salt on the device (no ID sent,
+  null for webdriver and `?internal=1`). The page appends `~<arm>` to the tally names it already sends; the site's counts
+  exporter turns them into `{unit, day, arm, phase, n, k}` rows for `reads.mjs verdict`.
+- **Daily line.** `reads.mjs <site> daily` lists every open read (day x / min_days, decide by, READ NOW / OVERDUE).
+  A verdict is CONTINUE / SHIP / KILL / NO-POWER (CI wider than the lift you care about, default 10% relative).
+  Close it with `close --id= --status=ship|kill|done`; the ledger is append-only (never rewrite it).
 
 ## 4. Robustness contracts (each was a shipped bug)
 - **Touch drag needs `touch-action:none` on the drag source** (kidsdomath 2026-10-20). The template's
@@ -414,6 +435,11 @@ tabs that hide text (crawlers and AI read visible text). NN/g: no horizontal car
   fixed fractions tuned on desktop. Raise the band only by measurement — level 1 AND deep level, drone open,
   two-line text, `#actBtn` still above the fold (`tools/game-review/drone-fit.mjs`; long-division-depot fit at
   level 1 and lost the button at MAX-1).
+  A floor like `avail=Math.max(120,H−topInset−16)` is the same bug in disguise (KDM ruler-ranger 2026-11-10): with the
+  drone open only ~80 px of canvas was left under the overlaid order bar, the floor drew the ruler BELOW the canvas at
+  every phone size, and the helper said "count the ticks" with no ticks on screen. Clamp the drawing into the band
+  (`rulerY=min(…, H−rh−pad)`, drop decoration when tight) and let the open helper REPLACE the task line / panel heading
+  instead of squeezing the play area. Measure: canvas room under the order bar with the drone forced open, 320–414 wide.
 - **Progress readouts measure against the target set** (mirror-lab: "84% symmetric" on an untouched board
   because empty-matches-empty counted). `pct = 1 − mismatch/targetCount`, clamped; extra lit cells count against.
 - **Every verb in the copy must have a live handler** (estimate-quantity-quay: "slide the mark" while
@@ -482,6 +508,14 @@ tabs that hide text (crawlers and AI read visible text). NN/g: no horizontal car
   `dbg.busy` is true until the round is playable, and playthrough, kid-sim, capture and playtest all wait on it.
   Without it, every tool judged the loading frame: "blank picture" vision findings, a careful kid-sim stuck
   at 1 commit, playthrough failing "did not reach win".
+  **Slow networks (KDM real-or-ai 2026-11-10, measured with CDP throttling, not guessed):** (1) start the menu preload
+  AFTER `load`, because `new Image()` made while the page is loading holds window.onload back (Fast 3G 35.9 → 2.9 s,
+  Slow 3G 86.5 → 10.2 s); (2) round 1 and "Try another" draw from the lightest content (byte counts from the build
+  manifest; pick the answer side FIRST, then the item, so the light set can't hint the answer); (3) "Try another" must
+  NOT abandon a download in flight: keep it as the next round, because restarting a pair made slow networks slower;
+  (4) gate a zero-byte filler (existing text-only rounds, unscored, gentle shake `m ≤ 5` so first-try, battle and
+  resurfacing tallies don't count it) on "not ready 3 s after PLAY", so fast networks see no change. Keep `dbg.busy`
+  true while the filler covers a load. Slow 3G: first tap 87–122 → 3.1 s.
 - **Scrolling side panels: `#facRight>*{flex-shrink:0}` and a sticky commit button** (same game). In a flex-column
   panel with `overflow:auto`, a multi-line feedback box shrinks to its `min-height` and its text spills over
   CHECK. On phones, the answer feedback plus CHECK fell below the fold once an "investigate" box opened. Make
@@ -508,6 +542,26 @@ tabs that hide text (crawlers and AI read visible text). NN/g: no horizontal car
   too much → take one out). Gate: `tools/game-review/hint-stale-probe.mjs` (KDM) fails when a visible helper still
   quotes the missed round's numbers after the round changes. On 11-09 it flagged prime-factory, pie-lab and
   true-false-circuit.
+- **P-O-E: the EXPLAIN must be readable on a phone without scrolling, and OBSERVE must be big enough to see**
+  (KDM plant-needs 2026-11-09: Google arrivals 0.47 level-ups/open; 1 in 3 children who tried level 1 cleared it at
+  83 % first-try accuracy). (a) On phones the pinned commit button moves the panel into its own scroll box (KDM
+  `kdm-pinned-act`: `#facRight > .kdm-ctl`, with `#facRight` overflow:hidden), so code that scrolls `#facRight` to
+  show the why-line is a no-op — scroll the element that actually scrolls (`.kdm-ctl` when present), or keep the
+  lesson on the stage. (b) A canvas that reserves headroom for a reveal word must drop that reserve on layouts that
+  draw the word elsewhere (plant-needs drew it on the pot on phones yet kept the reserve: the stem sat at its 34 px
+  floor and "it wilts" was one leaf over the rim). Size the scene to the room left, never to a fixed floor that
+  pushes it onto the labels. (c) Inputs that drive the prediction say their state in words ("has water" / "no
+  water"), not only a red slash. Gate: `tools/game-review/poe-explain-visible.mjs` (KDM) — 320×568 and 390×664, right
+  and wrong call, the why-line must be inside the viewport and every scroll box unless the lesson is already on the
+  stage (a canvas banner) or in the HUD. 11-09 catalogue: plant-needs fixed; states-of-matter flagged at 320 px.
+  (d) KDM 11-10, fixed once in shared code: 95/200 games still hid the why-line at 320×568 after a WRONG call (the
+  canvas banner showed the rule, but only the panel line names the right card, and the ✓ card had scrolled off). The
+  shared reveal (`kdm-poe-reveal` v3.5) now scrolls each scrolling ancestor of the why-line (never the page) in the
+  first second of EXPLAIN so the line — with the ✓ card or the status line when they fit — sits inside the box, clear
+  of a sticky NEXT, NEXT kept on screen, smooth unless prefers-reduced-motion, stopped by the child's own touch.
+  Generated games: do not reset or re-scroll the panel during EXPLAIN (it fights the reveal), and never let a stage
+  banner stand in for the panel line after a miss. Any change to a shared reveal / pinned-button script must pass
+  poe-explain-visible + poe-next-visible on every P-O-E game (KDM `shared-gate.mjs` runs them).
 
 ## 5. Verification protocol (non-negotiable, per game)
 1. `node test/playthrough.mjs <game>` — dbg contract, 560-round reachability sweep, win flow,
@@ -777,6 +831,38 @@ tabs that hide text (crawlers and AI read visible text). NN/g: no horizontal car
     at runtime: learn the canvas's bottom-edge ink at full size, and after each picture step back off if it rose.
     Every gate passed while the scene was cut (tap-reach, question-visible, playthrough): a fit needs its own crop
     tester. Tester: `test/fit-clip.mjs` (fit on vs off, bottom-edge ink). Shared: KDM kdm-poe-fit v3.4, kdm-phone-fit v1.1.
+    Second pass (KDM 2026-11-10, 17 math games still needed a scroll at 320×568): the bottom-ink guard cannot see a band
+    that is HTML (logic-grid's clue card scrolled, clues hidden), loss at the TOP (regroup-rally's first number under the
+    HUD), a scene that shrinks but stops working (coordinate-rule-reactor's drop lattice 60 px; two-way-table's table
+    reduced to its header row), and it is load-sensitive on animated scenes (gene-squadron's diving ships). Before any
+    picture step, win the room in the panel and HUD: one-row 12 px HUD pills + 14 px task line (14 of 17 games got
+    25-45 px of scene back), heading + how-to as one paragraph, a label beside its stepper, paired controls side by
+    side, the how-to hidden while the helper bubble says the same, no double ← Games reservation. A game whose band
+    holds the problem itself pins it: `data-pic="off"` plus its own band under the fit's tight hook.
+    Shared rule (KDM kdm-phone-fit v2, 2026-11-10) — the fit itself now does, in this order: (1) learn the game's own
+    scene first (~0.6 s: a slimmer HUD can MOVE the scene — paycheck-planner's axis came into view — so a baseline taken
+    after it passes a later cut); (2) win room without touching the picture: panel heading + how-to as one paragraph,
+    one-row 12 px HUD pills, 14 px task line, slimmer #orderBar, CHECK ≥ 48 px; (3) only then a picture step, and each step
+    must pass a ROOM rule (the scene's free height under the HUD ≥ 96 px and ≥ 60 % of what the game's own band had —
+    pure geometry, judged synchronously, so load can't flip it; it caught regroup-rally / division-remainder / coordinate-
+    rule-reactor / graph-story-quest / map-scale-mesa) and an ink guard on the bottom edge, the TOP edge, the scene under
+    the HUD box and the HUD's own overflow, as the mean of 4-8 frames before vs 5 frames after, judged only once the
+    canvas bitmap has been re-laid out (box-plot-builder's guard read a stale bitmap under load); (4) helper open = the
+    fit starts over from the helper's layout and MAY step (owner, 11-10: refusing every step cost reach for nothing) —
+    ROOM + ink still judge each step — and a game's own helper squeeze is raised only where it breaks ROOM (kdm-hint-fix
+    had regroup-rally / money-market at 30 %, 52-77 px of scene). Between (2) and (3) a generic SQUEEZE trims the panel's
+    own air (paddings > 6 → 6, margins > 4 → 4, gaps → 4, then controls taller than 48 px down to 46 px by padding) —
+    never a foot margin/padding ≥ 24 px (that is the ← Games pill's reserve: sort-sorter's bins slid under it,
+    hubback-overlap). Measure the SETTLED page: v1's guard backed steps off ~1 s after tap-reach's 900 ms scan, so the
+    base looked 29 games / 102 keys when its steady state was 36 / 122 (TAP_SETTLE_MS=1500); v2 lands at 25 / 94. Per game: `data-pic="off"`, or
+    `data-pic-min="N"` for the smallest band that keeps the scene usable. Cost, honestly: a guard that refuses the steps
+    that hid the problem surfaces panels that never fitted — after room-first + squeeze, 13 games still needed more
+    scroll than base; each got its own panel fold under the tight hook (question beside its choices / label beside its
+    stepper, tables in two columns, chips that fit a row, two-up rows, ≥ 44 px targets, only captions that repeat the
+    screen hidden). Result on the 78: games needing a panel scroll at 320-390 px 29 (racy base) / 36 (settled) → 12,
+    hard keys 102 / 122 → 36, no game above either base, fit-clip 0 crops. Panel work, not deeper steps. Ink
+    metrics stay heuristic: animated skies and content that only touches the edge flip them, and the fit's early judge can
+    disagree with fit-clip's settled one — LOOK at the frame and pin the game, don't tune the threshold to the gate.
 52. **A helper's claim is re-checked as the board changes** (KDM 2026-11-04 number-sudoku: "the left column is missing
     just one number" stayed up after the child filled it and after the solve — the hint went false). Re-word on every
     refresh (no extra scaffold count, no cursor jump); hide it once the round is solved. A toast about the LAST round
@@ -785,6 +871,24 @@ tabs that hide text (crawlers and AI read visible text). NN/g: no horizontal car
     "Pet dog" / "Pet turtle" vs "Monarch" — the word "Pet" ruled them out; the scene band "☀️ WARM GROUNDS · food 🍃"
     showed the two right reasons' icons). Name every option the same way; scene labels in PREDICT are words only.
     head-oracle covers DOM headings; canvas labels need the vision review (a static scan can't tell PREDICT from reveal).
+    11-10 (KDM states-of-matter, Bing's #1 game): the "name the state" rounds drew the state badge "GAS · STEAM" above the
+    beaker in PREDICT over cards Solid / Liquid / Gas — an IDENTIFY round must not caption the thing being identified until
+    the reveal (draw the badge only in heat/cool rounds, where the start state is the given). Tester: `test/canvas-oracle.mjs`
+    (hooks fillText in PREDICT; flags a stage that names the right card whole and no wrong card; sample 42 POE games → 4 hits).
+    11-10 by-eye pass (17 science games, 9 real): the same leak wears other clothes — a legend badge ('🪨 FAULT — a crack in
+    the crust' on "What is a fault?"), a diagram label ('Kidney' / 'LIVER' on "which organ…?", 'MANTLE — hot, slowly
+    flowing rock' on "what do the plates sit on?"), a lit gauge or a glowing organ (hibernation's '🍖 Stored fat' bar,
+    brain-nerves' gold BRAIN), the only captioned item in an odd-one-out, a figure already doing the answer (a child
+    under a table on "safest thing to do?"), and paint/light overlaps already mixed (mixing-light-colors). In PREDICT
+    the asked thing is a "?" and nothing glows; labels that are the round's premise (named in the question) may stay.
+    11-10 second pass (30 oracle-flagged science games, 23 real): the stage DRAWS the mechanism being asked — a force arrow
+    into the centre on "what keeps it circling?", the grid laid out in order on "the right order power travels", a bird
+    already carrying the berry / a fox wearing the burr / a river beside the coconut on "how does this seed travel?", the
+    food source + energy arrow on "where is its energy from?", the answer world headlined ('🪐 JUPITER') on "where would
+    you weigh the most?", the zoom chain '… → NUCLEUS → DNA' on "where is DNA kept?"; a meter whose COLOUR is the answer
+    (green = more, yellow = less); a card that restates the badge's word ('plates COLLIDING' → 'Yes — they collide…'):
+    cards name the outcome, the stage shows the given. Discounted: scenes that label every option (LEFT/RIGHT, TOP/BOT,
+    all three stage tiles, a labelled anatomy diagram) and a figure drawn in every round (the human in "animal vs you").
 54. **Every word in an instruction names something on screen** (KDM 2026-11-04 gene-squadron: "Move under the diver" —
     "diver" was the Galaga term for the diving ship; the child saw a glowing ship). Use what the child sees.
 55. **The optimizer read covers the whole path, not just in-game depth** (owner 11-04: the ~Oct 28 game-flow read never
@@ -843,6 +947,17 @@ tabs that hide text (crawlers and AI read visible text). NN/g: no horizontal car
     `<svg><use>` has a non-transparent computed colour and resolves in the sprite. (b) Emoji → markup breaks textContent
     sinks: trace each string's sink; use innerHTML only for STATIC strings, never for player names or word data (XSS) —
     keep data as text nodes and add the icon as its own element.
+    **In games (kit template, KDM 11-07 → kit 11-10):** (c) the home pill is hubBack v2 — `<a id="hubBack" aria-label=
+    "All <Site> games"><svg class="kdm-ic" aria-hidden="true"><use href="/icons/ui/sprite.svg#i-home"/></svg> <span
+    class="kdm-hb-t">All games</span></a>`, and the template's `T.hubBack` string is the same markup (its `set()` sink is
+    innerHTML). Site slots: href, aria-label, sprite URL (the kit sprite copied to `/icons/ui/sprite.svg`; a site without
+    it drops the `<svg>` and keeps the span). Where the pill would cover a control, pill-compact hides `.kdm-hb-t` (the
+    aria-label still names it) — never rewrite its textContent, that drops the icon. (d) The rest of a game's chrome
+    (START / CHECK / mode chips / win title / pills / status line) keeps its emoji in SOURCE and is swapped at RUNTIME by
+    `infra/icons/chrome-icons.js` (leading glyph → drawn icon, MutationObserver; never inside #choices,
+    [data-kdm-role=answer], [data-content]; sprite slot `window.__kitIconSprite`). Rewriting 500 hand-varied games' strings
+    would print raw `<svg>` wherever a textContent sink reads them. KDM embeds the same two blocks in kdm-progress.js.
+    Gate: `test/template-chrome.test.mjs` (template pill is v2 and matches T.hubBack; every mapped icon is in the sprite).
 62. **A funnel ratio uses one window for its numerator and its denominator** (CDE 2026-11-07: the optimizer counted
     Spelling Forge opens from 10-10 but starts only from 10-28, when `g_start` began logging, and read "72 of 115 kids
     never press Start"; like-for-like it was 43/55 = 78%, in line with the other games — a fix was nearly built for a
@@ -1190,3 +1305,12 @@ answer's name 250 ms after the answer (fire-and-forget) and advanced at 1,100 ms
   against a per-frame sample of what's on screen; fails if the visual changes while it plays or it starts late. Run
   warm AND cold (cache off + throttled). Yoga's `e2e/audio-sync.spec.js` failed on every answer of the old code.
 - Side effect to expect: e2e loops that answer on a fixed sleep get slower rounds → wait for the next item instead.
+- **TTS at a quick answer pace: never speak() in the same tick as cancel() of a line still playing, and keep the
+  browser's queue at ONE utterance** (KDM /play assessment 11-10). At a 1.5–2.5 s answer gap ~1 in 3 praise lines handed
+  over right after cancelling the question read-out never STARTED (Chrome sticks them), the next question queued behind
+  it in the browser's queue and was lost too, and the screen sat on the hold cap. Fix (KDM `src/lib/speechQueue.js`):
+  hand a line over a beat (~60 ms) after cancelling a busy synth, latest call wins; queue the rest in JS; praise/feedback
+  is perishable (a newer one replaces a queued one, one that would start > 2.5 s late is dropped, stuck praise is dropped
+  at 1.5 s); a stuck question is re-handed once and never dropped; cap the queue. *Check:* `checkSpeech` fails any line
+  that waits > `maxQueueMs` (3 s) between speak() and its start (or its cut / the end of the log) — run it at answer gaps
+  1.5 / 2.5 / 4 s. Note "queued at N s" in its output is a timestamp, not a wait (the 11-08 read took it for 21 s).
