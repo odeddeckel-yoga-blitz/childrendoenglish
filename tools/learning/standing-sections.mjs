@@ -117,8 +117,8 @@ export function printPageDepth(rows, minViews = 10) {
 export async function standingSections(q, days) {
   const since = `GREATEST(CURRENT_DATE - ${Number(days)}, DATE '${SECTIONS_SINCE}')`;
   const learn = await q.query(`SELECT ev, item, sum(n)::int AS n FROM cde_learn WHERE day >= ${since}
-    AND ev IN ('g2','g3','hop','vp','rets','jserr','cwv','g_open','vis') GROUP BY ev, item`, []);
-  const land = await q.query(`SELECT page, src, sum(n)::int AS n FROM cde_land WHERE day >= ${since} GROUP BY page, src`, []);
+    AND ev IN ('g2','g3','hop','vp','rets','jserr','jserx','cwv','g_open','vis') GROUP BY ev, item`, []);
+  const land = await q.query(`SELECT page, src, sum(n)::int AS n FROM cde_land WHERE day >= ${since} AND src NOT LIKE '%@%' GROUP BY page, src`, []);
   const of = (ev) => learn.filter((r) => r.ev === ev);
   const loads = {}; for (const r of land) loads[r.page] = (loads[r.page] || 0) + r.n;
   const visDays = of('vis').reduce((a, r) => a + r.n, 0);
@@ -160,6 +160,9 @@ export async function standingSections(q, days) {
   console.log('— script errors × bounce (page loads with an error ÷ opens):');
   console.log(errs.length ? '  ' + errs.map((e) => `${e.s} ${e.n}/${e.den} (${pct(e.n, e.den)})${e.den >= 10 && e.rate >= 0.05 ? ' ⚠' : ''}`).join(' · ')
     : '  none recorded');
+  // jserx (from 2026-11-13): errors injected by extensions / school filters, not our code — never a game bug on their own
+  const jx = of('jserx');
+  if (jx.length) console.log('  injected (jserx, not ours): ' + jx.map((r) => `${r.item} ${r.n}`).join(' · '));
 
   // 5. AI referrals (engines are in the AI arrivals line above; here: where they land)
   // (AI landings are an old tally: the full window, not just since the new ones shipped)

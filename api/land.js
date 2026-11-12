@@ -5,12 +5,16 @@
 // no identifier, no IP, no device storage. Table: cde_land (shared Neon
 // project childrendoenglish, CDE_DATABASE_URL — own project since 2026-10-17).
 import { neon } from '@neondatabase/serverless';
-import { parseComponentBeacon, pgComponentStore } from './_lib/component-clicks-server.mjs';
+import { parseComponentBeacon, pgComponentStore, isBotUA } from './_lib/component-clicks-server.mjs';
 
 // 'teachers' is reserved (11-08): the /teachers page doesn't exist yet; land-beacon.js already classes its path.
 const PAGES = new Set(['home', 'vocab', 'hebrew', 'spanish', 'games', 'tool', 'flashcards', 'guide', 'app', 'unit', 'battle', 'teachers', 'other']);
 const LANGS_OK = new Set(['en', 'he', 'es', 'ar']);
 const SRCS = new Set(['direct', 'seo', 'ai', 'internal', 'external']);
+// Bot opens and human opens (kit land-beacon.md, owner OK 11-12): a bot UA's arrival is stored as src 'bot@<src>' (not an
+// open) and any other bot beacon as ONE bot_ev tally; the client sends 'hum@<src>' on a page's first trusted tap/key.
+// Clients can never send bot@ or bot_ev (not in SRCS / HUM_SRC / LEARN_EVS). Opens = the plain SRCS words only.
+const HUM_SRC = /^hum@(direct|seo|ai|internal|external)$/;
 
 // Learning events (Word Learning Optimizer) — same cookieless aggregate model:
 // ONLY { day, event-kind, content-item, n } tallies. The item is a WORD ID or
@@ -47,7 +51,10 @@ const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_
   'mqv', 's15', 'prc', 'bpr', 'fmb',
   // Push method v2 (11-11): act = any action on a static page (once per view, item = its page key); jserrsig = a script
   // error's signature <file>_<line>_<type> (kit land-beacon.md §jserr; never message text), next to the plain jserr.
-  'act', 'jserrsig']);
+  'act', 'jserrsig',
+  // jserx (kit land-beacon.md, KDM 11-12): an error from a script that isn't one of our files (extension / school filter
+  // injection; CDE pages have no inline scripts) — counted apart so jserr means OUR code.
+  'jserx']);
 // distinct error signatures recorded per day; past this a NEW signature is dropped (a known one still counts)
 export const JSERRSIG_DAY_CAP = 50;
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
@@ -61,6 +68,7 @@ const EV_ITEM = {
   vp: /^[a-z]{1,12}$/,
   rets: new RegExp(`^${SURF}$`),
   jserr: new RegExp(`^${SURF}$`),
+  jserx: new RegExp(`^${SURF}$`),
   cwv: new RegExp(`^(lcp|cls|inp)_(good|ni|poor)@${SURF}$`),
   ...Object.fromEntries(['mqv', 's15', 'prc', 'bpr', 'fmb', 'act'].map((e) => [e, PAGE_KEY])),
   jserrsig: /^[a-z0-9-]{1,24}_\d{1,5}_(type|ref|range|syntax|other)$/,
@@ -135,10 +143,21 @@ export default async function handler(req, res) {
         return res.status(204).end();
       }
       const { g, s, batch } = body || {};
+      // The UA is read for this test only: never stored or logged. A missing UA counts as a bot.
+      const bot = isBotUA(req.headers?.['user-agent']);
       // Interface language of the session (multilang WS4) — validated, defaults 'en'
       const l = LANGS_OK.has(body?.l) ? body.l : 'en';
       // Learning-event batch: [{e, i}, ...] (≤30 per beacon, whitelisted kinds)
       if (Array.isArray(batch)) {
+        if (bot) {
+          const q = sql();
+          if (q && batch.length > 0) {
+            await ready;
+            await q`INSERT INTO cde_learn (day, ev, item, lang, n) VALUES (CURRENT_DATE, 'bot_ev', 'batch', ${l}, 1)
+                    ON CONFLICT (day, ev, item, lang) DO UPDATE SET n = cde_learn.n + 1`;
+          }
+          return res.status(204).end();
+        }
         const events = batch
           .filter(x => x && LEARN_EVS.has(x.e) && typeof x.i === 'string' && ITEM_RE.test(x.i))
           .filter(x => (x.e !== 'aie' && x.e !== 'aiv') || AI_ATTR_RE.test(`${x.e}_${x.i}`))
@@ -166,12 +185,19 @@ export default async function handler(req, res) {
         }
         return res.status(204).end();
       }
-      if (!PAGES.has(g) || !SRCS.has(s)) return res.status(204).end();
+      if (!PAGES.has(g) || !(SRCS.has(s) || HUM_SRC.test(s))) return res.status(204).end();
+      // a bot's arrival → bot@<src>; a bot "human" tally is just a bot event
+      const row = !bot ? s : SRCS.has(s) ? 'bot@' + s : null;
       const q = sql();
       if (q) {
         await ready;
-        await q`INSERT INTO cde_land (day, page, src, lang, n) VALUES (CURRENT_DATE, ${g}, ${s}, ${l}, 1)
-                ON CONFLICT (day, page, src, lang) DO UPDATE SET n = cde_land.n + 1`;
+        if (row) {
+          await q`INSERT INTO cde_land (day, page, src, lang, n) VALUES (CURRENT_DATE, ${g}, ${row}, ${l}, 1)
+                  ON CONFLICT (day, page, src, lang) DO UPDATE SET n = cde_land.n + 1`;
+        } else {
+          await q`INSERT INTO cde_learn (day, ev, item, lang, n) VALUES (CURRENT_DATE, 'bot_ev', 'batch', ${l}, 1)
+                  ON CONFLICT (day, ev, item, lang) DO UPDATE SET n = cde_learn.n + 1`;
+        }
         await sweepBattleRooms(q);
       }
       return res.status(204).end();

@@ -6,7 +6,7 @@
 import { neon } from '@neondatabase/serverless';
 const q = neon(process.env.CDE_DATABASE_URL);
 const r = await q.query(`SELECT to_char(d, 'YYYY-MM-DD Dy') AS day, extract(dow from d)::int AS dow,
-  COALESCE((SELECT sum(n) FROM cde_land WHERE day = d::date), 0)::int AS loads,
+  COALESCE((SELECT sum(n) FROM cde_land WHERE day = d::date AND src NOT LIKE '%@%'), 0)::int AS loads,
   COALESCE((SELECT sum(n) FROM cde_learn WHERE day = d::date AND ev = 'g_open'), 0)::int AS gopen,
   COALESCE((SELECT sum(n) FROM cde_learn WHERE day = d::date AND ev = 'quiz_start'), 0)::int AS quiz
   FROM generate_series(CURRENT_DATE - 21, CURRENT_DATE - 1, interval '1 day') d ORDER BY d`, []);

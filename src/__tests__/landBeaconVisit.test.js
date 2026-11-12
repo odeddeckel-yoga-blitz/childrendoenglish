@@ -146,6 +146,24 @@ describe('land-beacon AI attribution', () => {
     expect(ai(land('https://www.google.com/'))).toEqual([]);
     expect(ai(land(''))).toEqual([]);
   });
+  // kit land-beacon.md 11-12: a Google PRODUCT referrer is a class link → external, before the search regex and the utm override
+  it('Classroom / Docs / Drive → external, even with ?utm_source=chatgpt.com; google.com search stays seo', () => {
+    expect(land('https://classroom.google.com/')[0]).toMatchObject({ s: 'external' });
+    const pasted = land('https://classroom.google.com/u/0/c/abc', '?utm_source=chatgpt.com');
+    expect(pasted[0]).toMatchObject({ s: 'external' });
+    expect(ai(pasted)).toEqual([]);
+    expect(land('https://docs.google.com/document/d/x')[0]).toMatchObject({ s: 'external' });
+    expect(land('https://drive.google.com/')[0]).toMatchObject({ s: 'external' });
+    expect(land('https://www.google.com/')[0]).toMatchObject({ s: 'seo' });
+    expect(land('https://www.google.co.il/')[0]).toMatchObject({ s: 'seo' });
+    expect(land('', '?utm_source=chatgpt.com')[0]).toMatchObject({ s: 'ai' });
+  });
+  it('hum@ is never sent for an untrusted (scripted) tap', () => {
+    const sent = land('https://www.google.com/');
+    window.dispatchEvent(new Event('pointerdown'));
+    document.body.dispatchEvent(new KeyboardEvent('keydown', { bubbles: true }));
+    expect(sent.filter((b) => /^hum@/.test(b.s || ''))).toEqual([]);
+  });
 });
 
 // Static-page depth (measure step 2, 11-08): mqv / s15 / prc / bpr / fmb, item = the page key, each once per page view

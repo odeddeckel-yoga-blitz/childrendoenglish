@@ -81,8 +81,19 @@ describe('land-beacon on game pages (shares the tab list with the app)', () => {
     const rej = Object.assign(new RangeError('deep'), { stack: `RangeError: deep\n    at f (${location.origin}/games/word-zapper/game.js:88:12)` });
     expect(sigs('/games/word-zapper/', { reason: rej }, 'unhandledrejection')).toEqual(['word-zapper-game_88_range']);
     expect(sigs('/games/read-it/', { filename: 'chrome-extension://abc/x.js', lineno: 3, error: new Error('x') })).toEqual([]);
+    // injected into the page (extension / school filter; CDE pages have no inline scripts): jserx, no jserr or signature
+    expect(sigs('/he/', { filename: `${location.origin}/he/`, lineno: 12, error: new TypeError('x') })).toEqual([]);
     const all = JSON.stringify(navigator.sendBeacon.mock.calls);
     expect(all).not.toMatch(/kid typed|Cannot read/);
+  });
+  it('an error whose source is the page itself is jserx, never jserr', () => {
+    openPage('/vocabulary/animals/', '');
+    const sent = [];
+    navigator.sendBeacon = vi.fn((u, body) => { sent.push(JSON.parse(body)); return true; });
+    window.dispatchEvent(Object.assign(new Event('error'), { filename: `${location.origin}/vocabulary/animals/`, lineno: 3, error: new TypeError('x') }));
+    const mine = sent.flatMap((b) => b.batch).filter((x) => x.i === 'pg-vocab');
+    expect(mine).toContainEqual({ e: 'jserx', i: 'pg-vocab' });
+    expect(mine.filter((x) => x.e === 'jserr')).toEqual([]);
   });
   it('act: once per static page view, with the first action, never on load', () => {
     window.history.replaceState(null, '', '/vocabulary/animals/cat/');

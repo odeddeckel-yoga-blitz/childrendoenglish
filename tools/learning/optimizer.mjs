@@ -108,7 +108,7 @@ const langRows = await q`SELECT lang, ev, item, sum(n)::int AS n
 {
   const daily = await q`SELECT to_char(d, 'YYYY-MM-DD') AS day,
       COALESCE((SELECT sum(n) FROM cde_learn WHERE day = d::date), 0)::int AS learn,
-      COALESCE((SELECT sum(n) FROM cde_land  WHERE day = d::date), 0)::int AS land
+      COALESCE((SELECT sum(n) FROM cde_land  WHERE day = d::date AND src NOT LIKE '%@%'), 0)::int AS land
     FROM generate_series(CURRENT_DATE - 21, CURRENT_DATE - 1, interval '1 day') d ORDER BY d`;
   const median = (xs) => { const s = [...xs].sort((a, b) => a - b); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : 0; };
   const flags = [];
@@ -356,6 +356,18 @@ if (aiRows.length > 0) {
     .sort((a, b) => b[1].aie - a[1].aie).map(([k, v]) => `${k} ${v.aiv}/${v.aie}`).join(' · '));
 }
 
+// --- Bot and human opens (kit land-beacon.md, from 2026-11-13) ---
+// bot@<src> = an arrival from a bot UA (not an open); hum@<src> = a page open that got a trusted tap/key.
+// bot share = bot@ ÷ (bot@ + opens); human rate = hum@ ÷ opens. Opens before the cutover still include bots.
+const bhRows = await q`SELECT src, sum(n)::int AS n FROM cde_land
+  WHERE day >= GREATEST(CURRENT_DATE - ${days}::int, '2026-11-13'::date) GROUP BY src`;
+if (bhRows.some((r) => /@/.test(r.src))) {
+  const n = Object.fromEntries(bhRows.map((r) => [r.src, r.n]));
+  const pct = (a, b) => (b ? `${Math.round((100 * a) / b)}%` : '—');
+  console.log('\n— bot / human opens since 2026-11-13 (bot share · human rate): ' + ['seo', 'ai', 'direct', 'external', 'internal']
+    .map((k) => `${k} ${pct(n['bot@' + k] || 0, (n['bot@' + k] || 0) + (n[k] || 0))} · ${pct(n['hum@' + k] || 0, n[k] || 0)}`).join('  |  '));
+}
+
 // --- Class Battle use (bt, from 2026-10-30) ---
 // create = a host made a room, start_p<size> = a battle started with that many
 // kids, join = a kid joined. A real classroom = starts in the 6-15 / 16+ buckets.
@@ -382,7 +394,7 @@ for (const r of await q`SELECT ev, item, sum(n)::int AS n FROM cde_learn
   g[{ g_lvl: 'lvl', g_cmp: 'cmp', g_start: 'start' }[r.ev] || 'open'] += r.n;
 }
 const landRows = await q`SELECT sum(n)::int AS n FROM cde_land
-  WHERE day >= GREATEST(CURRENT_DATE - ${days}::int, ${G_OPEN_SINCE}::date) AND page = 'games'`;
+  WHERE day >= GREATEST(CURRENT_DATE - ${days}::int, ${G_OPEN_SINCE}::date) AND page = 'games' AND src NOT LIKE '%@%'`;
 const pageOpens = landRows[0]?.n || 0;
 const gameIds = Object.keys(gameEv).sort((a, b) => gameEv[b].open - gameEv[a].open);
 // Like-for-like start rate: opens and starts both counted from the game's first g_start (within the window).

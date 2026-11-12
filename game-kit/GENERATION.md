@@ -530,6 +530,16 @@ but they bend three contracts, so do this explicitly (see kidsdomath `plans/arca
 ## Say what a child can't see (2026-10-17 — kidsdomath, 6-game cliff round + catalogue scans)
 - **A round that doesn't count must say so.** The clean-quota gate (≤2 misses) is right, but silent: a celebration while ⭐
   stays put reads as broken (131 games). Call the shared `kdmNoCount(misses)` (or say it in the status line).
+- **Help arrives BEFORE the clean quota voids the round** (KDM 11-12, logic cluster: tower-of-hanoi L6 41% pass and
+  logic-grid L4 44% — the helper came at miss 3, after the ≤2-miss quota had already lost the round, and an over-par
+  tower re-dealt with no help at all). Teach at miss 2 (the plan / the clue the child's own marks break), the next legal
+  move at miss 4; a hint about a held or dragged piece is recomputed on every move. An unfinished answer with nothing
+  wrong in it is a nudge, not a miss. Probe: KDM `second-miss-help-probe.mjs` (L1: 215/247 checkable games showed no
+  helper after 2 misses — the template threshold is 3; 87 games pair that threshold with the ≤2 quota).
+- **A script error counts as ours only if it is ours** (KDM 11-12: the logic cluster's 35–40% jserr — and 401/404 of all
+  line-numbered errors site-wide — were page lines 1–24 or file-less, i.e. scripts injected by a school extension/filter;
+  0 repro on our side). Count an error only from a same-origin .js file or the page at a line where our inline scripts
+  live; send foreign ones as a separate tally (KDM `jserx`). Probe: `jserr-origin-probe.mjs`.
 - **A miss message must name the real cause and the control.** circuit-lemmings said "Short circuit … gap ?" for a
   bulb shortcut — children were stuck until the answer hint. Test every miss path's text, not just that it fires.
 - **Teach the new idea where phones can see it.** 34 games hid the panel `.hint` on phones to save space, so new modes were

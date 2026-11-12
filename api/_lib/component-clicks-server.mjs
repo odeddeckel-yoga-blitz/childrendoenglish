@@ -1,4 +1,4 @@
-// component-clicks-server v1.50.1 (kit infra/kpi, 2026-11-01, All-ZC) — framework-agnostic server half.
+// component-clicks-server v1.51.0 (kit infra/kpi, 2026-11-12: isBotUA from KDM botUa.js) — framework-agnostic server half.
 // The site's beacon endpoint (Next route, Vercel fn, Express…) calls parseComponentBeacon(body, userAgent) and, when
 // it returns a record, store.record(rec). Postgres via any `query(text, params)` function (neon: sql.query), else memory.
 // Privacy: validated static ids only (no free text), aggregate daily rows, no identifier, no IP.
@@ -17,14 +17,37 @@ const TPL_RE = /^[a-z0-9_-]{1,40}(\/\*)?$/
 const ROUTE_RE = /^\/[a-z0-9/-]{0,80}$/
 const COMP_RE = /^[a-z0-9_.-]{1,60}$/
 // Known automation only (v1.50.1: no generic words like 'preview'/'fetch', which real browsers and in-app webviews can carry).
-export const BOT_UA = /bot\b|bot\/|crawl|spider|slurp|headlesschrome|lighthouse|pagespeed|facebookexternalhit|whatsapp\/|python-requests|python-urllib|aiohttp|\bcurl\/|\bwget\/|go-http-client|okhttp|java\/|axios\/|node-fetch|undici/i
+// v1.51.0 (KDM src/lib/botUa.js, 11-12): the old single regex dropped CUBOT phones ('bot\b') and missed ChatGPT-User,
+// Claude-User, Perplexity-User, Skype/Teams previews, uptime tools and more HTTP libraries. Keep each pattern specific
+// enough that no real kid browser matches; test/component-clicks-server.test.mjs holds the real-browser list.
+const BOT_PATTERNS = [
+  /bot\b|bot[/_-]/,
+  /crawl|spider|slurp|scrap(er|y)|archiver|ia_archiver/,
+  /chatgpt-user|claude-(user|web)|perplexity-user|anthropic-ai|cohere-ai|google-extended|googleother|google-inspectiontool|meta-external(agent|fetcher)|bytespider|diffbot/,
+  /facebookexternalhit|facebookcatalog|whatsapp\/|skypeuripreview|slack-imgproxy|embedly|iframely|vkshare|outbrain|w3c_validator|bingpreview|microsoftpreview|google-pagerenderer|redditbot/,
+  /headlesschrome|phantomjs|slimerjs|prerender|rendertron|chrome-lighthouse|lighthouse|pagespeed|gtmetrix|\bptst\b|pingdom|uptimerobot|statuscake|site24x7|datadogsynthetics|newrelicpinger|checkly|vercel-(screenshot|favicon)/,
+  /\bcurl\/|\bwget\/|httpie|python-requests|python-urllib|python-httpx|aiohttp|go-http-client|okhttp|apache-httpclient|\bjava\/|libwww-perl|\bruby\b|guzzlehttp|axios\/|node-fetch|undici|\bgot \(|postmanruntime|insomnia|dart:io|dalvik\//,
+]
+// Real devices whose name contains 'bot' (CUBOT phones: "Android 10; CUBOT X30") are removed before the test.
+const DEVICE_NAMES = /cubot/g
+const MAX_UA = 512
+// true for a crawler / preview / headless / HTTP-library UA, or a missing one (every browser sends a UA).
+export function isBotUA (ua) {
+  if (typeof ua !== 'string') return true
+  const s = ua.slice(0, MAX_UA).toLowerCase().replace(DEVICE_NAMES, '')
+  if (!s.trim() || s === 'node' || s === 'mozilla/5.0') return true
+  return BOT_PATTERNS.some((re) => re.test(s))
+}
+// Compat for sites that call BOT_UA.test(ua): same answer as isBotUA for a non-empty UA.
+export const BOT_UA = { test: (ua) => isBotUA(String(ua)) }
 const MAX_ITEMS = 60, MAX_CLK = 20
 
 // body: the parsed beacon JSON. Returns { tpl, route, items: [[comp, imp, clk]] } or null (drop quietly).
 export function parseComponentBeacon (body, userAgent = '') {
   const cc = body && body.cc
   if (!cc || typeof cc !== 'object') return null
-  if (userAgent && BOT_UA.test(userAgent)) return null
+  // A missing UA still passes here (callers that never forwarded the header keep working); beacon OPENS treat it as a bot.
+  if (userAgent && isBotUA(userAgent)) return null
   const { t, r, i } = cc
   if (typeof t !== 'string' || !TPL_RE.test(t) || typeof r !== 'string' || !ROUTE_RE.test(r) || !Array.isArray(i)) return null
   const m = new Map()

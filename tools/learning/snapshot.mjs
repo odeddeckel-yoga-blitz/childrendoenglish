@@ -8,7 +8,7 @@ export async function fetchSnapshot(q, days = 28) {
   const rows = await q`SELECT ev, item, sum(n)::int AS n, max(day)::text AS last
     FROM cde_learn WHERE day >= CURRENT_DATE - ${days}::int GROUP BY ev, item`;
   const land = await q`SELECT sum(n)::int AS n FROM cde_land
-    WHERE day >= CURRENT_DATE - ${days}::int AND page = 'games'`;
+    WHERE day >= CURRENT_DATE - ${days}::int AND page = 'games' AND src NOT LIKE '%@%'`;
   const words = {}, games = {}, spot = {}, modes = {}, fb = {};
   let last = '';
   for (const r of rows) {

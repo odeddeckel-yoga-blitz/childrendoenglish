@@ -23,7 +23,9 @@ vi.mock('@neondatabase/serverless', () => ({
 }));
 
 const res = () => { const r = { code: 0 }; r.status = (c) => { r.code = c; return r; }; r.end = () => r; r.json = (b) => { r.body = b; return r; }; return r; };
-const beacon = { method: 'POST', body: { batch: [{ e: 'ans_ok', i: 'cat' }] } };
+// A real browser UA: since the bot filter (11-12) a missing UA counts as a bot.
+const BROWSER = { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36' };
+const beacon = { method: 'POST', headers: BROWSER, body: { batch: [{ e: 'ans_ok', i: 'cat' }] } };
 
 describe('api/land failure logging', () => {
   let handler, err;
@@ -66,7 +68,7 @@ describe('api/land learn-event whitelist', () => {
     const { default: handler } = await import('../land.js');
     calls.length = 0;
     const batch = [{ e: 'fcr', i: 'c3' }, { e: 'fcr', i: 'done' }, { e: 'ansx', i: 'arrow@airplane' }, { e: 'g_start', i: 'spelling-forge' }, { e: 'pg', i: 'vocabulary_ages-6-8' }, { e: 'cta', i: 'games' }, { e: 'mq', i: 'vocabulary_word' }, { e: 'bt', i: 'start_p6-15' }, { e: 'qs', i: 'new-ladder_start' }, { e: 'aie', i: 'chatgpt' }, { e: 'aiv', i: 'perplexity' }, { e: 'aie', i: 'bing' }, { e: 'sheet', i: 'bingo' }, { e: 'mp', i: 'ee-i_no' }, { e: 'cvc', i: 'o_h_ok' }, { e: 'zv', i: 'words-animals' }, { e: 'b1r', i: '3-hear' }, { e: 'wk', i: 'pin' }, { e: 'rq_ok', i: 'apron' }, { e: 'rs', i: 'lo_retry' }, { e: 'ge', i: 'word-zapper_next' }, { e: 'qr', i: 'printable-flashcards_animals' }, { e: 'ltw', i: 'bd_d_no' }, { e: 't1', i: 'g-letter-twins' }, { e: 'mm_keep', i: 'apron' }, { e: 'pb', i: 'two_ok' }, { e: 'oo', i: 'animals-food_no' }, { e: 'rt', i: 'mixed_ok' }, { e: 'nope', i: 'x' }];
-    const r = res(); await handler({ method: 'POST', body: { batch, l: 'he' } }, r);
+    const r = res(); await handler({ method: 'POST', headers: BROWSER, body: { batch, l: 'he' } }, r);
     expect(r.code).toBe(204);
     const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
     expect(written).toEqual(expect.arrayContaining(['fcr:c3', 'fcr:done', 'ansx:arrow@airplane', 'g_start:spelling-forge', 'pg:vocabulary_ages-6-8', 'cta:games', 'mq:vocabulary_word', 'bt:start_p6-15', 'qs:new-ladder_start', 'aie:chatgpt', 'aiv:perplexity', 'sheet:bingo', 'mp:ee-i_no', 'cvc:o_h_ok', 'zv:words-animals', 'b1r:3-hear', 'wk:pin', 'rq_ok:apron', 'rs:lo_retry', 'ge:word-zapper_next', 'qr:printable-flashcards_animals', 'ltw:bd_d_no', 't1:g-letter-twins', 'mm_keep:apron', 'pb:two_ok', 'oo:animals-food_no', 'rt:mixed_ok']));
@@ -84,7 +86,7 @@ describe('api/land games wave 2 events', () => {
     const { default: handler } = await import('../land.js');
     calls.length = 0;
     const batch = [{ e: 'op', i: 'hot_ok' }, { e: 'tf', i: 'is_no' }, { e: 'fe', i: 'shy_ok' }, { e: 'sb', i: 'article_no' }, { e: 'bs', i: 'b_ok' }, { e: 'ss', i: 'trap_no' }];
-    const r = res(); await handler({ method: 'POST', body: { batch, l: 'en' } }, r);
+    const r = res(); await handler({ method: 'POST', headers: BROWSER, body: { batch, l: 'en' } }, r);
     expect(r.code).toBe(204);
     const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
     expect(written).toEqual(expect.arrayContaining(['op:hot_ok', 'tf:is_no', 'fe:shy_ok', 'sb:article_no', 'bs:b_ok', 'ss:trap_no']));
@@ -102,7 +104,7 @@ describe('api/land standing-section events (kit 1.59 §5.55)', () => {
       { e: 'rets', i: 'g-read-it' }, { e: 'jserr', i: 'app' }, { e: 'jserr', i: 'pg-hebrew' }, { e: 'cwv', i: 'lcp_poor@g-spelling-forge' }, { e: 'cwv', i: 'cls_good@app' }];
     const bad = [{ e: 'g2', i: 'google' }, { e: 'hop', i: 'flashcards' }, { e: 'vp', i: 'vocab_word' }, { e: 'jserr', i: 'TypeError' },
       { e: 'cwv', i: 'lcp_2400@app' }, { e: 'cwv', i: 'ttfb_good@app' }, { e: 'rets', i: 'x' }];
-    const r = res(); await handler({ method: 'POST', body: { batch: [...good, ...bad], l: 'en' } }, r);
+    const r = res(); await handler({ method: 'POST', headers: BROWSER, body: { batch: [...good, ...bad], l: 'en' } }, r);
     expect(r.code).toBe(204);
     const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
     expect(written.sort()).toEqual(good.map((x) => `${x.e}:${x.i}`).sort());
@@ -125,20 +127,20 @@ describe('api/land any action + error signature (push method v2, 11-11)', () => 
       { e: 'jserrsig', i: 'category-conveyor-game_412_type' }, { e: 'jserrsig', i: 'inline_0_other' }];
     const bad = [{ e: 'act', i: 'vocabulary@word' }, { e: 'jserrsig', i: 'game_12_TypeError' }, { e: 'jserrsig', i: 'cannot read x_1_type' },
       { e: 'jserrsig', i: 'a-very-long-script-file-name-x_1_type' }, { e: 'jserrsig', i: 'game_123456_type' }, { e: 'jserrsig', i: 'game_1' }];
-    const r = res(); await handler({ method: 'POST', body: { batch: [...good, ...bad], l: 'en' } }, r);
+    const r = res(); await handler({ method: 'POST', headers: BROWSER, body: { batch: [...good, ...bad], l: 'en' } }, r);
     expect(r.code).toBe(204);
     expect(written().sort()).toEqual(good.map((x) => `${x.e}:${x.i}`).sort());
   });
 
   it('drops a NEW signature once 50 distinct ones are in today, still counts a known one', async () => {
     capRow = { known: false, seen: 50 };
-    await handler({ method: 'POST', body: { batch: [{ e: 'jserrsig', i: 'game_9_ref' }] } }, res());
+    await handler({ method: 'POST', headers: BROWSER, body: { batch: [{ e: 'jserrsig', i: 'game_9_ref' }] } }, res());
     expect(written()).toEqual([]);
     capRow = { known: true, seen: 50 };
-    await handler({ method: 'POST', body: { batch: [{ e: 'jserrsig', i: 'game_9_ref' }] } }, res());
+    await handler({ method: 'POST', headers: BROWSER, body: { batch: [{ e: 'jserrsig', i: 'game_9_ref' }] } }, res());
     expect(written()).toEqual(['jserrsig:game_9_ref']);
     capRow = { known: false, seen: 49 };
-    await handler({ method: 'POST', body: { batch: [{ e: 'jserrsig', i: 'game_10_ref' }] } }, res());
+    await handler({ method: 'POST', headers: BROWSER, body: { batch: [{ e: 'jserrsig', i: 'game_10_ref' }] } }, res());
     expect(written()).toEqual(['jserrsig:game_9_ref', 'jserrsig:game_10_ref']);
   });
 });
@@ -197,16 +199,58 @@ describe('api/land static-page depth events (measure step 2, 11-08)', () => {
       { e: 'prc', i: 'printable-flashcards_animals' }, { e: 'bpr', i: 'tools_flashcard-maker' }, { e: 'fmb', i: 'tools_flashcard-maker' },
       { e: 'prc', i: 'tools_flashcard-maker' }];
     const bad = [{ e: 'mqv', i: 'cat@img' }, { e: 's15', i: 'Vocabulary_Word' }, { e: 'fmb', i: '' }];
-    const r = res(); await handler({ method: 'POST', body: { batch: [...good, ...bad], l: 'es' } }, r);
+    const r = res(); await handler({ method: 'POST', headers: BROWSER, body: { batch: [...good, ...bad], l: 'es' } }, r);
     expect(r.code).toBe(204);
     const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
     expect(written.sort()).toEqual(good.map((x) => `${x.e}:${x.i}`).sort());
   });
 
   it('counts a landing on the reserved teachers page class, not on an unknown one', async () => {
-    await handler({ method: 'POST', body: { g: 'teachers', s: 'seo', l: 'he' } }, res());
-    await handler({ method: 'POST', body: { g: 'parents', s: 'seo', l: 'he' } }, res());
+    await handler({ method: 'POST', headers: BROWSER, body: { g: 'teachers', s: 'seo', l: 'he' } }, res());
+    await handler({ method: 'POST', headers: BROWSER, body: { g: 'parents', s: 'seo', l: 'he' } }, res());
     const landed = calls.filter((c) => /INSERT INTO cde_land/i.test(c.sql)).map((c) => c.values[0]);
     expect(landed).toEqual(['teachers']);
+  });
+});
+
+describe('api/land bot and human opens (kit land-beacon.md, 11-12)', () => {
+  let handler;
+  beforeEach(async () => {
+    vi.resetModules(); mode = 'ok'; calls.length = 0;
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    ({ default: handler } = await import('../land.js'));
+  });
+  const landRow = () => calls.find((c) => /INSERT INTO cde_land/.test(c.sql));
+  const learnRows = () => calls.filter((c) => /INSERT INTO cde_learn/.test(c.sql));
+
+  it('a browser arrival is a plain open', async () => {
+    await handler({ method: 'POST', headers: BROWSER, body: { g: 'vocab', s: 'seo', l: 'en' } }, res());
+    expect(landRow().values.slice(0, 2)).toEqual(['vocab', 'seo']);
+  });
+  it('a crawler or a missing UA is stored as bot@<src>, never an open', async () => {
+    await handler({ method: 'POST', headers: { 'user-agent': 'Mozilla/5.0 (compatible; Googlebot/2.1)' }, body: { g: 'vocab', s: 'seo' } }, res());
+    expect(landRow().values[1]).toBe('bot@seo');
+    calls.length = 0;
+    await handler({ method: 'POST', body: { g: 'home', s: 'ai' } }, res());
+    expect(landRow().values[1]).toBe('bot@ai');
+  });
+  it('hum@<src> from a browser is stored; a client cannot send bot@ itself', async () => {
+    await handler({ method: 'POST', headers: BROWSER, body: { g: 'games', s: 'hum@ai' } }, res());
+    expect(landRow().values[1]).toBe('hum@ai');
+    calls.length = 0;
+    await handler({ method: 'POST', headers: BROWSER, body: { g: 'games', s: 'bot@ai' } }, res());
+    await handler({ method: 'POST', headers: BROWSER, body: { g: 'games', s: 'hum@nope' } }, res());
+    expect(landRow()).toBeUndefined();
+  });
+  it("a bot's event batch (or its hum@) becomes ONE bot_ev tally", async () => {
+    const curl = { 'user-agent': 'curl/8.4.0' };
+    await handler({ method: 'POST', headers: curl, body: { batch: [{ e: 'pg', i: 'vocabulary_word' }, { e: 's15', i: 'vocabulary_word' }] } }, res());
+    await handler({ method: 'POST', headers: curl, body: { g: 'games', s: 'hum@seo' } }, res());
+    expect(landRow()).toBeUndefined();
+    expect(learnRows().map((c) => c.sql.includes("'bot_ev'"))).toEqual([true, true]);
+  });
+  it('a client cannot send bot_ev; jserx takes a surface', async () => {
+    await handler({ method: 'POST', headers: BROWSER, body: { batch: [{ e: 'bot_ev', i: 'batch' }, { e: 'jserx', i: 'pg-hebrew' }, { e: 'jserx', i: 'inline_0_type' }] } }, res());
+    expect(learnRows().map((c) => c.values.slice(0, 2))).toEqual([['jserx', 'pg-hebrew']]);
   });
 });

@@ -59,24 +59,40 @@
       } catch (e) { /* default en */ }
     }
     var self = location.hostname.replace(/^www\./, '');
-    var s = 'direct', ref = document.referrer || '';
+    var s = 'direct', ref = document.referrer || '', gprod = false;
     if (ref) {
       var h = '';
       try { h = new URL(ref).hostname.replace(/^www\./, ''); } catch (e) {}
+      // A Google PRODUCT (Classroom, Docs, Gmail, Drive…) is a class/teacher link, not a search (kit land-beacon.md, 11-12):
+      // tested before the search regex, which also matches *.google.*, and it skips the AI utm override below (teachers
+      // paste ChatGPT-made ?utm_source=chatgpt.com links into Classroom). gemini.google.com isn't in the list: stays ai.
+      gprod = /^(classroom|mail|drive|docs|sites|meet|calendar|groups|forms|translate|accounts|photos)\.google\./.test(h);
       if (h === self) s = 'internal';
+      else if (gprod) s = 'external';
       else if (/(chatgpt|openai|perplexity|copilot|gemini|bard|claude|poe\.com|you\.com|phind)/.test(h)) s = 'ai';
       else if (/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|yandex|baidu|startpage|brave)\./.test(h)) s = 'seo';
       else if (h) s = 'external';
     }
     // AI assistants often strip the referrer but tag the link (?utm_source=chatgpt.com) —
     // referrer-only classification read CDE+KDM AI arrivals as ~0 from 2026-10-08.
-    if (s !== 'internal') {
+    if (s !== 'internal' && !gprod) {
       try {
         var um = location.search.match(/[?&]utm_source=([^&#]*)/i);
         if (um && /(chatgpt|openai|perplexity|copilot|gemini|bard|claude|poe\.com|you\.com|phind)/.test(decodeURIComponent(um[1]).toLowerCase())) s = 'ai';
       } catch (e) { /* malformed utm — keep referrer class */ }
     }
     navigator.sendBeacon('/api/land', JSON.stringify({ g: g, s: s, l: l }));
+    // hum@<src> (kit land-beacon.md, 11-12): once per page open, on the first TRUSTED tap or key — headless browsers with a
+    // stock UA pass the server's bot test but never make one. Not an open; human rate = hum@src ÷ src opens.
+    try {
+      var humSent = false, onHum = function (ev) {
+        if (humSent || !ev.isTrusted) return;
+        humSent = true;
+        ['pointerdown', 'touchstart', 'keydown'].forEach(function (t) { window.removeEventListener(t, onHum, true); });
+        navigator.sendBeacon('/api/land', JSON.stringify({ g: g, s: 'hum@' + s, l: l }));
+      };
+      ['pointerdown', 'touchstart', 'keydown'].forEach(function (t) { window.addEventListener(t, onHum, { capture: true, passive: true }); });
+    } catch (e) { /* optional */ }
     // The tab's ARRIVAL class (seo · ai · external · direct), kept for this tab only so the first-quiz tally can say how
     // that child arrived (11-07 en first-quiz leak: couldn't hear vs adult evaluating vs left). Coarse class, never sent alone.
     try { if (!sessionStorage.getItem('cde_src')) sessionStorage.setItem('cde_src', s); } catch (e) { /* storage blocked */ }
@@ -246,8 +262,13 @@
           var f = String(ev.filename || (ev.reason && ev.reason.stack) || '');
           if (ev.type === 'error' && (f ? f.indexOf(location.origin) !== 0 : (!ev.error || /^Script error\.?$/.test(ev.message || '')))) return;
           if (ev.type === 'unhandledrejection' && f.indexOf(location.origin) < 0) return;
-          errSent = true; tally('jserr', surf);
-          tally('jserrsig', errSig(ev));
+          errSent = true;
+          // jserx (kit land-beacon.md, KDM 11-12): CDE pages carry no inline scripts (CSP script-src 'self'), so an error
+          // whose source is the page itself was injected (extension / school filter). Only our own files count as jserr.
+          var sig = errSig(ev);
+          if (sig.indexOf('inline_') === 0) { tally('jserx', surf); return; }
+          tally('jserr', surf);
+          tally('jserrsig', sig);
         } catch (x) { /* never break the page */ }
       };
       window.addEventListener('error', onErr);
