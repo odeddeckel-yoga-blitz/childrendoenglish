@@ -7,7 +7,7 @@ import { join } from 'node:path';
 // `npm run build`; vite dev doesn't serve them, so the spec serves them from dist/ and
 // lets everything else (the SPA at /new-player, public/*.js, images) come from vite.
 const DIST = join(process.cwd(), 'dist');
-const STATIC = /^\/(vocabulary|printable-flashcards|tools)\//;
+const STATIC = /^\/(vocabulary|printable-flashcards|tools|units)\//;
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript' };
 
 test.beforeEach(async ({ page }) => {
@@ -146,4 +146,84 @@ test('flashcard maker: a hostile pasted list stays inert text', async ({ page })
   expect(dialogs).toEqual([]);
   // the pasted text never leaves the page
   expect(requests.filter((u) => /Ignore|onerror|alert/.test(decodeURIComponent(u)))).toEqual([]);
+});
+
+// Game-first (owner 11-12, scripts/game-first.mjs): category pages (+ /hebrew/, /spanish/) and unit pages open with ONE
+// "Play <game> with these words" card above the word list, into a real game with inputs that game takes.
+const CARD = /class="game-first"/g;
+const LIST_START = { en: '<div class="grid">', he: '<div class="bilingual-list">', es: '<div class="bilingual-list">', unit: '<table class="words">' };
+const gameFirstPages = async () => {
+  const { CATEGORIES } = await import('../src/data/words.js');
+  const { UNITS } = await import('../src/data/units.js');
+  return [
+    ...CATEGORIES.flatMap((c) => [[`/vocabulary/${c}/`, 'en'], [`/vocabulary/${c}/hebrew/`, 'he'], [`/vocabulary/${c}/spanish/`, 'es']]),
+    ...UNITS.map((u) => [`/units/${u.book}/unit-${u.unit}/`, 'unit']),
+  ];
+};
+const cardHref = (html) => new URL((html.match(/class="game-first" data-game-first="[^"]*" href="([^"]*)"/) || [])[1].replace(/&amp;/g, '&'), 'https://x');
+
+test('game-first: every category and unit page has exactly one game card, above the word list, into a real game', async () => {
+  const { gameWords } = await import('../scripts/game-first.mjs');
+  const beacon = readFileSync(join(process.cwd(), 'public', 'land-beacon.js'), 'utf8');
+  const PLAY = new RegExp(beacon.match(/var PLAY = \/(.*)\/;/)[1]);
+  const pages = await gameFirstPages();
+  expect(pages.length).toBeGreaterThan(39);
+  for (const [path, kind] of pages) {
+    const html = readFileSync(join(DIST, path, 'index.html'), 'utf8');
+    expect(html.match(CARD) || [], path).toHaveLength(1);
+    const at = html.indexOf('class="game-first"'), list = html.indexOf(LIST_START[kind]);
+    expect(list, `${path}: word list`).toBeGreaterThan(0);
+    expect(at, `${path}: card above the list`).toBeLessThan(list);
+    const u = cardHref(html);
+    const id = (u.pathname.match(/^\/games\/([a-z0-9-]+)\/$/) || [])[1];
+    expect(id, `${path}: ${u.pathname}`).toBeTruthy();
+    expect(existsSync(join(process.cwd(), 'public', 'games', id, 'index.html')), `${path}: /games/${id}/ exists`).toBe(true);
+    // ?words= ids are all words the game knows (its own filter drops unknown ids and ignores a list under 4)
+    const ids = u.searchParams.get('words');
+    if (ids) {
+      const known = gameWords(process.cwd(), id);
+      expect(ids.split(',').filter((i) => !known.has(i)), path).toEqual([]);
+      expect(ids.split(',').length, path).toBeGreaterThanOrEqual(6);
+    }
+    if (kind === 'he' || kind === 'unit') expect(u.searchParams.get('lang'), path).toBe('he');
+    if (kind === 'es') expect(u.searchParams.get('lang'), path).toBe('es');
+    // land-beacon.js counts a click as `cta` only when its PLAY regex takes the link's path
+    expect(PLAY.test(u.pathname), `${path}: beacon cta`).toBe(true);
+  }
+});
+
+test('game-first: the /spanish/ category pages and /he/ keep their title, meta, canonical, h1 and robots (title holdout)', async () => {
+  const snapFile = join(process.cwd(), 'tools', 'reads', 'snap', 'title-holdout.json');
+  test.skip(!existsSync(snapFile), 'title-holdout read closed');
+  // the snapshot = origin/main's built head fields when the holdout read opened (tools/reads/locks.mjs fingerprint)
+  const { fingerprint } = await import('../tools/reads/locks.mjs');
+  const snap = JSON.parse(readFileSync(snapFile, 'utf8')).units;
+  const paths = Object.values(snap).flatMap((u) => Object.entries(u));
+  expect(paths.length).toBe(14);
+  for (const [path, print] of paths) expect(fingerprint(readFileSync(join(DIST, path, 'index.html'), 'utf8'), 'seo'), path).toBe(print);
+});
+
+test('game-first: the card is on a phone screen and its link opens the game with these words', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const checks = [
+    ['/vocabulary/animals/', 'Play Word Zapper with these words'],
+    ['/vocabulary/clothing/hebrew/', 'עם המילים האלה'],
+    ['/vocabulary/colors/spanish/', 'con estas palabras'],
+    ['/units/jet-1/unit-2/', 'מילים מהיחידה'],
+  ];
+  for (const [path, text] of checks) {
+    await page.goto(path);
+    const card = page.locator('a.game-first');
+    await expect(card).toHaveCount(1);
+    await expect(card).toContainText(text);
+    await expect(card).toBeInViewport();
+    const u = new URL(await card.getAttribute('href'), 'http://localhost');
+    // vite serves the frozen game from public/ (no directory index in dev)
+    await page.goto(`${u.pathname}index.html${u.search}`);
+    const id = u.pathname.split('/')[2], words = u.searchParams.get('words'), topic = u.searchParams.get('topic');
+    /* global WORDS, POOL */
+    if (words) await expect.poll(() => page.evaluate(() => WORDS.map((w) => w.id).sort().join(','))).toBe(words.split(',').sort().join(','));
+    if (id === 'word-zapper' && topic) await expect.poll(() => page.evaluate((t) => POOL.length >= 6 && POOL.every((w) => w.topic === t), topic)).toBe(true);
+    if (id === 'word-memory') await expect.poll(() => page.evaluate(() => window.WM.S.topic)).toBe(topic);
+  }
 });

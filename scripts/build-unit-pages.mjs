@@ -16,7 +16,8 @@ import { printQrBlock } from './qr-svg.mjs';
 import { collides } from '../src/data/words.js';
 import { sentenceAudio } from './sentence-audio.mjs';
 import { existsSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { gameForWordIds, gameFirstCard, GAME_FIRST_CSS } from './game-first.mjs';
 import { mkdirSync } from 'fs';
 
 export const audioKey = (en) => en.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
@@ -127,7 +128,7 @@ export function wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides }) {
   }
 
   const robots = (test) => (test ? 'noindex, nofollow' : 'index, follow');
-  const shell = ({ path, title, description, test, schemas, body, footerNote }) => `<!DOCTYPE html>
+  const shell = ({ path, title, description, test, schemas, body, footerNote, css = '' }) => `<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
@@ -145,7 +146,7 @@ export function wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides }) {
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:image" content="${SITE}/og-image.png" />
 ${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join('\n')}
-  <style>${UNIT_CSS}</style>
+  <style>${UNIT_CSS}${css}</style>
 </head>
 <body>
 ${body}
@@ -172,7 +173,7 @@ ${body}
   // step → a set on the Band I review path: finishing a round ticks it off on this device.
   // pin → "this week in class" (RC12): the unit name; the button saves the page on this
   // device and the app's home then opens with a one-tap card to it.
-  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null, step = null, pin = null, afterPractice = '' }) {
+  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null, step = null, pin = null, afterPractice = '', gameFirst = '' }) {
     const items = words.map((w) => {
       const base = byId.get(w.wordId);
       return { en: w.en, he: w.he, ex: w.ex || null, chip: w.chip || null, id: w.wordId || null, audio: `/audio/${audioKey(w.en)}.mp3`, img: base?.imageUrl || null, ...hebrewOptions(w, words) };
@@ -201,7 +202,8 @@ ${body}
     ${pin ? `<p class="pin-row"><button type="button" class="pin-btn" data-pin-unit="${path}" data-pin-name="${escapeHtml(pin)}" aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-pin"/></svg> זו היחידה שלנו השבוע</button></p>
     <p class="pin-hint" hidden>נשמר במכשיר הזה: האפליקציה תיפתח עם כרטיס ליחידה הזו.</p>` : ''}
   </header>
-  <main class="container">
+  <main class="container">${gameFirst ? `
+    <div class="gf-wrap">${gameFirst}</div>` : ''}
     <section class="section" aria-labelledby="words-h">
       <h2 id="words-h" class="section-title">${heBidi(listHeading)}</h2>
       <table class="words">
@@ -261,7 +263,7 @@ ${body}
   <script defer src="/unit-practice.js"></script>
   <script defer src="/print-btn.js"></script>`;
     mkdirSync(dir, { recursive: true });
-    writePage(join(dir, 'index.html'), shell({ path, title, description, test, footerNote, schemas: [crumbs(crumbItems), faq(faqPairs)], body }));
+    writePage(join(dir, 'index.html'), shell({ path, title, description, test, footerNote, schemas: [crumbs(crumbItems), faq(faqPairs)], body, css: gameFirst ? UNIT_GAME_FIRST_CSS : '' }));
   }
 
   return { byId, shell, crumbs, faq, setPage };
@@ -333,6 +335,8 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
       ctaUtm: `utm_medium=unit&amp;utm_content=${u.book}-${u.unit}`,
       pin: unitName,
       battleHref: battleUnitIds.has(`u-${u.book}-${u.unit}`) ? `/battle/?unit=u-${u.book}-${u.unit}` : null,
+      // game-first (owner 11-12, scripts/game-first.mjs): the game that knows most of the unit's words, above the table
+      gameFirst: gameFirstCard(gameForWordIds(dirname(publicDir), u.words.map((w) => w.wordId).filter(Boolean)), { lang: 'he', scope: 'unit', content: `unit_${u.book}-${u.unit}` }),
     });
     if (!test) sitemapUrls.push(path);
   }
@@ -433,6 +437,12 @@ export const SHEETS_CSS = `
       .cw-len { color: #555; font-size: 9pt; }
       .sheet-note-en { direction: ltr; }
     }
+`;
+// only on pages that carry the card (unit pages), so the other word-set pages (Band I, grades, topics) stay byte-identical
+const UNIT_GAME_FIRST_CSS = `
+    .gf-wrap { padding-top: 1.25rem; } .gf-wrap .game-first { margin-bottom: 0; }
+${GAME_FIRST_CSS}
+    @media print { .gf-wrap { display: none !important; } }
 `;
 const UNIT_CSS = `
     * { margin: 0; padding: 0; box-sizing: border-box; }

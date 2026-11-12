@@ -7,6 +7,7 @@ import { sentenceAudio } from './sentence-audio.mjs';
 import { withArticle, isPhoto, pictureClaim, truthfulPictureText, countWord } from './page-copy.mjs';
 import { SPOTLIGHT_GAMES, HUB_ONLY_GAMES } from '../src/data/arcadeGames.js';
 import { WORD_COUNT } from '../src/data/wordCount.js';
+import { gameForCategory, gameFirstCard, GAME_FIRST_CSS } from './game-first.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -428,6 +429,8 @@ function buildCategoryPage(slug, displayName, words) {
   // hubs ~0%. One button straight into this topic's quiz, a 10-second try, then the list.
   const playHref = `/new-player?topic=${slug}&utm_source=seo&utm_medium=cta`;
   const quizPool = (beg.length >= 3 ? beg : words).slice(0, 6);
+  // Game-first (owner 11-12, scripts/game-first.mjs): the matching game's card leads, above the app CTA and the list.
+  const gameFirst = gameFirstCard(gameForCategory(ROOT, slug, words), { lang: 'en', content: 'vocab_category' });
   const playTop = `<a class="top-cta" href="${playHref}&utm_content=vocab_category_top">${gameIcon('play')} Play ${escapeHtml(lower)} words free &mdash; no sign-up</a>
     ${miniQuizHtml(quizPool, slug, { title: '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> Try one word in 10 seconds', sub: 'Listen, then tap the right picture.', cta: `Play 10 more ${escapeHtml(lower)} words free &rarr;`, content: 'vocab_category', href: `/new-player?topic=${slug}&utm_source=seo&utm_medium=miniquiz` })}
     <p class="how-to"><strong>For parents:</strong> tap Play, let your child listen and pick the picture for about 5 minutes, then look through the words below together. No account, no ads.</p>`;
@@ -525,6 +528,7 @@ function buildCategoryPage(slug, displayName, words) {
     .top-cta { display: block; text-align: center; background: #b45309; color: #fff; font-weight: 800; font-size: 1.1rem; padding: 0.85rem 1rem; border-radius: 999px; text-decoration: none; margin: 0 auto 1rem; max-width: 420px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
     .how-to { margin: 0 0 1.5rem; color: #475569; font-size: 0.92rem; }
     ${GUIDE_QUIZ_CSS}
+    ${GAME_FIRST_CSS}
   </style>
 </head>
 <body>
@@ -538,6 +542,7 @@ function buildCategoryPage(slug, displayName, words) {
   </div>
 
   <div class="container">
+    ${gameFirst}
     ${playTop}
     <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
     ${levelTableHtml}
@@ -1221,6 +1226,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
     .cat-links a:hover { background: #2563eb; color: #fff; }
     .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
     ${FAQ_CSS}
+    ${GAME_FIRST_CSS}
     @media (max-width: 600px) {
       .bilingual-card { flex-direction: column; text-align: center; }
       .bi-content { flex-direction: column; align-items: center; }
@@ -1239,6 +1245,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
   </div>
 
   <div class="container">
+    ${gameFirstCard(gameForCategory(ROOT, slug, words), { lang: 'he', content: 'bilingual_category' })}
     <p class="intro">${escapeHtml(description)}</p>
 
     <div class="bilingual-list">
@@ -1389,6 +1396,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
     .cat-links a:hover { background: #2563eb; color: #fff; }
     .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
     ${FAQ_CSS}
+    ${GAME_FIRST_CSS}
     @media (max-width: 600px) {
       .bilingual-card { flex-direction: column; text-align: center; }
       .bi-content { flex-direction: column; align-items: center; }
@@ -1407,6 +1415,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
   </div>
 
   <div class="container">
+    ${gameFirstCard(gameForCategory(ROOT, slug, words), { lang: 'es', content: 'bilingual_category_es' })}
     <p class="intro">${ES_INTRO_BILINGUAL(lowerEs, words.length, words)}</p>
 
     <div class="bilingual-list">
