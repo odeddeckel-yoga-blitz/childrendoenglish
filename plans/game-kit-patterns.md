@@ -562,6 +562,16 @@ Brief: site-factory/briefs/push-method-v2-2026-11-10.md (power table per surface
   Generated games: do not reset or re-scroll the panel during EXPLAIN (it fights the reveal), and never let a stage
   banner stand in for the panel line after a miss. Any change to a shared reveal / pinned-button script must pass
   poe-explain-visible + poe-next-visible on every P-O-E game (KDM `shared-gate.mjs` runs them).
+- **A control hidden for a moment must give its room back** (KDM 11-12, clock-climb: the new-level worked-example
+  demo hid LOCK IN with `visibility:hidden`, so the empty slot still filled the bottom of a 320×568 screen and the
+  demo's own "My turn →" sat below the fold; tap-reach counted 23 hard + 37 soft hidden controls). Hide with
+  `display:none` (or collapse the slot) while the demo/teach card shows, and restore on dismiss. Shared demo
+  scripts (KDM `kdm-resurface`) apply this once for every game.
+- **A layout override must never re-show what a game hid** (KDM 11-12, mass-market: phone-fit tight mode forced every
+  panel hint to `display:inline !important`, beating the game's own hide, and pushed its controls under the fold).
+  A site-wide fit/fold script may shrink, move or fold an element, but it skips anything the game has hidden
+  (computed `display:none`, `[hidden]`, or a game hide class). Gate: run tap-reach on the games a shared layout
+  script changes (KDM `shared-gate.mjs`).
 
 ## 5. Verification protocol (non-negotiable, per game)
 1. `node test/playthrough.mjs <game>` — dbg contract, 560-round reachability sweep, win flow,

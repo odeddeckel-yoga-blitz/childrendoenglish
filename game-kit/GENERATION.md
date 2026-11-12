@@ -146,8 +146,13 @@ layers: **concrete embodiment → multi-step / compound → adaptive scaffolding
 - **Answer options that name things on the board carry the board's mark** (2026-11-08, natural-selection). Two
   variant options with the SAME emoji (🦌 Fast deer / 🦌 Slow deer, 📈 / 📈) say nothing, and the only link to the
   board's tan/brown dots was a small canvas legend. Give each such option the board token itself (a swatch: same fill
-  + ring) so the prediction reads straight off the picture. Neutral, identical icons on ALL options (no option
-  favoured) are fine; a shared icon on two options that the board tells apart is not.
+  + ring) so the prediction reads straight off the picture. A shared icon on two options that the board tells apart is
+  not fine either. **One icon on EVERY option = no icon** (2026-11-14, KDM atmosphere-layers 11-09 → 39 science
+  games): 🟦 on every layer, 🔢 on every number, 🔹 on every card, 👁️ on every eye colour tell the child nothing and are
+  emoji noise beside the label — give each option its own content icon or none (ico:''), and render the icon slot only
+  when there is one. A list built from data whose options can all share an icon (a trait family) guards the render:
+  all choices share one icon → draw none. Tester: KDM `contract-lint.mjs` [constant-icon] (static: a literal list or a
+  .map() with one literal ico); a data-built list needs eyes or a runtime read of the cards.
   **Never let an option's icon CONTRADICT the board** (2026-11-10, KDM earths-layers): cards said 🟡 Outer Core /
   ⚪ Inner Core while the cutaway painted the CENTER yellow, so a child who learned "the yellow middle" from a reveal
   was lured to the wrong card (L1 first-try 47%, chance 33%). Give the cards the board's own colour (one shared
@@ -438,6 +443,17 @@ Never add a step that lands on the answer, and keep `reachable()` true for every
 - Measure the step ON THE SAME ROUND as the distance. Games whose step is part of the question (times-table-tower
   steps by the row b, skip-trip by the skip) read 108 / 51 taps when the step came from one round and the distance
   from another. Their real cost was 27 / 18. workload-scan does this since 11-08.
+**KDM 11-12 workload batch 2 (8 games, worst level 84/45/45/42/39/36/36/30 → 15/21/15/21/9/12/9/15 taps per level-up):**
+- The same rule held on 8 more games: one step = one unit the child already sees on the board: one column of the
+  asked row (ratio table), one labelled axis tick (box plot), one item's price (unit cost), one whole (fractions ≥ 6
+  parts), one gate ✋ of 5 (tally), one branch (tree diagram), one map cm (scale). Hide the bigger step on rounds where
+  it would BE the answer (ratio-table scale-down rounds, where the base is the answer).
+- A round with a direct input (tap the treat, drag the handle) is judged by that input, not by its fallback stepper.
+- Measure with a scan that reads the REAL target the round wants (what solveForTest dials in), not a guess from the
+  label, and that probes drag handles across the whole control (a 3×3 grid): gauges with an off-centre handle read
+  as "no drag" otherwise. The scan's first read of map-scale-mesa (60) was a misread; the true worst was 30.
+- Value fields named `dial` / `fill` / `sel` / `pts[].y` / `E` are still invisible to the scan: read those games by hand
+  (11-12: constant-k-cove table ~336, speed-split 72, transversal-trail 57, balance-scale 33, sci-notation-scope 30).
 **KDM 11-09 cash-register (Google arrivals 0.51 level-ups/open; 60% of opens never cleared L1):**
 - A palette of denominations / tools shows only what the level's rounds can use. Add each one on the level that first
   needs it and name it in the level-up toast. $1 and $5 sat on the L1 panel for 40¢ goals, so a 7-year-old's first
@@ -550,6 +566,14 @@ Anything that changes when the STAGED answer becomes correct tells the child the
 Gate verdicts on `locked`. `tools/game-review/contract-lint.mjs` (status-oracle) and `cta-probe.mjs` (glow on a correct vs wrong staged
 value) catch the first two mechanically. Deliberate live-feedback builders (mirror-lab) mark the line `LIVE-FEEDBACK`.
 
+- **A round's cards are a symmetric set** (2026-11-14, KDM predator-prey). Each "cycle" state dealt one FIXED triple
+  with one card impossible from the prompt alone ("prey are at a peak" → "Prey rise"), so every round was a coin flip
+  between two; the colour dots that replaced the odd arrow (🟢 prey / 🔴 predators) left one green card among two red
+  ones, which reads as "green = right". Give every card of a round the same kind of picture (🐇 / 🦊, not traffic-light
+  colours), balance directions and subjects (all four events, or the asked subject's ▲ / ▼ / ↔), make no card ruled out
+  before thinking, and start the observe graph at the question's own moment (it drew "prey rise" first for "prey
+  decrease"). Check: no card's icon is unique among the cards unless every icon is; ≥ 3 cards stay plausible.
+
 ## Round flow (2026-10-11c)
 - **Scaffolds fade by level, never by a one-way switch.** mean-machine showed its sum ÷ count working only until the first solve
   ever (`proactive=false` forever) — round 2 was suddenly mental arithmetic; depth 0.16. Keep the working visible through level 1
@@ -624,6 +648,11 @@ Build these into the generator, not into a later fix pass:
   re-press rule (an unchanged re-commit is not a miss). Declare `dbg.firstTryOnly = true`: kid-sim then reports `slip`
   as voiding by design and `--personas=coin` (a 50% guesser) must still clear L1; `early-commit-probe --recommit`
   judges such games by miss shakes (exactly one from a wrong commit + unchanged re-presses).
+  **A coin-flip STEP inside a longer round counts too** (2026-11-14, KDM number-detective): a case of 2–3 clues ended on a
+  clue where only two suspects still stood in 28% of L1 cases and 55% of L7 cases; the ≤ 2-slip quota let a guess there
+  keep the ⭐ (12 of 12 coin-flip misses before, 0 of 10 after). A wrong pick while only two options stand makes that
+  round practice (`O.practice=true` → no `made++`, "🌱 practice" on the pill, the line names the one that fits); wider
+  steps keep the slip quota.
 - **Level 1 is never luck.** If later steps depend on earlier choices, generate the last step from the earlier ones so
   every route a careful child takes can finish.
 - **Level 1 never has one answer.** Open with the canonical case, then mix contrast cases whose correct answer is a
@@ -654,12 +683,20 @@ Build these into the generator, not into a later fix pass:
   28 d: 3.8% cleared L1, arcade line 40.5%). In an arcade, pace the spawns to a slow correct answerer instead (fleets every
   ~0.85 × their answer time), or they pile up and land while the child dials. Show the run on the level pill (●●○).
   Static scan: `grep -nE '(react|rt|elapsed)\s*<\s*[0-9.]+\s*&&[^;]*(streak|Streak)' public/games/*/index.html`, and
-  fast-path quotas far above the slow one (`fastStreak>=4` beside `…InTier>=10`).
+  fast-path quotas far above the slow one (`fastStreak>=4` beside `…InTier>=10`). **The volume path is the guesser's path**
+  (2026-11-14, KDM pattern-weaver + pie-lab): "4 fast OR 10 in the level" never resets the 10 on a miss, so a fast
+  random tapper banks lucky hits — pie-lab's guesser levelled 3.5× in 180 s vs 5.0× for a slow always-right child;
+  pattern-weaver's slow honest child needed 65 s for L2. One rule for all: N in a row, any speed (after: guesser 1.5 vs
+  slow 7.0; slow L2 at 19 s). Measured gate: `tools/game-review/speedpath-probe.mjs <ids>` (real-time guess / quick / slow).
 - **A child who does exactly what the task line says must be able to succeed.** "Tap +, then CHECK" over a stepper whose
   answer is never one press away is a miss on every round. Say how many ("tap + that many times") or until what. The
   input's label names what it holds (PETALS ON THE NEW FLOWER, not a subtitle asking for the jump). Method text is per
   rule kind: "do that jump once more" on a doubling round gives 12 for 2, 4, 8. 2026-11-10 pattern-garden: search
   children cleared L1 at 35% (site 59%). KDM gate: tools/game-review/literal-follower-probe.mjs.
+  **The task line never shows a number that is a wrong key** (2026-11-14, KDM element-defense): "🎯 Li · 3 electrons —
+  how many in the OUTER shell?" over a keypad with a 3 — the literal reader fires 3 (answer 1); L1 first-try 19% over
+  28 d (site 74%). Ask for what to count ("count the gold dots on its OUTER ring"), draw it bigger, and keep the lure
+  number off the line and the label at the level that teaches the idea. KDM gate: tools/game-review/number-lure-probe.mjs.
 - **Anything drawn like a button responds** (pick it, or nudge toward the real control).
 - **The big drawn shape is a handle too** (2026-11-10, KDM box-plot-builder). On a canvas build game the finger goes to
   the largest thing it sees — the box, a whisker tip, the median line, a bar top — not to the small tag under the axis.
