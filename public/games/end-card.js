@@ -8,10 +8,12 @@
 (function(){
   // Two loops, each game's next is the one after it in its own loop. Wave 2 (live 11-08) has its own loop until the
   // wave1-judge read (11-28): that read and ladder-return (11-14) measure the older games' next-game flow, so no older
-  // game may lead into a new one yet. After 11-28, merge the loops.
+  // game may lead into a new one yet. After 11-28, merge the loops. Wave 3 (11-12) is a third loop for the same reason:
+  // wave 2's own next-game flow is judged at that read too (src/__tests__/wave3Hold.test.js).
   var LOOPS=[['sound-pairs','read-it','letter-twins','spelling-forge','word-zapper','category-conveyor','picture-bingo','word-memory','rhyme-time','odd-one-out','missing-letter'],
-    ['beginning-sounds','simon-says','opposites','feelings','true-or-false','sentence-builder']];
-  var NAMES={'sound-pairs':'Sound Pairs','read-it':'Read It!','letter-twins':'Letter Twins','spelling-forge':'Spelling Forge','word-zapper':'Word Zapper','category-conveyor':'Category Conveyor','picture-bingo':'Picture Bingo','word-memory':'Word Memory','rhyme-time':'Rhyme Time','odd-one-out':'Odd One Out','missing-letter':'Missing Letter','opposites':'Opposites','true-or-false':'True or False','feelings':'Feelings','sentence-builder':'Sentence Builder','beginning-sounds':'Beginning Sounds','simon-says':'Simon Says'};
+    ['beginning-sounds','simon-says','opposites','feelings','true-or-false','sentence-builder'],
+    ['letter-drop','shopping-list','blend-it']];
+  var NAMES={'sound-pairs':'Sound Pairs','read-it':'Read It!','letter-twins':'Letter Twins','spelling-forge':'Spelling Forge','word-zapper':'Word Zapper','category-conveyor':'Category Conveyor','picture-bingo':'Picture Bingo','word-memory':'Word Memory','rhyme-time':'Rhyme Time','odd-one-out':'Odd One Out','missing-letter':'Missing Letter','opposites':'Opposites','true-or-false':'True or False','feelings':'Feelings','sentence-builder':'Sentence Builder','beginning-sounds':'Beginning Sounds','simon-says':'Simon Says','letter-drop':'Letter Drop','shopping-list':'Shopping List','blend-it':'Blend It'};
   // Plain labels; the drawn icons (CDE_IC from cde-l10n.js) are added as markup next to them.
   var STR={
     en:{next:'Next game: ',menu:'My menu',start:'More English practice',home:'Children Do English',ladder:'Back to my words'},

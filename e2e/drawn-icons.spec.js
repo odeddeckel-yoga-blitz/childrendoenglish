@@ -5,7 +5,8 @@ import { test, expect } from '@playwright/test';
 // a visible colour, and every sprite reference must exist in /icons.svg.
 const PAGES = ['/', '/games/', '/he/', '/battle/', '/projector/', '/games/letter-twins/', '/games/read-it/', '/games/sound-pairs/',
   '/games/spelling-forge/', '/games/word-zapper/', '/games/category-conveyor/', '/games/rhyme-time/', '/games/odd-one-out/',
-  '/games/word-memory/', '/games/missing-letter/', '/games/picture-bingo/', '/games/opposites/', '/games/true-or-false/', '/games/feelings/', '/games/sentence-builder/', '/games/beginning-sounds/', '/games/simon-says/'];
+  '/games/word-memory/', '/games/missing-letter/', '/games/picture-bingo/', '/games/opposites/', '/games/true-or-false/', '/games/feelings/', '/games/sentence-builder/', '/games/beginning-sounds/', '/games/simon-says/',
+  '/games/letter-drop/', '/games/shopping-list/', '/games/blend-it/'];
 
 test('drawn icons are visible and resolve in the sprite', async ({ page, request }) => {
   await page.route('**/api/**', (r) => r.fulfill({ status: 204 }));

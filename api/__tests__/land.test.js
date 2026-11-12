@@ -93,6 +93,23 @@ describe('api/land games wave 2 events', () => {
   });
 });
 
+describe('api/land games wave 3 events', () => {
+  it('records Letter Drop / Shopping List / Blend It events in their pinned shapes and drops malformed ones', async () => {
+    vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    const { default: handler } = await import('../land.js');
+    calls.length = 0;
+    const batch = [{ e: 'ld', i: 'l1_word' }, { e: 'ld', i: 'l3_over' }, { e: 'sl', i: 'n3_no' }, { e: 'bi', i: 'cat_ok' },
+      { e: 'ld', i: 'l4_word' }, { e: 'sl', i: 'n5_ok' }, { e: 'bi', i: 'zebra_ok' }];
+    const r = res(); await handler({ method: 'POST', headers: BROWSER, body: { batch, l: 'he' } }, r);
+    expect(r.code).toBe(204);
+    const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
+    expect(written).toEqual(expect.arrayContaining(['ld:l1_word', 'ld:l3_over', 'sl:n3_no', 'bi:cat_ok']));
+    for (const bad of ['ld:l4_word', 'sl:n5_ok', 'bi:zebra_ok']) expect(written).not.toContain(bad);
+  });
+});
+
 describe('api/land standing-section events (kit 1.59 §5.55)', () => {
   it('records g2/g3/hop/vp/rets/jserr/cwv in their pinned shapes and drops malformed ones', async () => {
     vi.resetModules();

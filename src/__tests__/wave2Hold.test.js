@@ -11,7 +11,7 @@ const loops = JSON.parse(endCard.match(/var LOOPS=(\[[\s\S]*?\]\]);/)[1].replace
 
 describe('games wave 2 hold (until the 11-28 wave1-judge read)', () => {
   it('wave 2 games are hub-only, never spotlight candidates', () => {
-    expect(HUB_ONLY_GAMES.map((g) => g.id).sort()).toEqual([...WAVE2].sort());
+    for (const id of WAVE2) expect(HUB_ONLY_GAMES.some((g) => g.id === id)).toBe(true);   // + wave 3 (wave3Hold.test.js)
     for (const id of WAVE2) expect(SPOTLIGHT_GAMES.some((g) => g.id === id)).toBe(false);
   });
   it('the committed spotlight pick is not a wave 2 game', () => {

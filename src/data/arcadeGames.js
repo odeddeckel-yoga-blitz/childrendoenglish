@@ -33,4 +33,9 @@ export const HUB_ONLY_GAMES = [
   { id: 'sentence-builder', name: 'Sentence Builder', icon: 'blocks', emoji: '🧱' },
   { id: 'beginning-sounds', name: 'Beginning Sounds', icon: 'type', emoji: '🔤' },
   { id: 'simon-says', name: 'Simon Says', icon: 'hand', emoji: '✋' },
+  // Games wave 3 (owner OK 11-12): listening + spelling, hub-only the same way and with their own end-card loop
+  // (src/__tests__/wave3Hold.test.js), so no unit under an open read changes.
+  { id: 'letter-drop', name: 'Letter Drop', icon: 'target', emoji: '🎯' },
+  { id: 'shopping-list', name: 'Shopping List', icon: 'clipboard-list', emoji: '📋' },
+  { id: 'blend-it', name: 'Blend It', icon: 'puzzle', emoji: '🧩' },
 ];
