@@ -44,6 +44,9 @@ const HUM_SRC = /^hum@(direct|seo|ai|internal|external)$/;
 // page view: mini-quiz >=50 % on screen while visible / visible 15 s in total / print button tapped / print dialog
 // opened (beforeprint) / flashcard-maker Build tapped — public/land-beacon.js.
 const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_quit', 'letter', 'g_lvl', 'g_cmp', 'g_open', 'g_start', 'spot', 'ansm_ok', 'ansm_no', 'wfb', 'cyc_start', 'cyc_stage', 'cyc_done', 'vis', 'onb', 'ansx', 'fcr', 'pg', 'cta', 'mq', 'bt', 'qs', 'aie', 'aiv', 'sheet', 'mp', 'cvc', 'zv', 'b1r', 'wk', 'rq_ok', 'rq_no', 'rs', 'ge', 'qr', 'ltw', 't1', 'mm_menu', 'mm_ret', 'mm_pick', 'mm_mast', 'mm_tmast', 'mm_keep', 'mm_slip', 'pb', 'oo', 'rt', 'op', 'tf', 'fe', 'sb', 'bs', 'ss',
+  // Games wave 3 (11-12), item shapes pinned in EV_ITEM: ld = Letter Drop l<1-3>_<word|miss|over>, sl = Shopping List
+  // n<2-4>_<ok|no>, bi = Blend It <cvc word>_<ok|no>.
+  'ld', 'sl', 'bi',
   // Standing optimizer sections (kit 1.59 §5.55, owner 11-04): movement between activities, page class → game,
   // returning-day start surface, script errors, phone load-speed buckets. Item shapes are pinned in EV_ITEM below.
   'g2', 'g3', 'hop', 'vp', 'rets', 'jserr', 'cwv',
@@ -72,6 +75,9 @@ const EV_ITEM = {
   cwv: new RegExp(`^(lcp|cls|inp)_(good|ni|poor)@${SURF}$`),
   ...Object.fromEntries(['mqv', 's15', 'prc', 'bpr', 'fmb', 'act'].map((e) => [e, PAGE_KEY])),
   jserrsig: /^[a-z0-9-]{1,24}_\d{1,5}_(type|ref|range|syntax|other)$/,
+  ld: /^l[1-3]_(word|miss|over)$/,
+  sl: /^n[2-4]_(ok|no)$/,
+  bi: /^[a-z]{3}_(ok|no)$/,
 };
 
 // Classify a DB failure so the function log names the REAL cause — the beacon

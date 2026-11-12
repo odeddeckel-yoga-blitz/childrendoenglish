@@ -27,6 +27,9 @@
         if (window.SB) return SB.S.lvl + 1;
         if (window.BS) return BS.S.lvl + 1;
         if (window.SS) return SS.S.lvl + 1;
+        if (window.LD) return LD.S.lvl + 1;   // letter-drop / shopping-list / blend-it (wave 3)
+        if (window.SL) return SL.S.lvl + 1;
+        if (window.BI) return BI.S.lvl + 1;
         if (window.S && typeof S.lvl === 'number') return S.lvl + 1;   // letter-twins / read-it / sound-pairs (0-based)  (+ rhyme-time, missing-letter, picture-bingo)
       } catch (e) { /* game not up yet */ }
       return 1;
