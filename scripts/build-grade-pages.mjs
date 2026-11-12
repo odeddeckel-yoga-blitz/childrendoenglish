@@ -23,7 +23,7 @@ const GRADES = [
 ];
 const PER_PAGE = 20;
 
-export function buildGradePages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND_CHIPS, UNITS, BOOKS }) {
+export function buildGradePages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND_CHIPS, UNITS, BOOKS, headterm }) {
   const kit = wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides });
   const footerNote = 'ההתאמה לכיתות היא שלנו, לפי רמות Band I של המילים שלנו ולפי הכיתה של כל יחידה בספר. רשימת Band I של משרד החינוך אינה מועתקת לכאן.';
   const words = WORDS.filter((w) => BAND1_BY_ID[w.id] && w.exampleSentence);
@@ -38,10 +38,15 @@ export function buildGradePages({ SITE, distDir, writePage, escapeHtml, WORDS, c
     const unitLinks = units.map((u) => `<a href="/units/${u.book}/unit-${u.unit}/"><bdi lang="en" dir="ltr">${escapeHtml(BOOKS[u.book].name)} Unit ${u.unit}${u.title ? `: ${escapeHtml(u.title)}` : ''}</bdi></a>`);
     const more = g.links.map(([href, label]) => `<a href="${href}">${escapeHtml(label).replace(/[A-Za-z][A-Za-z !]*[A-Za-z!]/g, (m) => `<bdi lang="en" dir="ltr">${m}</bdi>`)}</a>`);
     const nextG = GRADES[i + 1];
+    // he-headterms test: headterm() returns these unchanged unless HE_HEADTERM_TEST is on (generate-seo-pages.js)
+    const head = (headterm || ((p, title, description) => ({ title, description })))(path,
+      `אנגלית לכיתה ${g.he} — מילים, תרגול ומשחקים בחינם | Children Do English`,
+      `אנגלית לכיתה ${g.he}: ${set.length} מילים מותאמות לכיתה עם הגייה, תרגום ותרגול${units.length ? ', יחידות מהספר' : ''}, ומשחקים בעברית. חינם, בלי פרסומות ובלי הרשמה.`,
+      { n: set.length });
     kit.setPage({
       dir: join(distDir, 'he', `grade-${g.n}`), path, test: false, footerNote,
-      title: `אנגלית לכיתה ${g.he} — מילים, תרגול ומשחקים בחינם | Children Do English`,
-      description: `אנגלית לכיתה ${g.he}: ${set.length} מילים מותאמות לכיתה עם הגייה, תרגום ותרגול${units.length ? ', יחידות מהספר' : ''}, ומשחקים בעברית. חינם, בלי פרסומות ובלי הרשמה.`,
+      title: head.title,
+      description: head.description,
       crumbItems: [['עברית', '/he/'], [`אנגלית לכיתה ${g.he}`, path]],
       navHtml: `<a href="/he/">עברית</a> › אנגלית לכיתה ${g.he}`,
       h1Html: `אנגלית לכיתה ${g.he}`,

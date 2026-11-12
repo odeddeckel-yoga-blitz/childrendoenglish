@@ -200,6 +200,24 @@ const HE_WORD_STAT = 488;
 // Spanish FAQ (bilingualFaqEs).
 const ES_BILINGUAL_FAQ_ES = false;
 const TITLE_OVERRIDES = JSON.parse(readFileSync(new URL('./seo-title-overrides.json', import.meta.url), 'utf8'));
+
+// he-headterms test (prepared 11-12, NOT shipped — owner OK needed after the 11-14 /he/ read):
+// the /he/ landing's head-term titles (10-24) applied to the other /he/* pages with >=20 GSC
+// impressions. Half are "test" (title + description in seo-title-overrides.json, from each
+// page's real GSC queries), half an unchanged "holdout" (draft kept as proposed_*, never applied);
+// split by sha256 of the path within impression-ranked pairs. Off = byte-identical to before.
+// To ship: set true, give each test entry an "added" date (optimizer verdicts), check Google
+// re-crawled the test pages before day 0 (kit stale-crawl check). CDE_HE_HEADTERM_TEST=1 turns
+// it on for tests / scratch builds only (src/__tests__/heHeadterms.test.js).
+const HE_HEADTERM_TEST = false;
+const HE_HEADTERM_ON = HE_HEADTERM_TEST || process.env.CDE_HE_HEADTERM_TEST === '1';
+// {n} = the page's own count, {PICS}/{PIC} = its truthful picture claim.
+function heHeadterm(path, title, description, { n, words = [] } = {}) {
+  const o = TITLE_OVERRIDES[path];
+  if (!HE_HEADTERM_ON || !o || o.test !== 'he-headterms' || o.arm !== 'test') return { title, description };
+  const fill = (s) => s && fillPics(s.replace(/\{n\}/g, String(n)), words);
+  return { title: fill(o.title) || title, description: fill(o.description) || description };
+}
 // Pages the SEO optimizer's link advisor wants boosted (rendered on /vocabulary/)
 const SEO_FEATURED = JSON.parse(readFileSync(new URL('./seo-featured.json', import.meta.url), 'utf8'));
 const SITE = 'https://childrendoenglish.com';
@@ -2478,8 +2496,9 @@ function heGamesWordCard(w) {
 
 function buildHebrewGamesHubPage() {
   const path = '/he/english-games/';
-  const title = 'משחקים ללימוד אנגלית לילדים — חינם, בלי פרסומות ובלי הרשמה | Children Do English';
-  const description = `משחקים ללימוד אנגלית לילדים בחינם: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים עם ${pics(WORDS, 'many', 'he')}, השמעה של ההגייה וסולם תרגול בן 11 שלבים. בלי פרסומות ובלי הרשמה — פשוט משחקים ולומדים.`;
+  let title = 'משחקים ללימוד אנגלית לילדים — חינם, בלי פרסומות ובלי הרשמה | Children Do English';
+  let description = `משחקים ללימוד אנגלית לילדים בחינם: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים עם ${pics(WORDS, 'many', 'he')}, השמעה של ההגייה וסולם תרגול בן 11 שלבים. בלי פרסומות ובלי הרשמה — פשוט משחקים ולומדים.`;
+  ({ title, description } = heHeadterm(path, title, description, { n: HE_GAMES_WORDS_ROUNDED, words: WORDS }));
 
   const faq = [
     {
@@ -2666,8 +2685,9 @@ function buildHebrewGamesAgePage(age) {
   // Age-led title/H1 (GSC 10-28: the age pages took "משחקים ללימוד אנגלית לילדים"
   // at pos 52–60 while the hub never ranked). The head phrase belongs to the hub;
   // age pages link up to it with that exact anchor.
-  const title = `אנגלית לגילאי ${age.ages} (${age.grades}): משחקים ותרגול מילים — חינם | Children Do English`;
-  const description = `משחקי אנגלית לגילאי ${age.ages}, מותאמים לכיתות ${age.grades}: ${levelWords.length} מילים ברמת ${age.levelHe} עם ${pics(levelWords, 'many', 'he')}, השמעה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
+  let title = `אנגלית לגילאי ${age.ages} (${age.grades}): משחקים ותרגול מילים — חינם | Children Do English`;
+  let description = `משחקי אנגלית לגילאי ${age.ages}, מותאמים לכיתות ${age.grades}: ${levelWords.length} מילים ברמת ${age.levelHe} עם ${pics(levelWords, 'many', 'he')}, השמעה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
+  ({ title, description } = heHeadterm(path, title, description, { n: levelWords.length, words: levelWords }));
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -2779,10 +2799,11 @@ function buildHebrewGamesTopicPage(slug) {
   const words = getWordsByCategory(slug);
   const query = HE_TOPIC_QUERY[slug];
   const heading = query ? `${query} באנגלית לילדים` : `אנגלית לילדים — ${hebrewName}`;
-  const title = query
+  let title = query
     ? `${query} באנגלית לילדים — ${words.length} מילים עם תמונות, הגייה ותרגום | Children Do English`
     : `אנגלית לילדים — ${hebrewName}: משחקים ללימוד המילים בחינם | Children Do English`;
-  const description = `משחקים ללימוד אנגלית לילדים בנושא ${hebrewName}: ${words.length} מילים עם ${pics(words, 'many', 'he')}, השמעה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
+  let description = `משחקים ללימוד אנגלית לילדים בנושא ${hebrewName}: ${words.length} מילים עם ${pics(words, 'many', 'he')}, השמעה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.`;
+  ({ title, description } = heHeadterm(path, title, description, { n: words.length, words }));
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -5382,10 +5403,10 @@ const unitUrls = buildUnitPages({ SITE, distDir, publicDir: join(ROOT, 'public')
 const band1Pages = buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND1_TOTAL, CATEGORY_NAMES_HE });
 const { buildHeTopicPages } = await import(join(ROOT, 'scripts', 'build-he-topic-pages.mjs'));
 const { HE_TOPICS } = await import(join(ROOT, 'src', 'data', 'heTopics.js'));
-const heTopicPages = buildHeTopicPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, HE_TOPICS });
+const heTopicPages = buildHeTopicPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, HE_TOPICS, headterm: heHeadterm });
 console.log(`Hebrew topic pages: ${heTopicPages}`);
 const { buildGradePages } = await import(join(ROOT, 'scripts', 'build-grade-pages.mjs'));
-console.log(`Grade pages: ${buildGradePages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND_CHIPS, UNITS, BOOKS })}`);
+console.log(`Grade pages: ${buildGradePages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND_CHIPS, UNITS, BOOKS, headterm: heHeadterm })}`);
 const { buildReadingPages } = await import(join(ROOT, 'scripts', 'build-reading-pages.mjs'));
 const { READINGS, READING_NAMES } = await import(join(ROOT, 'src', 'data', 'readings.js'));
 const { READING_GLOSSES, READING_PHRASES } = await import(join(ROOT, 'src', 'data', 'readingGlosses.js'));

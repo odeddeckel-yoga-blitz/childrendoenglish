@@ -66,5 +66,138 @@
     "description": "Transporte y vehículos en inglés y español para niños: {n} vehicles side by side, each with a picture, English pronunciation and a kid-friendly definition. Free, no ads, no sign-up.",
     "added": "2026-10-24",
     "note": "ES step 2 — count-led short title (queries '20 sports in spanish', '30 deportes en ingles y español'); Spanish-parent phrase leads the description. Other 10 /spanish/ pages = control"
+  },
+  "/he/english-words/numbers-1-100/": {
+    "test": "he-headterms",
+    "arm": "holdout",
+    "proposed_title": "מספרים באנגלית: איך אומרים וכותבים | Children Do English",
+    "proposed_description": "איך אומרים 19, 50 או שמונה באנגלית? המספרים באנגלית מאפס עד עשרים והעשרות עד מאה, עם הגייה, תרגום לעברית ותרגול. חינם, בלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 353 imp; top queries מספרים באנגלית (17); 19 באנגלית (11); 11 באנגלית (7)"
+  },
+  "/he/english-games/colors/": {
+    "test": "he-headterms",
+    "arm": "test",
+    "title": "משחק צבעים באנגלית לילדים — בחינם | Children Do English",
+    "description": "משחק צבעים באנגלית לילדים: {n} צבעים עם {PICS}, השמעה של ההגייה ותרגום לעברית. שומעים, בוחרים ולומדים — חינם, בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 314 imp; top queries משחק צבעים באנגלית (52); צבעים באנגלית (16); צבעים באנגלית משחק (13)"
+  },
+  "/he/grade-4/": {
+    "test": "he-headterms",
+    "arm": "holdout",
+    "proposed_title": "משחקים באנגלית לכיתה ד׳ בחינם | Children Do English",
+    "proposed_description": "משחקים ותרגול באנגלית לכיתה ד׳ בחינם: מילים לכיתה עם הגייה ותרגום, תרגול איות ומשפטים, יחידות מהספר ומשחקים בעברית. בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 162 imp; top queries משחקים באנגלית לכיתה ד בחינם (26); משחקים באנגלית לכיתה ד (17); לימוד אנגלית לכיתה ד חינם (15)"
+  },
+  "/he/english-games/ages-9-10/": {
+    "test": "he-headterms",
+    "arm": "test",
+    "title": "אנגלית לילדים בני 9-10: משחקים בחינם | Children Do English",
+    "description": "אנגלית לילדים בני 9-10 (כיתות ג׳-ד׳): משחקים עם {n} מילים ברמת ביניים, {PICS}, השמעה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 130 imp; top queries משחקים ללימוד אנגלית לילדים (22); אנגלית לילדים בני 10 (10); משחקים באנגלית לכיתה ד בחינם (8)"
+  },
+  "/he/grade-3/": {
+    "test": "he-headterms",
+    "arm": "holdout",
+    "proposed_title": "משחקים באנגלית לכיתה ג׳ בחינם | Children Do English",
+    "proposed_description": "משחקים ותרגול באנגלית לכיתה ג׳ בחינם: מילים לכיתה עם הגייה ותרגום, תרגול איות ומשפטים, יחידות מהספר ומשחקים בעברית. בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 123 imp; top queries משחקים באנגלית לכיתה ג (32); משחקים באנגלית לכיתה ג בחינם (17); משחקי אנגלית לכיתה ג (6)"
+  },
+  "/he/english-games/ages-6-8/": {
+    "test": "he-headterms",
+    "arm": "test",
+    "title": "אנגלית לילדים בני 6-8: משחקים בחינם | Children Do English",
+    "description": "אנגלית לילדים בני 6-8 (כיתות א׳-ב׳): משחקים עם {n} מילים ראשונות, {PICS} והשמעה של ההגייה — מתחילים בהאזנה, בלי לקרוא. חינם ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 115 imp; top queries משחקים ללימוד אנגלית לילדים (29); משחקי אנגלית (9); משחקים באנגלית (7)"
+  },
+  "/he/english-words/family/": {
+    "test": "he-headterms",
+    "arm": "holdout",
+    "proposed_title": "איך אומרים אבא, אמא ואחות באנגלית | Children Do English",
+    "proposed_description": "איך אומרים אבא, אמא, הורים, אחות או סבא באנגלית? {n} מילים של בני המשפחה, כל אחת עם הגייה, איך כותבים אותה ומשפט לדוגמה. חינם, בלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 110 imp; top queries איך אומרים אבא באנגלית (5); איך אומרים הורים באנגלית (4); איך אומרים אחות באנגלית (3)"
+  },
+  "/he/grade-5/": {
+    "test": "he-headterms",
+    "arm": "test",
+    "title": "משחקים באנגלית לכיתה ה׳ בחינם | Children Do English",
+    "description": "משחקים ותרגול באנגלית לכיתה ה׳ בחינם: מילים לכיתה עם הגייה ותרגום, תרגול איות ומשפטים, יחידות מהספר ומשחקים בעברית. בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 96 imp; top queries משחקים באנגלית לכיתה ה (15); טקסט באנגלית לכיתה ה (3); טקסטים באנגלית לכיתה ה (3)"
+  },
+  "/he/english-words/days-of-the-week/": {
+    "test": "he-headterms",
+    "arm": "test",
+    "title": "ימות השבוע באנגלית: מיום ראשון עד שבת | Children Do English",
+    "description": "איך אומרים יום ראשון, יום שלישי או יום חמישי באנגלית? כל ימות השבוע מיום ראשון עד שבת, עם הגייה, תרגום ותרגול לילדים. חינם, בלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 94 imp; top queries יום חמישי באנגלית (9); יום ראשון עד שבת באנגלית (5); ימות השבוע באנגלית (4)"
+  },
+  "/he/english-words/abc/": {
+    "test": "he-headterms",
+    "arm": "holdout",
+    "proposed_title": "אותיות באנגלית לפי הסדר — לימוד ותרגול | Children Do English",
+    "proposed_description": "כל 26 האותיות באנגלית לפי הסדר, ולכל אות מילה שמתחילה בה, עם הגייה ותרגום לעברית. לימוד ותרגול אותיות לילדים — חינם, בלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 92 imp; top queries אותית באנגלית (4); אות באנגלית 2 אותיות (2); אותיות באנגלית (2)"
+  },
+  "/he/english-games/ages-11-12/": {
+    "test": "he-headterms",
+    "arm": "test",
+    "title": "אנגלית לילדים בני 11-12: משחקים בחינם | Children Do English",
+    "description": "אנגלית לילדים בני 11-12 (כיתות ה׳-ו׳): משחקים עם {n} מילים ברמת מתקדמים, {PICS}, השמעה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 69 imp; top queries משחקים ללימוד אנגלית לילדים (17); children do english (7); אנגלית לילדים בני 12 (5)"
+  },
+  "/he/english-games/nature/": {
+    "test": "he-headterms",
+    "arm": "holdout",
+    "proposed_title": "טבע באנגלית: איך אומרים טבע, עץ ודשא | Children Do English",
+    "proposed_description": "איך אומרים טבע, עץ, דשא או פרח באנגלית? {n} מילים מהטבע עם {PICS}, השמעה של ההגייה ותרגום לעברית, ומשחקים לתרגול. חינם, בלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 66 imp; top queries איך אומרים טבע באנגלית (17); טבע באנגלית (3); איך אומרים דשא באנגלית (2)"
+  },
+  "/he/english-games/animals/": {
+    "test": "he-headterms",
+    "arm": "test",
+    "title": "חיות באנגלית לילדים — משחק עם תמונות | Children Do English",
+    "description": "חיות באנגלית לילדים: {n} חיות עם {PICS}, השמעה של ההגייה ותרגום לעברית, ומשחקים לתרגול. חינם, בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 63 imp; top queries חיות באנגלית (2); חיות באנגלית לילדים (1)"
+  },
+  "/he/grade-6/": {
+    "test": "he-headterms",
+    "arm": "holdout",
+    "proposed_title": "משחקים באנגלית לכיתה ו׳ בחינם | Children Do English",
+    "proposed_description": "משחקים ותרגול באנגלית לכיתה ו׳ בחינם: מילים לכיתה עם הגייה ותרגום, תרגול איות ומשפטים וחזרה לקראת חטיבת הביניים. בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 61 imp; top queries משחקים באנגלית לכיתה ו (7); אנגלית לכיתה ו (3); טקסט באנגלית לכיתה ו (3)"
+  },
+  "/he/english-words/months/": {
+    "test": "he-headterms",
+    "arm": "holdout",
+    "proposed_title": "חודשי השנה באנגלית: איך אומרים וכותבים | Children Do English",
+    "proposed_description": "איך אומרים יולי באנגלית? ואיך כותבים נובמבר? כל 12 חודשי השנה באנגלית, עם הגייה, תרגום, משפט לדוגמה ותרגול לילדים. חינם, בלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 49 imp; top queries חודשי השנה באנגלית (7); חודשים באנגלית (6); יולי באנגלית (2)"
+  },
+  "/he/grade-1/": {
+    "test": "he-headterms",
+    "arm": "test",
+    "title": "לימוד אנגלית לכיתה א׳ בחינם — משחקים | Children Do English",
+    "description": "לימוד אנגלית לכיתה א׳ בחינם: המילים הראשונות באנגלית עם הגייה ותרגום, ומשחקים שמתחילים בהאזנה — לא צריך לקרוא. בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 46 imp; top queries children do english (2); אנגלית לכיתה א (2); אנגלית לכיתה א' (2)"
+  },
+  "/he/english-games/": {
+    "test": "he-headterms",
+    "arm": "holdout",
+    "proposed_title": "משחקים ללימוד אנגלית לילדים בחינם | Children Do English",
+    "proposed_description": "משחקים ללימוד אנגלית לילדים בחינם: יותר מ-{n} מילים עם {PICS}, השמעה של ההגייה ותרגול בשלבים. לפי גיל ולפי נושא, בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 32 imp; top queries משחקים ללימוד אנגלית לילדים (2); משחק לימוד אנגלית לילדים (1); משחקי לימוד האלפבית האנגלי של (1)"
+  },
+  "/he/grade-2/": {
+    "test": "he-headterms",
+    "arm": "test",
+    "title": "אנגלית לכיתה ב׳: משחקים ותרגול בחינם | Children Do English",
+    "description": "אנגלית לכיתה ב׳: מילים בסיסיות עם הגייה ותרגום, קריאה ראשונה של מילים קצרות ומשחקים בעברית. חינם, בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 30 imp; top queries אנגלית לכיתה ב' (3); children do english (1); אנגלית כיתה ב (1)"
+  },
+  "/he/english-games/numbers/": {
+    "test": "he-headterms",
+    "arm": "test",
+    "title": "משחק מספרים באנגלית לילדים — בחינם | Children Do English",
+    "description": "משחק מספרים באנגלית לילדים: {n} מספרים עם {PICS}, השמעה של ההגייה ותרגום לעברית. חינם, בלי פרסומות ובלי הרשמה.",
+    "note": "he-headterms 2026-10-15..2026-11-12: 29 imp; top queries מספרים באנגלית (5); לימוד מספרים באנגלית (3); משחק מספרים באנגלית (3)"
   }
 }

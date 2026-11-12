@@ -20,7 +20,7 @@ export function heTopicWords(topic, byId) {
   });
 }
 
-export function buildHeTopicPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, HE_TOPICS }) {
+export function buildHeTopicPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, HE_TOPICS, headterm }) {
   const kit = wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides });
   const { byId } = kit;
   const footerNote = 'רשימות המילים, התרגום והמשפטים הם שלנו. ההשמעה היא קול ממוחשב (TTS), אחיד לכל המילים.';
@@ -30,10 +30,15 @@ export function buildHeTopicPages({ SITE, distDir, writePage, escapeHtml, WORDS,
     const words = heTopicWords(t, byId);
     const sample = words.slice(0, 6).map((w) => w.en).join(', ');
     const nt = HE_TOPICS[i + 1];
+    // he-headterms test: headterm() returns these unchanged unless HE_HEADTERM_TEST is on (generate-seo-pages.js)
+    const head = (headterm || ((p, title, description) => ({ title, description })))(path,
+      `${t.query} — ${words.length} מילים עם הגייה, תרגום ותרגול לילדים | Children Do English`,
+      `${t.query} לילדים: ${words.length} מילים (${sample}…) עם הגייה, תרגום לעברית, משפט לדוגמה ותרגול. חינם, בלי פרסומות ובלי הרשמה.`,
+      { n: words.length });
     kit.setPage({
       dir: join(distDir, 'he', 'english-words', t.slug), path, test: false, footerNote,
-      title: `${t.query} — ${words.length} מילים עם הגייה, תרגום ותרגול לילדים | Children Do English`,
-      description: `${t.query} לילדים: ${words.length} מילים (${sample}…) עם הגייה, תרגום לעברית, משפט לדוגמה ותרגול. חינם, בלי פרסומות ובלי הרשמה.`,
+      title: head.title,
+      description: head.description,
       crumbItems: [['עברית', '/he/'], ['מילים באנגלית לפי נושא', hubPath], [t.name, path]],
       navHtml: `<a href="/he/">עברית</a> › <a href="${hubPath}">מילים באנגלית לפי נושא</a> › ${escapeHtml(t.name)}`,
       h1Html: escapeHtml(t.query),
