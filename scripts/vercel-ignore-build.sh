@@ -1,7 +1,13 @@
 #!/bin/sh
 # Vercel "Ignored Build Step" (vercel.json ignoreCommand). Exit 0 = SKIP this build, exit 1 = build.
-# Skip only when every file changed since the last deployed commit is docs, a recurring-check log or a GSC snapshot:
+# Otherwise skip only when every file changed since the last deployed commit is docs, a recurring-check log or a GSC snapshot:
 # those don't change the site (cost plan, owner 11-07). Anything unsure (no base commit in the clone) builds.
+# Branch previews (owner 11-12, build cost): only main and preview-* branches build. Name a branch preview-<what>
+# when it needs a preview deploy (server/api changes run .image-work/battle-e2e.mjs against one).
+REF="${VERCEL_GIT_COMMIT_REF:-}"
+if [ -n "$REF" ] && [ "$REF" != "main" ] && [ "${REF#preview-}" = "$REF" ]; then
+  echo "ignore-build: branch $REF is not main or preview-* — skipping the preview build"; exit 0
+fi
 BASE="${VERCEL_GIT_PREVIOUS_SHA:-}"
 [ -n "$BASE" ] || BASE="$(git rev-parse -q --verify HEAD^ 2>/dev/null)"
 if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
