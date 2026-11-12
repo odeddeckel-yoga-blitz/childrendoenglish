@@ -1300,6 +1300,15 @@ stopped counting:
 - **(d) A passing dry run of the hook APPENDS to the log**, so the next real push is refused for hours. Test on a copy
   (`cp .git/deploy-push-log /tmp/…` and restore) or with the log path overridden.
 *Check:* `tools/due.mjs <site>` warns when any worktree has no effective pre-push hook while the main checkout has one.
+- **(e) An ABSOLUTE `core.hooksPath` into the main checkout runs whatever branch that checkout is on** (KDM 11-12). KDM
+  pointed hooksPath at the main tree, which sat on a stale branch. From 11-09 every worktree push ran a pre-push 36 lines
+  older than main: no read-lock refusal, no recommit or hubback probe. CDE and yoga also point at main trees on feature
+  branches (11-12: their hooks were AHEAD of main, so unpushed guard changes were already enforcing). Neither (a) nor (e)
+  is safe alone: relative misses old worktrees, absolute follows whatever the main tree has checked out.
+  **Rule:** hooks run from ONE place that tracks origin/main, not from a working tree. Set `core.hooksPath` to an absolute
+  dir inside `git rev-parse --git-common-dir` (e.g. `.git/kit-hooks`), filled from `git show origin/main:.githooks/<hook>`
+  by the site's hook-install step after every merge to main and every kit sync. A guard change takes effect when it lands
+  on main. **Every hook prints its source when it starts** (`pre-push @ <main sha>`), so a stale hook shows in the push output.
 
 ## 8g. Spoken content stays with its visual (yoga-bits 11-07, owner bug)
 Owner: "the name of the pose is voiced only after the visual has already moved to the next pose". The quiz spoke the
