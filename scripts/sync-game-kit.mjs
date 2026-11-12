@@ -67,5 +67,7 @@ if (!check) {
   else try { rev = execSync('git rev-parse --short HEAD', { cwd: KIT }).toString().trim(); } catch { /* kit not a repo */ }
   writeFileSync('.game-kit-version', `${readFileSync(join(KIT, 'VERSION'), 'utf8').trim()} @ ${rev}\n`);
   console.log('kit version stamped:', readFileSync('.game-kit-version', 'utf8').trim());
+  // Refresh the installed hooks from origin/main (kit PATTERNS §8f(e)): a synced hook takes effect once it lands on main.
+  try { execSync('sh scripts/install-hooks.sh', { stdio: 'inherit' }); } catch { console.warn('install-hooks failed; run sh scripts/install-hooks.sh'); }
 }
 process.exit(drift ? 1 : 0);

@@ -1,0 +1,4 @@
+#!/bin/sh
+# After a merge (pull) refresh the installed hooks from origin/main (kit PATTERNS §8f(e)). Never fails the merge.
+top="$(git rev-parse --show-toplevel)"
+[ -f "$top/scripts/install-hooks.sh" ] && sh "$top/scripts/install-hooks.sh" --no-fetch >/dev/null 2>&1 || true

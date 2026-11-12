@@ -19,7 +19,7 @@ deploys on every push to main. Audit history: LEARN.md.
   rebase onto origin/main (a bot commits the daily spotlight), fast-forward, push.
 - Production push budget (owner, 10-31): .githooks/pre-push allows a push to main only
   >=3 h after the last one (owner 11-05; was 2 h) and <=4 per UTC day (docs-only and branch pushes don't count;
-  `git config core.hooksPath .githooks` once per clone). Batch commits. Broken live page:
+  hooks install from origin/main into .git/kit-hooks: `sh scripts/install-hooks.sh` once per clone; post-merge and the kit sync refresh it, kit PATTERNS §8f(e)). Batch commits. Broken live page:
   `CDE_PUSH_NOW=1 git push`.
 - After a push: check live with `vercel curl`, then ping new/changed URLs:
   `~/.config/searchconsole/venv/bin/python tools/seo/push-index.py <urls.txt>`.
