@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Letter Drop: Catch the Letters Spelling Game for Kids | Children Do English</title>
+<meta name="description" content="A free arcade spelling game for kids: see the picture, hear the word and catch the falling letters that spell it, in order. Three levels from 3-letter to 5-letter words. No ads, no sign-up.">
+<link rel="canonical" href="https://childrendoenglish.com/games/letter-drop/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta name="theme-color" content="#1e1b4b">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Children Do English">
+<meta property="og:title" content="Letter Drop: a Free Catch-the-Letters Spelling Game for Kids">
+<meta property="og:description" content="Letters are falling! Catch the ones that spell the word, in order. Free, no sign-up.">
+<meta property="og:url" content="https://childrendoenglish.com/games/letter-drop/">
+<meta property="og:image" content="https://childrendoenglish.com/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"VideoGame","name":"Letter Drop","url":"https://childrendoenglish.com/games/letter-drop/","description":"A free English spelling arcade game for kids: a picture shows and its word is spoken, letters fall down four lanes, and the child catches the letters of the word in order. A wrong letter costs one of three hearts. Level 1 has three-letter words with the letters shown faintly, levels 2 and 3 have four- and five-letter words to spell from the picture and the sound.","inLanguage":"en","genre":"Educational","gamePlatform":"Web Browser","playMode":"SinglePlayer","applicationCategory":"EducationalApplication","operatingSystem":"Any (modern web browser)","isFamilyFriendly":true,"isAccessibleForFree":true,"typicalAgeRange":"6-10","learningResourceType":"Game","educationalUse":"Practice","keywords":"spelling game for kids, falling letters game, catch the letters, english spelling, esl kids","author":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"publisher":{"@type":"Organization","name":"Children Do English","url":"https://childrendoenglish.com"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD","availability":"https://schema.org/InStock"}}
+</script>
+<script defer src="/land-beacon.js"></script>
+<style>
+  /* gradient-text headings use color:transparent — their drawn icon needs its own colour */
+  h1 .ic{color:#fbbf24;}
+  :root{ --bg0:#0b1230; --bg1:#1e1b4b; --ink:#eef2ff; --dim:#a5b4fc; --blue:#60a5fa; --gold:#fbbf24; --grn:#4ade80; --red:#f87171; --glass:rgba(30,27,75,.7); --line:rgba(129,140,248,.35); }
+  *{box-sizing:border-box;}
+  body{margin:0;min-height:100dvh;background:radial-gradient(circle at 50% 0%,var(--bg1),var(--bg0) 70%);background-color:var(--bg0);color:var(--ink);font-family:-apple-system,system-ui,'Segoe UI',sans-serif;}
+  #homePill{position:fixed;left:12px;top:12px;z-index:9;direction:ltr;font:bold 13px/1 -apple-system,system-ui,sans-serif;color:var(--ink);text-decoration:none;background:rgba(11,18,48,.8);border:1px solid rgba(165,180,252,.45);border-radius:999px;padding:9px 14px;}
+  main{max-width:560px;margin:0 auto;padding:54px 16px 0;text-align:center;}
+  #menu{padding-bottom:24px;}
+  h1{font-size:clamp(30px,8vw,46px);margin:0 0 8px;background:linear-gradient(90deg,var(--blue),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .sub{font-size:17px;line-height:1.55;color:#dbe4ff;margin:0 auto 18px;max-width:440px;}
+  .pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;}
+  .pill{background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:15px;font-weight:700;letter-spacing:3px;}
+  button,.ghost,.primary{font-family:inherit;}
+  .primary,#startBtn{display:inline-block;background:linear-gradient(135deg,#6366f1,#3b82f6);color:#fff;border:0;border-radius:14px;padding:15px 28px;font-size:19px;font-weight:800;cursor:pointer;min-height:52px;margin:6px;text-decoration:none;}
+  .ghost{display:inline-block;background:transparent;color:var(--ink);border:2px solid var(--line);border-radius:12px;padding:11px 18px;font-size:16px;font-weight:700;cursor:pointer;margin:6px;text-decoration:none;min-height:46px;}
+  .about{margin-top:28px;text-align:left;font-size:14px;line-height:1.6;color:var(--dim);background:var(--glass);border:1px solid var(--line);border-radius:14px;padding:14px 16px;}
+  .about a{color:var(--blue);}
+  .hud{margin-bottom:6px;}
+  .hud-row{display:flex;align-items:center;justify-content:center;gap:14px;}
+  .hud-level{font-size:14px;color:var(--dim);}
+  .hearts{display:flex;gap:2px;font-size:20px;}
+  .hrt.on{color:#fb7185;} .hrt.off{color:rgba(165,180,252,.3);}
+  .dots{display:flex;gap:6px;justify-content:center;margin-top:4px;}
+  .dot{width:10px;height:10px;border-radius:50%;background:rgba(165,180,252,.25);}
+  .dot.done{background:var(--grn);} .dot.now{background:var(--gold);}
+  .top-row{display:flex;align-items:center;justify-content:center;gap:12px;direction:ltr;}
+  .pic{width:clamp(76px,15vh,140px);height:clamp(76px,15vh,140px);object-fit:cover;border-radius:14px;border:3px solid var(--line);background:rgba(255,255,255,.06);flex:none;}
+  .right{display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .slots{display:flex;gap:4px;}
+  .slot{width:clamp(30px,9vw,46px);height:clamp(38px,10vw,52px);display:flex;align-items:center;justify-content:center;font-size:clamp(24px,7vw,34px);font-weight:900;border-bottom:4px solid var(--gold);color:var(--ink);}
+  .slot.faint{color:#8a93c9;}
+  .slot.shown{color:var(--gold);}
+  .slot.filled{color:var(--grn);border-bottom-color:var(--grn);}
+  .say{width:52px;height:52px;flex:none;border-radius:50%;border:0;font-size:24px;background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;cursor:pointer;box-shadow:0 6px 20px rgba(99,102,241,.45);display:flex;align-items:center;justify-content:center;}
+  .feedback{min-height:22px;font-size:16px;margin:6px 0;line-height:1.35;}
+  .feedback .en{direction:ltr;unicode-bidi:isolate;color:var(--gold);font-weight:900;}
+  .field{position:relative;overflow:hidden;border-radius:16px;border:2px solid var(--line);background:linear-gradient(180deg,rgba(30,27,75,.55),rgba(11,18,48,.85));touch-action:none;user-select:none;-webkit-user-select:none;}
+  .lane-line{position:absolute;top:0;bottom:0;width:1px;background:rgba(129,140,248,.14);}
+  .tile{position:absolute;top:0;width:58px;height:58px;border-radius:14px;border:3px solid #818cf8;background:#312e81;color:#fff;font-size:34px;font-weight:900;line-height:1;cursor:pointer;padding:0;touch-action:none;will-change:transform;box-shadow:0 4px 12px rgba(0,0,0,.35);}
+  .tile.got{background:#15803d;border-color:var(--grn);transition:opacity .3s;opacity:0;}
+  .tile.bad{background:#991b1b;border-color:var(--red);animation:shake .35s;}
+  @keyframes shake{0%,100%{margin-left:0;}25%{margin-left:-6px;}75%{margin-left:6px;}}
+  .card{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:26px 18px;margin-bottom:20px;}
+  .card h2{margin:6px 0;font-size:28px;}
+  .stars{font-size:40px;letter-spacing:4px;color:var(--gold);}
+  .stars .off{color:rgba(165,180,252,.35);}
+  .score{font-size:22px;font-weight:800;color:var(--gold);}
+  [data-cde-lang="he"] main{direction:rtl;}
+  [data-cde-lang="he"] .about{text-align:right;}
+  @media(prefers-reduced-motion:reduce){ .tile.bad{animation:none;} .tile.got{transition:none;} }
+</style>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do you play Letter Drop?","acceptedAnswer":{"@type":"Answer","text":"A picture shows and its English word is spoken. Letters fall down the screen; your child taps the letters of the word in order, first letter first. Each caught letter fills its space under the word. The speaker button says the word again."}},{"@type":"Question","name":"What happens after a wrong letter?","acceptedAnswer":{"@type":"Answer","text":"A wrong letter, or a letter of the word caught too early, costs one of three hearts, and the letter that comes next appears in its space. Your child still has to catch it. After three wrong letters the same word starts again with three new hearts. Letters that fall off the bottom cost nothing."}},{"@type":"Question","name":"What do the three levels practise?","acceptedAnswer":{"@type":"Answer","text":"Level 1: three-letter words (cat, sun, fox) with the letters shown faintly to match. Level 2: four-letter words (fish, frog, milk) with empty spaces. Level 3: five-letter words (zebra, apple, train). The wrong letters are often look-alikes like b, d and p."}},{"@type":"Question","name":"Is it free?","acceptedAnswer":{"@type":"Answer","text":"Yes. No ads, no sign-up and nothing to install. It runs in any phone, tablet or computer browser. The words are read by a computer voice."}}]}</script>
+</head>
+<body>
+<a id="homePill" href="/" aria-label="Back to childrendoenglish.com">← childrendoenglish.com</a>
+<main>
+  <div id="menu">
+    <h1><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-target"/></svg> LETTER DROP</h1>
+    <p class="sub" data-l10n="sub">Letters are falling! Look at the picture, listen to the word and <b>catch its letters in order</b>.</p>
+    <div class="pills"><span class="pill" dir="ltr">c a t</span><span class="pill" dir="ltr">f r o g</span><span class="pill" dir="ltr">z e b r a</span></div>
+    <button type="button" id="startBtn" data-l10n="start"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> Start</button>
+    <section class="about">
+      <h2 style="font-size:15px;margin:0 0 4px;color:inherit;">Letter Drop</h2>
+      <p style="margin:0 0 4px;">A free arcade spelling game for kids learning English. A picture shows and its word is spoken; letters fall down four lanes and your child catches the ones that spell the word, in order. Three levels of five words, from three-letter words with the letters shown faintly to five-letter words spelled from the picture and the sound. Three hearts per level.</p>
+      <p style="margin:0;">No ads, no sign-up. Part of <a href="/">childrendoenglish.com</a>: free vocabulary games, flashcards and quizzes with Hebrew support.</p>
+      <h3 style="font-size:14px;margin:12px 0 4px;color:inherit;">Questions parents ask</h3>
+      <p style="margin:0 0 6px;"><b>How do you play Letter Drop?</b> A picture shows and its English word is spoken. Letters fall down the screen; your child taps the letters of the word in order, first letter first. Each caught letter fills its space under the word. The speaker button says the word again.</p>
+      <p style="margin:0 0 6px;"><b>What happens after a wrong letter?</b> A wrong letter, or a letter of the word caught too early, costs one of three hearts, and the letter that comes next appears in its space. Your child still has to catch it. After three wrong letters the same word starts again with three new hearts. Letters that fall off the bottom cost nothing.</p>
+      <p style="margin:0 0 6px;"><b>What do the three levels practise?</b> Level 1: three-letter words (cat, sun, fox) with the letters shown faintly to match. Level 2: four-letter words (fish, frog, milk) with empty spaces. Level 3: five-letter words (zebra, apple, train). The wrong letters are often look-alikes like b, d and p.</p>
+      <p style="margin:0 0 6px;"><b>Is it free?</b> Yes. No ads, no sign-up and nothing to install. It runs in any phone, tablet or computer browser. The words are read by a computer voice.</p>
+    </section>
+  </div>
+  <div id="app"></div>
+</main>
+<script src="../cde-l10n.js" defer></script>
+<script src="../word-audio.js" defer></script>
+<script src="../end-card.js" defer></script>
+<script src="./l10n.js" defer></script>
+<script src="./words.js" defer></script>
+<script src="./game.js" defer></script>
+</body>
+</html>
