@@ -162,6 +162,7 @@ export default {
   createPlayer: 'Crear Jugador',
   playerName: 'Nombre del Jugador',
   playerNamePlaceholder: 'Escribe un nombre',
+  playerNamePrivacy: 'Un apodo o solo el nombre está bien. No uses el nombre completo.',
   chooseAvatar: 'Elige un Avatar',
   deletePlayer: 'Eliminar Jugador',
   deleteConfirm: '¿Eliminar a {{name}}? Se perderá todo el progreso.',

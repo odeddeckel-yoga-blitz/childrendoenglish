@@ -7,9 +7,13 @@ import './index.css';
 // Errors only — no performance tracing — so crash reporting stays anonymous
 // and consistent with the "no tracking" positioning.
 if (import.meta.env.PROD) {
-  const initSentry = () => import('./utils/sentry').then(({ init, setTag }) => {
+  const initSentry = () => Promise.all([import('./utils/sentry'), import('./utils/sentryScrub')]).then(([{ init, setTag }, scrub]) => {
     init({
       dsn: import.meta.env.VITE_SENTRY_DSN || '',
+      sendDefaultPii: false,
+      // no profile names in a crash report: no tap/console breadcrumbs, saved names replaced (utils/sentryScrub.js)
+      beforeBreadcrumb: scrub.beforeBreadcrumb,
+      beforeSend: (event) => scrub.beforeSend(event),
     });
     setTag('appVersion', '1.0.0');
   });

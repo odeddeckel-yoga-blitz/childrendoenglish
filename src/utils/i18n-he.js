@@ -162,6 +162,7 @@ export default {
   createPlayer: 'יצירת שחקן',
   playerName: 'שם השחקן',
   playerNamePlaceholder: 'הקלידו שם',
+  playerNamePrivacy: 'אפשר כינוי או שם פרטי, בלי שם משפחה.',
   chooseAvatar: 'בחרו סמל',
   deletePlayer: 'מחיקת שחקן',
   deleteConfirm: 'למחוק את {{name}}? כל ההתקדמות תאבד.',

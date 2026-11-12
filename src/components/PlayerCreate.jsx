@@ -58,7 +58,10 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack, firs
                      text-lg text-slate-700 dark:text-slate-200 placeholder-slate-400 focus:outline-hidden focus:ring-2
                      focus:ring-blue-400 transition-all"
           placeholder={t('playerNamePlaceholder', lang)}
+          aria-describedby="player-name-hint"
         />
+        {/* Privacy (owner 11-12): names stay on this device, but a child shouldn't type a full name anyway. */}
+        <p id="player-name-hint" className="text-sm text-slate-600 dark:text-slate-300">{t('playerNamePrivacy', lang)}</p>
       </div>
 
       {/* Avatar picker */}

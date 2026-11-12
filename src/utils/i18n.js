@@ -164,6 +164,7 @@ const translations = {
     createPlayer: 'Create Player',
     playerName: 'Player Name',
     playerNamePlaceholder: 'Type a name',
+    playerNamePrivacy: "A nickname or first name is fine. Don't use your full name.",
     chooseAvatar: 'Choose Avatar',
     deletePlayer: 'Delete Player',
     deleteConfirm: 'Delete {{name}}? All progress will be lost.',
