@@ -28,9 +28,9 @@ const animalImgs = async () => {
   return new Set(WORDS.filter((w) => w.category === 'animals').map((w) => w.imageUrl));
 };
 
-test('topic hub: Play is on screen and lands a new English player in an animals quiz', async ({ page }) => {
+test('topic hub: the app link is on screen and lands a new English player in an animals quiz', async ({ page }) => {
   await page.goto('/vocabulary/animals/');
-  const play = page.locator('a.top-cta');
+  const play = page.locator('a.top-link');
   await expect(play).toBeInViewport();
   await expect(play).toHaveAttribute('href', /\/new-player\?topic=animals&/);
   await play.click();
@@ -60,7 +60,7 @@ test('every topic hub has the play-first top and links into its own topic', asyn
   const { CATEGORIES } = await import('../src/data/words.js');
   for (const c of CATEGORIES) {
     await page.goto(`/vocabulary/${c}/`);
-    await expect(page.locator('a.top-cta')).toHaveAttribute('href', new RegExp(`topic=${c}&`));
+    await expect(page.locator('a.top-link')).toHaveAttribute('href', new RegExp(`topic=${c}&`));
     await expect(page.locator('.mini-quiz .mq-opt')).toHaveCount(3);
     await expect(page.locator('.how-to')).toContainText('For parents');
   }

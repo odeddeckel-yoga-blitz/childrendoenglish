@@ -431,7 +431,8 @@ function buildCategoryPage(slug, displayName, words) {
   const quizPool = (beg.length >= 3 ? beg : words).slice(0, 6);
   // Game-first (owner 11-12, scripts/game-first.mjs): the matching game's card leads, above the app CTA and the list.
   const gameFirst = gameFirstCard(gameForCategory(ROOT, slug, words), { lang: 'en', content: 'vocab_category' });
-  const playTop = `<a class="top-cta" href="${playHref}&utm_content=vocab_category_top">${gameIcon('play')} Play ${escapeHtml(lower)} words free &mdash; no sign-up</a>
+  // The game-first card above is the page's one big play button (owner 11-12); the app link is a plain text link under it.
+  const playTop = `<a class="top-link" href="${playHref}&utm_content=vocab_category_top">Or practice ${escapeHtml(lower)} words in the app, free &mdash; no sign-up &rarr;</a>
     ${miniQuizHtml(quizPool, slug, { title: '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> Try one word in 10 seconds', sub: 'Listen, then tap the right picture.', cta: `Play 10 more ${escapeHtml(lower)} words free &rarr;`, content: 'vocab_category', href: `/new-player?topic=${slug}&utm_source=seo&utm_medium=miniquiz` })}
     <p class="how-to"><strong>For parents:</strong> tap Play, let your child listen and pick the picture for about 5 minutes, then look through the words below together. No account, no ads.</p>`;
 
@@ -526,6 +527,7 @@ function buildCategoryPage(slug, displayName, words) {
     .cat-links a:hover { background: #2563eb; color: #fff; }
     .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
     .top-cta { display: block; text-align: center; background: #b45309; color: #fff; font-weight: 800; font-size: 1.1rem; padding: 0.85rem 1rem; border-radius: 999px; text-decoration: none; margin: 0 auto 1rem; max-width: 420px; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+    .top-link { display: block; text-align: center; color: #1d4ed8; font-weight: 600; margin: 0 auto 1.25rem; max-width: 420px; text-decoration: underline; text-underline-offset: 3px; }
     .how-to { margin: 0 0 1.5rem; color: #475569; font-size: 0.92rem; }
     ${GUIDE_QUIZ_CSS}
     ${GAME_FIRST_CSS}
