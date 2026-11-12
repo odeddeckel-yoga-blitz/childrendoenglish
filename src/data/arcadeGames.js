@@ -37,5 +37,4 @@ export const HUB_ONLY_GAMES = [
   // (src/__tests__/wave3Hold.test.js), so no unit under an open read changes.
   { id: 'letter-drop', name: 'Letter Drop', icon: 'target', emoji: '🎯' },
   { id: 'shopping-list', name: 'Shopping List', icon: 'clipboard-list', emoji: '📋' },
-  { id: 'blend-it', name: 'Blend It', icon: 'puzzle', emoji: '🧩' },
 ];

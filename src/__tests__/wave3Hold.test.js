@@ -6,7 +6,8 @@ import { SPOTLIGHT_GAMES, HUB_ONLY_GAMES } from '../data/arcadeGames';
 // Wave 3 (Letter Drop, Shopping List, Blend It; owner OK 11-12) ships hub-only like wave 2, so no unit under an open
 // read changes: never a spotlight candidate, never next after an older or a wave-2 game on the end card, and its
 // games lead only to each other. Lift with wave 2's guardrails (read wave2-guardrails-off) or at wave3-judge.
-const WAVE3 = ['letter-drop', 'shopping-list', 'blend-it'];
+// Blend It is held (owner 11-12: whole-word sound only, decided 11-07); it stays on branch games-wave3.
+const WAVE3 = ['letter-drop', 'shopping-list'];
 const WAVE2 = ['opposites', 'true-or-false', 'feelings', 'sentence-builder', 'beginning-sounds', 'simon-says'];
 const endCard = readFileSync(resolve(import.meta.dirname, '../../public/games/end-card.js'), 'utf-8');
 const loops = JSON.parse(endCard.match(/var LOOPS=(\[[\s\S]*?\]\]);/)[1].replace(/'/g, '"'));
