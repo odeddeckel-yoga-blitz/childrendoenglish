@@ -22,7 +22,8 @@ done
 [ "$prod" = 1 ] || exit 0
 
 # Kit stamp (kit 1.65, 11-12): .game-kit-version must name a PUSHED kit commit (sync with --from-origin).
-node "$HOME/projects/shared/game-kit/tools/kit-stamp.mjs" check --repo="$(git rev-parse --show-toplevel)" || { echo "🧰 push blocked: kit stamp names an unpushed/unknown kit commit; re-run scripts/sync-game-kit.mjs --from-origin." >&2; exit 1; }
+# git exports GIT_DIR to hooks; unset it, or kit-stamp's own git calls read THIS repo, not the kit (11-13: blocked a push).
+env -u GIT_DIR -u GIT_WORK_TREE -u GIT_INDEX_FILE -u GIT_PREFIX -u GIT_COMMON_DIR node "$HOME/projects/shared/game-kit/tools/kit-stamp.mjs" check --repo="$(git rev-parse --show-toplevel)" || { echo "🧰 push blocked: kit stamp names an unpushed/unknown kit commit; re-run scripts/sync-game-kit.mjs --from-origin." >&2; exit 1; }
 
 # Unit locks (push method v2, owner 11-11; kit PATTERNS §3g): a push may not change a page that an open read holds
 # (reads.jsonl + tools/reads/snap/). Judged on the BUILT pages, so run the gate (npm run build) first.
