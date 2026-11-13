@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-11-12T00:00:00.000Z",
+  "statsFrom": "2026-11-13T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "golf",
@@ -7,17 +7,17 @@
     "category": "sports",
     "he": "גולף",
     "image": "/images/golf.webp",
-    "ans": 7,
-    "ok": 6,
+    "ans": 22,
+    "ok": 17,
     "since": "2026-11-11T10:50:37.298Z"
   },
   "game": {
     "id": "missing-letter",
     "name": "Missing Letter",
     "emoji": "✏️",
-    "opens": 47,
-    "lvl": 57,
-    "cmp": 15,
+    "opens": 68,
+    "lvl": 70,
+    "cmp": 17,
     "since": "2026-11-08T10:14:44.081Z"
   },
   "history": [
