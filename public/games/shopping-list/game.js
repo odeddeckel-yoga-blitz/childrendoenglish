@@ -120,7 +120,7 @@ function render(){
       s.textContent=''; s.classList.add('filled');
       var im=el('img'); im.src='/images/'+w+'.webp'; im.alt=''; s.appendChild(im);
       // the written word goes on the picked shelf picture (a basket slot is too narrow for watermelon)
-      var lab=el('span','label',w); lab.setAttribute('lang','en'); b.appendChild(lab);
+      var lab=el('span','label',w); lab.setAttribute('lang','en'); b.appendChild(lab); fitLabel(lab);
       b.classList.remove('hint'); b.classList.add('picked'); b.disabled=true; b.setAttribute('aria-disabled','true');
       S.got++;
       say(w);
@@ -187,9 +187,19 @@ document.getElementById('startBtn').addEventListener('click',function(){
 
 /* ---------- test/debug contract (real input paths only) ---------- */
 function btn(w){ return app.querySelector('.shelf .opt[data-word="'+w+'"]'); }
+/* Shrink a picked word's label until it fits its picture: font widths differ by device (Linux/Chromebook fonts
+   cut "watermelon" at 320 px where macOS fit, CI 11-13), so measure instead of trusting a clamp(). */
+function fitLabel(lab){
+  lab.style.fontSize=''; lab.style.letterSpacing='';
+  var px=parseFloat(getComputedStyle(lab).fontSize)||14, over=function(){ return lab.scrollWidth>lab.clientWidth+1; };
+  while(over()&&px>8){ px-=0.5; lab.style.fontSize=px+'px'; }
+  if(over()) lab.style.letterSpacing='-0.6px';            // wide fonts: tighten before going smaller still
+  while(over()&&px>7){ px-=0.5; lab.style.fontSize=px+'px'; }
+}
 window.SL={
   S:S, LEVELS:LEVELS, D:D, ROUNDS:ROUNDS,
   dbg:{
+    fitLabel:fitLabel,
     get round(){ return S.rounds[S.round]||null; },
     get need(){ var r=S.rounds[S.round]; return r?r.list[S.got]||null:null; },
     get roundKey(){ var r=S.rounds[S.round]; return (r&&document.getElementById('menu').hidden&&app.querySelector('.shelf'))?S.lvl+':'+S.round:''; },

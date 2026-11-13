@@ -163,8 +163,8 @@ for (const vp of [{ width: 390, height: 844 }, { width: 320, height: 568 }]) {
       // every shelf word fits uncut on a picked picture at this level's size (watermelon, strawberry)
       const cut = await page.evaluate(() => {
         const lab = document.querySelector('.shelf .opt.picked .label'), keep = lab.textContent, out = [];
-        for (const w of SL.D.SHELF) { lab.textContent = w; if (lab.scrollWidth > lab.clientWidth + 1) out.push(w); }
-        lab.textContent = keep; return out;
+        for (const w of SL.D.SHELF) { lab.textContent = w; SL.dbg.fitLabel(lab); if (lab.scrollWidth > lab.clientWidth + 1 || parseFloat(getComputedStyle(lab).fontSize) < 7) out.push(w); }
+        lab.textContent = keep; SL.dbg.fitLabel(lab); return out;
       });
       expect(cut, `level ${li + 1}`).toEqual([]);
     }
