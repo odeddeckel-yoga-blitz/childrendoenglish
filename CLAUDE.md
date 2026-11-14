@@ -25,6 +25,9 @@ deploys on every push to main. Audit history: LEARN.md.
   `~/.config/searchconsole/venv/bin/python tools/seo/push-index.py <urls.txt>`.
 - Server/DB changes: push a preview branch first and run `.image-work/battle-e2e.mjs`
   against it (preview uses its own Neon branch). Never probe prod with test writes.
+- Before any risky DB change (migration, bulk delete/update, schema change, credential rotation), take a
+  restore point first (a Neon branch from main, e.g. `restore-<what>-<date>`, or an export) and note it in the
+  commit or log; delete the restore branch after 7 days (owner 11-14, after the rotation outage).
 - Never disable Vercel Deployment Protection. Never print or commit secrets/OIDC tokens.
 
 ## Standing rules
