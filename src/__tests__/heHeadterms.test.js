@@ -1,4 +1,4 @@
-// he-headterms SEO title test (prepared 11-12, not shipped): the /he/ landing's head-term titles applied to
+// he-headterms SEO title test (prepared 11-12, SHIPPED 11-14 after the title-holdout read): the /he/ landing's head-term titles applied to
 // half of the other /he/* pages (arm "test"), the other half an unchanged holdout. Everything sits behind
 // HE_HEADTERM_TEST in scripts/generate-seo-pages.js; CDE_HE_HEADTERM_TEST=1 turns it on for this test only.
 //  1. Flag off: the build is the one before the test (checked 11-12: whole SEO dist byte-identical to
@@ -31,8 +31,7 @@ const HEAD_COPY = /^\s*<(title>|meta (name="description"|property="og:(title|des
 function build(on) {
   const dist = mkdtempSync(join(tmpdir(), `cde-headterm-${on ? 'on' : 'off'}-`));
   const env = { ...process.env, CDE_SEO_DIST: dist };
-  delete env.CDE_HE_HEADTERM_TEST;
-  if (on) env.CDE_HE_HEADTERM_TEST = '1';
+  env.CDE_HE_HEADTERM_TEST = on ? '1' : '0';
   execFileSync('node', [join(ROOT, 'scripts', 'generate-seo-pages.js')], { cwd: ROOT, env, stdio: 'pipe' });
   const pages = new Map();
   for (const f of walk(dist)) pages.set('/' + relative(dist, f).replace(/index\.html$/, ''), readFileSync(f, 'utf8'));
@@ -47,9 +46,9 @@ beforeAll(() => {
 }, 360_000);
 
 describe('he-headterms: setup', () => {
-  it('ships OFF: the flag in the generator is false', () => {
+  it('ships ON since 11-14: the flag in the generator is true', () => {
     const src = readFileSync(join(ROOT, 'scripts', 'generate-seo-pages.js'), 'utf8');
-    expect(src).toMatch(/^const HE_HEADTERM_TEST = false;$/m);
+    expect(src).toMatch(/^const HE_HEADTERM_TEST = true;/m);
   });
   it('has a test arm and a holdout arm, each a real /he/* page', () => {
     expect(TEST.length).toBeGreaterThan(0);

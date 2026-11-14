@@ -116,7 +116,7 @@ const walk = (d) => readdirSync(d).flatMap((f) => {
   return statSync(p).isDirectory() ? walk(p) : p.endsWith('.html') ? [p] : [];
 });
 // Held SEO test until the 11-14 read (HE_WORD_STAT + the landing's "500").
-const HELD = new Set(['he/index.html']);
+const HELD = new Set(); // the /he/ landing's held stat ended with the 11-14 read
 const UNIT = /^(words?|palabras|tarjetas|cards|flashcards|photo words|real-photo|English words|everyday English|vocabulary flashcards|מילים|כרטיסיות)/i;
 
 test('one word count: every site-wide total on a generated page is WORD_COUNT+', () => {

@@ -180,25 +180,14 @@ try {
   console.warn('No word-enrichments.js found, word pages will render without enrichments');
 }
 
-// Words added 2026-10-24 (Starters nouns, Phase 0) are held off pages under a running SEO
-// test until its read: the 13 /spanish/ category pages (count-led title test + its control)
-// and the /he/ landing's word counts (head-term test). Delete after the Nov 7–14 read.
-const SEO_TEST_HOLDOUT = new Set([
-  'donkey', 'polar-bear', 'spider', 'burger', 'chicken', 'coconut', 'lemonade', 'meat', 'meatballs',
-  'pea', 'pear', 'pie', 'sausage', 'water', 'apartment', 'armchair', 'bathroom', 'bedroom',
-  'dining-room', 'living-room', 'sofa', 'computer', 'keyboard', 'tablet', 'radio', 'watch', 'bookstore',
-  'street', 'park', 'playground', 'shorts', 'pants', 'alphabet', 'drawing', 'painting', 'baseball',
-  'fishing', 'skateboarding', 'table-tennis', 'tennis-racket', 'board-game', 'sand', 'smile',
-  'snail', // 11-03: replaces grape + crayon (removed 10-31); held like the Phase 0 words
-  'toaster', // 11-03: replaces apron (owner: remove)
-]);
-// The /he/ landing's word stat is part of the held head-term test: frozen at its live value
-// (488) so removing grape + crayon doesn't move it. Delete with SEO_TEST_HOLDOUT after the read.
-const HE_WORD_STAT = 488;
+// The title-holdout test (10-24 → 11-14) is over: its held words are on every page and the /he/ landing's word stat is
+// the live count (owner 11-14). SEO_TEST_HOLDOUT stays as an empty set so later tests can reuse the hook.
+const SEO_TEST_HOLDOUT = new Set();
+const HE_WORD_STAT = WORD_COUNT;
 // The /vocabulary/<cat>/spanish/ FAQ (and its FAQPage schema) stays English, marked lang="en",
 // while those pages' count-led titles are under test; set true after the 11-14 read to ship the
 // Spanish FAQ (bilingualFaqEs).
-const ES_BILINGUAL_FAQ_ES = false;
+const ES_BILINGUAL_FAQ_ES = true; // shipped 11-14 after the title read (owner OK)
 const TITLE_OVERRIDES = JSON.parse(readFileSync(new URL('./seo-title-overrides.json', import.meta.url), 'utf8'));
 
 // he-headterms test (prepared 11-12, NOT shipped — owner OK needed after the 11-14 /he/ read):
@@ -209,8 +198,9 @@ const TITLE_OVERRIDES = JSON.parse(readFileSync(new URL('./seo-title-overrides.j
 // To ship: set true, give each test entry an "added" date (optimizer verdicts), check Google
 // re-crawled the test pages before day 0 (kit stale-crawl check). CDE_HE_HEADTERM_TEST=1 turns
 // it on for tests / scratch builds only (src/__tests__/heHeadterms.test.js).
-const HE_HEADTERM_TEST = false;
-const HE_HEADTERM_ON = HE_HEADTERM_TEST || process.env.CDE_HE_HEADTERM_TEST === '1';
+const HE_HEADTERM_TEST = true; // shipped 11-14 (owner OK after the title-holdout read: /he/ CTR 9.3→13.5%, pos 16→8)
+// CDE_HE_HEADTERM_TEST=0 builds the pre-test copy (src/__tests__/heHeadterms.test.js compares the two builds).
+const HE_HEADTERM_ON = process.env.CDE_HE_HEADTERM_TEST === '0' ? false : HE_HEADTERM_TEST || process.env.CDE_HE_HEADTERM_TEST === '1';
 // {n} = the page's own count, {PICS}/{PIC} = its truthful picture claim.
 function heHeadterm(path, title, description, { n, words = [] } = {}) {
   const o = TITLE_OVERRIDES[path];
@@ -1540,7 +1530,7 @@ function buildHebrewLandingPage() {
         name: 'כמה מילים יש באפליקציה?',
         acceptedAnswer: {
           '@type': 'Answer',
-          text: 'האפליקציה כוללת למעלה מ-500 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.',
+          text: `האפליקציה כוללת למעלה מ-${WORD_COUNT} מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.`,
         },
       },
       {
@@ -1857,7 +1847,7 @@ function buildHebrewLandingPage() {
         </div>
         <div class="faq-item">
           <div class="faq-q">כמה מילים יש באפליקציה?</div>
-          <div class="faq-a">האפליקציה כוללת למעלה מ-500 מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.</div>
+          <div class="faq-a">האפליקציה כוללת למעלה מ-${WORD_COUNT} מילים באנגלית ב-13 קטגוריות שונות, כולל חיות, אוכל, צבעים, ביגוד, רגשות, טבע, ספורט ועוד.</div>
         </div>
         <div class="faq-item">
           <div class="faq-q">האם יש תמיכה בעברית?</div>
