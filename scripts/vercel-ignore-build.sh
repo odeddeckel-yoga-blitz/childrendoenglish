@@ -14,6 +14,8 @@ if [ -z "$BASE" ] || ! git cat-file -e "$BASE^{commit}" 2>/dev/null; then
   git fetch -q --depth=50 origin 2>/dev/null
   git cat-file -e "$BASE^{commit}" 2>/dev/null || { echo "ignore-build: no base commit — building"; exit 1; }
 fi
+# A redeploy of the SAME commit is deliberate (an env var changed, e.g. the 11-14 DB password rotation): always build.
+if [ "$(git rev-parse "$BASE^{commit}")" = "$(git rev-parse HEAD)" ]; then echo "ignore-build: redeploy of the same commit — building"; exit 1; fi
 if git diff --quiet "$BASE" HEAD -- . \
   ':(exclude)*.md' ':(exclude)**/*.md' ':(exclude)plans/**' ':(exclude)docs/**' \
   ':(exclude).recurring-log.jsonl' ':(exclude).recurring-reads.jsonl' ':(exclude)tools/seo/snapshots/**'; then
