@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "lane": "game",
+    "id": "missing-letter",
+    "exposure": 92,
+    "rate": 0.96,
+    "severity": "watch",
+    "at": "2026-11-15T10:47:07.996Z"
+  }
+]
