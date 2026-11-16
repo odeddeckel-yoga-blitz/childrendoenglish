@@ -4,13 +4,18 @@ import { describe, it, expect } from 'vitest';
 import { WORDS, collides } from '../data/words.js';
 import { PAGES_HOLD } from '../data/pagesHold.js';
 import { pictureStyle } from '../data/imageStyle.js';
-import { wordPageVariant, variantSplit, wordPageKey, parseWordPageKey, wordPageUrls, WORD_PAGE_AB } from '../data/wordPageVariant.js';
+import { wordPageVariant, wordPageLayout, WORD_PAGE_ROLLOUT, variantSplit, wordPageKey, parseWordPageKey, wordPageUrls, WORD_PAGE_AB } from '../data/wordPageVariant.js';
 import { pickQuizRound, pictureCredit, shortAuthor, categoryNoun, categoryShort, boldWord } from '../../scripts/word-page-a.mjs';
 import { isPhoto } from '../../scripts/page-copy.mjs';
 
 const LIVE = WORDS.filter((w) => !PAGES_HOLD.has(w.id));
 
 describe('word-page A/B assignment', () => {
+  it('rollout (owner 11-16): every live word page is built with Option A, including the old control arm', () => {
+    expect(WORD_PAGE_ROLLOUT.arm).toBe('a');
+    expect(LIVE.some((w) => wordPageVariant(w.id) === 'b')).toBe(true);
+    expect(LIVE.filter((w) => wordPageLayout(w.id) !== 'a')).toEqual([]);
+  });
   it('splits every category about in half (within 2 words or 10 %)', () => {
     const split = variantSplit(LIVE);
     expect(Object.keys(split).length).toBeGreaterThan(10);

@@ -1,16 +1,16 @@
-// Word page Option A (step 4, mockup a "cat" / "nervous") as an A/B: half of each category's word pages get the new
-// layout (src/data/wordPageVariant.js), the rest keep today's page. Runs on the BUILT pages in dist/ (served through a
+// Word page Option A (step 4, mockup a "cat" / "nervous") on EVERY word page (owner 11-16 dropped the A/B; the split
+// code in src/data/wordPageVariant.js stays behind WORD_PAGE_ROLLOUT). Runs on the BUILT pages in dist/ (served through a
 // route like page-depth.spec.js; run `npm run build` first). Checks, per the mockup notes: one audio control labelled
 // "computer voice", quiz + example + CTA above the fold on a phone (360×800) and a Chromebook (1366×768), Hebrew and
 // Spanish glosses labelled by language, a picture credit that never calls a drawing a photo, a one-style quiz round,
-// the CTA's live category count, the beacon key carrying the arm — and arm B still today's page.
+// the CTA's live category count, the beacon key carrying the arm — and the old control page (cat) now on Option A.
 import { test, expect } from '@playwright/test';
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { WORDS } from '../src/data/words.js';
 import { PAGES_HOLD } from '../src/data/pagesHold.js';
 import { DRAWN } from '../src/data/imageStyle.js';
-import { wordPageVariant } from '../src/data/wordPageVariant.js';
+import { wordPageVariant, wordPageLayout, WORD_PAGE_ROLLOUT } from '../src/data/wordPageVariant.js';
 
 const DIST = join(process.cwd(), 'dist');
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript' };
@@ -52,10 +52,10 @@ const A_PAGES = [
   { path: `/vocabulary/${A_LONGEST.category}/${A_LONGEST.id}/`, cat: A_LONGEST.category },
 ];
 
-test('the mockup words are in the arms the test expects', () => {
-  expect(wordPageVariant('nervous')).toBe('a');
-  expect(wordPageVariant('elephant')).toBe('a');
-  expect(wordPageVariant('cat')).toBe('b');
+test('Option A is on every word page (owner 11-16: no A/B), whatever the old arm', () => {
+  expect(WORD_PAGE_ROLLOUT.arm).toBe('a');
+  for (const id of ['nervous', 'elephant', 'cat']) expect(wordPageLayout(id)).toBe('a');
+  expect(wordPageVariant('cat')).toBe('b'); // old control arm: proves the rollout, not the hash, decides
 });
 
 for (const pg of A_PAGES) {
@@ -116,16 +116,14 @@ test('Option A beacon: page view and the first quiz tap carry the arm and pictur
   await expect.poll(() => evs.includes('mq:vocabulary_word-a-drawn')).toBe(true);
 });
 
-test('arm B (cat) is still today\'s page, marked b for the beacon', async ({ page }) => {
+test('the old control page (cat) now gets Option A too, marked a for the beacon', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
   const evs = await serve(page);
   await page.goto('/vocabulary/animals/cat/');
-  await expect(page.locator('body')).toHaveAttribute('data-wv', 'b');
+  await expect(page.locator('body')).toHaveAttribute('data-wv', 'a');
   await expect(page.locator('body')).toHaveAttribute('data-pic', 'photo');
-  await expect(page.locator('.wa-grid, .wa-band, .wa-credit')).toHaveCount(0);
-  await expect(page.locator('.header h1')).toContainText('חתול באנגלית'); // today's Hebrew-first banner
-  await expect(page.locator('.word-hero')).toHaveCount(1);
-  await expect(page.locator('.mini-quiz h2')).toContainText('Try it');
-  expect(await page.locator('[data-say]').count()).toBeGreaterThan(1);
-  await expect.poll(() => evs.includes('pg:vocabulary_word-b-photo')).toBe(true);
+  await expect(page.locator('.wa-band')).toHaveCount(1);
+  await expect(page.locator('.word-hero')).toHaveCount(0);
+  await expect(page.locator('[data-say]')).toHaveCount(1);
+  await expect.poll(() => evs.includes('pg:vocabulary_word-a-photo')).toBe(true);
 });

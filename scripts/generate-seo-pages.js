@@ -10,7 +10,7 @@ import { WORD_COUNT } from '../src/data/wordCount.js';
 import { gameForCategory, gameFirstCard, GAME_FIRST_CSS } from './game-first.mjs';
 import { DRAWN, pictureStyle } from '../src/data/imageStyle.js';
 import { PILL_CSS, buildTeachersHtml } from './build-teachers-page.mjs';
-import { wordPageVariant } from '../src/data/wordPageVariant.js';
+import { wordPageLayout } from '../src/data/wordPageVariant.js';
 import { buildWordPageABody, WORD_A_CSS } from './word-page-a.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -711,8 +711,9 @@ function buildWordPage(word, categorySlug, categoryDisplayName, categoryWords) {
     enrichmentHtml = `${aboutParagraph}\n    ${sentencesHtml}\n    ${funFactHtml}\n    ${collocationsHtml}\n    ${relatedHtml}`;
   }
 
-  // Step 4 A/B (src/data/wordPageVariant.js): head is shared; the body is Option A (scripts/word-page-a.mjs) or today's.
-  const arm = wordPageVariant(word.id);
+  // Step 4 (src/data/wordPageVariant.js): head is shared; the body is Option A (scripts/word-page-a.mjs) on every page
+  // since the owner dropped the A/B (11-16), or today's page if the split is ever turned back on.
+  const arm = wordPageLayout(word.id);
   const pic = pictureStyle(word.id);
   const head = `<!DOCTYPE html>
 <html lang="en">

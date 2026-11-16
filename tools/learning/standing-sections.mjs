@@ -130,7 +130,7 @@ export function wordAbSummary(rows) {
 }
 export function printWordAb(rows) {
   const s = wordAbSummary(rows);
-  console.log(`\n— word-page A/B (Option A vs today's page; from ${WORD_PAGE_AB.start}, read ≥ 14 days after; Google CTR per arm: optimizer.mjs --word-ab-urls=a|b → GSC page filter) —`);
+  console.log(`\n— word pages, Option A (on every word page from ${WORD_PAGE_AB.start}, owner 11-16; compare with the word en rows before that date) —`);
   if (!s.a.all.pg && !s.b.all.pg) { console.log('  no A/B page views yet'); return s; }
   const c = (a, b) => pct(a, b).padStart(4);
   for (const arm of ['a', 'b']) {

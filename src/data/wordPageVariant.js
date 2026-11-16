@@ -11,6 +11,10 @@
 // Tests: src/__tests__/wordPageVariant.test.js, e2e/word-page-a.spec.js.
 
 export const WORD_PAGE_AB = { id: 'word-a', salt: 'wp1360', start: '2026-11-17' };
+// Owner 11-16: no A/B (~50 word-page visits a day can't read one) — Option A on EVERY word page from the step-4 release.
+// The beacon key stays vocabulary_word-a-<pic>, so every row after the release is A and the pre-release rows carry the
+// old key 'vocabulary_word': that boundary is the pre/post read (step4-prepost). Set arm to null to bring the split back.
+export const WORD_PAGE_ROLLOUT = { arm: 'a', from: '2026-11-17' };
 
 // FNV-1a with a murmur3 finaliser: the plain FNV low bit is far from even on short ids.
 function hash32(s) {
@@ -38,6 +42,9 @@ export function variantSplit(words) {
   for (const w of words) ((out[w.category] ||= { a: [], b: [] })[wordPageVariant(w.id)]).push(w.id);
   return out;
 }
+
+/** The layout a word page is built with: the rollout arm when one is set, otherwise its A/B arm. */
+export const wordPageLayout = (id) => WORD_PAGE_ROLLOUT.arm || wordPageVariant(id);
 
 /** Live page URLs of one arm (for a Google CTR read per arm: GSC page filter / optimizer --word-ab-urls). */
 export const wordPageUrls = (words, arm, site = 'https://childrendoenglish.com') =>
