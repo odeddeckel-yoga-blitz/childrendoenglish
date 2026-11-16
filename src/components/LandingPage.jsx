@@ -146,7 +146,6 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
       {suggest && (
         <div dir={suggest.rtl ? 'rtl' : 'ltr'}
              className="glass rounded-2xl px-4 py-3 -mt-12 flex items-center gap-3 text-sm max-w-sm mx-auto">
-          <span aria-hidden="true">{suggest.flag}</span>
           <span className="flex-1 text-slate-700 dark:text-slate-200 font-medium">
             {suggest.code === 'es' ? '¿Prefieres español?' : suggest.code === 'ar' ? 'هل تفضل العربية؟' : suggest.native + '?'}
           </span>
@@ -218,7 +217,6 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
                          hover:scale-[1.03] active:scale-95 transition-transform cursor-pointer
                          border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600"
             >
-              <span className="text-3xl block" aria-hidden="true">{l.flag}</span>
               <span className="font-bold text-slate-800 dark:text-slate-100 text-sm block">
                 {l.native}
               </span>

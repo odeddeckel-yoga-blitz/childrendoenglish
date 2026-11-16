@@ -616,12 +616,12 @@ const translations = {
 // first use (keeps the main bundle flat); adding a language = one entry here
 // + an i18n-<lang>.js file (+ a word-glosses-<lang>.js if it glosses the vocab).
 export const LANGS = [
-  { code: 'en', native: 'English', flag: '🇬🇧', rtl: false },
-  { code: 'he', native: 'עברית', flag: '🇮🇱', rtl: true },
-  { code: 'es', native: 'Español', flag: '🇪🇸', rtl: false },
+  { code: 'en', native: 'English', rtl: false },
+  { code: 'he', native: 'עברית', rtl: true },
+  { code: 'es', native: 'Español', rtl: false },
   // ready:false = shipped as scaffolding only; hidden from the picker until its
   // string+gloss files land (AR phase). Everything else already handles it.
-  { code: 'ar', native: 'العربية', flag: '🇸🇦', rtl: true, ready: false },
+  { code: 'ar', native: 'العربية', rtl: true, ready: false },
 ];
 const LOCALE_IMPORTS = {
   he: () => import('./i18n-he.js'),
