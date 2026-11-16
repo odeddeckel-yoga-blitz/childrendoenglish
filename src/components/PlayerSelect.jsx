@@ -1,5 +1,6 @@
 import { Plus, Settings } from 'lucide-react';
 import { t } from '../utils/i18n';
+import AvatarIcon from './AvatarIcon';
 
 export default function PlayerSelect({ players, activePlayerId, lang = 'en', onSelectPlayer, onManage, onAddPlayer }) {
   return (
@@ -19,7 +20,7 @@ export default function PlayerSelect({ players, activePlayerId, lang = 'en', onS
                        hover:shadow-lg active:scale-[0.97] transition-all
                        ${player.id === activePlayerId ? 'ring-2 ring-blue-500 bg-blue-50/50' : ''}`}
           >
-            <span className="text-4xl">{player.avatar}</span>
+            <AvatarIcon stored={player.avatar} size="w-14 h-14" />
             <span className="font-semibold text-slate-800 dark:text-slate-100 text-sm truncate max-w-full">{player.name}</span>
           </button>
         ))}
