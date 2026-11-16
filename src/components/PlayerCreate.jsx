@@ -3,8 +3,7 @@ import { ArrowLeft } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { sendLearn } from '../utils/learnBeacon';
 
-import AvatarIcon from './AvatarIcon';
-import { AVATAR_IDS, DEFAULT_AVATAR_ID } from '../utils/avatars';
+const AVATARS = ['🦊', '🐱', '🦁', '🐶', '🦄', '🐼', '🐸', '🦋', '🌟', '🚀', '🎨', '🎵'];
 
 export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack, first = false }) {
   // First-visit funnel (cookieless onb tally): screen shown → player created
@@ -12,7 +11,7 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack, firs
   // sibling is not onboarding.
   useEffect(() => { if (first) sendLearn('onb', 'create_view'); }, [first]);
   const [name, setName] = useState('');
-  const [avatar, setAvatar] = useState(DEFAULT_AVATAR_ID);
+  const [avatar, setAvatar] = useState('🦊');
   const [canRead, setCanRead] = useState(true);
 
   // Play-first: the FIRST player may skip the name (a typed name was the
@@ -69,15 +68,17 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack, firs
       <div className="glass rounded-2xl p-5 space-y-3">
         <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t('chooseAvatar', lang)}</p>
         <div className="grid grid-cols-6 gap-2">
-          {AVATAR_IDS.map(id => (
+          {AVATARS.map(emoji => (
             <button
-              key={id}
-              onClick={() => setAvatar(id)}
-              aria-label={t('selectAvatarLabel', lang, { avatar: id })}
-              aria-pressed={avatar === id}
-              className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${avatar === id ? 'ring-2 ring-blue-500 scale-110' : 'active:scale-95'}`}
+              key={emoji}
+              onClick={() => setAvatar(emoji)}
+              aria-label={t('selectAvatarLabel', lang, { avatar: emoji })}
+              className={`w-12 h-12 rounded-xl text-2xl flex items-center justify-center transition-all
+                         ${avatar === emoji
+                           ? 'bg-blue-100 ring-2 ring-blue-500 scale-110'
+                           : 'bg-white/60 hover:bg-white/80 active:scale-95'}`}
             >
-              <AvatarIcon stored={id} size="w-12 h-12" />
+              {emoji}
             </button>
           ))}
         </div>

@@ -1,7 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { X, Plus, Trash2 } from 'lucide-react';
 import { t } from '../utils/i18n';
-import AvatarIcon from './AvatarIcon';
 import useFocusTrap from '../hooks/useFocusTrap';
 
 export default function ProfilePicker({ open, onClose, players, activePlayerId, lang, onSwitch, onAdd, onDelete }) {
@@ -73,7 +72,7 @@ export default function ProfilePicker({ open, onClose, players, activePlayerId, 
                     : 'bg-slate-50 hover:bg-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600'
                 }`}
               >
-                <AvatarIcon stored={player.avatar} size="w-12 h-12" />
+                <span className="text-3xl">{player.avatar}</span>
                 <span className="text-xs font-semibold text-slate-700 dark:text-slate-200 max-w-[72px] truncate">
                   {player.name}
                 </span>
@@ -111,7 +110,7 @@ export default function ProfilePicker({ open, onClose, players, activePlayerId, 
           <div className="absolute inset-0 bg-black/50" onClick={() => setConfirmDelete(null)} />
           <div ref={deleteModalRef} role="dialog" aria-modal="true" className="relative bg-white dark:bg-slate-800 rounded-2xl p-5 mx-4 max-w-xs w-full
                           shadow-xl animate-fade-in space-y-4 text-center">
-            <AvatarIcon stored={confirmDelete.avatar} size="w-14 h-14" />
+            <span className="text-4xl">{confirmDelete.avatar}</span>
             <p className="text-slate-700 dark:text-slate-200 font-medium">
               {t('deleteConfirm', lang, { name: confirmDelete.name })}
             </p>

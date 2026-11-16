@@ -36,8 +36,8 @@ describe('PlayerManage', () => {
     render(<PlayerManage {...defaultProps} />);
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
-    expect(document.querySelector('.lucide-squirrel')).toBeTruthy(); // legacy emoji value -> icon
-    expect(document.querySelector('.lucide-cat')).toBeTruthy();
+    expect(screen.getByText('🦊')).toBeInTheDocument();
+    expect(screen.getByText('🐱')).toBeInTheDocument();
   });
 
   // 2. Back button calls onBack
@@ -85,7 +85,7 @@ describe('PlayerManage', () => {
 
     expect(defaultProps.onUpdatePlayer).toHaveBeenCalledWith('1', {
       name: 'Alicia',
-      avatar: 'fox',
+      avatar: '🦊',
     });
   });
 
