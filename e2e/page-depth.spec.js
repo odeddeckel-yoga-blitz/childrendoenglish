@@ -46,32 +46,32 @@ test.beforeEach(() => {
 });
 
 test('word page: mqv once when the mini-quiz scrolls into view; s15 once after 15 s of visible time', async ({ page }) => {
-  await page.setViewportSize({ width: 1366, height: 600 }); // the quiz sits below the fold (y ≈ 1,140)
-  await frozenClock(page);
+  await page.setViewportSize({ width: 360, height: 300 }); // Option A puts the quiz high (y ≈ 380 on a phone), so a short
+  await frozenClock(page);                                // window keeps it below the fold here
   const evs = await capture(page);
-  await page.goto('/vocabulary/animals/dog/'); // dog = arm b (today's layout), a photo: key vocabulary_word-b-photo
-  await expect.poll(() => evs.includes('pg:vocabulary_word-b-photo')).toBe(true);
+  await page.goto('/vocabulary/animals/dog/'); // dog: Option A (on every word page since 11-16), a photo: key vocabulary_word-a-photo
+  await expect.poll(() => evs.includes('pg:vocabulary_word-a-photo')).toBe(true);
   await page.waitForTimeout(300);
   expect(depth(evs)).toEqual([]); // nothing on load: the quiz is off screen and no time has passed
   await page.locator('.mini-quiz').scrollIntoViewIfNeeded();
-  await expect.poll(() => depth(evs)).toEqual(['mqv:vocabulary_word-b-photo']);
+  await expect.poll(() => depth(evs)).toEqual(['mqv:vocabulary_word-a-photo']);
   await page.mouse.wheel(0, -3000); await page.waitForTimeout(200);
   await page.locator('.mini-quiz').scrollIntoViewIfNeeded(); await page.waitForTimeout(300);
   await page.clock.runFor(14000);
   await page.waitForTimeout(200);
-  expect(depth(evs)).toEqual(['mqv:vocabulary_word-b-photo']); // seen once; 14 s is not 15
+  expect(depth(evs)).toEqual(['mqv:vocabulary_word-a-photo']); // seen once; 14 s is not 15
   await page.clock.runFor(1500);
-  await expect.poll(() => depth(evs)).toEqual(['mqv:vocabulary_word-b-photo', 's15:vocabulary_word-b-photo']);
+  await expect.poll(() => depth(evs)).toEqual(['mqv:vocabulary_word-a-photo', 's15:vocabulary_word-a-photo']);
   await page.clock.runFor(60000);
   await page.waitForTimeout(200);
-  expect(depth(evs)).toEqual(['mqv:vocabulary_word-b-photo', 's15:vocabulary_word-b-photo']);
+  expect(depth(evs)).toEqual(['mqv:vocabulary_word-a-photo', 's15:vocabulary_word-a-photo']);
 });
 
 test('word page: hidden time does not count toward s15', async ({ page }) => {
   await frozenClock(page);
   const evs = await capture(page);
-  await page.goto('/vocabulary/animals/dog/'); // dog = arm b (today's layout), a photo: key vocabulary_word-b-photo
-  await expect.poll(() => evs.includes('pg:vocabulary_word-b-photo')).toBe(true);
+  await page.goto('/vocabulary/animals/dog/'); // dog: Option A (on every word page since 11-16), a photo: key vocabulary_word-a-photo
+  await expect.poll(() => evs.includes('pg:vocabulary_word-a-photo')).toBe(true);
   const setVis = (v) => page.evaluate((st) => {
     Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => st });
     document.dispatchEvent(new Event('visibilitychange'));
@@ -83,7 +83,7 @@ test('word page: hidden time does not count toward s15', async ({ page }) => {
   expect(depth(evs).filter((e) => e.startsWith('s15'))).toEqual([]);
   await setVis('visible');
   await page.clock.runFor(5500);
-  await expect.poll(() => depth(evs).filter((e) => e.startsWith('s15'))).toEqual(['s15:vocabulary_word-b-photo']);
+  await expect.poll(() => depth(evs).filter((e) => e.startsWith('s15'))).toEqual(['s15:vocabulary_word-a-photo']);
 });
 
 test('printable page: prc once on the print button, bpr once per view on the print dialog', async ({ page }) => {

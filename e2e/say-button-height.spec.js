@@ -22,12 +22,12 @@ test('say buttons on word, topic and guide pages are at least 44 px tall', async
   let seen = 0;
   for (const u of ['/vocabulary/animals/cat/', '/vocabulary/food/apple/', '/guides/how-to-teach-kids-english-vocabulary/']) {
     await page.goto(u);
-    const hs = await page.$$eval('button.say-btn, button.wa-hear', // wa-hear = the one Hear button on Option A word pages (apple is arm a)
+    const hs = await page.$$eval('button.say-btn, button.wa-hear', // wa-hear = the one Hear button on Option A word pages (every word page since 11-16)
       (els) => els.filter((e) => e.getClientRects().length)
       .map((e) => Math.round(e.getBoundingClientRect().height)));
     seen += hs.length;
     for (const h of hs) if (h < 44) small.push(`${u}: say-btn ${h}px`);
   }
-  expect(seen).toBeGreaterThan(3);
+  expect(seen).toBeGreaterThanOrEqual(3); // Option A word pages have ONE Hear button each (was 2+ say buttons)
   expect(small).toEqual([]);
 });

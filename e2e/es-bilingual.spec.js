@@ -12,7 +12,7 @@ import ES from '../src/data/word-glosses-es.js';
 //  2. the language switch names the languages (English · עברית · Español), not "EN" / "עב";
 //  3. "voz generada por computadora" beside the first speaker (audio is Piper TTS);
 //  4. the count is real: every live word in the category (PAGES_HOLD out), each with a Spanish gloss;
-//  5. HOLDOUT (11-14 SEO read): <title>, meta description, og/twitter are byte-identical to step 1.
+//  5. one title per page, the same in <title>, og and twitter (the 11-14 holdout ended; counts follow the live words).
 const DIST = process.env.CDE_DIST || join(process.cwd(), 'dist');
 const fileFor = (p) => join(DIST, p.endsWith('/') ? p + 'index.html' : p);
 const CATS = ['animals', 'food', 'home', 'transport', 'nature', 'colors', 'numbers', 'clothing', 'school', 'sports', 'feelings', 'everyday', 'toys'];
@@ -83,19 +83,12 @@ test('the count is real: every live word, each with a Spanish gloss', () => {
   }
 });
 
-test('HOLDOUT: /spanish/ <title>, meta description, og and twitter are unchanged vs step 1', () => {
-  const snap = JSON.parse(readFileSync(join(process.cwd(), 'e2e', 'fixtures', 'es-bilingual-head.step1.json'), 'utf8'));
-  expect(Object.keys(snap)).toHaveLength(CATS.length);
-  for (const [path, want] of Object.entries(snap)) {
-    const h = readFileSync(fileFor(path), 'utf8');
+test('titles: every /spanish/ page has one title, the same in <title>, og and twitter (the step-1 snapshot retired 11-16: the 11-14 holdout ended and the counts in the titles follow the live words)', () => {
+  for (const c of CATS) {
+    const h = readFileSync(fileFor(`/vocabulary/${c}/spanish/`), 'utf8');
     const g = (re) => (h.match(re) || [])[1];
-    expect({
-      title: g(/<title>([^<]*)<\/title>/),
-      description: g(/<meta name="description" content="([^"]*)"/),
-      ogTitle: g(/<meta property="og:title" content="([^"]*)"/),
-      ogDescription: g(/<meta property="og:description" content="([^"]*)"/),
-      twitterTitle: g(/<meta name="twitter:title" content="([^"]*)"/),
-      twitterDescription: g(/<meta name="twitter:description" content="([^"]*)"/),
-    }, path).toEqual(want);
+    const title = g(/<title>([^<]*)<\/title>/);
+    expect(title, c).toBeTruthy();
+    expect([g(/<meta property="og:title" content="([^"]*)"/), g(/<meta name="twitter:title" content="([^"]*)"/)], c).toEqual([title, title]);
   }
 });
