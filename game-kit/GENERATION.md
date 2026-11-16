@@ -698,6 +698,26 @@ Build these into the generator, not into a later fix pass:
   random tapper banks lucky hits — pie-lab's guesser levelled 3.5× in 180 s vs 5.0× for a slow always-right child;
   pattern-weaver's slow honest child needed 65 s for L2. One rule for all: N in a row, any speed (after: guesser 1.5 vs
   slow 7.0; slow L2 at 19 s). Measured gate: `tools/game-review/speedpath-probe.mjs <ids>` (real-time guess / quick / slow).
+  **Calm stops pressure, never supply** (2026-11-14, KDM coin-hunt GotD). `if(!window.KDM_CALM) k.x+=…` froze the coins —
+  new ones spawn just off the edge (x −0.06 / 1.06), so in calm (the DEFAULT for grade-lo ≤ 2) nothing ever flew in and the
+  frozen ones filled the sky cap: after the 3 opening coins the sky stayed empty (L1 clears 47% → 22% from the day calm
+  shipped; a no-error bot never cleared L1). Anything a round needs to ARRIVE keeps moving in calm, slower
+  (`v*dt*(window.KDM_CALM?0.6:1)`, + one piece on screen); only lose-conditions and countdowns stop. dbg-driven tools are
+  blind to it (solveForTest stages the bag) — drive supply games by their own stream. Static gate: contract-lint
+  `calm-freeze` (KDM).
+- **The result line describes THIS level's round** (2026-11-14, KDM added-sugar-sleuth + daily-value-meter GotD). The RL4
+  "New level — watch one first" demo prints `resultPayload().msg` over the level's first, solved board; games whose
+  payload reads `lastSolved||O` / `lastMsg` printed LEVEL 1's answer (an ingredient list) over level 2's split bar — the
+  one teaching moment of a new idea, wrong. Reset every last-round variable at the top of build(); a payload with nothing
+  paid yet describes the board (coin-hunt: "10¢ + 5¢ + 1¢ + 1¢ = 17¢", not "Prices you paid: —"). Gate: contract-lint
+  advisory `demo-stale-result` (KDM, 10 games fixed).
+- **P-O-E level 1 asks different questions the one rule answers** (2026-11-14, KDM plant-food GotD): L1 asked "where does
+  the plant get its food?" three times with the options reshuffled — 49% of L1 first picks wrong (P-O-E median 73%),
+  38% of touchers cleared. Rotate the level's questions (where → make → grows) so the explanation pays off on a new item.
+- **A distractor must be false, not "also true"** (2026-11-14, KDM electricity-grid): "Plant → Transformer → High-voltage
+  lines → Home" was marked wrong, but a step-UP transformer does sit at the plant. Name the part the round is about
+  ("neighborhood transformer"). Scene art must not read as another option either: rainbows drew "no sun" as a grey RAIN
+  cloud above "(no rain — clear sky)", so 'neither' looked like 'only one'.
 - **A child who does exactly what the task line says must be able to succeed.** "Tap +, then CHECK" over a stepper whose
   answer is never one press away is a miss on every round. Say how many ("tap + that many times") or until what. The
   input's label names what it holds (PETALS ON THE NEW FLOWER, not a subtitle asking for the jump). Method text is per

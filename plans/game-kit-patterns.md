@@ -1333,3 +1333,37 @@ answer's name 250 ms after the answer (fire-and-forget) and advanced at 1,100 ms
   at 1.5 s); a stuck question is re-handed once and never dropped; cap the queue. *Check:* `checkSpeech` fails any line
   that waits > `maxQueueMs` (3 s) between speak() and its start (or its cut / the end of the log) — run it at answer gaps
   1.5 / 2.5 / 4 s. Note "queued at N s" in its output is a timestamp, not a wait (the 11-08 read took it for 21 s).
+
+## 8h. Machine-shared jobs: one browser slot, proven overnight runs, retry only transient builds (Factory 11-13, owner "do it")
+Three sites share one 8-core machine (and the merchantAnalysis crawler). On 11-12 each site capped its own browsers and the
+load still hit ~250; that night CDE's overnight loops failed to parse and nothing ran; on 11-13 KDM's prod build died on a
+Google Fonts fetch. Each failure was invisible until a push slot was missed.
+- **Every headless-browser job goes through `tools/browser-slot.mjs run --site=<s> --label=<job> -- <cmd>`** (machine-wide:
+  1 slot, waits while the 1-minute load is > 16; `status` shows holder and waiters). Playwright inside it runs `--workers=1`.
+  Never free a slot by killing another job's browser.
+- **Anything that runs later is planned and wrapped with `tools/overnight.mjs`**: `plan --sh=…/--script=…` refuses code that
+  doesn't parse; `wrap` logs begin/end and the exit code; `check --site=<s>` is the first morning step (recurring
+  `overnight-started`) and names MISSED / DIED / FAILED / HUNG jobs.
+- **Builds retry only on a known transient fetch**: `tools/build-retry.mjs -- next build` (copy it into the repo; Vercel builds
+  from the repo). Any other failure exits at once; a pattern is added only with a real failed log behind it.
+
+## 8i. Model cost: cheap tier first, expensive only where judges disagree; meter, cap, batch (Factory 11-14, owner "yes to all")
+The 11-12 sprint spent ~$645 at KDM; Hebrew alone cost $286.52 because every string was judged with sonnet ($177 of
+it), while Spanish moved its long tail to haiku. Yoga's consensus ran opus twice per unit. Neither yoga nor CDE metered.
+- **Tiers.** Routine judging runs on haiku (review, back-translation) and sonnet (compare). Opus only adjudicates or
+  breaks ties on units where a judge raised something. Keep TWO independent judges: one alone misses errors (yoga
+  11-08). `infra/i18n/consensus.mjs` defaults to this from 1.67. Vision, persona and answer-check judges start on
+  haiku too; a step moves up a tier only with a measured miss behind it.
+- **Prove the cheaper tier once per site.** On its first tiered run, a site also runs the old defaults
+  (`--judge-model=sonnet --bt-model=opus --compare-model=opus`) on ~30 units and compares the disputed units. If the
+  cheap tier misses a real error, move that judge up one tier and note it here.
+- **Meter + cap.** Every `claude -p` call goes through `tools/claude-cost.mjs` (`claudeCall({site, step, model,
+  prompt})`, or `run` from the shell). Default cap $25 per site per day; a capped call exits 75. Raising a cap is the
+  owner's call, asked with the `report` numbers.
+- **Batch anything over ~$20.** Run batch 1, report its metered cost, and wait for the owner's go before batch 2
+  (owner 11-14, KDM answer-check).
+- **Scope reviews.** Vision, persona and answer-check passes run on the top 100 by opens plus changed units, not the
+  whole catalogue, unless the owner asks for a full sweep.
+- **Judge only what changed.** After an edit pass (hedges, a term fix), run consensus with `--focus-since=<rev before
+  the edits>`: unchanged files are skipped, changed files are judged on the changed paragraphs ±1 (yoga fr ujjayi: 3K of
+  13.5K characters). Whole-unit judging is for new translations only.
