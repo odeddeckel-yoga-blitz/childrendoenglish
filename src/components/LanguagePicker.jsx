@@ -54,7 +54,7 @@ export default function LanguagePicker({ lang = 'en', onSelectLanguage }) {
                             hover:bg-blue-50 dark:hover:bg-slate-700 transition-colors
                             ${l.code === lang ? 'font-bold text-blue-600 dark:text-blue-300' : 'text-slate-700 dark:text-slate-200'}`}
               >
-                <span aria-hidden="true">{l.flag}</span> {l.native}
+                {l.native}
               </button>
             </li>
           ))}

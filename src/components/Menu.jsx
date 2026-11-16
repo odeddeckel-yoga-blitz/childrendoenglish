@@ -6,6 +6,7 @@ import ClassWeekCard from './ClassWeekCard';
 import MasteryMap from './MasteryMap';
 import { WORDS } from '../data/words';
 import { t } from '../utils/i18n';
+import AvatarIcon from './AvatarIcon';
 
 import LanguagePicker from './LanguagePicker';
 
@@ -76,7 +77,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
           className="w-full glass rounded-2xl p-3 flex items-center gap-3
                      hover:shadow-md active:scale-[0.98] transition-all text-start"
         >
-          <span className="text-2xl">{activePlayer.avatar}</span>
+          <AvatarIcon stored={activePlayer.avatar} size="w-9 h-9" />
           <span className="flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200">
             {t('playingAs', lang, { name: activePlayer.name })}
           </span>

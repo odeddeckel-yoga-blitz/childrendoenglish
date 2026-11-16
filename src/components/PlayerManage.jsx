@@ -4,7 +4,8 @@ import { t } from '../utils/i18n';
 import { exportAllData, importAllData } from '../utils/storage';
 import useFocusTrap from '../hooks/useFocusTrap';
 
-const AVATARS = ['🦊', '🐱', '🦁', '🐶', '🦄', '🐼', '🐸', '🦋', '🌟', '🚀', '🎨', '🎵'];
+import AvatarIcon from './AvatarIcon';
+import { AVATAR_IDS, resolveAvatarId } from '../utils/avatars';
 
 export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onResetPlayer, onDeletePlayer, onAddPlayer, onBack }) {
   const [confirmAction, setConfirmAction] = useState(null); // { type: 'delete'|'reset'|'deleteAll', playerId }
@@ -20,7 +21,7 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
   const startEdit = (player) => {
     setEditingId(player.id);
     setEditName(player.name);
-    setEditAvatar(player.avatar);
+    setEditAvatar(resolveAvatarId(player.avatar));
   };
 
   const saveEdit = (player) => {
@@ -125,14 +126,15 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
                   </button>
                 </div>
                 <div className="flex gap-1.5 flex-wrap">
-                  {AVATARS.map(emoji => (
+                  {AVATAR_IDS.map(id => (
                     <button
-                      key={emoji}
-                      onClick={() => setEditAvatar(emoji)}
-                      className={`w-9 h-9 rounded-lg text-lg flex items-center justify-center transition-all
-                                 ${editAvatar === emoji ? 'bg-blue-100 ring-2 ring-blue-500' : 'bg-white/60 hover:bg-white/80'}`}
+                      key={id}
+                      onClick={() => setEditAvatar(id)}
+                      aria-label={t('selectAvatarLabel', lang, { avatar: id })}
+                      aria-pressed={editAvatar === id}
+                      className={`rounded-full p-0.5 transition-all ${editAvatar === id ? 'ring-2 ring-blue-500' : 'hover:bg-white/80'}`}
                     >
-                      {emoji}
+                      <AvatarIcon stored={id} size="w-9 h-9" />
                     </button>
                   ))}
                 </div>
@@ -151,7 +153,7 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
               /* View mode */
               <>
                 <div className="flex items-center gap-3">
-                  <span className="text-3xl">{player.avatar}</span>
+                  <AvatarIcon stored={player.avatar} size="w-12 h-12" />
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-slate-800 dark:text-slate-100 truncate">{player.name}</p>
                     <p className="text-xs text-slate-400">
@@ -245,7 +247,7 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
               </>
             ) : (
               <>
-                <p className="text-3xl">{confirmPlayer.avatar}</p>
+                <div className="flex justify-center"><AvatarIcon stored={confirmPlayer.avatar} size="w-14 h-14" /></div>
                 <p className="text-slate-700 dark:text-slate-200 font-medium">
                   {confirmAction.type === 'delete'
                     ? t('deleteConfirm', lang, { name: confirmPlayer.name })

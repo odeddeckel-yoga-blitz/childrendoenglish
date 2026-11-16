@@ -4,6 +4,7 @@ import { loadStats } from '../utils/storage';
 import { WORDS } from '../data/words';
 import { filterByKnownLetters, letterCounts } from '../utils/letterFilter';
 import { t } from '../utils/i18n';
+import AvatarIcon from './AvatarIcon';
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 import { isNotificationSupported, isNotificationEnabled, requestNotificationPermission, disableNotifications } from '../utils/notifications';
@@ -56,7 +57,7 @@ export default function ParentDashboard({ players = [], lang = 'en', onUpdatePla
             <div key={player.id} className="glass rounded-2xl p-5 space-y-4">
               {/* Player header */}
               <div className="flex items-center gap-3">
-                <span className="text-3xl">{player.avatar}</span>
+                <AvatarIcon stored={player.avatar} size="w-12 h-12" />
                 <p className="font-bold text-slate-800 dark:text-slate-100">{player.name}</p>
               </div>
 
