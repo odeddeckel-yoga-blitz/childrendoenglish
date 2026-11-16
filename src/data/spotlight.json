@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-11-15T00:00:00.000Z",
+  "statsFrom": "2026-11-16T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "pyramid",
@@ -7,17 +7,17 @@
     "category": "everyday",
     "he": "פירמידה",
     "image": "/images/pyramid.webp",
-    "ans": 9,
-    "ok": 9,
+    "ans": 17,
+    "ok": 16,
     "since": "2026-11-14T10:18:38.065Z"
   },
   "game": {
     "id": "missing-letter",
     "name": "Missing Letter",
     "emoji": "✏️",
-    "opens": 93,
-    "lvl": 88,
-    "cmp": 20,
+    "opens": 104,
+    "lvl": 91,
+    "cmp": 21,
     "since": "2026-11-08T10:14:44.081Z"
   },
   "history": [

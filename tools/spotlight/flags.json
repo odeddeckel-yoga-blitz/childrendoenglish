@@ -2,9 +2,9 @@
   {
     "lane": "game",
     "id": "missing-letter",
-    "exposure": 92,
-    "rate": 0.96,
+    "exposure": 103,
+    "rate": 0.88,
     "severity": "watch",
-    "at": "2026-11-15T10:47:07.996Z"
+    "at": "2026-11-16T11:08:02.979Z"
   }
 ]
