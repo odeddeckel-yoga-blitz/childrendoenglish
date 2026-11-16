@@ -10,3 +10,6 @@ lighthouse-*.json
 .image-work/
 __pycache__/
 .claude/worktrees/
+
+# deploy-time IndexNow: last pinged commit (tools/seo/indexnow-after-deploy.sh)
+tools/seo/.indexnow-last-deploy
