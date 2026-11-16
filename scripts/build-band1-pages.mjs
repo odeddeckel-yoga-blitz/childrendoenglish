@@ -177,7 +177,7 @@ function buildReviewPath({ distDir, writePage, escapeHtml, kit, footerNote, lege
       crumbItems: [['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/'], [hubName, hubPath], [`סט ${s.n}`, path]],
       navHtml: `<a href="/he/">עברית</a> › <a href="/band-1/"><span lang="en" dir="ltr">Band I</span> לפי נושאים</a> › <a href="${hubPath}">מסלול חזרה</a> › סט ${s.n}`,
       h1Html: `חזרה על <span lang="en" dir="ltr">Band I</span>: סט ${s.n} מתוך ${sets.length}`,
-      answer: `${s.bandCount} מילים מתוך Band I (${s.he}) ועוד מילת בונוס אחת. מקשיבים לכל מילה בכפתור ההשמעה, ואז עושים סבב "שומעים ובוחרים" למטה. סבב שהסתיים מסומן ✓ במסלול.`,
+      answer: `${s.bandCount} מילים מתוך Band I (${s.he}) ועוד מילת בונוס אחת. מקשיבים לכל מילה בכפתור ההשמעה, ואז עושים סבב "שומעים ובוחרים" למטה. סבב שהסתיים מסומן \u0001 במסלול.`,
       listHeading: `המילים בסט ${s.n}`,
       words: s.words,
       afterTable: `${legend}
@@ -204,7 +204,7 @@ function buildReviewPath({ distDir, writePage, escapeHtml, kit, footerNote, lege
       kit.crumbs([['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/'], [hubName, hubPath]]),
       kit.faq([
         ['מה זה מסלול החזרה?', `${sets.length} סטים קצרים של מילים מתוך Band I (${total} מילים), מהרמה הראשונה (Pre-Band I) דרך Core I ועד Core II. כל סט: מקשיבים, מתרגלים, ועוברים לבא.`],
-        ['איך יודעים מה כבר עשינו?', 'סט שבו סיימתם סבב תרגול מסומן ✓ בעמוד הזה. הסימון נשמר רק בדפדפן שבו תרגלתם — בלי הרשמה ובלי לשלוח מידע.'],
+        ['איך יודעים מה כבר עשינו?', 'סט שבו סיימתם סבב תרגול מסומן בסימן וי בעמוד הזה. הסימון נשמר רק בדפדפן שבו תרגלתם — בלי הרשמה ובלי לשלוח מידע.'],
         ['האם זו רשימת Band I המלאה?', 'לא. אלה המילים מהאתר שלנו שנמצאות ב-Band I, עם מילת בונוס אחת בכל סט. את הרשימה הרשמית מפרסם משרד החינוך.'],
       ]),
     ],

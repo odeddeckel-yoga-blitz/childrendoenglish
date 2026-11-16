@@ -1654,7 +1654,7 @@ function buildHebrewLandingPage() {
     /* Feature cards */
     .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
     .feature-card { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    .feature-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+    .feature-icon { font-size: 1.75rem; margin-bottom: 0.5rem; color: #2563eb; }
     .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
     .feature-card p { font-size: 0.9rem; color: #475569; }
 
@@ -1715,7 +1715,7 @@ function buildHebrewLandingPage() {
 
   <!-- Hebrew games hub banner -->
   <div style="text-align:center;padding:0.9rem 1rem;background:#fffbeb;border-bottom:1px solid #fde68a;font-size:0.95rem">
-    &#127918; <a href="/he/english-games/" style="font-weight:700">משחקים ללימוד אנגלית לילדים</a> — לפי גיל ולפי נושא, חינם ובלי הרשמה
+    <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;flex:none;vertical-align:-.2em"><use href="/icons.svg#i-gamepad-2"/></svg> <a href="/he/english-games/" style="font-weight:700">משחקים ללימוד אנגלית לילדים</a> — לפי גיל ולפי נושא, חינם ובלי הרשמה
   </div>
 
   <!-- Features -->
@@ -1724,32 +1724,32 @@ function buildHebrewLandingPage() {
       <h2 class="section-title">איך הילדים שלכם ילמדו אנגלית?</h2>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">&#128248;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-camera"/></svg></div>
           <h3>למידה עם תמונות</h3>
           <p>כל מילה מלווה בתמונה צבעונית שעוזרת לילדים לזכור את המשמעות בצורה ויזואלית.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#127918;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg></div>
           <h3>חידונים מהנים</h3>
           <p>ארבעה סוגי חידונים — תמונות, מילים, שמע והתאמה — שהופכים את הלמידה למשחק.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#128196;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-file-text"/></svg></div>
           <h3>כרטיסיות לימוד</h3>
           <p>כרטיסיות אינטראקטיביות עם תמונה, הגייה, הגדרה ותרגום לעברית.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#128257;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-repeat"/></svg></div>
           <h3>חזרה מרווחת</h3>
           <p>מערכת חכמה שמחזירה מילים בדיוק לפני ששוכחים אותן, לשמירה בזיכרון לטווח ארוך.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#128506;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-map"/></svg></div>
           <h3>מסלול למידה מותאם</h3>
           <p>שלוש רמות קושי — מתחילים, ביניים ומתקדמים — כך שכל ילד מתקדם בקצב שלו.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#127942;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-trophy"/></svg></div>
           <h3>תגים והישגים</h3>
           <p>הילדים אוספים תגים ומעקבים אחרי ההתקדמות, מה שמעודד אותם להמשיך ללמוד.</p>
         </div>
@@ -2046,7 +2046,7 @@ function buildSpanishLandingPage() {
     /* Feature cards */
     .features-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
     .feature-card { background: #fff; border-radius: 0.75rem; padding: 1.25rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    .feature-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+    .feature-icon { font-size: 1.75rem; margin-bottom: 0.5rem; color: #2563eb; }
     .feature-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.25rem; }
     .feature-card p { font-size: 0.9rem; color: #475569; }
 
@@ -2104,32 +2104,32 @@ function buildSpanishLandingPage() {
       <h2 class="section-title">¿Cómo aprenderán inglés tus hijos?</h2>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">&#128248;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-camera"/></svg></div>
           <h3>Aprender con fotos</h3>
           <p>Cada palabra viene con ${pics(WORDS, 'one', 'es')} que ayuda a los niños a recordar el significado de forma visual.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#128266;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-volume-2"/></svg></div>
           <h3>Pronunciación en inglés</h3>
           <p>Cada palabra tiene audio en inglés. Los niños escuchan y repiten — así se entrena el oído desde el primer día.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#127918;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg></div>
           <h3>Quizzes divertidos</h3>
           <p>Una escalera de 11 pasos — tarjetas, quizzes, letras que faltan, oraciones y juegos arcade — que convierte el aprendizaje en un juego.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#128196;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-file-text"/></svg></div>
           <h3>Tarjetas de memoria</h3>
           <p>Tarjetas interactivas con imagen, pronunciación, definición y traducción al español.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#128257;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-repeat"/></svg></div>
           <h3>Repaso espaciado</h3>
           <p>Un sistema inteligente que repite las palabras justo antes de que se olviden, para memorizarlas a largo plazo.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#127942;</div>
+          <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-trophy"/></svg></div>
           <h3>Insignias y logros</h3>
           <p>Los niños coleccionan insignias y siguen su progreso, lo que los motiva a seguir aprendiendo.</p>
         </div>
