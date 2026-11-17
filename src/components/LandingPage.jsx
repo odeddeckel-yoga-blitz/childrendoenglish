@@ -98,7 +98,7 @@ function FAQItem({ index, lang }) {
         style={{ maxHeight: open ? `${contentRef.current?.scrollHeight ?? 200}px` : '0px' }}
       >
         <div className="px-4 pb-3 text-sm text-slate-500 dark:text-slate-300">
-          {t(`faq${index + 1}A`, lang)}
+          {t(`faq${index + 1}A`, lang, { n: WORD_COUNT })}
         </div>
       </div>
     </div>
@@ -263,7 +263,7 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
                   {t(`feature${key}Title`, lang)}
                 </h3>
                 <p className="text-slate-500 dark:text-slate-300 text-xs leading-relaxed mt-0.5">
-                  {t(`feature${key}Desc`, lang)}
+                  {t(`feature${key}Desc`, lang, { n: WORD_COUNT })}
                 </p>
               </div>
             </div>

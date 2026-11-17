@@ -49,4 +49,11 @@ describe('LandingPage', () => {
     fireEvent.click(screen.getByText('Interfaz en español').closest('button'));
     expect(onLanguageStart).toHaveBeenCalledWith('es');
   });
+
+  // 11-17 i18n consensus: faq5A said "{{n}}+ words" in English (no params passed) while he/es hard-coded 480.
+  it.each(['en', 'he', 'es'])('leaves no {{placeholder}} unfilled (%s)', async (lang) => {
+    if (lang !== 'en') await (await import('../utils/i18n')).loadLocale(lang);
+    const { container } = render(<LandingPage {...defaultProps} lang={lang} />);
+    expect(container.textContent).not.toMatch(/\{\{\w+\}\}/);
+  });
 });

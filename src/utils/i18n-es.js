@@ -145,7 +145,7 @@ export default {
   shareWordQuiz: 'Compartir quiz de palabras',
   shareWordList: 'Compartir lista de palabras',
   learnTheseWords: 'Aprender Estas Palabras',
-  flashcardTheseWords: 'Tarjetas de Estas Palabras',
+  flashcardTheseWords: 'Practicar Estas Palabras con Tarjetas',
 
   // Loading
   loading: 'Cargando',
@@ -193,8 +193,8 @@ export default {
   tryItOut: '¡Pruébalo!',
   whatWordMatches: '¿Qué palabra corresponde a esta imagen?',
   demoCorrect: '¡Muy bien!',
-  demoWrong: 'Casi — es <strong>{{word}}</strong>! Ya casi lo tienes.',
-  demoWrongPrefix: 'Casi — es',
+  demoWrong: 'Casi — ¡es <strong>{{word}}</strong>! Ya casi lo tienes.',
+  demoWrongPrefix: 'Casi — ¡es',
   demoWrongSuffix: '! Ya casi lo tienes.',
 
   // Parent email
@@ -391,7 +391,7 @@ export default {
   todayHear: 'Escucha y toca la imagen',
   todaySpell: 'Escucha y deletrea',
   todayTryAgain: '¡Casi! Inténtalo otra vez',
-  todayUndo: 'Borrar',
+  todayUndo: 'Deshacer',
   pickPicture: 'Elegir esta imagen',
   wordsDue: '{{count}} palabras por repasar',
   allCaughtUp: '¡Ya estás al día!',
@@ -399,7 +399,7 @@ export default {
   wordsReviewed: 'Palabras repasadas',
 
   // Landing page
-  landingHeroTitle: '¡Aprende Inglés — De Forma Divertida!',
+  landingHeroTitle: 'Vocabulario de Inglés para Niños — ¡Gratis y Divertido!',
   landingHeroDesc: 'App gratuita de vocabulario para niños de 6 a 12 años. Sin anuncios, sin registro.',
   getStarted: 'Vamos a Empezar',
   welcomeBack: '¡Bienvenido de nuevo, {{name}}!',
@@ -437,7 +437,7 @@ export default {
   faq4Q: '¿Hay soporte en español?',
   faq4A: '¡Sí! Interfaz completa en español y traducciones para cada palabra.',
   faq5Q: '¿Cuántas palabras incluye?',
-  faq5A: 'Más de 480 palabras en 13 categorías, organizadas en 3 niveles de dificultad.',
+  faq5A: 'Más de {{n}} palabras en 13 categorías, organizadas en 3 niveles de dificultad.',
   faq6Q: '¿Pueden varios niños usar la app?',
   faq6A: '¡Sí! La app admite múltiples perfiles de jugador para que cada hermano pueda seguir su propio progreso de forma independiente.',
   faq7Q: '¿Cómo enseña vocabulario?',
@@ -478,7 +478,7 @@ export default {
   trustOfflineDesc: 'Instálala una vez, úsala donde quieras — sin necesidad de internet.',
   trustProfiles: 'Múltiples perfiles',
   trustProfilesDesc: 'Cada niño tiene su propio progreso y estadísticas.',
-  trustHebrew: 'Soporte en español',
+  trustHebrew: 'Interfaz en español',
   trustHebrewDesc: 'Interfaz completa en español y traducciones de cada palabra.',
 
   // Testimonials
@@ -521,7 +521,7 @@ export default {
   backToResults: 'Volver a los resultados',
   trySuggestedMode: '¡Prueba {{mode}} ahora!',
   arcadeGames: 'Juegos',
-  arcadeGamesDesc: 'Atrapa, deletrea y ordena palabras en inglés',
+  arcadeGamesDesc: 'Dispara, deletrea y ordena palabras en inglés',
   spotlightTitle: 'Selección de hoy',
   spotlightWord: 'Palabra del día',
   spotlightGame: 'Juego del día',
