@@ -402,7 +402,7 @@ export default {
   landingHeroTitle: 'למדו אנגלית בכיף!',
   landingHeroDesc: 'אפליקציה חינמית לאוצר מילים לילדים בגילאי 6-12. ללא פרסומות, ללא הרשמה.',
   getStarted: 'בואו נתחיל',
-  welcomeBack: 'איזה כיף שחזרת, {{name}}!',
+  welcomeBack: 'ברוכים השבים, {{name}}!',
   continueBtn: 'המשך',
 
   // Features
