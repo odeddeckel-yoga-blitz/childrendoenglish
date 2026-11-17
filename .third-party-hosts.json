@@ -1,0 +1,9 @@
+{
+ "site": "cde",
+ "date": "2026-11-17",
+ "release": "6d45911",
+ "pages": ["/", "/he/", "/es/", "/vocabulary/animals/cat/", "/games/word-zapper/", "/battle/", "/teachers/"],
+ "how": "live, ?internal=1, headless Chromium, fresh context per page, networkidle + 1.5 s; Sentry ingest only appears on an SPA error",
+ "hosts": [],
+ "cookies": []
+}
