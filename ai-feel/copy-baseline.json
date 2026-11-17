@@ -1,0 +1,194 @@
+{
+  "pages": {
+    "/games/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 21.05,
+      "exclPer1k": 7.02,
+      "emojiPer1k": 0,
+      "ruleOfThree": 11,
+      "titleCaseShare": 0.27
+    },
+    "/about/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 33.99,
+      "exclPer1k": 1.42,
+      "emojiPer1k": 0,
+      "ruleOfThree": 8,
+      "titleCaseShare": 0.55
+    },
+    "/vocabulary/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 42.7,
+      "exclPer1k": 1.78,
+      "emojiPer1k": 0,
+      "ruleOfThree": 1,
+      "titleCaseShare": 0.71
+    },
+    "/vocabulary/animals/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 8.59,
+      "exclPer1k": 0.51,
+      "emojiPer1k": 0,
+      "ruleOfThree": 6,
+      "titleCaseShare": 0.5
+    },
+    "/vocabulary/animals/cat/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 31.8,
+      "exclPer1k": 3.53,
+      "emojiPer1k": 0,
+      "ruleOfThree": 0,
+      "titleCaseShare": 0.5
+    },
+    "/he/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 31.25,
+      "exclPer1k": 7.21,
+      "emojiPer1k": 8.41,
+      "ruleOfThree": 0,
+      "titleCaseShare": 0.17
+    },
+    "/es/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 32.21,
+      "exclPer1k": 5.37,
+      "emojiPer1k": 8.05,
+      "ruleOfThree": 0,
+      "titleCaseShare": 0.17
+    },
+    "/units/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 45.2,
+      "exclPer1k": 2.82,
+      "emojiPer1k": 0,
+      "ruleOfThree": 0,
+      "titleCaseShare": 0.38
+    },
+    "/printable-flashcards/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 31.37,
+      "exclPer1k": 1.96,
+      "emojiPer1k": 0,
+      "ruleOfThree": 2,
+      "titleCaseShare": 0.67
+    },
+    "/guides/learn-english-words-with-pictures/": {
+      "cliches": 1,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 38.1,
+      "exclPer1k": 0.87,
+      "emojiPer1k": 0,
+      "ruleOfThree": 5,
+      "titleCaseShare": 0.56
+    },
+    "/games/word-zapper/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 25.64,
+      "exclPer1k": 38.46,
+      "emojiPer1k": 12.82,
+      "ruleOfThree": 0,
+      "titleCaseShare": 0
+    },
+    "/battle/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 18.6,
+      "exclPer1k": 32.56,
+      "emojiPer1k": 0,
+      "ruleOfThree": 1,
+      "titleCaseShare": 0.29
+    },
+    "/vocabulary/food/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 8.94,
+      "exclPer1k": 0.53,
+      "emojiPer1k": 0,
+      "ruleOfThree": 5,
+      "titleCaseShare": 0.5
+    },
+    "/vocabulary/toys/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 13.24,
+      "exclPer1k": 1.56,
+      "emojiPer1k": 0,
+      "ruleOfThree": 5,
+      "titleCaseShare": 0.5
+    },
+    "/vocabulary/home/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 9.94,
+      "exclPer1k": 0.58,
+      "emojiPer1k": 0,
+      "ruleOfThree": 5,
+      "titleCaseShare": 0.5
+    },
+    "/vocabulary/food/apple/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 30.98,
+      "exclPer1k": 3.44,
+      "emojiPer1k": 0,
+      "ruleOfThree": 0,
+      "titleCaseShare": 0.5
+    },
+    "/vocabulary/toys/kite/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 31.77,
+      "exclPer1k": 3.34,
+      "emojiPer1k": 0,
+      "ruleOfThree": 0,
+      "titleCaseShare": 0.5
+    },
+    "/": {
+      "cliches": 0,
+      "fakeClaims": 0,
+      "placeholder": 0,
+      "emDashPer1k": 10.61,
+      "exclPer1k": 10.61,
+      "emojiPer1k": 0,
+      "ruleOfThree": 5,
+      "titleCaseShare": 0.38
+    }
+  },
+  "groups": {
+    "/vocabulary/animals/|/vocabulary/food/|/vocabulary/toys/|/vocabulary/home/": {
+      "max": 0.152,
+      "mean": 0.133
+    },
+    "/vocabulary/animals/cat/|/vocabulary/food/apple/|/vocabulary/toys/kite/": {
+      "max": 0.438,
+      "mean": 0.427
+    }
+  }
+}
