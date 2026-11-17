@@ -68,7 +68,7 @@ Head terms, for scale: "משחקי אנגלית לילדים" 10 and "english ga
 - **Sentences:** generated from templates, never free text. A false sentence swaps one word for a same-category word that is **never a confusable pair**, reusing `collides()`.
 - **Picture style:** a single picture, so no style mixing.
 - **Ladder slot:** last, after `missing-letter`. It is the most reading-heavy.
-- **Note:** this is the only candidate that practises full sentences, and the grammar wing (no build before Nov 15) could reuse its templates.
+- **Note:** this is the only candidate that practises full sentences; the grammar wing that could have reused its templates was dropped 11-12.
 
 ### 4. Simon Says (action verbs → verb card type)
 - **Play:** "Simon says… *jump*!", and the child taps the matching action picture. A trap round leaves out "Simon says".
