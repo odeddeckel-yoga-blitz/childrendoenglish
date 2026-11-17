@@ -1,22 +1,22 @@
 {
-  "statsFrom": "2026-11-16T00:00:00.000Z",
+  "statsFrom": "2026-11-17T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
-    "id": "pyramid",
-    "word": "pyramid",
-    "category": "everyday",
-    "he": "פירמידה",
-    "image": "/images/pyramid.webp",
-    "ans": 17,
-    "ok": 16,
-    "since": "2026-11-14T10:18:38.065Z"
+    "id": "shower",
+    "word": "shower",
+    "category": "home",
+    "he": "מקלחת",
+    "image": "/images/shower.webp",
+    "ans": 0,
+    "ok": 0,
+    "since": "2026-11-17T11:45:58.888Z"
   },
   "game": {
     "id": "missing-letter",
     "name": "Missing Letter",
     "emoji": "✏️",
-    "opens": 104,
-    "lvl": 91,
+    "opens": 112,
+    "lvl": 96,
     "cmp": 21,
     "since": "2026-11-08T10:14:44.081Z"
   },
@@ -90,6 +90,13 @@
       "to": "pyramid",
       "reason": "graduated (ans≥30, acc≥0.7)",
       "at": "2026-11-14T10:18:38.065Z"
+    },
+    {
+      "lane": "word",
+      "from": "pyramid",
+      "to": "shower",
+      "reason": "graduated (ans≥30, acc≥0.7)",
+      "at": "2026-11-17T11:45:58.888Z"
     }
   ]
 }
