@@ -4,8 +4,9 @@
 // profile name anywhere in the event with [name].
 const PLAYERS_KEY = 'childrendoenglish-players';
 
-export function savedNames(storage = globalThis.localStorage) {
+export function savedNames(storage) {
   try {
+    storage ||= globalThis.localStorage; // inside the try: the getter throws when storage is blocked
     const reg = JSON.parse(storage.getItem(PLAYERS_KEY) || 'null');
     return (reg?.players || []).map((p) => String(p?.name || '').trim()).filter((n) => n.length >= 2);
   } catch { return []; }

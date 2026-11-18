@@ -18,14 +18,14 @@ export async function requestNotificationPermission() {
   if (!isNotificationSupported()) return false;
   const result = await Notification.requestPermission();
   if (result === 'granted') {
-    localStorage.setItem(STORAGE_KEY, 'true');
+    try { localStorage.setItem(STORAGE_KEY, 'true'); } catch { /* storage off */ }
     return true;
   }
   return false;
 }
 
 export function disableNotifications() {
-  localStorage.setItem(STORAGE_KEY, 'false');
+  try { localStorage.setItem(STORAGE_KEY, 'false'); } catch { /* storage off */ }
 }
 
 /**
@@ -46,10 +46,10 @@ export function checkStreakReminder(stats, lang = 'en') {
   if (lastPlayed === today) return;
 
   // Check if we already showed a reminder today
-  const lastReminder = localStorage.getItem('childrendoenglish-last-reminder');
-  if (lastReminder === today) return;
-
-  localStorage.setItem('childrendoenglish-last-reminder', today);
+  try {
+    if (localStorage.getItem('childrendoenglish-last-reminder') === today) return;
+    localStorage.setItem('childrendoenglish-last-reminder', today);
+  } catch { return; /* storage off: can't remember a reminder, so don't nag */ }
 
   new Notification(t('streakReminderTitle', lang), {
     body: t('streakReminderBody', lang, { count: stats.currentStreak }),

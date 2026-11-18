@@ -36,8 +36,9 @@ export default function PlayerManage({ players, lang = 'en', onUpdatePlayer, onR
       // list missed newer keys (cde_seen, cde_lang, cde_class_unit…). cde_internal stays:
       // it is the owner's own "don't count this device" flag, not a child's data.
       const ours = (k) => k && /^(childrendoenglish-|cde[_-])/.test(k) && k !== 'cde_internal';
-      for (const store of [localStorage, sessionStorage]) {
+      for (const name of ['localStorage', 'sessionStorage']) {
         try {
+          const store = window[name]; // reading the property itself throws when storage is blocked
           const keys = [];
           for (let i = 0; i < store.length; i++) keys.push(store.key(i));
           keys.filter(ours).forEach((k) => store.removeItem(k));

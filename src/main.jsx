@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
 
 // Lazy-load Sentry after initial render to reduce main bundle.
@@ -20,8 +21,17 @@ if (import.meta.env.PROD) {
   (typeof requestIdleCallback === 'function' ? requestIdleCallback : (fn) => setTimeout(fn, 3000))(initSentry);
 }
 
+// A root boundary: an error outside App's own per-screen boundary (e.g. a hook on start-up) used to unmount the
+// whole root and leave a white screen (audit 11-18). The card's button reloads, since App itself failed.
+const rootLang = (() => {
+  const q = new URLSearchParams(window.location.search).get('lang') || document.documentElement.lang || '';
+  return ['he', 'es'].includes(q.slice(0, 2)) ? q.slice(0, 2) : 'en';
+})();
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <ErrorBoundary lang={rootLang} onReset={() => window.location.reload()}>
+      <App />
+    </ErrorBoundary>
   </React.StrictMode>
 );
