@@ -1,96 +1,90 @@
 # LEARN.MD — Audit Knowledge Base
 
+Runs: 2026-03-13/14, 2026-07-17, 2026-11-18 (full report: briefs/audit-2026-11-18/).
+
 ## Meta / Process
-- **Learning**: Repo went dormant 2026-03-15 → 2026-07: dependency CVEs re-accumulated (15 vulns incl. 4 new undici highs after the March "fix"), and sitemap lastmod froze. Dormancy itself is the top risk driver.
-- **Signal**: `git log -1 --format=%ci` first, before anything else. Uniform `<lastmod>` in sitemap.xml = date of last deploy.
-- **Action**: Any audit after a >2-month gap should start with `npm audit` + `npx npm-check-updates`.
-- **First seen**: 2026-07-17
-- **Confidence**: High
+- **Learning**: Four parallel read-only reviews (engineering · SEO/trust · learning value · usage data) covered all 25 dimensions in about 12 minutes. Owner questions about "offering more" are answered by the curriculum-overlap + usage reviews, not by the technical ones.
+- **Signal**: The owner phrases the audit around a goal ("advance children's learning") → weight dimensions 1/3/17/19 and the idea list.
+- **Action**: Keep the 4-way split; brief each agent with the owner's standing rules + "grep memory/briefs for prior decisions" (stops re-proposing dropped ideas).
+- **First seen**: 2026-11-18 · **Confidence**: Medium
+- **Learning**: Dormancy drove the 07-17 risk; from 10/2026 the repo is very active, so dormancy is no longer the lead risk. The lead risk is now depth/retention.
+- **First seen**: 2026-07-17 · **Updated**: 2026-11-18 · **Confidence**: High
 
-## SEO / Indexing
-- **Learning**: Sitemap gap FIXED — 397 URLs live, auto-generated in build (`generate-sitemap.js` after vite build). Remaining issues: uniform build-date `<lastmod>` on all 397 URLs (weak freshness signal, generate-sitemap.js:64), and index coverage still UNVERIFIED because GSC API access is broken.
-- **Signal**: `curl -s https://childrendoenglish.com/sitemap.xml | grep -c '<loc>'` → 397.
-- **Learning (07-17, post-verification)**: Index coverage measured via URL Inspection sample (10 URLs): 7 indexed (homepage, word pages, guide, /he/, ages-6-8), 1 crawled-not-indexed (/vocabulary/animals/), 2 NEVER crawled — /printable-flashcards/* and /vocabulary/*/hebrew/* (the differentiator pages). Sitemap hadn't been re-downloaded by Google since 03-18 (verification lapse froze the property); resubmitted 07-17. The sitemaps API `indexed=0` field is unreliable — use URL Inspection sampling instead.
-- **Action**: Next audit: re-sample the hebrew + flashcards URLs; if still uncrawled, add internal links from indexed word pages / consider Indexing API.
-- **First seen**: 2026-03-13 · **Updated**: 2026-07-17 (coverage finally measured)
-- **Confidence**: High
-
-## GSC API Access — FIXED 2026-07-17 (root cause: GA-method verification lapse)
-- **Learning**: Site was verified via the Google Analytics method; consent-gating GA in March removed gtag from the initial HTML → Google silently dropped ownership → API 403s as `siteUnverifiedUser`. Fixed durably: `google-site-verification` META tag in index.html (token `I5LcxA…`) + Site Verification API `webResource.insert(META)`. `siteverification` scope added to reauth.py; Site Verification API enabled in GCP project 775583234771.
-- **Signal**: `sites().list()` permissionLevel; `siteUnverifiedUser` after a consent-gating change = this failure mode. journeyoutline.com has the same lapse (tag committed but prod is broken/stale).
-- **Action**: If any site's GA gets consent-gated, add a META verification tag in the same change. Note: system python3 lost google libs (Homebrew upgrade) — use a venv.
-- **First seen**: 2026-07-17 (fixed same day)
-- **Confidence**: High
-
-## Analytics
-- **Learning**: quizQuit fix from March is HALF-DONE: `useQuizState.js:106` fires quiz_quit, but `handleQuit` → `onComplete({quit:true})` and `handleQuizComplete` (useQuizFlow.js:79-141) ignores the flag — quits ALSO fire quiz_complete, increment totalQuizzes, and award badges. GA completion counts are inflated (~4 of 23 "completions" in 28d were quits). Also: quizQuit fires with level=undefined.
-- **Learning**: The 372 static /vocabulary/ pages carry NO GA tag — the site's largest surface is analytically invisible. Their traffic is only inferred via `utm_source=seo` CTAs into the app (top source: 21 of 46 sessions in 90d).
-- **Learning**: Missing events: landing CTA click, consent accept, email submit/skip, share click, iOS installs. `analytics.onboardingStep` helper orphaned. Initial screen_view not fired on cold load.
-- **Signal**: Compare quiz_complete vs quiz_quit in GA4; grep gtag in a live /vocabulary/ page (0 hits).
-- **Action**: Guard handleQuizComplete with `results.quit`; add consent-gated GA to static page template in generate-seo-pages.js.
-- **First seen**: 2026-03-14 · **Updated**: 2026-07-17
-- **Confidence**: High
-
-## Trust Signals — REPEAT OFFENDER
-- **Learning**: "Zero ads, zero data collection" (index.html:279-280) and about-page "never sent to any server" STILL live despite two audits flagging it. Sentry initializes unconditionally in PROD (main.jsx:8-18) — not consent-gated, contradicting the copy. React trust card was softened but the static shell was missed.
-- **Action**: Fix index.html + /about/ copy AND decide Sentry consent-gating in the same commit. Third consecutive flag — treat as must-fix.
-- **First seen**: 2026-03-13 · **Updated**: 2026-07-17 (still unfixed)
-- **Confidence**: High
-
-## Onboarding
-- **Learning**: Time-to-value FIXED: 8-9 taps → 3 taps + name typing (landing language card → PlayerCreate → quick-start quiz). NEW: the Onboarding component + try-it demo is now DEAD CODE — `handleCreatePlayer` sets `hasSeenOnboarding:true` (usePlayerManagement.js:21); only legacy profiles can reach it.
-- **Action**: Repurpose the demo as landing-page instant-play (best) or delete it. Name entry is still mandatory before any play — consider guest path.
-- **First seen**: 2026-03-14 · **Updated**: 2026-07-17
-- **Confidence**: High
-
-## Engineering & Code Quality
-- **Learning**: src/ lint clean (0 errors, was 12); i18n dupes fixed. App.jsx still 707 lines but useEffects down to 15 with logic in 5 custom hooks — decomposition half-done. BLIND SPOT: `eslint .` = 167 errors outside src/ (eslint.config.js scopes globals to src/**; CI lints src only); real bug found there (dupe key 'butterfly', scripts/fetch-images.js:128). 229/229 unit tests pass.
-- **Signal**: Run BOTH `npm run lint` and `npx eslint .`.
-- **Action**: Add node-globals block for scripts/api/e2e; switch CI to `eslint .`.
-- **First seen**: 2026-03-14 · **Updated**: 2026-07-17
-- **Confidence**: High
-
-## Failure Resilience
-- **Learning**: storage.js is fully guarded, but src/utils/analytics.js:7,11,16 hits localStorage UNGUARDED at module scope (main.jsx:21, before React mounts) — full cookie-block browsers white-screen before ErrorBoundary exists.
-- **Action**: Wrap analytics.js storage access in storage.js's guard pattern.
-- **First seen**: 2026-07-17
-- **Confidence**: High
-
-## Performance
-- **Learning**: Desktop 99. Mobile 77 with **CLS 0.325 (poor)** — static HTML shell is replaced by hydrated React landing of different height (body shift 0.311), plus consent banner reflow. LCP fine (2.4s mobile). PSI keyless API quota-blocked all day; local Lighthouse against live site works.
-- **Signal**: Lighthouse mobile CLS; compare static shell height vs hydrated landing.
-- **Action**: Match shell dimensions to hydrated landing; mount consent banner without reflow.
-- **First seen**: 2026-03-13 · **Updated**: 2026-07-17 (CLS regression is the new perf issue)
-- **Confidence**: High
-
-## Privacy & COPPA
-- **Learning**: Policy text fixed (Sentry disclosed, email contradiction resolved). Remaining: Sentry not consent-gated (tension with copy, see Trust), and **ParentEmailCapture promises "progress reports and learning tips" but the email never leaves localStorage — the promise is undeliverable**.
-- **Action**: Either wire email to an ESP and send the report, or remove the capture + promise.
-- **First seen**: 2026-03-14 · **Updated**: 2026-07-17
-- **Confidence**: High
+## Learning value / Curriculum — HIGH SIGNAL (new 11-18)
+- **Learning**: CDE is a picture-noun tool: 563 app words, 91% nouns, 6 verbs, ~1% of the Starters function words; speaking zero; 8 reading texts. Coverage: Cambridge Starters 38% (app) / 67% (with pages); Israeli Band I 15% / 37%.
+- **Signal**: Parse the parts of speech in src/data/words.js; overlap with the Cambridge YLE lists (parsed copies are in the 11-18 scratchpad; re-parse from the cambridgeenglish.org PDFs) and the MoE 2020 elementary curriculum.
+- **Action**: Re-run the overlap each audit; track verbs, function words and readings counts as the headline depth metrics.
+- **First seen**: 2026-11-18 · **Confidence**: High (automated parse ±3 pts)
 
 ## Retention / Business Model
-- **Learning**: Still ~3.5/10. No monetization path at all. "Notifications" are local `new Notification()` fired only while the app is open (notifications.js:38-59) — no Push API, useless for re-engagement. Email capture dead-end. Share button + shareable word-list URLs exist but are untracked. GA shows retention is the real problem: 16 new vs 3 returning users in 28d.
-- **Learning**: Content ceiling: 342 words ≈ 2-3 months for an engaged child; competitors (Khan Kids, Duolingo ABC, Lingokids) are unbounded. Defensible wedge = only free Hebrew↔English vocab tool for ages 6-12.
-- **Action**: Parent email loop (ESP) is the one COPPA-safe owned channel; word-pack expansion addresses the ceiling.
-- **First seen**: 2026-03-13 · **Updated**: 2026-07-17
-- **Confidence**: High
+- **Learning**: 84% of browser-days are new; returns he 27–34%, en 8–14%, es 7–10%. The learning ladder finishes 4% of batches (1/57 cycles). 78% of answers are hear-and-tap. Games build no shared word memory.
+- **Signal**: cde_learn batch start vs done; `vis` repeat days (no learner id exists, so browser-days are the only proxy).
+- **Action**: Check that the ladder shortening (owner-asked 11-12) and a shared word memory have shipped; re-measure the return rate per language.
+- **First seen**: 2026-03-13 · **Updated**: 2026-11-18 (email capture removed; problem reframed as depth + ladder length) · **Confidence**: High
 
-## GEO (AI Engine Optimization)
-- **Learning**: llms.txt count fixed (342). llms-full.txt still 404. AI referrals are REAL: chatgpt.com is ~20% of sessions (9/46 in 90d), "AI Assistant" the top GA channel in the last 28d — GEO is this site's working acquisition channel ahead of Google organic (4 sessions/90d).
-- **Action**: Ship llms-full.txt; add comparison tables to guides (AI engines lift tables). Watch this channel in GA.
-- **First seen**: 2026-03-13 · **Updated**: 2026-07-17
-- **Confidence**: High
+## Observability — HIGH SIGNAL (new 11-18)
+- **Learning**: The browser Sentry DSN host is `o….ingest.de.sentry.io`; the CSP allows `*.ingest.sentry.io`, which matches one label only, so every browser report is blocked. There is no CSP report-uri, so nobody noticed. /api/health doesn't check the DB.
+- **Signal**: grep the ingest host in the live entry bundle vs the `connect-src` in the live headers (`vercel curl -sI /`).
+- **Action**: Whenever a third-party SDK is added or changed, diff its host against the CSP. Add CSP reporting.
+- **First seen**: 2026-11-18 · **Confidence**: High (verified on live)
+
+## Trust Signals — REPEAT OFFENDER
+- **Learning**: index.html and /about/ were fixed; the "no data collection" claim survived in **llms.txt** (line 8): a hand-written file outside the copy sweep. /about/ names the maker only at the bottom (ai-feel 2/5).
+- **Signal**: `grep -i collect` over public/llms*.txt and every static shell, not only the React copy.
+- **Action**: Generate llms.txt at build time from the same facts as the privacy page.
+- **First seen**: 2026-03-13 · **Updated**: 2026-11-18 (4th run, moved to llms.txt) · **Confidence**: High
+
+## Privacy & COPPA
+- **Learning**: Data is minimal and the email capture is removed. But the policy exists only as an SPA route: /privacy returns the home-page HTML, so it is invisible to crawlers and no-JS readers; there is no GDPR rights section, and /he and /es don't link to it. The Sentry IP toggle is still owner-owed.
+- **Signal**: `vercel curl -s /privacy | grep '<title>'` equals the home title.
+- **Action**: Static /privacy/ pages per language. Legal copy needs an explicit owner OK.
+- **First seen**: 2026-03-14 · **Updated**: 2026-11-18 · **Confidence**: High
+
+## Failure Resilience
+- **Learning**: analytics.js was fixed (it is now stubs), but a new unguarded localStorage at useInstallPrompt.js:36, with no root ErrorBoundary, still white-screens storage-blocked browsers. The SW audio cache cap (800) is below the ~2,300 sound files.
+- **Signal**: grep `localStorage` outside utils/storage.js; compare the cache caps in vite.config.js against the asset counts.
+- **Action**: Lint rule or test: ban direct localStorage outside storage.js.
+- **First seen**: 2026-07-17 · **Updated**: 2026-11-18 (moved file, same class) · **Confidence**: High
+
+## Engineering & Code Quality
+- **Learning**: Tests 229 → 628, all passing; src lint is clean. But App.jsx has grown to 1,159 lines / 23 effects, `eslint .` shows ~1,880 errors outside src (CI still lints src only), and CI runs ~23 of its 25 minutes on Node 20 (end of life). Arcade games each hold a copy of the word list (up to 24 files per change); there are 3 string systems.
+- **Signal**: `npx eslint . | tail -1`; the CI run duration; `wc -l src/App.jsx`.
+- **Action**: Node 24 + Playwright shards + `eslint .` in CI; one shared word source for the games.
+- **First seen**: 2026-03-14 · **Updated**: 2026-11-18 · **Confidence**: High
+
+## Performance
+- **Learning**: The CLS fix held (0.01); mobile 99, desktop 100. The one remaining lever: words.js (181 KB) is in the entry chunk and grows with every word added.
+- **Action**: Spot-check only next time, plus the entry-chunk size.
+- **First seen**: 2026-03-13 · **Updated**: 2026-11-18 · **Confidence**: High
+
+## Analytics
+- **Learning**: GA4 was removed 10-30; the cookieless Neon beacon (~70 event kinds, bot filter, AI attribution) replaces it, and the 07-17 GA issues are moot. Gaps: no learner continuity (no D7/D30 retention), no learning-gain measure, daily aggregates that can't be joined, no session length.
+- **Signal**: `SELECT DISTINCT ev FROM cde_learn`.
+- **Action**: Propose privacy-reviewed bucketed counters; don't re-add GA.
+- **First seen**: 2026-03-14 · **Updated**: 2026-11-18 · **Confidence**: High
+
+## SEO / Indexing
+- **Learning**: The sitemap holds 768 URLs; 10/10 sampled URLs are indexed (the Hebrew flashcards are now indexed too); clicks went 14 → 189/week. Word pages convert at 0.3% (title/meta tweaks proved flat 10-24, so don't re-tune them). The real unserved demand: Hebrew grade games (positions 5–10), the Hebrew head terms (positions 36–41), Spanish hubs (/es/ is the only one), English per-age lists. Every sitemap entry still has the same lastmod.
+- **Signal**: The GSC 90-day query export grouped by language and intent.
+- **Action**: Start from the B report's unserved-demand list; check the grade-page retitle result.
+- **First seen**: 2026-03-13 · **Updated**: 2026-11-18 · **Confidence**: High
+
+## GEO
+- **Learning**: ChatGPT is still ~20% of outside arrivals (98% of AI traffic); Google organic overtook it in 11/2026. llms-full.txt shipped (no es glosses).
+- **First seen**: 2026-03-13 · **Updated**: 2026-11-18 · **Confidence**: High
+
+## i18n
+- **Learning**: RTL is correct and the string files match, but static /he/ pages carry an English footer, English nav aria labels (generate-seo-pages.js:62/103) and `lang=en` on the Hebrew vocab pages; 5 hardcoded React aria-labels remain.
+- **Signal**: grep `aria-label="` in src/components and the page generator.
+- **First seen**: 2026-07-17 · **Updated**: 2026-11-18 · **Confidence**: High
 
 ## Low-Signal Dimensions (fast-track next time)
-- **Security**: 8-9/10 across three audits (headers, CSP, no injection). Minor: api/ timing-unsafe compare, imageBase64 unvalidated.
-- **Accessibility**: 8-9/10 consistently. Residual: hardcoded "Skip to content"/aria-labels break Hebrew SR users.
-- **Mobile/PWA**: 7.5-9/10, solid; maskable icons reuse `any` PNGs.
-- **SEO on-page**: meta/canonical/hreflang/JSON-LD all verified clean twice — spot-check only.
+- **Performance**, **Accessibility (8)**, **Mobile (8)**, **SEO on-page**, **Production dependency vulnerabilities (0)**: healthy across 3–4 runs; spot-check only.
+- **Security (7.5)**: still the same small items (timing-unsafe compares in api/commit-image.js, api/fetch-image.js and land.js; unvalidated imageBase64; no rate limit on /api/land and /api/live). Flagged twice; fix rather than re-audit.
 
 ## High-Signal Dimensions (extra scrutiny next time)
-- **Trust copy** — verify index.html:279-280 finally fixed (3rd flag)
-- **Analytics** — verify quit-guard in handleQuizComplete; GA on static pages
-- **Business/Retention** — email loop wired? returning-user share moving?
-- **Dependencies** — was `npm audit fix` run? majors still pending?
-- **GSC access** — re-verified? index coverage finally measured?
+- **Learning depth** (verbs, function words, readings, speaking): did any of the 11-18 ideas ship?
+- **Ladder completion + return rate** per language.
+- **Observability**: is Sentry receiving browser events?
+- **Trust/privacy**: llms.txt, a static privacy page, a maker card at the top of /about/.
+- **CI health**: duration vs timeout, Node version.
