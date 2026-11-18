@@ -22,17 +22,25 @@ const GRADES = [
     links: [['/band-1/reading/', 'קטעי קריאה קצרים'], ['/band-1/review/', 'מסלול חזרה על Band I'], ['/band-1/', 'רשימת Band I לפי נושאים'], ['/he/english-games/everyday/', 'חפצים יומיומיים'], ['/battle/', 'קרב כיתתי']] },
 ];
 const PER_PAGE = 20;
+export const GRADE_FOOTER_NOTE = 'ההתאמה לכיתות היא שלנו, לפי רמות Band I של המילים שלנו ולפי הכיתה של כל יחידה בספר. רשימת Band I של משרד החינוך אינה מועתקת לכאן.';
+export const GRADE_LIST = GRADES.map(({ n, he }) => ({ n, he }));
+
+// The grade page's word set (also the grade's printable week pack, scripts/build-week-packs.mjs).
+export function gradeWords(n, { WORDS, BAND1_BY_ID }) {
+  const g = GRADES.find((x) => x.n === n);
+  const words = WORDS.filter((w) => BAND1_BY_ID[w.id] && w.exampleSentence);
+  const level = words.filter((w) => BAND1_BY_ID[w.id] === g.band);
+  const half = Math.ceil(level.length / 2);
+  return (g.half ? level.slice(half) : level.slice(0, half)).slice(0, PER_PAGE);
+}
 
 export function buildGradePages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND_CHIPS, UNITS, BOOKS, headterm }) {
   const kit = wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides });
-  const footerNote = 'ההתאמה לכיתות היא שלנו, לפי רמות Band I של המילים שלנו ולפי הכיתה של כל יחידה בספר. רשימת Band I של משרד החינוך אינה מועתקת לכאן.';
-  const words = WORDS.filter((w) => BAND1_BY_ID[w.id] && w.exampleSentence);
+  const footerNote = GRADE_FOOTER_NOTE;
   const pages = [];
   for (const [i, g] of GRADES.entries()) {
     const path = `/he/grade-${g.n}/`;
-    const level = words.filter((w) => BAND1_BY_ID[w.id] === g.band);
-    const half = Math.ceil(level.length / 2);
-    const set = (g.half ? level.slice(half) : level.slice(0, half)).slice(0, PER_PAGE)
+    const set = gradeWords(g.n, { WORDS, BAND1_BY_ID })
       .map((w) => ({ en: w.word, he: w.hebrewTranslation, wordId: w.id, ex: w.exampleSentence, chip: BAND_CHIPS[g.band] }));
     const units = UNITS.filter((u) => !u.test && u.grade === g.he);
     const unitLinks = units.map((u) => `<a href="/units/${u.book}/unit-${u.unit}/"><bdi lang="en" dir="ltr">${escapeHtml(BOOKS[u.book].name)} Unit ${u.unit}${u.title ? `: ${escapeHtml(u.title)}` : ''}</bdi></a>`);

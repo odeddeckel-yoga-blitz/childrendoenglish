@@ -10,6 +10,12 @@
   var root = document.querySelector('[data-reading]');
   if (!root) return;
   var slug = root.getAttribute('data-reading');
+  // Interface strings: Hebrew by default; a page in another language sets data-t-<key> on the root (/es/lecturas/).
+  var HE = { play: 'הקשיבו לכל הקטע', stop: 'עצירה', ok: 'נכון!', retry: 'לא בדיוק — חפשו את התשובה בקטע ונסו שוב.',
+    all: 'כבר בניסיון הראשון — כל הכבוד!', some: 'בניסיון הראשון. כל השאלות נפתרו!' };
+  function T(k) { return root.getAttribute('data-t-' + k) || HE[k]; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+  var pageLang = document.documentElement.lang === 'es' ? 'es' : 'he';
 
   function excluded() {
     try { return navigator.webdriver || localStorage.getItem('cde_internal') === '1'; } catch (e) { return false; }
@@ -17,7 +23,7 @@
   function beacon(e, i) {
     try {
       if (excluded() || !navigator.sendBeacon || !/^[a-z0-9@_-]{1,40}$/.test(i)) return;
-      navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: e, i: i }], l: 'he' }));
+      navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: e, i: i }], l: pageLang }));
     } catch (err) { /* never break the page */ }
   }
   // Drawn icons (sprite): own static strings only, so innerHTML is safe for them.
@@ -42,7 +48,7 @@
     queue = [];
     if (player) { player.onended = null; player.pause(); }
     mark(null);
-    if (playAllBtn) playAllBtn.innerHTML = ic('play') + ' הקשיבו לכל הקטע';
+    if (playAllBtn) playAllBtn.innerHTML = ic('play') + ' ' + esc(T('play'));
   }
   function play(src, onend) {
     try {
@@ -75,7 +81,7 @@
       begin();
       if (queue.length || (player && !player.paused)) { stop(); return; }
       queue = sentences.slice();
-      playAllBtn.innerHTML = ic('x') + ' עצירה';
+      playAllBtn.innerHTML = ic('x') + ' ' + esc(T('stop'));
       nextInQueue();
       return;
     }
@@ -102,7 +108,7 @@
       o.classList.add('good');
       q.setAttribute('data-done', '1');
       Array.prototype.forEach.call(q.querySelectorAll('.opt'), function (b) { b.disabled = true; });
-      fb.innerHTML = 'נכון! ' + ic('check');
+      fb.innerHTML = esc(T('ok')) + ' ' + ic('check');
       if (!tried) firstTry++;
       done++;
       if (done === qs.length) finish();
@@ -110,13 +116,13 @@
       o.classList.add('bad');
       o.disabled = true;
       q.setAttribute('data-tried', '1');
-      fb.textContent = 'לא בדיוק — חפשו את התשובה בקטע ונסו שוב.';
+      fb.textContent = T('retry');
     }
   }
   function finish() {
     var sc = document.getElementById('read-score');
     sc.hidden = false;
-    sc.innerHTML = '⁦' + firstTry + '/' + qs.length + '⁩ ' + (firstTry === qs.length ? 'כבר בניסיון הראשון — כל הכבוד! ' + ic('party-popper') : 'בניסיון הראשון. כל השאלות נפתרו! ' + ic('sparkles'));
+    sc.innerHTML = '⁦' + firstTry + '/' + qs.length + '⁩ ' + (firstTry === qs.length ? esc(T('all')) + ' ' + ic('party-popper') : esc(T('some')) + ' ' + ic('sparkles'));
     beacon('quiz_done', ('read-' + slug).slice(0, 40));
   }
 })();

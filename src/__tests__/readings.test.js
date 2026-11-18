@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { READINGS, READING_NAMES } from '../data/readings';
 import { READING_GLOSSES, READING_PHRASES } from '../data/readingGlosses';
+import { READING_GLOSSES_ES, READING_PHRASES_ES, READING_TITLES_ES } from '../data/readingGlossesEs';
 import { glossTokens } from '../../scripts/build-reading-pages.mjs';
 
 const G = { GLOSSES: READING_GLOSSES, PHRASES: READING_PHRASES, NAMES: READING_NAMES };
@@ -14,6 +15,22 @@ describe('RC11 reading texts', () => {
       }
     }
     expect(missing).toEqual([]);
+  });
+
+  it('every word in every text, question and option has Spanish too (/es/lecturas/, audit 11-18)', () => {
+    const GE = { GLOSSES: READING_GLOSSES_ES, PHRASES: READING_PHRASES_ES, NAMES: READING_NAMES };
+    const missing = [];
+    for (const r of READINGS) {
+      expect(READING_TITLES_ES[r.slug]).toBeTruthy();
+      for (const s of [...r.text, ...r.questions.flatMap((q) => [q.q, ...q.options])]) {
+        for (const t of glossTokens(s, GE)) if (/[A-Za-z]/.test(t.text) && !t.name && !t.gloss) missing.push(`${r.slug}: ${t.text}`);
+      }
+    }
+    expect(missing).toEqual([]);
+    // the same words and phrases as the Hebrew set, and no Hebrew in the Spanish one
+    expect(Object.keys(READING_GLOSSES_ES).sort()).toEqual(Object.keys(READING_GLOSSES).sort());
+    expect(Object.keys(READING_PHRASES_ES).sort()).toEqual(Object.keys(READING_PHRASES).sort());
+    expect(Object.values({ ...READING_GLOSSES_ES, ...READING_PHRASES_ES }).filter((v) => /[֐-׿]/.test(v))).toEqual([]);
   });
 
   it('short texts with three answerable questions', () => {

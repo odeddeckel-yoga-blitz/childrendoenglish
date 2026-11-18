@@ -26,7 +26,14 @@ export function glossTokens(sentence, { GLOSSES, PHRASES, NAMES }) {
   });
 }
 
-export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, READINGS, READING_NAMES, READING_GLOSSES, READING_PHRASES }) {
+// hreflang between a Hebrew reading page and its Spanish twin (/es/lecturas/…, audit 11-18 idea 12)
+const ES_HUB = '/es/lecturas/';
+const twinHead = (SITE, hePath, esPath) => `  <link rel="alternate" hreflang="he" href="${SITE}${hePath}" />
+  <link rel="alternate" hreflang="es" href="${SITE}${esPath}" />
+  <link rel="alternate" hreflang="x-default" href="${SITE}${hePath}" />
+`;
+
+export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, READINGS, READING_NAMES, READING_GLOSSES, READING_PHRASES, esTwins = false }) {
   const kit = wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides });
   const G = { GLOSSES: READING_GLOSSES, PHRASES: READING_PHRASES, NAMES: READING_NAMES };
   const footerNote = 'הקטעים נכתבו עבור Children Do English, וכל המילים בהם נבדקו מול רשימת Band I של משרד החינוך. הרשימה עצמה אינה מועתקת לכאן. ההקראה היא קול ממוחשב.';
@@ -58,7 +65,7 @@ export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS,
     }).join('');
     mkdirSync(join(distDir, 'band-1', 'reading', r.slug), { recursive: true });
     writePage(join(distDir, 'band-1', 'reading', r.slug, 'index.html'), kit.shell({
-      path, test: false, footerNote,
+      path, test: false, footerNote, head: esTwins ? twinHead(SITE, path, `${ES_HUB}${r.slug}/`) : '',
       title: `קטע קריאה באנגלית: ${r.title} (${r.he}) — עם הקראה ותרגום | Children Do English`,
       description: `קטע קריאה קצר באנגלית לילדים, ${words(r)} מילים מרשימת Band I: מקשיבים, לוחצים על מילה כדי לראות אותה בעברית, ועונים על ${r.questions.length} שאלות. חינם, בלי הרשמה.`,
       schemas: [kit.crumbs([['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/'], [hubName, hubPath], [r.title, path]])],
@@ -83,7 +90,7 @@ export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS,
   const cards = texts.map((r) => `
         <a class="unit-card" href="${hubPath}${r.slug}/"><strong><bdi lang="en" dir="ltr">${escapeHtml(r.title)}</bdi> · ${escapeHtml(r.he)}</strong><span>${words(r)} מילים · <span lang="en" dir="ltr">${LEVEL_HE[r.level]}</span></span></a>`).join('');
   writePage(join(distDir, 'band-1', 'reading', 'index.html'), kit.shell({
-    path: hubPath, test: false, footerNote,
+    path: hubPath, test: false, footerNote, head: esTwins ? twinHead(SITE, hubPath, ES_HUB) : '',
     title: `${texts.length} קטעי קריאה קצרים באנגלית לילדים — מילים מ-Band I, עם הקראה ושאלות`,
     description: `${texts.length} קטעי קריאה קצרים באנגלית (50–65 מילים), כל המילים מרשימת Band I: הקראה, תרגום של כל מילה בלחיצה ושאלות הבנה. הכנה לקטעי Unseen. חינם, בלי הרשמה.`,
     schemas: [kit.crumbs([['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/'], [hubName, hubPath]])],
@@ -95,6 +102,89 @@ export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS,
   <div class="unit-grid">${cards}
   </div>
   <p class="aligned">את המילים עצמן אפשר לתרגל ב<a href="/band-1/">עמודי Band I לפי נושאים</a> וב<a href="/band-1/review/">מסלול החזרה</a>.</p>
+  </section></main>`,
+  }));
+  return texts.length + 1;
+}
+
+// Spanish twins (audit 11-18 idea 12, Spanish parity): /es/lecturas/ + /es/lecturas/<slug>/ — the same texts, audio and
+// questions, Spanish chrome, tap any word for its Spanish (src/data/readingGlossesEs.js). No Band I wording here: that
+// list is Israeli; for Spanish readers the levels are just "nivel 1–3". public/reading.js reads its strings from data-t-*.
+const LEVEL_ES = { pre: 'Nivel 1', c1: 'Nivel 2', c2: 'Nivel 3' };
+const READING_T_ES = {
+  'data-t-play': 'Escuchar todo el texto', 'data-t-stop': 'Detener', 'data-t-ok': '¡Correcto!',
+  'data-t-retry': 'Casi: busca la respuesta en el texto y vuelve a intentarlo.',
+  'data-t-all': 'a la primera. ¡Excelente!', 'data-t-some': 'a la primera. ¡Ya resolviste todas las preguntas!',
+};
+export function buildReadingPagesEs({ SITE, distDir, writePage, escapeHtml, WORDS, collides, READINGS, READING_NAMES, READING_GLOSSES_ES, READING_PHRASES_ES, READING_TITLES_ES }) {
+  const kit = wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides });
+  const G = { GLOSSES: READING_GLOSSES_ES, PHRASES: READING_PHRASES_ES, NAMES: READING_NAMES };
+  const footerNote = 'Los textos fueron escritos para Children Do English. La lectura en voz alta es una voz generada por computadora.';
+  const hubName = 'Lecturas cortas en inglés';
+  const texts = [...READINGS].sort((a, b) => LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level]);
+  const nWords = (r) => r.text.join(' ').split(/\s+/).length;
+  const esTitle = (r) => READING_TITLES_ES[r.slug] || r.title;
+  const tAttrs = Object.entries(READING_T_ES).map(([k, v]) => `${k}="${escapeHtml(v)}"`).join(' ');
+  const tokensHtml = (s) => glossTokens(s, G).map((t) => (t.gloss
+    ? `<button type="button" class="w" data-g="${escapeHtml(t.gloss)}">${escapeHtml(t.text)}</button>`
+    : escapeHtml(t.text))).join('');
+  const sayBtn = (s) => {
+    const src = sentenceAudio(s);
+    return src ? `<button type="button" class="say" data-say="${src}" aria-label="Escuchar la pregunta" lang="es"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-volume-2"/></svg></button>` : '';
+  };
+  const crumbsBase = [['Español', '/es/'], ['Inglés para primaria', '/es/primaria/'], [hubName, ES_HUB]];
+  const navBase = `<a href="/es/">Español</a> › <a href="/es/primaria/">Inglés para primaria</a> › `;
+  for (const [i, r] of texts.entries()) {
+    const path = `${ES_HUB}${r.slug}/`, hePath = `/band-1/reading/${r.slug}/`;
+    const next = texts[i + 1];
+    const sentences = r.text.map((s, k) => `<span class="snt" data-k="${k}"${sentenceAudio(s) ? ` data-src="${sentenceAudio(s)}"` : ''}>${tokensHtml(s)}</span>`).join(' ');
+    const qs = r.questions.map((q, n) => {
+      const opts = q.options.map((o, j) => ({ o, ok: j === q.answer })).sort((a, b) => hashOf(r.slug + n + a.o) - hashOf(r.slug + n + b.o));
+      return `<li class="q" data-q="${n}">
+          <p class="qt" lang="en" dir="ltr">${tokensHtml(q.q)} ${sayBtn(q.q)}</p>
+          <div class="opts" lang="en" dir="ltr">${opts.map((x) => `<button type="button" class="opt"${x.ok ? ' data-ok="1"' : ''}>${escapeHtml(x.o)}</button>`).join('')}</div>
+          <p class="fb" aria-live="polite"></p>
+        </li>`;
+    }).join('');
+    mkdirSync(join(distDir, 'es', 'lecturas', r.slug), { recursive: true });
+    writePage(join(distDir, 'es', 'lecturas', r.slug, 'index.html'), kit.shell({
+      path, test: false, footerNote, lang: 'es', head: twinHead(SITE, hePath, path),
+      title: `Lectura corta en inglés para niños: ${r.title} (${esTitle(r)}) | Children Do English`,
+      description: `Lectura corta en inglés para niños de primaria, ${nWords(r)} palabras: escucha el texto, toca cualquier palabra para verla en español y responde ${r.questions.length} preguntas. Gratis, sin registro.`,
+      schemas: [kit.crumbs([...crumbsBase, [r.title, path]])],
+      body: `
+  <nav class="breadcrumb" aria-label="breadcrumb">${navBase}<a href="${ES_HUB}">${hubName}</a> › <span lang="en">${escapeHtml(r.title)}</span></nav>
+  <header class="hero"><h1><span lang="en">${escapeHtml(r.title)}</span> · ${escapeHtml(esTitle(r))}</h1>
+    <p class="answer">Un texto corto en inglés: ${nWords(r)} palabras, ${LEVEL_ES[r.level].toLowerCase()}. Toca el botón para escuchar, toca cualquier palabra para verla en español y al final responde ${r.questions.length} preguntas.</p></header>
+  <main class="container"><section class="section reading" data-reading="${r.slug}" ${tAttrs}>
+    <div class="read-tools"><button type="button" class="play-all" data-play-all><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> ${READING_T_ES['data-t-play']}</button> <button type="button" class="slow-tog" data-slow aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-turtle"/></svg> Más lento</button></div>
+    <article class="rtext" lang="en" dir="ltr">${sentences}</article>
+    <p class="gloss" id="gloss" aria-live="polite">Toca una palabra para verla en español</p>
+    <h2 class="section-title">Preguntas</h2>
+    <ol class="qs">${qs}</ol>
+    <p class="score center" id="read-score" aria-live="polite" hidden></p>
+    <p class="center">${next ? `<a class="cta" href="${ES_HUB}${next.slug}/">Siguiente lectura: <span lang="en">${escapeHtml(next.title)}</span> →</a>` : `<a class="cta" href="${ES_HUB}">Todas las lecturas →</a>`}</p>
+  </section></main>
+  <style>${READING_CSS}</style>
+  <script src="/reading.js" defer></script>`,
+    }));
+  }
+  const cards = texts.map((r) => `
+        <a class="unit-card" href="${ES_HUB}${r.slug}/"><strong><span lang="en">${escapeHtml(r.title)}</span> · ${escapeHtml(esTitle(r))}</strong><span>${nWords(r)} palabras · ${LEVEL_ES[r.level]}</span></a>`).join('');
+  mkdirSync(join(distDir, 'es', 'lecturas'), { recursive: true });
+  writePage(join(distDir, 'es', 'lecturas', 'index.html'), kit.shell({
+    path: ES_HUB, test: false, footerNote, lang: 'es', head: twinHead(SITE, '/band-1/reading/', ES_HUB),
+    title: `${texts.length} lecturas cortas en inglés para niños de primaria, con audio | Children Do English`,
+    description: `${texts.length} lecturas cortas en inglés (50–65 palabras) para niños de primaria: audio frase por frase, toca una palabra para verla en español y responde preguntas de comprensión. Gratis.`,
+    schemas: [kit.crumbs(crumbsBase)],
+    body: `
+  <nav class="breadcrumb" aria-label="breadcrumb">${navBase}${hubName}</nav>
+  <header class="hero"><h1>Lecturas cortas en inglés para niños</h1>
+    <p class="answer">${texts.length} textos cortos que escribimos con palabras sencillas. En cada uno: audio frase por frase, la traducción al español de cualquier palabra con un toque, y 3 preguntas de comprensión. Van de la más fácil a la más larga.</p></header>
+  <main class="container"><section class="section">
+  <div class="unit-grid">${cards}
+  </div>
+  <p class="aligned">Las palabras se practican también en el <a href="/vocabulary/animals/spanish/">vocabulario en inglés y español</a> y en las <a href="/es/fichas/">fichas para imprimir</a>.</p>
   </section></main>`,
   }));
   return texts.length + 1;
