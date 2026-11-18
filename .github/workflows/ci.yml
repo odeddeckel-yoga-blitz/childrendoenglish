@@ -22,30 +22,35 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Node 24 = the Vercel project's Node.js version (24.x). Node 20 reached end of life in April 2026.
+# The *@v5 actions run on Node 24 themselves (v4 ran on the deprecated Node 20 runtime).
+env:
+  NODE_VERSION: 24
+
 jobs:
   ci:
     runs-on: ubuntu-24.04  # pinned: ubuntu-latest became 26.04 on 10-31 and Playwright 1.58 has no chromium build for it
-    timeout-minutes: 25
+    timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Cache node_modules
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-modules-${{ hashFiles('package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-modules-
+            ${{ runner.os }}-node${{ env.NODE_VERSION }}-modules-
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Lint
+      - name: Lint (whole repo, eslint .)
         run: npm run lint
 
       - name: Game-kit drift check
@@ -57,10 +62,41 @@ jobs:
       - name: Build
         run: npm run build
 
+  # Playwright in 4 parallel shards: one job ran ~21 of its 25 minutes (11-18 audit), so every new spec
+  # risked a red main. Each shard builds dist/ itself (8 s; seo-flows and page-language read it) and runs
+  # a quarter of the tests (fullyParallel, so the split is per test, not per file).
+  e2e:
+    if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04  # see the pin note on the ci job
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Cache node_modules
+        uses: actions/cache@v5
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node${{ env.NODE_VERSION }}-modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node${{ env.NODE_VERSION }}-modules-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
       - name: Install Playwright browsers
-        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
         run: npx playwright install --with-deps chromium
 
-      - name: Run Playwright E2E tests
-        if: github.ref == 'refs/heads/main' || github.event_name == 'pull_request'
-        run: npx playwright test
+      - name: Run Playwright E2E tests (shard ${{ matrix.shard }}/4)
+        run: npx playwright test --shard=${{ matrix.shard }}/4
