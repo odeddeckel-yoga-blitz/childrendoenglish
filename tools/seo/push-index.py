@@ -55,7 +55,9 @@ import urllib.request as _ur
 host = SITE.replace('https://', '').replace('http://', '').rstrip('/')
 key_glob = [f for f in os.listdir(os.environ.get('INDEXNOW_KEY_DIR', 'public'))
             if f.endswith('.txt') and len(f) == 36] if os.path.isdir(os.environ.get('INDEXNOW_KEY_DIR', 'public')) else []
-if urls and key_glob:
+if os.environ.get('INDEXNOW_SKIP') == '1':   # a site that pings IndexNow at deploy time (indexnow-deploy.mjs) sets this so Bing isn't pinged twice
+    print('IndexNow: skipped (INDEXNOW_SKIP=1)')
+elif urls and key_glob:
     key = key_glob[0][:-4]
     body = json.dumps({'host': host, 'key': key,
                        'keyLocation': f'https://{host}/{key}.txt',
