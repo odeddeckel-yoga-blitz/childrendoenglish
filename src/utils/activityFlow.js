@@ -15,9 +15,10 @@ export const APP_ACTIVITIES = {
 };
 
 // The events for one activity open; updates the session list. Shared logic with land-beacon.js.
-export function flowEvents(act, how, store = sessionStorage) {
+export function flowEvents(act, how, store) {
   const out = [];
   try {
+    store ||= sessionStorage; // inside the try: reading sessionStorage throws when storage is blocked
     let seen = [];
     try { seen = JSON.parse(store.getItem('cde_acts') || '[]') || []; } catch { seen = []; }
     if (!seen.includes(act)) {

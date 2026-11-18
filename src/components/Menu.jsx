@@ -124,7 +124,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       <div className="contents" data-m1="spotlight"><SpotlightCards lang={lang} onOpenWord={onOpenSpotlightWord} /></div>
 
       {/* Main actions */}
-      <nav aria-label="Main menu" className="space-y-3">
+      <nav aria-label={t('mainMenuLabel', lang)} className="space-y-3">
         {/* This week in class — the unit a parent pinned on its unit page (RC12) */}
         <div className="contents" data-m1="class"><ClassWeekCard lang={lang} /></div>
 

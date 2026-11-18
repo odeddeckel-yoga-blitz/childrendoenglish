@@ -155,7 +155,7 @@ export default function LandingPage({ lang = 'en', onLanguageStart, onPrivacy, o
           >
             {suggest.code === 'es' ? 'Sí' : suggest.code === 'ar' ? 'نعم' : suggest.code === 'he' ? 'כן' : 'Yes'}
           </button>
-          <button onClick={dismissSuggest} className="px-2 py-1.5 text-slate-400 hover:text-slate-600" aria-label="No">
+          <button onClick={dismissSuggest} className="px-2 py-1.5 text-slate-400 hover:text-slate-600" aria-label={t('dismissLabel', lang)}>
             <X className="w-4 h-4" aria-hidden="true" />
           </button>
         </div>

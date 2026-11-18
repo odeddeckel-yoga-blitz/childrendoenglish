@@ -321,6 +321,10 @@ export default {
 
   // Aria labels
   skipOnboarding: 'דלגו על הדרכה',
+  mainMenuLabel: 'תפריט ראשי',
+  languageListLabel: 'בחירת שפה',
+  closeLabel: 'סגירה',
+  dismissLabel: 'לא, תודה',
   previousStep: 'שלב קודם',
   nextStep: 'שלב הבא',
   quizProgress: 'התקדמות החידון',

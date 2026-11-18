@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { analytics } from '../utils/analytics';
 
+const DISMISS_KEY = 'childrendoenglish-install-dismissed';
+// Blocked storage (Safari private mode, cookies off) throws on access; this hook runs on every app start,
+// so an unguarded read white-screened the whole app (audit 11-18).
+const wasDismissed = () => { try { return !!localStorage.getItem(DISMISS_KEY); } catch { return false; } };
+const rememberDismissed = () => { try { localStorage.setItem(DISMISS_KEY, '1'); } catch { /* storage off */ } };
+
 function isStandalone() {
   if (typeof window === 'undefined') return false;
   if (window.matchMedia?.('(display-mode: standalone)')?.matches) return true;
@@ -33,7 +39,7 @@ export default function useInstallPrompt({ gameState, totalQuizzes }) {
 
   useEffect(() => {
     if (isStandalone()) return;
-    if (localStorage.getItem('childrendoenglish-install-dismissed')) {
+    if (wasDismissed()) {
       setShowInstallBanner(false);
       return;
     }
@@ -56,13 +62,13 @@ export default function useInstallPrompt({ gameState, totalQuizzes }) {
     setShowInstallBanner(false);
     analytics.pwaInstall(outcome);
     if (outcome === 'dismissed') {
-      localStorage.setItem('childrendoenglish-install-dismissed', '1');
+      rememberDismissed();
     }
   }, []);
 
   const dismissInstall = useCallback(() => {
     setShowInstallBanner(false);
-    localStorage.setItem('childrendoenglish-install-dismissed', '1');
+    rememberDismissed();
   }, []);
 
   return { showInstallBanner, handleInstall, dismissInstall, isIOS };
