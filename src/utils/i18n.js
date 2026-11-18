@@ -267,7 +267,7 @@ const translations = {
 
     // Privacy policy
     privacyTitle: 'Privacy Policy',
-    privacyUpdated: "Last updated: November 4, 2026",
+    privacyUpdated: "Last updated: November 18, 2026",
     privacyDataTitle: 'What data we collect',
     privacyDataDesc: "There are no accounts and no sign-up. To keep siblings' progress apart on one device you can type a player name (optional for the first player). The name stays in this browser's local storage and is never sent to us. We do not ask for an email address or any other contact details.",
     privacyCookieTitle: 'Cookies & tracking',
@@ -284,14 +284,19 @@ const translations = {
     privacyDeleteDesc: "To delete everything saved on this device, use Manage Players → \"Delete All Data\" (it removes every player, all progress and all of this site's settings), or clear this site's data in your browser settings. A Class Battle room deletes itself about 30 minutes after it is created. For anything else, email info@childrendoenglish.com.",
     privacyContactTitle: 'Contact',
     privacyContactDesc: 'Children Do English is made by Oded Deckelbaum. If you have questions about this privacy policy or the app, email',
+    privacyRightsTitle: "Your rights (GDPR and COPPA)",
+    privacyRightsDevice: "Everything the app keeps about a child is on your own device, so you can check it and delete it yourself. Player names, progress, settings and the date of the last visit are in this browser's local storage. While a tab is open, it also notes how the visit arrived and which games were opened, so each is counted only once; that note is cleared when the tab closes. Manage Players → \"Delete All Data\" removes all of it, and so does clearing this site's data in your browser settings.",
+    privacyRightsCounts: "Our usage counts are anonymous daily totals with no cookie, no identifier and no IP address. They cannot be linked to a person, so they hold nothing about your child to look up or delete.",
+    privacyRightsErrors: "Error reports go to Sentry only when something breaks. They are about the error, not the person: what went wrong, the page, the browser type and the steps just before it. Saved player names are removed before a report is sent, and there is no session recording.",
+    privacyRightsWho: "Children Do English is run by Oded Deckelbaum, and the site is hosted by Vercel. For any request about your data, or any question about privacy, email info@childrendoenglish.com. If you live in the EU or the UK, you can also complain to your local data protection authority.",
     termsTitle: 'Terms of Service',
-    termsUpdated: 'Last updated: March 2026',
+    termsUpdated: "Last updated: November 18, 2026",
     termsAcceptTitle: 'Acceptance of Terms',
     termsAcceptDesc: 'By using Children Do English, you agree to these terms. If you do not agree, please do not use the app.',
     termsUseTitle: 'Use of the App',
     termsUseDesc: 'Children Do English is a free educational app for learning English vocabulary. It is intended for children ages 6-12 with parental supervision. You may use the app for personal, non-commercial educational purposes.',
     termsContentTitle: 'Content & Intellectual Property',
-    termsContentDesc: 'All content, including images, text, and audio, is owned by Children Do English. You may not copy, redistribute, or sell any content from the app.',
+    termsContentDesc: "Children Do English's own text, games and app may not be copied, redistributed or sold. Some photos belong to other photographers and are used under their licences; each one is credited on the Image credits page (childrendoenglish.com/image-credits/).",
     termsDisclaimerTitle: 'Disclaimer',
     termsDisclaimerDesc: 'The app is provided "as is" without warranties. We do not guarantee uninterrupted access or error-free operation. Children Do English is not a substitute for formal education.',
     termsChangesTitle: 'Changes to Terms',
@@ -381,8 +386,8 @@ const translations = {
     storageFull: 'Storage is full. Your progress may not be saved. Try clearing old browser data.',
 
     // COPPA compliance
-    privacyCoppaTitle: 'COPPA compliance',
-    privacyCoppaDesc: "Children Do English is built to comply with the Children's Online Privacy Protection Act (COPPA). We do not knowingly collect personal information from children under 13. Learning progress is stored on the device; only anonymous totals with no identifier are sent. Error monitoring via Sentry runs only in production and collects only technical diagnostic data (no names, no user content).",
+    privacyCoppaTitle: "Children under 13 (COPPA)",
+    privacyCoppaDesc: "We do not collect personal information from children under 13. There are no accounts, nothing personal is sent to us, and learning progress stays on the device. Only anonymous totals with no identifier are sent. Sentry error reports carry technical details only, with no names and no user content.",
 
     // Daily Review
     dailyReview: 'Daily Review',

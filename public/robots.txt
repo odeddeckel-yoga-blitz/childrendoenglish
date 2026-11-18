@@ -20,6 +20,5 @@ Disallow: /new-player
 Disallow: /my-words
 Disallow: /daily-review
 Disallow: /app
-Disallow: /terms
 
 Sitemap: https://childrendoenglish.com/sitemap.xml

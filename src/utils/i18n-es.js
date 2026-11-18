@@ -265,7 +265,7 @@ export default {
 
   // Privacy policy
   privacyTitle: 'Política de Privacidad',
-  privacyUpdated: "Última actualización: 4 de noviembre de 2026",
+  privacyUpdated: "Última actualización: 18 de noviembre de 2026",
   privacyDataTitle: 'Qué datos recopilamos',
   privacyDataDesc: "No hay cuentas ni registro. Para separar el progreso de hermanos en un mismo dispositivo puedes escribir un nombre de jugador (opcional para el primer jugador). El nombre se queda en el almacenamiento local de este navegador y nunca se nos envía. No pedimos correo electrónico ni otros datos de contacto.",
   privacyCookieTitle: 'Cookies y rastreo',
@@ -282,14 +282,19 @@ export default {
   privacyDeleteDesc: "Para borrar todo lo guardado en este dispositivo, usa Administrar Jugadores → \"Eliminar Todos los Datos\" (borra todos los jugadores, todo el progreso y todos los ajustes de este sitio), o borra los datos de este sitio en los ajustes del navegador. Una sala de Class Battle se borra sola unos 30 minutos después de crearse. Para cualquier otra cosa, escribe a info@childrendoenglish.com.",
   privacyContactTitle: 'Contacto',
   privacyContactDesc: 'Children Do English fue creada por Oded Deckelbaum. Si tienes preguntas sobre esta política de privacidad o la app, escribe un correo a',
+  privacyRightsTitle: "Tus derechos (RGPD y COPPA)",
+  privacyRightsDevice: "Todo lo que la app guarda sobre un niño está en tu propio dispositivo, así que puedes revisarlo y borrarlo tú mismo. Los nombres de los jugadores, el progreso, los ajustes y la fecha de la última visita están en el almacenamiento local de este navegador. Mientras una pestaña está abierta, también anota cómo llegó la visita y qué juegos se abrieron, para contar cada uno una sola vez; esa nota se borra al cerrar la pestaña. Administrar Jugadores → \"Eliminar Todos los Datos\" lo borra todo, y también borrar los datos de este sitio en los ajustes del navegador.",
+  privacyRightsCounts: "Nuestros recuentos de uso son totales diarios anónimos, sin cookie, sin identificador y sin dirección IP. No se pueden relacionar con una persona, así que no contienen nada sobre tu hijo que se pueda consultar o borrar.",
+  privacyRightsErrors: "Los informes de errores se envían a Sentry solo cuando algo falla. Tratan del error, no de la persona: qué salió mal, la página, el tipo de navegador y los pasos justo antes. Los nombres de jugadores guardados se quitan antes de enviar el informe, y no se graba la sesión.",
+  privacyRightsWho: "Children Do English lo gestiona Oded Deckelbaum, y el sitio está alojado en Vercel. Para cualquier solicitud sobre tus datos, o cualquier pregunta sobre privacidad, escribe a info@childrendoenglish.com. Si vives en la UE o el Reino Unido, también puedes presentar una reclamación ante tu autoridad de protección de datos.",
   termsTitle: 'Términos de Servicio',
-  termsUpdated: 'Última actualización: marzo de 2026',
+  termsUpdated: "Última actualización: 18 de noviembre de 2026",
   termsAcceptTitle: 'Aceptación de los Términos',
   termsAcceptDesc: 'Al usar Children Do English, aceptas estos términos. Si no estás de acuerdo, por favor no uses la app.',
   termsUseTitle: 'Uso de la App',
   termsUseDesc: 'Children Do English es una app educativa gratuita para aprender vocabulario en inglés. Está pensada para niños de 6 a 12 años bajo la supervisión de sus padres. Puedes usar la app con fines educativos personales y no comerciales.',
   termsContentTitle: 'Contenido y Propiedad Intelectual',
-  termsContentDesc: 'Todo el contenido, incluidas las imágenes, el texto y el audio, es propiedad de Children Do English. No puedes copiar, redistribuir ni vender ningún contenido de la app.',
+  termsContentDesc: "No puedes copiar, redistribuir ni vender los textos, los juegos ni la app propios de Children Do English. Algunas fotos son de otros fotógrafos y se usan según sus licencias; cada una aparece citada en la página de créditos de las imágenes (childrendoenglish.com/image-credits/).",
   termsDisclaimerTitle: 'Aviso Legal',
   termsDisclaimerDesc: 'La app se ofrece "tal cual", sin garantías. No garantizamos un acceso ininterrumpido ni un funcionamiento libre de errores. Children Do English no sustituye a la educación formal.',
   termsChangesTitle: 'Cambios en los Términos',
@@ -379,8 +384,8 @@ export default {
   storageFull: 'El almacenamiento está lleno. Es posible que tu progreso no se guarde. Intenta borrar datos antiguos del navegador.',
 
   // COPPA compliance
-  privacyCoppaTitle: 'Cumplimiento de COPPA',
-  privacyCoppaDesc: "Children Do English está hecho para cumplir la Ley de Protección de la Privacidad Infantil en Línea (COPPA). No recopilamos a sabiendas información personal de menores de 13 años. El progreso se guarda en el dispositivo; solo se envían totales anónimos sin identificador. La monitorización de errores con Sentry funciona solo en producción y recoge solo datos técnicos de diagnóstico (sin nombres ni contenido del usuario).",
+  privacyCoppaTitle: "Menores de 13 años (COPPA)",
+  privacyCoppaDesc: "No recopilamos información personal de menores de 13 años. No hay cuentas, no se nos envía nada personal y el progreso se guarda en el dispositivo. Solo se envían totales anónimos sin identificador. Los informes de errores de Sentry llevan solo datos técnicos, sin nombres ni contenido del usuario.",
 
   // Daily Review
   dailyReview: 'Repaso Diario',
