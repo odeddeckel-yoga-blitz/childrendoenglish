@@ -79,7 +79,22 @@ export const installAudioUnlock = () => {
   }
 };
 
+// A clip that has not started within this window is treated as missing, so the on-device TTS speaks instead
+// (audit 11-18: on a stalled classroom network neither onplaying nor onerror fires, and the word stayed silent).
+export const WORD_AUDIO_START_MS = 2500;
+// Bumped by every new word and by stopWordAudio(): a request that was replaced or stopped settles as null, so
+// speakWord() does not fall back to TTS for a word the child has already moved past.
+let wordGen = 0;
+
+// Resolves true = the clip started, false = blocked / missing / too slow (use TTS), null = replaced or stopped.
 const playWordFile = (text) => new Promise((resolve) => {
+  const gen = ++wordGen;
+  let settled = false, timer = null;
+  const settle = (v) => {
+    if (settled) return;
+    settled = true; clearTimeout(timer);
+    resolve(gen === wordGen ? v : null);
+  };
   try {
     if (currentWordAudio) { currentWordAudio.pause(); currentWordAudio = null; }
     const audio = sharedAudio || new Audio();
@@ -90,17 +105,27 @@ const playWordFile = (text) => new Promise((resolve) => {
     audio.playbackRate = slow ? 0.75 : 1;
     if (slow) audio.preservesPitch = true;
     currentWordAudio = audio;
-    audio.onplaying = () => resolve(true);
-    audio.onerror = () => resolve(false);
+    audio.onplaying = () => settle(true);
+    audio.onerror = () => settle(false);
+    timer = setTimeout(() => {
+      if (settled) return;
+      // Give up on the clip and stop it, so a late start can't talk over the TTS fallback.
+      if (gen === wordGen) {
+        try { audio.pause(); } catch { /* gone */ }
+        if (currentWordAudio === audio) currentWordAudio = null;
+      }
+      settle(false);
+    }, WORD_AUDIO_START_MS);
     const p = audio.play();
-    if (p && p.catch) p.catch(() => resolve(false));
+    if (p && p.catch) p.catch(() => settle(false));
   } catch {
-    resolve(false); // jsdom / blocked autoplay → fall back to TTS
+    settle(false); // jsdom / blocked autoplay → fall back to TTS
   }
 });
 
 // Stop the word now (a card / screen the child moved past must not keep talking over the next one; kit §8g).
 export const stopWordAudio = () => {
+  wordGen++;
   try { if (currentWordAudio) currentWordAudio.pause(); } catch { /* gone */ }
   try { window.speechSynthesis?.cancel(); } catch { /* no TTS */ }
 };
@@ -129,15 +154,18 @@ export const whenWordAudioDone = (capMs, cb) => {
   } else poll = setInterval(() => { if (!tts()) done(); }, 100);
 };
 
-// Resolves true when the word's audio file started playing (false = blocked or
-// missing; the on-device TTS fallback below can't report whether it spoke).
+// Resolves true when the word's audio file started playing (false = blocked, missing or
+// not started within WORD_AUDIO_START_MS; the on-device TTS fallback below can't report whether
+// it spoke; null = a newer word or stopWordAudio() replaced this one, so nothing was spoken).
 export const isSlowAudio = () => { try { return localStorage.getItem('cde_slow') === '1'; } catch { return false; } };
 export const setSlowAudio = (on) => { try { localStorage.setItem('cde_slow', on ? '1' : '0'); } catch { /* storage off */ } };
 
 export const speakWord = async (text) => {
   if (!isSoundEnabled()) return true;
 
-  if (await playWordFile(text)) return true;
+  const played = await playWordFile(text);
+  if (played) return true;
+  if (played === null) return null; // replaced by a newer word or stopped: no fallback, nothing to report
 
   // If TTS status unknown, try initializing first
   if (ttsAvailable === null) {
