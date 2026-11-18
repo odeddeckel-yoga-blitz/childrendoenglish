@@ -1,5 +1,6 @@
-/* RC11 reading pages (/band-1/reading/<slug>/). CSP-safe external file.
- * Tap a word → its Hebrew in the bar under the text. ▶ plays the text sentence by
+/* Graded-reader pages: /band-1/reading/<slug>/ (Hebrew) and /es/reading/<slug>/ (Spanish). CSP-safe external file.
+ * Tap a word → its gloss in the bar under the text. UI strings come from the page (data-t-* on [data-reading],
+ * src/data/readingUi.js); the Hebrew fallbacks keep an older cached page working. ▶ plays the text sentence by
  * sentence (the sentence being read is highlighted); 🔊 plays one question.
  * 🐢 = 0.75× playback, remembered on this device (same key as the word pages).
  * Questions: a wrong pick stays marked and the child tries again; the score counts
@@ -10,6 +11,9 @@
   var root = document.querySelector('[data-reading]');
   if (!root) return;
   var slug = root.getAttribute('data-reading');
+  var LANG = root.getAttribute('data-lang') || 'he';
+  var RTL = document.documentElement.dir === 'rtl';
+  function T(k, d) { return root.getAttribute('data-t-' + k) || d; }
 
   function excluded() {
     try { return navigator.webdriver || localStorage.getItem('cde_internal') === '1'; } catch (e) { return false; }
@@ -17,16 +21,17 @@
   function beacon(e, i) {
     try {
       if (excluded() || !navigator.sendBeacon || !/^[a-z0-9@_-]{1,40}$/.test(i)) return;
-      navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: e, i: i }], l: 'he' }));
+      navigator.sendBeacon('/api/land', JSON.stringify({ batch: [{ e: e, i: i }], l: LANG === 'es' ? 'es' : 'he' }));
     } catch (err) { /* never break the page */ }
   }
   // Drawn icons (sprite): own static strings only, so innerHTML is safe for them.
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function ic(n){return '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-'+n+'"/></svg>';}
   var begun = false;
   function begin() { if (!begun) { begun = true; beacon('quiz_start', ('read-' + slug).slice(0, 40)); } }
 
   // Keep English runs left-to-right inside the Hebrew gloss bar.
-  function isolate(s) { return s.replace(/[A-Za-z][A-Za-z' ]*[A-Za-z]|[A-Za-z]/g, function (m) { return '⁦' + m + '⁩'; }); }
+  function isolate(s) { if (!RTL) return s; return s.replace(/[A-Za-z][A-Za-z' ]*[A-Za-z]|[A-Za-z]/g, function (m) { return '⁦' + m + '⁩'; }); }
 
   var SLOW_KEY = 'cde_slow';
   function slowOn() { try { return localStorage.getItem(SLOW_KEY) === '1'; } catch (e) { return false; } }
@@ -42,7 +47,7 @@
     queue = [];
     if (player) { player.onended = null; player.pause(); }
     mark(null);
-    if (playAllBtn) playAllBtn.innerHTML = ic('play') + ' הקשיבו לכל הקטע';
+    if (playAllBtn) playAllBtn.innerHTML = ic('play') + ' ' + esc(T('play', 'הקשיבו לכל הקטע'));
   }
   function play(src, onend) {
     try {
@@ -75,7 +80,7 @@
       begin();
       if (queue.length || (player && !player.paused)) { stop(); return; }
       queue = sentences.slice();
-      playAllBtn.innerHTML = ic('x') + ' עצירה';
+      playAllBtn.innerHTML = ic('x') + ' ' + esc(T('stop', 'עצירה'));
       nextInQueue();
       return;
     }
@@ -102,7 +107,7 @@
       o.classList.add('good');
       q.setAttribute('data-done', '1');
       Array.prototype.forEach.call(q.querySelectorAll('.opt'), function (b) { b.disabled = true; });
-      fb.innerHTML = 'נכון! ' + ic('check');
+      fb.innerHTML = esc(T('ok', 'נכון!')) + ' ' + ic('check');
       if (!tried) firstTry++;
       done++;
       if (done === qs.length) finish();
@@ -110,13 +115,13 @@
       o.classList.add('bad');
       o.disabled = true;
       q.setAttribute('data-tried', '1');
-      fb.textContent = 'לא בדיוק — חפשו את התשובה בקטע ונסו שוב.';
+      fb.textContent = T('try', 'לא בדיוק — חפשו את התשובה בקטע ונסו שוב.');
     }
   }
   function finish() {
     var sc = document.getElementById('read-score');
     sc.hidden = false;
-    sc.innerHTML = '⁦' + firstTry + '/' + qs.length + '⁩ ' + (firstTry === qs.length ? 'כבר בניסיון הראשון — כל הכבוד! ' + ic('party-popper') : 'בניסיון הראשון. כל השאלות נפתרו! ' + ic('sparkles'));
+    sc.innerHTML = '⁦' + firstTry + '/' + qs.length + '⁩ ' + (firstTry === qs.length ? esc(T('all', 'כבר בניסיון הראשון — כל הכבוד!')) + ' ' + ic('party-popper') : esc(T('some', 'בניסיון הראשון. כל השאלות נפתרו!')) + ' ' + ic('sparkles'));
     beacon('quiz_done', ('read-' + slug).slice(0, 40));
   }
 })();

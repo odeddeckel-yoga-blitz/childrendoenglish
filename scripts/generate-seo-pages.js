@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import ES_GLOSSES from '../src/data/word-glosses-es.js';
+import { READING_UI } from '../src/data/readingUi.js';
 import { printQrBlock, PRINT_QR_CSS } from './qr-svg.mjs';
 import { sentenceAudio } from './sentence-audio.mjs';
 import { withArticle, isPhoto, pictureClaim, truthfulPictureText, countWord } from './page-copy.mjs';
@@ -2243,6 +2244,7 @@ function buildSpanishLandingPage() {
         ${categoryGrid}
       </div>
       <p style="text-align:center;margin-top:1.25rem;font-size:0.9rem"><a href="/printable-flashcards/spanish/">Tarjetas imprimibles de vocabulario en inglés y español &rarr;</a></p>
+      <p style="text-align:center;margin-top:0.5rem;font-size:0.9rem"><a href="/es/reading/">${READING_UI.es.landingLink} &rarr;</a></p>
     </div>
   </div>
 
@@ -5499,9 +5501,9 @@ console.log(`Hebrew topic pages: ${heTopicPages}`);
 const { buildGradePages } = await import(join(ROOT, 'scripts', 'build-grade-pages.mjs'));
 console.log(`Grade pages: ${buildGradePages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, BAND1_BY_ID, BAND_CHIPS, UNITS, BOOKS, headterm: heHeadterm })}`);
 const { buildReadingPages } = await import(join(ROOT, 'scripts', 'build-reading-pages.mjs'));
-const { READINGS, READING_NAMES } = await import(join(ROOT, 'src', 'data', 'readings.js'));
-const { READING_GLOSSES, READING_PHRASES } = await import(join(ROOT, 'src', 'data', 'readingGlosses.js'));
-console.log(`Reading pages: ${buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, READINGS, READING_NAMES, READING_GLOSSES, READING_PHRASES })}`);
+const { READINGS, READING_STAGES, READING_NAMES } = await import(join(ROOT, 'src', 'data', 'readings.js'));
+const { READING_GLOSSES, READING_PHRASES, READING_GLOSSES_ES, READING_PHRASES_ES } = await import(join(ROOT, 'src', 'data', 'readingGlosses.js'));
+console.log(`Reading pages (he + es): ${buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, READINGS, READING_STAGES, READING_NAMES, READING_GLOSSES, READING_PHRASES, READING_GLOSSES_ES, READING_PHRASES_ES })}`);
 console.log(`  ✓ /band-1/: ${band1Pages} page(s)`);
 const unitEntries = unitUrls.map((u) => `  <url>
     <loc>${SITE}${u}</loc>
