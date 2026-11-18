@@ -3594,10 +3594,10 @@ const aboutExtraEn = `    <div class="section">
       <div class="stats">
         <div class="stat"><div class="stat-num">${WORDS_N}</div><div class="stat-label">Words</div></div>
         <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">Categories</div></div>
-        <div class="stat"><div class="stat-num">4</div><div class="stat-label">Quiz Modes</div></div>
-        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Difficulty Levels</div></div>
+        <div class="stat"><div class="stat-num">${FACT_GAMES}</div><div class="stat-label">Games</div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Languages</div></div>
       </div>
-      <p>Every word includes a definition, example sentence, phonetic pronunciation, and Hebrew translation &mdash; making it perfect for bilingual Hebrew-English learners.</p>
+      <p>Every word includes a definition, example sentence, phonetic pronunciation, and Hebrew and Spanish translations &mdash; made for kids learning English from Hebrew or Spanish.</p>
     </div>`;
 const trustUrls = buildTrustPages({ SITE, distDir, writePage, FACTS_EN, FACTS_HE, extraEn: aboutExtraEn,
   nums: { words: WORDS_N, cats: CATEGORIES.length, games: FACT_GAMES, band1: FACT_BAND1_N, units: FACT_UNITS_N, es: FACT_ES_N, total: WORDS.length } });
