@@ -37,6 +37,8 @@ function writePage(path, html) {
     out = out.replace('</body>', buildCrawlMesh(lang) + '</body>');
   }
   if (out.includes('</body>') && !out.includes('class="site-head"')) out = out.replace(/<body([^>]*)>/, (m) => m + siteHeader(lang));
+  // the page builders (build-*.mjs) all write aria-label="breadcrumb"; name it in the page's language
+  if (lang !== 'en') out = out.replaceAll('aria-label="breadcrumb"', `aria-label="${navLabel('crumb', lang)}"`);
   // Sweep 10-31: one <main> landmark per page (axe landmark-one-main on 648
   // pages): wrap everything between the shared header and the footer mesh.
   if (!/<main[\s>]/.test(out) && out.includes('</nav>\n') && out.includes('<nav class="crawl-mesh"')) {
@@ -56,10 +58,18 @@ const SITE_HEAD = {
   // The language links use names, as on the es header (mockups a/b).
   en: { dir: 'ltr', links: [['/', 'Children Do English'], ['/games/', 'Games'], ['/printable-flashcards/', 'Printables'], ['/teachers/', 'Teachers'], ['/he/', 'עברית', 'he', 'עברית'], ['/es/', 'Español', 'es', 'Español']] },
 };
+// Landmark names in the page's language (audit 11-18: /he/ and /es/ pages announced "Site", "Explore
+// ChildrenDoEnglish" and "breadcrumb" in English). English values stay as they were.
+const NAV_LABEL = {
+  site: { en: 'Site', he: 'ניווט באתר', es: 'Navegación del sitio' },
+  mesh: { en: 'Explore ChildrenDoEnglish', he: 'כל הדפים באתר', es: 'Todas las páginas del sitio' },
+  crumb: { en: 'breadcrumb', he: 'נתיב ניווט', es: 'Ruta de navegación' },
+};
+const navLabel = (k, lang) => NAV_LABEL[k][lang] || NAV_LABEL[k].en;
 const gameIcon = (n) => `<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-${n}"/></svg>`;
 function siteHeader(lang) {
   const h = SITE_HEAD[lang] || SITE_HEAD.en;
-  return `\n<nav class="site-head" dir="${h.dir}" aria-label="Site">` +
+  return `\n<nav class="site-head" dir="${h.dir}" aria-label="${navLabel('site', lang)}">` +
     `<style>.site-head{display:flex;flex-wrap:wrap;align-items:center;gap:0 .65rem;padding:0 1rem;background:#fff;border-bottom:1px solid #e2e8f0;font:600 .8rem/1.4 system-ui,-apple-system,'Segoe UI',sans-serif}` +
     `.cat-links a,.res-links a,.back-link,.play-online,.print-btn,.sheet-row select,details>summary{min-height:44px;box-sizing:border-box}details>summary{display:flex;align-items:center}` +
     `.cat-links a,.res-links a,.back-link,.play-online{display:inline-flex;align-items:center}` +
@@ -100,7 +110,7 @@ function buildCrawlMesh(lang = 'en') {
   const H = (k) => MESH_HEAD[k][lang] || MESH_HEAD[k].en;
   const own = (en, es) => (lang === 'es' ? [es, 'es'] : [en, 'en']);
   const heHead = (t) => (lang === 'he' ? t : `<span lang="he" dir="rtl">${t}</span>`);
-  _meshCache[lang] = `\n<nav class="crawl-mesh" aria-label="Explore ChildrenDoEnglish">` +
+  _meshCache[lang] = `\n<nav class="crawl-mesh" aria-label="${navLabel('mesh', lang)}">` +
     `<style>.crawl-mesh{max-width:960px;margin:2rem auto 0;padding:1.2rem 1rem 2.2rem;font-size:.78rem;color:#4b5a6e;border-top:1px solid #e2e8f0}` +
     `.crawl-mesh h2{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;margin:.8rem 0 .25rem;color:#475569}` +
     `.crawl-mesh p{margin:0;line-height:1.9}` +
@@ -449,7 +459,7 @@ function buildCategoryPage(slug, displayName, words) {
   // Game-first (owner 11-12, scripts/game-first.mjs): the matching game's card leads, above the app CTA and the list.
   const gameFirst = gameFirstCard(gameForCategory(ROOT, slug, words), { lang: 'en', content: 'vocab_category' });
   // The game-first card above is the page's one big play button (owner 11-12); the app link is a plain text link under it.
-  const playTop = `<a class="top-link" href="${playHref}&utm_content=vocab_category_top">Or practice ${escapeHtml(lower)} words in the app, free &mdash; no sign-up &rarr;</a>
+  const playTop = `<a class="top-link" href="${playHref}&utm_content=vocab_category_top">Or practice ${escapeHtml(lower)} words in the app, free &mdash; no <span style="white-space:nowrap">sign-up &rarr;</span></a>
     ${miniQuizHtml(quizPool, slug, { title: '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg> Try one word in 10 seconds', sub: 'Listen, then tap the right picture.', cta: `Play 10 more ${escapeHtml(lower)} words free &rarr;`, content: 'vocab_category', href: `/new-player?topic=${slug}&utm_source=seo&utm_medium=miniquiz` })}
     <p class="how-to"><strong>For parents:</strong> tap Play, let your child listen and pick the picture for about 5 minutes, then look through the words below together. No account, no ads.</p>`;
 
@@ -571,7 +581,7 @@ function buildCategoryPage(slug, displayName, words) {
     </div>
 
     <div class="cta">
-      <a href="${playHref}&utm_content=vocab_category">Practice These Words in the App &rarr;</a>
+      <a href="${playHref}&utm_content=vocab_category">Practice These Words in the <span style="white-space:nowrap">App &rarr;</span></a>
       <p class="cta-sub">Free &middot; No ads &middot; Works offline &middot; No account needed</p>
     </div>
 
@@ -1189,7 +1199,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
             <div class="bi-phonetic">${escapeHtml(w.phonetic)}</div>
             <div class="bi-def">${escapeHtml(w.definition)}</div>
           </div>
-          <div class="bi-he">
+          <div class="bi-he" lang="he" dir="rtl">
             <div class="bi-he-word">${escapeHtml(w.hebrewTranslation)}</div>
           </div>
         </div>
@@ -1202,7 +1212,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
   const otherCategoryLinks = CATEGORIES.filter((c) => c !== slug)
     .map(
       (c) =>
-        `<a href="/vocabulary/${c}/hebrew/">${escapeHtml(CATEGORY_NAMES[c] || c)} / ${escapeHtml(CATEGORY_NAMES_HE[c] || c)}</a>`
+        `<a href="/vocabulary/${c}/hebrew/">${escapeHtml(CATEGORY_NAMES[c] || c)} / <span lang="he" dir="rtl">${escapeHtml(CATEGORY_NAMES_HE[c] || c)}</span></a>`
     )
     .join('\n        ');
 
@@ -1285,7 +1295,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
 <body>
   <div class="header">
     <h1>${escapeHtml(displayName)} in Hebrew and English</h1>
-    <p>${escapeHtml(displayName)} / ${escapeHtml(hebrewName)} &mdash; ${words.length} bilingual vocabulary words</p>
+    <p>${escapeHtml(displayName)} / <span lang="he" dir="rtl">${escapeHtml(hebrewName)}</span> &mdash; ${words.length} bilingual vocabulary words</p>
   </div>
 
   <div class="breadcrumb">
@@ -1748,7 +1758,7 @@ function buildHebrewLandingPage() {
     .faq-q { font-weight: 700; font-size: 1rem; margin-bottom: 0.35rem; color: #1e293b; }
     .faq-a { font-size: 0.9rem; color: #475569; line-height: 1.6; }
 
-    .teacher-row { text-align: center; padding: 0.75rem 1rem; background: #fff; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; line-height: 1.9; }
+    .teacher-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; column-gap: 1rem; padding: 0.75rem 1rem; background: #fff; border-bottom: 1px solid #e2e8f0; font-size: 0.95rem; line-height: 1.9; }
     .teacher-row a { color: #1d4ed8; font-weight: 600; }
     /* Final CTA */
     .final-cta { text-align: center; padding: 2.5rem 1rem; background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%); color: #fff; }
@@ -1771,13 +1781,13 @@ function buildHebrewLandingPage() {
   </div>
 
   <!-- Teacher door (UX audit CUX8, persona P3): one line right under the hero -->
-  <nav class="teacher-row" id="teachers" aria-label="למורים"><strong>למורים:</strong> <a href="/band-1/">רשימת <bdi>Band I</bdi></a> &middot; <a href="/units/">יחידות לימוד</a> &middot; <a href="/battle/">קרב כיתתי</a> &middot; <a href="/printable-flashcards/hebrew/">כרטיסיות להדפסה</a></nav>
+  <nav class="teacher-row" id="teachers" aria-label="למורים"><strong>למורים:</strong> <a href="/band-1/">רשימת <bdi>Band I</bdi></a> <a href="/units/">יחידות לימוד</a> <a href="/battle/">קרב כיתתי</a> <a href="/printable-flashcards/hebrew/">כרטיסיות להדפסה</a></nav>
 
   <!-- Stats bar -->
   <div class="stats-bar">
     <div class="stat"><div class="stat-num">${HE_WORD_STAT}+</div><div class="stat-label">מילים</div></div>
     <div class="stat"><div class="stat-num">${CATEGORIES.length}</div><div class="stat-label">קטגוריות</div></div>
-    <div class="stat"><div class="stat-num">4</div><div class="stat-label">סוגי חידונים</div></div>
+    <div class="stat"><div class="stat-num">11</div><div class="stat-label">שלבי תרגול</div></div>
     <div class="stat"><div class="stat-num">3</div><div class="stat-label">רמות קושי</div></div>
   </div>
 
@@ -1799,7 +1809,7 @@ function buildHebrewLandingPage() {
         <div class="feature-card">
           <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg></div>
           <h3>חידונים מהנים</h3>
-          <p>ארבעה סוגי חידונים — תמונות, מילים, שמע והתאמה — שהופכים את הלמידה למשחק.</p>
+          <p>חידוני תמונות, האזנה וקריאה, איות עם אותיות חסרות ומשחקי ארקייד — שהופכים את הלמידה למשחק.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-file-text"/></svg></div>
@@ -1814,12 +1824,12 @@ function buildHebrewLandingPage() {
         <div class="feature-card">
           <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-map"/></svg></div>
           <h3>מסלול למידה מותאם</h3>
-          <p>שלוש רמות קושי — מתחילים, ביניים ומתקדמים — כך שכל ילד מתקדם בקצב שלו.</p>
+          <p>כל קבוצה של 10 מילים עולה בסולם תרגול בן 11 שלבים, מכרטיסייה ראשונה ועד משחקי ארקייד, וכל ילד מתקדם בקצב שלו.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-trophy"/></svg></div>
           <h3>תגים והישגים</h3>
-          <p>הילדים אוספים תגים ומעקבים אחרי ההתקדמות, מה שמעודד אותם להמשיך ללמוד.</p>
+          <p>הילדים אוספים תגים ועוקבים אחרי ההתקדמות, מה שמעודד אותם להמשיך ללמוד.</p>
         </div>
       </div>
     </div>
@@ -4748,7 +4758,7 @@ const GUIDES = [
   <li><strong>Reading direction</strong> &mdash; Switching from right-to-left (Hebrew) to left-to-right (English) is a major cognitive shift, especially for early readers</li>
   <li><strong>Vowel systems</strong> &mdash; Hebrew has 5 vowel sounds; English has 15+. Kids often struggle with sounds like the "a" in "cat" vs. "cake" vs. "car"</li>
   <li><strong>Phonetic inconsistency</strong> &mdash; Hebrew spelling is mostly phonetic; English is famously irregular ("though," "through," "thought")</li>
-  <li><strong>False friends</strong> &mdash; Some words sound similar but mean different things. Hebrew "dog" (דג) means "fish" in English!</li>
+  <li><strong>False friends</strong> &mdash; Some words sound similar but mean different things. Hebrew "dog" (<span lang="he" dir="rtl">דג</span>) means "fish" in English!</li>
   <li><strong>The "th" sound</strong> &mdash; This sound doesn't exist in Hebrew and requires specific practice</li>
 </ul>
 <p>Understanding these challenges helps parents provide targeted support rather than generic vocabulary drill.</p>`,
@@ -5651,14 +5661,14 @@ console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\
   h1{font-size:1.75rem;color:#1d4ed8;margin:.2rem 0 .4rem} .sub{color:#475569;margin:0 0 1rem;line-height:1.5}
   .today-cta{display:block;text-align:center;background:#b45309;color:#fff;font-weight:800;font-size:1.1rem;padding:.85rem 1rem;border-radius:999px;text-decoration:none;margin:0 auto 1.2rem;max-width:420px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
   .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-  .card{display:block;background:#fff;border-radius:1.2rem;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 2px 10px rgba(30,64,175,.08);transition:transform .15s}
+  .card{display:flex;flex-direction:column;background:#fff;border-radius:1.2rem;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 2px 10px rgba(30,64,175,.08);transition:transform .15s}
   .card:hover{transform:translateY(-3px)}
   .shot{display:block;width:100%;height:auto;aspect-ratio:8/5;object-fit:cover;background:#e0e7ff}
-  .body{padding:1rem 1.2rem 1.2rem} .card h2{margin:0 0 .3rem;color:#1d4ed8;font-size:1.2rem}
+  .body{padding:1rem 1.2rem 1.2rem;flex:1;display:flex;flex-direction:column} .card h2{margin:0 0 .3rem;color:#1d4ed8;font-size:1.2rem}
   .today{display:inline-block;vertical-align:middle;background:#fef3c7;color:#92400e;font-size:.72rem;font-weight:700;padding:.15rem .5rem;border-radius:999px;margin-inline-start:.3rem}
   .skill{font-weight:700;color:#0f766e;font-size:.9rem;margin:0 0 .4rem}
   .card p{font-size:.9rem;color:#475569;line-height:1.5;margin:0 0 .4rem} .card .who{font-size:.8rem;color:#4b5a6e}
-  .play{display:inline-block;margin-top:.3rem;background:#0f766e;color:#fff;font-weight:700;padding:.45rem 1rem;border-radius:999px}
+  .play{display:inline-block;align-self:flex-start;margin-top:auto;background:#0f766e;color:#fff;font-weight:700;padding:.45rem 1rem;border-radius:999px}
   .more{background:#fff;border-radius:1.2rem;padding:1.2rem 1.4rem;margin-top:1.4rem;box-shadow:0 2px 10px rgba(30,64,175,.06)}
   .more h2{font-size:1.15rem;margin:0 0 .5rem;color:#1e293b} .more p,.more li{color:#475569;line-height:1.55;font-size:.95rem}
   .more a{color:#1d4ed8;font-weight:600}
