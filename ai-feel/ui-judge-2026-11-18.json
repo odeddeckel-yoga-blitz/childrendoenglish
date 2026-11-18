@@ -1,0 +1,357 @@
+{
+  "site": "cde",
+  "jobs": [
+    {
+      "page": "/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_-390x844-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_-390x844-dark.png"
+      ],
+      "result": {
+        "score": 3,
+        "tells": [
+          "Centered hero with a generic open-book line icon above a stock-sounding headline, 'English Vocabulary for Kids — Free & Fun'",
+          "The headline is marketing filler ('Free & Fun'), and an em dash adds to the generic feel",
+          "Three small pill badges (560+ Words, 13 Categories, 11-Step Ladder) each carry a stock icon. They read like feature chips, and '11-Step Ladder' is unexplained",
+          "Three equal language cards (English, עברית, Español) look like the 'three feature cards' pattern, though here they do a real job",
+          "The soft blue-tinted background, rounded cards, and one blue primary button follow a standard template look",
+          "No visible 'who made this' on the first screen. Nothing says who is behind the app or why it exists"
+        ],
+        "good": [
+          "The subtitle is concrete and honest: ages 6-12, no ads, no signup",
+          "The language picker is a real, useful feature, with native-script labels and each description written in its own language (Hebrew, Spanish)",
+          "The teacher links (Band I word list, Textbook units, Class Battle, Printable flashcards) are specific and point to real, useful content",
+          "One clear primary action ('Start') with a plain explanation of the language choice below it",
+          "Light and dark themes are both well made, with consistent radii and spacing and good contrast",
+          "No emoji icons, no gradient text, no invented testimonials or fake badges",
+          "The numbers (560+ words, 13 categories) are concrete rather than vague boasts"
+        ],
+        "_model": "sonnet",
+        "_ladder": "second",
+        "_first": {
+          "score": 3,
+          "tells": [
+            "Stock hero stack: centered icon, two-line headline, subtitle, and a row of three pill badges (\"560+ Words\", \"13 Categories\", \"11-Step Ladder\") sitting above a full-width primary button, all in one predictable column",
+            "Three equal cards for language choice (English / עברית / Español) with identical structure, the pattern a template would generate",
+            "Stock Tailwind-style blue primary button and rounded-card styling; the dark theme is a default inverse with no distinct character",
+            "Feature-level copy is generic (\"Free & Fun\", \"No ads, no signup\") and the pills read as spec-sheet filler rather than something a teacher or child would need",
+            "Header's \"English\" globe pill is the only chrome; the page gives no visible author, organization, or 'who made this'"
+          ],
+          "good": [
+            "Specific, honest subject: a vocabulary app for ages 6–12 with concrete numbers (560+ words, 13 categories, 11-step ladder) rather than vague superlatives",
+            "Language choice is handled well: instructions offered in English, Hebrew, and Spanish, with each option labelled in its own language, and the Hebrew card set in RTL correctly",
+            "Teacher section is real and useful, linking directly to a word list, textbook units, Class Battle, and printable flashcards",
+            "Clear primary action (Start) with a secondary path for picking the instruction language, so a child or parent can act without reading much",
+            "Light and dark themes both kept legible with matching layout and spacing; the 390px mobile layout has no visible overflow or clipping",
+            "Honest claim \"No ads, no signup\" is stated plainly, with no fake testimonials or invented badges"
+          ],
+          "_model": "haiku"
+        }
+      }
+    },
+    {
+      "page": "/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_-1280x800-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_-1280x800-dark.png"
+      ],
+      "result": {
+        "score": 4,
+        "tells": [
+          "Centered hero stack (icon, headline, subhead, CTA, then a row of three icon pills and three language cards) is a familiar landing-page layout",
+          "Icon-plus-label stat pills (book, tag, gamepad) are a common template pattern, though only three and they carry real content",
+          "Headline wraps to leave \"Fun\" alone on the second line, and the \"Free & Fun\" phrasing reads as slightly marketing-styled",
+          "Hero icon is a generic outline book glyph rather than a custom mark",
+          "No visible author, maker, or 'about' attribution on the first screen"
+        ],
+        "good": [
+          "Specific, checkable claims: \"560+ Words\", \"13 Categories\", \"11-Step Ladder\", \"ages 6-12\", \"No ads, no signup\"",
+          "Teacher section links to concrete tools (Band I word list, Textbook units, Class Battle, Printable flashcards) instead of generic CTAs",
+          "Instructions offered in English, Hebrew, and Spanish with native-script labels, showing the audience was considered",
+          "Restrained single-blue palette with no gradient text, no emoji icons, and no invented testimonials or badges",
+          "Consistent icon family and corner radii across pills, cards, and the language selector",
+          "Dark theme is a real adaptation: same layout, adjusted surfaces, borders, and text contrast, not an inverted afterthought",
+          "Plain, honest copy that tells a parent or child what the app is and what it costs"
+        ],
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "page": "/games/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_games_-390x844-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_games_-390x844-dark.png"
+      ],
+      "result": {
+        "score": 4,
+        "tells": [
+          "Hero subcopy leans on marketing phrasing (\"tap and play in the browser on any device\"; \"An endless arcade with shields, combos and adaptive speed\")",
+          "No visible \"who made this\" or about link in the first screen; the nav shows only Games, Printables, Teachers, עברית and Español"
+        ],
+        "good": [
+          "Specific, checkable claims: 19 games, no ads, no sign-up, nothing to install, ages 6-12, no reading needed",
+          "Hero names today's actual game (\"Play today's game: Missing Letter\") instead of a generic call to action",
+          "Game cards show real gameplay previews with the word COW and its Hebrew translation פרה, so the product is visible before any copy",
+          "Bilingual audience handled honestly: Hebrew and Spanish in the nav, Hebrew label rendered correctly",
+          "Card structure is consistent: same preview, title, one-line mechanic, age note and Play button on each card",
+          "Restrained palette and type; no gradient headings, no emoji icons, no invented testimonials or badges on the first screen"
+        ],
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "page": "/games/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_games_-1280x800-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_games_-1280x800-dark.png"
+      ],
+      "result": {
+        "score": 4,
+        "tells": [
+          "Play-free buttons sit at different heights across the first row of cards (about y=600, 621, 643), so the card footers don't line up",
+          "Card-based grid of 19 games with identical card structure reads somewhat templated, though the thumbnails are individual",
+          "Line icons next to the game titles (bolt, cube, hammer) come from a stock set and don't clearly relate to the games",
+          "Intro line 'No ads, no sign-up, nothing to install — tap and play in the browser on any device' is slightly promotional",
+          "No author, about link, or contact visible on the first screen to say who made this"
+        ],
+        "good": [
+          "Specific, honest copy: '19 quick games', 'Ages 6-12 · no reading needed', 'Ages 7-12 · for kids who know their letters' tell parents exactly what each game needs",
+          "Each game is described by its actual learning mechanic (listening, word meaning, spelling) rather than generic praise",
+          "Thumbnails are real screenshots of the games in play, not abstract illustrations",
+          "Clear hierarchy: a single blue headline, one prominent 'Play today's game' call to action, then the grid",
+          "Localization is offered up front (עברית, Español), which suggests the site is built for real classrooms and families",
+          "Solid, consistent blue and teal palette with no gradient-text headings",
+          "Honest scope statement: 19 games, no ads, no sign-up, nothing to install"
+        ],
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "page": "/he/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_he_-390x844-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_he_-390x844-dark.png"
+      ],
+      "result": {
+        "score": 4,
+        "tells": [
+          "Hero is a blue gradient panel with a centered headline and one pill CTA, a familiar landing-page layout, though restrained and not overdone.",
+          "Four large stat numbers (560+ words, 4 quiz types, 13 categories, 3 difficulty levels) in a row are a common template pattern, though the figures are concrete.",
+          "Small stock-style line icons (house in the nav, game controller in the yellow notice) are generic rather than custom.",
+          "The teacher-links row wraps awkwardly: a stray separator dot starts the second line and 'כרטיסיות להדפסה' sits alone there.",
+          "The 'dark' screenshot shows the same light palette as the light one, so the dark theme is not visibly applied in this capture."
+        ],
+        "good": [
+          "Copy is specific and plain: ages 6-12, Hebrew glosses, concrete counts, and a clear 'what this is' line.",
+          "Honest trust line directly under the CTA: 'no ads · no sign-up · free', with no invented testimonials or badges.",
+          "The yellow notice is candid about what the games do ('by level and topic, free, no sign-up') rather than overselling.",
+          "Teacher-facing resources (Band I list, units, class battles, printable cards) are surfaced on the first screen, which suggests the maker knows the audience.",
+          "Hebrew RTL layout reads cleanly, with a consistent left-aligned nav, a clear EN/ES language switcher, and even section spacing.",
+          "No visible AI-generated or text-to-speech disclosure on this screen, and no claims that need one; nothing here is hidden or misleading."
+        ],
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "page": "/he/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_he_-1280x800-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_he_-1280x800-dark.png"
+      ],
+      "result": {
+        "score": 4,
+        "tells": [
+          "Hero is a centered headline, subhead and single CTA over a blue gradient background, a common template pattern (the gradient is background only, not gradient text)",
+          "The 'איך הילדים שלכם ילמדו אנגלית?' section is a three-card row with matching line icons, the standard feature-card layout",
+          "No author or 'about' identity is visible in the first screen; the footer is not shown, so this is unverified rather than missing"
+        ],
+        "good": [
+          "Specific, concrete copy: ages 6-12, 560+ words, 13 categories, 4 game types, 3 difficulty levels, with no invented testimonials or badges",
+          "Honest, clear trust signals: 'ללא פרסומות · ללא רישום · חינם לגמרי' (no ads, no sign-up, free) directly under the CTA",
+          "Good Hebrew RTL execution: type, alignment and nav order read naturally, and the Hebrew text is not a machine-looking translation",
+          "Consistent system: one blue accent, even card radii and spacing, and a restrained icon set (camera, gamepad, document) that matches its meaning",
+          "Practical navigation with a plain 'למורים' (for teachers) link and an EN/ES language switcher",
+          "Useful at-a-glance stats and a clearly labelled 'for teachers' path, which shows the product was built around real users"
+        ],
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "page": "/about/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_about_-390x844-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_about_-390x844-dark.png"
+      ],
+      "result": {
+        "score": 4,
+        "tells": [
+          "Dark-theme capture renders identically to the light one (white cards on a light background, no dark surfaces visible), so dark mode is either unimplemented or not captured",
+          "Default-looking blue hero banner with centered title and subtitle above stacked white cards, a common template layout",
+          "Bold-lead bullets with em-dash explanations (Spaced repetition, Multi-modal learning, Progressive difficulty) read as a standard feature-list pattern",
+          "No visible author, maker, or contact on the first screen; the page does not say who built it"
+        ],
+        "good": [
+          "Concrete, honest copy: 'free, with no ads and no account' and a specific age range (6-12) instead of vague marketing claims",
+          "Explains how the product works in plain terms (spaced repetition, multi-modal, three difficulty levels) without hype",
+          "Navigation offers Hebrew and Spanish alongside English, which suggests care for the actual audience",
+          "Consistent card radii, padding, and type scale; text is readable at phone width",
+          "Clear wayfinding with a home icon and a Home > About breadcrumb",
+          "Restrained palette with no gradient text, emoji icons, or invented testimonials or badges"
+        ],
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "page": "/about/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_about_-1280x800-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_about_-1280x800-dark.png"
+      ],
+      "result": {
+        "score": 2,
+        "tells": [
+          "Generic template look: saturated blue banner with centered title and tagline, followed by a stack of identical white rounded cards on a pale blue background",
+          "'How It Works' is a bolded-lead-in bullet list ('Spaced repetition —', 'Multi-modal learning —', 'Progressive difficulty —', 'Instant feedback —'), which is stock explainer copy",
+          "Copy is generic and promotional: 'fun, interactive learning', 'a strong English vocabulary', 'built around a few simple ideas', 'encouraging feedback'",
+          "The first screen has no 'who made this', no named person or team, no photo and no story, so the About page doesn't say who is behind it",
+          "The dark and light screenshots look identical, so the dark theme either isn't applied or isn't differentiated",
+          "No distinctive visual identity: no illustration, no brand character, no imagery of the kids' content, and a default-looking system sans-serif"
+        ],
+        "good": [
+          "Spacing, card radii, and type hierarchy are consistent and clean",
+          "The nav is small and clear, with a home icon and Hebrew and Spanish language options, which shows real multilingual intent",
+          "The mission statement makes concrete, checkable claims: free, no ads, no account",
+          "The tagline gives a specific age range (6-12)",
+          "The breadcrumb is present and the text is readable, with good contrast and line length",
+          "The feature bullets name real pedagogy (spaced repetition, three difficulty levels) rather than vague buzzwords",
+          "No invented testimonials, fake badges, emoji icons, gradient text, or hero-plus-three-cards layout"
+        ],
+        "_model": "sonnet",
+        "_ladder": "second",
+        "_first": {
+          "score": 3,
+          "tells": [
+            "Blue hero band with a centered title and tagline above a stack of identical white rounded cards, a common default page layout",
+            "Every section uses the same card treatment (same radius, shadow, and padding), so the page reads as a component template rather than a designed layout",
+            "Filler phrasing in the intro: 'The app is built around a few simple ideas' and 'engage different senses' say little on their own",
+            "Em-dash lead-ins on every bullet ('Spaced repetition — …') give the copy a formulaic rhythm",
+            "No author, team, or 'who made this' is visible on the first screen (the page continues below the fold, so this is only what is shown)"
+          ],
+          "good": [
+            "Concrete, honest mission copy: 'It is free, with no ads and no account' states specific commitments instead of vague claims",
+            "Specific mechanisms are named (spaced repetition, three difficulty levels, image, audio, flashcard, and word quizzes) rather than generic 'engaging learning' wording",
+            "No emoji, gradient text, or stock icon soup; the only icon is a small home glyph in the nav",
+            "Clear typographic hierarchy with sentence-case headings and readable body text in both screenshots",
+            "Language nav (Hebrew, Español) and a breadcrumb show attention to the actual audience and wayfinding",
+            "Spacing between cards and inside them looks consistent, with no obvious alignment drift"
+          ],
+          "_model": "haiku"
+        }
+      }
+    },
+    {
+      "page": "/vocabulary/animals/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_vocabulary_animals_-390x844-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_vocabulary_animals_-390x844-dark.png"
+      ],
+      "result": {
+        "score": 4,
+        "tells": [],
+        "good": [
+          "Specific, concrete title and subtitle: 'Animals - English Vocabulary for Kids', '73 words with definitions, sentences, phonetics & Hebrew translations'",
+          "Real photographs of the animals (horse, goldfish, rabbit) instead of stock icons or generic illustrations",
+          "Honest, plain free-trial framing: 'Free, no sign-up' stated directly in the Word Zapper card and the practice link",
+          "Clear, one-step 'Try one word in 10 seconds' demo with a Listen button, so a child can act immediately",
+          "Useful parent guidance ('tap Play, let your child listen and pick the picture for about 5 minutes') written for the actual audience",
+          "Breadcrumb navigation (Home › Vocabulary › Animals) and a language switcher (Hebrew, Español) show care for the audience",
+          "Consistent rounded corners, borders and spacing across the card, thumbnails and buttons",
+          "Dark theme keeps the same layout, contrast and image treatment rather than being an afterthought"
+        ],
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "page": "/vocabulary/animals/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_vocabulary_animals_-1280x800-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_vocabulary_animals_-1280x800-dark.png"
+      ],
+      "result": {
+        "score": 4,
+        "tells": [
+          "The arrow in the \"Or practice animals words in the app\" link wraps onto its own line, a small spacing inconsistency.",
+          "The section heading and \"Listen\" button use small stock-style line icons (game controller, speaker), which is mild icon use rather than icon soup.",
+          "The top nav and hero are a fairly conventional blue banner with a centered title and subtitle."
+        ],
+        "good": [
+          "Specific, checkable copy: \"73 words with definitions, sentences, phonetics & Hebrew translations\" and \"Try one word in 10 seconds.\"",
+          "Real photographs of animals (horse, goldfish, rabbit) instead of abstract illustrations or stock gradients.",
+          "Clear hierarchy: breadcrumbs, one primary call to action (Play Word Zapper), then a free practice option, then a try-it widget.",
+          "Honest, plain parent guidance: \"tap Play, let your child listen... No account, no ads.\"",
+          "No gradient-text headings, no emoji used as icons, no invented testimonials or badges on the first screen.",
+          "Consistent rounded cards and restrained palette; the light and dark screenshots show the same layout, so nothing visibly changes between them."
+        ],
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "page": "/games/spelling-forge/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_games_spelling_forge_-390x844-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_games_spelling_forge_-390x844-dark.png"
+      ],
+      "result": {
+        "score": 4,
+        "tells": [
+          "Gradient-text title: \"SPELLING FORGE\" fades from blue to beige/orange, a common AI-template treatment",
+          "Emoji used as an icon: the hammer emoji beside the title",
+          "Over-explained copy: the hero sentence, the level-progression note and the two-paragraph description plus FAQ repeat the same mechanics (decoy letters, word length, ear-only top levels)"
+        ],
+        "good": [
+          "Specific, honest copy: names the real mechanics (decoy letters like b/d, tricky vowels, levels 1-2 short words, top levels spelled by ear alone)",
+          "Clear provenance: \"Part of childrendoenglish.com\" with a link, and a free/no-ads/no-signup statement that is stated plainly",
+          "No invented testimonials or fake social-proof badges; the only badge is a factual \"8 levels · best-score chase\"",
+          "Parent-facing FAQ answers the questions a parent would actually ask",
+          "Consistent pill-shaped controls and a coherent palette that holds up in both light and dark themes"
+        ],
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "page": "/games/spelling-forge/",
+      "files": [
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_games_spelling_forge_-1280x800-light.png",
+        "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/ui/_games_spelling_forge_-1280x800-dark.png"
+      ],
+      "result": {
+        "score": 4,
+        "tells": [
+          "Gradient-text heading on \"SPELLING FORGE\" (blue-to-gold fill), a common AI-template flourish",
+          "Over-explained copy: the intro, the pill chips, the level note, and the FAQ restate the same points (decoy letters, hearing the word, levels) several times",
+          "Three small pill chips with stock-style line icons summarize features in the hero, a familiar template pattern",
+          "Lower description and FAQ text is small, low-contrast grey-blue on navy, and hard to read",
+          "The file named \"light\" renders the same dark navy theme as the \"dark\" file, so the light theme is not visibly shown"
+        ],
+        "good": [
+          "Specific, concrete copy: decoy letters like b/d, levels 1-2 with short words, a top level spelled by ear alone, and 8 levels with best-score chase",
+          "Honest, checkable claims: free, no ads, no sign-up, works in any browser, English/Hebrew/Spanish button labels",
+          "Clear audience stated (ages 6-12) and a plain \"Part of childrendoenglish.com\" link that says who made it",
+          "Clean single primary action (START FORGING) with a clear hierarchy from title to button",
+          "Consistent centered layout, one accent palette, and no invented testimonials or fake badges"
+        ],
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    }
+  ]
+}

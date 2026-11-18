@@ -1,0 +1,384 @@
+{
+  "site": "cde",
+  "sheets": [
+    {
+      "files": [
+        "burger.webp",
+        "bowling.webp",
+        "thunder.webp",
+        "read_verb.webp",
+        "watch.webp",
+        "sunny.webp"
+      ],
+      "set": false,
+      "sheet": "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/sheet-rand-0.png",
+      "result": {
+        "tiles": [
+          {
+            "name": "burger",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "bowling",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "thunder",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "read_verb",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "watch",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "sunny",
+            "issues": [],
+            "aiFeel": 0
+          }
+        ],
+        "setConsistency": null,
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "files": [
+        "chin.webp",
+        "cannon.webp",
+        "robot.webp",
+        "cat.webp",
+        "twin.webp",
+        "castle.webp"
+      ],
+      "set": false,
+      "sheet": "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/sheet-rand-1.png",
+      "result": {
+        "tiles": [
+          {
+            "name": "chin",
+            "issues": [
+              "3D scan render is ambiguous and hard to read as a chin",
+              "cropped awkwardly"
+            ],
+            "aiFeel": 1
+          },
+          {
+            "name": "cannon",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "robot",
+            "issues": [
+              "glossy plastic 3D look"
+            ],
+            "aiFeel": 1
+          },
+          {
+            "name": "cat",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "twin",
+            "issues": [
+              "old photo, handwritten caption partly illegible"
+            ],
+            "aiFeel": 0
+          },
+          {
+            "name": "castle",
+            "issues": [],
+            "aiFeel": 0
+          }
+        ],
+        "setConsistency": null,
+        "_model": "sonnet",
+        "_ladder": "second",
+        "_first": {
+          "tiles": [
+            {
+              "name": "chin",
+              "issues": [],
+              "aiFeel": 0
+            },
+            {
+              "name": "cannon",
+              "issues": [],
+              "aiFeel": 0
+            },
+            {
+              "name": "robot",
+              "issues": [
+                "glossy plastic 3D render look"
+              ],
+              "aiFeel": 1
+            },
+            {
+              "name": "cat",
+              "issues": [],
+              "aiFeel": 0
+            },
+            {
+              "name": "twin",
+              "issues": [],
+              "aiFeel": 0
+            },
+            {
+              "name": "castle",
+              "issues": [],
+              "aiFeel": 0
+            }
+          ],
+          "setConsistency": null,
+          "_model": "haiku"
+        }
+      }
+    },
+    {
+      "files": [
+        "zipper.webp",
+        "hoodie.webp",
+        "paintbrush.webp",
+        "octopus.webp",
+        "sixteen.webp",
+        "king.webp"
+      ],
+      "set": false,
+      "sheet": "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/sheet-rand-2.png",
+      "result": {
+        "tiles": [
+          {
+            "name": "zipper",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "hoodie",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "paintbrush",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "octopus",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "sixteen",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "king",
+            "issues": [
+              "glossy 3D emoji style (a Fluent-style emoji, not a photo)"
+            ],
+            "aiFeel": 0
+          }
+        ],
+        "setConsistency": null,
+        "_model": "sonnet",
+        "_ladder": "second",
+        "_first": {
+          "tiles": [
+            {
+              "name": "zipper",
+              "issues": [],
+              "aiFeel": 0
+            },
+            {
+              "name": "hoodie",
+              "issues": [],
+              "aiFeel": 0
+            },
+            {
+              "name": "paintbrush",
+              "issues": [],
+              "aiFeel": 0
+            },
+            {
+              "name": "octopus",
+              "issues": [],
+              "aiFeel": 0
+            },
+            {
+              "name": "sixteen",
+              "issues": [],
+              "aiFeel": 0
+            },
+            {
+              "name": "king",
+              "issues": [
+                "glossy 3D emoji sheen"
+              ],
+              "aiFeel": 1
+            }
+          ],
+          "setConsistency": null,
+          "_model": "haiku"
+        }
+      }
+    },
+    {
+      "files": [
+        "bracelet.webp",
+        "chimney.webp",
+        "climbing.webp",
+        "beret.webp",
+        "quail.webp",
+        "armchair.webp"
+      ],
+      "set": false,
+      "sheet": "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/sheet-rand-3.png",
+      "result": {
+        "tiles": [
+          {
+            "name": "bracelet",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "chimney",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "climbing",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "beret",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "quail",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "armchair",
+            "issues": [],
+            "aiFeel": 0
+          }
+        ],
+        "setConsistency": null,
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "files": [
+        "cat.webp",
+        "dog.webp",
+        "horse.webp",
+        "fox.webp",
+        "penguin.webp",
+        "bird.webp"
+      ],
+      "set": true,
+      "sheet": "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/sheet-set-4.png",
+      "result": {
+        "tiles": [
+          {
+            "name": "cat",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "dog",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "horse",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "fox",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "penguin",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "bird",
+            "issues": [],
+            "aiFeel": 0
+          }
+        ],
+        "setConsistency": 3,
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    },
+    {
+      "files": [
+        "apple.webp",
+        "bread.webp",
+        "cheese.webp",
+        "egg.webp",
+        "juice.webp",
+        "meat.webp"
+      ],
+      "set": true,
+      "sheet": "/Users/odeddeckelbaum/projects/childrendoenglish/.image-work/ai-feel/sheet-set-5.png",
+      "result": {
+        "tiles": [
+          {
+            "name": "apple",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "bread",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "cheese",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "egg",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "juice",
+            "issues": [],
+            "aiFeel": 0
+          },
+          {
+            "name": "meat",
+            "issues": [],
+            "aiFeel": 0
+          }
+        ],
+        "setConsistency": 3,
+        "_model": "haiku",
+        "_ladder": "first"
+      }
+    }
+  ]
+}
