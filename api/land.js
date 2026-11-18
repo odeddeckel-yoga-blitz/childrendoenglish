@@ -5,6 +5,7 @@
 // no identifier, no IP, no device storage. Table: cde_land (shared Neon
 // project childrendoenglish, CDE_DATABASE_URL — own project since 2026-10-17).
 import { neon } from '@neondatabase/serverless';
+import { safeEqual } from './_lib/safeCompare.js';
 import { parseComponentBeacon, pgComponentStore, isBotUA } from './_lib/component-clicks-server.mjs';
 
 // 'teachers' is reserved (11-08): the /teachers page doesn't exist yet; land-beacon.js already classes its path.
@@ -210,7 +211,7 @@ export default async function handler(req, res) {
     }
     if (req.method === 'GET') {
       const token = process.env.LAND_REPORT_TOKEN;
-      if (!token || req.query.key !== token) return res.status(403).json({ error: 'forbidden' });
+      if (!safeEqual(req.query?.key, token)) return res.status(403).json({ error: 'forbidden' });
       const days = Math.min(365, Math.max(1, Number(req.query.days) || 30));
       const q = sql();
       if (!q) return res.status(200).json({ days, rows: [], note: 'no database configured' });

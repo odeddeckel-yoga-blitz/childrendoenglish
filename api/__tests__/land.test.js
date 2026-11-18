@@ -271,3 +271,29 @@ describe('api/land bot and human opens (kit land-beacon.md, 11-12)', () => {
     expect(learnRows().map((c) => c.values.slice(0, 2))).toEqual([['jserx', 'pg-hebrew']]);
   });
 });
+
+describe('api/land report token (audit 11-18: constant-time compare)', () => {
+  let handler;
+  beforeEach(async () => {
+    vi.restoreAllMocks(); vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    process.env.LAND_REPORT_TOKEN = 'report-token-1';
+    ({ default: handler } = await import('../land.js'));
+  });
+
+  it('403s a wrong, longer, missing or array key and 200s the right one', async () => {
+    for (const key of ['report-token-2', 'report-token-1x', undefined, ['report-token-1']]) {
+      const r = res(); await handler({ method: 'GET', headers: BROWSER, query: { key } }, r);
+      expect(r.code).toBe(403);
+    }
+    const r = res(); await handler({ method: 'GET', headers: BROWSER, query: { key: 'report-token-1' } }, r);
+    expect(r.code).toBe(200);
+  });
+
+  it('403s every key when no token is configured', async () => {
+    delete process.env.LAND_REPORT_TOKEN;
+    const r = res(); await handler({ method: 'GET', headers: BROWSER, query: { key: '' } }, r);
+    expect(r.code).toBe(403);
+  });
+});

@@ -1,15 +1,7 @@
-import crypto from 'crypto';
 import sharp from 'sharp';
+import { verifyAdminAuth as verifyAuth } from './_lib/safeCompare.js';
 
 const UA = 'ChildrenDoEnglish/1.0 (https://childrendoenglish.com; educational app)';
-
-function verifyAuth(req) {
-  const auth = req.headers.authorization;
-  if (!auth?.startsWith('Bearer ')) return false;
-  const password = auth.slice(7);
-  const hash = crypto.createHash('sha256').update(password).digest('hex');
-  return hash === (process.env.ADMIN_HASH || '').trim();
-}
 
 async function searchWikimedia(query, offset = 0) {
   const url = `https://commons.wikimedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrnamespace=6&gsrlimit=25&gsroffset=${offset}&prop=imageinfo&iiprop=url|mime|size|extmetadata&iiurlwidth=512&format=json&origin=*`;
@@ -80,7 +72,7 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
-  const { queries, offset = 0 } = req.body;
+  const { queries, offset = 0 } = req.body || {};
   if (!Array.isArray(queries) || queries.length === 0) {
     return res.status(400).json({ error: 'queries[] required' });
   }
