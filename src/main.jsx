@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
+import { installDomTranslateGuard, pageTranslated } from './utils/domTranslateGuard';
+
+installDomTranslateGuard();
 
 // Lazy-load Sentry after initial render to reduce main bundle.
 // Errors only — no performance tracing — so crash reporting stays anonymous
@@ -14,7 +17,7 @@ if (import.meta.env.PROD) {
       sendDefaultPii: false,
       // no profile names in a crash report: no tap/console breadcrumbs, saved names replaced (utils/sentryScrub.js)
       beforeBreadcrumb: scrub.beforeBreadcrumb,
-      beforeSend: (event) => scrub.beforeSend(event),
+      beforeSend: (event) => { event.tags = { ...event.tags, translated: pageTranslated() }; return scrub.beforeSend(event); },
     });
     setTag('appVersion', '1.0.0');
   });
