@@ -23,7 +23,7 @@ const EMAIL = 'info@childrendoenglish.com';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 // Latin runs (with the punctuation inside a name or URL), emails and numbers ("6–12", "13", "560+") → LTR isolates.
-const LTR_RUN = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+|[A-Za-z](?:[A-Za-z0-9'’\-]|[ ,.:/&+](?=[ ,.:/&+]*[A-Za-z0-9]))*|\d+(?:[–-]\d+)*\+?/g;
+const LTR_RUN = /[\w.+-]+@[\w-]+(?:\.[\w-]+)+|[A-Za-z](?:[A-Za-z0-9'’-]|[ ,.:/&+](?=[ ,.:/&+]*[A-Za-z0-9]))*|\d+(?:[–-]\d+)*\+?/g;
 function heText(s) {
   let out = '', at = 0;
   for (const m of String(s).matchAll(LTR_RUN)) {
