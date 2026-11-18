@@ -8,7 +8,7 @@
  */
 
 import sharp from 'sharp';
-import { existsSync, mkdirSync, statSync, writeFileSync } from 'fs';
+import { statSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -207,20 +207,6 @@ async function downloadAndConvert(imageUrl, outputPath) {
     .resize(512, 512, { fit: 'cover', position: 'centre' })
     .webp({ quality: 80 })
     .toFile(outputPath);
-}
-
-function getPlaceholderImages() {
-  const placeholders = [];
-  const files = require('fs').readdirSync(imagesDir);
-  for (const file of files) {
-    if (!file.endsWith('.webp')) continue;
-    const filepath = join(imagesDir, file);
-    const size = statSync(filepath).size;
-    if (size < PLACEHOLDER_MAX_SIZE) {
-      placeholders.push(file.replace('.webp', ''));
-    }
-  }
-  return placeholders;
 }
 
 async function main() {

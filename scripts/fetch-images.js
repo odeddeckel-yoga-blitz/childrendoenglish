@@ -51,7 +51,6 @@ const WORDS = {
   crocodile: ['crocodile reptile water', 'Krokodil crocodile', 'Crocodylus crocodile'],
   kangaroo: ['kangaroo standing Australia', 'Känguru kangaroo', 'red kangaroo Macropus'],
   hippo: ['hippopotamus water mouth', 'Nilpferd hippo', 'Hippopotamus amphibius'],
-  butterfly: ['butterfly colorful wings flower', 'Schmetterling butterfly', 'monarch butterfly orange'],
   camel: ['camel desert standing', 'Kamel camel', 'dromedary camel hump'],
   panda: ['giant panda bamboo eating', 'Pandabär panda', 'Ailuropoda melanoleuca panda'],
 

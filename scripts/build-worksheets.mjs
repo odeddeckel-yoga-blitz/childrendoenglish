@@ -216,7 +216,7 @@ function feelingsPage(SITE, d, esc) {
   const rows = d.circle.map((r, i) => `<div class="row3" data-word="${r.word}" data-answer="${r.answer}"><span class="w">${i + 1}. ${esc(r.word)}</span>${r.faces.map((f) => img(F(f), 'a face')).join('')}</div>`).join('\n');
   const stories = d.stories.map((s, i) => `<div class="story" data-n="${i + 1}"><span class="box"></span><span>${i + 1}. ${esc(s.text)}</span></div>`).join('\n');
   const faces = d.storyFaces.map((f, i) => `<figure data-letter="${LETTERS[i]}" data-feel="${f}">${img(F(f), 'a face')}${LETTERS[i]}</figure>`).join('');
-  const keyA = d.circle.map((r, i) => `<li data-word="${r.word}">${esc(r.word)}: face ${r.answer + 1} of 3</li>`).join('');
+  const keyA = d.circle.map((r) => `<li data-word="${r.word}">${esc(r.word)}: face ${r.answer + 1} of 3</li>`).join('');
   const keyB = d.key.map((k) => `<li data-n="${k.n}" data-letter="${k.letter}"><b>${k.letter}</b> (${esc(k.feel)})</li>`).join('');
   const body = `<section class="sheet" id="sheet">
   <h2>Feelings</h2>${NAME_LINE}

@@ -101,7 +101,7 @@ export function cleanUrls (urls, host, extraIgnore = []) {
 // Tolerant reader: skips blank/garbage lines and rows without {url, ts} (e.g. KDM's older
 // {date, ids} Google-push rows in tools/engagement/index-pushes.jsonl).
 export function readLog (logPath) {
-  let text = ''
+  let text
   try { text = fs.readFileSync(logPath, 'utf8') } catch { return [] }
   const rows = []
   for (const line of text.split('\n')) {

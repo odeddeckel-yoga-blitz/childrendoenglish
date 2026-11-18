@@ -122,7 +122,7 @@ test('a fresh round is not solved or hinted; a miss shows the letter and needs t
         sizes: new Set(opts.map((b) => Math.round(b.getBoundingClientRect().width) + 'x' + Math.round(b.getBoundingClientRect().height))).size,
         fonts: new Set(cs.map((c) => c.fontWeight + c.fontSize + c.borderColor + c.backgroundColor)).size,
         fb: document.querySelector('.feedback').textContent.trim(),
-        word: ML.dbg.item.word, gap: document.querySelector('.gap-word').textContent.replace(/ /g, '_')
+        word: ML.dbg.item.word, gap: document.querySelector('.gap-word').textContent.replace(/\u00a0/g, '_')
       };
     });
     expect(st.blank).toBe('');
