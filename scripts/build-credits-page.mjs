@@ -99,7 +99,7 @@ const html = `<!DOCTYPE html>
 
     <p>Is your work here and something is wrong or missing? Write to <a href="mailto:info@childrendoenglish.com">info@childrendoenglish.com</a> and we will fix it.</p>
   </main>
-  <footer><a href="/">Children Do English</a> &middot; <a href="/about/">About</a> &middot; <a href="/privacy">Privacy</a></footer>
+  <footer><a href="/">Children Do English</a> &middot; <a href="/about/">About</a> &middot; <a href="/privacy/">Privacy</a></footer>
 </body>
 </html>
 `;

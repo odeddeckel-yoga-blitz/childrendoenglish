@@ -15,6 +15,9 @@ describe('SPA routes', () => {
     const paths = [...block.matchAll(/'(\/[^']*)'/g)].map((m) => m[1]).filter((p) => p !== '/');
     expect(paths.length).toBeGreaterThan(10);
     const rewritten = new Set(vercel.rewrites.filter((r) => r.destination === '/').map((r) => r.source));
+    // /privacy and /terms are static pages since 11-18 (scripts/build-trust-pages.mjs): a direct load 308s to /privacy/ and
+    // /terms/; the in-app screens still open on in-app navigation.
+    for (const r of vercel.redirects || []) if (r.destination === `${r.source}/`) rewritten.add(r.source);
     expect(paths.filter((p) => !rewritten.has(p))).toEqual([]);
   });
 });

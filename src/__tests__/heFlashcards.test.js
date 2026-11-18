@@ -42,7 +42,7 @@ describe('Hebrew printable flashcards', () => {
     expect(html.match(/loading="lazy"/g)).toHaveLength(2); // 8 cards, first 6 eager
     expect(html).toContain('<script defer src="/print-btn.js"></script>');
     expect(html).toContain('"@type":"FAQPage"');
-    expect(html).not.toMatch(/href="\/he\//);
+    expect(html).not.toContain('href="/he/"'); // the /he/ landing (its /he/about/ + /he/privacy/ footer links are fine, 11-18)
   });
 
   it('the index lists every set with its count', () => {

@@ -153,7 +153,7 @@ ${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join(
 <body>
 ${body}
   <footer class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/he/">עברית</a> &middot; <a href="/about/">אודות</a> &middot; <a href="/privacy">פרטיות</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/he/">עברית</a> &middot; <a href="/he/about/">אודות</a> &middot; <a href="/he/privacy/">פרטיות</a>
     ${footerNote ? `<p class="not-affiliated">${heBidi(footerNote)}</p>` : ''}
   </footer>
 </body>

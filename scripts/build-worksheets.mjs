@@ -186,7 +186,7 @@ ${WORKSHEETS_HOLD ? '  <meta name="robots" content="noindex">\n' : ''}  <link re
     <button class="print-btn" type="button" data-print>Print the worksheet</button>${playHref ? `<a class="play-online" href="${playHref}">Play the game online</a>` : ''}
 ${body}
   </main>
-  <footer><a href="/">Children Do English</a> &middot; <a href="/image-credits/">Image credits</a> &middot; <a href="/privacy">Privacy</a></footer>
+  <footer><a href="/">Children Do English</a> &middot; <a href="/image-credits/">Image credits</a> &middot; <a href="/privacy/">Privacy</a></footer>
   <script defer src="/print-btn.js"></script>
 </body>
 </html>

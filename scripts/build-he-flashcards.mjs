@@ -107,7 +107,7 @@ ${SHEETS_CSS}
 </head>
 <body>
 ${body}
-  <div class="footer"><span dir="ltr">&copy; ${year} Children Do English</span> &middot; <a href="/about/">אודות</a> &middot; <a href="/privacy">פרטיות</a></div>
+  <div class="footer"><span dir="ltr">&copy; ${year} Children Do English</span> &middot; <a href="/he/about/">אודות</a> &middot; <a href="/he/privacy/">פרטיות</a></div>
 </body>
 </html>`;
 

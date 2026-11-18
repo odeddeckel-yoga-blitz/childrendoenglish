@@ -12,6 +12,7 @@ import { DRAWN, pictureStyle } from '../src/data/imageStyle.js';
 import { PILL_CSS, buildTeachersHtml } from './build-teachers-page.mjs';
 import { wordPageLayout } from '../src/data/wordPageVariant.js';
 import { buildWordPageABody, WORD_A_CSS } from './word-page-a.mjs';
+import { addLegalRow, buildTrustPages, buildLlmsTxt } from './build-trust-pages.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -36,6 +37,7 @@ function writePage(path, html) {
   if (out.includes('</body>') && !out.includes('class="crawl-mesh"')) {
     out = out.replace('</body>', buildCrawlMesh(lang) + '</body>');
   }
+  out = addLegalRow(out, lang, path); // Privacy · Terms · About in the page's language (scripts/build-trust-pages.mjs)
   if (out.includes('</body>') && !out.includes('class="site-head"')) out = out.replace(/<body([^>]*)>/, (m) => m + siteHeader(lang));
   // Sweep 10-31: one <main> landmark per page (axe landmark-one-main on 648
   // pages): wrap everything between the shared header and the footer mesh.
@@ -588,7 +590,7 @@ function buildCategoryPage(slug, displayName, words) {
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy/" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -919,7 +921,7 @@ ${wordNav}
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy/" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
   <script defer src="/vocab-quiz.js"></script>
 </body>
@@ -1124,7 +1126,7 @@ function buildAgeBracketPage(bracket, allWords) {
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy/" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -1320,7 +1322,7 @@ function buildBilingualCategoryPage(slug, displayName, hebrewName, words) {
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy/" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -1527,7 +1529,7 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
 // intro that switched language mid-sentence). Simple Latin-American Spanish for parents/teachers.
 const ES_INTRO_BILINGUAL = (lower, n, words) => `Las ${n} palabras de ${escapeHtml(lower)} en inglés, con su traducción al español. Cada palabra tiene ${pics(words, 'one', 'es')}, pronunciación en inglés y una definición corta en inglés, pensada para niños de 6 a 12 años. Gratis, sin anuncios y sin registro.`;
 const ES_FOOTER = `<div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">Acerca de</a> &middot; <a href="/privacy" style="color:#5b6779">Privacidad</a> &middot; <a href="/image-credits/" style="color:#5b6779">Créditos de las imágenes</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/es/about/" style="color:#5b6779">Acerca de</a> &middot; <a href="/es/privacy/" style="color:#5b6779">Privacidad</a> &middot; <a href="/image-credits/" style="color:#5b6779">Créditos de las imágenes</a>
   </div>`;
 
 const HREFLANG_HE = ''; // Only add he hreflang on pages with Hebrew equivalents (homepage, /he/)
@@ -1951,7 +1953,7 @@ function buildHebrewLandingPage() {
   <!-- Footer -->
   <div class="footer">
     <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot;
-    <a href="/about/">אודות</a> &middot;
+    <a href="/he/about/">אודות</a> &middot;
     <a href="/">English</a>
   </div>
 </body>
@@ -2281,7 +2283,7 @@ function buildSpanishLandingPage() {
   <!-- Footer -->
   <div class="footer">
     <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot;
-    <a href="/about/">Acerca de</a> &middot;
+    <a href="/es/about/">Acerca de</a> &middot;
     <a href="/">English</a>
   </div>
 </body>
@@ -2536,7 +2538,7 @@ ${body}
   <div class="footer">
     <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot;
     <a href="/he/">עברית — דף הבית</a> &middot;
-    <a href="/about/">אודות</a> &middot;
+    <a href="/he/about/">אודות</a> &middot;
     <a href="/">English</a>
   </div>
 </body>
@@ -3388,7 +3390,7 @@ const vocabIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy/" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -3559,134 +3561,9 @@ const wordEntries = CATEGORIES.flatMap((slug) =>
   console.log('  ✓ /free-english-practice/ (no-sign-up landing)');
 }
 
-// --- Generate About page ---
-
-const aboutUrl = `${SITE}/about/`;
-const aboutTitle = 'About Children Do English | Free English Vocabulary App for Kids';
-const aboutDesc = 'Children Do English is a free, ad-free vocabulary learning app for kids ages 6-12, built by Oded Deckelbaum. Learn about our teaching methodology and mission.';
-
-const aboutBreadcrumb = JSON.stringify({
-  '@context': 'https://schema.org',
-  '@type': 'BreadcrumbList',
-  itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE}/` },
-    { '@type': 'ListItem', position: 2, name: 'About', item: aboutUrl },
-  ],
-});
-
-const aboutPersonSchema = JSON.stringify({
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: 'Oded Deckelbaum',
-  jobTitle: 'Creator of Children Do English',
-  url: `${SITE}/about/`,
-});
-
-const aboutFaqSchema = JSON.stringify({
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: [
-    {
-      '@type': 'Question',
-      name: 'Is Children Do English really free?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Yes, 100% free with no ads, no in-app purchases, and no subscription. All features are available to everyone.' },
-    },
-    {
-      '@type': 'Question',
-      name: 'What ages is Children Do English designed for?',
-      acceptedAnswer: { '@type': 'Answer', text: 'The app is designed for children ages 6-12, with three difficulty levels (beginner, intermediate, advanced) and a pre-reader mode for younger kids who cannot read yet.' },
-    },
-    {
-      '@type': 'Question',
-      name: 'Does Children Do English work offline?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Yes! It is a Progressive Web App (PWA) that can be installed on any device and works fully offline after the first visit.' },
-    },
-    {
-      '@type': 'Question',
-      name: 'Is my child\'s data safe?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Yes. Learning progress is stored on your device. There are no ads, no accounts and no cookies, and we collect no personal data. Visits are counted with cookieless Vercel Web Analytics and our own anonymous counter, which keeps only daily totals. Anonymous crash reports help us fix bugs. The app is COPPA-compliant.' },
-    },
-    {
-      '@type': 'Question',
-      name: 'Does it support Hebrew?',
-      acceptedAnswer: { '@type': 'Answer', text: 'Yes, the entire app interface is available in Hebrew and English. Every word includes a Hebrew translation, making it ideal for bilingual Hebrew-English families.' },
-    },
-  ],
-});
-
-const aboutHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${escapeHtml(aboutTitle)}</title>
-  <meta name="description" content="${escapeHtml(aboutDesc)}" />
-  <meta name="robots" content="index, follow" />
-  <link rel="canonical" href="${aboutUrl}" />
-  <link rel="alternate" hreflang="en" href="${aboutUrl}" />
-  <link rel="alternate" hreflang="x-default" href="${aboutUrl}" />
-  ${HREFLANG_HE}
-  <link rel="icon" type="image/png" href="/favicon.png" />
-
-  <!-- Open Graph -->
-  <meta property="og:locale" content="en_US" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="Children Do English" />
-  <meta property="og:url" content="${aboutUrl}" />
-  <meta property="og:title" content="${escapeHtml(aboutTitle)}" />
-  <meta property="og:description" content="${escapeHtml(aboutDesc)}" />
-  <meta property="og:image" content="${SITE}/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="${escapeHtml(aboutTitle)}" />
-  <meta name="twitter:description" content="${escapeHtml(aboutDesc)}" />
-  <meta name="twitter:image" content="${SITE}/og-image.png" />
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">${aboutBreadcrumb}</script>
-  <script type="application/ld+json">${aboutPersonSchema}</script>
-  <script type="application/ld+json">${aboutFaqSchema}</script>
-
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.7; }
-    .header { background: #2563eb; color: #fff; padding: 2rem 1rem; text-align: center; }
-    .header h1 { font-size: 1.75rem; margin-bottom: 0.25rem; }
-    .header p { font-size: 0.95rem; }
-    .breadcrumb { padding: 0.75rem 1rem; font-size: 0.85rem; color: #4b5a6e; max-width: 720px; margin: 0 auto; }
-    .breadcrumb a { color: #2563eb; text-decoration: underline; }
-    .breadcrumb a:hover { text-decoration: underline; }
-    .container { max-width: 720px; margin: 0 auto; padding: 0 1rem 2rem; }
-    .section { background: #fff; border-radius: 0.75rem; padding: 1.5rem; margin-bottom: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-    .section h2 { font-size: 1.2rem; font-weight: 700; color: #1e293b; margin-bottom: 0.75rem; }
-    .section p { margin-bottom: 0.75rem; color: #475569; }
-    .section ul { margin: 0.5rem 0 0.75rem 1.25rem; color: #475569; }
-    .section li { margin-bottom: 0.35rem; }
-    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
-    .stat { background: #f0f9ff; border-radius: 0.5rem; padding: 1rem; text-align: center; }
-    .stat-num { font-size: 1.5rem; font-weight: 800; color: #2563eb; }
-    .stat-label { font-size: 0.8rem; color: #4b5a6e; margin-top: 0.25rem; }
-    .cta { text-align: center; margin: 2rem 0; }
-    .cta a { display: inline-block; background: #2563eb; color: #fff; padding: 0.75rem 2rem; border-radius: 0.5rem; text-decoration: none; font-weight: 600; font-size: 1rem; }
-    .cta a:hover { background: #1d4ed8; }
-    .footer { text-align: center; padding: 2rem 1rem; color: #5b6779; font-size: 0.8rem; }
-  </style>
-</head>
-<body>
-  <div class="header">
-    <h1>About Children Do English</h1>
-    <p>Free vocabulary learning for kids ages 6-12</p>
-  </div>
-
-  <div class="breadcrumb">
-    <a href="/">Home</a> &rsaquo; About
-  </div>
-
-  <div class="container">
-    <div class="section">
+// --- About, Privacy and Terms pages, en/he/es (scripts/build-trust-pages.mjs; owner OK 11-18) ---
+// /about/ opens with the maker card; the en page keeps its mission / how-it-works / inside sections below it.
+const aboutExtraEn = `    <div class="section">
       <h2>Our Mission</h2>
       <p>Children Do English helps kids build a strong English vocabulary through fun, interactive learning. It is free, with no ads and no account.</p>
     </div>
@@ -3711,40 +3588,10 @@ const aboutHtml = `<!DOCTYPE html>
         <div class="stat"><div class="stat-num">3</div><div class="stat-label">Difficulty Levels</div></div>
       </div>
       <p>Every word includes a definition, example sentence, phonetic pronunciation, and Hebrew translation &mdash; making it perfect for bilingual Hebrew-English learners.</p>
-    </div>
-
-    <div class="section" id="facts">
-      <h2>Facts at a glance</h2>
-      <ul>${FACTS_EN.map((f) => `\n        <li>${escapeHtml(f)}</li>`).join('')}
-      </ul>
-    </div>
-
-    <div class="section">
-      <h2>Privacy First</h2>
-      <p>Children Do English is designed with kids' safety in mind. Learning progress is stored on the device. There are no ads, no accounts and no cookies, and we collect no personal data. We count visits with cookieless Vercel Web Analytics and an anonymous counter of our own that keeps only daily totals, and anonymous crash reports help us keep the app working. We comply with COPPA. <a href="/privacy">Read our full privacy policy &rarr;</a></p>
-    </div>
-
-    <div class="section">
-      <h2>About the Creator</h2>
-      <p>Children Do English is built and maintained by me, <strong>Oded Deckelbaum</strong> &mdash; a software engineer and parent who couldn&rsquo;t find an English vocabulary app for my own kids that was genuinely free, ad-free, and focused on real learning. I design and build everything myself, and I stand behind every activity and every privacy claim on this site. Questions or ideas? Reach me at <a href="mailto:info@childrendoenglish.com">info@childrendoenglish.com</a>.</p>
-      <p style="font-size:0.9rem;color:#4b5a6e">Also from me: <a href="https://www.kidsdomath.com" rel="me">KidsDoMath</a> &mdash; free math and science games for kids, built on the same no-ads, privacy-first principles.</p>
-    </div>
-
-
-    <div class="cta">
-      <a href="/?utm_source=seo&utm_medium=cta&utm_content=about">Start Learning &rarr;</a>
-    </div>
-  </div>
-
-  <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/privacy" style="color:#5b6779">Privacy Policy</a>
-  </div>
-</body>
-</html>`;
-
-mkdirSync(join(distDir, 'about'), { recursive: true });
-writePage(join(distDir, 'about', 'index.html'), aboutHtml, 'utf-8');
-console.log('  \u2713 /about/ (about page)');
+    </div>`;
+const trustUrls = buildTrustPages({ SITE, distDir, writePage, FACTS_EN, FACTS_HE, extraEn: aboutExtraEn,
+  nums: { words: WORDS_N, cats: CATEGORIES.length, games: FACT_GAMES, band1: FACT_BAND1_N, units: FACT_UNITS_N, es: FACT_ES_N, total: WORDS.length } });
+console.log(`  \u2713 ${trustUrls.join(' ')}`);
 
 // --- 404 (scripts/build-404.mjs): site header + home/games/words, localized by the /he/ or /es/ prefix ---
 // writeFileSync, not writePage: no beacon and no crawl mesh on a noindex error page.
@@ -3941,7 +3788,7 @@ ${FC_SHEETS_CSS}
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy/" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
   ${sheetsOut(escapeHtml(displayName), 'en')}
 </body>
@@ -4279,7 +4126,7 @@ const fcIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy/" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -5215,7 +5062,7 @@ ${GUIDE_QUIZ_CSS}
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy/" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -5311,7 +5158,7 @@ const guidesIndexHtml = `<!DOCTYPE html>
   </div>
 
   <div class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/about/" style="color:#5b6779">About</a> &middot; <a href="/privacy/" style="color:#5b6779">Privacy</a> &middot; <a href="/image-credits/" style="color:#5b6779">Image credits</a>
   </div>
 </body>
 </html>`;
@@ -5544,7 +5391,8 @@ const llmsFull = [
   '> Full vocabulary dataset of https://childrendoenglish.com — a free, ad-free English learning app for kids ages 6-12 with Hebrew translations, spaced repetition, and offline PWA support. See /llms.txt for the app overview.',
   '',
   `Total words: ${WORDS.length} across ${CATEGORIES.length} categories: ${CATEGORIES.map((c) => CATEGORY_NAMES[c] || c).join(', ')}.`,
-  'Every word has a dedicated page at https://childrendoenglish.com/vocabulary/{category}/{word}/ with photo, phonetics, and Hebrew translation.',
+  'Every word has a dedicated page at https://childrendoenglish.com/vocabulary/{category}/{word}/ with a picture, phonetics and its translations.',
+  'No accounts and no personal data: progress stays on the device; the site keeps only anonymous daily usage totals and error reports. Privacy policy: https://childrendoenglish.com/privacy/',
   '',
 ];
 for (const slug of CATEGORIES) {
@@ -5557,6 +5405,7 @@ for (const slug of CATEGORIES) {
     llmsFull.push(`- Definition: ${w.definition}`);
     llmsFull.push(`- Part of speech: ${w.partOfSpeech} | Level: ${w.level} | Phonetic: ${w.phonetic}`);
     llmsFull.push(`- Hebrew translation: ${w.hebrewTranslation}`);
+    if (ES_GLOSSES[w.id]) llmsFull.push(`- Spanish translation: ${ES_GLOSSES[w.id]}`);
     if (e.sentences?.length) {
       llmsFull.push(`- Example sentences: ${e.sentences.join(' ')}`);
     } else if (w.exampleSentence) {
@@ -5570,6 +5419,8 @@ for (const slug of CATEGORIES) {
 }
 writeFileSync(join(distDir, 'llms-full.txt'), llmsFull.join('\n'), 'utf-8');
 console.log(`llms-full.txt: ${WORDS.length} words, ${Math.round(llmsFull.join('\n').length / 1024)}KB`);
+buildLlmsTxt({ SITE, distDir, wordsLabel: WORDS_N, cats: CATEGORIES.length, games: FACT_GAMES, band1: FACT_BAND1_N, units: FACT_UNITS_N, readings: READINGS.length, esWords: FACT_ES_N, totalWords: WORDS.length });
+console.log('llms.txt: built from the data (scripts/build-trust-pages.mjs)');
 
 // ---------------------------------------------------------------------------
 // /games/ hub — SEO landing for the standalone vocabulary arcade games

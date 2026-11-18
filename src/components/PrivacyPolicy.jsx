@@ -55,6 +55,11 @@ export default function PrivacyPolicy({ lang = 'en', onBack }) {
         </section>
 
         <section className="space-y-2">
+          <h3 className="font-bold text-slate-800 dark:text-slate-100">{t('privacyRightsTitle', lang)}</h3>
+          {['privacyRightsDevice', 'privacyRightsCounts', 'privacyRightsErrors', 'privacyRightsWho'].map((k) => <p key={k}>{t(k, lang)}</p>)}
+        </section>
+
+        <section className="space-y-2">
           <h3 className="font-bold text-slate-800 dark:text-slate-100">{t('privacyContactTitle', lang)}</h3>
           <p>{t('privacyContactDesc', lang)} <a href="mailto:info@childrendoenglish.com" className="text-blue-600 underline">info@childrendoenglish.com</a>.</p>
         </section>
