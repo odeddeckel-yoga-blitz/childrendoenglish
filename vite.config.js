@@ -126,6 +126,10 @@ export default defineConfig({
           groups: [
             { name: 'icons', test: /node_modules[\\/]lucide-react[\\/]/ },
             { name: 'vendor', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/ },
+            // The word list (~60% of the old entry chunk) in its own chunk: still loaded up front (23 modules
+            // import WORDS synchronously), but a code-only deploy no longer busts it, and it downloads in
+            // parallel with the entry (modulepreload). Lazy-loading it is the next step (audit 11-18 A).
+            { name: 'words', test: /src[\\/]data[\\/](words|imageStyle)\.js$/ },
           ],
         },
       },
