@@ -100,14 +100,16 @@ export default defineConfig({
             type: 'image/png',
             purpose: 'any',
           },
+          // Full-bleed, lettering inside the 40% safe zone (scripts/generate-icons.js maskable).
+          // The `any` icons have transparent rounded corners, which showed through the mask.
           {
-            src: 'icon-192.png',
+            src: 'icon-maskable-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'maskable',
           },
           {
-            src: 'icon-512.png',
+            src: 'icon-maskable-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
