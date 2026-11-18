@@ -81,3 +81,4 @@
 {"id":"spotlight-review","at":"2026-11-17T10:47:03.538Z","result":"found","note":"11-17: live card matches (missing-letter, 9 d up, 108 opens, 19% finished); ⚠ 0.9 level-ups/open = stalls in level 1 → /review-game after the 11-28 freeze (read missing-letter-review)"}
 {"id":"arm-balance","at":"2026-11-17T10:47:03.719Z","result":"ok","note":"11-17: no open visitor-arm read (word-a split ended: Option A on all pages 11-17; he-headterms is a page-unit test)"}
 {"id":"deploy-smoke","at":"2026-11-18T06:02:29.874Z","result":"ok","note":"386e4e2 Ready; / /he/ /es/ 200 with no {{n}}; he chunk has the new welcome; Google 3 ok; indexnow 0 changed"}
+{"id":"deploy-smoke","at":"2026-11-18T12:03:35.358Z","result":"ok","note":"c85cad7 live 12:02Z: CSP ingest.de, static privacy/terms/about en/he/es, llms.txt fixed, /api/health db ok, Hebrew copy; smoke 11 pass; Google 39 ok"}
