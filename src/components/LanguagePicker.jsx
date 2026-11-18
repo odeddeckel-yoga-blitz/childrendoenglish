@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Globe } from 'lucide-react';
-import { LANGS } from '../utils/i18n';
+import { LANGS, t } from '../utils/i18n';
 
 /**
  * Compact language picker — a Globe button that opens a small popover listing
@@ -39,7 +39,7 @@ export default function LanguagePicker({ lang = 'en', onSelectLanguage }) {
       {open && (
         <ul
           role="listbox"
-          aria-label="Choose language"
+          aria-label={t('languageListLabel', lang)}
           className="absolute end-0 mt-1 z-30 min-w-36 rounded-xl bg-white dark:bg-slate-800
                      border border-slate-200 dark:border-slate-700 shadow-lg overflow-hidden"
         >

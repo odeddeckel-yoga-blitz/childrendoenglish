@@ -321,6 +321,10 @@ export default {
 
   // Aria labels
   skipOnboarding: 'Saltar introducción',
+  mainMenuLabel: 'Menú principal',
+  languageListLabel: 'Elegir idioma',
+  closeLabel: 'Cerrar',
+  dismissLabel: 'No, gracias',
   previousStep: 'Paso anterior',
   nextStep: 'Paso siguiente',
   quizProgress: 'Progreso del quiz',

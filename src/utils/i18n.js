@@ -323,6 +323,10 @@ const translations = {
 
     // Aria labels
     skipOnboarding: 'Skip onboarding',
+    mainMenuLabel: 'Main menu',
+    languageListLabel: 'Choose language',
+    closeLabel: 'Close',
+    dismissLabel: 'No, thanks',
     previousStep: 'Previous step',
     nextStep: 'Next step',
     quizProgress: 'Quiz progress',
