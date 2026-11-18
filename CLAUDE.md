@@ -5,7 +5,7 @@ plus static SEO pages (scripts/generate-seo-pages.js and scripts/build-*.mjs). V
 deploys on every push to main. Audit history: LEARN.md.
 
 ## Commands (the gate, in order)
-- `npm run lint` (eslint src/)
+- `npm run lint` (`eslint .`: src plus scripts, api, tools, e2e, configs; kit copies ignored)
 - `npx vitest run` (unit + api tests)
 - `npm run build` (vite + SEO pages + OG + sitemap; postbuild = JSON-LD/CSP validator)
 - `npx playwright test` (e2e, runs against the build)

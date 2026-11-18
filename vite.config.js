@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import asyncCss from './vite-plugin-async-css.js';
-import { SW_FALLBACK_ALLOW } from './sw-routes.js';
+import { SW_FALLBACK_ALLOW, SW_IMAGE_RE, SW_AUDIO_RE, swCacheCaps } from './sw-routes.js';
 import { WORD_COUNT } from './src/data/wordCount.js';
 
 // index.html's prerendered copy and meta write the one word count as %WORD_COUNT% (persona P5:
@@ -12,6 +12,9 @@ const wordCountHtml = () => ({
   name: 'cde-word-count',
   transformIndexHtml: { order: 'pre', handler: (html) => html.replaceAll('%WORD_COUNT%', String(WORD_COUNT)) },
 });
+
+// Runtime-cache caps follow the real file counts (sw-routes.js; 1.5x headroom, swCacheCaps.test.js).
+const SW_CAPS = swCacheCaps();
 
 export default defineConfig({
   plugins: [
@@ -31,28 +34,35 @@ export default defineConfig({
         navigateFallbackDenylist: [/\/images\//, /\/api\//, /\/battle\//, /\/vocabulary\//, /\/printable-flashcards\//, /\/guides\//, /\/about\//, /\/he\//, /\.webp$/, /\.png$/, /\.js$/, /\.css$/],
         runtimeCaching: [
           {
-            urlPattern: /\/images\/.*\.webp$/,
+            urlPattern: SW_IMAGE_RE,
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'word-images-v11',
               expiration: {
-                // Must exceed the full image set (409 words + numbers/colors
-                // ≈470 files) or the cache thrashes and quizzes re-fetch.
-                maxEntries: 800,
+                // Must exceed the full image set or the cache thrashes and quizzes re-fetch.
+                maxEntries: SW_CAPS.imageCap,
                 maxAgeSeconds: 30 * 24 * 60 * 60,
               },
             },
           },
           {
-            urlPattern: /\/audio\/.*\.mp3$/,
+            urlPattern: SW_AUDIO_RE,
             handler: 'StaleWhileRevalidate',
             options: {
               cacheName: 'word-audio-v5',
               expiration: {
-                maxEntries: 800,
+                // Word, sentence (audio/s), CVC, pairs and game audio: all match /audio/.
+                maxEntries: SW_CAPS.audioCap,
                 maxAgeSeconds: 30 * 24 * 60 * 60,
               },
             },
+          },
+          {
+            // API calls are live data (battle polls /api/live every 2 s, beacons): never cache them.
+            // Under the catch-all below, each poll was written to Cache Storage and pushed real
+            // pages out of the 'pages' cache.
+            urlPattern: /\/api\//,
+            handler: 'NetworkOnly',
           },
           {
             urlPattern: /^https?:\/\/.*$/,
@@ -60,7 +70,8 @@ export default defineConfig({
             options: {
               cacheName: 'pages',
               expiration: {
-                maxEntries: 50,
+                // Static pages plus each game's html/js/css; a few visited games fill 50.
+                maxEntries: 200,
                 maxAgeSeconds: 24 * 60 * 60,
               },
             },
@@ -89,14 +100,16 @@ export default defineConfig({
             type: 'image/png',
             purpose: 'any',
           },
+          // Full-bleed, lettering inside the 40% safe zone (scripts/generate-icons.js maskable).
+          // The `any` icons have transparent rounded corners, which showed through the mask.
           {
-            src: 'icon-192.png',
+            src: 'icon-maskable-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'maskable',
           },
           {
-            src: 'icon-512.png',
+            src: 'icon-maskable-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable',
@@ -113,6 +126,10 @@ export default defineConfig({
           groups: [
             { name: 'icons', test: /node_modules[\\/]lucide-react[\\/]/ },
             { name: 'vendor', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/ },
+            // The word list (~60% of the old entry chunk) in its own chunk: still loaded up front (23 modules
+            // import WORDS synchronously), but a code-only deploy no longer busts it, and it downloads in
+            // parallel with the entry (modulepreload). Lazy-loading it is the next step (audit 11-18 A).
+            { name: 'words', test: /src[\\/]data[\\/](words|imageStyle)\.js$/ },
           ],
         },
       },

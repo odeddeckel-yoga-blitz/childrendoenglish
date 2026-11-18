@@ -5391,7 +5391,7 @@ ${unitEntries}
 writeFileSync(join(distDir, 'sitemap.xml'), sitemap, 'utf-8');
 
 const totalUrls = 1 + 1 + 1 + 1 + CATEGORIES.length + WORDS.length + 1 + 1 + CATEGORIES.length + 1 + GUIDES.length + AGE_BRACKETS.length + CATEGORIES.length + CATEGORIES.length + unitUrls.length;
-console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about + Hebrew landing + Spanish landing + ${spanishBilingualGenerated} Spanish bilingual pages`);
+console.log(`\nGenerated ${generated} vocab pages + ${flashcardsGenerated} flashcard pages + ${GUIDES.length} guides + indexes + about + Hebrew landing + Spanish landing + ${esFlashcardsGenerated} Spanish flashcard pages + ${bilingualGenerated} Hebrew bilingual pages + ${spanishBilingualGenerated} Spanish bilingual pages`);
 console.log(`Sitemap: ${totalUrls} URLs`);
 
 // ---- llms-full.txt: the complete word dataset for AI answer engines ----

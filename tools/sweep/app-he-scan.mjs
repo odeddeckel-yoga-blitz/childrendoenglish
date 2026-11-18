@@ -4,7 +4,6 @@
 import { chromium } from 'playwright';
 import fs from 'fs';
 const AXE = fs.readFileSync('node_modules/axe-core/axe.min.js', 'utf8');
-const S = process.argv[2];
 const b = await chromium.launch(); const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
 await ctx.addInitScript(() => {
   const id = 'player_x';

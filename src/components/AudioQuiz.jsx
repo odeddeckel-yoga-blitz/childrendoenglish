@@ -62,6 +62,7 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
       let live = true;
       const timer = setTimeout(() => {
         Promise.resolve(speakWord(quiz.currentWord.word)).then((played) => {
+          if (played === null) return; // a newer word or a stop replaced it: nothing to report
           if (quiz.currentIndex === 0) q1(played === false ? 'q1_audio_blocked' : 'q1_audio_ok');
           if (live && played === false) setNeedTap(true);
         });

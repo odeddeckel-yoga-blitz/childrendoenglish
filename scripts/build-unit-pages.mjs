@@ -28,7 +28,7 @@ export const audioKey = (en) => en.toLowerCase().trim().replace(/[^a-z0-9]+/g, '
 // so the run keeps its order and its ellipsis inside a Hebrew line. Text only, never markup.
 const escText = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 // A digit joins the run only straight after a space ("Unit 1"), so "Band I · 14 מילים" splits.
-const LATIN_RUN = /[A-Za-z](?:[A-Za-z0-9'’\-]|[ ,.:·/&+](?=[ ,.:·/&+]*[A-Za-z])| (?=\d))*(?:…|\.\.\.)?/g;
+const LATIN_RUN = /[A-Za-z](?:[A-Za-z0-9'’-]|[ ,.:·/&+](?=[ ,.:·/&+]*[A-Za-z])| (?=\d))*(?:…|\.\.\.)?/g;
 // Lucide check from the icon sprite; answer text carries \u0001 where it belongs (heBidi escapes markup).
 const CHECK_ICON = '<svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-check"/></svg>';
 export const ltrRun =(html) => `<bdi lang="en" dir="ltr">${html}</bdi>`;
@@ -199,7 +199,7 @@ ${body}
   <nav class="breadcrumb" aria-label="breadcrumb">${navHtml}</nav>
   <header class="hero">
     <h1>${h1Html}</h1>
-    <p class="answer">${heBidi(answer).replace(/\u0001/g, CHECK_ICON)}</p>
+    <p class="answer">${heBidi(answer).replaceAll('\u0001', CHECK_ICON)}</p>
     <p class="jump-row"><a class="jump-btn" href="#practice-h"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-play"/></svg> תרגול</a></p>
     ${pin ? `<p class="pin-row"><button type="button" class="pin-btn" data-pin-unit="${path}" data-pin-name="${escapeHtml(pin)}" aria-pressed="false"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-pin"/></svg> זו היחידה שלנו השבוע</button></p>
     <p class="pin-hint" hidden>נשמר במכשיר הזה: האפליקציה תיפתח עם כרטיס ליחידה הזו.</p>` : ''}

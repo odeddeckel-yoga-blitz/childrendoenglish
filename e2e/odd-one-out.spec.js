@@ -227,7 +227,7 @@ for (const lang of ['en', 'he', 'es']) {
       if (lang !== 'en') {
         for (const [k, v] of Object.entries(en)) if (plain(v).length >= 6 && plain(cur[k]) !== plain(v) && txt.includes(plain(v))) found.push('en: ' + plain(v));
         // English group names must not appear (game words are single English words; group names are interface)
-        for (const [g, [sg, pl]] of Object.entries(OO.NAMES.en)) for (const s of [sg, pl]) if (s.includes(' ') && txt.includes(s)) found.push('en group: ' + s);
+        for (const [sg, pl] of Object.values(OO.NAMES.en)) for (const s of [sg, pl]) if (s.includes(' ') && txt.includes(s)) found.push('en group: ' + s);
       }
       return found;
     }, { lang, heb: HEB.source });

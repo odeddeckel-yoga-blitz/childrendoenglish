@@ -4,7 +4,7 @@
 //   node scripts/errors-check.mjs      (npm run errors)
 import { execFileSync } from 'node:child_process';
 const TEAM = 'team_cZbruHxXnt65pojCL5oha3Gq', PROJECT = 'prj_bAPAFiJ3pTbmbJkPOYPj6i8xyioc';
-let out = '';
+let out;
 try {
   out = execFileSync('vercel', ['logs', '--scope', TEAM, '--project', PROJECT, '--since', '12h', '--query', 'level:error', '--limit', '200'],
     { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 64 * 1024 * 1024 });

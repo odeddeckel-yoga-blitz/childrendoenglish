@@ -83,7 +83,6 @@ async function main() {
       .webp({ quality: 90 })
       .toFile(outputPath);
 
-    const { size } = await sharp(outputPath).metadata().catch(() => ({ size: 0 }));
     console.log(`  ${name} (${hex}) → ${outputPath.split('/').pop()}`);
     count++;
   }

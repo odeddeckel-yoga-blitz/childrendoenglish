@@ -107,6 +107,18 @@ describe('AudioQuiz', () => {
     expect(sendLearn).toHaveBeenCalledWith('onb', 'q1_hear_tap');
     vi.useRealTimers();
   });
+  // 11-18: speakWord resolves null when a newer word or a stop replaced it; that is neither blocked nor ok.
+  it('a replaced word (null): no pulse and no q1 tally', async () => {
+    vi.useFakeTimers();
+    sendLearn.mockClear();
+    speakWord.mockResolvedValue(null);
+    render(<AudioQuiz {...defaultProps} firstQuiz />);
+    await act(async () => { await vi.advanceTimersByTimeAsync(400); });
+    expect(document.querySelector('[data-need-tap]')).toBeNull();
+    expect(sendLearn).not.toHaveBeenCalledWith('onb', 'q1_audio_blocked');
+    expect(sendLearn).not.toHaveBeenCalledWith('onb', 'q1_audio_ok');
+    vi.useRealTimers();
+  });
   it('not a first quiz: no onb tallies', async () => {
     vi.useFakeTimers();
     speakWord.mockReturnValue(true);

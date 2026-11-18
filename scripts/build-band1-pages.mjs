@@ -160,7 +160,7 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
   return topics.length + 1 + buildReviewPath({ SITE, distDir, writePage, escapeHtml, kit, footerNote, legend, WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE });
 }
 
-function buildReviewPath({ distDir, writePage, escapeHtml, kit, footerNote, legend, WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE }) {
+function buildReviewPath({ distDir, writePage, kit, footerNote, legend, WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE }) {
   const sets = band1Path({ WORDS, BAND1_BY_ID, CATEGORY_NAMES_HE });
   const total = sets.reduce((n, s) => n + s.bandCount, 0);
   const hubPath = '/band-1/review/';
