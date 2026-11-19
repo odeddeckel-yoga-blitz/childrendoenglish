@@ -82,3 +82,6 @@
 {"id":"arm-balance","at":"2026-11-17T10:47:03.719Z","result":"ok","note":"11-17: no open visitor-arm read (word-a split ended: Option A on all pages 11-17; he-headterms is a page-unit test)"}
 {"id":"deploy-smoke","at":"2026-11-18T06:02:29.874Z","result":"ok","note":"386e4e2 Ready; / /he/ /es/ 200 with no {{n}}; he chunk has the new welcome; Google 3 ok; indexnow 0 changed"}
 {"id":"deploy-smoke","at":"2026-11-18T12:03:35.358Z","result":"ok","note":"c85cad7 live 12:02Z: CSP ingest.de, static privacy/terms/about en/he/es, llms.txt fixed, /api/health db ok, Hebrew copy; smoke 11 pass; Google 39 ok"}
+{"id":"deploy-smoke","at":"2026-11-19T06:10:22.727Z","result":"ok","note":"b3cc163 live 06:01Z (eng audit + translate guard): smoke 11 pass, translate guard in entry chunk, maskable manifest, /api/health db ok, indexnow 0 changed"}
+{"id":"ci-health","at":"2026-11-19T06:10:22.802Z","result":"ok","note":"11-19 first sharded CI on b3cc163 green: lint 90s, e2e shards 544/358/380/572s (was ~23 min single job; c85cad7 run was cancelled)"}
+{"id":"optimizer-read","at":"2026-11-19T06:10:22.951Z","result":"found","note":"see cde-optimizer-1119"}
