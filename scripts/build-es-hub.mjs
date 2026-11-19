@@ -97,7 +97,9 @@ export function buildEsHub({ SITE, distDir, writePage, escapeHtml, WORDS, collid
     <p class="center more"><a class="cta" href="/new-player?lang=es&amp;utm_source=seo&amp;utm_medium=cta&amp;utm_content=es_primaria">Practicar en la app, gratis →</a></p>
   </main>`;
   const css = `
-    .es-topics td a { font-weight: 700; } .es-topics th, .es-topics td { text-align: left; }
+    .es-topics { width: 100%; table-layout: fixed; } .es-topics td a { font-weight: 700; }
+    .es-topics th, .es-topics td { text-align: left; padding-left: 0.35rem; padding-right: 0.35rem; overflow-wrap: anywhere; }
+    .es-topics th:first-child, .es-topics td:first-child { width: 38%; }
     .jump-btn { margin-top: 0.4rem; }
   `;
   const dir = join(distDir, 'es', 'primaria');
