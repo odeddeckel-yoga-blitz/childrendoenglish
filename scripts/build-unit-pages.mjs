@@ -130,8 +130,13 @@ export function wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides }) {
   }
 
   const robots = (test) => (test ? 'noindex, nofollow' : 'index, follow');
-  const shell = ({ path, title, description, test, schemas, body, footerNote, css = '' }) => `<!DOCTYPE html>
-<html lang="he" dir="rtl">
+  // lang 'es' (graded readers, 11-18): the same shell left-to-right, Spanish footer. head = extra <head> lines (hreflang).
+  const FOOT = {
+    he: '<a href="/he/">עברית</a> &middot; <a href="/he/about/">אודות</a> &middot; <a href="/he/privacy/">פרטיות</a>',
+    es: '<a href="/es/">Español</a> &middot; <a href="/es/about/">Acerca de</a> &middot; <a href="/es/privacy/">Privacidad</a>',
+  };
+  const shell = ({ path, title, description, test, schemas, body, footerNote, css = '', lang = 'he', head = '' }) => `<!DOCTYPE html>
+<html lang="${lang}" dir="${lang === 'he' ? 'rtl' : 'ltr'}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -139,8 +144,8 @@ export function wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides }) {
   <meta name="description" content="${escapeHtml(description)}" />
   <meta name="robots" content="${robots(test)}" />
   <link rel="canonical" href="${SITE}${path}" />
-  <link rel="icon" type="image/png" href="/favicon.png" />
-  <meta property="og:locale" content="he_IL" />
+${head}  <link rel="icon" type="image/png" href="/favicon.png" />
+  <meta property="og:locale" content="${lang === 'he' ? 'he_IL' : 'es_LA'}" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Children Do English" />
   <meta property="og:url" content="${SITE}${path}" />
@@ -148,13 +153,13 @@ export function wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides }) {
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:image" content="${SITE}/og-image.png" />
 ${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join('\n')}
-  <style>${UNIT_CSS}${css}</style>
+  <style>${UNIT_CSS}${lang === 'he' ? '' : `\n    body { direction: ltr; text-align: left; }`}${css}</style>
 </head>
 <body>
 ${body}
   <footer class="footer">
-    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; <a href="/he/">עברית</a> &middot; <a href="/he/about/">אודות</a> &middot; <a href="/he/privacy/">פרטיות</a>
-    ${footerNote ? `<p class="not-affiliated">${heBidi(footerNote)}</p>` : ''}
+    <span dir="ltr">&copy; ${new Date().getFullYear()} Children Do English</span> &middot; ${FOOT[lang] || FOOT.he}
+    ${footerNote ? `<p class="not-affiliated">${lang === 'he' ? heBidi(footerNote) : escText(footerNote)}</p>` : ''}
   </footer>
 </body>
 </html>`;

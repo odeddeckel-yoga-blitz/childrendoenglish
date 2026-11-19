@@ -15,7 +15,7 @@ describe('component clicks config', () => {
 
   it('excludes leaf content and play routes', () => {
     for (const p of ['/vocabulary/animals/cat/', '/vocabulary/food/grapes', '/games/read-it/', '/games/category-conveyor',
-      '/band-1/reading/my-dog/', '/tools/flashcard-maker/', '/learn', '/flashcards', '/daily-review', '/today', '/battle/',
+      '/band-1/reading/my-dog/', '/es/reading/my-cat/', '/tools/flashcard-maker/', '/learn', '/flashcards', '/daily-review', '/today', '/battle/',
       '/projector/', '/privacy', '/terms']) expect(excluded(p), p).toBe(true);
   });
 
@@ -24,7 +24,7 @@ describe('component clicks config', () => {
       '/vocabulary/animals/hebrew/', '/vocabulary/animals/spanish/', '/vocabulary/ages-6-8/', '/printable-flashcards/',
       '/printable-flashcards/animals/', '/printable-flashcards/animals/hebrew/', '/he/english-games/animals/',
       '/he/english-games/ages-9-10/', '/he/grade-3/', '/units/', '/units/jet-1/', '/units/jet-1/unit-1/', '/band-1/',
-      '/band-1/animals/', '/band-1/review/set-3/', '/band-1/reading/', '/guides/learn-english-words-with-pictures/'])
+      '/band-1/animals/', '/band-1/review/set-3/', '/band-1/reading/', '/es/reading/', '/guides/learn-english-words-with-pictures/'])
       expect(excluded(p), p).toBe(false);
   });
 
@@ -50,6 +50,7 @@ describe('component clicks config', () => {
     expect(tpl('/band-1/review/')).toBe('band1-review-hub');
     expect(tpl('/band-1/review/set-1/')).toBe('band1-review-set');
     expect(tpl('/band-1/reading/')).toBe('band1-reading-hub');
+    expect(tpl('/es/reading/')).toBe('es-reading-hub');
     expect(tpl('/band-1/food/')).toBe('band1-topic');
     expect(tpl('/guides/best-english-learning-apps-for-kids/')).toBe('guide');
     for (const p of ['/teachers/', '/for-teachers/', '/he/teachers/', '/es/teachers/']) expect(tpl(p), p).toBe('teachers'); // reserved 11-08
