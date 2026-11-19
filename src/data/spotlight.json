@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-11-18T00:00:00.000Z",
+  "statsFrom": "2026-11-19T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "shower",
@@ -7,16 +7,16 @@
     "category": "home",
     "he": "מקלחת",
     "image": "/images/shower.webp",
-    "ans": 8,
-    "ok": 7,
+    "ans": 21,
+    "ok": 19,
     "since": "2026-11-17T11:45:58.888Z"
   },
   "game": {
     "id": "missing-letter",
     "name": "Missing Letter",
     "emoji": "✏️",
-    "opens": 126,
-    "lvl": 118,
+    "opens": 136,
+    "lvl": 124,
     "cmp": 27,
     "since": "2026-11-08T10:14:44.081Z"
   },
