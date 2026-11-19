@@ -1,5 +1,5 @@
 // UI copy of the graded-reader pages (scripts/build-reading-pages.mjs, public/reading.js):
-// /band-1/reading/ (Hebrew) and /es/reading/ (Spanish). `en` is the source the i18n consensus
+// /band-1/reading/ (Hebrew) and /es/lecturas/ (Spanish). `en` is the source the i18n consensus
 // judges the translations against (tools/i18n/consensus-units.mjs); no English page uses it.
 // {placeholders} stay as they are. Hebrew: gender-neutral plural forms. Audio is a computer
 // voice (Piper TTS): never call it a native speaker or a recording.

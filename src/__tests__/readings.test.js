@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { READINGS, READING_NAMES, READING_STAGES } from '../data/readings';
 import { READING_GLOSSES, READING_PHRASES, READING_GLOSSES_ES, READING_PHRASES_ES } from '../data/readingGlosses';
 import { READING_UI } from '../data/readingUi';
-import { glossTokens, orderedOptions, wordCount, readingOrder } from '../../scripts/build-reading-pages.mjs';
+import { glossTokens, orderedOptions, wordCount, readingOrder, READING_LANGS } from '../../scripts/build-reading-pages.mjs';
 
 const G = {
   he: { GLOSSES: READING_GLOSSES, PHRASES: READING_PHRASES, NAMES: READING_NAMES },
@@ -21,6 +21,13 @@ describe('graded readers', () => {
       }
       expect(missing, lang).toEqual([]);
     }
+    // one Spanish gloss source (11-19 merge: printables' readingGlossesEs.js folded in), and no Hebrew in it
+    expect(Object.values({ ...READING_GLOSSES_ES, ...READING_PHRASES_ES }).filter((v) => /[\u0590-\u05FF]/.test(v))).toEqual([]);
+  });
+
+  it('one Spanish reading section, at /es/lecturas/ (never /es/reading/)', () => {
+    expect(READING_LANGS.es.hub).toBe('/es/lecturas/');
+    expect(READING_LANGS.es.dir).toEqual(['es', 'lecturas']);
   });
 
   it('every reading has exactly 3 questions, each with one unambiguous right answer', () => {

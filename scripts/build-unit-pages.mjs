@@ -20,6 +20,9 @@ import { join, dirname } from 'path';
 import { gameForWordIds, gameFirstCard, GAME_FIRST_CSS } from './game-first.mjs';
 import { mkdirSync } from 'fs';
 
+// The printable week pack of a live unit (audit 11-18 idea 6; built by scripts/build-week-packs.mjs).
+export const packPath = (u) => `/he/printables/${u.book}-unit-${u.unit}/`;
+
 export const audioKey = (en) => en.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
 
 // Bidi for Hebrew pages (triage 11-08: "cat, dog, ועוד" / "…milk" garbled on the Band I review
@@ -130,10 +133,11 @@ export function wordSetKit({ SITE, writePage, escapeHtml, WORDS, collides }) {
   }
 
   const robots = (test) => (test ? 'noindex, nofollow' : 'index, follow');
-  // lang 'es' (graded readers, 11-18): the same shell left-to-right, Spanish footer. head = extra <head> lines (hreflang).
+  // lang 'es' (graded readers + week packs, 11-18): the same body CSS turned LTR (LTR_CSS) and a Spanish footer with the
+  // localized trust pages. head = extra <head> lines (hreflang). Both default to the Hebrew page, byte for byte.
   const FOOT = {
     he: '<a href="/he/">עברית</a> &middot; <a href="/he/about/">אודות</a> &middot; <a href="/he/privacy/">פרטיות</a>',
-    es: '<a href="/es/">Español</a> &middot; <a href="/es/about/">Acerca de</a> &middot; <a href="/es/privacy/">Privacidad</a>',
+    es: '<a href="/es/">Español</a> &middot; <a href="/es/about/">Acerca de</a> &middot; <a href="/es/privacy/">Privacidad</a> &middot; <a href="/image-credits/">Créditos de las imágenes</a>',
   };
   const shell = ({ path, title, description, test, schemas, body, footerNote, css = '', lang = 'he', head = '' }) => `<!DOCTYPE html>
 <html lang="${lang}" dir="${lang === 'he' ? 'rtl' : 'ltr'}">
@@ -153,7 +157,7 @@ ${head}  <link rel="icon" type="image/png" href="/favicon.png" />
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:image" content="${SITE}/og-image.png" />
 ${schemas.map((s) => `  <script type="application/ld+json">${s}</script>`).join('\n')}
-  <style>${UNIT_CSS}${lang === 'he' ? '' : `\n    body { direction: ltr; text-align: left; }`}${css}</style>
+  <style>${UNIT_CSS}${lang === 'he' ? '' : LTR_CSS}${css}</style>
 </head>
 <body>
 ${body}
@@ -180,7 +184,7 @@ ${body}
   // step → a set on the Band I review path: finishing a round ticks it off on this device.
   // pin → "this week in class" (RC12): the unit name; the button saves the page on this
   // device and the app's home then opens with a one-tap card to it.
-  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null, step = null, pin = null, afterPractice = '', gameFirst = '' }) {
+  function setPage({ dir, path, title, description, test, crumbItems, navHtml, h1Html, answer, listHeading, words, afterTable = '', practiceKey, faqPairs, sheetsName, shareTitle, ctaUtm, footerNote, battleHref = null, step = null, pin = null, afterPractice = '', gameFirst = '', packHref = null }) {
     const items = words.map((w) => {
       const base = byId.get(w.wordId);
       return { en: w.en, he: w.he, ex: w.ex || null, chip: w.chip || null, id: w.wordId || null, audio: `/audio/${audioKey(w.en)}.mp3`, img: base?.imageUrl || null, ...hebrewOptions(w, words) };
@@ -238,7 +242,8 @@ ${body}
     ${afterPractice}
     <section class="section" aria-labelledby="cards-h">
       <h2 id="cards-h" class="section-title">כרטיסיות להדפסה</h2>
-      <p class="center"><button type="button" class="print-btn" data-print><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-printer"/></svg> הדפסת הכרטיסיות</button></p>
+      <p class="center"><button type="button" class="print-btn" data-print><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-printer"/></svg> הדפסת הכרטיסיות</button></p>${packHref ? `
+      <p class="center pack-row"><a class="cta" href="${packHref}"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-file-text"/></svg> חבילת דפי עבודה לשבוע: <bdi dir="ltr">5</bdi> עמודים עם דף פתרון</a></p>` : ''}
       ${printQrBlock(`${SITE}${path}`, 'סרקו כדי לשמוע את המילים ולתרגל באתר — חינם, בלי הרשמה', 'rtl')}
       <div class="cards">${cards}
       </div>
@@ -342,6 +347,8 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
       ctaUtm: `utm_medium=unit&amp;utm_content=${u.book}-${u.unit}`,
       pin: unitName,
       battleHref: battleUnitIds.has(`u-${u.book}-${u.unit}`) ? `/battle/?unit=u-${u.book}-${u.unit}` : null,
+      // audit 11-18 idea 6: the unit's printable week pack (scripts/build-week-packs.mjs)
+      packHref: test ? null : packPath(u),
       // game-first (owner 11-12, scripts/game-first.mjs): the game that knows most of the unit's words, above the table
       gameFirst: gameFirstCard(gameForWordIds(dirname(publicDir), u.words.map((w) => w.wordId).filter(Boolean)), { lang: 'he', scope: 'unit', content: `unit_${u.book}-${u.unit}` }),
     });
@@ -398,6 +405,7 @@ export function buildUnitPages({ SITE, distDir, publicDir, writePage, escapeHtml
   <div class="unit-grid">${withUnits.map((b) => `
         <a class="unit-card" href="/units/${b}/"><strong lang="en" dir="ltr">${escapeHtml(BOOKS[b].name)}</strong><span>${(live.length ? liveUnitsOf(b) : UNITS.filter((u) => u.book === b)).length} יחידות</span></a>`).join('')}
   </div>
+  <p class="center pack-row"><a class="cta" href="/he/printables/">דפי עבודה להדפסה: חבילה לשבוע לכל יחידה ←</a></p>
   <p class="center pin-hint">בעמוד של כל יחידה אפשר ללחוץ <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-pin"/></svg> "זו היחידה שלנו השבוע", והאפליקציה תיפתח עם כרטיס אליה.</p></section></main>
   <script defer src="/unit-practice.js"></script>`,
     }));
@@ -450,6 +458,11 @@ const UNIT_GAME_FIRST_CSS = `
     .gf-wrap { padding-top: 1.25rem; } .gf-wrap .game-first { margin-bottom: 0; }
 ${GAME_FIRST_CSS}
     @media print { .gf-wrap { display: none !important; } }
+`;
+// LTR pages on the same CSS (lang 'es'): direction and the English column alignment flip.
+const LTR_CSS = `
+    body { direction: ltr; text-align: left; }
+    .col-en { text-align: left; } .sheet-note { direction: ltr; }
 `;
 const UNIT_CSS = `
     * { margin: 0; padding: 0; box-sizing: border-box; }

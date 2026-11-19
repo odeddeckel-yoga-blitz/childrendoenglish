@@ -114,7 +114,7 @@ export const READING_GLOSSES = {
   work: 'עבודה / לעבוד', world: 'עולם', yellow: 'צהוב/ה', yes: 'כן', yesterday: 'אתמול', your: 'שלך',
 };
 
-// Tap-for-Spanish (wave 1, 11-18): the Spanish pages (/es/reading/) gloss every word of all
+// Tap-for-Spanish (wave 1, 11-18): the Spanish pages (/es/lecturas/) gloss every word of all
 // the texts the same way. Latin-American, kid-level, like word-glosses-es.js.
 export const READING_PHRASES_ES = {
   'ice cream': 'helado', 'a lot': 'mucho', 'lot of': 'muchos / mucho', 'come back': 'volver',

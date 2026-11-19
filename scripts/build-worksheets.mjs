@@ -27,7 +27,7 @@ function oppositesPairs(publicDir) {
 }
 
 // small seeded PRNG: the same sheet every build
-function shuffle(list, seed) {
+export function shuffle(list, seed) {
   let s = seed >>> 0;
   const rnd = () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   const a = list.slice();
@@ -35,7 +35,7 @@ function shuffle(list, seed) {
   return a;
 }
 // a shuffle where no item stays next to its own partner row (a straight line across would give the answer away)
-function derange(list, seed) {
+export function derange(list, seed) {
   for (let k = 0; k < 200; k++) {
     const a = shuffle(list, seed + k);
     if (a.every((x, i) => x !== list[i])) return a;
@@ -259,7 +259,9 @@ function indexPage(SITE) {
   return page({ SITE, path: '/printable-worksheets/', title: 'Free Printable English Worksheets for Kids | Children Do English',
     h1: 'Printable English worksheets', sub: 'Free one-page English worksheets for kids: opposites, feelings and action verbs, with pictures and answer keys.',
     intro: 'Each worksheet is one A4 page with pictures, plus an answer key on page 2. They use the words and pictures from our online games, so children can print the sheet and then play the game.',
-    body: `<div class="cards">${cards}</div>`, crumb: 'Printable worksheets' })
+    // audit 11-18 idea 6: the 5-page week packs (scripts/build-week-packs.mjs)
+    body: `<div class="cards">${cards}</div>
+<p class="intro" style="margin-top:1.25rem">Need a whole week? Our printable week packs have 5 pages each (flashcards, matching, missing letters, a word search, read and draw, and an answer key): <a href="/he/printables/" lang="he" dir="rtl">דפי עבודה לכל יחידה וכיתה</a> in Hebrew for Israeli textbook units and grades 3–6, and <a href="/es/fichas/" lang="es">fichas de inglés para primaria</a> in Spanish for 13 topics.</p>`, crumb: 'Printable worksheets' })
     .replace('<button class="print-btn" type="button" data-print>Print the worksheet</button>', '');
 }
 

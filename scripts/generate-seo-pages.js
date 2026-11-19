@@ -14,6 +14,7 @@ import { PILL_CSS, buildTeachersHtml } from './build-teachers-page.mjs';
 import { wordPageLayout } from '../src/data/wordPageVariant.js';
 import { buildWordPageABody, WORD_A_CSS } from './word-page-a.mjs';
 import { addLegalRow, buildTrustPages, buildLlmsTxt } from './build-trust-pages.mjs';
+import { buildAgeFeelingsPages, YEAR_PAGES, yearPath, FEELINGS_PATH } from './build-age-feelings.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -157,7 +158,6 @@ const getWordsByCategory = (c) => WORDS.filter((w) => w.category === c);
 const pics = (words, form = 'many', lang = 'en') => pictureClaim(words, isPhoto, { lang, form });
 // Hebrew per-set copy keeps {PICS} / {PIC} slots, filled from the page's own words.
 const fillPics = (text, words) => text.replace(/\{PICS\}/g, pics(words, 'many', 'he')).replace(/\{PIC\}/g, pics(words, 'one', 'he'));
-const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
 
 // R2C23: quotable facts — plain one-line sentences an answer engine can lift,
 // every number computed from the data (no hand-typed counts).
@@ -576,7 +576,8 @@ function buildCategoryPage(slug, displayName, words) {
   <div class="container">
     ${gameFirst}
     ${playTop}
-    <p class="intro answer-first">${escapeHtml(answerFirst)}</p>
+    <p class="intro answer-first">${escapeHtml(answerFirst)}</p>${slug === 'feelings' ? `
+    <p class="intro"><a href="${FEELINGS_PATH}">Feelings words for kids with simple meanings: what each feeling means and when you might feel it &rarr;</a></p>` : ''}
     ${levelTableHtml}
 
     <div class="grid">
@@ -1133,7 +1134,13 @@ function buildAgeBracketPage(bracket, allWords) {
       <div class="age-links-row">
         ${otherBrackets}
       </div>
-    </div>
+    </div>${bracket.level === 'advanced' ? '' : `
+    <div class="age-links">
+      <h2>Words by year</h2>
+      <div class="age-links-row">
+        ${YEAR_PAGES.filter((y) => y.bracket === bracket.slug).map((y) => `<a href="${yearPath(y.n)}">Words for ${y.n} year olds</a>`).join('\n        ')}
+      </div>
+    </div>`}
   </div>
 
   <div class="footer">
@@ -1356,8 +1363,11 @@ function buildSpanishBilingualCategoryPage(slug, displayName, spanishName, words
   // Per-page overrides (seo-title-overrides.json); {n} = word count so the number never drifts
   const override = TITLE_OVERRIDES[`/vocabulary/${slug}/spanish/`] || {};
   const fill = (s) => s && s.replaceAll('{n}', words.length);
-  const title = fill(override.title) || `${displayName} in Spanish and English — Vocabulario bilingüe para niños | Children Do English`;
-  const description = fill(override.description) || `Learn ${words.length} ${displayName.toLowerCase()} words in English and Spanish side by side — ${spanishName.toLowerCase()} en inglés para niños. With pictures, English pronunciation, and definitions. Free bilingual vocabulary for kids ages 6-12.`;
+  // Spanish leads (audit 11-18, owner OK; the title-holdout read ended "ship" 11-14): the English-first titles drew
+  // English speakers searching "colors in spanish" (pos 60) and ranked 10–17 for "colores en inglés y español".
+  // The three count-led English overrides (sports/food/transport, 10-24) were folded into this default.
+  const title = fill(override.title) || `${spanishName} en inglés y español para niños | Children Do English`;
+  const description = fill(override.description) || `${spanishName} en inglés y español para niños: ${words.length} palabras lado a lado, cada una con ${pics(words, 'one', 'es')}, pronunciación en inglés y una definición sencilla. Vocabulario en inglés para primaria, gratis y sin registro.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -2256,7 +2266,8 @@ function buildSpanishLandingPage() {
         ${categoryGrid}
       </div>
       <p style="text-align:center;margin-top:1.25rem;font-size:0.9rem"><a href="/printable-flashcards/spanish/">Tarjetas imprimibles de vocabulario en inglés y español &rarr;</a></p>
-      <p style="text-align:center;margin-top:0.5rem;font-size:0.9rem"><a href="/es/reading/">${READING_UI.es.landingLink} &rarr;</a></p>
+      <p style="text-align:center;margin-top:0.5rem;font-size:0.9rem"><a href="/es/primaria/">Inglés para niños de primaria: fichas, juegos y lecturas &rarr;</a></p>
+      <p style="text-align:center;margin-top:0.5rem;font-size:0.9rem"><a href="/es/lecturas/">${READING_UI.es.landingLink} &rarr;</a></p>
     </div>
   </div>
 
@@ -3810,8 +3821,9 @@ ${FC_SHEETS_CSS}
 function buildSpanishPrintableFlashcardsPage(slug, displayName, spanishName, words) {
   const url = `${SITE}/printable-flashcards/${slug}/spanish/`;
   const enUrl = `${SITE}/printable-flashcards/${slug}/`;
-  const title = `Printable ${displayName} Flashcards in English and Spanish — Free PDF-ready | Children Do English`;
-  const description = `Tarjetas imprimibles de vocabulario en inglés con ${pics(words, 'many', 'es')}: ${words.length} free printable ${displayName.toLowerCase()} flashcards in English and Spanish, con traducción al español. ${cap(pics(words))}, English phonetics, and Spanish glosses. Just print and cut!`;
+  // Spanish leads (audit 11-18): "tarjetas de deportes para imprimir" ranks pos 6 on an English-first title.
+  const title = `Tarjetas de ${spanishName.toLowerCase()} en inglés y español para imprimir | Children Do English`;
+  const description = `Tarjetas de vocabulario en inglés para imprimir gratis: ${words.length} tarjetas de ${spanishName.toLowerCase()}, cada una con ${pics(words, 'one', 'es')}, la palabra en inglés, su pronunciación y la traducción al español. Imprime y recorta, sin registro.`;
 
   const breadcrumbSchema = JSON.stringify({
     '@context': 'https://schema.org',
@@ -4127,6 +4139,7 @@ const fcIndexHtml = `<!DOCTYPE html>
     ${howToHtml('How to print the flashcards', [{ name: 'Pick a category', text: `Choose one of the ${CATEGORIES.length} sets below.` }, ...fcIndexSteps.slice(1)])}
     <p style="font-size:0.9rem;margin-bottom:1rem"><a href="/printable-flashcards/spanish/" style="color:#2563eb;text-decoration:none">Ver tarjetas imprimibles en inglés y español &rarr;</a></p>
     ${WORKSHEETS_HOLD ? '' : '<p style="font-size:0.9rem;margin-bottom:1rem"><a href="/printable-worksheets/" style="color:#2563eb;text-decoration:none">Printable worksheets from the games: match opposites, name the feeling, act it out &rarr;</a></p>'}
+    <p style="font-size:0.9rem;margin-bottom:1rem">Printable week packs (5 pages with an answer key): <a href="/he/printables/" lang="he" dir="rtl" style="color:#2563eb;text-decoration:none">דפי עבודה לכל יחידה וכיתה</a> (Hebrew, Israeli textbook units and grades 3–6) &middot; <a href="/es/fichas/" lang="es" style="color:#2563eb;text-decoration:none">Fichas de inglés para primaria</a> (Spanish, 13 topics)</p>
 
     <div class="grid">
       ${fcCategoryCards}
@@ -4162,7 +4175,8 @@ const esFcIndexFaq = faqSchemaFor([
 ]);
 const esFcIndexAnswer = `Tarjetas de vocabulario en inglés y español para imprimir gratis: ${WORDS_N} tarjetas en ${CATEGORIES.length} sets, cada una con ${pics(WORDS, 'one', 'es')}, la palabra en inglés, su pronunciación y la traducción al español. Elige una categoría, imprime y recorta por las líneas punteadas.`;
 const esFcIndexUrl = `${SITE}/printable-flashcards/spanish/`;
-const esFcIndexTitle = 'Tarjetas Imprimibles de Vocabulario en Ingl\u00e9s y Espa\u00f1ol \u2014 Gratis | Children Do English';
+// audit 11-18: lead with the query as typed ("tarjetas de vocabulario en ingles", pos 46)
+const esFcIndexTitle = 'Tarjetas de vocabulario en ingl\u00e9s para imprimir, con espa\u00f1ol \u2014 gratis | Children Do English';
 const esFcIndexDesc = `Tarjetas de vocabulario en ingl\u00e9s listas para imprimir, con ${pics(WORDS, 'many', 'es')} y traducci\u00f3n al espa\u00f1ol. ${WORDS_N} palabras en ${CATEGORIES.length} categor\u00edas. \u00a1Solo imprime y recorta!`;
 
 const esFcIndexBreadcrumb = JSON.stringify({
@@ -4263,6 +4277,7 @@ const esFcIndexHtml = `<!DOCTYPE html>
     <p class="intro answer-first">${escapeHtml(esFcIndexAnswer)}</p>
     ${howToHtml('Cómo imprimir las tarjetas', [{ name: 'Elige una categoría', text: `Elige uno de los ${CATEGORIES.length} sets.` }, ...esFcIndexSteps.slice(1)])}
     <p class="lang-variant"><a href="/printable-flashcards/">Ver la versi\u00f3n solo en ingl\u00e9s &rarr;</a></p>
+    <p class="lang-variant"><a href="/es/fichas/">Fichas de ejercicios para imprimir: un paquete de 5 p\u00e1ginas por tema, con hoja de respuestas &rarr;</a> &middot; <a href="/es/primaria/">Ingl\u00e9s para primaria</a></p>
 
     <div class="grid">
       ${esFcCategoryCards}
@@ -5201,6 +5216,8 @@ for (const bracket of AGE_BRACKETS) {
   const count = WORDS.filter((w) => w.level === bracket.level).length;
   console.log(`  \u2713 /vocabulary/${bracket.slug}/ (${count} words)`);
 }
+// audit 11-18: per-year lists (words for 6\u202610 year olds) + feelings words for kids (scripts/build-age-feelings.mjs)
+for (const p of buildAgeFeelingsPages({ SITE, ROOT, distDir, writePage, escapeHtml, WORDS, faqSchemaFor, CATEGORY_NAMES })) console.log(`  \u2713 ${p}`);
 
 // --- Generate bilingual Hebrew-English category pages ---
 
@@ -5360,7 +5377,18 @@ console.log(`Grade pages: ${buildGradePages({ SITE, distDir, writePage, escapeHt
 const { buildReadingPages } = await import(join(ROOT, 'scripts', 'build-reading-pages.mjs'));
 const { READINGS, READING_STAGES, READING_NAMES } = await import(join(ROOT, 'src', 'data', 'readings.js'));
 const { READING_GLOSSES, READING_PHRASES, READING_GLOSSES_ES, READING_PHRASES_ES } = await import(join(ROOT, 'src', 'data', 'readingGlosses.js'));
-console.log(`Reading pages (he + es): ${buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, READINGS, READING_STAGES, READING_NAMES, READING_GLOSSES, READING_PHRASES, READING_GLOSSES_ES, READING_PHRASES_ES })}`);
+console.log(`Reading pages (he /band-1/reading/ + es /es/lecturas/): ${buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS, collides, READINGS, READING_STAGES, READING_NAMES, READING_GLOSSES, READING_PHRASES, READING_GLOSSES_ES, READING_PHRASES_ES })}`);
+// Printable week packs (audit 11-18 idea 6): /he/printables/ (units + grades 3–6) and /es/fichas/ (13 topics)
+const { buildWeekPacks } = await import(join(ROOT, 'scripts', 'build-week-packs.mjs'));
+const weekPacks = buildWeekPacks({ SITE, distDir, writePage, escapeHtml, WORDS, collides, UNITS, BOOKS, BAND1_BY_ID, ES_GLOSSES, CATEGORIES, CATEGORY_NAMES_ES });
+console.log(`Week packs: ${weekPacks.he.length} Hebrew + ${weekPacks.es.length} Spanish (+2 hubs)`);
+// /es/primaria/ — the Spanish primary hub (audit 11-18 idea 12); its readings section lists every Spanish reading
+const { buildEsHub } = await import(join(ROOT, 'scripts', 'build-es-hub.mjs'));
+console.log(`  ✓ ${buildEsHub({ SITE, distDir, writePage, escapeHtml, WORDS, collides, CATEGORIES, CATEGORY_NAMES_ES, ES_GLOSSES, GAMES: [...SPOTLIGHT_GAMES, ...HUB_ONLY_GAMES], READINGS })} (Spanish primary hub)`);
+// Chant cards PILOT (audit 11-18 idea 13): noindex, linked from nowhere until the ear check
+const { buildChantPages, CHANTS_INDEX } = await import(join(ROOT, 'scripts', 'build-chant-pages.mjs'));
+const { CHANTS } = await import(join(ROOT, 'src', 'data', 'chants.js'));
+console.log(`  ✓ chants pilot: ${buildChantPages({ SITE, distDir, writePage, escapeHtml, CHANTS }).length} page(s)${CHANTS_INDEX ? '' : ' (noindex)'}`);
 console.log(`  ✓ /band-1/: ${band1Pages} page(s)`);
 const unitEntries = unitUrls.map((u) => `  <url>
     <loc>${SITE}${u}</loc>

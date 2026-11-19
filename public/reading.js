@@ -1,4 +1,4 @@
-/* Graded-reader pages: /band-1/reading/<slug>/ (Hebrew) and /es/reading/<slug>/ (Spanish). CSP-safe external file.
+/* Graded-reader pages: /band-1/reading/<slug>/ (Hebrew) and /es/lecturas/<slug>/ (Spanish). CSP-safe external file.
  * Tap a word → its gloss in the bar under the text. UI strings come from the page (data-t-* on [data-reading],
  * src/data/readingUi.js); the Hebrew fallbacks keep an older cached page working. ▶ plays the text sentence by
  * sentence (the sentence being read is highlighted); 🔊 plays one question.

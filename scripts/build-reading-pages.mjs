@@ -1,6 +1,7 @@
 // Graded readers ("Little Readers"): RC11 (10-31) + wave 1 (11-18). Original texts (src/data/readings.js) in
 // 5 levels, built twice: Hebrew  /band-1/reading/ hub + /band-1/reading/<slug>/  (tap a word → Hebrew)
-//                        Spanish /es/reading/ hub      + /es/reading/<slug>/      (tap a word → Spanish)
+//                        Spanish /es/lecturas/ hub     + /es/lecturas/<slug>/     (tap a word → Spanish)
+// (11-19: one Spanish section, at the printables branch's /es/lecturas/; /es/reading/ was never live)
 // The two versions of a page are reciprocal hreflang alternates (he ↔ es), each self-canonical. Each page: the
 // text read aloud sentence by sentence (/audio/s/, Piper TTS — a computer voice), any word tappable for its gloss
 // (src/data/readingGlosses.js), three questions, and a print-only sheet: the text, the questions with lettered
@@ -17,7 +18,7 @@ const LEVEL_HE = { pre: 'Pre-Band I', c1: 'Band I · Core I', c2: 'Band I · Cor
 const LETTERS = 'abcdef';
 export const READING_LANGS = {
   he: { hub: '/band-1/reading/', dir: ['band-1', 'reading'], rtl: true },
-  es: { hub: '/es/reading/', dir: ['es', 'reading'], rtl: false },
+  es: { hub: '/es/lecturas/', dir: ['es', 'lecturas'], rtl: false },
 };
 
 // The gloss for each token: a two-word phrase containing it wins over the word alone.
@@ -65,10 +66,10 @@ export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS,
     const en = (s) => (cfg.rtl ? `<bdi lang="en" dir="ltr">${escapeHtml(s)}</bdi>` : `<span lang="en">${escapeHtml(s)}</span>`);
     const tr = (r) => r[lang];
     const hubPath = cfg.hub;
-    const crumbBase = lang === 'he' ? [['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/']] : [['Español', '/es/']];
+    const crumbBase = lang === 'he' ? [['עברית', '/he/'], ['Band I לפי נושאים', '/band-1/']] : [['Español', '/es/'], ['Inglés para primaria', '/es/primaria/']];
     const crumbHtml = lang === 'he'
       ? '<a href="/he/">עברית</a> › <a href="/band-1/"><span lang="en" dir="ltr">Band I</span> לפי נושאים</a>'
-      : '<a href="/es/">Español</a>';
+      : '<a href="/es/">Español</a> › <a href="/es/primaria/">Inglés para primaria</a>';
     const arrow = cfg.rtl ? '←' : '→';
     const ui = `data-lang="${lang}" data-t-ok="${escapeHtml(T.right)}" data-t-try="${escapeHtml(T.tryAgain)}" data-t-play="${escapeHtml(T.playAll)}" data-t-stop="${escapeHtml(T.stop)}" data-t-all="${escapeHtml(T.scoreAll)}" data-t-some="${escapeHtml(T.scoreSome)}"`;
 
@@ -155,7 +156,8 @@ export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS,
     const more = lang === 'he'
       ? `<p class="aligned">${txt(T.band1Note)}</p>
   <p class="aligned">את המילים עצמן אפשר לתרגל ב<a href="/band-1/">עמודי Band I לפי נושאים</a> וב<a href="/band-1/review/">מסלול החזרה</a>.</p>`
-      : `<p class="aligned"><a href="/printable-flashcards/spanish/">${txt(T.morePractice)}</a></p>`;
+      : `<p class="aligned"><a href="/printable-flashcards/spanish/">${txt(T.morePractice)}</a></p>
+  <p class="aligned">Las palabras se practican también en el <a href="/vocabulary/animals/spanish/">vocabulario en inglés y español</a> y en las <a href="/es/fichas/">fichas para imprimir</a>.</p>`;
     mkdirSync(join(distDir, ...cfg.dir), { recursive: true });
     writePage(join(distDir, ...cfg.dir, 'index.html'), kit.shell({
       path: hubPath, test: false, footerNote: T.footerNote, lang, head: alternates(''),

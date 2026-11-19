@@ -211,6 +211,7 @@ ${body}
   </div>
   <div class="container" style="padding-top:1.25rem">
     <p class="intro answer-first">${escapeHtml(answer)}</p>
+    <p class="intro no-print"><a href="/he/printables/">דפי עבודה להדפסה: חבילה של <bdi dir="ltr">5</bdi> עמודים לכל יחידה ולכל כיתה, עם דף פתרון ←</a></p>
     <div class="cat-grid">${grid}
     </div>
     ${faqHtml(faq)}
