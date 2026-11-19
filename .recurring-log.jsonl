@@ -89,3 +89,5 @@
 {"id":"i18n-consensus","at":"2026-11-19T12:43:08.328Z","result":"ok","note":"11-19 printables/es release: 5 units (week-pack he/es strings, /es/primaria/, /es/fichas/, /he/printables/) all pass, 0 edits, $2.16; backup ~/.config/cde/backup/printables-1119"}
 {"id":"deploy-smoke","at":"2026-11-19T12:58:38.519Z","result":"ok","note":"d6f0f20 live 12:47Z (readers 23 + /es/lecturas/, week packs, /es/primaria/, age/feelings lists, chants noindex): smoke 11 pass; new pages 200, /es/reading/ 404, chants noindex; Google 112 ok"}
 {"id":"ci-health","at":"2026-11-19T12:58:38.600Z","result":"found","note":"d6f0f20 CI red: shard 2 printables-es /es/primaria/ 17 px sideways scroll at 390 (Linux fonts); fix 3b68820 on fix/es-hub-table-1119, 0 px at 320/360/390"}
+{"id":"deploy-smoke","at":"2026-11-19T15:54:31.849Z","result":"ok","note":"abde285 (es-hub table fix) READY; smoke 11/11; /es/primaria/ table-layout fixed live"}
+{"id":"ci-health","at":"2026-11-19T15:54:31.953Z","result":"ok","note":"abde285 CI green (lint + 4 shards); shard-2 /es/primaria/ overflow fixed"}
