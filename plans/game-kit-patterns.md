@@ -1367,3 +1367,37 @@ it), while Spanish moved its long tail to haiku. Yoga's consensus ran opus twice
 - **Judge only what changed.** After an edit pass (hedges, a term fix), run consensus with `--focus-since=<rev before
   the edits>`: unchanged files are skipped, changed files are judged on the changed paragraphs ±1 (yoga fr ujjayi: 3K of
   13.5K characters). Whole-unit judging is for new translations only.
+
+## 8j. Lessons from the 11-18 Factory session (KDM, CDE, yoga; owner "do all")
+Short rules. Each one cost something on 11-16 to 11-18.
+- **Never swap a value the user saved for a stand-in** (CDE 11-16, revert ff94c23). A line-icon set had no fox, frog,
+  butterfly, lion or unicorn, so a child's saved 🦊 would have become a squirrel. Before any change that remaps saved
+  values (avatars, names, settings), prove that every old value has an exact new one. If one is missing, hold the
+  change; do not substitute.
+- **A layout test keeps the interactive hook on the first screen** (yoga 6a, 11-16 to 11-18). The test layout moved the
+  quiz from about 297 px to about 1,491 px. Widget answers per landing fell from 5.7% (42/732) to 2.3% (15/647),
+  p≈0.001; search-engaged visitors fell from 86% to 66%. Write the hook's pixel position into the test plan, and stop
+  any arm that moves it below the fold. (Pairs with Q1 above: one clear action on the first screen.)
+- **A tool that calls `claude` itself still meters.** KDM's `vision.mjs` needs the Read tool, so it could not use
+  `claudeCall`; its $9.07 answer-check run never reached the meter or the $25 cap. Call `capCheck(site)` before each call
+  and `logCall({site, step, model, usd})` after it (both in `tools/claude-cost.mjs`; `log` from the shell hand-logs
+  spend). Pilot three calls and multiply before you plan a batch: the plan said $2, the run cost $9.07.
+- **A cheap judge is overconfident on drawn answers** (KDM es answer-check, 11-18). On canvas-drawn rounds sonnet says
+  `cant_tell`; haiku said correct or wrong on 3 of 4 spot-check games. A round the judge cannot see is "needs a visual
+  check", never coverage. Code signatures (fillText count, DOM text ratio) do not separate canvas games from DOM games;
+  read the capture, or use a judge that sees the image. Spot-check the cheap tier on a few games before the batch.
+- **Scratchpad subfolders are not durable** (Factory, 11-09 to 11-18). Their contents vanished at 00:00 on 11-09, 11-15,
+  11-17 and 11-18; files at the top of a scratchpad survived; the cause is unknown. It took KDM's Hebrew output ($286.52)
+  and a worktree. No worktrees and no unsaved paid output there. Use an ignored in-repo folder
+  (`.claude/worktrees/`, listed in `.git/info/exclude`) or `~/.config/<site>/backup/`, and commit before midnight.
+  Branches that are unmerged and unpushed: `git bundle` them to the backup folder (do not push them just to save them).
+- **A high advisory with no fix reaches every site at once** (picomatch GHSA-fc5q-39xc-vjpf, 11-18). KDM's push gate
+  blocked and an env skip was used for one push; yoga used a dated allowlist (`tools/checks/audit-allow.mjs`). Use the
+  dated allowlist: one line per advisory with its package chain, why it does not reach the client bundle, the owner's OK
+  and an expiry date; the gate fails again after the date. A skip flag is only for one owner-approved push, and is logged.
+- **A human-signal detector must ignore zero-movement events** (yoga 11-18, 117cce6). Linux Chrome fires a trusted
+  `mousemove` when the layout shifts under a still cursor, so "no input = no hum" failed in CI, and a JS crawler could
+  trip it too. Count a mouse event only when its position changed. Check the same in the KDM and CDE bot filters.
+- **Check the job log before you report a delay** (yoga 11-18). Yoga reported a 3 h wait on the browser slot;
+  `~/.kit-overnight/jobs.jsonl` showed an 8 min gate that started late because the script was launched late. Open
+  question: `browser-slot` keeps no hold history, only status. A holds log would make waits attributable.
