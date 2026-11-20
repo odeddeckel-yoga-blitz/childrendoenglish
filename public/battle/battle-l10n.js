@@ -54,7 +54,7 @@ const HE_TEXT = {
 // Drawn icon before / after the text of these ids (the emoji were stripped from HE_TEXT).
 const HE_ICON = { projLink: ['projector'], btnCheckCode: [null, 'arrow-left'], btnMoreNames: ['dices'], podiumTitle: ['trophy'] };
 const HE_ARIA = { codeInput: 'קוד החדר', sayBtn: 'לשמוע שוב את המילה' };
-const HE_PRIVACY = ['פרטיות:', ' בלי חשבונות ובלי הרשמה. השחקנים בוחרים כינוי מצחיק מרשימה — אף אחד לא מקליד את השם האמיתי שלו. נשמרים רק הכינוי והניקוד, והחדר כולו נמחק אוטומטית כ־30 דקות אחרי שנוצר.'];
+const HE_PRIVACY = ['פרטיות:', ' בלי חשבונות ובלי הרשמה. השחקנים בוחרים כינוי מצחיק מרשימה — אף אחד לא מקליד את השם האמיתי שלו. נשמרים רק הכינוי והניקוד, והחדר כולו נמחק אוטומטית תוך שעה: 30 דקות אחרי שנוצר, או 10 דקות אחרי סוף המשחק אם זה מאוחר יותר.'];
 
 // The screens a kid sees; they turn right-to-left in Hebrew.
 const KID_SCREENS = ['sHome', 'sJoin', 'sName', 'sKidLobby', 'sPlay', 'sPodium'];
