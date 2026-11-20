@@ -15,9 +15,17 @@
  *                                                 (class mode: the teacher's target, else default)
  *   POST /api/live {action:'score', code, playerId, playerKey,
  *                   score, streak, answered, correct} → { ok }
+ *                                                 (only while running + 5 s grace;
+ *                                                 counts rate-capped — battleRules.js)
+ *   POST /api/live {action:'lock', code, hostKey, locked} → { ok, locked }
+ *                                                 (host: no new joins while locked)
+ *   POST /api/live {action:'remove', code, hostKey, playerId} → { ok }
+ *                                                 (host: the player's key goes dead,
+ *                                                 their words leave every total)
  *
  * Privacy: no accounts; only a picked (never typed) nickname + score are
- * stored; rooms auto-delete ~30 minutes after creation. See api/_lib/battleStore.js.
+ * stored; rooms auto-delete 30 minutes after creation, or 10 minutes after the
+ * battle ends if later (max ~50 min). See api/_lib/battleStore.js.
  */
 
 import { getBattleStore, normalizeRoomCode } from './_lib/battleStore.js';
@@ -28,6 +36,9 @@ const STATUS_BY_ERROR = {
   forbidden: 403,
   room_finished: 409,
   room_full: 409,
+  room_locked: 409,
+  not_running: 409,
+  player_not_found: 404,
   nickname_taken: 409,
   already_started: 409,
   invalid_nickname: 400,
@@ -102,6 +113,20 @@ export default async function handler(req, res) {
         return send(res, await store.updateScore(code, body.playerId, body.playerKey, {
           score, streak, answered, correct,
         }));
+      }
+      case 'lock': {
+        const code = normalizeRoomCode(body.code);
+        if (!code || typeof body.hostKey !== 'string' || typeof body.locked !== 'boolean') {
+          return send(res, { error: 'bad_request' });
+        }
+        return send(res, await store.setLocked(code, body.hostKey, body.locked));
+      }
+      case 'remove': {
+        const code = normalizeRoomCode(body.code);
+        if (!code || typeof body.hostKey !== 'string' || typeof body.playerId !== 'string') {
+          return send(res, { error: 'bad_request' });
+        }
+        return send(res, await store.removePlayer(code, body.hostKey, body.playerId));
       }
       default:
         return send(res, { error: 'bad_request' });

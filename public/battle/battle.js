@@ -16,7 +16,7 @@ import {
   BATTLE_CATEGORIES, BATTLE_UNIT_CATEGORIES, BATTLE_DURATIONS, BATTLE_MODES, TEAM_NAMES, defaultTarget,
   normalizeCode, suggestNicknames, makeQuestion, pointsForAnswer,
 } from './battle-core.js';
-import { pickLang, applyLang, HE, ltr, ic, setIc } from './battle-l10n.js';
+import { pickLang, applyLang, HE, ltr, ic, setIc, tr } from './battle-l10n.js';
 
 const API = '/api/live';
 const POLL_MS = 2000;
@@ -26,6 +26,8 @@ const NO_REPEAT_WINDOW = 6;
 const $ = (id) => document.getElementById(id);
 // Kid screens in Hebrew (CUX20); the teacher/projector screens stay English.
 const HEB = pickLang() === 'he';
+const KID_LANG = HEB ? 'he' : 'en';
+const HOST_LANG = 'en'; // teacher screens stay English (battle-l10n.js header)
 const screens = ['sHome', 'sSetup', 'sHostLobby', 'sHostLive', 'sJoin', 'sName', 'sKidLobby', 'sPlay', 'sPodium'];
 
 /* ---------------- state ---------------- */
@@ -192,9 +194,12 @@ async function poll() {
 function render() {
   const room = S.room;
   if (!room) return;
+  // Host-removed: the server drops the player from the board and kills the key.
+  if (S.role === 'kid' && S.playerId && !room.players.some((p) => p.id === S.playerId)) { kicked(); return; }
   if (room.status === 'finished') { renderPodium(); return; }
 
   if (S.role === 'host') {
+    if (room.status !== 'finished') renderHostCtl(room);
     if (room.status === 'lobby') {
       if (S.view !== 'sHostLobby') show('sHostLobby');
       $('roomCode').textContent = room.code;
@@ -237,6 +242,65 @@ function render() {
       tickClock();
     }
   }
+}
+
+/* ---------------- teacher: lock + remove (hostKey-gated on the server) ---------------- */
+
+/** The one host-controls block follows the teacher between the lobby and the live screen. */
+function renderHostCtl(room) {
+  const ctl = $('hostCtl');
+  const home = room.status === 'lobby' ? $('sHostLobby') : $('sHostLive');
+  if (ctl.parentElement !== home) home.appendChild(ctl);
+  const lockBtn = $('btnLock');
+  setIc(lockBtn, tr(HOST_LANG, room.locked ? 'unlock' : 'lock'), 'lock');
+  lockBtn.setAttribute('aria-pressed', room.locked ? 'true' : 'false');
+  $('lockNote').hidden = !room.locked;
+  $('lockNote').textContent = tr(HOST_LANG, 'lockedNote');
+  $('manageSum').textContent = `${tr(HOST_LANG, 'manage')} (${room.players.length})`;
+  const list = $('manageList');
+  if (room.players.length === 0) {
+    const p = document.createElement('p');
+    p.className = 'sub';
+    p.textContent = tr(HOST_LANG, 'noPlayers');
+    list.replaceChildren(p);
+    return;
+  }
+  list.replaceChildren(...room.players.map((pl) => {
+    const row = document.createElement('div');
+    row.className = 'mrow';
+    row.dataset.playerId = pl.id;
+    const name = document.createElement('bdi');
+    name.textContent = pl.nickname;
+    const b = document.createElement('button');
+    b.className = 'btn ghost';
+    b.textContent = tr(HOST_LANG, 'remove');
+    b.setAttribute('aria-label', tr(HOST_LANG, 'removeAria')(pl.nickname));
+    b.addEventListener('click', () => removePlayer(pl.id));
+    row.append(name, b);
+    return row;
+  }));
+}
+
+async function hostAction(body) {
+  $('ctlErr').textContent = '';
+  try {
+    await apiPost({ code: S.code, hostKey: S.hostKey, ...body });
+    poll();
+  } catch {
+    $('ctlErr').textContent = tr(HOST_LANG, 'hostErr');
+  }
+}
+const toggleLock = () => hostAction({ action: 'lock', locked: !(S.room && S.room.locked) });
+const removePlayer = (playerId) => hostAction({ action: 'remove', playerId });
+
+/** This kid was removed by the teacher: drop the session, explain, back to the code screen. */
+function kicked() {
+  stopLoops();
+  clearSession();
+  S.role = S.playerId = S.playerKey = S.q = S.room = null;
+  S.score = S.streak = S.answered = S.correct = 0;
+  show('sJoin');
+  $('joinErr').textContent = tr(KID_LANG, 'removed');
 }
 
 /** Mode glyph: team colour markers stay (they name the teams); target / trophy are drawn icons. */
@@ -554,6 +618,10 @@ async function checkCode() {
     $('joinErr').textContent = (HEB ? HE.errFinished : 'That battle already finished — ask for a new code.');
     return;
   }
+  if (room.locked) {
+    $('joinErr').textContent = tr(KID_LANG, 'errLocked');
+    return;
+  }
   S.code = code;
   S.room = room;
   renderNamePicker();
@@ -593,6 +661,8 @@ async function joinAs(nickname) {
       $('nameErr').textContent = (HEB ? HE.errFull : 'This room is full (60 players max).');
     } else if (e.code === 'room_finished') {
       $('nameErr').textContent = (HEB ? HE.errFinished : 'That battle already finished — ask for a new code.');
+    } else if (e.code === 'room_locked') {
+      $('nameErr').textContent = tr(KID_LANG, 'errLocked');
     } else {
       $('nameErr').textContent = (HEB ? HE.errJoin : 'Could not join — please try again.');
     }
@@ -650,6 +720,7 @@ function boot() {
   $('btnKid').addEventListener('click', () => show('sJoin'));
   $('btnCreate').addEventListener('click', createRoom);
   $('btnStart').addEventListener('click', startBattle);
+  $('btnLock').addEventListener('click', toggleLock);
   $('targetDown').addEventListener('click', () => { S.targetNudge--; render(); });
   $('targetUp').addEventListener('click', () => { S.targetNudge++; render(); });
   $('btnCheckCode').addEventListener('click', checkCode);

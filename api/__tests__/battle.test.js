@@ -289,13 +289,13 @@ describe('memory battle store (dev fallback)', () => {
     await store.updateScore(code, join.playerId, join.playerKey, {
       score: 5, streak: 0, answered: 1, correct: 1,
     });
-    // clamped: an implausible score is capped at durationSec * 20
+    // clamped: an implausible score is capped (20 per correct; 4 correct here → 80)
     await store.updateScore(code, join2.playerId, join2.playerKey, {
       score: 999999, streak: 0, answered: 4, correct: 4,
     });
     state = await store.getRoomState(code);
     expect(state.players.find((p) => p.id === join.playerId).score).toBe(30);
-    expect(state.players.find((p) => p.id === join2.playerId).score).toBe(2400);
+    expect(state.players.find((p) => p.id === join2.playerId).score).toBe(80);
 
     // wrong player key is forbidden
     expect(

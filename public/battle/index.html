@@ -117,6 +117,13 @@
   .targetrow .btn{min-width:48px;padding:6px 14px;font-size:24px;}
   .teamline{font-size:clamp(20px,4.5vw,28px);font-weight:900;}
   @media(prefers-reduced-motion:reduce){ .gbar{transition:none;} }
+  /* host controls (lock / remove): small, below the main action, collapsed by default */
+  .hostctl{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;}
+  .manage{max-width:560px;padding:12px 18px;text-align:start;}
+  .manage summary{cursor:pointer;font-weight:800;color:var(--indigo);min-height:44px;display:flex;align-items:center;}
+  .managelist{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+  .mrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700;}
+  .mrow .btn{min-height:44px;padding:6px 14px;font-size:15px;color:#b91c1c;}
   @media(prefers-reduced-motion:reduce){ .brow .bar,.choice{transition:none;} }
 </style>
 </head>
@@ -180,6 +187,16 @@
   </div>
   <button id="btnStart" class="btn green" disabled>Start the Battle! <svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-rocket"/></svg></button>
   <p id="hostErr" class="err"></p>
+  <!-- host controls: moved between the lobby and the live screen by battle.js -->
+  <div id="hostCtl" class="hostctl">
+    <button id="btnLock" class="btn ghost" aria-pressed="false">Lock room</button>
+    <p id="lockNote" class="sub" hidden></p>
+    <details id="hostManage" class="card manage">
+      <summary id="manageSum">Manage players</summary>
+      <div id="manageList" class="managelist"></div>
+    </details>
+    <p id="ctlErr" class="err"></p>
+  </div>
 </section>
 
 <!-- teacher: live leaderboard -->

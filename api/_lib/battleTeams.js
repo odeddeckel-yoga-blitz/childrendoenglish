@@ -13,9 +13,12 @@ export function teamOf(players) {
   return m;
 }
 
-/** [{ team, members, total, avg }] for both teams — never a per-player score. */
-export function teamTotals(players) {
-  const tm = teamOf(players);
+/**
+ * [{ team, members, total, avg }] for both teams — never a per-player score.
+ * `tm` defaults to teamOf(players); pass the map built from EVERY player (a
+ * host-removed one included) so removing a kid never flips the others' teams.
+ */
+export function teamTotals(players, tm = teamOf(players)) {
   const out = [0, 1].map((team) => ({ team, members: 0, total: 0, avg: 0 }));
   for (const p of players) {
     const t = out[tm.get(p.id)];

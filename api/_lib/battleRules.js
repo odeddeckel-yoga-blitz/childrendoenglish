@@ -45,6 +45,46 @@ export function maxPlausibleScore(durationSec) {
 }
 
 /*
+ * Score-update window + rate caps (battle hardening 2026-11-20). Scores come
+ * from the client (window.__battleDbg is reachable from devtools), and team /
+ * class modes total `correct`, so one kid could otherwise decide a team win.
+ *   - Updates are accepted only while the room runs, plus a short grace after
+ *     the end for the last in-flight POST (lobby and later → 'not_running').
+ *   - answered/correct ≤ one per second of play so far + a small burst slack,
+ *     and never more than durationSec (the same 1-tap-per-second model as
+ *     maxPlausibleScore). The client locks 550 ms after a right answer and
+ *     1100 ms after a wrong one, and a kid also has to hear + find the photo.
+ *   - score ≤ 20 per (capped) correct answer; streak ≤ correct.
+ */
+export const SCORE_GRACE_MS = 5000;
+export const COUNT_SLACK = 5;
+
+/** Max answered/correct a player can have `elapsedMs` into a `durationSec` battle. */
+export function maxPlausibleCount(elapsedMs, durationSec) {
+  const sec = Math.max(0, Math.floor(elapsedMs / 1000));
+  return Math.min(durationSec, sec + COUNT_SLACK);
+}
+
+/**
+ * Clamp a client's claimed totals for a room started at `startedAt`, at server
+ * time `now`. Returns null when the room is not accepting scores.
+ */
+export function clampScoreUpdate({ score, streak, answered, correct }, { durationSec, startedAt }, now) {
+  if (!startedAt) return null; // lobby
+  const endsAt = startedAt + durationSec * 1000;
+  if (now < startedAt || now >= endsAt + SCORE_GRACE_MS) return null;
+  const countCap = maxPlausibleCount(Math.min(now, endsAt) - startedAt, durationSec);
+  const a = Math.min(answered, countCap);
+  const c = Math.min(correct, a);
+  return {
+    answered: a,
+    correct: c,
+    score: Math.min(score, maxPlausibleScore(durationSec), c * 20),
+    streak: Math.min(streak, c),
+  };
+}
+
+/*
  * Grouping modes (roadmap RL13, kit PATTERNS §8c, agreed with KDM 2026-10-29).
  * Cooperative beats competitive for a class (Roseth 2008); individual
  * leaderboards lowered scores (Hanus & Fox 2015).
