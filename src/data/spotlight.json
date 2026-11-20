@@ -1,23 +1,23 @@
 {
-  "statsFrom": "2026-11-19T00:00:00.000Z",
+  "statsFrom": "2026-11-20T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
-    "id": "shower",
-    "word": "shower",
-    "category": "home",
-    "he": "מקלחת",
-    "image": "/images/shower.webp",
-    "ans": 21,
-    "ok": 19,
-    "since": "2026-11-17T11:45:58.888Z"
+    "id": "socks",
+    "word": "socks",
+    "category": "clothing",
+    "he": "גרביים",
+    "image": "/images/socks.webp",
+    "ans": 0,
+    "ok": 0,
+    "since": "2026-11-20T11:29:41.266Z"
   },
   "game": {
     "id": "missing-letter",
     "name": "Missing Letter",
     "emoji": "✏️",
-    "opens": 136,
-    "lvl": 124,
-    "cmp": 27,
+    "opens": 145,
+    "lvl": 136,
+    "cmp": 29,
     "since": "2026-11-08T10:14:44.081Z"
   },
   "history": [
@@ -97,6 +97,13 @@
       "to": "shower",
       "reason": "graduated (ans≥30, acc≥0.7)",
       "at": "2026-11-17T11:45:58.888Z"
+    },
+    {
+      "lane": "word",
+      "from": "shower",
+      "to": "socks",
+      "reason": "graduated (ans≥30, acc≥0.7)",
+      "at": "2026-11-20T11:29:41.266Z"
     }
   ]
 }
