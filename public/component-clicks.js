@@ -89,9 +89,11 @@ export function installComponentClicks (opts = {}) {
   const doc = w.document
   const exclude = opts.exclude || []
   const templates = opts.templates || []
-  const minMs = opts.minVisibleMs ?? 1000
-  const maxItems = opts.maxItems ?? 60
-  const maxClk = opts.maxClicksPerView ?? 20
+  // no ?? here: Chromebooks / iPads older than Chrome 80 / Safari 13.1 throw a SyntaxError on it and lose the whole module (CDE jserrsig 11-20)
+  const or = (v, d) => (v === undefined || v === null ? d : v)
+  const minMs = or(opts.minVisibleMs, 1000)
+  const maxItems = or(opts.maxItems, 60)
+  const maxClk = or(opts.maxClicksPerView, 20)
   const send = typeof opts.send === 'function' ? opts.send : null
   const blocked = () => {
     try { if (w.navigator && w.navigator.webdriver) return true } catch (e) { /* ignore */ }
