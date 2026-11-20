@@ -4,7 +4,7 @@
  * unit; each card waits for the class to answer out loud, then "Show answer" reveals the
  * English word, its Hebrew meaning and the audio. Keyboard: Space/→/PageDown next, Enter/↓ answer,
  * S sound, F full screen, Esc back. Words = Class Battle's photo words (battle-core.js).
- * No accounts, nothing stored or sent beyond the page-view tally.
+ * No accounts, no student data stored; only the anonymous page-view tally is sent.
  */
 import { BATTLE_CATEGORIES, BATTLE_UNIT_CATEGORIES, wordPool } from '../battle/battle-core.js';
 
@@ -19,7 +19,7 @@ const HEB = (() => {
 })();
 
 const TXT = HEB ? {
-  tTitle: 'מצב מקרן', tSub: 'לכל הכיתה על מסך אחד גדול: מציגים תמונה, הכיתה אומרת יחד את המילה באנגלית, ואז חושפים אותה עם ההגייה והפירוש בעברית. בלי חשבונות, שום דבר לא נשמר.',
+  tTitle: 'מצב מקרן', tSub: 'לכל הכיתה על מסך אחד גדול: מציגים תמונה, הכיתה אומרת יחד את המילה באנגלית, ואז חושפים אותה עם ההגייה והפירוש בעברית. בלי חשבונות, לא נשמר שום מידע על התלמידים.',
   tShow: 'מה להציג', tTopic: 'מילים', tGo: 'התחלה', tReveal: 'הצגת התשובה', tNext: 'הבא',
   tKeys: 'רווח = הבא · Enter = התשובה · S = שמע · F = מסך מלא · Esc = חזרה',
 } : null;
