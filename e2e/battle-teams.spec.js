@@ -150,3 +150,36 @@ test('kid screens in Hebrew', async ({ browser }) => {
   await ctx.close();
   await teacher.context().close();
 });
+
+// Battle hardening (11-20): the teacher locks the room and removes a player. The removed kid lands on the
+// code screen with a message; their words leave the totals; a locked room turns away a new kid.
+test('host controls: remove a player, lock the room', async ({ browser }) => {
+  test.setTimeout(90000);
+  const { page: h, code } = await host(browser, 'class');
+  const kids = [await kid(browser, code), await kid(browser, code)];
+  await h.click('#manageSum');
+  await expect(h.locator('#manageList .mrow')).toHaveCount(2);
+  await h.click('#btnStart');
+  await answerRight(kids[0], 2);
+  await answerRight(kids[1], 1);
+  await expect(h.locator('#hostBoard .gtxt')).toHaveText(/^\s*3 \/ \d+ words$/);
+  // the controls followed the teacher to the live screen
+  await expect(h.locator('#sHostLive #hostCtl')).toBeVisible();
+  const gone = await kids[0].evaluate(() => window.__battleDbg.playerId);
+  await h.locator(`#manageList .mrow[data-player-id="${gone}"] button`).click();
+  await expect(kids[0].locator('#sJoin')).toBeVisible();
+  await expect(kids[0].locator('#joinErr')).toHaveText('Your teacher took you out of this battle.');
+  await expect(h.locator('#hostBoard .gtxt')).toHaveText(/^\s*1 \/ \d+ words$/);
+  await expect(h.locator('#manageList .mrow')).toHaveCount(1);
+  // lock: a new kid is turned away at the code check
+  await h.click('#btnLock');
+  await expect(h.locator('#btnLock')).toHaveText(/Unlock room/);
+  await expect(h.locator('#lockNote')).toBeVisible();
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await wire(ctx);
+  const late = await ctx.newPage();
+  await late.goto(`/battle/index.html#join=${code}`);
+  await late.click('#btnCheckCode');
+  await expect(late.locator('#joinErr')).toHaveText('This room is locked. Ask your teacher!');
+  await ctx.close();
+});

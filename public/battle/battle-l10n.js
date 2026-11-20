@@ -54,7 +54,7 @@ const HE_TEXT = {
 // Drawn icon before / after the text of these ids (the emoji were stripped from HE_TEXT).
 const HE_ICON = { projLink: ['projector'], btnCheckCode: [null, 'arrow-left'], btnMoreNames: ['dices'], podiumTitle: ['trophy'] };
 const HE_ARIA = { codeInput: 'קוד החדר', sayBtn: 'לשמוע שוב את המילה' };
-const HE_PRIVACY = ['פרטיות:', ' בלי חשבונות ובלי הרשמה. השחקנים בוחרים כינוי מצחיק מרשימה — אף אחד לא מקליד את השם האמיתי שלו. נשמרים רק הכינוי והניקוד, והחדר כולו נמחק אוטומטית כ־30 דקות אחרי שנוצר.'];
+const HE_PRIVACY = ['פרטיות:', ' בלי חשבונות ובלי הרשמה. השחקנים בוחרים כינוי מצחיק מרשימה — אף אחד לא מקליד את השם האמיתי שלו. נשמרים רק הכינוי והניקוד, והחדר כולו נמחק אוטומטית תוך שעה: 30 דקות אחרי שנוצר, או 10 דקות אחרי סוף המשחק אם זה מאוחר יותר.'];
 
 // The screens a kid sees; they turn right-to-left in Hebrew.
 const KID_SCREENS = ['sHome', 'sJoin', 'sName', 'sKidLobby', 'sPlay', 'sPodium'];
@@ -86,6 +86,53 @@ export const HE = {
   errFull: 'החדר מלא (עד 60 שחקנים).',
   errJoin: 'לא הצלחנו להצטרף — נסו שוב.',
 };
+
+/*
+ * Host controls + the kid-side messages they cause (battle hardening 11-20),
+ * in en / he / es. The teacher screens are English today (see the header), so
+ * the host strings render from `en`; he / es are ready for when they turn.
+ * Nicknames are English: wrap them with ltr() inside Hebrew text.
+ */
+export const BATTLE_T = {
+  en: {
+    lock: 'Lock room',
+    unlock: 'Unlock room',
+    lockedNote: 'Room locked: no new players can join.',
+    manage: 'Manage players',
+    remove: 'Remove',
+    removeAria: (nick) => `Remove ${nick} from the battle`,
+    noPlayers: 'No players yet.',
+    hostErr: 'Could not update the room. Please try again.',
+    errLocked: 'This room is locked. Ask your teacher!',
+    removed: 'Your teacher took you out of this battle.',
+  },
+  he: {
+    lock: 'נעילת החדר',
+    unlock: 'פתיחת החדר',
+    lockedNote: 'החדר נעול: שחקנים חדשים לא יכולים להצטרף.',
+    manage: 'ניהול שחקנים',
+    remove: 'הוצאה',
+    removeAria: (nick) => `הוצאת ${ltr(nick)} מהקרב`,
+    noPlayers: 'עדיין אין שחקנים.',
+    hostErr: 'לא הצלחנו לעדכן את החדר. נסו שוב.',
+    errLocked: 'החדר נעול. שאלו את המורה!',
+    removed: 'המורה הוציאו אתכם מהקרב הזה.',
+  },
+  es: {
+    lock: 'Bloquear la sala',
+    unlock: 'Desbloquear la sala',
+    lockedNote: 'Sala bloqueada: no pueden entrar jugadores nuevos.',
+    manage: 'Gestionar jugadores',
+    remove: 'Quitar',
+    removeAria: (nick) => `Quitar a ${nick} de la batalla`,
+    noPlayers: 'Todavía no hay jugadores.',
+    hostErr: 'No se pudo actualizar la sala. Inténtalo de nuevo.',
+    errLocked: 'Esta sala está bloqueada. ¡Pregunta a tu profe!',
+    removed: 'Tu profe te ha sacado de esta batalla.',
+  },
+};
+/** String `key` in `lang` (falls back to English). */
+export const tr = (lang, key) => (BATTLE_T[lang] && BATTLE_T[lang][key]) || BATTLE_T.en[key];
 
 /** Hebrew on the kid screens; the toggle link on home + join switches either way. */
 export function applyLang(lang, $) {

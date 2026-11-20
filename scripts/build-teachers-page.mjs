@@ -261,7 +261,7 @@ export function buildTeachersHtml({ SITE, escapeHtml, WORDS, CATEGORIES, CATEGOR
       <div>
         <h2>Class Battle</h2>
         <p>A live game for the whole class. You pick a category, kids join with a 5-letter code on any device, hear the English word (computer voice) and race to tap the right picture.</p>
-        <p>No accounts and no real names: kids pick a nickname from a list. The room deletes itself about 30 minutes after it starts.</p>
+        <p>No accounts and no real names: kids pick a nickname from a list. The room deletes itself within an hour: 30 minutes after it is created, or 10 minutes after the game ends if that is later.</p>
         <p><a class="btn" href="/battle/">${ic('play')} Start a Class Battle</a></p>
       </div>
       <div class="board" aria-hidden="true"><p>On the board</p><p><b>JOIN CODE</b></p><span class="code">•••••</span><p>Teams join on any device</p></div>
