@@ -128,6 +128,15 @@ describe('AudioQuiz', () => {
     vi.useRealTimers();
   });
 
+  // 11-20: a new player's first audio quiz shows the word before the answer (a muted device was a dead end).
+  it('first quiz: the word is on screen before answering; later quizzes keep it hidden', () => {
+    const { unmount } = render(<AudioQuiz {...defaultProps} firstQuiz />);
+    expect(screen.getByTestId('audio-word')).toHaveTextContent(testWords[0].word);
+    unmount();
+    render(<AudioQuiz {...defaultProps} />);
+    expect(screen.queryByTestId('audio-word')).toBeNull();
+  });
+
   it('first quiz: tallies how the tab arrived (q1_src_*), from the class land-beacon kept', () => {
     sessionStorage.setItem('cde_src', 'ai');
     render(<AudioQuiz {...defaultProps} firstQuiz />);

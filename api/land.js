@@ -28,7 +28,7 @@ const HUM_SRC = /^hum@(direct|seo|ai|internal|external)$/;
 // fcr = ladder flashcards reach (c1..c10|done) — where in the deck kids leave;
 // pg/cta/mq = a static page's view / click into the app or a game / first
 // mini-quiz tap, item = page-path key (public/land-beacon.js) → click-to-play rate;
-// onb = first-visit funnel step (create_view|create_done|q1_start|q1_done|q1_quit);
+// onb = first-visit funnel step (create_view|create_done|q1_start|q1_done|q1_quit; q1_v2 = a first quiz under the 11-20 rules);
 // qs = quiz start-source funnel: [new-]<menu|ladder|shared|letter|mywords|learn|again|quick|topic|other>_<start|done|quit> (useQuizFlow);
 // aie/aiv = AI attribution v1 (kit land-beacon.md): item = engine (chatgpt|perplexity|copilot|
 // gemini|claude|other); aie with every ai open, aiv once visible 5 s. Not opens.

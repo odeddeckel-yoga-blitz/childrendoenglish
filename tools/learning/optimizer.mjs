@@ -492,8 +492,10 @@ if (picks.length > 0) {
 // that ends with neither done nor quit ("vanished") shows how far it got.
 // Counted from 2026-10-22 only (first full day of the 5-question first quiz) and
 // split by interface language — 10-25 read: he 8/14 finished, en 5/19.
+// q1_v2 (from the 11-20 ship) = a first quiz under the 11-20 rules (whole quiz from the
+// best-answered words, audio quiz shows the word); q1_start/done/quit keep their meaning.
 {
-  const S = ['create_view', 'create_done', 'create_noname', 'name_later', 'q1_start', 'q1_done', 'q1_quit'];
+  const S = ['create_view', 'create_done', 'create_noname', 'name_later', 'q1_start', 'q1_done', 'q1_quit', 'q1_v2'];
   const onbRows = await q`SELECT lang, item, sum(n)::int AS n FROM cde_learn
     WHERE ev = 'onb' AND day >= GREATEST(CURRENT_DATE - ${days}::int, DATE '2026-10-22') GROUP BY lang, item`;
   const tally = (rs) => {
@@ -525,6 +527,7 @@ if (picks.length > 0) {
       if (src.length) console.log(`    ${lang}: first quizzes by arrival: ` + src.map(([k, n]) => `${k} ${n}`).join(' · '));
       if (a('q1_audio_ok') + a('q1_audio_blocked') + a('q1_audio_none')) console.log(`    ${lang}: Q1 sound played ${a('q1_audio_ok')} · blocked ${a('q1_audio_blocked')} (then tapped to hear ${a('q1_hear_tap')}) · no speech ${a('q1_audio_none')}`);
     }
+    if (onb.q1_v2) console.log(`  ${onb.q1_v2} of the ${onb.q1_start} first quizzes ran the 11-20 rules (q1_v2) — read before/after per qs new-<source>, not this pooled line`);
     if (onb.reach[1]) console.log(`  answered Q1..Q5: ${onb.reach.slice(1).join(' → ')} (of ${onb.q1_start} started since the per-answer beacon; Q1 wrong/skipped ${onb.firstWrong})`);
     if (onb.create_view >= 15 && created / onb.create_view < 0.6)
       console.log('  ⚠ the create-player screen still loses ≥40% even with the name optional — consider auto-creating the first player');

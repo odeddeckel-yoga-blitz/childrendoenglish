@@ -128,8 +128,12 @@ export default function AudioQuiz({ words, lang = 'en', soundEnabled, onToggleSo
             >
               <Turtle className="w-4 h-4 inline -mt-0.5" aria-hidden="true" /> {t('slowAudio', lang)}
             </button>
-            {quiz.answered && (
-              <p className="text-2xl font-bold text-slate-800 dark:text-slate-100 animate-fade-in">{quiz.currentWord.word}</p>
+            {/* A new player's first quiz also shows the word before the answer (11-20 read, since 11-07:
+                first quizzes in this hidden-word mode lost ~26% before answering Q1 vs ~12% for the
+                word-on-screen listen quiz; all players 151/227 = 67% vs 434/541 = 80% finished).
+                A muted device reports "played" too, and then a hidden word is a dead end. */}
+            {(quiz.answered || firstQuiz) && (
+              <p className="text-2xl font-bold text-slate-800 dark:text-slate-100 animate-fade-in" dir="ltr" data-testid="audio-word">{quiz.currentWord.word}</p>
             )}
           </>
         ) : (

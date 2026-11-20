@@ -53,14 +53,15 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     // (getDistractors tops up from the full vocabulary only if it runs dry).
     const restrict = knownLetters?.length ? filterByKnownLetters(WORDS, knownLetters) : null;
     let selected = selectQuizWords(pool, stats.wordProgress, isFreshPlayer(stats) ? FIRST_QUIZ_LEN : QUIZ_LEN);
-    // A brand-new player's first question is one most kids get right (U2).
+    // A brand-new player's first quiz is the pool's best-answered words, easiest
+    // first (U2 eased Q1 only; 11-20: the whole quiz — utils/easyFirst.js).
     // `pool` is the given set when there is one (ladder batch, shared list), so
-    // the swap never brings in a word from outside it.
+    // the pick never brings in a word from outside it.
     if (isFreshPlayer(stats)) {
-      const [{ easyFirst }, { default: cdeStats }] = await Promise.all([
+      const [{ easyFirstQuiz }, { default: cdeStats }] = await Promise.all([
         import('../utils/easyFirst'), import('../data/cde-stats.json'),
       ]);
-      selected = easyFirst(selected, pool, cdeStats.words);
+      selected = easyFirstQuiz(selected, pool, cdeStats.words);
     }
 
     if (selected.length === 0) {
@@ -111,7 +112,9 @@ export default function useQuizFlow({ stats, setStats, navigate, knownLetters = 
     analytics.quizStart(mode, level);
     sendLearn('quiz_start', mode || 'unknown');
     sendLearn('qs', `${isFreshPlayer(stats) ? 'new-' : ''}${srcRef.current}_start`);
-    if (isFreshPlayer(stats)) sendLearn('onb', 'q1_start');
+    // q1_v2 (11-20): this first quiz has the 11-20 rules (best-answered words; an audio
+    // quiz also shows the word). Counts next to q1_start, which keeps its meaning.
+    if (isFreshPlayer(stats)) { sendLearn('onb', 'q1_start'); sendLearn('onb', 'q1_v2'); }
     const stateMap = { image: 'imageQuiz', word: 'wordQuiz', audio: 'audioQuiz', listen: 'listenMatchQuiz' };
     navigate(stateMap[mode] || 'imageQuiz');
   }, [navigate, stats, knownLetters]);

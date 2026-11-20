@@ -49,6 +49,9 @@ vi.mock('../data/words', async () => {
   };
 });
 
+// Answer stats for two mock words only (id → [answers, correct]): a fresh player's first quiz leads with them.
+vi.mock('../data/cde-stats.json', () => ({ default: { words: { word_5: [100, 92], word_6: [100, 98] } } }));
+
 import useQuizFlow from '../hooks/useQuizFlow';
 import { analytics } from '../utils/analytics';
 import { playSound } from '../utils/sound';
@@ -413,6 +416,16 @@ describe('useQuizFlow', () => {
     expect(returning.result.current.quizWords).toHaveLength(7); // all 7 intermediate mock words
   });
 
+  it('a brand-new player\'s first quiz leads with the pool\'s best-answered words (11-20)', async () => {
+    const fresh = renderFlow();
+    await act(async () => { await fresh.result.current.startQuiz('beginner', 'image'); });
+    const ids = fresh.result.current.quizWords.map((w) => w.id);
+    expect(ids).toHaveLength(5);
+    expect(ids.slice(0, 2)).toEqual(['word_6', 'word_5']);
+    expect(new Set(ids).size).toBe(5);
+    ids.forEach((id) => expect(Number(id.split('_')[1])).toBeLessThan(7)); // beginner pool only
+  });
+
   describe('first-visit funnel (onb)', () => {
     const onb = () => sendLearn.mock.calls.filter(([e]) => e === 'onb').map(([, i]) => i);
     beforeEach(() => sendLearn.mockClear());
@@ -421,14 +434,14 @@ describe('useQuizFlow', () => {
       const { result } = renderFlow();
       await act(async () => { await result.current.startQuiz('beginner', 'image'); });
       act(() => { result.current.handleQuizComplete({ score: 8, total: 10, mode: 'image', answers: [] }); });
-      expect(onb()).toEqual(['q1_start', 'q1_done']);
+      expect(onb()).toEqual(['q1_start', 'q1_v2', 'q1_done']);
     });
 
     it('fresh player who quits: q1_quit', async () => {
       const { result } = renderFlow();
       await act(async () => { await result.current.startQuiz('beginner', 'image'); });
       act(() => { result.current.handleQuizComplete({ score: 1, total: 10, mode: 'image', answers: [], quit: true }); });
-      expect(onb()).toEqual(['q1_start', 'q1_quit']);
+      expect(onb()).toEqual(['q1_start', 'q1_v2', 'q1_quit']);
     });
 
     it('player with history: no onb events', async () => {
@@ -452,7 +465,7 @@ describe('useQuizFlow', () => {
         result.current.handleQuizAnswer(1, 'no');
         result.current.handleQuizAnswer(2, 'skip');
       });
-      expect(onb()).toEqual(['q1_start', 'q1_a1_ok', 'q1_a2_no', 'q1_a3_skip']);
+      expect(onb()).toEqual(['q1_start', 'q1_v2', 'q1_a1_ok', 'q1_a2_no', 'q1_a3_skip']);
     });
 
     it('player with history: answers send no onb events', async () => {

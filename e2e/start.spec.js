@@ -27,6 +27,10 @@ test('?topic= starts the first quiz on that topic', async ({ page }) => {
   const { WORDS } = await import('../src/data/words.js');
   const animalImgs = new Set(WORDS.filter((w) => w.category === 'animals').map((w) => w.imageUrl));
   expect(srcs.filter((s) => animalImgs.has(s)).length).toBeGreaterThanOrEqual(2);
+  // 11-20: this first (audio) quiz also shows the word before the answer, LTR inside the Hebrew UI
+  const word = page.getByTestId('audio-word');
+  await expect(word).toBeVisible();
+  await expect(word).toHaveAttribute('dir', 'ltr');
 });
 
 test('a new Hebrew player starts on the "words you already know" set (R2C4)', async ({ page }) => {
