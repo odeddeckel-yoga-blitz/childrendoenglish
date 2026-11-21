@@ -24,6 +24,8 @@ const REQUIRED = {
   Organization: (d) => d.name && d.url,
   WebSite: (d) => d.name && d.url,
   Person: (d) => d.name,
+  WebPage: (d) => d.name && d.url && d.inLanguage && d.isPartOf,
+  CollectionPage: (d) => d.name && d.url && d.inLanguage && d.isPartOf,
 };
 
 function pageType(rel) {
@@ -66,7 +68,7 @@ for (const file of pages(DIST)) {
     for (const d of Array.isArray(data) ? data : [data]) {
       const items = d['@graph'] ? d['@graph'] : [d];
       for (const it of items) {
-        const t = it['@type'];
+        const t = Array.isArray(it['@type']) ? it['@type'][0] : it['@type'];
         c.types[t] = (c.types[t] || 0) + 1;
         if (t === 'FAQPage' || t === 'HowTo') hasAnswerSchema = true;
         const check = REQUIRED[t];

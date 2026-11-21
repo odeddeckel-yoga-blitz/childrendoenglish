@@ -12,6 +12,7 @@ import { WORDS } from '../src/data/words.js';
 import { PAGES_HOLD } from '../src/data/pagesHold.js';
 
 const SITE = 'https://childrendoenglish.com';
+import { pageLd } from './page-ld.mjs';
 const SRC = JSON.parse(readFileSync(new URL('./IMAGE_SOURCES.json', import.meta.url), 'utf8'));
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const safeUrl = (u) => (/^https:\/\//.test(u || '') ? esc(u) : '');
@@ -49,6 +50,7 @@ const html = `<!DOCTYPE html>
   <link rel="canonical" href="${SITE}/image-credits/" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <script defer src="/land-beacon.js"></script>
+  ${pageLd({ name: 'Image Credits | Children Do English', description: 'Credits and licences for the photos, illustrations and icons used on Children Do English.', path: '/image-credits/', kids: false })}
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: system-ui, -apple-system, sans-serif; background: #eff6ff; color: #1e293b; line-height: 1.6; }

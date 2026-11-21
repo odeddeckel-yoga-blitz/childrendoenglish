@@ -9,6 +9,7 @@
 import { readFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import vm from 'vm';
+import { pageLd } from './page-ld.mjs';
 
 // Released 11-11 (owner 11-10, push method v2: only the title-holdout pages wait for the 11-14 read). Linked from the
 // printable-flashcards index and /games/; the 3 game pages link after the 11-28 game reads.
@@ -176,6 +177,7 @@ function page({ SITE, path, title, h1, sub, intro, body, crumb, playHref }) {
   <title>${title}</title>
   <meta name="description" content="${sub}">
 ${WORKSHEETS_HOLD ? '  <meta name="robots" content="noindex">\n' : ''}  <link rel="canonical" href="${url}">
+  ${pageLd({ type: path === '/printable-worksheets/' ? 'CollectionPage' : 'WebPage', name: title, description: sub, path, learning: path !== '/printable-worksheets/' })}
   <style>${CSS}</style>
 </head>
 <body>
