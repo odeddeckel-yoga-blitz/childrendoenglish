@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-11-20T00:00:00.000Z",
+  "statsFrom": "2026-11-21T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "socks",
@@ -7,15 +7,15 @@
     "category": "clothing",
     "he": "גרביים",
     "image": "/images/socks.webp",
-    "ans": 0,
-    "ok": 0,
+    "ans": 10,
+    "ok": 8,
     "since": "2026-11-20T11:29:41.266Z"
   },
   "game": {
     "id": "missing-letter",
     "name": "Missing Letter",
     "emoji": "✏️",
-    "opens": 145,
+    "opens": 149,
     "lvl": 136,
     "cmp": 29,
     "since": "2026-11-08T10:14:44.081Z"
