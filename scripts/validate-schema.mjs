@@ -5,6 +5,7 @@
 // field. Usage: node scripts/validate-schema.mjs [--quiet]
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { missingJsonLd, homeH1Error } from './page-checks.mjs';
 // script-src keyword that lets the speculation-rules JSON run (R2X19)
 const CSP_SPEC = readFileSync(new URL('../vercel.json', import.meta.url), 'utf8').includes("'inline-speculation-rules'");
 
@@ -59,6 +60,8 @@ for (const file of pages(DIST)) {
   const c = (cov[type] = cov[type] || { n: 0, answer: 0, answerFirst: 0, types: {} });
   c.n++;
   const html = readFileSync(file, 'utf8');
+  { const e = missingJsonLd(html); if (e) errors.push(`${rel}: ${e}`); }
+  if (rel === '/') { const e = homeH1Error(html); if (e) errors.push(`${rel}: ${e}`); }
   if (/class="[^"]*\banswer-first\b/.test(html)) c.answerFirst++;
   let hasAnswerSchema = false;
   for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
