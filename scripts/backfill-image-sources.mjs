@@ -56,7 +56,7 @@ const fp = async (input) => {
 const corr = (a, b) => { let s = 0; for (let i = 0; i < a.length; i++) s += a[i] * b[i]; return s / a.length; };   // 1 = identical
 const strip = (h) => String(h || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 
-// --deep (pass 2): the admin image tool (api/fetch-image.js) searched WITHOUT the File: prefix and paged up to 50+
+// --deep (pass 2): the old admin image tool (api/fetch-image.js, removed 11-22) searched WITHOUT the File: prefix and paged up to 50+
 // results deep, so pass 2 replays that for words pass 1 didn't match (only those; results merge into the same file).
 const DEEP = args.includes('--deep');
 async function search(q) {

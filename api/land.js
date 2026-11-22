@@ -6,6 +6,7 @@
 // project childrendoenglish, CDE_DATABASE_URL — own project since 2026-10-17).
 import { neon } from '@neondatabase/serverless';
 import { safeEqual } from './_lib/safeCompare.js';
+import { CREATE_WINDOW_MS } from './_lib/battleStore.js';
 import { parseComponentBeacon, pgComponentStore, isBotUA } from './_lib/component-clicks-server.mjs';
 
 // 'teachers' is reserved (11-08): the /teachers page doesn't exist yet; land-beacon.js already classes its path.
@@ -130,6 +131,8 @@ async function sweepBattleRooms(q) {
   if (now - lastBattleSweep < 60_000) return;
   lastBattleSweep = now;
   try { await q`DELETE FROM cde_battle_rooms WHERE expires_at <= ${now}`; } catch { /* table not created yet */ }
+  // The per-client create log (audit A091) promises 10 minutes; same lazy sweep, same no-table tolerance.
+  try { await q`DELETE FROM cde_battle_creates WHERE created_at <= ${now - CREATE_WINDOW_MS}`; } catch { /* table not created yet */ }
 }
 
 export default async function handler(req, res) {

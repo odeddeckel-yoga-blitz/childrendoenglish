@@ -49,7 +49,6 @@ const PersonalWordList = lazy(() => import('./components/PersonalWordList'));
 const UpdatePrompt = lazy(() => import('./components/UpdatePrompt'));
 const PrivacyPolicy = lazy(() => import('./components/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./components/TermsOfService'));
-const AdminPanel = lazy(() => import('./components/admin/AdminPanel'));
 const PlayerCreate = lazy(() => import('./components/PlayerCreate'));
 const PlayerSelect = lazy(() => import('./components/PlayerSelect'));
 const PlayerManage = lazy(() => import('./components/PlayerManage'));
@@ -556,14 +555,10 @@ export default function App() {
     setStats(prev => ({ ...prev, uiLanguage: lang }));
   }, []);
 
-  // Detect hash routes: #admin, #quiz/{mode}/{ids}, #words/{ids}
+  // Detect hash routes: #quiz/{mode}/{ids}, #words/{ids} (#admin removed 11-22, audit A090)
   useEffect(() => {
     const checkHash = async () => {
       const hash = window.location.hash;
-      if (hash === '#admin') {
-        setGameState('admin');
-        return;
-      }
       const quizMatch = hash.match(/^#quiz\/(image|word)\/(.+)$/);
       if (quizMatch) {
         const mode = quizMatch[1];
@@ -1089,16 +1084,6 @@ export default function App() {
           <TermsOfService lang={lang} onBack={() => navigate(legalReturnRef.current, 'back')} />
         );
 
-      case 'admin':
-        return (
-          <AdminPanel
-            onExit={() => {
-              window.location.hash = '';
-              navigate('menu', 'back');
-            }}
-          />
-        );
-
       default:
         return null;
     }
@@ -1123,7 +1108,7 @@ export default function App() {
           <button onClick={() => setStorageFull(false)} className="underline font-semibold">&times;</button>
         </div>
       )}
-      <main id="main-content" ref={mainRef} tabIndex={-1} className={`${gameState === 'admin' ? 'max-w-5xl' : 'max-w-lg md:max-w-2xl'} mx-auto px-4 py-6 outline-hidden`}>
+      <main id="main-content" ref={mainRef} tabIndex={-1} className={`max-w-lg md:max-w-2xl mx-auto px-4 py-6 outline-hidden`}>
         <Suspense fallback={<SuspenseFallback lang={lang} />}>
           <ErrorBoundary key={gameState} onReset={resetToMenu} lang={lang}>
             {cycleRun && LADDER_STRIP_STATES.has(gameState) && (

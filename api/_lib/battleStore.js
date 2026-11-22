@@ -12,6 +12,10 @@
  *   - Rooms auto-expire 30 minutes after creation, or 10 minutes after the
  *     battle's end if that is later (a long lobby + a 10-min battle must not
  *     expire mid-game), and are deleted lazily on access — no cron needed.
+ *   - Per-client create limit (audit A091, 11-22): a separate, short-lived
+ *     log keeps { random id, keyed 16-hex hash of the creator's IP (/64 for
+ *     IPv6, api/_lib/clientBucket.js), time } per created room, never the IP
+ *     itself and never linked to the room; rows go after CREATE_WINDOW_MS.
  *     Worst case: started at minute ~30, 10-min battle → deleted ~50 min
  *     after creation (ROOM_TTL_MS + MAX_DURATION_SEC + POST_GAME_TTL_MS).
  *   - Host controls (hostKey): lock (no new joins) and remove a player. A
@@ -23,8 +27,8 @@
  *   - PgBattleStore  — Neon Postgres over HTTP (@neondatabase/serverless).
  *     Used automatically when DATABASE_URL or POSTGRES_URL is set. REQUIRED
  *     in production: Vercel functions don't share memory.
- *     Tables: cde_battle_rooms / cde_battle_players (create-if-missing, like
- *     api/land.js does with cde_land).
+ *     Tables: cde_battle_rooms / cde_battle_players / cde_battle_creates
+ *     (create-if-missing, like api/land.js does with cde_land).
  *   - MemoryBattleStore — in-process Map. Dev / single-process fallback only
  *     (logs a warning when NODE_ENV=production).
  *
@@ -42,6 +46,13 @@ export const MAX_PLAYERS = 60;
 // Unexpired rooms at once (both backends): a cheap brake on create-spam.
 // A busy school day is a few dozen rooms; 300 is far above real use.
 export const MAX_ACTIVE_ROOMS = 300;
+// Per-client create limit (audit A091): without it one script could fill the
+// 300-room cap and every teacher got too_many_rooms for 30 minutes. Generous
+// for a school behind one NAT IP (a whole staff starting at the bell, plus
+// re-creates), yet one client can hold at most ~36 of the 300 rooms at once
+// (rooms live 30 min, so 3 windows x 12).
+export const CREATE_WINDOW_MS = 10 * 60 * 1000;
+export const MAX_CREATES_PER_CLIENT = 12;
 
 // No vowels (avoids accidental words), no I/L/O/U lookalikes. 20^5 ≈ 3.2M codes.
 const CODE_ALPHABET = 'BCDFGHJKMNPQRSTVWXYZ';
@@ -150,6 +161,8 @@ class MemoryBattleStore {
     // Pin to globalThis so dev-server hot reloads don't wipe active rooms.
     if (!globalThis.__cdeBattleRooms) globalThis.__cdeBattleRooms = new Map();
     this.rooms = globalThis.__cdeBattleRooms;
+    if (!globalThis.__cdeBattleCreates) globalThis.__cdeBattleCreates = new Map(); // bucket → [createdAt]
+    this.creates = globalThis.__cdeBattleCreates;
   }
 
   _sweep(now) {
@@ -168,10 +181,18 @@ class MemoryBattleStore {
     return entry;
   }
 
-  async createRoom({ category, durationSec, mode = 'solo' }) {
+  async createRoom({ category, durationSec, mode = 'solo', creator = null }) {
     const now = Date.now();
     this._sweep(now);
+    for (const [b, times] of this.creates) {
+      const kept = times.filter((t) => t > now - CREATE_WINDOW_MS);
+      if (kept.length) this.creates.set(b, kept); else this.creates.delete(b);
+    }
+    if (creator && (this.creates.get(creator) || []).length >= MAX_CREATES_PER_CLIENT) {
+      return { error: 'too_many_creates' };
+    }
     if (this.rooms.size >= MAX_ACTIVE_ROOMS) return { error: 'too_many_rooms' };
+    if (creator) this.creates.set(creator, [...(this.creates.get(creator) || []), now]);
     let code = generateRoomCode();
     let guard = 0;
     while (this.rooms.has(code) && guard++ < 50) code = generateRoomCode();
@@ -321,6 +342,14 @@ class PgBattleStore {
           )`;
         // 2026-11-20 hardening: host-removed players (tombstone, never sent to clients).
         await sql`ALTER TABLE cde_battle_players ADD COLUMN IF NOT EXISTS removed BOOLEAN NOT NULL DEFAULT false`;
+        // 2026-11-22 (audit A091): per-client create log. No IP, no room code: a keyed hash + a time, kept 10 min.
+        await sql`
+          CREATE TABLE IF NOT EXISTS cde_battle_creates (
+            id TEXT PRIMARY KEY,
+            bucket TEXT NOT NULL,
+            created_at BIGINT NOT NULL
+          )`;
+        await sql`CREATE INDEX IF NOT EXISTS cde_battle_creates_bucket ON cde_battle_creates (bucket, created_at)`;
         return sql;
       })();
     }
@@ -358,12 +387,28 @@ class PgBattleStore {
     return room;
   }
 
-  async createRoom({ category, durationSec, mode = 'solo' }) {
+  async createRoom({ category, durationSec, mode = 'solo', creator = null }) {
     const sql = await this._sql();
     const now = Date.now();
     await this._sweep(sql, now); // lazy TTL cleanup on access (so every row left is unexpired)
+    // Per-client limit: record first, then count (this attempt included), so parallel requests from one
+    // script cannot all pass a count taken before any of them was written. A refused or failed attempt
+    // removes its own row, so retries behind a school NAT don't extend the wait.
+    let createId = null;
+    if (creator) {
+      createId = randomKey();
+      await sql`DELETE FROM cde_battle_creates WHERE created_at <= ${now - CREATE_WINDOW_MS}`;
+      await sql`INSERT INTO cde_battle_creates (id, bucket, created_at) VALUES (${createId}, ${creator}, ${now})`;
+      const [{ count: mine }] = await sql`
+        SELECT COUNT(*)::int AS count FROM cde_battle_creates WHERE bucket = ${creator} AND created_at > ${now - CREATE_WINDOW_MS}`;
+      if (mine > MAX_CREATES_PER_CLIENT) {
+        await sql`DELETE FROM cde_battle_creates WHERE id = ${createId}`;
+        return { error: 'too_many_creates' };
+      }
+    }
+    const unrecord = async () => { if (createId) await sql`DELETE FROM cde_battle_creates WHERE id = ${createId}`; };
     const [{ count: live }] = await sql`SELECT COUNT(*)::int AS count FROM cde_battle_rooms`;
-    if (live >= MAX_ACTIVE_ROOMS) return { error: 'too_many_rooms' };
+    if (live >= MAX_ACTIVE_ROOMS) { await unrecord(); return { error: 'too_many_rooms' }; }
     const hostKey = randomKey();
     for (let attempt = 0; attempt < 5; attempt++) {
       const code = generateRoomCode();
@@ -373,9 +418,10 @@ class PgBattleStore {
           VALUES (${code}, ${category}, ${durationSec}, ${mode}, 'lobby', ${hostKey}, ${now}, ${now + ROOM_TTL_MS})`;
         return { code, hostKey };
       } catch (e) {
-        if (attempt === 4) throw e; // code collision is ~impossible 5x in a row
+        if (attempt === 4) { await unrecord(); throw e; } // code collision is ~impossible 5x in a row
       }
     }
+    await unrecord();
     return { error: 'too_many_rooms' };
   }
 
@@ -510,4 +556,5 @@ export function getBattleStore() {
 export function __resetBattleStoreForTests() {
   storeInstance = null;
   delete globalThis.__cdeBattleRooms;
+  delete globalThis.__cdeBattleCreates;
 }
