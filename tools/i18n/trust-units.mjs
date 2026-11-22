@@ -15,7 +15,7 @@ mkdirSync(OUT, { recursive: true })
 const write = (name, o) => { writeFileSync(join(OUT, name), JSON.stringify(o, null, 1) + '\n'); return join(OUT, name) }
 
 const UI_KEYS = ['privacyUpdated', 'termsUpdated', 'termsContentDesc', 'privacyCoppaTitle', 'privacyCoppaDesc', 'privacyRightsTitle',
-  'privacyRightsDevice', 'privacyRightsCounts', 'privacyRightsErrors', 'privacyRightsWho']
+  'privacyRightsDevice', 'privacyRightsCounts', 'privacyRightsErrors', 'privacyRightsWho', 'privacyRightsBasis', 'privacyRightsProcessors', 'privacyRightsRetention']
 // The English of the Spanish facts (FACTS_EN in generate-seo-pages.js, placeholders kept).
 const FACTS_EN = {
   words: 'Children Do English has {words} English words in {cats} topics, each with a picture, audio, a kid-friendly definition and an example sentence.',

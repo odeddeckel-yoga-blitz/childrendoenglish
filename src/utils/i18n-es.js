@@ -265,7 +265,7 @@ export default {
 
   // Privacy policy
   privacyTitle: 'Política de Privacidad',
-  privacyUpdated: "Última actualización: 18 de noviembre de 2026",
+  privacyUpdated: "Última actualización: 22 de noviembre de 2026",
   privacyDataTitle: 'Qué datos recopilamos',
   privacyDataDesc: "No hay cuentas ni registro. Para separar el progreso de hermanos en un mismo dispositivo puedes escribir un nombre de jugador (opcional para el primer jugador). El nombre se queda en el almacenamiento local de este navegador y nunca se nos envía. No pedimos correo electrónico ni otros datos de contacto.",
   privacyCookieTitle: 'Cookies y rastreo',
@@ -287,6 +287,9 @@ export default {
   privacyRightsCounts: "Nuestros recuentos de uso son totales diarios anónimos, sin cookie, sin identificador y sin dirección IP. No se pueden relacionar con una persona, así que no contienen nada sobre tu hijo que se pueda consultar o borrar.",
   privacyRightsErrors: "Los informes de errores se envían a Sentry solo cuando algo falla. Tratan del error, no de la persona: qué salió mal, la página, el tipo de navegador, su idioma y zona horaria, y los pasos justo antes. Los nombres de jugadores guardados se quitan antes de enviar el informe, y no se graba la sesión.",
   privacyRightsWho: "Children Do English lo gestiona Oded Deckelbaum, y el sitio está alojado en Vercel. Para cualquier solicitud sobre tus datos, o cualquier pregunta sobre privacidad, escribe a info@childrendoenglish.com. Si vives en la UE o el Reino Unido, también puedes presentar una reclamación ante tu autoridad de protección de datos.",
+  privacyRightsBasis: "Base jurídica (RGPD): los recuentos diarios anónimos y los informes de errores se apoyan en nuestro interés legítimo de mantener en funcionamiento y mejorar una aplicación gratuita para niños (artículo 6.1.f). Lo poco que se guarda en tu navegador (progreso, ajustes, la fecha de la última visita y la nota de la pestaña) sirve solo para tu propio uso y para ese recuento. Nada de ello se nos envía como dato personal y no usamos cookies, por lo que no hay banner de consentimiento.",
+  privacyRightsProcessors: "Quién trata datos por nosotros: Vercel aloja el sitio. Neon, un proveedor de bases de datos, guarda los totales diarios anónimos y las salas de Class Battle. Sentry recibe los informes de errores y los conserva en Alemania (UE). Estos servicios tratan los datos solo para prestarnos el servicio. Los totales anónimos y las salas de Class Battle no son datos personales de un niño.",
+  privacyRightsRetention: "Cuánto tiempo conservamos los datos: los totales diarios anónimos se conservan sin fecha de fin, porque no se pueden vincular a una persona. Los informes de errores en Sentry se eliminan a los 90 días. Una sala de Class Battle se elimina en el plazo de una hora desde su creación. Todo lo que hay en tu dispositivo permanece allí hasta que lo borres.",
   termsTitle: 'Términos de Servicio',
   termsUpdated: "Última actualización: 18 de noviembre de 2026",
   termsAcceptTitle: 'Aceptación de los Términos',
