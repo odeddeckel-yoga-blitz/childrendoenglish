@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-11-21T00:00:00.000Z",
+  "statsFrom": "2026-11-22T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "socks",
@@ -7,18 +7,18 @@
     "category": "clothing",
     "he": "גרביים",
     "image": "/images/socks.webp",
-    "ans": 10,
-    "ok": 8,
+    "ans": 14,
+    "ok": 12,
     "since": "2026-11-20T11:29:41.266Z"
   },
   "game": {
-    "id": "missing-letter",
-    "name": "Missing Letter",
-    "emoji": "✏️",
-    "opens": 149,
-    "lvl": 136,
-    "cmp": 29,
-    "since": "2026-11-08T10:14:44.081Z"
+    "id": "odd-one-out",
+    "name": "Odd One Out",
+    "emoji": "🔍",
+    "opens": 17,
+    "lvl": 27,
+    "cmp": 8,
+    "since": "2026-11-22T11:14:54.505Z"
   },
   "history": [
     {
@@ -104,6 +104,13 @@
       "to": "socks",
       "reason": "graduated (ans≥30, acc≥0.7)",
       "at": "2026-11-20T11:29:41.266Z"
+    },
+    {
+      "lane": "game",
+      "from": "missing-letter",
+      "to": "odd-one-out",
+      "reason": "max tenure 14d",
+      "at": "2026-11-22T11:14:54.505Z"
     }
   ]
 }
