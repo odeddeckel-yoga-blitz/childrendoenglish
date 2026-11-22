@@ -11,10 +11,21 @@ DAY_MAX="${CDE_PUSH_DAY_MAX:-4}"
 LOG="$(git rev-parse --git-common-dir)/prod-push-log"   # one epoch second per production push (common dir: shared by worktrees)
 ZERO=0000000000000000000000000000000000000000
 
+# Secret-pattern scan (audit 11-22 A095, owner OK): blocks a push (any branch) whose ADDED lines match a known secret
+# shape. Patterns only, matched text is never printed. False positive: fix the line, or CDE_SKIP_SECRETS=1 git push.
+SECRET_RE='(sk-ant-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{30,}|AKIA[0-9A-Z]{16}|xox[abprs]-[A-Za-z0-9-]{10,}|sntry[su]_[A-Za-z0-9+/=_-]{20,}|npg_[A-Za-z0-9]{12,}|vc[a-z]_[A-Za-z0-9]{24,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|postgres(ql)?://[^[:space:]:@/"'"'"']+:[^[:space:]@/"'"'"']{6,}@|AIza[0-9A-Za-z_-]{35})'
+
 prod=0
 while read -r lref lsha rref rsha; do
-  [ "$rref" = "refs/heads/main" ] || continue
   [ "$lsha" = "$ZERO" ] && continue
+  if [ "${CDE_SKIP_SECRETS:-0}" != "1" ]; then
+    sbase="$rsha"; [ "$sbase" = "$ZERO" ] && sbase="$(git merge-base "$lsha" origin/main 2>/dev/null)"
+    if [ -n "$sbase" ] && git diff "$sbase" "$lsha" -U0 2>/dev/null | grep '^+' | grep -v '^+++' | grep -Eq "$SECRET_RE"; then
+      echo "🔒 push blocked: an added line matches a secret pattern (key/token/private key/DB URL with password). Find it with: git diff $sbase $lsha | grep -E '^\+' | grep -En <pattern>. Remove it (new commit), or CDE_SKIP_SECRETS=1 git push for a false positive." >&2
+      exit 1
+    fi
+  fi
+  [ "$rref" = "refs/heads/main" ] || continue
   base="$rsha"; [ "$base" = "$ZERO" ] && base="$(git merge-base "$lsha" origin/main 2>/dev/null)"
   # docs-only (markdown / docs/) doesn't build anything worth a deploy
   if git diff --name-only "$base" "$lsha" 2>/dev/null | grep -qvE '(\.md$|^docs/)'; then prod=1; fi
