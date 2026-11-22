@@ -254,11 +254,11 @@ def main() -> int:
     section("6. /api/land beacon (cookieless landing counter, GA-consent-independent)")
     token = os.environ.get("LAND_REPORT_TOKEN")
     if token:
-        print(f"  curl \"{SITE_URL}/api/land?key={token}&days={days}\"")
+        print(f"  curl -H \"Authorization: Bearer $LAND_REPORT_TOKEN\" \"{SITE_URL}/api/land?days={days}\"")
     else:
         print("  LAND_REPORT_TOKEN not set in this shell.")
         print("  Run `vercel env pull` (from the project root) to fetch it, then:")
-        print(f"  curl \"{SITE_URL}/api/land?key=$LAND_REPORT_TOKEN&days={days}\"")
+        print(f"  curl -H \"Authorization: Bearer $LAND_REPORT_TOKEN\" \"{SITE_URL}/api/land?days={days}\"")
 
     print("\nDone.\n")
     return 0
