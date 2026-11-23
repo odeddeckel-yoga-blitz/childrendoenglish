@@ -1,6 +1,6 @@
 #!/bin/sh
 # Vercel "Ignored Build Step" (vercel.json ignoreCommand). Exit 0 = SKIP this build, exit 1 = build.
-# Otherwise skip only when every file changed since the last deployed commit is docs, a recurring-check log or a GSC snapshot:
+# Otherwise skip only when every file changed since the last deployed commit is docs, a ledger/recurring-check log (.jsonl: recurring-log, recurring-reads, reads) or a GSC snapshot:
 # those don't change the site (cost plan, owner 11-07). Anything unsure (no base commit in the clone) builds.
 # Branch previews (owner 11-12, build cost): only main and preview-* branches build. Name a branch preview-<what>
 # when it needs a preview deploy (server/api changes run .image-work/battle-e2e.mjs against one).
@@ -18,7 +18,7 @@ fi
 if [ "$(git rev-parse "$BASE^{commit}")" = "$(git rev-parse HEAD)" ]; then echo "ignore-build: redeploy of the same commit — building"; exit 1; fi
 if git diff --quiet "$BASE" HEAD -- . \
   ':(exclude)*.md' ':(exclude)**/*.md' ':(exclude)plans/**' ':(exclude)docs/**' \
-  ':(exclude).recurring-log.jsonl' ':(exclude).recurring-reads.jsonl' ':(exclude)tools/seo/snapshots/**'; then
+  ':(exclude).recurring-log.jsonl' ':(exclude).recurring-reads.jsonl' ':(exclude)reads.jsonl' ':(exclude)tools/seo/snapshots/**'; then
   echo "ignore-build: only docs / logs / snapshots changed since $BASE — skipping the build"; exit 0
 fi
 echo "ignore-build: site files changed since $BASE — building"; exit 1
