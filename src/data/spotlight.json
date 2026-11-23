@@ -1,5 +1,5 @@
 {
-  "statsFrom": "2026-11-22T00:00:00.000Z",
+  "statsFrom": "2026-11-23T00:00:00.000Z",
   "gradRule": "word: ans>=30 && acc>=0.7 · game: opens>=30 && depth>=2",
   "word": {
     "id": "socks",
@@ -7,7 +7,7 @@
     "category": "clothing",
     "he": "גרביים",
     "image": "/images/socks.webp",
-    "ans": 14,
+    "ans": 16,
     "ok": 12,
     "since": "2026-11-20T11:29:41.266Z"
   },
@@ -15,9 +15,9 @@
     "id": "odd-one-out",
     "name": "Odd One Out",
     "emoji": "🔍",
-    "opens": 17,
-    "lvl": 27,
-    "cmp": 8,
+    "opens": 25,
+    "lvl": 32,
+    "cmp": 9,
     "since": "2026-11-22T11:14:54.505Z"
   },
   "history": [
