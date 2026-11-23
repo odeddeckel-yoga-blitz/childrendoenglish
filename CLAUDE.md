@@ -29,6 +29,9 @@ deploys on every push to main. Audit history: LEARN.md.
   restore point first (a Neon branch from main, e.g. `restore-<what>-<date>`, or an export) and note it in the
   commit or log; delete the restore branch after 7 days (owner 11-14, after the rotation outage).
 - Never disable Vercel Deployment Protection. Never print or commit secrets/OIDC tokens.
+- Rollback rule (owner 11-23, A137): after every production push run
+  `node ~/projects/site-factory/tools/post-deploy-check.mjs cde --log`. If it fails, revert the push
+  (`git revert`, new commit, same push rules) within 30 min and tell the owner; fix on a branch afterwards.
 
 ## Standing rules
 - Audio is Piper TTS: never claim "native speaker / native audio / דובר שפת אם".
