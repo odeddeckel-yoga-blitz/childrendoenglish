@@ -28,6 +28,11 @@ deploys on every push to main. Audit history: LEARN.md.
 - Before any risky DB change (migration, bulk delete/update, schema change, credential rotation), take a
   restore point first (a Neon branch from main, e.g. `restore-<what>-<date>`, or an export) and note it in the
   commit or log; delete the restore branch after 7 days (owner 11-14, after the rotation outage).
+- Standing-OK classes (owner 11-23, A137). Only these need no fresh question, and the owner is still told
+  what shipped: (1) ledger-only pushes that touch just .jsonl logs/reads or docs (the ignore script skips their build);
+  (2) a branch the owner has already approved by name for that day. Everything else (any code, audio, copy,
+  api or config change; an extra commit on an approved branch) is a per-push AskUserQuestion with what ships,
+  gate results, push time and the post-deploy check. Teammate sessions cannot approve any push.
 - Never disable Vercel Deployment Protection. Never print or commit secrets/OIDC tokens.
 - Rollback rule (owner 11-23, A137): after every production push run
   `node ~/projects/site-factory/tools/post-deploy-check.mjs cde --log`. If it fails, revert the push
