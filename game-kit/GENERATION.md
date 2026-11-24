@@ -12,6 +12,37 @@ the existing games and pass review. Starter code: `templates/game-template/index
 
 ---
 
+<!-- index:start -->
+## Index (generated: node tools/doc-index.mjs GENERATION.md --write; Read a section with offset/limit instead of the whole file)
+- PROMPT (paste this, fill the ⟨blanks⟩) — lines 46-76
+- Mechanic ideation (do this before writing code) — lines 77-202
+- The mechanic (design rubric) — lines 203-338
+- Learning-science design rules (evidence-based — enforce these) — lines 339-376
+- KOC onboarding kit (REQUIRED — this is what separates a 5/10 game from an 8/10) — lines 377-444
+- Workload check (before you call a game "done") — lines 445-500
+- Readout honesty (before you call a game "done") — lines 501-510
+- Arcade addendum (endless real-time games — Vector Vanguard is the reference) — lines 511-538
+- Search intent — a tool query gets a free mode (2026-11-09 — kidsdomath balance-scale, the  — lines 539-551
+- PLAY must be reachable by a real tap (2026-10-17 — kidsdomath, catalogue-wide) — lines 552-560
+- Say what a child can't see (2026-10-17 — kidsdomath, 6-game cliff round + catalogue scans) — lines 561-580
+- Commit button & meters (2026-10-11b) — lines 581-599
+- No answer oracles before commit (2026-10-11c — found in 11 games) — lines 600-617
+- Round flow (2026-10-11c) — lines 618-648
+- Level-1 kid traps (2026-10-23 — kidsdomath, ~45 games fixed; see PATTERNS §2 + §5.9–5.12) — lines 649-783
+- Design-review lens — the 3 personas (quick pre-ship check) — lines 784-794
+- Architecture (identical every game — don't reinvent) — lines 795-817
+- Accessibility (template ships these — keep them) — lines 818-829
+- English-only (do NOT add Hebrew / RTL / a language toggle) — lines 830-847
+- Hub conventions (chrome) — lines 848-858
+- Hub progress contract (Continue / mastery / progression paths) — lines 859-876
+- Accent tokens (IMPORTANT gotcha) — lines 877-885
+- Verification gate (run every one — this is non-negotiable) — lines 886-946
+- Merge steps (checklist) — lines 947-977
+- Build-time safety net — lines 978-992
+- No-repeat contract (kdm-no-repeat v2) — lines 993-1005
+- Cross-app harvest — content integrity + i18n (2026-10-19, CDE + yoga-bits) — lines 1006-1053
+<!-- index:end -->
+
 ## PROMPT (paste this, fill the ⟨blanks⟩)
 
 > You are building one more single-file math game for the KidsDoMath hub. Topic: **⟨topic, e.g. measurement & unit conversion⟩**, target **Grade ⟨2–8⟩**, ages ~8–11 (assume a **pre/early reader** — clarity beats prose).

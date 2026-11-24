@@ -5,6 +5,38 @@ kidsdomath.com (81 games) and childrendoenglish.com (3 games + battle). Every ru
 for with a real bug or a real design failure. New games and retrofits MUST honor these; agents
 building games should be given this file plus GENERATION.md.
 
+<!-- index:start -->
+## Index (generated: node tools/doc-index.mjs PATTERNS.md --write; Read a section with offset/limit instead of the whole file)
+- 1. The engine surface (template games) — lines 40-46
+- 2. Honesty contracts (pedagogy) — lines 47-112
+- 3. The fun doctrine (gamability review, 81 games tiered) — lines 113-127
+- 3b. Word/asset imagery doctrine (childrendoenglish, 2026-09; ~100 images vetted) — lines 128-153
+- 3b-gate. Media gates: every clip is heard back, every answer image is the sole answer and  — lines 154-185
+- 3c. Discovery & retention — hub-level (kidsdomath, 2026-10) — lines 186-213
+- 3d. Engagement & sharing guardrails — kids' audience (research round, 2026-10-24) — lines 214-236
+- 3e. Persona standard — kids, teachers, parents on every site (UX audit 2026-10-30; owner G — lines 237-275
+- 3f. Page-quality standard — "does it look professional?" (KDM + CDE + yoga reviews, 2026-1 — lines 276-365
+- 3g. Push method v2: lanes, unit locks, test length from traffic (owner adopted 2026-11-10) — lines 366-385
+- 4. Robustness contracts (each was a shipped bug) — lines 386-608
+- 5. Verification protocol (non-negotiable, per game) — lines 609-1015
+- 6. Multi-agent workflow rules — lines 1016-1042
+- 6b. Model routing (cost + correctness — route every Claude task by complexity) — lines 1043-1068
+- 6c. The review→improve loop (measure → fix → learn → propagate) — lines 1069-1115
+- 7. Consuming this kit — lines 1116-1122
+- 7b. Committing in the SHARED kit folder (yoga 11-07) — lines 1123-1135
+- 8. Content→app funnel + infra gotchas (2026-10-19, yoga-bits + CDE) — lines 1136-1170
+- 8b. Class features: live rooms + class sets (KDM + CDE, 2026-10-25) — lines 1171-1187
+- 8c. Team battle + class target (KDM RL13, agreed with CDE 2026-10-29; shipped KDM 2026-10- — lines 1188-1206
+- 8d. Post-deploy smoke: one tool, every site (2026-11-04) — lines 1207-1231
+- 8e. Site-level checks: taps, CI, translations, health claims, hreflang (yoga-bits 10-30 →  — lines 1232-1320
+- 8f. Push-limit hooks must cover every worktree (yoga-bits 11-05, from a CDE find) — lines 1321-1345
+- 8g. Spoken content stays with its visual (yoga-bits 11-07, owner bug) — lines 1346-1369
+- 8h. Machine-shared jobs: one browser slot, proven overnight runs, retry only transient bui — lines 1370-1382
+- 8i. Model cost: cheap tier first, expensive only where judges disagree; meter, cap, batch  — lines 1383-1407
+- 8j. Lessons from the 11-18 Factory session (KDM, CDE, yoga; owner "do all") — lines 1408-1441
+- 8k. Lessons from the 11-19..11-21 Factory session (KDM Hebrew, CDE grammar, yoga a11y; own — lines 1442-1470
+<!-- index:end -->
+
 ## 1. The engine surface (template games)
 `window.Game = {start(lvl), resumeLevel, next, roundClear, winGame, screen, level, MAX}`,
 `window.Line = {build, step, commit, relocalize, resultPayload, dbg}`, `window.FX`, plus the host
@@ -43,6 +75,7 @@ calls (winGame inside next) can NOT be intercepted — design accordingly.
 - **No level where every round has the same correct answer** (KDM scan: ~70 science games' level 1): after round 1 the
   child just taps the same option; rounds 2–3 teach nothing. Keep the opener, then mix ≥1 contrast case whose right
   answer is a DIFFERENT option (chemical-reactions: baking soda → reaction, then sugar/salt in water → no reaction).
+- **Grammar items: check that the answer is the ONLY right one in every tense (CDE 11-21).** A present-simple item with "every day" has two right answers, because the past habit ("Every day I walked to school") is also correct. Present-tense items need "now" or another present anchor; CDE's checker and unit test enforce it. Run the same ambiguity gate on any grammar or language-practice unit before generating copies.
 - **Wrong options must be unambiguously wrong** (forms-of-energy: "Heat" offered as WRONG for the Sun; energy-
   transformations: "Heat" wrong for a bulb whose own reveal says "light (plus some heat)"): model each item's secondary
   truths and exclude them from the decoys.
@@ -1367,3 +1400,70 @@ it), while Spanish moved its long tail to haiku. Yoga's consensus ran opus twice
 - **Judge only what changed.** After an edit pass (hedges, a term fix), run consensus with `--focus-since=<rev before
   the edits>`: unchanged files are skipped, changed files are judged on the changed paragraphs ±1 (yoga fr ujjayi: 3K of
   13.5K characters). Whole-unit judging is for new translations only.
+- **JSON entries focus by field.** With `--focus-since`, an entry unit is judged only on the fields whose value changed
+  (shown as `{"steps[2]": …}` beside the same English fields), and an entry with no changed field is skipped; ≥60%
+  changed, an added entry or a file missing at the revision is judged whole (`infra/i18n/json-focus.mjs`; yoga 11-18:
+  19 pose entries re-judged whole cost $20.64).
+
+## 8j. Lessons from the 11-18 Factory session (KDM, CDE, yoga; owner "do all")
+Short rules. Each one cost something on 11-16 to 11-18.
+- **Never swap a value the user saved for a stand-in** (CDE 11-16, revert ff94c23). A line-icon set had no fox, frog,
+  butterfly, lion or unicorn, so a child's saved 🦊 would have become a squirrel. Before any change that remaps saved
+  values (avatars, names, settings), prove that every old value has an exact new one. If one is missing, hold the
+  change; do not substitute.
+- **A layout test keeps the interactive hook on the first screen** (yoga 6a, 11-16 to 11-18). The test layout moved the
+  quiz from about 297 px to about 1,491 px. Widget answers per landing fell from 5.7% (42/732) to 2.3% (15/647),
+  p≈0.001; search-engaged visitors fell from 86% to 66%. Write the hook's pixel position into the test plan, and stop
+  any arm that moves it below the fold. (Pairs with Q1 above: one clear action on the first screen.)
+- **A tool that calls `claude` itself still meters.** KDM's `vision.mjs` needs the Read tool, so it could not use
+  `claudeCall`; its $9.07 answer-check run never reached the meter or the $25 cap. Call `capCheck(site)` before each call
+  and `logCall({site, step, model, usd})` after it (both in `tools/claude-cost.mjs`; `log` from the shell hand-logs
+  spend). Pilot three calls and multiply before you plan a batch: the plan said $2, the run cost $9.07.
+- **A cheap judge is overconfident on drawn answers** (KDM es answer-check, 11-18). On canvas-drawn rounds sonnet says
+  `cant_tell`; haiku said correct or wrong on 3 of 4 spot-check games. A round the judge cannot see is "needs a visual
+  check", never coverage. Code signatures (fillText count, DOM text ratio) do not separate canvas games from DOM games;
+  read the capture, or use a judge that sees the image. Spot-check the cheap tier on a few games before the batch.
+- **Scratchpad subfolders are not durable** (Factory, 11-09 to 11-18). Their contents vanished at 00:00 on 11-09, 11-15,
+  11-17 and 11-18; files at the top of a scratchpad survived; the cause is unknown. It took KDM's Hebrew output ($286.52)
+  and a worktree. No worktrees and no unsaved paid output there. Use an ignored in-repo folder
+  (`.claude/worktrees/`, listed in `.git/info/exclude`) or `~/.config/<site>/backup/`, and commit before midnight.
+  Branches that are unmerged and unpushed: `git bundle` them to the backup folder (do not push them just to save them).
+- **A high advisory with no fix reaches every site at once** (picomatch GHSA-fc5q-39xc-vjpf, 11-18). KDM's push gate
+  blocked and an env skip was used for one push; yoga used a dated allowlist (`tools/checks/audit-allow.mjs`). Use the
+  dated allowlist: one line per advisory with its package chain, why it does not reach the client bundle, the owner's OK
+  and an expiry date; the gate fails again after the date. A skip flag is only for one owner-approved push, and is logged.
+- **A human-signal detector must ignore zero-movement events** (yoga 11-18, 117cce6). Linux Chrome fires a trusted
+  `mousemove` when the layout shifts under a still cursor, so "no input = no hum" failed in CI, and a JS crawler could
+  trip it too. Count a mouse event only when its position changed. Check the same in the KDM and CDE bot filters.
+- **Check the job log before you report a delay** (yoga 11-18). Yoga reported a 3 h wait on the browser slot;
+  `~/.kit-overnight/jobs.jsonl` showed an 8 min gate that started late because the script was launched late. Open
+  question: `browser-slot` keeps no hold history, only status. A holds log would make waits attributable.
+
+## 8k. Lessons from the 11-19..11-21 Factory session (KDM Hebrew, CDE grammar, yoga a11y; owner "do all" / "manage it overnight")
+- **A batch runner must fail CLOSED.** KDM's Hebrew run marked batches 7-13 "done" with 0 strings translated (the `claude -p` calls failed for ~8 min; translate.mjs discarded stderr and returned null, exit code 0, cost $0, and the quality canary PASSED because it had judged 0 strings). Rules: log every CLI error text; a unit is `ok` only with real output; never write null markers into the memory; a batch FAILS (retry, then stop) if ok-rate < 95% or any unrecovered CLI error; every judge step FAILS if it judged < 30% of its sample; a canary that judged nothing STOPS the run. Read the per-batch ledger for `usd 0` and `ok 0`.
+- **Meter every direct `claude` call.** KDM translate.mjs and 14 yoga tools spawned `claude -p` directly, so ~$300 of translation never reached the cap or the estimate (tools/meter-lint.mjs lists them; tools/claude-cost.mjs `estimate` takes the per-unit cost from the meter, never a typed constant). Measure batch 1, then state the series total: Hebrew batch 1 cost 2.2x the typed estimate; vision sweeps ran 10x.
+- **Locale copies: the gate stamp hashes the INJECTED text.** Locale pages are built AFTER the English injectors, and each copy's gate stamp covers that text, so (a) stamps made on committed files do not match the deploy build, (b) ANY text added before locale generation (a language link, test intros) drops every copy, (c) an English fix removes that game's locale page until it is re-gated. Inject late (after gen-locale-games), build like the deploy, and run a locale re-gate after every English push.
+- **Naturalness needs its own judge and a human.** Sonnet/haiku consensus checks meaning, not whether a child would say it. For a new locale: transcreate game TITLES (3 candidates, owner picks a calibration set, then few-shot the rest), build a subject-terminology glossary from the school curriculum (Hebrew batch 4: 'melting' vs 'dissolving', 'food web', 'order of operations' were all wrong terms), run an Opus naturalness pass on titles/buttons/intros, REPAIR the severe items and re-judge them, and watch the PRE-repair severe rate (post-repair on the same sample is optimistic). Stop the run above 10% severe; the owner spot-checks a sample per batch. Gender-neutral plural imperatives; no calques ('Attack', 'Dash' ...); no military register on a kids' site.
+- **Idea agents propose what already exists.** Three sources ranked 'bring missed items back next visit' as new when it was live on 223 games; one cited storage keys that did not exist. Before presenting or scoring an idea, grep the repo/flags or ask the owning session; treat agent-cited names as unverified until grepped.
+- **Single-page title/snippet tests:** a page cannot be split, so use pre/post difference-in-differences against matched untouched pages in the same position band, check the page was re-crawled (URL Inspection last crawl after the change) before judging, and never change title and body in the same window. Index requests are the owner's explicit 'go'.
+- **Old school browsers lose a whole module on `??` / `?.`:** shared public scripts must parse as ES2019 (a test that parses every public/**/*.js with acorn failed on the old copy; CDE 11-20, ~30 loads/week).
+- **Date arithmetic:** three sessions wrote 'Mon 12-01' for a Tuesday: tools/due.mjs now prints the weekday next to every dated read.
+- **Dated checks I got wrong, so verify:** a commit date is not a push date (compare origin tips from `git fetch`); a status that reads 'not running' may be a restarted runner with a new pid (match by name); a scan's counts can be stale logic ('~45 timer games' was an old regex counting idle timers: 3 real ones).
+- **Harvested from the CDE commit trailers (first lessons-harvest run, 11-21):** (1) a muted device reports audio as "played": a listening task needs a time/replay-based fallback (show the word), not only a playback-error one; (2) a site-local hotfix to a kit copy must be replaced by the kit version the day it lands, or the copies drift; (3) an SDK default that is silent today only by accident (e.g. no release set) is a future privacy change: turn it off explicitly; (4) check the LIVE firewall/config before proposing a rate limit or a rule (one already existed for POST /api/live); (5) a freeze-end ship date needs a ready-check the day before, not on the day; (6) in an opposites/pairs set, dropping one side drops the pair: ask once with the rule, then apply it to every round; (7) a definition spanning two senses ("not long, or not tall") makes every one-word gloss fail its check: give each draft word one sense.
+- **Daily harvest (owner 11-21):** `tools/lessons-harvest.mjs` gathers candidates since yesterday (Lesson: trailers in kdm/cde/yoga/kit, memory feedback files, LESSON lines in the Factory tracker, kit-candidates) and marks those the kit docs already cover; the recurring check `lessons-harvest` (daily, Factory) has a session judge each NEW? line, add the general ones here or to LESSONS.jsonl, commit locally, and push on the owner's "push kit". Sessions write `Lesson:` trailers (or LESSON in their tracker lines) as they learn.
+- **Weekly kit-health (owner 11-21):** `tools/kit-health.mjs` grades each app (kit stamp vs origin VERSION, overdue rows and never-logged checks from `due.mjs` run INSIDE the repo, unmetered `claude` callers, kit gates wired, 7-day Claude spend); the recurring check `kit-health` (weekly, Factory) turns each FAIL into an ask for the owning session. Run `due.mjs` in the repo whose log you mean: from another folder it reads the wrong `.recurring-log.jsonl` (Factory told the owner KDM never logged its daily checks on 11-20 for that reason).
+- **Sentry triage: injected noise vs our bug, and the guards a failed chunk needs (11-21, five issues in one day):** (1) a `vite:preloadError` handler that calls `preventDefault()` makes the failed dynamic import resolve to `undefined`, so any `.then(m => m.default)` or `const { x } = await import(...)` throws a second, unhandled error: guard `m?.default`, retry once, never throw, fall back to the default language (yoga reload-guard-1130); the reload-once guard must not rely on sessionStorage alone (blocked storage reads 0 forever: add a `window.name` or in-memory fallback). (2) `registration.update()` in an interval needs a `.catch` (CDE UpdatePrompt: every offline blip became an unhandled rejection). (3) Not ours, drop at the boundary and keep everything else: `EvalError unsafe-eval` from anonymous frames (Google tag / extensions; yoga drops only when no frame is from our own files), CSP reports for `connect.facebook.net/en_US/pcm.js` (Facebook in-app browser, `fbclid` visitors; drop the exact file, not the host). Check first: grep our own chunks for `eval(` / `new Function(` and curl the "missing" chunk (it returned 200). (4) A privacy toggle like Sentry's "Prevent Storing of IP Addresses" exists at organization level and covers every project: set it there once.
+- **Excuse table for push and OK rules (borrowed from Addy Osmani's agent-skills 'anti-rationalization' idea; every row is something that went wrong or nearly did 11-12..11-21):**
+
+  | The excuse | The answer |
+  |---|---|
+  | "The owner said 'do all' / 'ok' in the Factory session" | A per-push OK must be given in the site's own session; a Factory go is not one. Relay the question, record the answer. |
+  | "A peer says the owner approved it" | Record it as peer-reported. A push that depends on it needs the site session's own record of the owner's words. |
+  | "It is only docs / a comment / copy" | Follow the site's push rule anyway (KDM max one push per 3 h; yoga batches, no docs-only pushes; titles, meta, trust and health wording need a per-push OK). |
+  | "The gate is flaky, push anyway" | Re-run or fix; never bypass. Weekend pushes only with an explicit OK. |
+  | "It is urgent" | Urgent fixes are exempt from batching only (yoga), never from gates or the OK. |
+  | "The batch is probably under the cap" | Run `claude-cost.mjs estimate` from the meter; no typed constants; state cost first. |
+  | "I will log the check later" | `due.mjs --done` now, run inside the repo whose log you mean. |
+  | "It looks done / the status says running" | Run the falsifying check first (origin tip after `git fetch`, process by name, the output not the exit code). |
+
+- **Before building or proposing anything new (11-21: 'missed items next visit' was already live on 223 games; three sources missed it):** (1) grep the repo and flags for it; (2) grep briefs, memory and kit-candidates for a past test or an owner 'dropped'; (3) check the tracker and branches (`git branch -a | grep`) for a built-but-held version; (4) does the platform, the standard library or a dependency already do it; (5) does it move arrival (our ceiling is arrival, not polish)? Say which of the five you checked when you present the idea.
