@@ -56,7 +56,7 @@ export default function PrivacyPolicy({ lang = 'en', onBack }) {
 
         <section className="space-y-2">
           <h3 className="font-bold text-slate-800 dark:text-slate-100">{t('privacyRightsTitle', lang)}</h3>
-          {['privacyRightsDevice', 'privacyRightsCounts', 'privacyRightsErrors', 'privacyRightsWho'].map((k) => <p key={k}>{t(k, lang)}</p>)}
+          {['privacyRightsDevice', 'privacyRightsCounts', 'privacyRightsErrors', 'privacyRightsWho', 'privacyRightsBasis', 'privacyRightsProcessors', 'privacyRightsRetention'].map((k) => <p key={k}>{t(k, lang)}</p>)}
         </section>
 
         <section className="space-y-2">

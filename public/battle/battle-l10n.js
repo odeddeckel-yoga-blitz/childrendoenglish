@@ -23,6 +23,15 @@ export function setIc(el, text, pre, post) {
   el.replaceChildren(...nodes);
 }
 
+/** Language for the teacher's error lines: ?lang, the app's saved cde_lang, then the browser; en | he | es. */
+export function errLang() {
+  try {
+    const ok = (v) => (v === 'he' || v === 'es' || v === 'en' ? v : '');
+    return ok(new URLSearchParams(location.search).get('lang')) || ok(localStorage.getItem('cde_lang'))
+      || ok(String(navigator.language || '').slice(0, 2).toLowerCase()) || 'en';
+  } catch { return 'en'; }
+}
+
 export function pickLang() {
   try {
     const q = new URLSearchParams(location.search).get('lang');
@@ -104,6 +113,9 @@ export const BATTLE_T = {
     noPlayers: 'No players yet.',
     hostErr: 'Could not update the room. Please try again.',
     errLocked: 'This room is locked. Ask your teacher!',
+    createErr: 'Could not create a room — please try again.',
+    startErr: 'Could not start — please try again.',
+    tooManyRooms: 'Battles are busy right now. Try again in a few minutes.',
     removed: 'Your teacher took you out of this battle.',
   },
   he: {
@@ -116,6 +128,9 @@ export const BATTLE_T = {
     noPlayers: 'עדיין אין שחקנים.',
     hostErr: 'לא הצלחנו לעדכן את החדר. נסו שוב.',
     errLocked: 'החדר נעול. שאלו את המורה!',
+    createErr: 'לא הצלחנו ליצור חדר. נסו שוב.',
+    startErr: 'לא הצלחנו להתחיל. נסו שוב.',
+    tooManyRooms: 'יש כרגע הרבה קרבות פעילים. נסו שוב בעוד כמה דקות.',
     removed: 'המורה הוציאו אתכם מהקרב הזה.',
   },
   es: {
@@ -128,6 +143,9 @@ export const BATTLE_T = {
     noPlayers: 'Todavía no hay jugadores.',
     hostErr: 'No se pudo actualizar la sala. Inténtalo de nuevo.',
     errLocked: 'Esta sala está bloqueada. ¡Pregunta a tu profe!',
+    createErr: 'No se pudo crear la sala. Inténtalo de nuevo.',
+    startErr: 'No se pudo empezar. Inténtalo de nuevo.',
+    tooManyRooms: 'Hay muchas batallas ahora mismo. Inténtalo de nuevo en unos minutos.',
     removed: 'Tu profe te ha sacado de esta batalla.',
   },
 };

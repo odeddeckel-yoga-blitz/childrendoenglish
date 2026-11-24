@@ -16,7 +16,7 @@ import {
   BATTLE_CATEGORIES, BATTLE_UNIT_CATEGORIES, BATTLE_DURATIONS, BATTLE_MODES, TEAM_NAMES, defaultTarget,
   normalizeCode, suggestNicknames, makeQuestion, pointsForAnswer,
 } from './battle-core.js';
-import { pickLang, applyLang, HE, ltr, ic, setIc, tr } from './battle-l10n.js';
+import { pickLang, errLang, applyLang, HE, ltr, ic, setIc, tr } from './battle-l10n.js';
 
 const API = '/api/live';
 const POLL_MS = 2000;
@@ -574,8 +574,8 @@ async function createRoom() {
     show('sHostLobby');
     $('roomCode').textContent = code;
     startLoops();
-  } catch {
-    $('setupErr').textContent = 'Could not create a room — please try again.';
+  } catch (e) {
+    $('setupErr').textContent = tr(errLang(), e && e.code === 'too_many_rooms' ? 'tooManyRooms' : 'createErr');
   }
 }
 
@@ -591,7 +591,7 @@ async function startBattle() {
     poll();
   } catch (e) {
     if (e.code !== 'already_started') {
-      $('hostErr').textContent = 'Could not start — please try again.';
+      $('hostErr').textContent = tr(errLang(), 'startErr');
     }
   }
 }

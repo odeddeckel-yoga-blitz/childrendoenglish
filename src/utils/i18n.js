@@ -267,7 +267,7 @@ const translations = {
 
     // Privacy policy
     privacyTitle: 'Privacy Policy',
-    privacyUpdated: "Last updated: November 18, 2026",
+    privacyUpdated: "Last updated: November 22, 2026",
     privacyDataTitle: 'What data we collect',
     privacyDataDesc: "There are no accounts and no sign-up. To keep siblings' progress apart on one device you can type a player name (optional for the first player). The name stays in this browser's local storage and is never sent to us. We do not ask for an email address or any other contact details.",
     privacyCookieTitle: 'Cookies & tracking',
@@ -289,6 +289,9 @@ const translations = {
     privacyRightsCounts: "Our usage counts are anonymous daily totals with no cookie, no identifier and no IP address. They cannot be linked to a person, so they hold nothing about your child to look up or delete.",
     privacyRightsErrors: "Error reports go to Sentry only when something breaks. They are about the error, not the person: what went wrong, the page, the browser type, its language and time-zone settings, and the steps just before it. Saved player names are removed before a report is sent, and there is no session recording.",
     privacyRightsWho: "Children Do English is run by Oded Deckelbaum, and the site is hosted by Vercel. For any request about your data, or any question about privacy, email info@childrendoenglish.com. If you live in the EU or the UK, you can also complain to your local data protection authority.",
+    privacyRightsBasis: "Legal basis (GDPR): the anonymous daily counts and the error reports rest on our legitimate interest in keeping a free children's app working and improving it (Article 6(1)(f)). The few items kept in your browser (progress, settings, the date of the last visit and the tab note) serve only your own use and that counting. Nothing in them is sent to us as personal data, and no cookies are set, so there is no consent banner.",
+    privacyRightsProcessors: "Who handles data for us: Vercel hosts the site. Neon, a database provider, stores the anonymous daily totals and the Class Battle rooms. Sentry receives error reports and keeps them in Germany (EU). These services process data only to provide the service to us. Anonymous totals and Class Battle rooms are not personal data about a child.",
+    privacyRightsRetention: "How long we keep data: anonymous daily totals are kept without an end date, because they cannot be linked to a person. Error reports in Sentry are deleted after 90 days. A Class Battle room is deleted within an hour of being created. Everything on your device stays there until you delete it.",
     termsTitle: 'Terms of Service',
     termsUpdated: "Last updated: November 18, 2026",
     termsAcceptTitle: 'Acceptance of Terms',

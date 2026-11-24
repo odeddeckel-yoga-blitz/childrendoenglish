@@ -214,7 +214,10 @@ export default async function handler(req, res) {
     }
     if (req.method === 'GET') {
       const token = process.env.LAND_REPORT_TOKEN;
-      if (!safeEqual(req.query?.key, token)) return res.status(403).json({ error: 'forbidden' });
+      // Authorization: Bearer <token> (11-22: a ?key= token lands in access logs). ?key= still works for one release.
+      const auth = req.headers?.authorization;
+      const bearer = typeof auth === 'string' && auth.startsWith('Bearer ') ? auth.slice(7) : undefined;
+      if (!safeEqual(bearer, token) && !safeEqual(req.query?.key, token)) return res.status(403).json({ error: 'forbidden' });
       const days = Math.min(365, Math.max(1, Number(req.query.days) || 30));
       const q = sql();
       if (!q) return res.status(200).json({ days, rows: [], note: 'no database configured' });

@@ -7,7 +7,7 @@
     "dev": "vite",
     "prebuild": "node scripts/gen-image-style.mjs && node scripts/pick-spotlight.mjs",
     "build": "vite build && node scripts/generate-seo-pages.js && node scripts/build-credits-page.mjs && node scripts/generate-og-images.js && node scripts/speculation-rules.mjs && node scripts/generate-sitemap.js",
-    "postbuild": "node scripts/validate-schema.mjs --quiet && (node tools/seo/schema-gate.mjs dist | grep -E '^schema-gate|^  [A-Z]' || true)",
+    "postbuild": "node scripts/validate-schema.mjs --quiet && node scripts/validate-he-lang.mjs && (node tools/seo/schema-gate.mjs dist | grep -E '^schema-gate|^  [A-Z]' || true)",
     "indexnow": "sh tools/seo/indexnow-after-deploy.sh",
     "preview": "vite preview",
     "test": "vitest run",

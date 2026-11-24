@@ -153,7 +153,7 @@ const PRIVACY_SECTIONS = [
   ['privacyChildrenTitle', ['privacyChildrenDesc']],
   ['privacyCoppaTitle', ['privacyCoppaDesc']],
   ['privacyDeleteTitle', ['privacyDeleteDesc']],
-  ['privacyRightsTitle', ['privacyRightsDevice', 'privacyRightsCounts', 'privacyRightsErrors', 'privacyRightsWho']],
+  ['privacyRightsTitle', ['privacyRightsDevice', 'privacyRightsCounts', 'privacyRightsErrors', 'privacyRightsWho', 'privacyRightsBasis', 'privacyRightsProcessors', 'privacyRightsRetention']],
 ];
 const TERMS_SECTIONS = ['Accept', 'Use', 'Content', 'Disclaimer', 'Changes'].map((k) => [`terms${k}Title`, [`terms${k}Desc`]]);
 

@@ -291,6 +291,15 @@ describe('api/land report token (audit 11-18: constant-time compare)', () => {
     expect(r.code).toBe(200);
   });
 
+  it('accepts the report token as an Authorization: Bearer header and rejects a wrong one', async () => {
+    const r = res(); await handler({ method: 'GET', headers: { ...BROWSER, authorization: 'Bearer report-token-1' }, query: {} }, r);
+    expect(r.code).toBe(200);
+    for (const authorization of ['Bearer report-token-2', 'report-token-1', 'Bearer ']) {
+      const bad = res(); await handler({ method: 'GET', headers: { ...BROWSER, authorization }, query: {} }, bad);
+      expect(bad.code).toBe(403);
+    }
+  });
+
   it('403s every key when no token is configured', async () => {
     delete process.env.LAND_REPORT_TOKEN;
     const r = res(); await handler({ method: 'GET', headers: BROWSER, query: { key: '' } }, r);
