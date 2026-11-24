@@ -5259,7 +5259,7 @@ export const ENRICHMENTS = {
       "Petting a soft puppy can make you feel happy right away.",
       "The whole class was happy when the teacher said no homework today!"
     ],
-    "funFact": "Smiling actually makes your brain produce more happy chemicals, even if you are not feeling happy at first. Laughter releases a chemical in your brain called endorphins that makes you feel wonderful. Research shows that spending time outside in sunshine makes people happier.",
+    "funFact": "Smiling and laughing with friends can make a happy moment feel even better. Lots of people feel happy after playing outside on a sunny day. Happy is one of the first feelings words many children learn.",
     "collocations": [
       "feel happy",
       "happy smile",
@@ -5419,7 +5419,7 @@ export const ENRICHMENTS = {
       "Her hands shook because she was nervous about the big test.",
       "Taking a slow deep breath helps when you feel nervous."
     ],
-    "funFact": "Feeling nervous before something important is called \"performance anxiety,\" and even famous singers and actors feel it. Your nervous feelings actually help you perform better by making you more alert and focused. Butterflies in your stomach are caused by blood moving away from your digestive system to your muscles when you are nervous.",
+    "funFact": "Lots of people feel nervous before something important, like a test or a show, and even famous singers and actors do. A nervous, fluttery feeling in your tummy is often called \"butterflies in your stomach.\" Telling a grown-up how you feel can help.",
     "collocations": [
       "feel nervous",
       "get nervous",
@@ -5659,7 +5659,7 @@ export const ENRICHMENTS = {
       "He was so curious that he read every book he could find about dinosaurs.",
       "Curious kids ask lots of questions and learn so much more!"
     ],
-    "funFact": "Albert Einstein said that curiosity was his most important quality — more important than intelligence. Being curious actually releases dopamine in your brain, making learning feel like a reward. Cats are famous for being curious, which is where the saying \"curiosity killed the cat\" comes from — though cats are usually perfectly safe!",
+    "funFact": "Albert Einstein once wrote, \"I have no special talents. I am only passionately curious.\" Being curious means you want to find out new things and ask lots of questions. Cats are famous for being curious, which is where the saying \"curiosity killed the cat\" comes from — though cats are usually perfectly safe!",
     "collocations": [
       "feel curious",
       "naturally curious",

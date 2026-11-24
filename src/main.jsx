@@ -15,6 +15,8 @@ if (import.meta.env.PROD) {
     init({
       dsn: import.meta.env.VITE_SENTRY_DSN || '',
       sendDefaultPii: false,
+      // no session pings: BrowserSession would report every app load and route change once a release is set (trust audit 11-20)
+      integrations: (defaults) => defaults.filter((i) => i.name !== 'BrowserSession'),
       // no profile names in a crash report: no tap/console breadcrumbs, saved names replaced (utils/sentryScrub.js)
       beforeBreadcrumb: scrub.beforeBreadcrumb,
       beforeSend: (event) => { event.tags = { ...event.tags, translated: pageTranslated() }; return scrub.beforeSend(event); },
