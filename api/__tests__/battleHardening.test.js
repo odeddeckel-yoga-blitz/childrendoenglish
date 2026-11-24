@@ -9,14 +9,27 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
 /* ---------------- fake Neon (Postgres path) ---------------- */
-const db = { rooms: new Map(), players: new Map() };
+const db = { rooms: new Map(), players: new Map(), creates: new Map() };
 const norm = (strings) => strings.join('?').replace(/\s+/g, ' ').trim();
 function cascade(code) {
   db.rooms.delete(code);
   for (const [id, p] of db.players) if (p.room_code === code) db.players.delete(id);
 }
 function run(q, v) {
-  if (/^(CREATE TABLE|ALTER TABLE)/.test(q)) return [];
+  if (/^(CREATE TABLE|ALTER TABLE|CREATE INDEX)/.test(q)) return [];
+  // per-client create log (audit A091)
+  if (q === 'DELETE FROM cde_battle_creates WHERE created_at <= ?') {
+    for (const [id, c] of db.creates) if (c.created_at <= v[0]) db.creates.delete(id);
+    return [];
+  }
+  if (q === 'INSERT INTO cde_battle_creates (id, bucket, created_at) VALUES (?, ?, ?)') {
+    db.creates.set(v[0], { id: v[0], bucket: v[1], created_at: v[2] });
+    return [];
+  }
+  if (q === 'SELECT COUNT(*)::int AS count FROM cde_battle_creates WHERE bucket = ? AND created_at > ?') {
+    return [{ count: [...db.creates.values()].filter((c) => c.bucket === v[0] && c.created_at > v[1]).length }];
+  }
+  if (q === 'DELETE FROM cde_battle_creates WHERE id = ?') { db.creates.delete(v[0]); return []; }
   if (q === 'DELETE FROM cde_battle_rooms WHERE expires_at <= ?') {
     for (const [code, r] of db.rooms) if (r.expires_at <= v[0]) cascade(code);
     return [];
@@ -69,8 +82,9 @@ vi.mock('@neondatabase/serverless', () => ({
 
 import {
   getBattleStore, __resetBattleStoreForTests, generateRoomCode, expiryAtStart,
-  ROOM_TTL_MS, POST_GAME_TTL_MS, MAX_ACTIVE_ROOMS,
+  ROOM_TTL_MS, POST_GAME_TTL_MS, MAX_ACTIVE_ROOMS, CREATE_WINDOW_MS, MAX_CREATES_PER_CLIENT,
 } from '../_lib/battleStore.js';
+import { clientBucket, clientIp, normalizeClientIp } from '../_lib/clientBucket.js';
 import { clampScoreUpdate, maxPlausibleCount, SCORE_GRACE_MS, COUNT_SLACK, MAX_DURATION_SEC } from '../_lib/battleRules.js';
 import liveHandler from '../live.js';
 
@@ -81,6 +95,7 @@ function useBackend(kind) {
   if (kind === 'pg') process.env.CDE_DATABASE_URL = 'postgres://fake/neon';
   db.rooms.clear();
   db.players.clear();
+  db.creates.clear();
   __resetBattleStoreForTests();
 }
 function restoreEnv() {
@@ -245,6 +260,54 @@ describe.each(['memory', 'pg'])('battle store hardening (%s)', (kind) => {
     expect((await store.createRoom({ category: 'mix', durationSec: 120 })).code).toBeTruthy();
   });
 
+  it(`per-client create limit (A091): ${MAX_CREATES_PER_CLIENT} per window, other clients unaffected, sliding release`, async () => {
+    const store = getBattleStore();
+    const mk = (creator) => store.createRoom({ category: 'mix', durationSec: 120, creator });
+    for (let i = 0; i < MAX_CREATES_PER_CLIENT; i++) {
+      expect((await mk('aaaa')).code).toBeTruthy();
+      vi.advanceTimersByTime(1000);
+    }
+    expect(await mk('aaaa')).toEqual({ error: 'too_many_creates' });
+    expect(await mk('aaaa')).toEqual({ error: 'too_many_creates' }); // a refused retry...
+    expect((await mk('bbbb')).code).toBeTruthy(); // another school is fine
+    expect((await mk(null)).code).toBeTruthy(); // unknown client: no per-client limit
+    // ...does not extend the wait: the first create ages out at CREATE_WINDOW_MS after it
+    vi.advanceTimersByTime(CREATE_WINDOW_MS - MAX_CREATES_PER_CLIENT * 1000);
+    expect((await mk('aaaa')).code).toBeTruthy();
+    expect(await mk('aaaa')).toEqual({ error: 'too_many_creates' });
+    if (kind === 'pg') {
+      // the log holds no IP and no room code, and refused attempts left no row
+      for (const c of db.creates.values()) expect(Object.keys(c).sort()).toEqual(['bucket', 'created_at', 'id']);
+      expect([...db.creates.values()].filter((c) => c.bucket === 'aaaa').length).toBe(MAX_CREATES_PER_CLIENT);
+    }
+  });
+
+  it('one client cannot fill the global room cap (A091)', async () => {
+    const store = getBattleStore();
+    let made = 0;
+    for (let i = 0; i < MAX_ACTIVE_ROOMS; i++) {
+      const r = await store.createRoom({ category: 'mix', durationSec: 120, creator: 'attacker' });
+      if (r.code) made++;
+      else expect(r).toEqual({ error: 'too_many_creates' });
+      vi.advanceTimersByTime(5000); // ~25 min of steady spam, inside the room TTL
+    }
+    expect(made).toBeLessThanOrEqual(MAX_CREATES_PER_CLIENT * Math.ceil(ROOM_TTL_MS / CREATE_WINDOW_MS));
+    expect((await store.createRoom({ category: 'mix', durationSec: 120, creator: 'teacher' })).code).toBeTruthy();
+  });
+
+  it('a room refused by the global cap does not count against the client', async () => {
+    const store = getBattleStore();
+    for (let i = 0; i < MAX_ACTIVE_ROOMS; i++) await store.createRoom({ category: 'mix', durationSec: 120 });
+    vi.advanceTimersByTime(ROOM_TTL_MS - 1000); // the cap rooms are still alive
+    for (let i = 0; i < MAX_CREATES_PER_CLIENT + 2; i++) {
+      expect(await store.createRoom({ category: 'mix', durationSec: 120, creator: 'cccc' })).toEqual({ error: 'too_many_rooms' });
+    }
+    vi.advanceTimersByTime(1000); // the cap rooms expire; the refused attempts are 1 s old, well inside the window
+    for (let i = 0; i < MAX_CREATES_PER_CLIENT; i++) {
+      expect((await store.createRoom({ category: 'mix', durationSec: 120, creator: 'cccc' })).code).toBeTruthy();
+    }
+  });
+
   it('expiry: a lobby room still goes at 30 min; a battle started late lives until 10 min after its end', async () => {
     const a = await room('solo', 120, 1);
     vi.advanceTimersByTime(ROOM_TTL_MS);
@@ -306,5 +369,62 @@ describe('/api/live host actions', () => {
     const late = await call({ action: 'join', code, nickname: 'Clever Fox' });
     expect([late.code, late.body.error]).toEqual([409, 'room_locked']);
     expect((await call({ action: 'remove', code, hostKey, playerId: kid.playerId })).body).toEqual({ ok: true });
+  });
+});
+
+/* ---------------- per-client create limit over HTTP (audit A091) ---------------- */
+describe('/api/live create limit per IP', () => {
+  beforeEach(() => useBackend('memory'));
+  afterEach(restoreEnv);
+  async function create(headers) {
+    const res = {
+      code: 0, body: null, headers: {},
+      setHeader(k, v) { this.headers[k] = v; }, status(c) { this.code = c; return this; }, json(b) { this.body = b; return this; },
+    };
+    await liveHandler({ method: 'POST', headers, body: { action: 'create', category: 'animals', durationSec: 120 } }, res);
+    return res;
+  }
+
+  it(`the ${MAX_CREATES_PER_CLIENT + 1}th create from one IP in the window answers 429 too_many_creates; other IPs still create`, async () => {
+    const school = { 'x-real-ip': '203.0.113.7', 'x-forwarded-for': '203.0.113.7' };
+    for (let i = 0; i < MAX_CREATES_PER_CLIENT; i++) expect((await create(school)).code).toBe(200);
+    const r = await create(school);
+    expect([r.code, r.body]).toEqual([429, { error: 'too_many_creates' }]);
+    expect(r.headers['Retry-After']).toBeTruthy();
+    expect((await create({ 'x-real-ip': '198.51.100.2' })).code).toBe(200);
+    expect((await create({ 'x-forwarded-for': '198.51.100.3, 10.0.0.1' })).code).toBe(200);
+  });
+
+  it('one IPv6 /64 counts as one client', async () => {
+    for (let i = 0; i < MAX_CREATES_PER_CLIENT; i++) expect((await create({ 'x-real-ip': `2001:db8:1:2::${i + 1}` })).code).toBe(200);
+    expect((await create({ 'x-real-ip': '2001:db8:1:2:ffff:ffff:ffff:ffff' })).code).toBe(429);
+    expect((await create({ 'x-real-ip': '2001:db8:1:3::1' })).code).toBe(200);
+  });
+});
+
+describe('clientBucket', () => {
+  it('normalizes IPv4, IPv4-mapped IPv6 and IPv6 /64; rejects junk', () => {
+    expect(normalizeClientIp('203.0.113.7')).toBe('203.0.113.7');
+    expect(normalizeClientIp('::ffff:203.0.113.7')).toBe('203.0.113.7');
+    expect(normalizeClientIp('2001:db8::1')).toBe('2001:0db8:0000:0000::/64');
+    expect(normalizeClientIp('[2001:DB8:0:0:1:2:3:4]')).toBe('2001:0db8:0000:0000::/64');
+    expect(normalizeClientIp('::1')).toBe('0000:0000:0000:0000::/64');
+    for (const bad of ['', 'unknown', '999.1.1.1', '1.2.3', '2001:db8::1::2', 'gggg::1', null, 42]) {
+      expect(normalizeClientIp(bad)).toBeNull();
+    }
+  });
+  it('prefers x-real-ip, then the first x-forwarded-for hop, then the socket', () => {
+    expect(clientIp({ headers: { 'x-real-ip': '1.1.1.1', 'x-forwarded-for': '2.2.2.2' } })).toBe('1.1.1.1');
+    expect(clientIp({ headers: { 'x-forwarded-for': '2.2.2.2, 3.3.3.3' } })).toBe('2.2.2.2');
+    expect(clientIp({ headers: {}, socket: { remoteAddress: '4.4.4.4' } })).toBe('4.4.4.4');
+    expect(clientIp({})).toBeNull();
+  });
+  it('is a keyed 16-hex hash, never the IP; same IP → same bucket; unknown → null', () => {
+    const a = clientBucket({ headers: { 'x-real-ip': '203.0.113.7' } });
+    expect(a).toMatch(/^[0-9a-f]{16}$/);
+    expect(a).not.toContain('203');
+    expect(clientBucket({ headers: { 'x-forwarded-for': '203.0.113.7' } })).toBe(a);
+    expect(clientBucket({ headers: { 'x-real-ip': '203.0.113.8' } })).not.toBe(a);
+    expect(clientBucket({ headers: {} })).toBeNull();
   });
 });

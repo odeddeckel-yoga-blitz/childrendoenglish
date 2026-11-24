@@ -9,11 +9,4 @@ export function safeEqual(a, b) {
   if (typeof a !== 'string' || typeof b !== 'string' || !a || !b) return false;
   return crypto.timingSafeEqual(digest(a), digest(b));
 }
-
-// Admin bearer check shared by commit-image and fetch-image: sha256(password) against ADMIN_HASH.
-export function verifyAdminAuth(req) {
-  const auth = req.headers?.authorization;
-  if (typeof auth !== 'string' || !auth.startsWith('Bearer ')) return false;
-  const hash = crypto.createHash('sha256').update(auth.slice(7)).digest('hex');
-  return safeEqual(hash, (process.env.ADMIN_HASH || '').trim());
-}
+// Used by land.js GET (stats token). The admin bearer check went with commit-image/fetch-image (11-22, audit A090).

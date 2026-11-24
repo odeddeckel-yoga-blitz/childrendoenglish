@@ -80,7 +80,7 @@ Runs: 2026-03-13/14, 2026-07-17, 2026-11-18 (full report: briefs/audit-2026-11-1
 
 ## Low-Signal Dimensions (fast-track next time)
 - **Performance**, **Accessibility (8)**, **Mobile (8)**, **SEO on-page**, **Production dependency vulnerabilities (0)**: healthy across 3–4 runs; spot-check only.
-- **Security (7.5)**: still the same small items (timing-unsafe compares in api/commit-image.js, api/fetch-image.js and land.js; unvalidated imageBase64; no rate limit on /api/land and /api/live). Flagged twice; fix rather than re-audit.
+- **Security (7.5)**: timing-safe compares and imageBase64 validation fixed 11-18. 11-22 (A090): the GitHub-write admin image tool (api/commit-image.js, api/fetch-image.js, the #admin route) was removed from the site; image work is the local `word-image-improver.mjs pick`. GITHUB_TOKEN/ADMIN_HASH still need deleting from the Vercel env. 11-22 (A091): per-IP Class Battle room-create limit; /api/health is static unless `?deep=1`. Still open: Vercel Firewall rate limits on POST /api/land and /api/live.
 
 ## High-Signal Dimensions (extra scrutiny next time)
 - **Learning depth** (verbs, function words, readings, speaking): did any of the 11-18 ideas ship?

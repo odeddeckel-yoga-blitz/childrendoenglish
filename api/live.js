@@ -10,6 +10,8 @@
  *   POST /api/live {action:'create', category, durationSec, mode?}
  *                                                 mode: solo (default) | team | class
  *                                                 → { code, hostKey }
+ *                                                 (≤ MAX_CREATES_PER_CLIENT per 10 min per IP,
+ *                                                 else 429 too_many_creates — battleStore.js)
  *   POST /api/live {action:'join', code, nickname}→ { playerId, playerKey }
  *   POST /api/live {action:'start', code, hostKey, target?}→ { ok }
  *                                                 (class mode: the teacher's target, else default)
@@ -30,6 +32,7 @@
 
 import { getBattleStore, normalizeRoomCode } from './_lib/battleStore.js';
 import { isValidCategory, isValidDuration, isValidMode } from './_lib/battleRules.js';
+import { clientBucket } from './_lib/clientBucket.js';
 
 const STATUS_BY_ERROR = {
   room_not_found: 404,
@@ -44,10 +47,12 @@ const STATUS_BY_ERROR = {
   invalid_nickname: 400,
   bad_request: 400,
   too_many_rooms: 503,
+  too_many_creates: 429, // per-client create limit (audit A091); the client maps the code to its own text
 };
 
 function send(res, result) {
   if (result && result.error) {
+    if (result.error === 'too_many_creates') res.setHeader('Retry-After', '600');
     return res.status(STATUS_BY_ERROR[result.error] || 400).json({ error: result.error });
   }
   return res.status(200).json(result);
@@ -86,7 +91,7 @@ export default async function handler(req, res) {
         const durationSec = isValidDuration(body.durationSec) ? body.durationSec : null;
         const mode = body.mode === undefined ? 'solo' : body.mode;
         if (!category || !durationSec || !isValidMode(mode)) return send(res, { error: 'bad_request' });
-        return send(res, await store.createRoom({ category, durationSec, mode }));
+        return send(res, await store.createRoom({ category, durationSec, mode, creator: clientBucket(req) }));
       }
       case 'join': {
         const code = normalizeRoomCode(body.code);
