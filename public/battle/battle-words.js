@@ -1064,7 +1064,7 @@ export const BATTLE_WORDS = {
   {
    "id": "yarn",
    "w": "yarn",
-   "he": "חוט צמר",
+   "he": "חוט סריגה",
    "img": "/images/yarn.webp"
   },
   {
