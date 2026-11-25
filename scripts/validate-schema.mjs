@@ -5,6 +5,7 @@
 // field. Usage: node scripts/validate-schema.mjs [--quiet]
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { missingJsonLd, homeH1Error } from './page-checks.mjs';
 // script-src keyword that lets the speculation-rules JSON run (R2X19)
 const CSP_SPEC = readFileSync(new URL('../vercel.json', import.meta.url), 'utf8').includes("'inline-speculation-rules'");
 
@@ -24,6 +25,8 @@ const REQUIRED = {
   Organization: (d) => d.name && d.url,
   WebSite: (d) => d.name && d.url,
   Person: (d) => d.name,
+  WebPage: (d) => d.name && d.url && d.inLanguage && d.isPartOf,
+  CollectionPage: (d) => d.name && d.url && d.inLanguage && d.isPartOf,
 };
 
 function pageType(rel) {
@@ -57,6 +60,8 @@ for (const file of pages(DIST)) {
   const c = (cov[type] = cov[type] || { n: 0, answer: 0, answerFirst: 0, types: {} });
   c.n++;
   const html = readFileSync(file, 'utf8');
+  { const e = missingJsonLd(html); if (e) errors.push(`${rel}: ${e}`); }
+  if (rel === '/') { const e = homeH1Error(html); if (e) errors.push(`${rel}: ${e}`); }
   if (/class="[^"]*\banswer-first\b/.test(html)) c.answerFirst++;
   let hasAnswerSchema = false;
   for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
@@ -66,7 +71,7 @@ for (const file of pages(DIST)) {
     for (const d of Array.isArray(data) ? data : [data]) {
       const items = d['@graph'] ? d['@graph'] : [d];
       for (const it of items) {
-        const t = it['@type'];
+        const t = Array.isArray(it['@type']) ? it['@type'][0] : it['@type'];
         c.types[t] = (c.types[t] || 0) + 1;
         if (t === 'FAQPage' || t === 'HowTo') hasAnswerSchema = true;
         const check = REQUIRED[t];

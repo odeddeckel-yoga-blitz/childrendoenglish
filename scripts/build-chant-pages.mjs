@@ -6,6 +6,7 @@
 import { join } from 'path';
 import { mkdirSync } from 'fs';
 import { sentenceAudio } from './sentence-audio.mjs';
+import { pageLd } from './page-ld.mjs';
 import { chantLine } from '../src/data/chants.js';
 
 export const CHANTS_INDEX = false; // pilot: noindex until the ear check
@@ -55,6 +56,7 @@ function shell({ SITE, path, title, description, body }) {
   <meta name="robots" content="${CHANTS_INDEX ? 'index, follow' : 'noindex'}" />
   <link rel="canonical" href="${SITE}${path}" />
   <link rel="icon" type="image/png" href="/favicon.png" />
+  ${pageLd({ type: path === '/chants/' ? 'CollectionPage' : 'WebPage', name: title, description, path })}
   <style>${CSS}</style>
 </head>
 <body>
