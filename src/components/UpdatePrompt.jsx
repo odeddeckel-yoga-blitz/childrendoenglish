@@ -9,7 +9,9 @@ export default function UpdatePrompt({ lang = 'en' }) {
   } = useRegisterSW({
     onRegisteredSW(swUrl, registration) {
       if (registration) {
-        setInterval(() => registration.update(), 60 * 60 * 1000);
+        // update() rejects when the sw.js fetch fails (offline, flaky network); without a catch
+        // that is an unhandled rejection reported to Sentry every hour on a bad connection.
+        setInterval(() => registration.update().catch(() => {}), 60 * 60 * 1000);
       }
     },
   });
