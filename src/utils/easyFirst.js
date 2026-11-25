@@ -30,3 +30,32 @@ export function easyFirst(selected, pool, statsWords, rand = Math.random) {
   const pick = easy.slice(0, TOP)[Math.floor(rand() * Math.min(TOP, easy.length))];
   return [pick, ...selected.slice(0, -1)];
 }
+
+// 11-20 read (since 11-07): first quizzes that got past Q1 still lost a third of
+// the letter-path starts by Q5 (new-letter 34/68 done), and U2 only eased Q1 —
+// Q2 became the most-missed first-quiz question (27% wrong vs Q1 19%). So a
+// brand-new player's WHOLE first quiz now comes from the pool's best-answered
+// words: the top (length + SPARE) by right-rate among words with enough answers,
+// `length` of them at random (the quiz still varies), easiest first. Words come
+// only from `pool` (a ladder batch stays inside its batch); short on rated words
+// → the rest of `selected` fills in. No stats → `selected` unchanged.
+const SPARE = 3;
+export function easyFirstQuiz(selected, pool, statsWords = {}, rand = Math.random) {
+  const len = selected.length;
+  if (!len) return selected;
+  const ranked = pool
+    .map((w) => {
+      const [n = 0, ok = 0] = statsWords[w.id] || [];
+      return { w, n, rate: n ? ok / n : 0 };
+    })
+    .filter((x) => x.n >= EASY_MIN_ANSWERS)
+    .sort((a, b) => b.rate - a.rate || b.n - a.n);
+  if (!ranked.length) return selected;
+  const top = ranked.slice(0, len + SPARE);
+  const picked = [];
+  while (picked.length < len && top.length) picked.push(top.splice(Math.floor(rand() * top.length), 1)[0]);
+  picked.sort((a, b) => b.rate - a.rate || b.n - a.n);
+  const ids = new Set(picked.map((x) => x.w.id));
+  const fill = selected.filter((w) => !ids.has(w.id)).slice(0, len - picked.length);
+  return [...picked.map((x) => x.w), ...fill];
+}

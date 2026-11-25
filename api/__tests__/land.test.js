@@ -77,6 +77,20 @@ describe('api/land learn-event whitelist', () => {
   });
 });
 
+describe('api/land first-quiz version marker (11-20)', () => {
+  it('records onb q1_v2 next to q1_start', async () => {
+    vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    const { default: handler } = await import('../land.js');
+    calls.length = 0;
+    const r = res(); await handler({ method: 'POST', headers: BROWSER, body: { batch: [{ e: 'onb', i: 'q1_start' }, { e: 'onb', i: 'q1_v2' }], l: 'en' } }, r);
+    expect(r.code).toBe(204);
+    const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
+    expect(written).toEqual(expect.arrayContaining(['onb:q1_start', 'onb:q1_v2']));
+  });
+});
+
 describe('api/land games wave 2 events', () => {
   it('records the Opposites / True or False / Feelings / Sentence Builder answer events', async () => {
     // own batch: the endpoint keeps the first 30 events of a batch, and the list above is near that
