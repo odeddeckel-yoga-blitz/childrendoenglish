@@ -1,6 +1,6 @@
 # LEARN.MD — Audit Knowledge Base
 
-Runs: 2026-03-13/14, 2026-07-17, 2026-11-18 (full report: briefs/audit-2026-11-18/).
+Runs: 2026-03-13/14, 2026-07-17, 2026-11-18 (full report kept privately, not in this public repo).
 
 ## Meta / Process
 - **Learning**: Four parallel read-only reviews (engineering · SEO/trust · learning value · usage data) covered all 25 dimensions in about 12 minutes. Owner questions about "offering more" are answered by the curriculum-overlap + usage reviews, not by the technical ones.
