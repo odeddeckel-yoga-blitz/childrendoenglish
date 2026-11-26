@@ -41,6 +41,13 @@ const generateId = () => 'player_' + Math.random().toString(36).slice(2, 10) + D
 
 // --- Player Registry ---
 
+// In-memory copy for the visit: when browser storage is blocked (locked-down Chromebooks, some
+// private modes: getItem/setItem throw) a child can still create a player and play this visit.
+// localStorage stays the source of truth whenever it works.
+let memRegistry = null;
+let storageBlocked = false; // set once a storage read/write throws; the memory copy is used only then
+const memStats = {};
+
 /** Load the player registry, auto-migrating from legacy single-player format if needed. */
 // Real learning in a stats blob (vs. just a saved language preference).
 const hasProgress = (s) => !!(s && (s.totalQuizzes > 0 || Object.keys(s.wordProgress || {}).length || (s.badges || []).length));
@@ -74,6 +81,7 @@ export const loadPlayerRegistry = () => {
     const saved = localStorage.getItem(PLAYERS_KEY);
     if (saved) return dropPhantomPlayer(JSON.parse(saved));
   } catch (e) {
+    storageBlocked = true;
     console.warn('Failed to load player registry:', e);
   }
 
@@ -100,13 +108,15 @@ export const loadPlayerRegistry = () => {
     console.warn('Failed to migrate legacy stats:', e);
   }
 
-  return null; // No registry and no legacy data — first-ever use
+  return storageBlocked ? memRegistry : null; // storage blocked: the in-memory registry of this visit; null on first-ever use
 };
 
 export const savePlayerRegistry = (registry) => {
+  memRegistry = registry;
   try {
     localStorage.setItem(PLAYERS_KEY, JSON.stringify(registry));
   } catch (e) {
+    storageBlocked = true;
     console.warn('Failed to save player registry:', e);
   }
 };
@@ -123,9 +133,11 @@ export const addPlayer = (name, avatar, canRead, autoName = false) => {
   registry.players.push(player);
   if (!registry.activePlayerId) registry.activePlayerId = id;
   // Initialize empty stats for new player
+  memStats[id] = getDefaultStats();
   try {
     localStorage.setItem(PLAYER_PREFIX + id, JSON.stringify(getDefaultStats()));
   } catch (e) {
+    storageBlocked = true;
     console.warn('Failed to init player stats:', e);
   }
   savePlayerRegistry(registry);
@@ -179,6 +191,7 @@ export const loadStats = (playerId) => {
     } catch (e) {
       console.warn('Failed to load player stats:', e);
     }
+    if (storageBlocked && memStats[id]) return { ...getDefaultStats(), ...memStats[id] };
   }
   // Fallback: try legacy key (pre-migration or no registry)
   try {
@@ -207,9 +220,11 @@ export const saveStats = (stats, playerId) => {
   }
   const id = playerId || loadPlayerRegistry()?.activePlayerId;
   if (id) {
+    memStats[id] = stats;
     try {
       localStorage.setItem(PLAYER_PREFIX + id, JSON.stringify(stats));
     } catch (e) {
+      storageBlocked = true;
       console.warn('Failed to save player stats:', e);
       if (e?.name === 'QuotaExceededError') emitStorageFull();
     }
