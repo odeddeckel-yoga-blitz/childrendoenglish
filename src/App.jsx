@@ -465,7 +465,11 @@ export default function App() {
         while (!next.batchDone && extraDone.includes(ladderSteps[next.stage]?.key)) {
           next = advanceCycle({ ...stats, cycle: { batch: next.batch, stage: next.stage, v: CYCLE_V } }, canReadNow, activeSet.words);
         }
-        setStats((prev) => ({ ...prev, cycle: { batch: next.batch, stage: next.stage, v: CYCLE_V } }));
+        const cycle = { batch: next.batch, stage: next.stage, v: CYCLE_V };
+        setStats((prev) => ({ ...prev, cycle }));
+        // An arcade step leaves the SPA right after this (full navigation): the save effect would run too late
+        // when the launch came from Continue (an effect, not a tap), so the step was never kept. Save now.
+        if (leaving) saveStats({ ...stats, cycle }, playerRegistry?.activePlayerId);
         if (next.batchDone) {
           sendLearn('cyc_done', activeSet.token);
           setExtraDone([]);
@@ -484,7 +488,7 @@ export default function App() {
     if (done.length >= ladderSteps.length) { sendLearn('cyc_done', activeSet.token); navigate('ladder'); return; }
     if (!leaving) setPendingStart(true);
    
-  }, [activeSet, ladderPos, stats, canReadNow, adhocPos, ladderSteps, extraDone, navigate, setStats]);
+  }, [activeSet, ladderPos, stats, canReadNow, adhocPos, ladderSteps, extraDone, navigate, setStats, playerRegistry?.activePlayerId]);
 
   useEffect(() => {
     if (!pendingStart) return;

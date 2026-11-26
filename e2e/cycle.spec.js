@@ -203,6 +203,29 @@ test('arcade step navigates to a words-scoped game URL', async ({ page }) => {
   // a moment later (live stays on the game, checked 11-02), so no second read of page.url().
 });
 
+// 11-27: Continue on an arcade step (Category Conveyor, Word Zapper) launched the game from an effect and left the
+// SPA before the save effect ran, so the step was never kept: the child came back to the same step, every time.
+for (const [name, cycle, want] of [
+  ['the last step (Word Zapper) finishes the batch', { batch: 0, stage: 4, v: 2 }, (c) => c.batch === 1 && c.stage === 0],
+  ['a middle arcade step moves the position on', { batch: 0, stage: 3, v: 2 }, (c) => c.batch === 1 || c.stage === 4],
+]) {
+  test(`Continue on an arcade step keeps it done after leaving for the game: ${name}`, async ({ page }) => {
+    await page.route('**/api/**', (r) => r.fulfill({ status: 204 }));
+    await page.addInitScript((cy) => {
+      if (localStorage.getItem('childrendoenglish-players')) return;
+      const player = { id: 'p_arc', name: 'Kid', avatar: '🦊', canRead: true, createdAt: new Date().toISOString() };
+      localStorage.setItem('childrendoenglish-players', JSON.stringify({ schemaVersion: 2, activePlayerId: 'p_arc', players: [player] }));
+      localStorage.setItem('childrendoenglish-player-p_arc', JSON.stringify({ hasSeenOnboarding: true, totalQuizzes: 3, badges: [], unlockedLevels: ['beginner'], wordProgress: {}, uiLanguage: 'en', cycle: cy }));
+      localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
+    }, cycle);
+    await page.goto('/');
+    await page.getByText('Continue learning').click();
+    await page.waitForURL(/\/games\/(word-zapper|category-conveyor)\/\?words=.+&from=ladder/, { timeout: 20000 });
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('childrendoenglish-player-p_arc')).cycle);
+    expect(want(saved), JSON.stringify(saved)).toBe(true);
+  });
+}
+
 test('back from a ladder step returns to the ladder, not the My Word List editor', async ({ page }) => {
   await reachMenu(page);
   await openLadder(page);
