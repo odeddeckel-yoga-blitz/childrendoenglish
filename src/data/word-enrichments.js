@@ -745,7 +745,7 @@ export const ENRICHMENTS = {
       "We watched a humpback whale leap completely out of the ocean and crash back down.",
       "The whale communicated with other whales far away using a beautiful, deep song."
     ],
-    "funFact": "The blue whale is the largest animal that has ever lived on Earth — even bigger than any dinosaur! A blue whale's heart is about the size of a small car, and its arteries are so wide that a small child could crawl through them. Blue whales can hear each other's songs from thousands of kilometers away across the ocean.",
+    "funFact": "The blue whale is the largest animal that has ever lived on Earth — even bigger than any dinosaur! It can grow to about 30 meters long, as long as two or three school buses in a row. Blue whales can hear each other's songs from thousands of kilometers away across the ocean.",
     "collocations": [
       "blue whale",
       "whale song",
@@ -1305,7 +1305,7 @@ export const ENRICHMENTS = {
       "He made a big pot of spaghetti with tomato sauce for the whole family.",
       "Spaghetti with meatballs is one of the most popular pasta dishes in the world."
     ],
-    "funFact": "Despite being associated with Italy, spaghetti may have been brought to Europe from China by the explorer Marco Polo in the 13th century — though some historians disagree! In 1957, a British television show famously broadcast a \"documentary\" about the Swiss spaghetti harvest, showing people picking spaghetti from trees as an April Fools' Day joke, and thousands of viewers believed it was real!",
+    "funFact": "Spaghetti is a famous Italian pasta, and there is even a funny spaghetti prank. In 1957, a British television show broadcast a joke \"documentary\" about the Swiss spaghetti harvest, showing people picking spaghetti from trees as an April Fools' Day joke, and thousands of viewers believed it was real!",
     "collocations": [
       "spaghetti sauce",
       "spaghetti bolognese",
@@ -2105,7 +2105,7 @@ export const ENRICHMENTS = {
       "We painted the garden fence white on a sunny afternoon.",
       "The horses galloped up to the wooden fence to say hello."
     ],
-    "funFact": "The longest fence in the world is the \"Dingo Fence\" in Australia, stretching 5,614 kilometers — longer than the Great Wall of China! It was built to protect sheep farms from wild dingoes. Some people are so passionate about fences that there are international fence-building competitions with creative designs.",
+    "funFact": "The \"Dingo Fence\" in Australia is one of the longest fences in the world, stretching 5,614 kilometers. It was built to protect sheep farms from wild dingoes. Some people are so passionate about fences that there are international fence-building competitions with creative designs.",
     "collocations": [
       "garden fence",
       "picket fence",
@@ -2825,7 +2825,7 @@ export const ENRICHMENTS = {
       "The forest floor was covered in soft moss and fallen leaves.",
       "Little Red Riding Hood walked through the forest to grandmother's house."
     ],
-    "funFact": "The Amazon rainforest produces about 20% of the world's oxygen and is home to about 10% of all species on Earth. Forests cover about 30% of our planet's land. The \"Daintree Rainforest\" in Australia is the oldest tropical rainforest in the world at over 180 million years old — dinosaurs walked through it!",
+    "funFact": "The Amazon rainforest is home to about 10% of all species on Earth. Forests cover about 30% of our planet's land. The \"Daintree Rainforest\" in Australia is the oldest tropical rainforest in the world at over 180 million years old — dinosaurs walked through it!",
     "collocations": [
       "rain forest",
       "forest fire",
@@ -5299,7 +5299,7 @@ export const ENRICHMENTS = {
       "Taking deep breaths can help you calm down when you feel angry.",
       "She was angry that the game was called off because of rain."
     ],
-    "funFact": "Your heart beats faster and your face gets red when you are angry because your body is preparing to react. Ancient people needed anger to protect themselves from danger. Counting to ten slowly is one of the oldest tricks for calming anger — it gives your brain time to think clearly.",
+    "funFact": "Counting to ten slowly is one of the oldest tricks for calming down when you feel angry — it gives you time to think clearly. Many people also like to take a few slow breaths, go for a walk, or draw how they feel.",
     "collocations": [
       "feel angry",
       "get angry",
@@ -5319,7 +5319,7 @@ export const ENRICHMENTS = {
       "She was so tired she fell asleep before dinner.",
       "Drinking water and resting can help when you feel tired."
     ],
-    "funFact": "Kids aged 6-12 need 9-12 hours of sleep every night to feel their best. Your brain actually cleans itself while you sleep, flushing out waste products — like taking a bath for your brain! Yawning when you are tired might help cool your brain down, almost like a small fan.",
+    "funFact": "Yawning is catching! Seeing someone else yawn can make you yawn too — and dogs and cats yawn as well. People often yawn when they are tired, and a good stretch is something many animals do when they wake up.",
     "collocations": [
       "feel tired",
       "tired eyes",
@@ -5959,7 +5959,7 @@ export const ENRICHMENTS = {
       "He dried his wet hands on the paper towel.",
       "Always bring a towel to the swimming pool."
     ],
-    "funFact": "The average person uses their bath towel about 65 times before it needs to be washed, according to some hygiene experts. Hotel housekeepers can fold towels into amazing shapes like swans, elephants, and roses — this is called \"towel origami.\" The book \"The Hitchhiker's Guide to the Galaxy\" says a towel is the most useful thing a space traveler can own!",
+    "funFact": "Hotel housekeepers can fold towels into amazing shapes like swans, elephants, and roses — this is called \"towel origami.\" The book \"The Hitchhiker's Guide to the Galaxy\" says a towel is the most useful thing a space traveler can own!",
     "collocations": [
       "beach towel",
       "dry with a towel",
