@@ -20,7 +20,9 @@ const res = () => {
   r.setHeader = (k, v) => { r.headers[k] = v; };
   return r;
 };
-const DEEP = { query: { deep: '1' } };
+const TOKEN = 'test-health-token';
+const DEEP = { query: { deep: '1' }, headers: { 'x-health-token': TOKEN } };
+const DEEP_NO_TOKEN = { query: { deep: '1' } };
 
 describe('api/health', () => {
   let handler;
@@ -29,6 +31,7 @@ describe('api/health', () => {
     vi.restoreAllMocks(); vi.resetModules();
     mode = 'ok'; dbCalls = 0;
     process.env.CDE_DATABASE_URL = 'postgres://x';
+    process.env.HEALTH_TOKEN = TOKEN;
     vi.spyOn(console, 'error').mockImplementation(() => {});
     ({ default: handler } = await import('../health.js'));
   });
@@ -43,6 +46,17 @@ describe('api/health', () => {
       expect(r.body.db).toBeUndefined();
       expect(r.headers['Cache-Control']).toBe('no-store');
     }
+    expect(dbCalls).toBe(0);
+  });
+
+  it('?deep=1 WITHOUT the token, with a wrong token, or with no server token never touches the DB', async () => {
+    for (const req of [DEEP_NO_TOKEN, { query: { deep: '1' }, headers: { 'x-health-token': 'wrong' } }, { query: { deep: '1' }, headers: { 'x-health-token': '' } }]) {
+      const r = res(); await handler(req, r);
+      expect(r.code).toBe(200); expect(r.body.db).toBeUndefined();
+    }
+    delete process.env.HEALTH_TOKEN;
+    const r2 = res(); await handler({ query: { deep: '1' }, headers: { 'x-health-token': 'undefined' } }, r2);
+    expect(r2.code).toBe(200); expect(r2.body.db).toBeUndefined();
     expect(dbCalls).toBe(0);
   });
 
