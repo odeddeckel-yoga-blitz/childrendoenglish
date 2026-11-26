@@ -15,6 +15,12 @@
  * Automation and owner devices are excluded, as everywhere else. */
 (function () {
   'use strict';
+  // one word memory: load /word-mem.js (CDE_WORD + the review link) once per page, no extra tag in the page
+  try {
+    if (!window.CDE_WORDMEM && !document.querySelector('script[src="/word-mem.js"]')) {
+      var wmS = document.createElement('script'); wmS.src = '/word-mem.js'; wmS.async = true; document.head.appendChild(wmS);
+    }
+  } catch (e) { /* no memory on this page — practice still works */ }
 
   function excluded() {
     try {
@@ -188,6 +194,7 @@
     var again = el('button', { type: 'button', class: 'next' }, 'עוד סיבוב');
     again.addEventListener('click', function () { start(mode); });
     box.appendChild(again);
+    if (window.CDE_WORDMEM) window.CDE_WORDMEM.card(box, 'unit', 'he');
     announce('סיימתם: ' + score + ' מתוך ' + order.length);
     again.focus();
   }
@@ -227,6 +234,8 @@
     if (!begun) { begun = true; beacon('quiz_start', 'unit-' + mode); }
     if (ok) score += 1;
     if (it.id) beacon(ok ? 'ans_ok' : 'ans_no', it.id);
+    // one word memory (/word-mem.js): app words only (it.id), kept on this device
+    if (it.id && window.CDE_WORD) window.CDE_WORD(it.id, ok);
   }
 
   function render() {

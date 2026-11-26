@@ -122,6 +122,22 @@ describe('api/land games wave 3 events', () => {
     expect(written).toEqual(expect.arrayContaining(['ld:l1_word', 'ld:l3_over', 'sl:n3_no', 'bi:cat_ok']));
     for (const bad of ['ld:l4_word', 'sl:n5_ok', 'bi:zebra_ok']) expect(written).not.toContain(bad);
   });
+
+  it('records the word-memory review tally (rvw) in its pinned shapes and drops anything else', async () => {
+    vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    const { default: handler } = await import('../land.js');
+    calls.length = 0;
+    const good = ['view_game', 'open_game', 'view_app', 'open_batch', 'view_unit', 'open_read', 'start', 'done'];
+    const bad = ['view_cat', 'open_game_x', 'cat', 'done_app', 'view_word@cat'];
+    const batch = [...good, ...bad].map((i) => ({ e: 'rvw', i }));
+    const r = res(); await handler({ method: 'POST', headers: BROWSER, body: { batch, l: 'he' } }, r);
+    expect(r.code).toBe(204);
+    const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
+    expect(written).toEqual(expect.arrayContaining(good.map((i) => `rvw:${i}`)));
+    for (const b of bad) expect(written).not.toContain(`rvw:${b}`);
+  });
 });
 
 describe('api/land standing-section events (kit 1.59 §5.55)', () => {

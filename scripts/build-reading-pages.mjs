@@ -53,6 +53,14 @@ export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS,
   const alternates = (slug) => Object.entries(READING_LANGS).map(([l, c]) => `  <link rel="alternate" hreflang="${l}" href="${SITE}${c.hub}${slug ? `${slug}/` : ''}" />\n`).join('');
   let written = 0;
 
+  // An app word (or its plain -s plural) carries its id, so a tap-for-meaning feeds the
+  // one on-device word memory (public/reading.js → /word-mem.js).
+  const WORD_ID = new Map(WORDS.map((w) => [w.word.toLowerCase(), w.id]));
+  const idOf = (word) => {
+    const k = word.toLowerCase();
+    return WORD_ID.get(k) || (k.length > 3 && k.endsWith('s') ? WORD_ID.get(k.slice(0, -1)) : null) || null;
+  };
+
   for (const [lang, cfg] of Object.entries(READING_LANGS)) {
     const T = READING_UI[lang];
     const t = (k, vars) => fillUi(T[k], vars);
@@ -74,7 +82,7 @@ export function buildReadingPages({ SITE, distDir, writePage, escapeHtml, WORDS,
     const ui = `data-lang="${lang}" data-t-ok="${escapeHtml(T.right)}" data-t-try="${escapeHtml(T.tryAgain)}" data-t-play="${escapeHtml(T.playAll)}" data-t-stop="${escapeHtml(T.stop)}" data-t-all="${escapeHtml(T.scoreAll)}" data-t-some="${escapeHtml(T.scoreSome)}"`;
 
     const tokensHtml = (s) => glossTokens(s, G).map((x) => (x.gloss
-      ? `<button type="button" class="w" data-g="${escapeHtml(x.gloss)}">${escapeHtml(x.text)}</button>`
+      ? `<button type="button" class="w" data-g="${escapeHtml(x.gloss)}"${idOf(x.text) ? ` data-id="${escapeHtml(idOf(x.text))}"` : ''}>${escapeHtml(x.text)}</button>`
       : escapeHtml(x.text))).join('');
     const sayBtn = (s) => {
       const src = sentenceAudio(s);

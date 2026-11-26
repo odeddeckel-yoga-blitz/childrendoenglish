@@ -10,6 +10,12 @@
   'use strict';
   var root = document.querySelector('[data-reading]');
   if (!root) return;
+  // one word memory: load /word-mem.js (CDE_WORD + the review link) once per page, no extra tag in the page
+  try {
+    if (!window.CDE_WORDMEM && !document.querySelector('script[src="/word-mem.js"]')) {
+      var wmS = document.createElement('script'); wmS.src = '/word-mem.js'; wmS.async = true; document.head.appendChild(wmS);
+    }
+  } catch (e) { /* no memory on this page — practice still works */ }
   var slug = root.getAttribute('data-reading');
   var LANG = root.getAttribute('data-lang') || 'he';
   var RTL = document.documentElement.dir === 'rtl';
@@ -74,6 +80,8 @@
       if (selWord) selWord.classList.remove('sel');
       selWord = w; w.classList.add('sel');
       glossBar.textContent = isolate(w.textContent + ' — ' + w.getAttribute('data-g'));
+      // one word memory (/word-mem.js): a looked-up app word comes back in the review (unless already well known)
+      if (w.getAttribute('data-id') && window.CDE_WORD) window.CDE_WORD(w.getAttribute('data-id'), false, true);
       return;
     }
     if (ev.target.closest('[data-play-all]')) {
@@ -123,5 +131,6 @@
     sc.hidden = false;
     sc.innerHTML = '⁦' + firstTry + '/' + qs.length + '⁩ ' + (firstTry === qs.length ? esc(T('all', 'כבר בניסיון הראשון — כל הכבוד!')) + ' ' + ic('party-popper') : esc(T('some', 'בניסיון הראשון. כל השאלות נפתרו!')) + ' ' + ic('sparkles'));
     beacon('quiz_done', ('read-' + slug).slice(0, 40));
+    if (window.CDE_WORDMEM) window.CDE_WORDMEM.card(sc.parentNode, 'read', 'he');
   }
 })();

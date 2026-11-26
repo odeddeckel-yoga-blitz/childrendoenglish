@@ -278,6 +278,7 @@ function tapBin(cat){
 }
 
 function correct(f, el){
+  /* word memory (public/word-mem.js): first-try result per word */ if(window.CDE_WORD) CDE_WORD(f.w.id, !f.wmMiss);
   const g = geo();
   const react = f.zoneAt ? (performance.now()-f.zoneAt)/1000 : 9;
   const fast = react < 3.0;
@@ -304,6 +305,7 @@ function correct(f, el){
 }
 
 function wrong(f, cat, el){
+  f.wmMiss = true;
   S.streak = 0; S.combo = 0; S.fastStreak = 0;
   S.speedMul = Math.max(0.6, S.speedMul*0.93);               // rubber-band down
   /* the bin bounces it out: hop + buzz, item continues on the belt */
@@ -324,6 +326,7 @@ function article(n){ return /^[AEIOU]/i.test(n) ? 'an' : 'a'; }
 
 /* item slipped off the end unsorted → shield loss */
 function slipped(f){
+  if(window.CDE_WORD) CDE_WORD(f.w.id, false);
   S.items = S.items.filter(x => x !== f);
   S.shields--; S.streak = 0; S.combo = 0; S.fastStreak = 0;
   S.speedMul = Math.max(0.6, S.speedMul*0.9);

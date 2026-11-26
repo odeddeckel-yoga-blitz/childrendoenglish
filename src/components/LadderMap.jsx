@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, ChevronDown, Check, Pencil } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Check, Pencil, Plus } from 'lucide-react';
 import { t } from '../utils/i18n';
 import { PHASES, LADDER, stepsFor } from '../utils/learningCycle';
 
@@ -7,12 +7,14 @@ import { PHASES, LADDER, stepsFor } from '../utils/learningCycle';
  * The practice-ladder step map: phase-grouped step chips with free navigation.
  * done ✓ / current (pulse) / upcoming — every available step is tappable (the
  * owner's "skip to any game" requirement). Pre-reader-skipped steps render
- * greyed; writing steps carry the explainer's "skippable" promise.
+ * greyed. Below the 5 steps, an optional bonus row (spelling, sentence) that never
+ * counts toward finishing the batch (11-18 ladder cut).
  */
 export default function LadderMap({
   lang = 'en', canRead = true, setWords, setLabel, currentStepKey, doneKeys = [],
-  onStartStep, onPickSet, onBack,
+  bonusSteps = [], bonusDoneKeys = [], onStartStep, onPickSet, onBack,
 }) {
+  const bonusDone = new Set(bonusDoneKeys);
   const [explain, setExplain] = useState(false);
   const available = stepsFor(canRead, setWords);
   const availableKeys = new Set(available.map((s) => s.key));
@@ -30,7 +32,7 @@ export default function LadderMap({
         </div>
       </div>
 
-      {/* Explainer — "11 steps build complete learning; writing is skippable" */}
+      {/* Explainer — "5 short steps finish a batch; spelling is an optional bonus" */}
       <div className="glass rounded-2xl">
         <button onClick={() => setExplain((e) => !e)}
           className="w-full px-4 py-3 flex items-center justify-between text-sm font-bold text-slate-700 dark:text-slate-200"
@@ -88,6 +90,35 @@ export default function LadderMap({
           </div>
         );
       })}
+
+      {/* Optional bonus row: never part of the batch's position */}
+      {bonusSteps.length > 0 && (
+        <div data-testid="ladder-bonus">
+          <p className="text-xs font-bold uppercase tracking-wide text-slate-400 mb-1">{t('phaseBonus', lang)}</p>
+          <p className="text-xs text-slate-500 mb-2">{t('ladderBonusHint', lang)}</p>
+          <div className="space-y-2">
+            {bonusSteps.map((step) => {
+              const isDone = bonusDone.has(step.key);
+              return (
+                <button
+                  key={step.key}
+                  onClick={() => onStartStep(step.key)}
+                  className={`w-full rounded-xl px-4 py-3 flex items-center gap-3 text-start transition-all border border-dashed border-slate-300 dark:border-slate-600
+                    ${isDone ? 'text-slate-500' : 'hover:shadow-md active:scale-[0.99]'}`}
+                >
+                  <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0
+                    ${isDone ? 'bg-emerald-600 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'}`}
+                    aria-hidden="true">
+                    {isDone ? <Check className="w-4 h-4" aria-hidden="true" /> : <Plus className="w-4 h-4" aria-hidden="true" />}
+                  </span>
+                  <span className="flex-1 font-bold text-sm text-slate-700 dark:text-slate-200">{t(step.labelKey, lang)}</span>
+                  {step.writing && !isDone && <Pencil className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       <button onClick={onPickSet}
         className="w-full py-3 rounded-xl border border-dashed border-slate-300 dark:border-slate-600

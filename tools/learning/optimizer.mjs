@@ -263,8 +263,9 @@ if (cyc.length > 0) {
   const starts = cyc.filter(r => r.ev === 'cyc_start').reduce((a, r) => a + r.n, 0);
   const dones = cyc.filter(r => r.ev === 'cyc_done').reduce((a, r) => a + r.n, 0);
   console.log(`\n— learning cycle: ${starts} batch starts → ${dones} batch completions (${starts ? Math.round(100 * dones / starts) : 0}%)`);
-  // Items are <batchToken>_<stepKey> (full-ladder, 2026-10-07; legacy _s<n> kept)
-  const STEP_ORDER = ['fc', 'aud', 'wq', 'iq', 'conv', 'lf1', 'lf2', 'lf3', 'forge', 'sent', 'zap', 's0', 's1', 's2'];
+  // Items are <batchToken>_<stepKey> (full-ladder 2026-10-07; legacy _s<n> kept). Since the 11-18 cut the ladder is
+  // fc → aud → wq → conv → zap; lf1/forge/sent are an optional bonus row (iq/lf2/lf3 only in older days).
+  const STEP_ORDER = ['fc', 'aud', 'wq', 'iq', 'conv', 'zap', 'lf1', 'lf2', 'lf3', 'forge', 'sent', 's0', 's1', 's2'];
   const byStep = {};
   for (const r of cyc.filter(x => x.ev === 'cyc_stage')) {
     const key = r.item.split('_').slice(1).join('_') || r.item;
@@ -282,6 +283,16 @@ if (cyc.length > 0) {
   for (const r of cl) (byLang[r.lang] ||= { start: 0, fc: 0 })[r.ev === 'cyc_start' ? 'start' : 'fc'] += r.n;
   console.log('  by language, starts → flashcards done: ' + Object.entries(byLang)
     .map(([l, v]) => `${l} ${v.start}→${v.fc}`).join('  '));
+}
+// One word memory (11-18): the "words to review today" card per surface (view → open) and the review it opens.
+{
+  const rv = rows.filter((r) => r.ev === 'rvw');
+  if (rv.length) {
+    const n = (i) => rv.filter((r) => r.item === i).reduce((a, r) => a + r.n, 0);
+    const surf = ['app', 'batch', 'game', 'unit', 'read', 'word'].filter((s) => n('view_' + s) || n('open_' + s));
+    console.log('\n— review card: ' + surf.map((s) => `${s} ${n('view_' + s)}→${n('open_' + s)}`).join('  ')
+      + `  · reviews started ${n('start')} → done ${n('done')}`);
+  }
 }
 // Audio lead-in fix (2026-10-28): listen-probe wrong-rate on the padded words, before vs after.
 // Baseline as this section printed it on 10-28 (28d): padded 21% of 1548 (en-UI 16%) vs other 18% (en-UI 10%);

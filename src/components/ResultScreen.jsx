@@ -6,6 +6,7 @@ import { LIGHTNING_SECS } from '../utils/arcade';
 import { t, isRTL } from '../utils/i18n';
 import { ARCADE } from '../data/arcadeGames';
 import ArcadeIcon from './ArcadeIcon';
+import ReviewTodayCard from './ReviewTodayCard';
 
 // PASS_PCT: the ladder's bar to move on (7 of 10), the same bar as level unlocks.
 export const PASS_PCT = 70;
@@ -13,7 +14,7 @@ export const PASS_PCT = 70;
 // One primary action, picked by the score (persona standard P1): under the bar →
 // the same words again; at or over it → the next ladder step (or a new quiz).
 // Everything else sits behind one "More choices" disclosure.
-export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onRetrySame, onMenu, onLightning }) {
+export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, results, lang = 'en', level: _level, mode: _mode, canRead = true, onPlayAgain, onRetrySame, onMenu, onLightning, reviewCount = 0, onReview }) {
   const { score, total, answers = [], arcade, arcadeNewBest, quit } = results;
   const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
   const passed = !quit && percentage >= PASS_PCT;
@@ -155,6 +156,9 @@ export default function ResultScreen({ namePrompt, cycleNext, cycleRepeats, resu
           </>
         );
       })()}
+
+      {/* One word memory: the words due or just missed, as a short review (not on ladder steps) */}
+      {!quit && <ReviewTodayCard count={reviewCount} lang={lang} surface="app" onOpen={onReview} />}
 
       <details className="glass rounded-xl group">
         <summary className="cursor-pointer list-none py-2.5 px-3 text-center text-sm font-bold text-slate-600 dark:text-slate-300">

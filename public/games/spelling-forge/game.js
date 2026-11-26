@@ -329,6 +329,7 @@ function forge(){
 }
 function forgeSuccess(){
   S.locked=true; S.forged++;
+  /* word memory (public/word-mem.js): first-try result per word */ if(window.CDE_WORD&&S.word) CDE_WORD(S.word.id,S.wrongForges===0&&!S.usedHint);
   if(S.wrongForges===0&&!S.usedHint) S.perfect++;
   const len=S.letters.length;
   let pts=Math.round((10+2*len)*(1+0.2*S.streak));

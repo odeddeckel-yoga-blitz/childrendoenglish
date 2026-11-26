@@ -1,16 +1,20 @@
 /** @module learningCycle — the guided learn→practice→advance loop.
  *
- * v2 (plans/learning-cycle: full practice ladder, 2026-10-07): each ~10-word SET
- * climbs an 11-step ladder — meet → understand → spell → use → master — built
- * from existing quiz modes, two new in-app games (Letter Fix, Sentence Gap) and
- * the three arcade games scoped to the set. Sets come from four sources: the
- * cycle batch (default, persisted in stats.cycle), chosen letter(s), a surprise
- * draw, or the least-practiced words. SOFT gate throughout: finishing a step
- * advances; true mastery accrues across days via SRS resurfacing.
+ * v3 (owner 11-12, built 11-18): each ~10-word SET climbs a 5-step ladder made
+ * only of the steps kids finish — meet → understand → master — and the spelling
+ * and sentence steps are an optional BONUS row that never blocks the batch.
+ * Why: 1 of 57 batch starts finished the 11-step v2 ladder, and the funnel fell
+ * off at the first spelling step (conv 13 → lf1 4, 11-14 read), while
+ * listen-and-tap (84 % done), Category Conveyor (best completion) and Word Zapper
+ * (most played) held kids. Sets come from four sources: the cycle batch
+ * (default, persisted in stats.cycle), chosen letter(s), a surprise draw, or the
+ * least-practiced words. SOFT gate throughout: finishing a step advances; true
+ * mastery accrues across days via SRS resurfacing.
  *
- * Cycle position lives in per-player stats as stats.cycle = { batch, stage },
- * where stage is an index into stepsFor(...). Older players lack the key —
- * always read through cycleState().
+ * Cycle position lives in per-player stats as stats.cycle = { batch, stage, v },
+ * where stage is an index into stepsFor(...). v = CYCLE_V marks the 5-step
+ * ladder; an older record (no v) indexes the 11-step LADDER_V1 and is mapped
+ * forward by cycleState()/migrateCycle() — always read through cycleState().
  */
 import { WORDS } from '../data/words';
 
@@ -18,40 +22,79 @@ export const BATCH_SIZE = 10;
 const LEVEL_RANK = { beginner: 0, intermediate: 1, advanced: 2 };
 
 /** The canonical ladder. kind: 'flashcards' | 'quiz' | 'letterfix' | 'sentence'
- *  | 'arcade'. needsReading steps are auto-skipped for pre-readers; writing
- *  steps carry a user-facing skip affordance (explainer says writing is optional). */
+ *  | 'arcade'. needsReading steps are auto-skipped for pre-readers. The order is
+ *  a SUBSEQUENCE of LADDER_V1, so an old position maps forward without losing a
+ *  finished step (migrateCycle). */
 export const LADDER = [
   { key: 'fc',    kind: 'flashcards', labelKey: 'stepFlashcards' },
   { key: 'aud',   kind: 'quiz', mode: 'audio', preReaderMode: 'listen', labelKey: 'stepAudio' },
   { key: 'wq',    kind: 'quiz', mode: 'word',  needsReading: true, labelKey: 'stepWordQuiz' },
-  { key: 'iq',    kind: 'quiz', mode: 'image', needsReading: true, labelKey: 'stepImageQuiz' },
   { key: 'conv',  kind: 'arcade', game: 'category-conveyor', needsCategories: 2, labelKey: 'stepConveyor' },
-  { key: 'lf1',   kind: 'letterfix', mode: 'easy',   needsReading: true, writing: true, labelKey: 'stepLetterFix1' },
-  { key: 'lf2',   kind: 'letterfix', mode: 'double', needsReading: true, writing: true, labelKey: 'stepLetterFix2' },
-  { key: 'lf3',   kind: 'letterfix', mode: 'hard',   needsReading: true, writing: true, labelKey: 'stepLetterFix3' },
-  { key: 'forge', kind: 'arcade', game: 'spelling-forge', needsReading: true, writing: true, labelKey: 'stepForge' },
-  { key: 'sent',  kind: 'sentence', needsReading: true, labelKey: 'stepSentence' },
   { key: 'zap',   kind: 'arcade', game: 'word-zapper', labelKey: 'stepZapper' },
 ];
 
-/** Phases for the step map UI (keys must cover LADDER exactly). */
+/** Optional extras: playable from the step map at any time, never part of the
+ *  batch position (finishing one is tallied as cyc_stage; skipping costs nothing). */
+export const BONUS = [
+  { key: 'lf1',   kind: 'letterfix', mode: 'easy', needsReading: true, writing: true, bonus: true, labelKey: 'stepLetterFix1' },
+  { key: 'forge', kind: 'arcade', game: 'spelling-forge', needsReading: true, writing: true, bonus: true, labelKey: 'stepForge' },
+  { key: 'sent',  kind: 'sentence', needsReading: true, bonus: true, labelKey: 'stepSentence' },
+];
+
+/** Every launchable step (core + bonus), for look-ups by key. */
+export const ALL_STEPS = [...LADDER, ...BONUS];
+
+/** v2's 11-step ladder (2026-10-07 → 11-18), kept ONLY to migrate stored positions. */
+export const LADDER_V1 = [
+  { key: 'fc' }, { key: 'aud' }, { key: 'wq', needsReading: true }, { key: 'iq', needsReading: true },
+  { key: 'conv', needsCategories: 2 }, { key: 'lf1', needsReading: true }, { key: 'lf2', needsReading: true },
+  { key: 'lf3', needsReading: true }, { key: 'forge', needsReading: true }, { key: 'sent', needsReading: true },
+  { key: 'zap' },
+];
+export const CYCLE_V = 2;
+
+/** Phases for the step map UI (keys must cover LADDER exactly; BONUS renders apart). */
 export const PHASES = [
   { labelKey: 'phaseMeet', steps: ['fc'] },
-  { labelKey: 'phaseUnderstand', steps: ['aud', 'wq', 'iq', 'conv'] },
-  { labelKey: 'phaseSpell', steps: ['lf1', 'lf2', 'lf3', 'forge'] },
-  { labelKey: 'phaseUse', steps: ['sent'] },
+  { labelKey: 'phaseUnderstand', steps: ['aud', 'wq', 'conv'] },
   { labelKey: 'phaseMaster', steps: ['zap'] },
 ];
 
-/** The ladder for a given learner + word set: pre-readers lose needsReading
- *  steps; the conveyor needs the set to span ≥2 categories or its bins starve. */
-export function stepsFor(canRead, setWords = null) {
+function filterSteps(list, canRead, setWords) {
   const cats = new Set((setWords || []).map((w) => w.category));
-  return LADDER.filter((s) => {
+  return list.filter((s) => {
     if (s.needsReading && !canRead) return false;
     if (s.needsCategories && setWords && cats.size < s.needsCategories) return false;
     return true;
   });
+}
+
+/** The ladder for a given learner + word set: pre-readers lose needsReading
+ *  steps; the conveyor needs the set to span ≥2 categories or its bins starve. */
+export function stepsFor(canRead, setWords = null) {
+  return filterSteps(LADDER, canRead, setWords);
+}
+
+/** The bonus row this learner + set can play (pre-readers get none). */
+export function bonusFor(canRead, setWords = null) {
+  return filterSteps(BONUS, canRead, setWords);
+}
+
+/** Map a stored cycle position onto the 5-step ladder. A v1 (11-step) stage
+ *  counts every v1 step before it as done; the new stage is the first new step
+ *  not done. LADDER is a subsequence of LADDER_V1 and both end on zap, so nothing
+ *  a child finished is lost and nobody is sent back before a step they did. The
+ *  batch (and with it every word already practiced) is kept as is. */
+export function migrateCycle(cycle, canRead = true, setWords = null) {
+  const batch = cycle?.batch ?? 0;
+  const stage = cycle?.stage ?? 0;
+  if (cycle?.v === CYCLE_V) return { batch, stage, v: CYCLE_V };
+  const oldSteps = filterSteps(LADDER_V1, canRead, setWords);
+  const upTo = Math.max(0, Math.min(stage, oldSteps.length - 1));
+  const done = new Set(oldSteps.slice(0, upTo).map((s) => s.key));
+  const steps = stepsFor(canRead, setWords);
+  const idx = steps.findIndex((s) => !done.has(s.key));
+  return { batch, stage: idx < 0 ? steps.length - 1 : idx, v: CYCLE_V };
 }
 
 /** Deterministic full-catalog sequence (same inputs → same order, always). */
@@ -168,21 +211,28 @@ export function repeatSet(currentWords, source, opts = {}) {
   return buildSet('surprise', { ...opts, seed, size: currentWords.length }).words;
 }
 
-/** Safe read of the per-player cycle position (older stats lack the key). */
-export function cycleState(stats) {
+/** Safe read of the per-player cycle position. Older stats lack the key; a v1
+ *  record (11-step ladder, no v) is mapped onto the 5-step ladder on the fly —
+ *  pass the learner's canRead and the set's words for an exact mapping. */
+export function cycleState(stats, canRead = true, setWords = null) {
   const c = stats?.cycle;
-  return { batch: c?.batch ?? 0, stage: c?.stage ?? 0 };
+  if (!c) return { batch: 0, stage: 0 };
+  if (c.v === CYCLE_V) return { batch: c.batch ?? 0, stage: c.stage ?? 0 };
+  const m = migrateCycle(c, canRead, setWords || batchWords(c.batch ?? 0));
+  return { batch: m.batch, stage: m.stage };
 }
 
-/** Advance after a COMPLETED (not quit/skipped-backward) ladder step. */
+/** Advance after a COMPLETED (not quit/skipped-backward) ladder step. The result
+ *  carries v, so writing { batch, stage, v } back as stats.cycle keeps it migrated. */
 export function advanceCycle(stats, canRead, setWords = null) {
-  const { batch, stage } = cycleState(stats);
-  const ladder = stepsFor(canRead, setWords || batchWords(batch));
+  const words = setWords || batchWords(stats?.cycle?.batch ?? 0);
+  const { batch, stage } = cycleState(stats, canRead, words);
+  const ladder = stepsFor(canRead, words);
   if (stage + 1 < ladder.length) {
-    return { batch, stage: stage + 1, batchDone: false };
+    return { batch, stage: stage + 1, v: CYCLE_V, batchDone: false };
   }
   const last = batchCount() - 1;
-  return { batch: Math.min(batch + 1, last + 1), stage: 0, batchDone: true };
+  return { batch: Math.min(batch + 1, last + 1), stage: 0, v: CYCLE_V, batchDone: true };
 }
 
 /** Back-compat alias used by pre-ladder call sites/tests. */

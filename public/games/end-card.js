@@ -6,6 +6,14 @@
    child with a player, else create-player in the page language) replaces the old
    domain-name link. Game names stay English everywhere (one name per game). */
 (function(){
+  // One word memory (owner OK 11-18): /word-mem.js gives the games CDE_WORD (each game posts its first-try result per
+  // word) and the "words to review today (N)" link below. Loaded from here so no game page needs another tag; it is
+  // in place long before a first answer (same pattern as land-beacon.js → game-clicks.js).
+  try{
+    if(!window.CDE_WORDMEM&&!document.querySelector('script[src="/word-mem.js"]')){
+      var wm=document.createElement('script'); wm.src='/word-mem.js'; wm.async=true; document.head.appendChild(wm);
+    }
+  }catch(e){}
   // Two loops, each game's next is the one after it in its own loop. Wave 2 (live 11-08) has its own loop until the
   // wave1-judge read (11-28): that read and ladder-return (11-14) measure the older games' next-game flow, so no older
   // game may lead into a new one yet. After 11-28, merge the loops. Wave 3 (11-12) is a third loop for the same reason:
@@ -83,6 +91,8 @@
     }
     if(o.good){ primary(next); wrap.appendChild(next); wrap.appendChild(again); secondary(again); }
     else { primary(again); wrap.appendChild(again); wrap.appendChild(next); secondary(next); }
+    // words due or just missed (this run's misses included) → the app's short review; nothing when there are none
+    try{ if(window.CDE_WORDMEM) window.CDE_WORDMEM.card(wrap,'game',lang); }catch(e){}
     wrap.appendChild(home);
   };
   // The top-left pill: "My menu" with a house icon back into the app for a child with a player

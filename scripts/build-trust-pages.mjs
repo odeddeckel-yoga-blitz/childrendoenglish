@@ -259,8 +259,8 @@ The full word list with definitions is at ${u('/llms-full.txt')}.
 
 - [Games](${u('/games/')}): ${games} free arcade vocabulary games, no sign-up.
 - [Hebrew games hub](${u('/he/english-games/')}): משחקים ללימוד אנגלית לילדים, by age and by topic.
-- [Free practice app](${u('/')}): every group of 10 words climbs an 11-step practice ladder (flashcards, listening
-  and reading quizzes, spelling, a sentence step and arcade games) with spaced repetition.
+- [Free practice app](${u('/')}): every group of 10 words climbs a short 5-step practice ladder (flashcards, listening
+  and reading quizzes and two arcade games, with optional spelling and sentence bonus steps) with spaced repetition.
 - [Parent guides](${u('/guides/')}): practical articles on teaching English vocabulary to children.
 
 ## About

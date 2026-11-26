@@ -63,7 +63,7 @@ export const FACTS_ES = {
   glossAll: 'Todas las palabras tienen traducción al hebreo y al español.',
   glossSome: 'Todas las palabras tienen traducción al hebreo, y {es} tienen traducción al español.',
   audio: 'El audio de todas las palabras usa una sola voz generada por computadora (texto a voz Piper), la misma en todos los dispositivos.',
-  ladder: 'Cada grupo de 10 palabras sube una escalera de práctica de 11 pasos: tarjetas, quizzes de escuchar y de leer, ortografía, un paso con frases y juegos arcade.',
+  ladder: 'Cada grupo de 10 palabras sube una escalera de práctica corta de 5 pasos: tarjetas, quizzes de escuchar y de leer y dos juegos arcade, con pasos extra opcionales de ortografía y oraciones.',
   games: 'Hay {games} juegos arcade gratis y una Class Battle en vivo para el aula.',
   band1: '{band1} de las palabras están asignadas a los niveles de vocabulario Band I de Israel, y {units} unidades de libros de texto tienen su propia página de palabras.',
   free: 'Es gratis, no tiene anuncios, no necesita cuenta ni registro y guarda el progreso en el dispositivo.',

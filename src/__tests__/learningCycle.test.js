@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import {
   cycleSequence, batchWords, batchLabel, batchCount, cycleState,
   advanceCycle, stepsFor, LADDER, PHASES, buildSet, repeatSet,
-  letterFixPlan, BATCH_SIZE,
+  letterFixPlan, BATCH_SIZE, BONUS, LADDER_V1, CYCLE_V, bonusFor, migrateCycle, masteredCount,
 } from '../utils/learningCycle';
 import { WORDS } from '../data/words';
 
@@ -41,19 +41,31 @@ describe('learningCycle sequence/batches', () => {
   });
 });
 
-describe('the 11-step ladder', () => {
-  it('has 11 canonical steps grouped into 5 phases exactly', () => {
-    expect(LADDER.length).toBe(11);
+describe('the 5-step ladder (11-18 cut from 11 steps)', () => {
+  it('has 5 canonical steps grouped into phases exactly, spelling only as bonus', () => {
+    expect(LADDER.map(s => s.key)).toEqual(['fc', 'aud', 'wq', 'conv', 'zap']);
     const phaseKeys = PHASES.flatMap(p => p.steps);
     expect(phaseKeys).toEqual(LADDER.map(s => s.key));
+    expect(BONUS.map(s => s.key)).toEqual(['lf1', 'forge', 'sent']);
+    expect(BONUS.every(s => s.bonus)).toBe(true);
+    expect(LADDER.some(s => s.writing)).toBe(false); // no spelling step blocks a batch
   });
 
-  it('pre-readers lose the reading steps', () => {
+  it('is a subsequence of the v1 ladder (so old positions map forward losslessly)', () => {
+    const v1 = LADDER_V1.map(s => s.key);
+    let at = -1;
+    for (const s of LADDER) { const i = v1.indexOf(s.key); expect(i).toBeGreaterThan(at); at = i; }
+    expect(v1[v1.length - 1]).toBe(LADDER[LADDER.length - 1].key);
+  });
+
+  it('pre-readers lose the reading steps and get no bonus row', () => {
     const set = batchWords(0);
     const reader = stepsFor(true, set).map(s => s.key);
     const pre = stepsFor(false, set).map(s => s.key);
     expect(reader).toContain('wq');
-    expect(reader).toContain('forge');
+    expect(reader).not.toContain('forge');
+    expect(bonusFor(true, set).map(s => s.key)).toContain('forge');
+    expect(bonusFor(false, set)).toEqual([]);
     expect(pre).not.toContain('wq');
     expect(pre).not.toContain('lf1');
     expect(pre).toContain('fc');
@@ -72,11 +84,89 @@ describe('the 11-step ladder', () => {
   it('advanceCycle walks the full ladder then rolls the batch', () => {
     const set = batchWords(0);
     const ladder = stepsFor(true, set);
-    let next = advanceCycle({ cycle: { batch: 0, stage: 0 } }, true, set);
-    expect(next).toEqual({ batch: 0, stage: 1, batchDone: false });
-    next = advanceCycle({ cycle: { batch: 0, stage: ladder.length - 1 } }, true, set);
+    let next = advanceCycle({ cycle: { batch: 0, stage: 0, v: CYCLE_V } }, true, set);
+    expect(next).toEqual({ batch: 0, stage: 1, v: CYCLE_V, batchDone: false });
+    next = advanceCycle({ cycle: { batch: 0, stage: ladder.length - 1, v: CYCLE_V } }, true, set);
     expect(next.batchDone).toBe(true);
     expect(next.batch).toBe(1);
+    expect(next.v).toBe(CYCLE_V);
+  });
+
+  it('a batch is 5 completed steps for a reader (4 for a pre-reader)', () => {
+    const set = batchWords(0);
+    for (const [canRead, n] of [[true, 5], [false, 4]]) {
+      let stats = { cycle: { batch: 0, stage: 0, v: CYCLE_V } };
+      let steps = 0, r;
+      do { r = advanceCycle(stats, canRead, set); stats = { cycle: { batch: r.batch, stage: r.stage, v: r.v } }; steps++; } while (!r.batchDone);
+      expect(steps).toBe(n);
+    }
+  });
+});
+
+describe('migrating an 11-step position (stats.cycle without v)', () => {
+  const set = batchWords(0); // spans ≥2 categories → conveyor is in both ladders
+  const v1Reader = ['fc', 'aud', 'wq', 'iq', 'conv', 'lf1', 'lf2', 'lf3', 'forge', 'sent', 'zap'];
+  const expectNew = { fc: 'fc', aud: 'aud', wq: 'wq', iq: 'conv', conv: 'conv', lf1: 'zap', lf2: 'zap', lf3: 'zap', forge: 'zap', sent: 'zap', zap: 'zap' };
+
+  it('every old reader position lands on the first new step not yet done', () => {
+    expect(new Set(set.map(w => w.category)).size).toBeGreaterThanOrEqual(2);
+    v1Reader.forEach((key, stage) => {
+      const m = migrateCycle({ batch: 3, stage }, true, set);
+      expect(m.v).toBe(CYCLE_V);
+      expect(m.batch).toBe(3); // the batch (and so every practiced word) is kept
+      expect(stepsFor(true, set)[m.stage].key).toBe(expectNew[key]);
+    });
+  });
+
+  it('never sends a child back before a step they finished', () => {
+    const newKeys = stepsFor(true, set).map(s => s.key);
+    v1Reader.forEach((_, stage) => {
+      const doneOld = new Set(v1Reader.slice(0, stage));
+      const m = migrateCycle({ batch: 0, stage }, true, set);
+      newKeys.slice(0, m.stage).forEach(k => expect(doneOld.has(k)).toBe(true)); // done before stays done
+      if (newKeys[m.stage] !== 'zap') expect(doneOld.has(newKeys[m.stage])).toBe(false); // current = not done yet
+    });
+  });
+
+  it('pre-readers: the 4 no-reading steps map one to one', () => {
+    const pre = ['fc', 'aud', 'conv', 'zap'];
+    pre.forEach((key, stage) => {
+      const m = migrateCycle({ batch: 1, stage }, false, set);
+      expect(stepsFor(false, set)[m.stage].key).toBe(key);
+    });
+  });
+
+  it('a single-category set (no conveyor) maps too', () => {
+    const oneCat = WORDS.filter(w => w.category === 'animals').slice(0, 10);
+    const m = migrateCycle({ batch: 0, stage: 4 }, true, oneCat); // v1 for this set: fc aud wq iq lf1 → at lf1
+    expect(stepsFor(true, oneCat)[m.stage].key).toBe('zap');
+  });
+
+  it('a stage past the end clamps; a v2 record is left alone; no record = start', () => {
+    expect(stepsFor(true, set)[migrateCycle({ batch: 0, stage: 99 }, true, set).stage].key).toBe('zap');
+    expect(migrateCycle({ batch: 2, stage: 3, v: CYCLE_V }, true, set)).toEqual({ batch: 2, stage: 3, v: CYCLE_V });
+    expect(cycleState({ cycle: { batch: 0, stage: 4 } }, true, set)).toEqual({ batch: 0, stage: 3 }); // old conv → new conv
+    expect(cycleState({ cycle: { batch: 0, stage: 7 } }, true, set)).toEqual({ batch: 0, stage: 4 }); // old lf3 → zap
+  });
+
+  it('advancing from an unmigrated record migrates first', () => {
+    // old stage 5 = lf1 (fc..conv done) → new zap; finishing zap completes the batch
+    const r = advanceCycle({ cycle: { batch: 0, stage: 5 } }, true, set);
+    expect(r).toEqual({ batch: 1, stage: 0, v: CYCLE_V, batchDone: true });
+  });
+
+  it('keeps mastered words, badges and every other stat (only cycle changes)', () => {
+    const stats = {
+      cycle: { batch: 4, stage: 6 },
+      wordProgress: { cat: { lastSeen: 1, interval: 30, correct: 9, wrong: 1 } },
+      badges: ['first_quiz', 'streak_3'], spelling: { cat: { ok: 4, no: 0 } }, totalQuizzes: 12,
+    };
+    const migrated = { ...stats, cycle: migrateCycle(stats.cycle, true, batchWords(4)) };
+    expect(migrated.wordProgress).toBe(stats.wordProgress);
+    expect(migrated.badges).toBe(stats.badges);
+    expect(migrated.spelling).toBe(stats.spelling);
+    expect(migrated.cycle.batch).toBe(4);
+    expect(masteredCount(migrated)).toBe(1);
   });
 });
 

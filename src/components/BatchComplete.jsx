@@ -1,6 +1,7 @@
 import { Trophy, PartyPopper, ArrowLeft, ArrowRight } from 'lucide-react';
 import { t, isRTL } from '../utils/i18n';
 import ArcadeIcon from './ArcadeIcon';
+import ReviewTodayCard from './ReviewTodayCard';
 import { batchCount, masteredCount, BATCH_SIZE } from '../utils/learningCycle';
 
 /**
@@ -15,7 +16,7 @@ const ARCADE = [
   { id: 'category-conveyor', name: 'Category Conveyor' },
 ];
 
-export default function BatchComplete({ stats, lang = 'en', batchJustDone, onNextBatch, onBackToMenu }) {
+export default function BatchComplete({ stats, lang = 'en', batchJustDone, onNextBatch, onBackToMenu, reviewCount = 0, onReview }) {
   const total = batchCount();
   const allDone = batchJustDone >= total;
   const game = ARCADE[batchJustDone % ARCADE.length];
@@ -55,6 +56,8 @@ export default function BatchComplete({ stats, lang = 'en', batchJustDone, onNex
           {isRTL(lang) ? <ArrowLeft className="w-4 h-4" aria-hidden="true" /> : <ArrowRight className="w-4 h-4" aria-hidden="true" />}
         </button>
       )}
+
+      <ReviewTodayCard count={reviewCount} lang={lang} surface="batch" onOpen={onReview} />
 
       <button onClick={onBackToMenu} className="w-full py-2 text-sm text-slate-400 hover:text-slate-600">
         {t('backToMenuBtn', lang)}

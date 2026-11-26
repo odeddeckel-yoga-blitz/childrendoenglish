@@ -2,8 +2,8 @@ import { test, expect } from '@playwright/test';
 
 // Practice ladder (plans/learning-cycle + full-ladder expansion 2026-10-07):
 // the menu leads with one Continue card; it starts the current step, and the
-// step strip opens the 11-step LadderMap with free navigation; steps dispatch to flashcards / quizzes / Letter Fix /
-// Sentence Gap / scoped arcade URLs.
+// step strip opens the LadderMap (5 steps since 11-18, plus an optional bonus row) with free navigation; steps
+// dispatch to flashcards / quizzes / Letter Fix / Sentence Gap / scoped arcade URLs.
 
 async function reachMenu(page, { canRead = true, fresh = false } = {}) {
   await page.addInitScript(() => {
@@ -108,15 +108,44 @@ test('finishing Flashcards goes straight into the next step, not back to the map
   await expect(page.getByText('Your practice ladder')).toHaveCount(0);
 });
 
-test('the strip opens the 11-step ladder map', async ({ page }) => {
+test('the strip opens the 5-step ladder map with spelling as an optional bonus row', async ({ page }) => {
   await reachMenu(page);
   await openLadder(page);
-  for (const label of ['Flashcards', 'Listen & Pick', 'Word Quiz', 'Image Quiz',
-    'Missing Letter', 'Tricky Letter', 'Spelling Forge', 'Use the Word', 'Word Zapper']) {
+  for (const label of ['Flashcards', 'Listen & Pick', 'Word Quiz', 'Category Conveyor', 'Word Zapper']) {
     await expect(page.getByText(label, { exact: true })).toBeVisible();
+  }
+  const bonus = page.getByTestId('ladder-bonus');
+  await expect(bonus).toContainText('Bonus (optional)');
+  for (const label of ['Missing Letter', 'Spelling Forge', 'Use the Word']) {
+    await expect(bonus.getByText(label, { exact: true })).toBeVisible();
+  }
+  for (const gone of ['Image Quiz', 'Two Missing Letters', 'Tricky Letter']) {
+    await expect(page.getByText(gone, { exact: true })).toHaveCount(0);
   }
   await page.getByText('Flashcards', { exact: true }).click();
   await expect(page.getByText('Tap to flip')).toBeVisible({ timeout: 8000 });
+});
+
+// 11-18 ladder cut: a child saved mid-way up the OLD 11-step ladder keeps every finished step.
+test('an 11-step position (old lf3, stage 7) moves on to the last of the 5 steps, words and badges kept', async ({ page }) => {
+  await page.addInitScript(() => {
+    if (sessionStorage.getItem('seeded')) return;
+    sessionStorage.setItem('seeded', '1');
+    localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
+    const player = { id: 'player_old11', name: 'Old', avatar: '🦊', canRead: true, createdAt: new Date().toISOString() };
+    localStorage.setItem('childrendoenglish-players', JSON.stringify({ schemaVersion: 2, players: [player], activePlayerId: player.id }));
+    localStorage.setItem('childrendoenglish-player-' + player.id, JSON.stringify({
+      totalQuizzes: 6, hasSeenOnboarding: true, badges: ['first_quiz'], cycle: { batch: 2, stage: 7 },
+      wordProgress: { cat: { lastSeen: Date.now(), interval: 14, correct: 5, wrong: 0 } },
+    }));
+  });
+  await page.goto('/');
+  await page.waitForSelector('#root > *', { timeout: 10000 });
+  await expect(page.getByText(/Step 5 of 5/)).toBeVisible({ timeout: 8000 });
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('childrendoenglish-player-player_old11')));
+  expect(saved.cycle).toEqual({ batch: 2, stage: 4, v: 2 });
+  expect(saved.badges).toEqual(['first_quiz']);
+  expect(saved.wordProgress.cat.interval).toBe(14);
 });
 
 test('pre-readers see only the no-reading steps enabled', async ({ page }) => {

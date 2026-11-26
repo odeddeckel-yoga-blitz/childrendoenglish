@@ -51,3 +51,22 @@ menu breadth goes unused, audio mode is dead, games had no role.
 - Learning Path removal/merge (owner call later)
 - Audio-mode removal (parked separately)
 - Letter map visual rework (CycleCard bar + existing Letter Path suffice)
+
+## v3 — 5-step ladder + one word memory (owner OK 11-18, branch hold/ladder-memory-1118, ships after the 11-28 reads)
+
+Data: 1 of 57 batch starts finished the 11-step v2 ladder; the step funnel fell off at the first spelling step
+(11-14 read: conv 13 → lf1 4); listen-and-tap is 78% of answers at 84% done; Word Zapper and Category Conveyor are the
+most played / best-completing games.
+
+- Ladder = fc → aud → wq → conv → zap (pre-readers: fc → aud/listen → conv → zap). Every step is one short sitting.
+  Spelling and sentences (lf1, forge, sent) are an optional BONUS row on the step map: tallied as cyc_stage, never part
+  of the batch position. iq, lf2 and lf3 left the map.
+- Migration: stats.cycle gains v = 2. A record without v indexes the 11-step LADDER_V1; migrateCycle() counts every v1
+  step before the stored stage as done and moves to the first new step not done. The new ladder is a subsequence of v1
+  and both end on zap, so no finished step is lost; batch, wordProgress, spelling and badges are untouched.
+- One word memory: games (Word Zapper, Category Conveyor, Spelling Forge, Picture Bingo, Missing Letter), unit / Band I
+  practice, reading look-ups and word-page mini-quizzes append first-try results to the localStorage inbox
+  (public/word-mem.js); the app folds it into the active player's wordProgress with updateWordSR (one step up per word
+  per day). Guests' answers wait for a player (after the first quiz, or at once via the review link).
+- "Words to review today (N)" (due + missed in the last 3 days, max 10) on the game end card, unit and reading finish,
+  free-quiz results and batch complete → Daily Review (pre-readers: the same words as a listening run). Beacon: rvw.

@@ -261,6 +261,7 @@ function announce(word){
   speak(word.en);
 }
 function newRound(){
+  S.wmMiss=false;
   /* half the time promote an existing high-up distractor to target (so "newest
      card = answer" is never a reliable trick); otherwise spawn a fresh one */
   let sp=null;
@@ -291,6 +292,7 @@ function hitSprite(x,y){
   return best;
 }
 function zap(sp){
+  /* word memory (public/word-mem.js): first-try result per word */ if(window.CDE_WORD) CDE_WORD(sp.word.id,!S.wmMiss);
   const react=(performance.now()-S.targetAt)/1000, fast=react<4;
   S.streak++; S.combo++;
   const pts=Math.round(10*(1+0.15*S.streak)*(fast?1.5:1));
@@ -308,6 +310,7 @@ function zap(sp){
   newRound();
 }
 function miss(sp){
+  S.wmMiss=true;
   S.streak=0; S.combo=0; S.fastStreak=0;
   S.speedMul=Math.max(0.65,S.speedMul*0.94);               // rubber-band down
   sp.flashT=0.7;
@@ -355,6 +358,7 @@ function tierUp(){
 function leak(sp){
   S.sprites=S.sprites.filter(s=>s!==sp);
   if(!sp.isTarget){ burst(sp.x,geo().lineY-10,8,'#c7d2fe',3,0.5); return; }   // distractors drift away free
+  if(window.CDE_WORD) CDE_WORD(sp.word.id,false);   // the target fell: a miss for that word
   burst(sp.x,geo().lineY-10,30,'#ef4444',6,1);
   redFlash(); shakeIt(12); beep(90,0.4,'sawtooth',0.18,50);
   S.shields--; S.streak=0; S.combo=0; S.fastStreak=0;

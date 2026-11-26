@@ -168,7 +168,7 @@ function nextCall(){
     var open=[]; S.card.forEach(function(x,k){ if(!S.marked[k]) open.push(k); });
     w=S.card[pick(open)];
   }
-  S.call=w; S.decoy=decoy; S.callNo++; S.calls.push({w:w,decoy:decoy});
+  S.call=w; S.decoy=decoy; S.wmMiss=false; S.callNo++; S.calls.push({w:w,decoy:decoy});
   hud.setAttribute('data-call',S.lvl+'-'+S.callNo);
   callLbl.textContent=T('call')+' '+S.callNo;
   if(!(S.lvl===0&&S.callNo===1)&&!(LEVELS[S.lvl].decoys&&S.callNo===1)) fb.textContent='';
@@ -191,6 +191,7 @@ function advance(){
 }
 
 function miss(kind){
+  S.wmMiss=true;
   S.misses++; S.totalMisses++;
   beacon('pb',LEVELS[S.lvl].id+'_'+kind);
   say(S.call); // replay the call
@@ -200,6 +201,8 @@ function tapSquare(k,b){
   if(S.busy||!S.call||S.marked[k]) return;
   if(!S.decoy && S.card[k]===S.call){
     S.marked[k]=true; b.classList.add('marked');
+    // word memory (public/word-mem.js): first-try result per word (one child's card; a projector class round is the whole room's, so not)
+    if(window.CDE_WORD&&!CLASS) CDE_WORD(S.call,!S.wmMiss);
     beacon('pb',LEVELS[S.lvl].id+'_ok');
     fb.textContent='';
     var line=bingoLine();

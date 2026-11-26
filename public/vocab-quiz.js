@@ -38,8 +38,16 @@
   // Mini-quiz
   var quiz = document.querySelector('.mini-quiz');
   if (!quiz) return;
+  // one word memory: load /word-mem.js (CDE_WORD + the review link) once per page, no extra tag in the page
+  try {
+    if (!window.CDE_WORDMEM && !document.querySelector('script[src="/word-mem.js"]')) {
+      var wmS = document.createElement('script'); wmS.src = '/word-mem.js'; wmS.async = true; document.head.appendChild(wmS);
+    }
+  } catch (e) { /* no memory on this page — practice still works */ }
   var answer = quiz.getAttribute('data-answer');
-  var solved = false;
+  var solved = false, tried = false;
+  // one word memory (/word-mem.js): the first tap is this word's result, kept on this device
+  function remember(ok) { if (!tried) { tried = true; if (window.CDE_WORD) window.CDE_WORD(answer, ok); } }
   quiz.addEventListener('click', function (ev) {
     var opt = ev.target.closest('.mq-opt');
     if (!opt || solved) return;
@@ -51,10 +59,12 @@
       var result = quiz.querySelector('.mq-result');
       if (result) result.hidden = false;
       beacon('ans_ok', answer);
+      remember(true);
     } else {
       opt.classList.add('mq-wrong');
       setTimeout(function () { opt.classList.remove('mq-wrong'); }, 600);
       beacon('ans_no', answer);
+      remember(false);
     }
   });
 })();

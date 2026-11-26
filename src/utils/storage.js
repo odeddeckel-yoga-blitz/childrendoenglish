@@ -161,6 +161,8 @@ export const resetPlayerProgress = (id) => {
   } catch (e) {
     console.warn('Failed to reset player progress:', e);
   }
+  // a reset also forgets that player's not-yet-folded game/page answers
+  saveWordInbox(loadWordInbox().filter((e) => e.p !== id));
 };
 
 export const updatePlayerProfile = (id, updates) => {
@@ -237,6 +239,27 @@ export const saveStats = (stats, playerId) => {
       if (e?.name === 'QuotaExceededError') emitStorageFull();
     }
   }
+};
+
+// --- Word-memory inbox (src/utils/wordMemory.js, public/word-mem.js) ---
+// Pages outside the app (arcade games, unit practice, readings) append per-word
+// results here; the app folds them into the right player's wordProgress.
+export const WORD_INBOX_KEY = 'childrendoenglish-word-inbox';
+export const WORD_INBOX_MAX = 400;
+
+/** The inbox entries ({ w, ok, t, s, p?, k? }); malformed rows are dropped. */
+export const loadWordInbox = () => {
+  try {
+    const v = JSON.parse(localStorage.getItem(WORD_INBOX_KEY));
+    return Array.isArray(v) ? v.filter((e) => e && typeof e.w === 'string' && e.t > 0) : [];
+  } catch { return []; }
+};
+
+export const saveWordInbox = (entries) => {
+  try {
+    if (!entries?.length) localStorage.removeItem(WORD_INBOX_KEY);
+    else localStorage.setItem(WORD_INBOX_KEY, JSON.stringify(entries.slice(-WORD_INBOX_MAX)));
+  } catch { /* storage unavailable */ }
 };
 
 // --- Global preferences (unchanged) ---

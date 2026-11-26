@@ -59,7 +59,10 @@ const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_
   'act', 'jserrsig',
   // jserx (kit land-beacon.md, KDM 11-12): an error from a script that isn't one of our files (extension / school filter
   // injection; CDE pages have no inline scripts) — counted apart so jserr means OUR code.
-  'jserx']);
+  'jserx',
+  // One word memory (11-18, hold to after 11-28): rvw = the end-of-activity "words to review today" card and the short
+  // review it opens — view_/open_<surface> (app|batch|game|unit|read|word), start, done. Counts only, pinned in EV_ITEM.
+  'rvw']);
 // distinct error signatures recorded per day; past this a NEW signature is dropped (a known one still counts)
 export const JSERRSIG_DAY_CAP = 50;
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
@@ -80,6 +83,7 @@ const EV_ITEM = {
   ld: /^l[1-3]_(word|miss|over)$/,
   sl: /^n[2-4]_(ok|no)$/,
   bi: /^[a-z]{3}_(ok|no)$/,
+  rvw: /^((view|open)_(app|batch|game|unit|read|word)|start|done)$/,
 };
 
 // Classify a DB failure so the function log names the REAL cause — the beacon

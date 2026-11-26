@@ -132,6 +132,7 @@ function render(){
       if(l===r.answer){
         S.done=true;
         if(!S.missed){ S.score++; S.total++; }
+        /* word memory (public/word-mem.js): first-try result per word */ if(window.CDE_WORD) CDE_WORD(r.word,!S.missed);
         b.classList.add('ok'); blank.textContent=l; blank.className='blank filled';
         fb.innerHTML=T('right');
         say(r.word);
