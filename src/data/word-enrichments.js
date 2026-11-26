@@ -585,7 +585,7 @@ export const ENRICHMENTS = {
       "A group of hippos wallowed in the shallow muddy water to keep cool.",
       "The baby hippo swam next to its mother, matching her every move in the slow river."
     ],
-    "funFact": "Hippos sweat a reddish oily liquid that works like sunscreen and antiseptic cream all in one! This \"blood sweat\" protects their skin from the hot African sun and kills germs in cuts. Despite looking slow and round, hippos can run at speeds of up to 30 kilometers per hour on land — faster than most people can run!",
+    "funFact": "Hippos make a reddish-orange oily liquid that coats their skin. People nicknamed it 'blood sweat', but it isn't blood at all!",
     "collocations": [
       "baby hippo",
       "hippo yawn",
@@ -905,7 +905,7 @@ export const ENRICHMENTS = {
       "Monkeys at the zoo leaped excitedly when the keeper brought a bunch of bananas.",
       "He sliced a banana into his cereal bowl for a sweet and filling breakfast."
     ],
-    "funFact": "Bananas are technically berries, while strawberries are not! Bananas are slightly radioactive because they contain a small amount of potassium-40, but it is completely harmless. Bananas are slightly curved because they grow upward toward the sun — a behavior called negative geotropism — which gives them their characteristic bent shape.",
+    "funFact": "Bananas are slightly radioactive because they contain a tiny amount of potassium-40, just like many other foods and even your own body!",
     "collocations": [
       "banana split",
       "banana peel",
@@ -945,7 +945,7 @@ export const ENRICHMENTS = {
       "The baby calf drank warm milk from its mother every morning.",
       "He added a splash of milk to his cereal and stirred it gently."
     ],
-    "funFact": "It takes about 10 liters of milk to make just one kilogram of cheese! Milk is packed with calcium, which is what makes your bones and teeth strong. Before refrigerators were invented, people had to drink milk very quickly or it would go bad — in summer, fresh milk could turn sour in just a few hours in warm weather.",
+    "funFact": "Milk comes from cows, goats, sheep, and other animals. A cow can make about 25 liters of milk in one day!",
     "collocations": [
       "milk shake",
       "chocolate milk",
@@ -965,7 +965,7 @@ export const ENRICHMENTS = {
       "He boiled two eggs for breakfast and put them in little egg cups.",
       "The hen laid a warm brown egg in the straw every morning."
     ],
-    "funFact": "You can tell how fresh an egg is by putting it in a glass of water — a fresh egg sinks to the bottom, while an old egg floats! Eggs contain all the essential vitamins except for vitamin C. The color of a hen's earlobes predicts the color of her eggshells — hens with white earlobes lay white eggs, and hens with red earlobes lay brown eggs.",
+    "funFact": "You can tell how fresh an egg is by putting it in a glass of water — a fresh egg sinks to the bottom, while an old egg floats!",
     "collocations": [
       "egg shell",
       "egg yolk",
@@ -1065,7 +1065,7 @@ export const ENRICHMENTS = {
       "The rabbit hopped over and nibbled on the bright orange carrot.",
       "He peeled and chopped the carrots to add to the vegetable soup."
     ],
-    "funFact": "Carrots were originally purple, not orange! Orange carrots were developed by Dutch farmers in the 17th century, possibly to honor their royal family, the House of Orange. Carrots contain beta-carotene, which your body turns into vitamin A — this nutrient really does help your eyesight, so there is some truth in the saying that carrots help you see in the dark!",
+    "funFact": "Carrots used to come in many colors, including purple, yellow, and white. Orange carrots became popular in Europe in the 1600s.",
     "collocations": [
       "carrot cake",
       "carrot juice",
@@ -1085,7 +1085,7 @@ export const ENRICHMENTS = {
       "He sliced the avocado in half and carefully removed the large pit from the center.",
       "The green avocado was her favorite topping on tacos and burritos."
     ],
-    "funFact": "Avocados are technically large berries with a single seed! Avocados do not ripen while they are still on the tree — the tree actually keeps them \"fresh\" and they only begin to ripen after being picked. Avocados are one of the few fruits that contain healthy fats, which makes them extra nutritious and gives them their smooth, creamy texture.",
+    "funFact": "Avocados are technically large berries with a single seed, and they only start to ripen after they are picked from the tree!",
     "collocations": [
       "avocado toast",
       "avocado dip",
@@ -1125,7 +1125,7 @@ export const ENRICHMENTS = {
       "The sweet and tangy pineapple juice was perfect for a hot summer afternoon.",
       "He debated whether pineapple should ever go on a pizza."
     ],
-    "funFact": "A pineapple takes about two years to grow — and each plant only produces one pineapple at a time! In the 1700s, pineapples were so rare and expensive in Europe that people would rent them for parties to impress their guests. Pineapples contain an enzyme called bromelain that can actually digest protein — this is why your tongue can feel a little tingly after eating a lot of fresh pineapple.",
+    "funFact": "A pineapple takes about two years to grow, and each plant only produces one pineapple at a time. In the 1700s, people in Europe even rented pineapples for parties!",
     "collocations": [
       "pineapple juice",
       "pineapple ring",
@@ -1445,7 +1445,7 @@ export const ENRICHMENTS = {
       "He ground black pepper over his scrambled eggs until they were perfectly seasoned.",
       "The green peppers in the garden were starting to turn red as they ripened."
     ],
-    "funFact": "Bell peppers and hot chili peppers are the same species of plant! The difference is one single gene that controls whether the pepper produces capsaicin, the compound that makes peppers spicy. Red, yellow, and orange bell peppers are all just fully ripened green peppers — they start out green and change color as they mature on the vine. Red peppers contain three times more vitamin C than oranges!",
+    "funFact": "Bell peppers and hot chili peppers are the same species of plant! The difference is one single gene that controls whether the pepper makes capsaicin, the compound that makes peppers spicy. Peppers come in red, yellow, orange, green and even purple. Birds can't taste capsaicin, so they happily eat spicy peppers and spread the seeds!",
     "collocations": [
       "bell pepper",
       "black pepper",
@@ -1625,7 +1625,7 @@ export const ENRICHMENTS = {
       "He spread honey on his warm toast and licked the sticky sweetness off his finger.",
       "Bees collect nectar from thousands of flowers to make just one small jar of honey."
     ],
-    "funFact": "Honey never spoils — archaeologists found 3,000-year-old honey in Egyptian tombs that was still perfectly edible! Honey is the only food made by an insect that humans eat. A single bee produces only about one twelfth of a teaspoon of honey in its entire lifetime, which is why bees work together as a team. Honey was used as a medicine by ancient Egyptians, Greeks, and Romans to help heal wounds.",
+    "funFact": "Honey almost never spoils — archaeologists found 3,000-year-old honey in Egyptian tombs! A single bee makes only about one twelfth of a teaspoon of honey in its whole life, which is why bees work together as a team. A hive may visit millions of flowers to make just one jar of honey.",
     "collocations": [
       "honey bee",
       "honey jar",
@@ -3282,7 +3282,7 @@ export const ENRICHMENTS = {
       "Her grandmother had beautiful long silver hair.",
       "The knight wore silver armor that gleamed in the sunlight."
     ],
-    "funFact": "Silver is a real metal that has been used by humans for over 5,000 years to make coins, jewelry, and mirrors. Actual silver mirrors were once so expensive that only very wealthy people could own one! Silver is also used in some medicines because it can kill bacteria.",
+    "funFact": "Silver is a real metal that has been used by humans for over 5,000 years to make coins, jewelry, and mirrors. Actual silver mirrors were once so expensive that only very wealthy people could own one! Silver is also one of the shiniest metals, and it reflects almost all the light that hits it.",
     "collocations": [
       "silver medal",
       "shiny silver",
@@ -3321,7 +3321,7 @@ export const ENRICHMENTS = {
       "The sports team wore bright lime green jerseys on the field.",
       "The lime-colored caterpillar was hard to spot among the green leaves."
     ],
-    "funFact": "Lime green is one of the most visible colors to the human eye, which is why many safety vests and highlighter pens are lime green or yellow-green. The color is named after the lime fruit, which has a wonderfully sour taste that makes your mouth water!",
+    "funFact": "Lime green is one of the most visible colors to the human eye, which is why many safety vests and highlighter pens are lime green or yellow-green. The color is named after the lime fruit, which has a bright green skin and grows on warm-weather trees!",
     "collocations": [
       "lime green",
       "lime juice",
@@ -4719,7 +4719,7 @@ export const ENRICHMENTS = {
       "She drew a diagram on the whiteboard to explain how volcanoes work.",
       "He volunteered to clean the whiteboard at the end of class."
     ],
-    "funFact": "Whiteboards replaced blackboards in classrooms starting in the 1990s, partly because chalk dust can cause breathing problems. The first dry-erase marker was created accidentally in the 1970s when a chemist was trying to make something else! Interactive whiteboards (SMART boards) can connect to the internet and act like a giant touchscreen computer.",
+    "funFact": "Whiteboards began replacing blackboards in many classrooms in the 1990s. The first dry-erase marker was made in the 1970s. Interactive whiteboards (SMART boards) can connect to the internet and act like a giant touchscreen computer.",
     "collocations": [
       "write on the whiteboard",
       "dry erase",
@@ -4999,7 +4999,7 @@ export const ENRICHMENTS = {
       "She is learning the butterfly stroke in swimming class.",
       "The team practiced swimming laps for an hour every morning."
     ],
-    "funFact": "Swimming is one of the only sports that works nearly every muscle in your body at once. Ancient cave paintings show people swimming over 10,000 years ago. Olympic swimming pools hold about 660,000 gallons of water — enough to fill 15,000 bathtubs!",
+    "funFact": "Ancient cave paintings show people swimming over 10,000 years ago. Olympic swimming pools hold about 660,000 gallons of water — enough to fill thousands of bathtubs!",
     "collocations": [
       "go swimming",
       "swimming pool",
@@ -5279,7 +5279,7 @@ export const ENRICHMENTS = {
       "It is okay to cry when you feel sad — everyone does sometimes.",
       "She was sad that the fun vacation was finally over."
     ],
-    "funFact": "Crying when you are sad actually helps your body feel better because tears release stress chemicals. Humans are the only animals that cry emotional tears — other animals only produce tears to clean their eyes. Feeling sad is normal and usually passes after a little while, especially when you talk to someone you trust.",
+    "funFact": "Feeling sad is normal and usually passes after a little while, especially when you talk to someone you trust. Many people cry when they are sad, and that is okay.",
     "collocations": [
       "feel sad",
       "look sad",
@@ -5339,7 +5339,7 @@ export const ENRICHMENTS = {
       "After swimming for an hour, the children were all hungry.",
       "He always feels hungry after playing sports outside."
     ],
-    "funFact": "Your stomach makes a rumbling sound called \"borborygmus\" when you are hungry — that is the sound of air and liquids moving through your digestive system. It takes about 20 minutes for your brain to realize your stomach is full, which is why eating slowly is a good idea. People in ancient times could go several days without food in emergencies.",
+    "funFact": "Your stomach can make a rumbling sound called \"borborygmus\" — that is the sound of air and liquids moving through your digestive system.",
     "collocations": [
       "feel hungry",
       "very hungry",
@@ -5399,7 +5399,7 @@ export const ENRICHMENTS = {
       "She could not sleep because she was excited about the school trip.",
       "He jumped up and down when he got excited about the good news."
     ],
-    "funFact": "When you feel excited, your body releases adrenaline — the same chemical released when you are scared. That is why excitement and nervousness can feel similar! Excitement makes your heart beat faster, your palms sweaty, and gives you extra energy. Scientists call this the \"fight or flight\" response.",
+    "funFact": "Excitement and nervousness can feel similar, which is why people sometimes mix them up! Many people feel extra energy when they are excited about something.",
     "collocations": [
       "feel excited",
       "really excited",
@@ -5439,7 +5439,7 @@ export const ENRICHMENTS = {
       "Having a pet can help you feel less lonely.",
       "He was lonely over the holidays because his friends were all away."
     ],
-    "funFact": "Feeling lonely is not about being alone — some people feel lonely even in a crowd. Your brain reacts to loneliness the same way it reacts to physical pain, which is why it hurts so much. Studies show that people with strong friendships live longer and healthier lives, so making friends is actually good for your health!",
+    "funFact": "Feeling lonely is not about being alone. Some people feel lonely even in a crowd. Loneliness is a signal, a bit like hunger, that tells you to connect with others. Talking to a friend, a family member, or a teacher is a great way to feel less lonely.",
     "collocations": [
       "feel lonely",
       "lonely day",
@@ -5479,7 +5479,7 @@ export const ENRICHMENTS = {
       "He made a surprised face when he opened the unexpected gift.",
       "The magician surprised the whole audience with his disappearing trick."
     ],
-    "funFact": "Surprise is one of the six basic emotions that all humans feel, no matter where in the world they live. Your eyebrows go up automatically when you are surprised because your brain is widening your visual field to take in more information quickly. Surprise only lasts a few seconds — it quickly turns into another emotion like happiness or fear.",
+    "funFact": "Surprise is one of the basic emotions that people everywhere can recognize on faces. Eyebrows going up and eyes opening wide is a typical surprised look. Surprise only lasts a few seconds before turning into another feeling like happiness or fear.",
     "collocations": [
       "big surprise",
       "surprised look",
@@ -5499,7 +5499,7 @@ export const ENRICHMENTS = {
       "The teacher spoke in a calm voice so the students would not panic.",
       "Listening to soft music can help you feel calm before bedtime."
     ],
-    "funFact": "Being calm actually spreads to people around you — scientists call it \"emotional contagion.\" Breathing slowly on purpose is one of the fastest ways to calm your nervous system because it sends a direct signal to your brain. Petting an animal for just a few minutes can lower your heart rate and make you feel much calmer.",
+    "funFact": "Being calm can spread to the people around you. Scientists call this \"emotional contagion.\" Many people like to count to ten, stretch, or spend quiet time with a pet when they want to feel calm.",
     "collocations": [
       "stay calm",
       "calm down",
@@ -5559,7 +5559,7 @@ export const ENRICHMENTS = {
       "He felt grateful when his teacher helped him understand the tricky math.",
       "Writing down things you are grateful for can make you happier."
     ],
-    "funFact": "Studies show that people who practice being grateful every day sleep better and feel happier. Writing a \"gratitude journal\" — listing three things you are thankful for each night — can improve your mood within two weeks. Saying \"thank you\" and meaning it is one of the kindest things one person can do for another.",
+    "funFact": "Being grateful means noticing and appreciating the good things and people in your life. Some families say three things they are thankful for at dinner. Saying \"thank you\" and meaning it is one of the kindest things one person can do for another.",
     "collocations": [
       "feel grateful",
       "grateful heart",
@@ -5619,7 +5619,7 @@ export const ENRICHMENTS = {
       "She felt scared before her first roller coaster ride, but loved it afterwards.",
       "It is okay to tell someone when you feel scared."
     ],
-    "funFact": "Being scared makes your pupils get bigger so you can see better in the dark — your body is trying to help you! Fear is processed in a tiny part of the brain called the amygdala, which reacts in less than a millisecond — faster than you can even think. Phobias are extreme fears of specific things, and there are over 400 officially named phobias.",
+    "funFact": "Fear is processed in a small, almond-shaped part of the brain called the amygdala. It helps you react very fast to danger, sometimes before you have time to think. Phobias are strong fears of specific things, like spiders, heights, or the dark.",
     "collocations": [
       "feel scared",
       "get scared",
@@ -5759,7 +5759,7 @@ export const ENRICHMENTS = {
       "He pressed his ear against the wall to listen.",
       "Your outer ear collects sound and sends it deep inside."
     ],
-    "funFact": "Your ears never stop working — even when you are asleep, your ears are still hearing sounds and sending signals to your brain. Earwax is actually good for you because it protects the inside of your ear from dust and insects. Ears also help you keep your balance through a special fluid-filled system deep inside them.",
+    "funFact": "Your ears never stop working. Even when you are asleep, your ears are still picking up sounds and sending signals to your brain. Ears also help you keep your balance through a special fluid-filled system deep inside them.",
     "collocations": [
       "behind the ear",
       "ear of corn",
@@ -5979,7 +5979,7 @@ export const ENRICHMENTS = {
       "You should replace your toothbrush every three months.",
       "He picked out a blue toothbrush at the shop."
     ],
-    "funFact": "The first toothbrush with bristles was invented in China in 1498, using hairs from a wild boar's neck. Before that, people cleaned their teeth with twigs, feathers, and even porcupine quills! Electric toothbrushes are proven to remove 21% more plaque than regular ones. You should brush for exactly two minutes — about the length of a short song.",
+    "funFact": "The first toothbrush with bristles was invented in China in 1498, using hairs from a wild boar's neck. Before that, people cleaned their teeth with twigs, feathers, and even porcupine quills! Today toothbrushes come in all shapes, sizes, and colors.",
     "collocations": [
       "electric toothbrush",
       "brush with a toothbrush",
@@ -6179,7 +6179,7 @@ export const ENRICHMENTS = {
       "The thermometer outside read below freezing.",
       "Scientists use special thermometers to measure very high temperatures."
     ],
-    "funFact": "Galileo invented the first thermometer in 1593, but it measured temperature using the density of liquid rather than numbers. Mercury thermometers, the classic glass ones, were invented in 1714. The hottest temperature ever recorded on Earth was 134°F (56.7°C) in Death Valley, California. Digital thermometers can read your temperature in just 10 seconds!",
+    "funFact": "Galileo built an early temperature device around 1593 called a thermoscope. The mercury thermometer was invented in 1714 by Daniel Fahrenheit. The hottest temperature ever recorded on Earth was 134°F (56.7°C) in Death Valley, California.",
     "collocations": [
       "take your temperature",
       "read the thermometer",
@@ -6339,7 +6339,7 @@ export const ENRICHMENTS = {
       "We run around the playground during break time every day.",
       "He had to run to catch the school bus in the morning."
     ],
-    "funFact": "Humans are one of the best long-distance runners in the animal kingdom — we can outrun almost any animal over very long distances. When you run, you become briefly airborne with every stride — both feet are off the ground at the same time. The fastest human ever, Usain Bolt, ran at nearly 28 miles per hour. Regular running strengthens your heart, lungs, and bones all at once.",
+    "funFact": "Humans are among the best long-distance runners in the animal kingdom. Over very long distances in hot weather, people can outlast many animals. When you run, you are briefly airborne with every stride. The fastest human ever, Usain Bolt, ran at nearly 28 miles per hour.",
     "collocations": [
       "run fast",
       "run away",
@@ -6399,7 +6399,7 @@ export const ENRICHMENTS = {
       "He watched a video to learn how to cook his favorite pasta.",
       "Cooking is a skill that will be useful for the rest of your life."
     ],
-    "funFact": "Humans are the only animals that cook their food, and scientists believe cooking is one of the reasons our brains became so large. Cooking food makes it easier to digest and releases more nutrients. The word \"chef\" comes from the French word for \"head\" because the head chef is the boss of the kitchen. There are over 32,000 restaurants in New York City alone.",
+    "funFact": "Humans are the only animals that cook their food, and some scientists think cooking helped our brains grow large. The word \"chef\" comes from the French word for \"head\" because the head chef is the boss of the kitchen. New York City has tens of thousands of restaurants.",
     "collocations": [
       "cook dinner",
       "cook from scratch",
@@ -6419,7 +6419,7 @@ export const ENRICHMENTS = {
       "She had to climb three flights of stairs to reach the classroom.",
       "The mountain goats can climb almost vertical cliffs without slipping."
     ],
-    "funFact": "Climbing trees is great exercise because it uses muscles in your arms, legs, and core all at once. Rock climbers use a technique called \"smearing\" where they press the flat sole of their shoe against rock to get grip. The world's tallest climbable structure that humans have scaled is Mount Everest at 29,032 feet. Some children in Indonesia climb 60-foot poles greased with oil as part of a festival game.",
+    "funFact": "Rock climbers use a technique called \"smearing\" where they press the flat sole of their shoe against the rock to get grip. Mount Everest, at 29,032 feet, is the tallest mountain above sea level. Some children in Indonesia climb tall poles greased with oil as part of a festival game.",
     "collocations": [
       "climb a tree",
       "climb a mountain",
@@ -6619,7 +6619,7 @@ export const ENRICHMENTS = {
       "He likes word puzzles and number puzzles equally.",
       "The puzzle showed a beautiful picture of the ocean when completed."
     ],
-    "funFact": "Jigsaw puzzles were invented in the 1760s by a mapmaker who glued a map onto wood and cut it into pieces to teach geography to children. The world's largest jigsaw puzzle had 551,232 pieces and was assembled in Vietnam. Working on puzzles exercises both sides of your brain and can help improve memory and problem-solving skills.",
+    "funFact": "Jigsaw puzzles were invented in the 1760s by a mapmaker who glued a map onto wood and cut it into pieces to teach geography to children. The world's largest jigsaw puzzle had 551,232 pieces and was assembled in Vietnam.",
     "collocations": [
       "jigsaw puzzle",
       "do a puzzle",
