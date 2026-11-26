@@ -149,7 +149,7 @@ export function buildBand1Pages({ SITE, distDir, writePage, escapeHtml, WORDS, c
   <header class="hero"><h1>מילים באנגלית <span lang="en" dir="ltr">Band I</span> לפי נושאים</h1>
     <p class="answer">${covered} מילים מרשימת <span lang="en" dir="ltr">Band I</span> של משרד החינוך, עם תמונה, הגייה, תרגום ותרגול, מסודרות לפי ${topics.length} נושאים. בכל נושא נוספו גם כמה מילות בונוס מחוץ לרשימה, מסומנות.</p></header>
   <main class="container"><section class="section">
-  <p class="center"><a class="cta" href="/band-1/review/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-backpack"/></svg> מסלול חזרה: כל ${ltrRun('Band I')} ב-${PATH_SETS} סטים קצרים ←</a></p>
+  <p class="center"><a class="cta" href="/band-1/review/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-backpack"/></svg> מסלול חזרה: מילות ${ltrRun('Band I')} לפי נושאים, ב-${PATH_SETS} סטים קצרים ←</a></p>
   <p class="center"><a class="cta" href="/band-1/reading/"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.15em;height:1.15em;vertical-align:-.2em;flex:none"><use href="/icons.svg#i-book-open"/></svg> קטעי קריאה קצרים עם הקראה ושאלות ←</a></p>
   <div class="unit-grid">${cards}
   </div>
