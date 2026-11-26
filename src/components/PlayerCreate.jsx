@@ -94,8 +94,10 @@ export default function PlayerCreate({ lang = 'en', onCreatePlayer, onBack, firs
               onChange={e => setCanRead(e.target.checked)}
               className="sr-only"
             />
+            {/* No onClick here: the enclosing <label> already toggles the checkbox on any click inside it, so a second
+                handler on the track toggled twice and the switch did nothing when tapped (R2 UX 11-26). */}
             <div
-              onClick={() => setCanRead(v => !v)}
+              data-testid="canread-switch"
               className={`w-11 h-6 rounded-full transition-colors ${canRead ? 'bg-blue-500' : 'bg-slate-300'}`}
             >
               <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow-sm transition-transform ${canRead ? 'translate-x-5' : 'translate-x-0'}`} />

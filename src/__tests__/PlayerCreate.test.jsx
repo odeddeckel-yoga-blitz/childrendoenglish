@@ -68,4 +68,15 @@ describe('PlayerCreate', () => {
     render(<PlayerCreate {...defaultProps} />);
     expect(sendLearn).not.toHaveBeenCalled();
   });
+
+  it('tapping the switch itself toggles "can read" once (R2 UX 11-26: it did nothing)', () => {
+    render(<PlayerCreate {...defaultProps} />);
+    const box = screen.getByRole('checkbox');
+    const sw = screen.getByTestId('canread-switch');
+    expect(box).toBeChecked();
+    fireEvent.click(sw);
+    expect(box).not.toBeChecked();
+    fireEvent.click(sw);
+    expect(box).toBeChecked();
+  });
 });
