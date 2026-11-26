@@ -4,7 +4,7 @@ import LoadingScreen from './components/LoadingScreen';
 import Menu from './components/Menu';
 import LandingPage from './components/LandingPage';
 import Confetti from './components/Confetti';
-import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, updateStreak, updateDailyGoal, touchLastActive, shouldResumeActivePlayer, loadWordInbox, saveWordInbox, WORD_INBOX_KEY } from './utils/storage';
+import { loadStats, saveStats, isDarkMode, saveDarkMode, isSoundEnabled, saveSoundEnabled, loadPlayerRegistry, updateStreak, updateDailyGoal, touchLastActive, shouldResumeActivePlayer, formatLocalDate, loadWordInbox, saveWordInbox, WORD_INBOX_KEY } from './utils/storage';
 import { applyInboxEntries, splitInbox, reviewTodayWords, reviewTodayCount, REVIEW_MAX } from './utils/wordMemory';
 import { initTTS, installAudioUnlock } from './utils/sound';
 import { isRTL, t, loadLocale } from './utils/i18n';
@@ -17,6 +17,7 @@ import { pickTodayWords, TODAY_SIZE } from './utils/todayRun';
 import { filterByKnownLetters } from './utils/letterFilter';
 import { sendLearn } from './utils/learnBeacon';
 import { noteAppActivity } from './utils/activityFlow';
+import { isReturningLoad, nextTally, missedWords, pickNext, learnedCount, playedGames, nextNewGame, noteGameLaunch, gameName, nextGameTappedToday, noteNextGameTap } from './utils/homeNext';
 import { WORDS, CATEGORIES } from './data/words';
 import { cycleState, advanceCycle, batchLabel, batchCount, batchWords, stepsFor, bonusFor, ALL_STEPS, CYCLE_V, migrateCycle, buildSet, repeatSet, masteredCount } from './utils/learningCycle';
 import LadderMap from './components/LadderMap';
@@ -176,6 +177,11 @@ export default function App() {
   // label}); batch sets track position in stats.cycle, ad-hoc sets in adhocPos.
   // cycleRun marks an in-flight quiz as a ladder step; ladderStepKey = which.
   const [cycleRun, setCycleRun] = useState(false);
+  // Returning home (utils/homeNext.js; owner D4 11-26: every returning player, no split): the app opened with a
+  // player created before this sitting → one smart Next card + the trimmed More. A first visit keeps today's home.
+  const [returningHome] = useState(() => isReturningLoad(initial.current.registry));
+  // "Missed since the last visit" = last answered before this page load
+  const visitStart = useRef(Date.now());
   // Movement between activities (g2/g3/hop, kit §5.55): each play screen entered, and whether the ladder sent it.
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { noteAppActivity(gameState, cycleRun ? 'ladder' : 'menu'); }, [gameState]);
@@ -440,6 +446,7 @@ export default function App() {
       // Mark-on-launch (cross-page completion isn't trackable in v1; g_lvl/g_cmp
       // beacons measure real play). Then a full navigation out of the SPA.
       completeLadderStep(stepKey, true);
+      noteGameLaunch(step.game);
       const ids = words.map((w) => w.id).join(',');
       window.location.href = `/games/${step.game}/?words=${encodeURIComponent(ids)}&from=ladder`;
     }
@@ -465,7 +472,9 @@ export default function App() {
         while (!next.batchDone && extraDone.includes(ladderSteps[next.stage]?.key)) {
           next = advanceCycle({ ...stats, cycle: { batch: next.batch, stage: next.stage, v: CYCLE_V } }, canReadNow, activeSet.words);
         }
-        const cycle = { batch: next.batch, stage: next.stage, v: CYCLE_V };
+        // doneDay: the home Next card suggests a new game after a batch finished today
+        const doneDay = next.batchDone ? { doneDay: formatLocalDate(new Date()) } : {};
+        const cycle = { batch: next.batch, stage: next.stage, v: CYCLE_V, ...doneDay };
         setStats((prev) => ({ ...prev, cycle }));
         // An arcade step leaves the SPA right after this (full navigation): the save effect would run too late
         // when the launch came from Continue (an effect, not a tap), so the step was never kept. Save now.
@@ -709,6 +718,46 @@ export default function App() {
 
   // Assessment removed — levels unlock via quiz scores (7+/10)
 
+  // ---- Returning home "Next" card (null on a first visit = today's Menu) ----
+  const onMenu = gameState === 'menu';
+  const homeNext = useMemo(() => {
+    if (!returningHome || !onMenu) return null;
+    const words = batchWords(stats.cycle?.batch ?? 0, klNow);
+    const { batch, stage } = cycleState(stats, canReadNow, words);
+    const pathDone = batch >= batchCount(klNow);
+    const steps = stepsFor(canReadNow, words);
+    const idx = Math.min(stage, steps.length - 1);
+    const doneToday = stats.cycle?.doneDay === formatLocalDate(new Date()) && !nextGameTappedToday();
+    const missed = missedWords(stats.wordProgress, WORDS, visitStart.current);
+    const newGame = nextNewGame(playedGames(), canReadNow);
+    const next = pickNext({ player: activePlayer, missed, pathDone, batchDoneToday: doneToday, newGame });
+    return {
+      next,
+      learned: learnedCount(stats),
+      name: activePlayer?.name || '',
+      gameName: next.kind === 'game' ? gameName(next.game) : '',
+      isNew: next.kind === 'path' && (stats.totalQuizzes || 0) === 0 && batch === 0 && stage === 0,
+      path: {
+        num: batch + 1, label: batchLabel(batch, klNow), step: idx + 1, total: steps.length,
+        mode: steps[idx] ? t(steps[idx].labelKey, lang) : '', starter: starterFirst,
+      },
+    };
+  }, [returningHome, onMenu, stats, klNow, canReadNow, activePlayer, lang, starterFirst]);
+  const nextKind = homeNext?.next.kind;
+  useEffect(() => { if (nextKind) nextTally(`see_${nextKind}`, { once: true }); }, [nextKind]);
+  const homeNextActions = homeNext && {
+    ...homeNext,
+    onNext: () => {
+      const { next } = homeNext;
+      nextTally(`next_${next.kind}`);
+      if (next.kind === 'mreq') quizFlow.startQuiz(null, canReadNow ? 'audio' : 'listen', next.words, 'missed');
+      else if (next.kind === 'game') noteNextGameTap(next.game); // the card is a link to the game page
+      else openLadder(starterFirst ? 'starter' : 'batch', null, true);
+    },
+    onNotMe: () => { sendLearn('mreq_notme', 'tap'); setShowProfilePicker(true); },
+    onOpenPath: () => openLadder(starterFirst ? 'starter' : 'batch'),
+  };
+
   const renderState = () => {
     switch (gameState) {
       case 'landing':
@@ -803,6 +852,7 @@ export default function App() {
             onNavigate={navigate}
             onQuickStart={() => quizFlow.startQuiz('beginner', 'listen', null, 'quick')}
             onContinueCycle={() => openLadder(starterFirst ? 'starter' : 'batch', null, true)}
+            homeNext={homeNextActions}
             onPickTopic={(topic) => {
               // a topic from the mastery map: its words not yet mastered first (the quiz picks 10 by spaced repetition)
               const inTopic = filterByKnownLetters(WORDS.filter((w) => w.category === topic), activePlayer?.knownLetters);

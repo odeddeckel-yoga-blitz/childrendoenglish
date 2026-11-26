@@ -140,6 +140,25 @@ describe('api/land games wave 3 events', () => {
   });
 });
 
+describe('api/land returning-home Next card events (owner D4 11-26)', () => {
+  it('records hn / mreq_notme in their pinned shapes and drops malformed ones', async () => {
+    vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    const { default: handler } = await import('../land.js');
+    calls.length = 0;
+    const good = [['hn', 'see_mreq'], ['hn', 'see_path'], ['hn', 'next_game'], ['hn', 'next_mreq'], ['mreq_notme', 'tap']];
+    // the old split's arm events are gone; an id-like item, an unknown kind, a name: all dropped
+    const bad = [['hn', 'player_abc123'], ['hn', 'next_quiz'], ['hn', 'day'], ['hn_on', 'day'], ['hn_off', 'asg'], ['mreq_notme', 'alex']];
+    const batch = [...good, ...bad].map(([e, i]) => ({ e, i }));
+    const r = res(); await handler({ method: 'POST', headers: BROWSER, body: { batch, l: 'he' } }, r);
+    expect(r.code).toBe(204);
+    const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
+    expect(written).toEqual(expect.arrayContaining(good.map((x) => x.join(':'))));
+    for (const b of bad) expect(written).not.toContain(b.join(':'));
+  });
+});
+
 describe('api/land standing-section events (kit 1.59 §5.55)', () => {
   it('records g2/g3/hop/vp/rets/jserr/cwv in their pinned shapes and drops malformed ones', async () => {
     vi.resetModules();

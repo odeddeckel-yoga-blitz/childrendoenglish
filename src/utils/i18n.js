@@ -623,6 +623,18 @@ const translations = {
     ladderPickSet: 'Practice different words',
     mapViewKnow: 'Know the word',
     mapViewSpell: 'Spell the word',
+    // Returning home "Next" card (home-next, owner 11-21; for every returning player since D4 11-26)
+    hnNextLabel: 'Next for you',
+    hnMreqTitle: 'Words for {{name}} to try again',
+    hnMreqDesc: 'A quick quiz with {{count}} words',
+    hnNotMe: 'Not me',
+    hnPathDesc: 'Step {{step}} of {{total}}: {{mode}}',
+    hnGameTitle: 'Try a new game: {{name}}',
+    hnGameDesc: 'You\'ve been practising hard. Time to play!',
+    hnLearned: '{{count}} words learned',
+    hnLearnedOne: '1 word learned',
+    hnLearnedZero: 'Every word you try helps you learn!',
+    hnPathLine: 'My path',
 
   },
 };

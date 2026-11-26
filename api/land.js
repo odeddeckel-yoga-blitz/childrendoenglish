@@ -30,7 +30,10 @@ const HUM_SRC = /^hum@(direct|seo|ai|internal|external)$/;
 // pg/cta/mq = a static page's view / click into the app or a game / first
 // mini-quiz tap, item = page-path key (public/land-beacon.js) → click-to-play rate;
 // onb = first-visit funnel step (create_view|create_done|q1_start|q1_done|q1_quit; q1_v2 = a first quiz under the 11-20 rules);
-// qs = quiz start-source funnel: [new-]<menu|ladder|shared|letter|mywords|learn|again|quick|topic|other>_<start|done|quit> (useQuizFlow);
+// qs = quiz start-source funnel: [new-]<menu|ladder|shared|letter|mywords|learn|again|quick|topic|map|missed|other>_<start|done|quit> (useQuizFlow;
+//   missed = the missed-word re-quiz from the home Next card);
+// hn = the returning home's Next card: see_<mreq|path|game> (once per device-day) / next_<kind> (tapped);
+//   mreq_notme = "Not me" on its missed-words card (src/utils/homeNext.js);
 // aie/aiv = AI attribution v1 (kit land-beacon.md): item = engine (chatgpt|perplexity|copilot|
 // gemini|claude|other); aie with every ai open, aiv once visible 5 s. Not opens.
 // mp = Sound Pairs answer per sound contrast (<p-b|a-u|e-a|th|th-d|ee-i|v-w>_<ok|no>) — public/games/sound-pairs;
@@ -62,7 +65,10 @@ const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_
   'jserx',
   // One word memory (11-18, hold to after 11-28): rvw = the end-of-activity "words to review today" card and the short
   // review it opens — view_/open_<surface> (app|batch|game|unit|read|word), start, done. Counts only, pinned in EV_ITEM.
-  'rvw']);
+  'rvw',
+  // Returning home "Next" card (home-next, owner D4 11-26: every returning player, no split): hn = see_/next_<kind>,
+  // mreq_notme = "Not me" on the missed-words card. Daily totals, shapes pinned in EV_ITEM.
+  'hn', 'mreq_notme']);
 // distinct error signatures recorded per day; past this a NEW signature is dropped (a known one still counts)
 export const JSERRSIG_DAY_CAP = 50;
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
@@ -84,6 +90,8 @@ const EV_ITEM = {
   sl: /^n[2-4]_(ok|no)$/,
   bi: /^[a-z]{3}_(ok|no)$/,
   rvw: /^((view|open)_(app|batch|game|unit|read|word)|start|done)$/,
+  hn: /^(see|next)_(mreq|path|game)$/,
+  mreq_notme: /^tap$/,
 };
 
 // Classify a DB failure so the function log names the REAL cause — the beacon

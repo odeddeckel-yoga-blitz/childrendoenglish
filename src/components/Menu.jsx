@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { sendLearn } from '../utils/learnBeacon';
-import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck, Gamepad2 } from 'lucide-react';
+import { BookOpen, Layers, Play, Award, BarChart2, Sun, Moon, Volume2, VolumeX, ListChecks, Download, X, Users, Map, ShieldCheck, Gamepad2, Repeat, Sparkles, ChevronRight } from 'lucide-react';
 import SpotlightCards from './SpotlightCards';
 import ClassWeekCard from './ClassWeekCard';
 import MasteryMap from './MasteryMap';
@@ -8,8 +8,13 @@ import { WORDS } from '../data/words';
 import { t } from '../utils/i18n';
 
 import LanguagePicker from './LanguagePicker';
+import ArcadeIcon from './ArcadeIcon';
+import Slots from './Slots';
 
-export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount: _dueCount = 0, todayCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart: _onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage, onContinueCycle, cycleInfo, onOpenSpotlightWord, onPickTopic }) {
+export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activePlayer, playerCount: _playerCount = 0, showInstallBanner, isIOS, dueCount: _dueCount = 0, todayCount = 0, onInstall, onDismissInstall, onNavigate, onQuickStart: _onQuickStart, onToggleDark, onToggleSound, onOpenProfilePicker, onSelectLanguage, onContinueCycle, cycleInfo, onOpenSpotlightWord, onPickTopic, homeNext = null }) {
+  // homeNext (a RETURNING player, utils/homeNext.js; owner D4 11-26, no split): one smart Next card instead of
+  // the Continue hero, "N words learned", a 6-item More. null = a first visit: the home below, unchanged.
+  const hn = homeNext;
 
   const wordsLearned = Object.keys(stats.wordProgress || {}).length;
   const isNewUser = stats.totalQuizzes === 0 && wordsLearned === 0;
@@ -78,7 +83,13 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         >
           <span className="text-2xl">{activePlayer.avatar}</span>
           <span className="flex-1 text-sm font-semibold text-slate-700 dark:text-slate-200">
-            {t('playingAs', lang, { name: activePlayer.name })}
+            {hn ? <Slots text={t('playingAs', lang)} vals={{ name: activePlayer.name }} /> : t('playingAs', lang, { name: activePlayer.name })}
+            {hn && (
+              <span className="block text-xs font-medium text-emerald-700 dark:text-emerald-300" data-testid="words-learned">
+                {hn.learned > 1 ? <Slots text={t('hnLearned', lang)} vals={{ count: hn.learned }} />
+                  : hn.learned === 1 ? t('hnLearnedOne', lang) : t('hnLearnedZero', lang)}
+              </span>
+            )}
           </span>
           <span className="px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 text-xs font-semibold
                            flex items-center gap-1">
@@ -93,7 +104,32 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       {/* Learning cycle hero — THE answer to "what do I do?": one continue
           button over the batch ladder (learn 10 → practice through stages →
           advance). Everything below is explore, not the main path. */}
-      {onContinueCycle && (
+      {hn && <NextCard hn={hn} lang={lang} />}
+      {hn && (
+        <div className="grid grid-cols-2 gap-3">
+          <a href="/games/" data-m1="games" className="glass rounded-2xl p-3 flex items-center gap-3 hover:shadow-lg active:scale-[0.98] transition-all">
+            <span className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white shrink-0" aria-hidden="true"><Gamepad2 className="w-5 h-5" /></span>
+            <span className="font-bold text-sm text-slate-800 dark:text-slate-100">{t('arcadeGames', lang)}</span>
+          </a>
+          <button onClick={() => onNavigate('letterPath')} data-m1="letters" className="glass rounded-2xl p-3 flex items-center gap-3 hover:shadow-lg active:scale-[0.98] transition-all text-start">
+            <span className="w-10 h-10 rounded-xl bg-linear-to-br from-purple-500 to-purple-600 flex items-center justify-center font-black text-white shrink-0" aria-hidden="true" dir="ltr">A<span className="text-purple-200">b</span></span>
+            <span className="font-bold text-sm text-slate-800 dark:text-slate-100">{t('letterPath', lang)}</span>
+          </button>
+        </div>
+      )}
+      {/* The path stays one tap away when the Next card suggests something else */}
+      {hn && hn.next?.kind !== 'path' && hn.path && (
+        <button onClick={hn.onOpenPath} data-testid="path-line"
+          className="w-full glass rounded-2xl px-4 py-3 flex items-center gap-3 text-start hover:shadow-md active:scale-[0.98] transition-all">
+          <Map className="w-5 h-5 text-indigo-600 shrink-0" aria-hidden="true" />
+          <span className="flex-1 min-w-0">
+            <span className="block text-sm font-bold text-slate-700 dark:text-slate-200">{t('hnPathLine', lang)}</span>
+            <span className="block text-xs text-slate-500"><Slots text={t('cycleStageOf', lang)} vals={{ step: hn.path.step, total: hn.path.total }} /></span>
+          </span>
+          <ChevronRight className="w-4 h-4 text-slate-400 rtl:rotate-180" aria-hidden="true" />
+        </button>
+      )}
+      {!hn && onContinueCycle && (
         <button
           onClick={onContinueCycle}
           data-m1="continue"
@@ -131,7 +167,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         {/* Vocabulary arcade — standalone game pages (full navigation out of the
             SPA; the games' home pill links back). Engagement fix 2026-10-01:
             the games had ZERO in-app doors, so real users never found them. */}
-        <a
+        {!hn && <a
           href="/games/"
           data-m1="games"
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
@@ -145,11 +181,11 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <p className="font-bold text-slate-800 dark:text-slate-100">{t('arcadeGames', lang)}</p>
             <p className="text-slate-500 text-sm">{t('arcadeGamesDesc', lang)}</p>
           </div>
-        </a>
+        </a>}
 
         {/* Letter-by-letter path — the natural progression for young learners. Back on the short
             menu (11-02 read: taps 9 → 1-2/day once it sat inside More). */}
-        <button
+        {!hn && <button
           onClick={() => onNavigate('letterPath')}
           data-m1="letters"
           className="w-full glass rounded-2xl p-4 flex items-center gap-4
@@ -165,7 +201,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             <p className="font-bold text-slate-800 dark:text-slate-100">{t('letterPath', lang)}</p>
             <p className="text-slate-500 text-sm">{t('letterPathDesc', lang)}</p>
           </div>
-        </button>
+        </button>}
 
         {/* Mastery map (kit RL16): only once the child has answered a word; a topic tap starts a quiz */}
         {onPickTopic && <MasteryMap wordMap={stats.wordMap} words={WORDS} lang={lang} onPickTopic={onPickTopic} />}
@@ -197,7 +233,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
               </button>
             )}
 
-            {!isNewUser && (
+            {!isNewUser && !hn && (
               <>
             <button
               onClick={() => onNavigate('personalList')}
@@ -344,6 +380,20 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
       <details className="text-center" data-kdm-audience="teacher" data-m1="grownups">
         <summary className="cursor-pointer list-none text-xs font-semibold text-slate-400 hover:text-slate-600">{t('forGrownUps', lang)} ▾</summary>
         <div className="mt-3 space-y-3 text-start">
+        {/* returning home: the long-tail kid items moved here from More (routes unchanged) */}
+        {hn && !isNewUser && [
+          { to: 'personalList', Icon: ListChecks, color: 'text-purple-600', title: 'myWordList', desc: 'myWordListDesc' },
+          { to: 'learningPath', Icon: Map, color: 'text-indigo-600', title: 'learningPath', desc: 'learningPathDesc' },
+        ].map(({ to, Icon, color, title, desc }) => (
+          <button key={to} onClick={() => onNavigate(to)}
+            className="w-full glass rounded-2xl p-3.5 flex items-center gap-3 hover:shadow-md active:scale-[0.98] transition-all text-start">
+            <Icon className={`w-5 h-5 ${color} shrink-0`} aria-hidden="true" />
+            <span className="flex-1">
+              <span className="block text-sm font-semibold text-slate-700 dark:text-slate-200">{t(title, lang)}</span>
+              <span className="block text-xs text-slate-500">{t(desc, lang)}</span>
+            </span>
+          </button>
+        ))}
         <button
           onClick={() => onNavigate('parentDashboard')}
           className="w-full glass rounded-2xl p-3.5 flex items-center gap-3
@@ -375,5 +425,58 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
         </div>
       </details>
     </div>
+  );
+}
+
+/** The one smart Next card (returning home). kind: mreq (missed-word re-quiz, with "Not me") | path | game. */
+function NextCard({ hn, lang }) {
+  const { next } = hn;
+  const shell = 'w-full rounded-2xl p-5 text-start text-white shadow-lg bg-linear-to-br hover:shadow-xl active:scale-[0.98] transition-all ring-2 ring-emerald-400 ring-offset-2';
+  const label = <p className="text-xs font-semibold uppercase tracking-wide text-white/85">{hn.isNew ? t('startHere', lang) : t('hnNextLabel', lang)}</p>;
+  if (next.kind === 'mreq') {
+    return (
+      <div className={`${shell} from-amber-600 to-orange-700 space-y-3`} data-testid="next-card" data-kind="mreq">
+        <button type="button" onClick={hn.onNext} data-m1="continue" className="w-full text-start">
+          {label}
+          <p className="text-lg font-black mt-1 flex items-center gap-2">
+            <Repeat className="w-5 h-5 shrink-0" aria-hidden="true" />
+            <span><Slots text={t('hnMreqTitle', lang)} vals={{ name: hn.name }} /></span>
+          </p>
+          <p className="text-sm text-white/90 mt-1"><Slots text={t('hnMreqDesc', lang)} vals={{ count: next.words.length }} /></p>
+        </button>
+        <button type="button" onClick={hn.onNotMe} data-testid="not-me"
+          className="px-3 py-2 rounded-lg bg-white/20 hover:bg-white/30 text-sm font-bold flex items-center gap-1.5">
+          <Users className="w-4 h-4" aria-hidden="true" /> {t('hnNotMe', lang)}
+        </button>
+      </div>
+    );
+  }
+  if (next.kind === 'game') {
+    return (
+      <a href={`/games/${next.game}/`} onClick={hn.onNext} data-m1="continue" data-testid="next-card" data-kind="game"
+        className={`block ${shell} from-emerald-600 to-teal-700`}>
+        {label}
+        <p className="text-lg font-black mt-1 flex items-center gap-2">
+          <ArcadeIcon id={next.game} className="w-5 h-5 shrink-0" />
+          <span><Slots text={t('hnGameTitle', lang)} vals={{ name: hn.gameName }} /></span>
+        </p>
+        <p className="text-sm text-white/90 mt-1">{t('hnGameDesc', lang)}</p>
+      </a>
+    );
+  }
+  const p = hn.path || {};
+  return (
+    <button type="button" onClick={hn.onNext} data-m1="continue" data-testid="next-card" data-kind="path"
+      className={`${shell} from-blue-600 to-indigo-600`}>
+      {label}
+      <p className="text-lg font-black mt-1 flex items-center gap-2">
+        <Sparkles className="w-5 h-5 shrink-0" aria-hidden="true" />
+        <span>{p.starter ? t('ladderSetStarter', lang) : <Slots text={t('cycleBatchTitle', lang)} vals={{ num: p.num ?? 1, label: p.label || 'A' }} />}</span>
+      </p>
+      <p className="text-sm text-blue-100 mt-1"><Slots text={t('hnPathDesc', lang)} vals={{ step: p.step ?? 1, total: p.total ?? 5, mode: p.mode || '' }} /></p>
+      <div className="mt-2 h-2 rounded-full bg-white/25 overflow-hidden" aria-hidden="true">
+        <div className="h-full bg-emerald-300 rounded-full transition-all" style={{ width: `${Math.round(100 * Math.min(1, ((p.step ?? 1) - 1) / (p.total || 5)))}%` }} />
+      </div>
+    </button>
   );
 }

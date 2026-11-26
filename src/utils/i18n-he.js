@@ -613,4 +613,16 @@ export default {
   ladderPickSet: 'לתרגל מילים אחרות',
   mapViewKnow: 'מכירים את המילה',
   mapViewSpell: 'מאייתים את המילה',
+  // Returning home "Next" card (home-next, owner 11-21; for every returning player since D4 11-26)
+  hnNextLabel: 'הצעד הבא שלך',
+  hnMreqTitle: 'מילים לנסות שוב, {{name}}',
+  hnMreqDesc: 'חידון קצר עם {{count}} מילים',
+  hnNotMe: 'זה לא אני',
+  hnPathDesc: 'שלב {{step}} מתוך {{total}}: {{mode}}',
+  hnGameTitle: 'משחק חדש לנסות: {{name}}',
+  hnGameDesc: 'תרגלת המון. הגיע הזמן לשחק!',
+  hnLearned: '{{count}} מילים שכבר למדת',
+  hnLearnedOne: 'מילה אחת שכבר למדת',
+  hnLearnedZero: 'כל מילה שמנסים עוזרת ללמוד!',
+  hnPathLine: 'המסלול שלי',
 };

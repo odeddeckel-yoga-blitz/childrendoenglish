@@ -93,6 +93,73 @@ describe('Menu', () => {
     expect(onNavigate).toHaveBeenCalledWith('levelSelect');
   });
 
+  describe('returning home (homeNext prop; owner D4 11-26: every returning player, no split)', () => {
+    const base = {
+      learned: 12, name: 'Maya', gameName: '', isNew: false,
+      path: { num: 2, label: 'B', step: 2, total: 5, mode: 'Listen & Pick', starter: false },
+      onNext: vi.fn(), onNotMe: vi.fn(), onOpenPath: vi.fn(),
+    };
+    const mreq = { ...base, next: { kind: 'mreq', words: [{ id: 'cat' }, { id: 'dog' }, { id: 'sun' }] } };
+
+    it('a first visit (no homeNext) keeps the Continue hero and no Next card', () => {
+      render(<Menu {...defaultProps} onContinueCycle={vi.fn()} cycleInfo={{ batch: 1, stage: 1, label: 'B', stages: 5, mastered: 0, totalBatches: 48 }} />);
+      expect(screen.queryByTestId('next-card')).not.toBeInTheDocument();
+      expect(screen.getByText('Continue learning')).toBeInTheDocument();
+      expect(screen.getByText('0 words mastered')).toBeInTheDocument();
+    });
+
+    it('missed words: names the player, starts the re-quiz, Not me opens the picker', () => {
+      const onNext = vi.fn(); const onNotMe = vi.fn();
+      render(<Menu {...defaultProps} onContinueCycle={vi.fn()} homeNext={{ ...mreq, onNext, onNotMe }} />);
+      const card = screen.getByTestId('next-card');
+      expect(card).toHaveAttribute('data-kind', 'mreq');
+      expect(card.textContent).toContain('Words for Maya to try again');
+      expect(card.textContent).toContain('A quick quiz with 3 words');
+      fireEvent.click(screen.getByTestId('not-me'));
+      expect(onNotMe).toHaveBeenCalled();
+      expect(onNext).not.toHaveBeenCalled();
+      fireEvent.click(screen.getByText(/Words for/));
+      expect(onNext).toHaveBeenCalled();
+      // no Continue hero, no "mastered" line; the path stays one tap away
+      expect(screen.queryByText('Continue learning')).not.toBeInTheDocument();
+      expect(screen.queryByText(/words mastered/)).not.toBeInTheDocument();
+      fireEvent.click(screen.getByTestId('path-line'));
+      expect(base.onOpenPath).toHaveBeenCalled();
+    });
+
+    it('path and game kinds', () => {
+      const { unmount } = render(<Menu {...defaultProps} homeNext={{ ...base, next: { kind: 'path' } }} />);
+      expect(screen.getByTestId('next-card').textContent).toMatch(/Word batch 2.*Step 2 of 5: Listen & Pick/);
+      expect(screen.queryByTestId('path-line')).not.toBeInTheDocument();
+      unmount();
+      render(<Menu {...defaultProps} homeNext={{ ...base, gameName: 'Missing Letter', next: { kind: 'game', game: 'missing-letter' } }} />);
+      const card = screen.getByTestId('next-card');
+      expect(card).toHaveAttribute('href', '/games/missing-letter/');
+      expect(card.textContent).toContain('Try a new game: Missing Letter');
+    });
+
+    it('"N words learned", with an encouraging line instead of 0', () => {
+      const { unmount } = render(<Menu {...defaultProps} homeNext={{ ...base, next: { kind: 'path' } }} />);
+      expect(screen.getByTestId('words-learned').textContent).toBe('12 words learned');
+      unmount();
+      render(<Menu {...defaultProps} homeNext={{ ...base, learned: 0, next: { kind: 'path' } }} />);
+      expect(screen.getByTestId('words-learned').textContent).toBe('Every word you try helps you learn!');
+    });
+
+    it('More holds 6 items (was 8); My Word List and Learning Path move under For grown-ups', () => {
+      const { unmount } = render(<Menu {...defaultProps} todayCount={12} />);
+      expect(screen.getByTestId('menu-more').querySelectorAll(':scope > div button')).toHaveLength(8);
+      unmount();
+      render(<Menu {...defaultProps} todayCount={12} homeNext={{ ...base, next: { kind: 'path' } }} />);
+      const more = screen.getByTestId('menu-more');
+      expect(more.querySelectorAll(':scope > div button')).toHaveLength(6);
+      expect(more.textContent).not.toContain('My Word List');
+      const grown = screen.getByText(/For grown-ups/).closest('details');
+      expect(grown.textContent).toContain('My Word List');
+      expect(grown.textContent).toContain('Learning Path');
+    });
+  });
+
   it('renders in Hebrew when lang=he', async () => {
     await loadHebrew();
     render(<Menu {...defaultProps} lang="he" />);

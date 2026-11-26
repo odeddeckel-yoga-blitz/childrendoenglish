@@ -613,4 +613,16 @@ export default {
   ladderPickSet: 'Practicar otras palabras',
   mapViewKnow: 'Conoce la palabra',
   mapViewSpell: 'Deletrea la palabra',
+  // Returning home "Next" card (home-next, owner 11-21; for every returning player since D4 11-26)
+  hnNextLabel: 'Lo siguiente para ti',
+  hnMreqTitle: 'Palabras para que {{name}} vuelva a intentar',
+  hnMreqDesc: 'Un quiz corto con {{count}} palabras',
+  hnNotMe: 'No soy yo',
+  hnPathDesc: 'Paso {{step}} de {{total}}: {{mode}}',
+  hnGameTitle: 'Prueba un juego nuevo: {{name}}',
+  hnGameDesc: 'Has practicado mucho. ¡Hora de jugar!',
+  hnLearned: '{{count}} palabras aprendidas',
+  hnLearnedOne: '1 palabra aprendida',
+  hnLearnedZero: '¡Cada palabra que intentas te ayuda a aprender!',
+  hnPathLine: 'Mi camino',
 };
