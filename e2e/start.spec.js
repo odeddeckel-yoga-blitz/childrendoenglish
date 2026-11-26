@@ -28,9 +28,12 @@ test('?topic= starts the first quiz on that topic', async ({ page }) => {
   const animalImgs = new Set(WORDS.filter((w) => w.category === 'animals').map((w) => w.imageUrl));
   expect(srcs.filter((s) => animalImgs.has(s)).length).toBeGreaterThanOrEqual(2);
   // 11-20: this first (audio) quiz also shows the word before the answer, LTR inside the Hebrew UI
-  const word = page.getByTestId('audio-word');
+  // CI's headless Chromium has no speech synthesis, so the quiz falls back to the plain word heading
+  // (<h2>, no audio-word testid); either way the word must be on screen before the answer.
+  const word = page.locator('[data-testid="audio-word"], main h2').first();
   await expect(word).toBeVisible();
-  await expect(word).toHaveAttribute('dir', 'ltr');
+  await expect(word).toHaveText(/^[A-Za-z' -]+$/);
+  if (await page.getByTestId('audio-word').count()) await expect(page.getByTestId('audio-word')).toHaveAttribute('dir', 'ltr');
 });
 
 test('a new Hebrew player starts on the "words you already know" set (R2C4)', async ({ page }) => {
