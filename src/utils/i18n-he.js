@@ -553,6 +553,7 @@ export default {
   resultTryGame: 'בונוס: שחקו {{name}}!',
   cycleContinue: 'ממשיכים ללמוד',
   cycleBatchTitle: 'קבוצת מילים {{num}} — אות {{label}}',
+  cycleBatchTitleNum: 'קבוצת מילים {{num}}',
   cycleStageOf: 'שלב {{step}} מתוך {{total}}',
   cycleNextStage: 'הבא: {{mode}}',
   cycleFinishBatch: 'לסיים את הקבוצה!',

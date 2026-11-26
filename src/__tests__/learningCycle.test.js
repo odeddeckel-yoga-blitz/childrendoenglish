@@ -3,6 +3,7 @@ import {
   cycleSequence, batchWords, batchLabel, batchCount, cycleState,
   advanceCycle, stepsFor, LADDER, PHASES, buildSet, repeatSet,
   letterFixPlan, BATCH_SIZE, BONUS, LADDER_V1, CYCLE_V, bonusFor, migrateCycle, masteredCount,
+  cycleOrder, ORDER_ABC, ORDER_MIX,
 } from '../utils/learningCycle';
 import { WORDS } from '../data/words';
 
@@ -256,5 +257,72 @@ describe('letterFixPlan', () => {
         }
       }
     }
+  });
+});
+
+// 11-27 mixed-start order (owner D4 via A254; engagement review F1): the cycle used to start on A and walk the
+// alphabet, so the 18 A words (3% of the catalogue) took 24.5% of answers. These fail on the alphabetical order.
+describe('mixed-start word order', () => {
+  const N = 5; // the first 5 batches = 50 words, more than any learner had reached (3 of 190 cycles got to batch 2)
+  const share = (words, re) => words.filter((w) => re.test(w.word)).length / words.length;
+  const firstBatches = (stats, n = N, kl = null) =>
+    Array.from({ length: n }, (_, i) => buildSet('batch', { stats: { ...stats, cycle: stats.cycle ? { ...stats.cycle, batch: i } : { batch: i, stage: 0, v: CYCLE_V, ord: 'mix' } }, knownLetters: kl }).words).flat();
+  const beginners = WORDS.filter((w) => w.level === 'beginner');
+
+  it('a brand-new learner (no stats.cycle) gets the mixed order', () => {
+    expect(cycleOrder({})).toBe(ORDER_MIX);
+    expect(cycleOrder({ cycle: { batch: 0, stage: 0, v: CYCLE_V, ord: 'mix' } })).toBe(ORDER_MIX);
+  });
+
+  it('the first batch spans the alphabet: ≥ 8 different first letters, none from A/B-only', () => {
+    const b0 = buildSet('batch', { stats: {} }).words;
+    expect(b0).toHaveLength(BATCH_SIZE);
+    expect(new Set(b0.map((w) => w.word[0].toLowerCase())).size).toBeGreaterThanOrEqual(8);
+    expect(share(b0, /^[ab]/i)).toBeLessThan(0.5);
+    expect(b0.every((w) => w.level === 'beginner')).toBe(true);
+  });
+
+  it('A words in the first batches ≈ their share of the beginner level (was ~4× it)', () => {
+    const first = firstBatches({});
+    const aLevel = share(beginners, /^a/i);
+    expect(share(first, /^a/i)).toBeLessThanOrEqual(aLevel * 2 + 0.02);
+    expect(share(first, /^[ab]/i)).toBeLessThanOrEqual(share(beginners, /^[ab]/i) * 1.5);
+  });
+
+  it('known letters (pre-readers) still come first, mixed among themselves', () => {
+    const kl = ['m', 's', 't'];
+    const first = buildSet('batch', { stats: {}, knownLetters: kl }).words;
+    expect(first.every((w) => kl.includes(w.word[0].toLowerCase()))).toBe(true);
+    expect(new Set(first.map((w) => w.word[0].toLowerCase())).size).toBe(3);
+  });
+
+  it('deterministic, whole catalogue once, levels still easy-first', () => {
+    const a = cycleSequence(null, ORDER_MIX).map((w) => w.id);
+    expect(cycleSequence(null, ORDER_MIX).map((w) => w.id)).toEqual(a);
+    expect(new Set(a).size).toBe(WORDS.length);
+    const lv = cycleSequence(null, ORDER_MIX).map((w) => ({ beginner: 0, intermediate: 1, advanced: 2 }[w.level] ?? 1));
+    expect([...lv].sort((x, y) => x - y)).toEqual(lv);
+    const n = batchCount();
+    const seen = new Set();
+    for (let i = 0; i < n; i++) batchWords(i, null, ORDER_MIX).forEach((w) => seen.add(w.id));
+    expect(seen.size).toBe(WORDS.length);
+  });
+
+  it('a saved cycle from before 11-27 (no ord) keeps its alphabetical batch: nobody\'s words change under them', () => {
+    const old = { cycle: { batch: 2, stage: 3, v: CYCLE_V } };
+    expect(cycleOrder(old)).toBe(ORDER_ABC);
+    expect(buildSet('batch', { stats: old }).words.map((w) => w.id)).toEqual(batchWords(2).map((w) => w.id));
+    expect(cycleOrder({ cycle: { batch: 0, stage: 9 } })).toBe(ORDER_ABC); // v1 record
+    expect(migrateCycle({ batch: 1, stage: 2, v: CYCLE_V, ord: 'mix' })).toEqual({ batch: 1, stage: 2, v: CYCLE_V, ord: 'mix' });
+  });
+
+  it('a mixed batch has no letter label; an alphabetical one keeps its span', () => {
+    expect(batchLabel(0, null, ORDER_MIX)).toBe('');
+    expect(batchLabel(0)).toMatch(/^[A-Z](–[A-Z])?$/);
+  });
+
+  it('"New words" (fresh) for a new learner also starts mixed', () => {
+    const fresh = buildSet('fresh', { stats: {} }).words;
+    expect(share(fresh, /^[ab]/i)).toBeLessThan(0.5);
   });
 });

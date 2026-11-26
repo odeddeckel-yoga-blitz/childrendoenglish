@@ -141,7 +141,7 @@ export default function Menu({ stats, darkMode, soundEnabled, lang = 'en', activ
             {cycleInfo?.isNew ? t('startHere', lang) : t('cycleContinue', lang)}
           </p>
           <p className="text-lg font-black mt-1">
-            {cycleInfo?.starter ? t('ladderSetStarter', lang) : t('cycleBatchTitle', lang, { num: (cycleInfo?.batch ?? 0) + 1, label: cycleInfo?.label || 'A' })}
+            {cycleInfo?.starter ? t('ladderSetStarter', lang) : t(cycleInfo?.label ? 'cycleBatchTitle' : 'cycleBatchTitleNum', lang, { num: (cycleInfo?.batch ?? 0) + 1, label: cycleInfo?.label || '' })}
           </p>
           <div className="flex items-center justify-between mt-2 text-sm text-blue-100">
             <span>{t('cycleStageOf', lang, { step: (cycleInfo?.stage ?? 0) + 1, total: cycleInfo?.stages ?? 3 })}</span>
@@ -471,7 +471,7 @@ function NextCard({ hn, lang }) {
       {label}
       <p className="text-lg font-black mt-1 flex items-center gap-2">
         <Sparkles className="w-5 h-5 shrink-0" aria-hidden="true" />
-        <span>{p.starter ? t('ladderSetStarter', lang) : <Slots text={t('cycleBatchTitle', lang)} vals={{ num: p.num ?? 1, label: p.label || 'A' }} />}</span>
+        <span>{p.starter ? t('ladderSetStarter', lang) : <Slots text={t(p.label ? 'cycleBatchTitle' : 'cycleBatchTitleNum', lang)} vals={p.label ? { num: p.num ?? 1, label: p.label } : { num: p.num ?? 1 }} />}</span>
       </p>
       <p className="text-sm text-blue-100 mt-1"><Slots text={t('hnPathDesc', lang)} vals={{ step: p.step ?? 1, total: p.total ?? 5, mode: p.mode || '' }} /></p>
       <div className="mt-2 h-2 rounded-full bg-white/25 overflow-hidden" aria-hidden="true">

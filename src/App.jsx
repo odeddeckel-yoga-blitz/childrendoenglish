@@ -19,7 +19,7 @@ import { sendLearn } from './utils/learnBeacon';
 import { noteAppActivity } from './utils/activityFlow';
 import { isReturningLoad, nextTally, missedWords, pickNext, learnedCount, playedGames, nextNewGame, noteGameLaunch, gameName, nextGameTappedToday, noteNextGameTap } from './utils/homeNext';
 import { WORDS, CATEGORIES } from './data/words';
-import { cycleState, advanceCycle, batchLabel, batchCount, batchWords, stepsFor, bonusFor, ALL_STEPS, CYCLE_V, migrateCycle, buildSet, repeatSet, masteredCount } from './utils/learningCycle';
+import { cycleState, advanceCycle, batchLabel, batchCount, batchWords, stepsFor, bonusFor, ALL_STEPS, CYCLE_V, migrateCycle, cycleOrder, ORDER_MIX, buildSet, repeatSet, masteredCount } from './utils/learningCycle';
 import LadderMap from './components/LadderMap';
 import LadderStrip from './components/LadderStrip';
 
@@ -373,7 +373,7 @@ export default function App() {
     const built = buildSet('batch', { stats, knownLetters: klNow });
     // labelParts, not a baked string: lazy-loaded locale strings arrive after
     // this memo, so the render site translates (LadderMap re-renders then).
-    return { ...built, source: 'batch', labelParts: { num: batch + 1, label: batchLabel(batch, klNow) } };
+    return { ...built, source: 'batch', labelParts: { num: batch + 1, label: batchLabel(batch, klNow, cycleOrder(stats)) } };
   }, [ladderSet, stats, klNow]);
 
   const ladderSteps = useMemo(() => stepsFor(canReadNow, activeSet.words), [canReadNow, activeSet]);
@@ -467,14 +467,16 @@ export default function App() {
     if (activeSet.source === 'batch') {
       const { batch } = cycleState(stats, canReadNow, activeSet.words);
       if (stepKey === ladderPos.currentKey) {
+        // the word order stays with the record: mixed for a cycle begun since 11-27, alphabetical for an older one
+        const ord = cycleOrder(stats) === ORDER_MIX ? { ord: ORDER_MIX } : {};
         let next = advanceCycle(stats, canReadNow, activeSet.words);
         // Skip steps already done off-order (a newcomer's quiz-first launch lands in extraDone).
         while (!next.batchDone && extraDone.includes(ladderSteps[next.stage]?.key)) {
-          next = advanceCycle({ ...stats, cycle: { batch: next.batch, stage: next.stage, v: CYCLE_V } }, canReadNow, activeSet.words);
+          next = advanceCycle({ ...stats, cycle: { batch: next.batch, stage: next.stage, v: CYCLE_V, ...ord } }, canReadNow, activeSet.words);
         }
         // doneDay: the home Next card suggests a new game after a batch finished today
         const doneDay = next.batchDone ? { doneDay: formatLocalDate(new Date()) } : {};
-        const cycle = { batch: next.batch, stage: next.stage, v: CYCLE_V, ...doneDay };
+        const cycle = { batch: next.batch, stage: next.stage, v: CYCLE_V, ...ord, ...doneDay };
         setStats((prev) => ({ ...prev, cycle }));
         // An arcade step leaves the SPA right after this (full navigation): the save effect would run too late
         // when the launch came from Continue (an effect, not a tap), so the step was never kept. Save now.
@@ -722,7 +724,8 @@ export default function App() {
   const onMenu = gameState === 'menu';
   const homeNext = useMemo(() => {
     if (!returningHome || !onMenu) return null;
-    const words = batchWords(stats.cycle?.batch ?? 0, klNow);
+    const order = cycleOrder(stats);
+    const words = batchWords(stats.cycle?.batch ?? 0, klNow, order);
     const { batch, stage } = cycleState(stats, canReadNow, words);
     const pathDone = batch >= batchCount(klNow);
     const steps = stepsFor(canReadNow, words);
@@ -738,7 +741,7 @@ export default function App() {
       gameName: next.kind === 'game' ? gameName(next.game) : '',
       isNew: next.kind === 'path' && (stats.totalQuizzes || 0) === 0 && batch === 0 && stage === 0,
       path: {
-        num: batch + 1, label: batchLabel(batch, klNow), step: idx + 1, total: steps.length,
+        num: batch + 1, label: batchLabel(batch, klNow, order), step: idx + 1, total: steps.length,
         mode: steps[idx] ? t(steps[idx].labelKey, lang) : '', starter: starterFirst,
       },
     };
@@ -861,10 +864,11 @@ export default function App() {
             }}
             cycleInfo={(() => {
               const kl = activePlayer?.knownLetters;
-              const { batch, stage } = cycleState(stats, canReadNow, batchWords(stats.cycle?.batch ?? 0, kl));
+              const order = cycleOrder(stats);
+              const { batch, stage } = cycleState(stats, canReadNow, batchWords(stats.cycle?.batch ?? 0, kl, order));
               return {
                 batch, stage,
-                label: batchLabel(batch, kl),
+                label: batchLabel(batch, kl, order),
                 stages: ladderSteps.length,
                 mastered: masteredCount(stats),
                 totalBatches: batchCount(kl),
@@ -1014,7 +1018,7 @@ export default function App() {
             lang={lang}
             canRead={canReadNow}
             setWords={activeSet.words}
-            setLabel={activeSet.labelParts ? t('cycleBatchTitle', lang, activeSet.labelParts) : activeSet.label}
+            setLabel={activeSet.labelParts ? t(activeSet.labelParts.label ? 'cycleBatchTitle' : 'cycleBatchTitleNum', lang, activeSet.labelParts) : activeSet.label}
             currentStepKey={ladderPos.currentKey}
             doneKeys={ladderPos.doneKeys}
             bonusSteps={bonusSteps}

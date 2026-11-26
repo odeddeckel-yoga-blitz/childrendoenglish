@@ -88,31 +88,77 @@ export function bonusFor(canRead, setWords = null) {
 export function migrateCycle(cycle, canRead = true, setWords = null) {
   const batch = cycle?.batch ?? 0;
   const stage = cycle?.stage ?? 0;
-  if (cycle?.v === CYCLE_V) return { batch, stage, v: CYCLE_V };
+  const ord = cycle?.ord === ORDER_MIX ? { ord: ORDER_MIX } : {};
+  if (cycle?.v === CYCLE_V) return { batch, stage, v: CYCLE_V, ...ord };
   const oldSteps = filterSteps(LADDER_V1, canRead, setWords);
   const upTo = Math.max(0, Math.min(stage, oldSteps.length - 1));
   const done = new Set(oldSteps.slice(0, upTo).map((s) => s.key));
   const steps = stepsFor(canRead, setWords);
   const idx = steps.findIndex((s) => !done.has(s.key));
-  return { batch, stage: idx < 0 ? steps.length - 1 : idx, v: CYCLE_V };
+  return { batch, stage: idx < 0 ? steps.length - 1 : idx, v: CYCLE_V, ...ord };
 }
 
-/** Deterministic full-catalog sequence (same inputs → same order, always). */
-export function cycleSequence(knownLetters = null) {
+/** Word order of the cycle (owner D4 via A254, 11-27). 'abc' = level, then alphabetical (2026-10 → 11-27):
+ *  kids kept practising A/B words (11-26 engagement review: the 18 A words, 3% of the catalogue, got 24.5% of
+ *  all answers; 3 of 190 cycles reached batch 2). 'mix' = level, then every letter's words dealt evenly across
+ *  that level (a stride: the i-th of a letter's n words sits at (i + ½)/n), so each batch spans the alphabet and
+ *  a letter's share of any stretch is its share of the level. Same order on every device (no seed, nothing
+ *  stored), so a batch token b<i> names the same words everywhere.
+ *  A player whose stats.cycle was saved before 11-27 (no ord) keeps 'abc', so nobody's current batch changes
+ *  under them; a player with no cycle yet (or one marked ord: 'mix') gets 'mix'. Read it with cycleOrder(). */
+export const ORDER_ABC = 'abc';
+export const ORDER_MIX = 'mix';
+
+export function cycleOrder(stats) {
+  const c = stats?.cycle;
+  if (!c) return ORDER_MIX;
+  return c.ord === ORDER_MIX ? ORDER_MIX : ORDER_ABC;
+}
+
+const LETTER_RANK = (w) => 'abcdefghijklmnopqrstuvwxyz'.indexOf(w.word[0].toLowerCase());
+const alpha = (a, b) => {
+  const aw = a.word.toLowerCase();
+  const bw = b.word.toLowerCase();
+  return aw < bw ? -1 : aw > bw ? 1 : 0;
+};
+
+/** Deal one group (same known-letter partition and level, alphabetical) evenly by first letter. */
+function dealByLetter(group) {
+  const byLetter = new Map();
+  for (const w of group) {
+    const k = w.word[0].toLowerCase();
+    if (!byLetter.has(k)) byLetter.set(k, []);
+    byLetter.get(k).push(w);
+  }
+  const keyed = [];
+  for (const list of byLetter.values()) list.forEach((w, i) => keyed.push({ w, k: (i + 0.5) / list.length }));
+  // ties (letters of equal size): a fixed stride through the alphabet (×7 mod 26), not a → z again
+  return keyed.sort((x, y) => x.k - y.k || ((LETTER_RANK(x.w) * 7) % 26) - ((LETTER_RANK(y.w) * 7) % 26) || alpha(x.w, y.w))
+    .map((x) => x.w);
+}
+
+const SEQ_CACHE = new Map();
+
+/** Deterministic full-catalog sequence (same inputs → same order, always). order: ORDER_ABC (default, the
+ *  pre-11-27 order) | ORDER_MIX. Call sites pass cycleOrder(stats). */
+export function cycleSequence(knownLetters = null, order = ORDER_ABC) {
+  const ck = `${order}|${(knownLetters || []).map((l) => l.toLowerCase()).sort().join('')}`;
+  if (SEQ_CACHE.has(ck)) return [...SEQ_CACHE.get(ck)];
   const known = knownLetters?.length ? new Set(knownLetters.map((l) => l.toLowerCase())) : null;
-  return [...WORDS].sort((a, b) => {
-    if (known) {
-      const ak = known.has(a.word[0].toLowerCase()) ? 0 : 1;
-      const bk = known.has(b.word[0].toLowerCase()) ? 0 : 1;
-      if (ak !== bk) return ak - bk;
+  const group = (w) => (known && !known.has(w.word[0].toLowerCase()) ? 3 : 0) + (LEVEL_RANK[w.level] ?? 1);
+  const abc = [...WORDS].sort((a, b) => group(a) - group(b) || alpha(a, b));
+  let seq = abc;
+  if (order === ORDER_MIX) {
+    seq = [];
+    for (let i = 0; i < abc.length;) {
+      let j = i;
+      while (j < abc.length && group(abc[j]) === group(abc[i])) j++;
+      seq.push(...dealByLetter(abc.slice(i, j)));
+      i = j;
     }
-    const al = LEVEL_RANK[a.level] ?? 1;
-    const bl = LEVEL_RANK[b.level] ?? 1;
-    if (al !== bl) return al - bl;
-    const aw = a.word.toLowerCase();
-    const bw = b.word.toLowerCase();
-    return aw < bw ? -1 : aw > bw ? 1 : 0;
-  });
+  }
+  SEQ_CACHE.set(ck, seq);
+  return [...seq];
 }
 
 export function batchCount(knownLetters = null) {
@@ -120,14 +166,16 @@ export function batchCount(knownLetters = null) {
 }
 
 /** The words of batch i (clamped; the last batch may be short). */
-export function batchWords(batchIdx, knownLetters = null) {
-  const seq = cycleSequence(knownLetters);
+export function batchWords(batchIdx, knownLetters = null, order = ORDER_ABC) {
+  const seq = cycleSequence(knownLetters, order);
   const i = Math.max(0, Math.min(batchIdx, Math.ceil(seq.length / BATCH_SIZE) - 1));
   return seq.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE);
 }
 
-/** Letter span label for a batch, e.g. "A" or "A–B" — the kid-facing batch name. */
-export function batchLabel(batchIdx, knownLetters = null) {
+/** Letter span label for a batch, e.g. "A" or "A–B" — the kid-facing batch name. A mixed batch spans the
+ *  alphabet, so it has no letter label ('' → the title without "letter …", cycleBatchTitleNum). */
+export function batchLabel(batchIdx, knownLetters = null, order = ORDER_ABC) {
+  if (order === ORDER_MIX) return '';
   const words = batchWords(batchIdx, knownLetters);
   if (words.length === 0) return '';
   const first = words[0].word[0].toUpperCase();
@@ -149,7 +197,7 @@ export function buildSet(source, opts = {}) {
   const size = opts.size || BATCH_SIZE;
   if (source === 'batch') {
     const { batch } = cycleState(opts.stats);
-    return { words: batchWords(batch, opts.knownLetters), token: 'b' + batch };
+    return { words: batchWords(batch, opts.knownLetters, cycleOrder(opts.stats)), token: 'b' + batch };
   }
   if (source === 'starter') {
     const byId = new Map(WORDS.map((w) => [w.id, w]));
@@ -182,7 +230,7 @@ export function buildSet(source, opts = {}) {
   if (source === 'fresh') {
     // Least-practiced: fewest recorded attempts; ties broken by cycle order
     const prog = opts.stats?.wordProgress || {};
-    const order = cycleSequence(opts.knownLetters);
+    const order = cycleSequence(opts.knownLetters, cycleOrder(opts.stats));
     const attempts = (w) => {
       const p = prog[w.id];
       return p ? (p.correct || 0) + (p.wrong || 0) : 0;
@@ -225,7 +273,7 @@ export function cycleState(stats, canRead = true, setWords = null) {
 /** Advance after a COMPLETED (not quit/skipped-backward) ladder step. The result
  *  carries v, so writing { batch, stage, v } back as stats.cycle keeps it migrated. */
 export function advanceCycle(stats, canRead, setWords = null) {
-  const words = setWords || batchWords(stats?.cycle?.batch ?? 0);
+  const words = setWords || batchWords(stats?.cycle?.batch ?? 0, null, cycleOrder(stats));
   const { batch, stage } = cycleState(stats, canRead, words);
   const ladder = stepsFor(canRead, words);
   if (stage + 1 < ladder.length) {

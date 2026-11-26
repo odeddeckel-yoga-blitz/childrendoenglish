@@ -160,6 +160,18 @@ describe('Menu', () => {
     });
   });
 
+  it('a mixed batch (no letter label) is titled by its number only, never "letter A"', () => {
+    const { unmount } = render(<Menu {...defaultProps} onContinueCycle={vi.fn()}
+      cycleInfo={{ batch: 0, stage: 0, label: '', stages: 5, mastered: 0, totalBatches: 57 }} />);
+    expect(screen.getByText('Word batch 1')).toBeInTheDocument();
+    expect(screen.queryByText(/Word batch 1 — letter/)).not.toBeInTheDocument();
+    unmount();
+    render(<Menu {...defaultProps} homeNext={{ learned: 0, name: 'Maya', gameName: '', isNew: false, next: { kind: 'path' },
+      path: { num: 3, label: '', step: 1, total: 5, mode: 'Flashcards', starter: false }, onNext: vi.fn(), onNotMe: vi.fn(), onOpenPath: vi.fn() }} />);
+    expect(screen.getByTestId('next-card').textContent).toContain('Word batch 3');
+    expect(screen.getByTestId('next-card').textContent).not.toContain('letter');
+  });
+
   it('renders in Hebrew when lang=he', async () => {
     await loadHebrew();
     render(<Menu {...defaultProps} lang="he" />);

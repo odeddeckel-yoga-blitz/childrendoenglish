@@ -226,6 +226,36 @@ for (const [name, cycle, want] of [
   });
 }
 
+// 11-27 mixed-start order (owner D4): a cycle begun now deals the words across the alphabet instead of starting on A,
+// keeps that order in stats.cycle.ord, and the batch is named by its number only (no "letter A").
+test('a new cycle mixes the alphabet: no letter label, mixed words in the game URL, ord kept on the record', async ({ page }) => {
+  await page.route('**/api/**', (r) => r.fulfill({ status: 204 }));
+  await page.addInitScript(() => {
+    if (localStorage.getItem('childrendoenglish-players')) return;
+    const player = { id: 'p_mix', name: 'Kid', avatar: '🦊', canRead: true, createdAt: new Date().toISOString() };
+    localStorage.setItem('childrendoenglish-players', JSON.stringify({ schemaVersion: 2, activePlayerId: 'p_mix', players: [player] }));
+    localStorage.setItem('childrendoenglish-player-p_mix', JSON.stringify({ hasSeenOnboarding: true, totalQuizzes: 3, badges: [], unlockedLevels: ['beginner'], wordProgress: {}, uiLanguage: 'en' }));
+    localStorage.setItem('childrendoenglish-analytics-consent', 'declined');
+  });
+  await page.goto('/');
+  await expect(page.getByText('Word batch 1', { exact: true })).toBeVisible({ timeout: 8000 });
+  await expect(page.getByText(/Word batch 1 — letter/)).toHaveCount(0);
+  // jump to the last core step (Word Zapper) the way a returning kid would, then Continue
+  await page.evaluate(() => {
+    const k = 'childrendoenglish-player-p_mix';
+    localStorage.setItem(k, JSON.stringify({ ...JSON.parse(localStorage.getItem(k)), cycle: { batch: 0, stage: 4, v: 2, ord: 'mix' } }));
+  });
+  await page.reload();
+  await page.getByText('Continue learning').click();
+  await page.waitForURL(/\/games\/word-zapper\/\?words=.+&from=ladder/, { timeout: 20000 });
+  const ids = decodeURIComponent(new URL(page.url()).searchParams.get('words')).split(',');
+  expect(ids).toHaveLength(10);
+  expect(new Set(ids.map((id) => id[0])).size).toBeGreaterThanOrEqual(8);
+  expect(ids.filter((id) => /^[ab]/.test(id)).length).toBeLessThanOrEqual(3);
+  const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('childrendoenglish-player-p_mix')).cycle);
+  expect(saved).toMatchObject({ batch: 1, stage: 0, v: 2, ord: 'mix' });
+});
+
 test('back from a ladder step returns to the ladder, not the My Word List editor', async ({ page }) => {
   await reachMenu(page);
   await openLadder(page);

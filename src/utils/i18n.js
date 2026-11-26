@@ -563,6 +563,7 @@ const translations = {
     // Learning cycle (guided learn→practice→advance loop)
     cycleContinue: 'Continue learning',
     cycleBatchTitle: 'Word batch {{num}} — letter {{label}}',
+    cycleBatchTitleNum: 'Word batch {{num}}',
     cycleStageOf: 'Step {{step}} of {{total}}',
     cycleNextStage: 'Next: {{mode}}',
     cycleFinishBatch: 'Finish the batch!',

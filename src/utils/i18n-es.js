@@ -553,6 +553,7 @@ export default {
   resultTryGame: '¡Extra: juega {{name}}!',
   cycleContinue: 'Seguir aprendiendo',
   cycleBatchTitle: 'Grupo de palabras {{num}} — letra {{label}}',
+  cycleBatchTitleNum: 'Grupo de palabras {{num}}',
   cycleStageOf: 'Paso {{step}} de {{total}}',
   cycleNextStage: 'Siguiente: {{mode}}',
   cycleFinishBatch: '¡Termina el grupo!',
