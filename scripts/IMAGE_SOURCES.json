@@ -779,13 +779,8 @@
   "match": 0.976
  },
  "clock": {
-  "source": "wikimedia-commons",
-  "title": "File:Wall clock by Finn Juhl, V&A London.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Wall_clock_by_Finn_Juhl,_V%26A_London.jpg",
-  "author": "14GTR",
-  "licence": "CC0",
-  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-  "match": 0.994
+  "source": "unknown",
+  "note": "fetched from Wikimedia Commons before sources were recorded; 11-27 re-match found a likely source (File:Wall clock by Finn Juhl, V&A London.jpg, CC0, fingerprint 0.994) but the clock is a Finn Juhl design (design-copyright question), so not credited; to be replaced (owner 11-27)"
  },
  "cloud": {
   "source": "pixabay",
@@ -2183,13 +2178,8 @@
   "licence": "own work"
  },
  "magnet": {
-  "source": "wikimedia-commons",
-  "title": "File:A-1 horseshoe-magnet-red-silver-iron-filings-AHD.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:A-1_horseshoe-magnet-red-silver-iron-filings-AHD.jpg",
-  "author": "Oguraclutch",
-  "licence": "CC BY-SA 3.0",
-  "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-  "match": 0.993
+  "source": "unknown",
+  "note": "fetched from Wikimedia Commons before sources were recorded; 11-27 re-match found a likely source (File:A-1 horseshoe-magnet-red-silver-iron-filings-AHD.jpg, fingerprint 0.993 at 64 px, 0.987 on the full-size file) below the 0.99 bar on that measure, so not credited; to be replaced (owner 11-27)"
  },
  "magnifier": {
   "source": "wikimedia-commons",

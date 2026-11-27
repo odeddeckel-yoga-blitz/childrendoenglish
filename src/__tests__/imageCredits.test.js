@@ -13,8 +13,8 @@ import { html, counts } from '../../scripts/build-credits-page.mjs';
 const root = resolve(import.meta.dirname, '../..');
 const SRC = JSON.parse(readFileSync(resolve(root, 'scripts/IMAGE_SOURCES.json'), 'utf8'));
 const ROCKET = 'https://commons.wikimedia.org/wiki/File:Space_Shuttle_Columbia_launching.jpg';
-const CREDITED_1127 = ['surfing', 'panda', 'read_verb', 'clock', 'magnet'];
-const NOT_CREDITED_1127 = ['jacket', 'turtle', 'cucumber', 'toothbrush', 'window', 'write', 'tiger'];
+const CREDITED_1127 = ['surfing', 'panda', 'read_verb'];
+const NOT_CREDITED_1127 = ['jacket', 'turtle', 'cucumber', 'toothbrush', 'window', 'write', 'tiger', 'clock', 'magnet'];
 
 describe('image credits page', () => {
   it('rocket is traced: NASA, public domain, Commons file page', () => {
