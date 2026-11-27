@@ -7,13 +7,18 @@
 //   { source: 'own', licence: 'own work' }                                       drawn/generated here
 //   { source: 'pixabay', title: tags, url: photo page, author, licence: 'Pixabay Content License', licenceUrl }  (owner 11-08)
 // Also credits the computer voices (Jenny (Dioco) + public-domain Piper voices, public/audio/VOICE-LICENCES.md) and the Lucide interface icons (ISC). Runs in `npm run build` after generate-seo-pages.js.
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+// `html` and `counts` are exported so src/__tests__/imageCredits.test.js can check the page without a dist build;
+// the file is written only when this script is run directly.
+import { readFileSync, writeFileSync, mkdirSync, existsSync, realpathSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import { WORDS } from '../src/data/words.js';
 import { PAGES_HOLD } from '../src/data/pagesHold.js';
 
 const SITE = 'https://childrendoenglish.com';
 import { pageLd } from './page-ld.mjs';
-const SRC = JSON.parse(readFileSync(new URL('./IMAGE_SOURCES.json', import.meta.url), 'utf8'));
+// a path, not a URL object: vitest's jsdom environment swaps the global URL class (imageCredits.test.js imports this)
+const SRC = JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)), 'IMAGE_SOURCES.json'), 'utf8'));
 const esc = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const safeUrl = (u) => (/^https:\/\//.test(u || '') ? esc(u) : '');
 const words = [...WORDS].sort((a, b) => a.word.localeCompare(b.word));
@@ -23,6 +28,10 @@ const twemoji = words.filter((w) => SRC[w.id]?.source === 'twemoji');
 const own = words.filter((w) => SRC[w.id]?.source === 'own');
 const fluent = words.filter((w) => SRC[w.id]?.source === 'fluent-emoji');
 const pixabay = words.filter((w) => SRC[w.id]?.source === 'pixabay');
+// Photos added before sources were recorded (source 'unknown', the frozen 11-05 legacy list) have no row below, so
+// the intro gives their count instead of implying that every picture is covered.
+const untraced = words.filter((w) => SRC[w.id]?.source === 'unknown');
+const one = untraced.length === 1;
 // A held word has no /vocabulary/ page yet (pagesHold.js): name it without a link.
 const wordLink = (w) => (PAGES_HOLD.has(w.id) ? `<span class="w">${esc(w.word)}</span>` : `<a class="w" href="/vocabulary/${esc(w.category)}/${esc(w.id)}/">${esc(w.word)}</a>`);
 
@@ -39,7 +48,7 @@ const pxRow = (w) => {
   return `<li>${wordLink(w)}: ${page ? `<a href="${page}" rel="nofollow">photo</a>` : 'photo'} by ${esc(s.author) || 'unknown author'} on Pixabay</li>`;
 };
 
-const html = `<!DOCTYPE html>
+export const html = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -74,7 +83,8 @@ const html = `<!DOCTYPE html>
     <p><a href="/">Children Do English</a> uses photos from <a href="https://commons.wikimedia.org/" rel="nofollow">Wikimedia Commons</a>
       under their authors' free licences, photos from <a href="https://pixabay.com/" rel="nofollow">Pixabay</a>, emoji artwork from Twemoji and Microsoft Fluent Emoji, illustrations we made ourselves, and the Lucide icon set.
       Each photo below is shown resized and cropped to a square; the file page has the original.</p>
-
+${untraced.length ? `    <p class="untraced">${untraced.length} older ${one ? 'photo is' : 'photos are'} not listed on this page: we did not record ${one ? 'its' : 'their'} source when ${one ? 'it was' : 'they were'} added, so we are replacing ${one ? 'it' : 'them'} with photos whose source and licence we record.</p>
+` : ''}
     <h2>Photos from Wikimedia Commons (${commons.length})</h2>
     <ul class="credits">${commons.map(row).join('\n')}</ul>
 
@@ -113,8 +123,12 @@ const html = `<!DOCTYPE html>
 </body>
 </html>
 `;
-const out = new URL('../dist/image-credits/', import.meta.url);
-if (!existsSync(new URL('../dist/', import.meta.url))) { console.error('build-credits-page: dist/ missing — run after vite build'); process.exit(1); }
-mkdirSync(out, { recursive: true });
-writeFileSync(new URL('index.html', out), html);
-console.log(`image-credits: ${commons.length} Commons · ${pixabay.length} Pixabay · ${twemoji.length} Twemoji · ${fluent.length} Fluent · ${own.length} own · ${WORDS.length - commons.length - pixabay.length - twemoji.length - fluent.length - own.length} not listed`);
+export const counts = { commons: commons.length, pixabay: pixabay.length, twemoji: twemoji.length, fluent: fluent.length, own: own.length, untraced: untraced.length };
+
+if (process.argv[1] && fileURLToPath(import.meta.url) === realpathSync(process.argv[1])) {
+  const out = new URL('../dist/image-credits/', import.meta.url);
+  if (!existsSync(new URL('../dist/', import.meta.url))) { console.error('build-credits-page: dist/ missing — run after vite build'); process.exit(1); }
+  mkdirSync(out, { recursive: true });
+  writeFileSync(new URL('index.html', out), html);
+  console.log(`image-credits: ${commons.length} Commons · ${pixabay.length} Pixabay · ${twemoji.length} Twemoji · ${fluent.length} Fluent · ${own.length} own · ${WORDS.length - commons.length - pixabay.length - twemoji.length - fluent.length - own.length} not listed (${untraced.length} untraced)`);
+}

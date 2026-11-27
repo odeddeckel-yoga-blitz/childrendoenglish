@@ -891,8 +891,13 @@
   "match": 0.763
  },
  "cucumber": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Green Cucumbers 1.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Green_Cucumbers_1.jpg",
+  "author": "Inyor4mr",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "match": 0.948
  },
  "cup": {
   "source": "wikimedia-commons",
@@ -1854,8 +1859,13 @@
   "match": 0.989
  },
  "jacket": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Leather jacket.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Leather_jacket.jpg",
+  "author": "Alec Xander",
+  "licence": "CC BY-SA 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "match": 0.98
  },
  "jam": {
   "source": "wikimedia-commons",
@@ -2574,8 +2584,13 @@
   "match": 0.929
  },
  "panda": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Giant panda eating bamboo.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Giant_panda_eating_bamboo.jpg",
+  "author": "Kevin Dooley",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+  "match": 0.99
  },
  "pants": {
   "source": "unknown",
@@ -2975,8 +2990,13 @@
   "licenceUrl": "https://pixabay.com/service/license-summary/"
  },
  "rocket": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Space Shuttle Columbia launching.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Space_Shuttle_Columbia_launching.jpg",
+  "author": "NASA",
+  "licence": "Public domain",
+  "licenceUrl": "",
+  "match": 0.996
  },
  "rooster": {
   "source": "wikimedia-commons",
@@ -3462,8 +3482,13 @@
   "match": 0.963
  },
  "surfing": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:A surfer at the wave edit.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:A_surfer_at_the_wave_edit.jpg",
+  "author": "Brocken Inaglory, edit by Kallerna",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+  "match": 0.995
  },
  "surprised": {
   "source": "twemoji",
@@ -3651,8 +3676,13 @@
   "match": 0.994
  },
  "toothbrush": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Oral-B Pro 2 2500 Electric Toothbrush - 41646996702.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Oral-B_Pro_2_2500_Electric_Toothbrush_-_41646996702.jpg",
+  "author": "electricteeth",
+  "licence": "CC BY 2.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
+  "match": 0.991
  },
  "towel": {
   "source": "wikimedia-commons",
@@ -3726,8 +3756,13 @@
   "licence": "own work"
  },
  "turtle": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Sea turtle swimming.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Sea_turtle_swimming.jpg",
+  "author": "Simonverhamme",
+  "licence": "CC BY-SA 4.0",
+  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+  "match": 0.968
  },
  "twelve": {
   "source": "own",
