@@ -6,6 +6,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import os from 'node:os';
+import process from 'node:process';
+import { spawnSync } from 'node:child_process';
 import { parseCsv, family, parseHeld } from '../../tools/voice-final-check.mjs';
 import { audioCacheName } from '../../sw-audio-cache.js';
 
@@ -62,8 +64,10 @@ describe('voice ship batches', () => {
     } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
   });
   it('a clip held by the owner keeps its baseline bytes and is in no batch (remove the hold line when the owner clears it)', () => {
-    const heldPath = path.join(PROV, 'held-by-owner.txt');
-    const held = parseHeld(fs.existsSync(heldPath) ? fs.readFileSync(heldPath, 'utf8') : '');
+    const heldFiles = fs.readdirSync(PROV).filter((f) => /^held-by-owner.*\.txt$/.test(f));
+    expect(heldFiles).toContain('held-by-owner.txt');
+    const held = parseHeld(heldFiles.map((f) => fs.readFileSync(path.join(PROV, f), 'utf8')).join('\n'));
+    expect(held.has('public/audio/cvc/bit.mp3')).toBe(true);
     const base = new Map(baseline.map((r) => [r.file, r]));
     const shipped = new Set(shipRows.map((r) => r.file));
     const bad = [];
@@ -74,6 +78,23 @@ describe('voice ship batches', () => {
       if (shipped.has(f)) bad.push(`${f}: shipped by a batch, so the hold is stale`);
     }
     expect(bad).toEqual([]);
+  });
+  it('the final check reads every held-by-owner*.txt (a batch keeps its holds in a file of its own)', () => {
+    const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'cde-held-'));
+    try {
+      const prov = path.join(tmp, 'briefs/voice-provenance');
+      fs.mkdirSync(prov, { recursive: true }); fs.mkdirSync(path.join(tmp, 'public/audio'), { recursive: true });
+      fs.writeFileSync(path.join(tmp, 'public/audio/x.mp3'), 'x');
+      const x = crypto.createHash('sha1').update('x').digest('hex');
+      fs.writeFileSync(path.join(prov, 'baseline-2026-11-22.csv'), `file,voice,sha1\npublic/audio/x.mp3,en_US-amy-medium,${x}\n`);
+      fs.writeFileSync(path.join(prov, 'held-by-owner-ship9.txt'), 'public/audio/x.mp3 | 2026-11-27 | test\n');
+      const tool = path.join(ROOT, 'tools/voice-final-check.mjs');
+      const r = spawnSync(process.execPath, [tool, `--root=${tmp}`, '--strict'], { encoding: 'utf8' });
+      expect(r.stdout).toMatch(/HELD 1 clip/);
+      expect(r.status).toBe(0);
+      fs.rmSync(path.join(prov, 'held-by-owner-ship9.txt'));
+      expect(spawnSync(process.execPath, [tool, `--root=${tmp}`, '--strict'], { encoding: 'utf8' }).status).toBe(1);
+    } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
   });
   it('parses the hold list (comments and blank lines skipped)', () => {
     const h = parseHeld('# c\n\npublic/audio/cvc/bit.mp3 | 2026-11-27 | why | more\n');

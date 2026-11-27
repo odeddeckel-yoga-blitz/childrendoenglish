@@ -8,7 +8,8 @@
 //   --list   print every file with its voice and record
 //   --strict also fail on clips whose voice is unknown or that no csv records, and on a stale hold (below)
 //
-// Owner holds (briefs/voice-provenance/held-by-owner.txt, one `<file> | <date> | <why>` per line): a clip the owner keeps
+// Owner holds (every briefs/voice-provenance/held-by-owner*.txt, e.g. held-by-owner.txt and a batch's own
+// held-by-owner-ship7.txt, so two batches never edit one file; one `<file> | <date> | <why>` per line): a clip the owner keeps
 // on its pre-redo voice until they have listened. It is listed as HELD and never fails the check, as long as its bytes
 // are still the baseline file and no ship csv records it. A held clip whose bytes changed is an error; a held clip that
 // a batch has shipped is a stale hold (WARN, FAIL with --strict): remove its line once the owner has cleared it.
@@ -84,8 +85,8 @@ export function run() {
   }
   const base = new Map(parseCsv(readFileSync(join(PROV, 'baseline-2026-11-22.csv'), 'utf8')).map((r) => [r.file, r]));
   const ships = readdirSync(PROV).filter((f) => /^ship-\d+\.csv$/.test(f)).sort((a, b) => parseInt(a.slice(5)) - parseInt(b.slice(5)));
-  const heldPath = join(PROV, 'held-by-owner.txt');
-  const held = parseHeld(existsSync(heldPath) ? readFileSync(heldPath, 'utf8') : '');
+  const heldFiles = readdirSync(PROV).filter((f) => /^held-by-owner.*\.txt$/.test(f)).sort();
+  const held = parseHeld(heldFiles.map((f) => readFileSync(join(PROV, f), 'utf8')).join('\n'));
   const shipRow = new Map(); const errors = []; const stale = [];
   for (const s of ships) {
     for (const r of parseCsv(readFileSync(join(PROV, s), 'utf8'))) {
@@ -115,7 +116,7 @@ export function run() {
     list.push({ file: f, voice, family: voice === 'unrecorded' ? 'unrecorded' : family(voice), source });
   }
   for (const [f, s] of shipRow) if (!onDisk.has(f)) errors.push(`${f}: in ${s.ship} but missing on disk`);
-  for (const f of held.keys()) if (!onDisk.has(f)) errors.push(`${f}: in held-by-owner.txt but missing on disk`);
+  for (const f of held.keys()) if (!onDisk.has(f)) errors.push(`${f}: in held-by-owner*.txt but missing on disk`);
 
   const by = {}; for (const x of list) by[x.family] = (by[x.family] || 0) + 1;
   const banned = list.filter((x) => !x.held && BANNED.test(x.family));
@@ -135,11 +136,11 @@ export function run() {
     for (const x of unknown) console.log(`  ${x.file} (${x.voice}; ${x.source})`);
   }
   if (heldList.length) {
-    console.log(`HELD ${heldList.length} clip(s) by owner decision (not a failure; held-by-owner.txt, remove the line when cleared):`);
+    console.log(`HELD ${heldList.length} clip(s) by owner decision (not a failure; held-by-owner*.txt, remove the line when cleared):`);
     for (const x of heldList) console.log(`  ${x.file} (keeps ${x.voice}; ${x.source}; ${held.get(x.file).why})`);
   }
   if (stale.length) {
-    console.log(`${args.includes('--strict') ? 'FAIL' : 'WARN'} ${stale.length} stale hold(s): shipped by a batch but still in held-by-owner.txt:`);
+    console.log(`${args.includes('--strict') ? 'FAIL' : 'WARN'} ${stale.length} stale hold(s): shipped by a batch but still in held-by-owner*.txt:`);
     for (const f of stale) console.log(`  ${f}`);
   }
   for (const e of errors) console.log(`ERROR ${e}`);
