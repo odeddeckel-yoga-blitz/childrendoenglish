@@ -19,7 +19,7 @@ Setup (self-contained venv):
   /tmp/voice-venv/bin/python -m piper.download_voices en_US-amy-medium en_US-lessac-medium en_US-ryan-high
 Then adapt the session scripts (voice-audit.py / voice-improver.py in git history
 of this file's commit message) — or ask Claude to re-run the loop; this header
-is the spec. After ANY mass audio replacement: bump the SW cacheName
-('word-audio-vN' in vite.config.js) or devices serve the old voice for 30 days.
+is the spec. After ANY mass audio replacement: bump the SW audio cache (add one file to
+scripts/audio-cache-bumps/, see sw-audio-cache.js) or devices serve the old voice for 30 days.
 """
 print(__doc__)

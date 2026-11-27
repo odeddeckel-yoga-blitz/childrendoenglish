@@ -1,0 +1,11 @@
+# Voice provenance (per clip)
+
+- `baseline-2026-11-22.csv`: every audio clip as it was on origin/main before the voice-licence redo (file, family,
+  voice, sha1 of the file). Voices come from the 2026-11-22 provenance log (generators, git history, acoustic
+  classifier); `unknown` = not settled.
+- `ship-<k>.csv`: the clips that batch k (branch fix/voice-ship-k) replaced: final voice and speed, licence, gate
+  result, `sha1` of the shipped file, `old_voice`/`old_sha1` of the file it replaced, and the render evidence.
+- `ship-<k>.md`: the batch log (counts, clips that failed the whisper gate in every voice, kept exceptions).
+
+`node tools/voice-final-check.mjs` lists every clip by voice from these files (matched by sha1 of the bytes on disk) and
+fails while a clip is on amy, lessac, hfc_female or ryan. `src/__tests__/voiceShip.test.js` checks every batch present.

@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import asyncCss from './vite-plugin-async-css.js';
 import { SW_FALLBACK_ALLOW, SW_IMAGE_RE, SW_AUDIO_RE, swCacheCaps } from './sw-routes.js';
+import { audioCacheName } from './sw-audio-cache.js';
 import { WORD_COUNT } from './src/data/wordCount.js';
 
 // index.html's prerendered copy and meta write the one word count as %WORD_COUNT% (persona P5:
@@ -49,7 +50,8 @@ export default defineConfig({
             urlPattern: SW_AUDIO_RE,
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'word-audio-v5',
+              // Bump = add a file to scripts/audio-cache-bumps/ (sw-audio-cache.js), never edit a version here.
+              cacheName: audioCacheName(),
               expiration: {
                 // Word, sentence (audio/s), CVC, pairs and game audio: all match /audio/.
                 maxEntries: SW_CAPS.audioCap,
