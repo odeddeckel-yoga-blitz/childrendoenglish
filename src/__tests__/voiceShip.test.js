@@ -107,4 +107,22 @@ describe('voice ship batches', () => {
     }
     expect(fs.readFileSync(path.join(ROOT, 'public/audio/VOICE-LICENCES.md'), 'utf8')).toMatch(/Jenny \(Dioco\)/);
   });
+  // Ship 7 (owner 11-27): or / our rendered as just the letter 'r', so the owner holds them on their origin/main files.
+  // Their hold lines live in held-by-owner-ship7.txt (not ship-2's held-by-owner.txt, so the two batches never conflict).
+  it('ship 7 holds or / our out: 29 clips ship, the two keep their baseline bytes and are listed in held-by-owner-ship7.txt', () => {
+    if (!fs.existsSync(path.join(PROV, 'ship-7.csv'))) return;
+    const rows = parseCsv(fs.readFileSync(path.join(PROV, 'ship-7.csv'), 'utf8'));
+    const HELD7 = ['public/audio/or.mp3', 'public/audio/our.mp3'];
+    expect(rows.length).toBe(29);
+    const holdTxt = path.join(PROV, 'held-by-owner-ship7.txt');
+    expect(fs.existsSync(holdTxt)).toBe(true);
+    const lines = fs.readFileSync(holdTxt, 'utf8').split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#'));
+    expect(lines.map((l) => l.split('|')[0].trim()).sort()).toEqual(HELD7);
+    for (const l of lines) expect(l.split('|').map((x) => x.trim())[1]).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    const base = new Map(baseline.map((r) => [r.file, r]));
+    for (const f of HELD7) {
+      expect(shipRows.some((r) => r.file === f), `${f} is in a batch`).toBe(false);
+      expect(sha1(f), `${f} is not its baseline file`).toBe(base.get(f).sha1);
+    }
+  });
 });

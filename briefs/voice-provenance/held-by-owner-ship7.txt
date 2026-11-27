@@ -1,0 +1,5 @@
+# Ship 7's owner holds (fix/voice-ship-7). Same format and meaning as held-by-owner.txt (fix/voice-ship-2); a file of its own
+# so the two batches never edit the same file. tools/voice-final-check.mjs reads every briefs/voice-provenance/held-by-owner*.txt.
+# Format: <file> | <date held> | <why>
+public/audio/or.mp3 | 2026-11-27 | the Jenny 1.1 render (sha1 e6f0d3d9dd) is just the letter 'r' (whisper base.en and small.en both 'r'; kristin and ljspeech failed too); owner holds it. Keeps its origin/main file (baseline voice unknown, sha1 033ed193cf) meanwhile.
+public/audio/our.mp3 | 2026-11-27 | the Jenny 1.1 render (sha1 1841372803) is just the letter 'r' (whisper base.en and small.en both 'r'; kristin and ljspeech failed too); owner holds it. Keeps its origin/main file (baseline voice unknown, sha1 2fbb65bdaf) meanwhile.
