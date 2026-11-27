@@ -177,7 +177,7 @@ const FACTS_EN = [
   `Children Do English has ${FACT_WORDS} English words in ${CATEGORIES.length} topics, each with ${pics(WORDS, 'one')}, audio, a kid-friendly definition and an example sentence.`,
   FACT_ES_N === WORDS.length ? 'Every word has a Hebrew and a Spanish translation.' : `Every word has a Hebrew translation, and ${FACT_ES_N} have a Spanish one.`,
   `Every word's audio uses one computer voice (Piper text-to-speech), the same on every device.`,
-  `Each group of 10 words climbs a short 5-step practice ladder: flashcards, listening and reading quizzes and two arcade games, with optional spelling and sentence bonus steps.`, // persona-ok: the group size, not a catalogue count
+  `Each group of 10 words climbs an 11-step practice ladder: flashcards, listening and reading quizzes, spelling, a sentence step and arcade games.`, // persona-ok: the group size, not a catalogue count
   `There are ${FACT_GAMES} free arcade games and a live Class Battle for classrooms.`,
   `${FACT_BAND1_N} of the words are mapped to Israel's Band I vocabulary levels, and ${FACT_UNITS_N} textbook units have their own word pages.`,
   'It is free, has no ads, needs no account or sign-up, and keeps progress on the device.',
@@ -186,7 +186,7 @@ const FACTS_HE = [
   `ב-Children Do English יש ${FACT_WORDS} מילים באנגלית ב-${CATEGORIES.length} נושאים, לכל מילה תמונה, השמעה, הגדרה ומשפט לדוגמה.`,
   'לכל המילים יש תרגום לעברית.',
   'ההשמעה של כל המילים היא באותו קול ממוחשב (TTS), זהה בכל מכשיר.',
-  'כל קבוצה של 10 מילים עוברת סולם תרגול קצר בן 5 שלבים: כרטיסיות, חידוני האזנה וקריאה ושני משחקים, ושלבי בונוס של איות ומשפטים שאינם חובה.',
+  'כל קבוצה של 10 מילים עוברת סולם תרגול בן 11 שלבים: כרטיסיות, חידוני האזנה וקריאה, איות, משפט ומשחקים.',
   `יש ${FACT_GAMES} משחקי ארקייד בחינם וקרב כיתתי חי לכיתה.`,
   `${FACT_BAND1_N} מהמילים ממופות לרמות של Band I, ול-${FACT_UNITS_N} יחידות מספרי הלימוד יש עמוד מילים משלהן.`,
   'האתר חינמי, בלי פרסומות, בלי חשבון ובלי הרשמה, וההתקדמות נשמרת במכשיר.',
@@ -1837,7 +1837,7 @@ function buildHebrewLandingPage() {
         <div class="feature-card">
           <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-map"/></svg></div>
           <h3>מסלול למידה מותאם</h3>
-          <p>כל קבוצה של 10 מילים עולה בסולם תרגול קצר בן 5 שלבים, מכרטיסייה ראשונה ועד משחקי ארקייד, וכל ילד מתקדם בקצב שלו.</p>
+          <p>כל קבוצה של 10 מילים עולה בסולם תרגול בן 11 שלבים, מכרטיסייה ראשונה ועד משחקי ארקייד, וכל ילד מתקדם בקצב שלו.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-trophy"/></svg></div>
@@ -2207,7 +2207,7 @@ function buildSpanishLandingPage() {
         <div class="feature-card">
           <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-gamepad-2"/></svg></div>
           <h3>Quizzes divertidos</h3>
-          <p>Una escalera corta de 5 pasos — tarjetas, quizzes y juegos arcade, con pasos extra opcionales de ortografía y oraciones — que convierte el aprendizaje en un juego.</p>
+          <p>Una escalera de 11 pasos — tarjetas, quizzes, letras que faltan, oraciones y juegos arcade — que convierte el aprendizaje en un juego.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon"><svg class="ic" aria-hidden="true" focusable="false" style="width:1.75rem;height:1.75rem;flex:none"><use href="/icons.svg#i-file-text"/></svg></div>
@@ -2580,7 +2580,7 @@ function heGamesWordCard(w) {
 function buildHebrewGamesHubPage() {
   const path = '/he/english-games/';
   let title = 'משחקים ללימוד אנגלית לילדים — חינם, בלי פרסומות ובלי הרשמה | Children Do English';
-  let description = `משחקים ללימוד אנגלית לילדים בחינם: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים עם ${pics(WORDS, 'many', 'he')}, השמעה של ההגייה וסולם תרגול קצר בן 5 שלבים. בלי פרסומות ובלי הרשמה — פשוט משחקים ולומדים.`;
+  let description = `משחקים ללימוד אנגלית לילדים בחינם: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים עם ${pics(WORDS, 'many', 'he')}, השמעה של ההגייה וסולם תרגול בן 11 שלבים. בלי פרסומות ובלי הרשמה — פשוט משחקים ולומדים.`;
   ({ title, description } = heHeadterm(path, title, description, { n: HE_GAMES_WORDS_ROUNDED, words: WORDS }));
 
   const faq = [
@@ -2590,7 +2590,7 @@ function buildHebrewGamesHubPage() {
     },
     {
       q: 'איך המשחקים עובדים?',
-      a: `כל קבוצה של 10 מילים עולה בסולם תרגול קצר בן 5 שלבים: כרטיסיות, חידוני האזנה וקריאה ושני משחקי ארקייד, ואחריהם שלבי בונוס של איות ותרגול משפטים שאינם חובה. מערכת חזרה מרווחת מחזירה כל מילה בדיוק לפני ששוכחים אותה, עד שליטה מלאה ביותר מ-${HE_GAMES_WORDS_ROUNDED} מילים.`,
+      a: `כל קבוצה של 10 מילים עולה בסולם תרגול בן 11 שלבים: כרטיסיות, חידוני האזנה וקריאה, משחקי איות עם אותיות חסרות, תרגול משפטים ומשחקי ארקייד. מערכת חזרה מרווחת מחזירה כל מילה בדיוק לפני ששוכחים אותה, עד שליטה מלאה ביותר מ-${HE_GAMES_WORDS_ROUNDED} מילים.`,
     },
     {
       q: 'לאיזה גיל המשחקים מתאימים?',
@@ -2670,7 +2670,7 @@ function buildHebrewGamesHubPage() {
     <p class="subtitle">חינם, בלי פרסומות ובלי הרשמה: הילדים לומדים אנגלית דרך משחק — עם ${pics(WORDS, 'many', 'he')}, השמעה של ההגייה וממשק בעברית.</p>
     <a href="/new-player?lang=he&utm_source=seo&utm_medium=cta&utm_content=he_games_hub" class="cta-btn">התחילו לשחק עכשיו &#8592;</a>
     <p class="cta-sub">בלי פרסומות &middot; בלי הרשמה &middot; חינם לגמרי</p>
-    <p class="hero-cite">Children Do English מציע משחקים חינמיים ללימוד אנגלית לילדים בגילאי 6-12: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים באנגלית עם ${pics(WORDS, 'many', 'he')}, השמעה של ההגייה, סולם תרגול קצר בן 5 שלבים ותרגום לעברית — בלי פרסומות ובלי הרשמה.</p>
+    <p class="hero-cite">Children Do English מציע משחקים חינמיים ללימוד אנגלית לילדים בגילאי 6-12: יותר מ-${HE_GAMES_WORDS_ROUNDED} מילים באנגלית עם ${pics(WORDS, 'many', 'he')}, השמעה של ההגייה, סולם תרגול בן 11 שלבים ותרגום לעברית — בלי פרסומות ובלי הרשמה.</p>
   </div>
 
   <div class="stats-bar">
@@ -2826,7 +2826,7 @@ function buildHebrewGamesAgePage(age) {
     <div class="container prose">
       <p>${fillPics(age.pitch, levelWords)}</p>
       <p>מחפשים משחקים לגיל אחר או לפי נושא? כל המשחקים נמצאים בעמוד <a href="/he/english-games/">משחקים ללימוד אנגלית לילדים</a>.</p>
-      <p>ברמה הזו מחכות <span style="direction:ltr;display:inline-block">${levelWords.length}</span> מילים, וכל אחת עוברת דרך סולם תרגול קצר בן 5 שלבים — מכרטיסייה ראשונה ועד משחקי ארקייד — עם חזרה מרווחת עד שליטה מלאה. הכול בחינם, בלי פרסומות ובלי הרשמה.</p>
+      <p>ברמה הזו מחכות <span style="direction:ltr;display:inline-block">${levelWords.length}</span> מילים, וכל אחת עוברת דרך סולם תרגול בן 11 שלבים — מכרטיסייה ראשונה ועד משחקי ארקייד — עם חזרה מרווחת עד שליטה מלאה. הכול בחינם, בלי פרסומות ובלי הרשמה.</p>
     </div>
   </div>
 
@@ -4568,7 +4568,7 @@ const GUIDES = [
       {
         h2: 'Picture Quizzes: From Passive to Active Learning',
         content: `<p>Looking at picture flashcards is passive learning. To move vocabulary into long-term memory, kids need to <strong>actively retrieve</strong> the word. That's where picture quizzes come in.</p>
-<p><a href="/">Children Do English</a> practices every word through a short guided 5-step ladder with pictures at every step:</p>
+<p><a href="/">Children Do English</a> practices every word through a guided 11-step ladder with pictures at every step:</p>
 <ul>
   <li><strong>Image Quiz</strong> &mdash; See a picture, pick the correct English word from four options</li>
   <li><strong>Word Quiz</strong> &mdash; See an English word, pick the matching picture</li>
@@ -4760,7 +4760,7 @@ const GUIDES = [
 <ul>
   <li><strong>Hebrew throughout</strong> &mdash; every word has a Hebrew translation, and the menus are available in Hebrew.</li>
   <li><strong>Spaced repetition built in</strong> &mdash; the app schedules word reviews so kids keep what they learn.</li>
-  <li><strong>A short 5-step practice ladder</strong> &mdash; flashcards, listening and reading quizzes and two arcade games take each group of words from first meeting to mastery, with optional spelling and sentence bonus steps.</li>
+  <li><strong>An 11-step practice ladder</strong> &mdash; flashcards, listening and reading quizzes, missing-letter spelling games, sentence practice and arcade games take each group of words from first meeting to mastery.</li>
   <li><strong>Free</strong> &mdash; no premium tier, no ads, no in-app purchases, no account.</li>
   <li><strong>Works offline</strong> &mdash; after the first visit, the app works without internet.</li>
   <li><strong>Multiple player profiles</strong> &mdash; siblings can each track their own progress on the same device.</li>

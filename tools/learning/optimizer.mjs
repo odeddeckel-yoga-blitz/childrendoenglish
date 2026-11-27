@@ -267,8 +267,11 @@ if (cyc.length > 0) {
   // fc → aud → wq → conv → zap; lf1/forge/sent are an optional bonus row (iq/lf2/lf3 only in older days).
   const STEP_ORDER = ['fc', 'aud', 'wq', 'iq', 'conv', 'zap', 'lf1', 'lf2', 'lf3', 'forge', 'sent', 's0', 's1', 's2'];
   const byStep = {};
+  // since the 11-27 split by device the items may end in the visitor arm (~0 / ~1, src/utils/ladderArm.js): pooled
+  // here (the two arms have different ladders), per arm in tools/reads/ladder-arm-counts.mjs
   for (const r of cyc.filter(x => x.ev === 'cyc_stage')) {
-    const key = r.item.split('_').slice(1).join('_') || r.item;
+    const item = r.item.replace(/~[01]$/, '');
+    const key = item.split('_').slice(1).join('_') || item;
     byStep[key] = (byStep[key] || 0) + r.n;
   }
   const stepLine = Object.keys(byStep)
@@ -277,7 +280,7 @@ if (cyc.length > 0) {
   if (stepLine) console.log(`  step completions: ${stepLine}  (a step-down along the ladder = the drop-off step)`);
   // Per language: starts → step 1 (flashcards) done. 10-28: en 27→7, es 7→0, he 23→19.
   const cl = await q`SELECT lang, ev, sum(n)::int AS n FROM cde_learn
-    WHERE day >= CURRENT_DATE - ${days}::int AND (ev = 'cyc_start' OR (ev = 'cyc_stage' AND item LIKE '%\\_fc'))
+    WHERE day >= CURRENT_DATE - ${days}::int AND (ev = 'cyc_start' OR (ev = 'cyc_stage' AND (item LIKE '%\\_fc' OR item LIKE '%\\_fc~_')))
     GROUP BY lang, ev`;
   const byLang = {};
   for (const r of cl) (byLang[r.lang] ||= { start: 0, fc: 0 })[r.ev === 'cyc_start' ? 'start' : 'fc'] += r.n;

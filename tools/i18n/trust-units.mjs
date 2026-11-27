@@ -22,7 +22,7 @@ const FACTS_EN = {
   glossAll: 'Every word has a Hebrew and a Spanish translation.',
   glossSome: 'Every word has a Hebrew translation, and {es} have a Spanish one.',
   audio: "Every word's audio uses one computer voice (Piper text-to-speech), the same on every device.",
-  ladder: 'Each group of 10 words climbs a short 5-step practice ladder: flashcards, listening and reading quizzes and two arcade games, with optional spelling and sentence bonus steps.',
+  ladder: 'Each group of 10 words climbs an 11-step practice ladder: flashcards, listening and reading quizzes, spelling, a sentence step and arcade games.',
   games: 'There are {games} free arcade games and a live Class Battle for classrooms.',
   band1: "{band1} of the words are mapped to Israel's Band I vocabulary levels, and {units} textbook units have their own word pages.",
   free: 'It is free, has no ads, needs no account or sign-up, and keeps progress on the device.',

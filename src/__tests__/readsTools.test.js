@@ -6,6 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import { toRows } from '../../tools/reads/counts.mjs';
 import { pageKey, fingerprint, changedUnits } from '../../tools/reads/locks.mjs';
+import { toArmRows, armTotals } from '../../tools/reads/ladder-arm-counts.mjs';
 
 const read = { id: 'step4-prepost', units: ['vocabulary_word'], start: '2026-11-16' };
 
@@ -28,6 +29,28 @@ describe('counts exporter rows', () => {
       { day: '2026-11-16', ev: 'pg', item: 'units_jet-1', n: 5 }, { day: '2026-11-16', ev: 'pg', item: 'games', n: 7 },
     ], { units: ['printable-flashcards*'], start: '2026-11-11' }, { ctrl: ['units*'] });
     expect(rows.map((r) => `${r.unit}:${r.group}:${r.n}:${r.k}`)).toEqual(['printable-flashcards_food:treat:2:2', 'units_jet-1:ctrl:5:0']);
+  });
+});
+
+describe('ladder-next arm counts (split by device, 11-27)', () => {
+  const tallies = [
+    { day: '2026-12-01', ev: 'cyd', item: 'start1~0', lang: 'he', n: 10 }, { day: '2026-12-01', ev: 'cyd', item: 'start1~1', lang: 'he', n: 12 },
+    { day: '2026-12-01', ev: 'cyd', item: 'done1~1', lang: 'he', n: 3 }, { day: '2026-12-01', ev: 'cyd', item: 'done1~0', lang: 'he', n: 1 },
+    { day: '2026-12-02', ev: 'cyd', item: 'start2~1', lang: 'he', n: 2 }, { day: '2026-12-01', ev: 'cyc_done', item: 'b0~1', lang: 'he', n: 4 },
+    { day: '2026-12-01', ev: 'cyc_start', item: 'b0~1', lang: 'he', n: 30 }, { day: '2026-12-01', ev: 'cyc_start', item: 'b0', lang: 'he', n: 99 },
+  ];
+  it('n = devices with a first set start, k = first-set finishes per arm and language (post-only A/B rows)', () => {
+    expect(toArmRows(tallies)).toEqual([
+      { unit: 'he', day: '2026-12-01', arm: 0, phase: 'post', n: 10, k: 1 },
+      { unit: 'he', day: '2026-12-01', arm: 1, phase: 'post', n: 12, k: 3 },
+    ]);
+    expect(toArmRows(tallies, { metric: 'start2' }).find((r) => r.day === '2026-12-02')).toEqual({ unit: 'he', day: '2026-12-02', arm: 1, phase: 'post', n: 0, k: 2 });
+    expect(toArmRows(tallies, { metric: 'done' }).find((r) => r.arm === 1).k).toBe(4);
+  });
+  it('totals per arm skip unsuffixed (uncounted) tallies', () => {
+    const t = armTotals(tallies);
+    expect(t[1]).toEqual({ start1: 12, done1: 3, start2: 2, cyc_done: 4, cyc_start: 30 });
+    expect(t[0]).toEqual({ start1: 10, done1: 1 });
   });
 });
 

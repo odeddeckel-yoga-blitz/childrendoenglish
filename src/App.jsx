@@ -13,13 +13,15 @@ import usePlayerManagement from './hooks/usePlayerManagement';
 import useInstallPrompt from './hooks/useInstallPrompt';
 import { analytics } from './utils/analytics';
 import { checkStreakReminder } from './utils/notifications';
+import { getDueWords } from './utils/spaced-repetition';
 import { pickTodayWords, TODAY_SIZE } from './utils/todayRun';
+import { ladderTreat, sendCycle } from './utils/ladderArm';
 import { filterByKnownLetters } from './utils/letterFilter';
 import { sendLearn } from './utils/learnBeacon';
 import { noteAppActivity } from './utils/activityFlow';
-import { isReturningLoad, nextTally, missedWords, pickNext, learnedCount, playedGames, nextNewGame, noteGameLaunch, gameName, nextGameTappedToday, noteNextGameTap } from './utils/homeNext';
+import { showsHomeNext, nextTally, missedWords, pickNext, learnedCount, playedGames, nextNewGame, noteGameLaunch, gameName, nextGameTappedToday, noteNextGameTap } from './utils/homeNext';
 import { WORDS, CATEGORIES } from './data/words';
-import { cycleState, advanceCycle, batchLabel, batchCount, batchWords, stepsFor, bonusFor, ALL_STEPS, CYCLE_V, migrateCycle, cycleOrder, ORDER_MIX, buildSet, repeatSet, masteredCount } from './utils/learningCycle';
+import { cycleState, advanceCycle, batchLabel, batchCount, batchWords, stepsFor, bonusFor, findStep, CYCLE_V, migrateCycle, cycleOrder, ORDER_MIX, buildSet, repeatSet, masteredCount } from './utils/learningCycle';
 import LadderMap from './components/LadderMap';
 import LadderStrip from './components/LadderStrip';
 
@@ -149,6 +151,9 @@ function initialReview() {
   return new URLSearchParams(window.location.search).get('review') === '1';
 }
 const KNOWN_WORD_IDS = new Set(WORDS.map((w) => w.id));
+// The ladder-next split by device (utils/ladderArm.js, kit arm-bit, salt 'ladder'), read once per load. true = the
+// treatment (5-step ladder, one word memory, home Next card + 6-item More, mixed order); false = main's behaviour.
+const LADDER_TREAT = ladderTreat();
 // Screens where nobody is known to be playing yet: the inbox waits.
 const NO_FOLD_STATES = new Set(['landing', 'playerSelect', 'playerCreate', 'onboarding', 'privacy', 'terms', 'admin']);
 
@@ -177,9 +182,10 @@ export default function App() {
   // label}); batch sets track position in stats.cycle, ad-hoc sets in adhocPos.
   // cycleRun marks an in-flight quiz as a ladder step; ladderStepKey = which.
   const [cycleRun, setCycleRun] = useState(false);
-  // Returning home (utils/homeNext.js; owner D4 11-26: every returning player, no split): the app opened with a
-  // player created before this sitting → one smart Next card + the trimmed More. A first visit keeps today's home.
-  const [returningHome] = useState(() => isReturningLoad(initial.current.registry));
+  // Returning home (utils/homeNext.js; owner D4 11-26: every returning player): the app opened with a player created
+  // before this sitting → one smart Next card + the trimmed More. A first visit keeps today's home. Treatment arm only
+  // since the 11-27 split (the control arm keeps main's home).
+  const [returningHome] = useState(() => showsHomeNext(initial.current.registry, LADDER_TREAT));
   // "Missed since the last visit" = last answered before this page load
   const visitStart = useRef(Date.now());
   // Movement between activities (g2/g3/hop, kit §5.55): each play screen entered, and whether the ladder sent it.
@@ -395,7 +401,7 @@ export default function App() {
   // finished step; words, badges and mastery live elsewhere and are untouched).
   useEffect(() => {
     const c = stats.cycle;
-    if (!c || c.v === CYCLE_V) return;
+    if (!LADDER_TREAT || !c || c.v === CYCLE_V) return; // the control arm keeps main's 11-step record
     setStats((prev) => (prev.cycle && prev.cycle.v !== CYCLE_V
       ? { ...prev, cycle: migrateCycle(prev.cycle, canReadNow, batchWords(prev.cycle.batch ?? 0, klNow)) }
       : prev));
@@ -418,11 +424,11 @@ export default function App() {
 
   // Launch a step (any step — free navigation). Fires cyc_start on a set's first step.
   const startLadderStep = useCallback((stepKey, wordsOverride = null, setStart = false) => {
-    const step = ALL_STEPS.find((st) => st.key === stepKey);
+    const step = findStep(stepKey);
     if (!step) return;
     const words = wordsOverride || activeSet.words;
     if (!step.bonus && ladderPos.doneKeys.length === 0 && (setStart || stepKey === ladderPos.currentKey)) {
-      sendLearn('cyc_start', activeSet.token);
+      sendCycle('cyc_start', activeSet.token);
     }
     setLadderStepKey(stepKey);
     if (step.kind === 'quiz') {
@@ -446,7 +452,7 @@ export default function App() {
       // Mark-on-launch (cross-page completion isn't trackable in v1; g_lvl/g_cmp
       // beacons measure real play). Then a full navigation out of the SPA.
       completeLadderStep(stepKey, true);
-      noteGameLaunch(step.game);
+      if (LADDER_TREAT) noteGameLaunch(step.game); // the Next card's "games played" (treatment only)
       const ids = words.map((w) => w.id).join(',');
       window.location.href = `/games/${step.game}/?words=${encodeURIComponent(ids)}&from=ladder`;
     }
@@ -455,11 +461,11 @@ export default function App() {
 
   // Record a completed step; advance position; celebrate batch completion.
   const completeLadderStep = useCallback((stepKey, leaving = false) => {
-    sendLearn('cyc_stage', `${activeSet.token}_${stepKey}`);
+    sendCycle('cyc_stage', `${activeSet.token}_${stepKey}`);
     setCycleRun(false);
     setFocusedWords(null);
     // A bonus step (spelling / sentence) is tallied and ticked, never part of the position.
-    if (ALL_STEPS.find((st) => st.key === stepKey)?.bonus) {
+    if (findStep(stepKey)?.bonus) {
       setBonusDone((cur) => (cur.includes(stepKey) ? cur : [...cur, stepKey]));
       if (!leaving) navigate('ladder');
       return;
@@ -469,20 +475,21 @@ export default function App() {
       if (stepKey === ladderPos.currentKey) {
         // the word order stays with the record: mixed for a cycle begun since 11-27, alphabetical for an older one
         const ord = cycleOrder(stats) === ORDER_MIX ? { ord: ORDER_MIX } : {};
+        const v = LADDER_TREAT ? { v: CYCLE_V } : {}; // control: main's { batch, stage } record
         let next = advanceCycle(stats, canReadNow, activeSet.words);
         // Skip steps already done off-order (a newcomer's quiz-first launch lands in extraDone).
         while (!next.batchDone && extraDone.includes(ladderSteps[next.stage]?.key)) {
-          next = advanceCycle({ ...stats, cycle: { batch: next.batch, stage: next.stage, v: CYCLE_V, ...ord } }, canReadNow, activeSet.words);
+          next = advanceCycle({ ...stats, cycle: { batch: next.batch, stage: next.stage, ...v, ...ord } }, canReadNow, activeSet.words);
         }
         // doneDay: the home Next card suggests a new game after a batch finished today
-        const doneDay = next.batchDone ? { doneDay: formatLocalDate(new Date()) } : {};
-        const cycle = { batch: next.batch, stage: next.stage, v: CYCLE_V, ...ord, ...doneDay };
+        const doneDay = LADDER_TREAT && next.batchDone ? { doneDay: formatLocalDate(new Date()) } : {};
+        const cycle = { batch: next.batch, stage: next.stage, ...v, ...ord, ...doneDay };
         setStats((prev) => ({ ...prev, cycle }));
         // An arcade step leaves the SPA right after this (full navigation): the save effect would run too late
         // when the launch came from Continue (an effect, not a tap), so the step was never kept. Save now.
         if (leaving) saveStats({ ...stats, cycle }, playerRegistry?.activePlayerId);
         if (next.batchDone) {
-          sendLearn('cyc_done', activeSet.token);
+          sendCycle('cyc_done', activeSet.token);
           setExtraDone([]);
           setBatchDoneNum(batch + 1);
           navigate('batchComplete');
@@ -496,7 +503,7 @@ export default function App() {
     }
     const done = adhocPos.done.includes(stepKey) ? adhocPos.done : [...adhocPos.done, stepKey];
     setAdhocPos({ done });
-    if (done.length >= ladderSteps.length) { sendLearn('cyc_done', activeSet.token); navigate('ladder'); return; }
+    if (done.length >= ladderSteps.length) { sendCycle('cyc_done', activeSet.token); navigate('ladder'); return; }
     if (!leaving) setPendingStart(true);
    
   }, [activeSet, ladderPos, stats, canReadNow, adhocPos, ladderSteps, extraDone, navigate, setStats, playerRegistry?.activePlayerId]);
@@ -532,7 +539,9 @@ export default function App() {
   // first quiz, so the newcomer flow is unchanged — or go at once when the child
   // tapped "words to review today". A review link lands on the short review.
   const activeId = playerRegistry?.activePlayerId || null;
+  // Treatment arm only (ladder-next split): the control arm never folds the inbox, as on main.
   const foldWordInbox = useCallback((allowGuest) => {
+    if (!LADDER_TREAT) return null;
     const inbox = loadWordInbox();
     if (!inbox.length || !activeId) return null;
     const { mine, keep } = splitInbox(inbox, { activeId, playerIds: (playerRegistry?.players || []).map((p) => p.id), allowGuest });
@@ -563,7 +572,7 @@ export default function App() {
   }, [stats.wordProgress, canReadNow, navigate]);
 
   useEffect(() => {
-    if (!activeId || NO_FOLD_STATES.has(gameState)) return;
+    if (!LADDER_TREAT || !activeId || NO_FOLD_STATES.has(gameState)) return;
     const wantReview = gameState === 'menu' && pendingReview.current;
     if (wantReview) pendingReview.current = false;
     const folded = foldWordInbox(wantReview || !isFresh);
@@ -579,10 +588,11 @@ export default function App() {
   }, [foldWordInbox, isFresh]);
 
   useEffect(() => {
-    if (gameState === 'dailyReview') sendLearn('rvw', 'start');
+    if (LADDER_TREAT && gameState === 'dailyReview') sendLearn('rvw', 'start');
     if (gameState !== 'today') reviewRun.current = false;
   }, [gameState]);
-  const reviewCount = reviewTodayCount(WORDS, stats.wordProgress || {});
+  // control arm: no review card (0) and main's due count / Daily Review words (getDueWords)
+  const reviewCount = LADDER_TREAT ? reviewTodayCount(WORDS, stats.wordProgress || {}) : 0;
 
   // Reaching the menu by any route (bottom nav, browser back) ends a ladder run.
   useEffect(() => {
@@ -848,7 +858,7 @@ export default function App() {
             playerCount={playerRegistry?.players.length || 0}
             showInstallBanner={showInstallBanner}
             isIOS={isIOS}
-            dueCount={reviewCount}
+            dueCount={LADDER_TREAT ? reviewCount : getDueWords(WORDS, stats.wordProgress || {}).length}
             todayCount={TODAY_SIZE}
             onInstall={handleInstall}
             onDismissInstall={dismissInstall}
@@ -980,7 +990,7 @@ export default function App() {
             canRead={activePlayer?.canRead ?? true}
             cycleNext={(() => {
               if (!cycleRun || quizFlow.quizResults?.quit || !ladderStepKey) return null;
-              if (ALL_STEPS.find((st) => st.key === ladderStepKey)?.bonus) {
+              if (findStep(ladderStepKey)?.bonus) {
                 return { label: t('ladderStepDone', lang), icon: 'check', onClick: () => completeLadderStep(ladderStepKey) };
               }
               const isCurrent = ladderStepKey === ladderPos.currentKey;
@@ -1039,7 +1049,7 @@ export default function App() {
         );
 
       case 'letterFix': {
-        const lfStep = ALL_STEPS.find((st) => st.key === ladderStepKey);
+        const lfStep = findStep(ladderStepKey);
         return (
           <LetterFix
             words={activeSet.words}
@@ -1204,12 +1214,12 @@ export default function App() {
       case 'dailyReview':
         return (
           <DailyReview
-            words={reviewTodayWords(WORDS, stats.wordProgress || {})}
+            words={LADDER_TREAT ? reviewTodayWords(WORDS, stats.wordProgress || {}) : getDueWords(WORDS, stats.wordProgress || {})}
             stats={stats}
             lang={lang}
             canRead={activePlayer?.canRead ?? true}
             onComplete={(results) => {
-              sendLearn('rvw', 'done');
+              if (LADDER_TREAT) sendLearn('rvw', 'done');
               setStats(prev => {
                 let updated = { ...prev, wordProgress: results.wordProgress };
                 updated = updateStreak(updated);

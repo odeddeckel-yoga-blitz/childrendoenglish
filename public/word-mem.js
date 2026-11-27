@@ -15,13 +15,26 @@
  * app (a brand-new player only after the first quiz, or at once if the review link is tapped).
  * Privacy: nothing here leaves the device. The only network call is the cookieless rvw
  * tally (view_/open_<surface>), with the same guards as the other beacons.
- * Storage can throw (kit PATTERNS §41): every touch is guarded; with storage blocked this is a no-op. */
+ * Storage can throw (kit PATTERNS §41): every touch is guarded; with storage blocked this is a no-op.
+ * Split by device (11-27, src/utils/ladderArm.js): the review link is the TREATMENT arm's only (kit /arm-bit.js,
+ * kitArm('ladder') === 1 with stable storage). The control arm, crawlers and owner devices see no link, as on main;
+ * CDE_WORD still records in every arm (on the device only, nothing shown), and the control app never folds it. */
 (function () {
   'use strict';
   var KEY = 'childrendoenglish-word-inbox', MAX = 400;
   var PLAYERS = 'childrendoenglish-players', PFX = 'childrendoenglish-player-', LAST = 'childrendoenglish-last-active';
   var RESUME = 2 * 60 * 60 * 1000, DAY = 86400000, RECENT = 3 * DAY, REVIEW_MAX = 10;
   var ID = /^[a-z0-9-]{1,40}$/;
+
+  // the kit's visitor arm, one copy for the app and the pages (ready long before an activity ends)
+  try {
+    if (!window.kitArm && !document.querySelector('script[src="/arm-bit.js"]')) {
+      var ab = document.createElement('script'); ab.src = '/arm-bit.js'; ab.async = true; document.head.appendChild(ab);
+    }
+  } catch (e) { /* no arm: control (no link) */ }
+  function treat() {
+    try { return !!window.kitArm && window.kitArm('ladder') === 1 && window.kitArm.stable('ladder'); } catch (e) { return false; }
+  }
 
   function get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
   function json(k) { try { return JSON.parse(get(k) || 'null'); } catch (e) { return null; } }
@@ -104,7 +117,7 @@
   }
   // surface: game | unit | read | word (the rvw item shape is pinned in api/land.js)
   function card(parent, surface, lang) {
-    if (!parent) return null;
+    if (!parent || !treat()) return null;
     var old = parent.querySelector('.cde-review'); if (old) old.parentNode.removeChild(old);
     var n = toReview(); if (!n) return null;
     lang = langNow(lang);
@@ -125,5 +138,5 @@
     return a;
   }
 
-  window.CDE_WORDMEM = { key: KEY, entries: read, owner: owner, toReview: toReview, reviewHref: reviewHref, card: card };
+  window.CDE_WORDMEM = { key: KEY, entries: read, owner: owner, toReview: toReview, reviewHref: reviewHref, card: card, treat: treat };
 })();

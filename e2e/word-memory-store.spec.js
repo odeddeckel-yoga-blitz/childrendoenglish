@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { forceLadderArm } from './lib/ladder-arm.mjs';
 
 // One word memory (owner OK 11-18): a game posts its first-try result per word to the shared inbox
 // (public/word-mem.js), its end card offers "words to review today (N)", and the app folds the inbox
@@ -38,6 +39,10 @@ async function zapperOver(page) {
   await page.waitForFunction(() => WZ.dbg.screen === 'over');
 }
 const missedIds = (inbox) => [...new Set(inbox.filter((e) => !e.ok).map((e) => e.w))];
+
+// Written for the TREATMENT arm of the ladder-next split by device (src/utils/ladderArm.js): force arm 1 (Playwright's
+// webdriver flag would otherwise give every page the control arm). The control arm: e2e/ladder-arm.spec.js.
+test.beforeEach(async ({ page }) => { await forceLadderArm(page, 1); });
 
 test('Word Zapper writes first-try results; its end card opens the review with the missed word', async ({ page }) => {
   await seedPlayer(page);

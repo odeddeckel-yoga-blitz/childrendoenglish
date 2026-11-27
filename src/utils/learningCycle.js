@@ -15,8 +15,13 @@
  * where stage is an index into stepsFor(...). v = CYCLE_V marks the 5-step
  * ladder; an older record (no v) indexes the 11-step LADDER_V1 and is mapped
  * forward by cycleState()/migrateCycle() — always read through cycleState().
+ *
+ * Split by device (11-27, src/utils/ladderArm.js): v3 and the mixed order are the TREATMENT arm. The control arm
+ * keeps main's 11-step ladder (LADDER_V1, PHASES_V1), its { batch, stage } record (no v, never migrated) and the
+ * alphabetical order. The switch points take `treat` as their last argument (default: this device's arm).
  */
 import { WORDS } from '../data/words';
+import { ladderTreat } from './ladderArm';
 
 export const BATCH_SIZE = 10;
 const LEVEL_RANK = { beginner: 0, intermediate: 1, advanced: 2 };
@@ -44,12 +49,20 @@ export const BONUS = [
 /** Every launchable step (core + bonus), for look-ups by key. */
 export const ALL_STEPS = [...LADDER, ...BONUS];
 
-/** v2's 11-step ladder (2026-10-07 → 11-18), kept ONLY to migrate stored positions. */
+/** v2's 11-step ladder (2026-10-07 → 11-18): main's ladder, so the CONTROL arm of the ladder-next split
+ *  (src/utils/ladderArm.js) climbs it unchanged, and the one migrateCycle() maps a stored position from. */
 export const LADDER_V1 = [
-  { key: 'fc' }, { key: 'aud' }, { key: 'wq', needsReading: true }, { key: 'iq', needsReading: true },
-  { key: 'conv', needsCategories: 2 }, { key: 'lf1', needsReading: true }, { key: 'lf2', needsReading: true },
-  { key: 'lf3', needsReading: true }, { key: 'forge', needsReading: true }, { key: 'sent', needsReading: true },
-  { key: 'zap' },
+  { key: 'fc',    kind: 'flashcards', labelKey: 'stepFlashcards' },
+  { key: 'aud',   kind: 'quiz', mode: 'audio', preReaderMode: 'listen', labelKey: 'stepAudio' },
+  { key: 'wq',    kind: 'quiz', mode: 'word',  needsReading: true, labelKey: 'stepWordQuiz' },
+  { key: 'iq',    kind: 'quiz', mode: 'image', needsReading: true, labelKey: 'stepImageQuiz' },
+  { key: 'conv',  kind: 'arcade', game: 'category-conveyor', needsCategories: 2, labelKey: 'stepConveyor' },
+  { key: 'lf1',   kind: 'letterfix', mode: 'easy',   needsReading: true, writing: true, labelKey: 'stepLetterFix1' },
+  { key: 'lf2',   kind: 'letterfix', mode: 'double', needsReading: true, writing: true, labelKey: 'stepLetterFix2' },
+  { key: 'lf3',   kind: 'letterfix', mode: 'hard',   needsReading: true, writing: true, labelKey: 'stepLetterFix3' },
+  { key: 'forge', kind: 'arcade', game: 'spelling-forge', needsReading: true, writing: true, labelKey: 'stepForge' },
+  { key: 'sent',  kind: 'sentence', needsReading: true, labelKey: 'stepSentence' },
+  { key: 'zap',   kind: 'arcade', game: 'word-zapper', labelKey: 'stepZapper' },
 ];
 export const CYCLE_V = 2;
 
@@ -59,6 +72,23 @@ export const PHASES = [
   { labelKey: 'phaseUnderstand', steps: ['aud', 'wq', 'conv'] },
   { labelKey: 'phaseMaster', steps: ['zap'] },
 ];
+/** main's phases for the 11-step ladder (control arm). */
+export const PHASES_V1 = [
+  { labelKey: 'phaseMeet', steps: ['fc'] },
+  { labelKey: 'phaseUnderstand', steps: ['aud', 'wq', 'iq', 'conv'] },
+  { labelKey: 'phaseSpell', steps: ['lf1', 'lf2', 'lf3', 'forge'] },
+  { labelKey: 'phaseUse', steps: ['sent'] },
+  { labelKey: 'phaseMaster', steps: ['zap'] },
+];
+
+// The ladder-next split (ladderArm.js): treat = the 5-step ladder + bonus row, control = main's 11 steps. Each switch
+// point takes `treat` as its last argument (default: this device's arm), so tests inject the arm.
+/** The core ladder of an arm. */
+export const ladderFor = (treat = ladderTreat()) => (treat ? LADDER : LADDER_V1);
+/** The step-map phases of an arm. */
+export const phasesFor = (treat = ladderTreat()) => (treat ? PHASES : PHASES_V1);
+/** A launchable step by key (control: main's 11 steps, none of them a bonus). */
+export const findStep = (key, treat = ladderTreat()) => (treat ? ALL_STEPS : LADDER_V1).find((st) => st.key === key);
 
 function filterSteps(list, canRead, setWords) {
   const cats = new Set((setWords || []).map((w) => w.category));
@@ -71,13 +101,13 @@ function filterSteps(list, canRead, setWords) {
 
 /** The ladder for a given learner + word set: pre-readers lose needsReading
  *  steps; the conveyor needs the set to span ≥2 categories or its bins starve. */
-export function stepsFor(canRead, setWords = null) {
-  return filterSteps(LADDER, canRead, setWords);
+export function stepsFor(canRead, setWords = null, treat = ladderTreat()) {
+  return filterSteps(ladderFor(treat), canRead, setWords);
 }
 
-/** The bonus row this learner + set can play (pre-readers get none). */
-export function bonusFor(canRead, setWords = null) {
-  return filterSteps(BONUS, canRead, setWords);
+/** The bonus row this learner + set can play (pre-readers get none; the control arm has no bonus row). */
+export function bonusFor(canRead, setWords = null, treat = ladderTreat()) {
+  return treat ? filterSteps(BONUS, canRead, setWords) : [];
 }
 
 /** Map a stored cycle position onto the 5-step ladder. A v1 (11-step) stage
@@ -93,7 +123,7 @@ export function migrateCycle(cycle, canRead = true, setWords = null) {
   const oldSteps = filterSteps(LADDER_V1, canRead, setWords);
   const upTo = Math.max(0, Math.min(stage, oldSteps.length - 1));
   const done = new Set(oldSteps.slice(0, upTo).map((s) => s.key));
-  const steps = stepsFor(canRead, setWords);
+  const steps = stepsFor(canRead, setWords, true);
   const idx = steps.findIndex((s) => !done.has(s.key));
   return { batch, stage: idx < 0 ? steps.length - 1 : idx, v: CYCLE_V, ...ord };
 }
@@ -109,7 +139,8 @@ export function migrateCycle(cycle, canRead = true, setWords = null) {
 export const ORDER_ABC = 'abc';
 export const ORDER_MIX = 'mix';
 
-export function cycleOrder(stats) {
+export function cycleOrder(stats, treat = ladderTreat()) {
+  if (!treat) return ORDER_ABC; // control arm: main's alphabetical order
   const c = stats?.cycle;
   if (!c) return ORDER_MIX;
   return c.ord === ORDER_MIX ? ORDER_MIX : ORDER_ABC;
@@ -261,26 +292,30 @@ export function repeatSet(currentWords, source, opts = {}) {
 
 /** Safe read of the per-player cycle position. Older stats lack the key; a v1
  *  record (11-step ladder, no v) is mapped onto the 5-step ladder on the fly —
- *  pass the learner's canRead and the set's words for an exact mapping. */
-export function cycleState(stats, canRead = true, setWords = null) {
+ *  pass the learner's canRead and the set's words for an exact mapping. The control arm reads the record as main
+ *  does (stage = an index into the 11-step ladder). */
+export function cycleState(stats, canRead = true, setWords = null, treat = ladderTreat()) {
   const c = stats?.cycle;
   if (!c) return { batch: 0, stage: 0 };
+  if (!treat) return { batch: c.batch ?? 0, stage: c.stage ?? 0 };
   if (c.v === CYCLE_V) return { batch: c.batch ?? 0, stage: c.stage ?? 0 };
   const m = migrateCycle(c, canRead, setWords || batchWords(c.batch ?? 0));
   return { batch: m.batch, stage: m.stage };
 }
 
 /** Advance after a COMPLETED (not quit/skipped-backward) ladder step. The result
- *  carries v, so writing { batch, stage, v } back as stats.cycle keeps it migrated. */
-export function advanceCycle(stats, canRead, setWords = null) {
-  const words = setWords || batchWords(stats?.cycle?.batch ?? 0, null, cycleOrder(stats));
-  const { batch, stage } = cycleState(stats, canRead, words);
-  const ladder = stepsFor(canRead, words);
+ *  carries v, so writing { batch, stage, v } back as stats.cycle keeps it migrated. The control arm's result has
+ *  no v (main's { batch, stage } record on the 11-step ladder). */
+export function advanceCycle(stats, canRead, setWords = null, treat = ladderTreat()) {
+  const words = setWords || batchWords(stats?.cycle?.batch ?? 0, null, cycleOrder(stats, treat));
+  const { batch, stage } = cycleState(stats, canRead, words, treat);
+  const ladder = stepsFor(canRead, words, treat);
+  const v = treat ? { v: CYCLE_V } : {};
   if (stage + 1 < ladder.length) {
-    return { batch, stage: stage + 1, v: CYCLE_V, batchDone: false };
+    return { batch, stage: stage + 1, ...v, batchDone: false };
   }
   const last = batchCount() - 1;
-  return { batch: Math.min(batch + 1, last + 1), stage: 0, v: CYCLE_V, batchDone: true };
+  return { batch: Math.min(batch + 1, last + 1), stage: 0, ...v, batchDone: true };
 }
 
 /** Back-compat alias used by pre-ladder call sites/tests. */

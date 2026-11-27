@@ -1,4 +1,5 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { setLadderArmForTests } from '../utils/ladderArm';
 import {
   cycleSequence, batchWords, batchLabel, batchCount, cycleState,
   advanceCycle, stepsFor, LADDER, PHASES, buildSet, repeatSet,
@@ -6,6 +7,11 @@ import {
   cycleOrder, ORDER_ABC, ORDER_MIX,
 } from '../utils/learningCycle';
 import { WORDS } from '../data/words';
+
+// These tests pin the TREATMENT arm of the ladder-next split (5 steps, migration, mixed order). The control arm
+// (main's 11-step ladder) is pinned in ladderArm.test.js with an injected arm.
+beforeAll(() => setLadderArmForTests(1));
+afterAll(() => setLadderArmForTests(undefined));
 
 describe('learningCycle sequence/batches', () => {
   it('sequence is deterministic and covers the whole vocabulary once', () => {

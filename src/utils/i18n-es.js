@@ -453,13 +453,13 @@ export default {
   faq6Q: '¿Pueden varios niños usar la app?',
   faq6A: '¡Sí! La app admite múltiples perfiles de jugador para que cada hermano pueda seguir su propio progreso de forma independiente.',
   faq7Q: '¿Cómo enseña vocabulario?',
-  faq7A: 'Cada grupo de 10 palabras sube una escalera de práctica corta de 5 pasos — tarjetas, quizzes de escucha y lectura y dos juegos arcade — con pasos extra opcionales de ortografía y oraciones, y repetición espaciada hasta dominarlas.',
+  faq7A: 'Cada grupo de 10 palabras sube una escalera de práctica de 11 pasos — tarjetas, quizzes de escucha y lectura, juegos de letras que faltan, práctica de oraciones y juegos arcade — con repetición espaciada hasta dominarlas.',
 
   // Language select
   confirmLanguage: '¿Qué idioma hablas?',
   landingStatsWords: '{{n}}+ Palabras',
   landingStatsCategories: '13 Categorías',
-  landingStatsModes: 'Escalera de 5 pasos',
+  landingStatsModes: 'Escalera de 11 pasos',
   landingFeaturesHeading: 'Todo lo que tu hijo necesita',
   landingReadyTitle: '¿Listo para empezar a aprender?',
   landingReadyDesc: 'Elige tu idioma y comienza de inmediato.',
@@ -584,6 +584,10 @@ export default {
   ladderExplainTitle: 'Cómo funcionan los 5 pasos',
   ladderExplainBody: 'Cada grupo de palabras sube una escalera corta: primero las conoces con tarjetas, luego las comprendes de oído, de vista y clasificándolas, y al final las dominas a toda velocidad en un juego arcade. Cada paso dura unos minutos, así que un grupo entero cabe en una sola sesión. Las palabras que fallas vuelven en tus repasos hasta que las sabes.',
   ladderExplainSkip: '¿Quieres más? Los pasos extra (ortografía y oraciones) son opcionales — toca cualquier paso para moverte.',
+  // control arm of the ladder-next split (utils/ladderArm.js): main's 11-step explainer, unchanged
+  ladderExplainTitleV1: 'Cómo funcionan los 11 pasos',
+  ladderExplainBodyV1: 'Cada grupo de palabras sube una escalera: primero las conoces con tarjetas, luego las comprendes de oído y de vista, aprendes a deletrearlas letra por letra, las usas en una oración y al final las dominas a toda velocidad. Completar cada paso construye un conocimiento completo de cada palabra: oírla, leerla, escribirla y usarla.',
+  ladderExplainSkipV1: '¿Todavía no trabajas la escritura? Los pasos de ortografía se pueden saltar — toca cualquier paso para moverte.',
   phaseBonus: 'Extra (opcional)',
   ladderBonusHint: 'Ortografía y oraciones. Nunca bloquean tu grupo.',
   reviewTodayCard: 'Palabras para repasar hoy ({{n}})',

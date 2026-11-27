@@ -1,18 +1,21 @@
 /** @module homeNext — the returning player's "Next" home (owner 11-21 build on feat/home-next; owner 11-26 D4 via
  *  Factory A254: the Next card and the trimmed More for EVERY returning player, no 50/50 split, and no separate
- *  4-step path: the path is the 5-step ladder of learningCycle.js).
+ *  4-step path: the path is the 5-step ladder of learningCycle.js). Since 11-27 (retro rule 3) it ships as the
+ *  treatment arm of the ladder-next split by device (ladderArm.js): the control arm keeps main's home.
  *
  *  A returning load = the device's oldest player was created ≥ FIRST_VISIT_MS before this page load, so a
  *  brand-new family's first sitting (create → quiz → a game page → back) keeps today's first-visit home.
  *
  *  Beacon (pinned in api/land.js EV_ITEM), daily totals only, no identifier:
- *    hn @ see_<k>   the Next card showed kind k (mreq|path|game), once per device-day
+ *    hn @ see_<k>~1 the Next card showed kind k (mreq|path|game), once per device-day (~1: the ladder-next arm,
+ *                   src/utils/ladderArm.js; only the treatment arm has the card)
  *    hn @ next_<k>  it was tapped
  *    mreq_notme @ tap  "Not me" on the missed-words card (the card names the active player)
  *  Stored on the device only: the games launched from the app (cde-hn-games), the day a new-game card was
  *  tapped (cde-hn-gday) and which see_ tallies went out today (cde-hn-sent).
  */
 import { sendLearnBatch } from './learnBeacon';
+import { armTag, ladderTreat } from './ladderArm';
 import { formatLocalDate } from './storage';
 import { SPOTLIGHT_GAMES } from '../data/arcadeGames';
 
@@ -43,6 +46,11 @@ export function isReturningLoad(registry, now = Date.now()) {
   return now - oldest >= FIRST_VISIT_MS;
 }
 
+/** The gate: the Next card + 6-item More show on a returning load of the TREATMENT arm only (ladder-next split). */
+export function showsHomeNext(registry, treat = ladderTreat(), now = Date.now()) {
+  return treat && isReturningLoad(registry, now);
+}
+
 /** One Next-card tally (hn @ item). once = at most once per local day per device. */
 export function nextTally(item, { once = false, store, now } = {}) {
   if (once) {
@@ -54,7 +62,7 @@ export function nextTally(item, { once = false, store, now } = {}) {
     if (items.includes(item)) return false;
     try { s.setItem(SENT_KEY, JSON.stringify({ d, i: [...items, item].slice(-20) })); } catch { return false; }
   }
-  sendLearnBatch([{ e: 'hn', i: item }]);
+  sendLearnBatch([{ e: 'hn', i: item + armTag() }]); // the card is treatment-only, so this is ~1 (ladderArm.js)
   return true;
 }
 

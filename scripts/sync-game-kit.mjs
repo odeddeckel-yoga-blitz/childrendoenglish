@@ -48,6 +48,10 @@ const MAP = {
   'ISSUE-LOOP.md': 'plans/issue-loop.md',
   // Spoken content stays with its visual (kit §8g, yoga 11-07): CI can't reach the shared kit, so the tool is synced in.
   'test/speech-sync.mjs': 'e2e/lib/speech-sync.mjs',
+  // Visitor arm (push method v2, PATTERNS §3g): window.kitArm(salt), one stable 0|1 per device per test. Served from
+  // public/ so the SPA (a classic tag in index.html, before the app bundle) and the static pages (public/word-mem.js)
+  // share one copy and one stored number (kit_arm_<salt>). First user: the ladder-next split (src/utils/ladderArm.js).
+  'infra/arm-bit.js': 'public/arm-bit.js',
 };
 
 const hash = (p) => createHash('sha256').update(readFileSync(p)).digest('hex').slice(0, 12);

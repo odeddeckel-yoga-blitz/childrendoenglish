@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { forceLadderArm } from './lib/ladder-arm.mjs';
 
 // Practice ladder (plans/learning-cycle + full-ladder expansion 2026-10-07):
 // the menu leads with one Continue card; it starts the current step, and the
@@ -33,6 +34,10 @@ async function reachMenu(page, { canRead = true, fresh = false } = {}) {
     await page.waitForSelector('#root > *', { timeout: 10000 });
   }
 }
+
+// Written for the TREATMENT arm of the ladder-next split by device (src/utils/ladderArm.js): force arm 1 (Playwright's
+// webdriver flag would otherwise give every page the control arm). The control arm: e2e/ladder-arm.spec.js.
+test.beforeEach(async ({ page }) => { await forceLadderArm(page, 1); });
 
 test('play-first: a new player can start without typing a name', async ({ page }) => {
   await page.addInitScript(() => {

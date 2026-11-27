@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { forceLadderArm } from './lib/ladder-arm.mjs';
 
 // Returning home "Next" (home-next, owner 11-21; owner D4 11-26 via Factory A254: for EVERY returning player, no
 // 50/50 split, no separate 4-step path). Returning = the oldest player was created ≥ 2 h before this page load; a
@@ -38,6 +39,10 @@ const MISSED = (now) => ({
   apple: { lastSeen: now - 2 * DAY, interval: 1, easeFactor: 2.5, correct: 0, wrong: 1 },
   ball: { lastSeen: now - DAY, interval: 3, easeFactor: 2.5, correct: 1, wrong: 0 },
 });
+
+// Written for the TREATMENT arm of the ladder-next split by device (src/utils/ladderArm.js): force arm 1 (Playwright's
+// webdriver flag would otherwise give every page the control arm). The control arm: e2e/ladder-arm.spec.js.
+test.beforeEach(async ({ page }) => { await forceLadderArm(page, 1); });
 
 test('returning named player with misses: the Next card re-quizzes exactly those words', async ({ page }) => {
   await seed(page, { wordProgress: MISSED(Date.now()) });

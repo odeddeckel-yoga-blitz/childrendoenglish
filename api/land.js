@@ -68,7 +68,24 @@ const LEARN_EVS = new Set(['ans_ok', 'ans_no', 'quiz_start', 'quiz_done', 'quiz_
   'rvw',
   // Returning home "Next" card (home-next, owner D4 11-26: every returning player, no split): hn = see_/next_<kind>,
   // mreq_notme = "Not me" on the missed-words card. Daily totals, shapes pinned in EV_ITEM.
-  'hn', 'mreq_notme']);
+  'hn', 'mreq_notme',
+  // Ladder-next split by device (11-27, src/utils/ladderArm.js): cyd = the device funnel, once per device per step
+  // (start1 first set started, done1 first set finished, start2 a set started after a finish). Sent only with an arm.
+  'cyd']);
+// Visitor-arm suffix (kit infra/arm-bit.js + land-beacon.md): a counted device appends ~0 / ~1 to the item of the
+// tallies its test reads. Accepted ONLY on these events (the ladder-next split); anywhere else the item is rejected.
+// cyd exists only for the split, so it must carry the arm.
+export const ARM_EVS = new Set(['cyc_start', 'cyc_stage', 'cyc_done', 'hn', 'cyd']);
+const ARM_SUFFIX = /~[01]$/;
+const ARM_REQUIRED = new Set(['cyd']);
+/** The item without its arm suffix, or null when the suffix isn't allowed here (or is missing where required). */
+export function baseItem(e, i) {
+  if (typeof i !== 'string') return null;
+  const armed = ARM_SUFFIX.test(i);
+  if (armed && !ARM_EVS.has(e)) return null;
+  if (!armed && ARM_REQUIRED.has(e)) return null;
+  return armed ? i.slice(0, -2) : i;
+}
 // distinct error signatures recorded per day; past this a NEW signature is dropped (a known one still counts)
 export const JSERRSIG_DAY_CAP = 50;
 const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
@@ -92,6 +109,7 @@ const EV_ITEM = {
   rvw: /^((view|open)_(app|batch|game|unit|read|word)|start|done)$/,
   hn: /^(see|next)_(mreq|path|game)$/,
   mreq_notme: /^tap$/,
+  cyd: /^(start1|done1|start2)$/,
 };
 
 // Classify a DB failure so the function log names the REAL cause — the beacon
@@ -181,9 +199,12 @@ export default async function handler(req, res) {
           return res.status(204).end();
         }
         const events = batch
-          .filter(x => x && LEARN_EVS.has(x.e) && typeof x.i === 'string' && ITEM_RE.test(x.i))
-          .filter(x => (x.e !== 'aie' && x.e !== 'aiv') || AI_ATTR_RE.test(`${x.e}_${x.i}`))
-          .filter(x => !EV_ITEM[x.e] || EV_ITEM[x.e].test(x.i))
+          .filter(x => x && LEARN_EVS.has(x.e) && typeof x.i === 'string')
+          // the shape checks run on the item without its arm suffix; the stored item keeps it (b3~1)
+          .map(x => ({ e: x.e, i: x.i, b: baseItem(x.e, x.i) }))
+          .filter(x => x.b !== null && ITEM_RE.test(x.b))
+          .filter(x => (x.e !== 'aie' && x.e !== 'aiv') || AI_ATTR_RE.test(`${x.e}_${x.b}`))
+          .filter(x => !EV_ITEM[x.e] || EV_ITEM[x.e].test(x.b))
           .slice(0, 30);
         const q = sql();
         if (q && events.length > 0) {

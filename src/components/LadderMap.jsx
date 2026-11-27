@@ -1,22 +1,26 @@
 import { useState } from 'react';
 import { ArrowLeft, ChevronDown, Check, Pencil, Plus } from 'lucide-react';
 import { t } from '../utils/i18n';
-import { PHASES, LADDER, stepsFor } from '../utils/learningCycle';
+import { phasesFor, ladderFor, stepsFor } from '../utils/learningCycle';
+import { ladderTreat } from '../utils/ladderArm';
 
 /**
  * The practice-ladder step map: phase-grouped step chips with free navigation.
  * done ✓ / current (pulse) / upcoming — every available step is tappable (the
  * owner's "skip to any game" requirement). Pre-reader-skipped steps render
  * greyed. Below the 5 steps, an optional bonus row (spelling, sentence) that never
- * counts toward finishing the batch (11-18 ladder cut).
+ * counts toward finishing the batch (11-18 ladder cut). The control arm of the ladder-next split
+ * (utils/ladderArm.js) gets main's 11-step map and explainer; `treat` is injectable for tests.
  */
 export default function LadderMap({
   lang = 'en', canRead = true, setWords, setLabel, currentStepKey, doneKeys = [],
-  bonusSteps = [], bonusDoneKeys = [], onStartStep, onPickSet, onBack,
+  bonusSteps = [], bonusDoneKeys = [], onStartStep, onPickSet, onBack, treat = ladderTreat(),
 }) {
+  const LADDER = ladderFor(treat);
+  const V = treat ? '' : 'V1'; // main's explainer strings for the 11-step ladder
   const bonusDone = new Set(bonusDoneKeys);
   const [explain, setExplain] = useState(false);
-  const available = stepsFor(canRead, setWords);
+  const available = stepsFor(canRead, setWords, treat);
   const availableKeys = new Set(available.map((s) => s.key));
   const done = new Set(doneKeys);
 
@@ -37,19 +41,19 @@ export default function LadderMap({
         <button onClick={() => setExplain((e) => !e)}
           className="w-full px-4 py-3 flex items-center justify-between text-sm font-bold text-slate-700 dark:text-slate-200"
           aria-expanded={explain}>
-          {t('ladderExplainTitle', lang)}
+          {t('ladderExplainTitle' + V, lang)}
           <ChevronDown className={`w-4 h-4 transition-transform ${explain ? 'rotate-180' : ''}`} />
         </button>
         {explain && (
           <div className="px-4 pb-4 text-sm text-slate-500 space-y-2">
-            <p>{t('ladderExplainBody', lang)}</p>
-            <p className="font-semibold">{t('ladderExplainSkip', lang)}</p>
+            <p>{t('ladderExplainBody' + V, lang)}</p>
+            <p className="font-semibold">{t('ladderExplainSkip' + V, lang)}</p>
           </div>
         )}
       </div>
 
       {/* Phase-grouped steps */}
-      {PHASES.map((phase) => {
+      {phasesFor(treat).map((phase) => {
         const steps = LADDER.filter((s) => phase.steps.includes(s.key));
         return (
           <div key={phase.labelKey}>

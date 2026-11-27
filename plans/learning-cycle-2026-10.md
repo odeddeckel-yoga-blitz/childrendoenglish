@@ -70,3 +70,13 @@ most played / best-completing games.
   per day). Guests' answers wait for a player (after the first quiz, or at once via the review link).
 - "Words to review today (N)" (due + missed in the last 3 days, max 10) on the game end card, unit and reading finish,
   free-quiz results and batch complete → Daily Review (pre-readers: the same words as a listening run). Beacon: rvw.
+
+### Ships as a 50/50 split BY DEVICE (11-27, retro rule 3; branch feat/ladder-next-arm-1127)
+
+- Arm = kit visitor arm, `kitArm('ladder')` (public/arm-bit.js, synced from kit infra/arm-bit.js; stored number in
+  localStorage `kit_arm_ladder`, untouched by every reset). src/utils/ladderArm.js is the one helper the switch points read.
+- Arm 1 = v3 above + the home Next card / 6-item More + mixed order. Arm 0 = main (11 steps, no inbox fold or review
+  card, today's home, alphabetical). null (webdriver, ?internal=1, blocked storage) = control, never counted.
+  The arcade-step save fix runs in both arms. Static / crawler copy keeps main's 11-step wording during the test.
+- Beacon: cyc_start / cyc_stage / cyc_done / hn items end in ~0 / ~1; cyd @ start1|done1|start2 ~a = the device funnel.
+  Read: tools/reads/ladder-arm-counts.mjs (rows for kit reads.mjs, split visitor-arm).

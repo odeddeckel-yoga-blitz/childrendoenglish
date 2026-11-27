@@ -159,6 +159,34 @@ describe('api/land returning-home Next card events (owner D4 11-26)', () => {
   });
 });
 
+describe('api/land visitor-arm suffix (ladder-next split by device, 11-27)', () => {
+  it('keeps ~0/~1 on the ladder tallies and the cyd funnel, rejects it everywhere else', async () => {
+    vi.resetModules();
+    mode = 'ok';
+    process.env.CDE_DATABASE_URL = 'postgres://x';
+    const { default: handler } = await import('../land.js');
+    calls.length = 0;
+    const good = [['cyc_start', 'b0~1'], ['cyc_start', 'b0~0'], ['cyc_stage', 'b12_conv~0'], ['cyc_done', 'b3~1'],
+      ['cyc_done', 'l-ab~0'], ['hn', 'see_path~1'], ['hn', 'next_game~1'],
+      ['cyd', 'start1~0'], ['cyd', 'done1~1'], ['cyd', 'start2~1'],
+      // an uncounted device (no arm) still sends main's plain items
+      ['cyc_start', 'b0'], ['cyc_stage', 'b0_fc'], ['cyc_done', 'b0']];
+    const bad = [
+      ['ans_ok', 'cat~1'], ['quiz_start', 'audio~0'], ['rvw', 'start~1'], ['pg', 'home~1'], // suffix on other events
+      ['cyc_start', 'b0~2'], ['cyc_start', 'b0~1~1'], ['cyc_start', 'b0~'], ['cyc_start', '~1'], // bad arm / shape
+      ['hn', 'see_quiz~1'], // the base item still has to match its pinned shape
+      ['cyd', 'start1'], ['cyd', 'start3~1'], ['cyd', 'done2~0'], // cyd: arm required, fixed steps
+    ];
+    const batch = [...good, ...bad].map(([e, i]) => ({ e, i }));
+    const r = res(); await handler({ method: 'POST', headers: BROWSER, body: { batch, l: 'en' } }, r);
+    expect(r.code).toBe(204);
+    const written = calls.filter((c) => /INSERT INTO cde_learn/i.test(c.sql)).map((c) => c.values.slice(0, 2).join(':'));
+    expect(written).toEqual(expect.arrayContaining(good.map((x) => x.join(':'))));
+    for (const b of bad) expect(written).not.toContain(b.join(':'));
+    expect(written.some((w) => w.startsWith('ans_ok:cat'))).toBe(false);
+  });
+});
+
 describe('api/land standing-section events (kit 1.59 §5.55)', () => {
   it('records g2/g3/hop/vp/rets/jserr/cwv in their pinned shapes and drops malformed ones', async () => {
     vi.resetModules();

@@ -131,11 +131,19 @@ function loadHelper() {
   (0, eval)(WM_SRC);
   return window.CDE_WORDMEM;
 }
+// The review link is the ladder-next TREATMENT arm's (src/utils/ladderArm.js): load the kit's real arm-bit.js with this
+// device's stored number (kit_arm_ladder: < 0.5 → arm 0, ≥ 0.5 → arm 1).
+const ARM_SRC = readFileSync(resolve(import.meta.dirname, '../../public/arm-bit.js'), 'utf8');
+function loadArm(u) {
+  delete window.kitArm;
+  if (u !== undefined) localStorage.setItem('kit_arm_ladder', String(u));
+  (0, eval)(ARM_SRC);
+}
 const setPlayers = (players, activePlayerId) => localStorage.setItem('childrendoenglish-players', JSON.stringify({ schemaVersion: 2, players, activePlayerId }));
 
 describe('public/word-mem.js', () => {
-  beforeEach(() => { localStorage.clear(); vi.useFakeTimers(); vi.setSystemTime(NOW); });
-  afterEach(() => { vi.useRealTimers(); });
+  beforeEach(() => { localStorage.clear(); vi.useFakeTimers(); vi.setSystemTime(NOW); loadArm(0.75); });
+  afterEach(() => { vi.useRealTimers(); delete window.kitArm; });
 
   it('records app word ids only, tagged with the player', () => {
     setPlayers([{ id: 'A' }], 'A');
@@ -222,5 +230,30 @@ describe('public/word-mem.js', () => {
     localStorage.removeItem('childrendoenglish-players');
     window.CDE_WORD('cow', false);
     expect(wm.reviewHref('es')).toBe('/new-player?review=1&lang=es'); // a guest starts as a new player
+  });
+
+  it('ladder-next split: no review link for the control arm, an unstable arm or no kit; answers still recorded', () => {
+    setPlayers([{ id: 'A' }], 'A');
+    for (const arm of ['control', 'no-kit', 'internal']) {
+      localStorage.removeItem('cde_internal');
+      if (arm === 'control') loadArm(0.25);
+      if (arm === 'no-kit') delete window.kitArm;
+      if (arm === 'internal') { loadArm(0.75); localStorage.setItem('cde_internal', '1'); }
+      const wm = loadHelper();
+      window.CDE_WORD('cat', false);
+      expect(wm.toReview(), arm).toBeGreaterThan(0); // the memory is kept on the device in every arm
+      expect(wm.treat(), arm).toBe(false);
+      expect(wm.card(document.createElement('div'), 'game', 'en'), arm).toBeNull();
+    }
+    localStorage.removeItem('cde_internal');
+    loadArm(0.75);
+    const wm = loadHelper();
+    expect(wm.treat()).toBe(true);
+    expect(wm.card(document.createElement('div'), 'game', 'en')).not.toBeNull();
+    // storage that can't keep the number (kit: unstable) = control, as in the app
+    delete window.kitArm;
+    (0, eval)(ARM_SRC);
+    window.kitArm.stable = () => false;
+    expect(loadHelper().card(document.createElement('div'), 'game', 'en')).toBeNull();
   });
 });

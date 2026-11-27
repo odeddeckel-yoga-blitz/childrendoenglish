@@ -455,13 +455,13 @@ const translations = {
     faq6Q: 'Can multiple kids use the app?',
     faq6A: 'Yes! The app supports multiple player profiles so siblings can each track their own progress independently.',
     faq7Q: 'How does it teach vocabulary?',
-    faq7A: 'Every group of 10 words climbs a short 5-step practice ladder — flashcards, listening and reading quizzes and two arcade games — with optional spelling and sentence bonus steps, and spaced repetition resurfacing words until they are mastered.', // persona-ok: a rule, not a catalogue count
+    faq7A: 'Every group of 10 words climbs an 11-step practice ladder — flashcards, listening and reading quizzes, missing-letter spelling games, sentence practice and arcade games — with spaced repetition resurfacing words until they are mastered.', // persona-ok: a rule, not a catalogue count
 
     // Language select
     confirmLanguage: 'What language do you speak?',
     landingStatsWords: '{{n}}+ Words',
     landingStatsCategories: '13 Categories',
-    landingStatsModes: '5-Step Ladder',
+    landingStatsModes: '11-Step Ladder',
     landingFeaturesHeading: 'Everything your child needs',
     landingReadyTitle: 'Ready to start learning?',
     landingReadyDesc: 'Choose your language and jump right in.',
@@ -594,6 +594,10 @@ const translations = {
     ladderExplainTitle: 'How the 5 steps work',
     ladderExplainBody: 'Each group of words climbs a short ladder: first you meet them with flashcards, then you understand them by ear, by eye and by sorting them, and finally you master them at speed in an arcade game. Each step takes a few minutes, so a whole batch fits in one sitting. Words you miss come back in your reviews until you know them.',
     ladderExplainSkip: 'Want more? The bonus steps (spelling and sentences) are optional — tap any step to jump around.',
+    // control arm of the ladder-next split (utils/ladderArm.js): main's 11-step explainer, unchanged
+    ladderExplainTitleV1: 'How the 11 steps work',
+    ladderExplainBodyV1: 'Each group of words climbs a ladder: first you meet them with flashcards, then you understand them by ear and by eye, then you learn to spell them one letter at a time, use them in a sentence, and finally master them at speed. Finishing every step builds complete knowledge of each word — hearing it, reading it, writing it and using it.',
+    ladderExplainSkipV1: 'Not working on writing yet? The spelling steps can be skipped — tap any step to jump around.',
     phaseBonus: 'Bonus (optional)',
     ladderBonusHint: 'Spelling and sentences. They never block your batch.',
     reviewTodayCard: 'Words to review today ({{n}})',

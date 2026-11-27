@@ -15,7 +15,8 @@ function isExcluded() {
   return false;
 }
 
-const ITEM_RE = /^[a-z0-9@_-]{1,40}$/;
+// an item may end in a visitor arm `~0` / `~1` (src/utils/ladderArm.js); api/land.js takes it on its ARM_EVS only
+const ITEM_RE = /^[a-z0-9@_-]{1,40}(~[01])?$/;
 
 function uiLang() {
   try {
