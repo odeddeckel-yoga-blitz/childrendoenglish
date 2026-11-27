@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import os from 'node:os';
-import { parseCsv, family } from '../../tools/voice-final-check.mjs';
+import { parseCsv, family, parseHeld } from '../../tools/voice-final-check.mjs';
 import { audioCacheName } from '../../sw-audio-cache.js';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../..');
@@ -60,6 +60,25 @@ describe('voice ship batches', () => {
       expect(new Set([a, b, c]).size).toBe(3);
       expect(a).toBe('word-audio-v5');
     } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
+  });
+  it('a clip held by the owner keeps its baseline bytes and is in no batch (remove the hold line when the owner clears it)', () => {
+    const heldPath = path.join(PROV, 'held-by-owner.txt');
+    const held = parseHeld(fs.existsSync(heldPath) ? fs.readFileSync(heldPath, 'utf8') : '');
+    const base = new Map(baseline.map((r) => [r.file, r]));
+    const shipped = new Set(shipRows.map((r) => r.file));
+    const bad = [];
+    for (const [f, h] of held) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(h.date) || !h.why) bad.push(`${f}: needs '<file> | <date> | <why>'`);
+      if (!fs.existsSync(path.join(ROOT, f))) { bad.push(`${f}: missing`); continue; }
+      if (!base.has(f) || base.get(f).sha1 !== sha1(f)) bad.push(`${f}: bytes are not the baseline file`);
+      if (shipped.has(f)) bad.push(`${f}: shipped by a batch, so the hold is stale`);
+    }
+    expect(bad).toEqual([]);
+  });
+  it('parses the hold list (comments and blank lines skipped)', () => {
+    const h = parseHeld('# c\n\npublic/audio/cvc/bit.mp3 | 2026-11-27 | why | more\n');
+    expect([...h.keys()]).toEqual(['public/audio/cvc/bit.mp3']);
+    expect(h.get('public/audio/cvc/bit.mp3')).toEqual({ date: '2026-11-27', why: 'why | more' });
   });
   it('ships the voice licence texts', () => {
     for (const f of ['VOICE-LICENCES.md', 'licences/en_GB-jenny_dioco-medium.MODEL_CARD', 'licences/en_US-kristin-medium.MODEL_CARD', 'licences/en_US-ljspeech-high.MODEL_CARD']) {

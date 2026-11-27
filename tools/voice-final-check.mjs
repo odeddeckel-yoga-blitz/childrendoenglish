@@ -6,7 +6,12 @@
 //   node tools/voice-final-check.mjs [--root=<repo>] [--list] [--strict] [--json=<out.json>]
 //   exit 0 clean · 1 a clip is on a banned voice, or a ship record does not match the bytes on disk
 //   --list   print every file with its voice and record
-//   --strict also fail on clips whose voice is unknown or that no csv records
+//   --strict also fail on clips whose voice is unknown or that no csv records, and on a stale hold (below)
+//
+// Owner holds (briefs/voice-provenance/held-by-owner.txt, one `<file> | <date> | <why>` per line): a clip the owner keeps
+// on its pre-redo voice until they have listened. It is listed as HELD and never fails the check, as long as its bytes
+// are still the baseline file and no ship csv records it. A held clip whose bytes changed is an error; a held clip that
+// a batch has shipped is a stale hold (WARN, FAIL with --strict): remove its line once the owner has cleared it.
 //
 // How a file's voice is decided (by content sha1, so a half-applied batch can't pass as done):
 //   1. a ship-<k>.csv row for the file whose sha1 equals the bytes on disk → that row's voice
@@ -39,6 +44,18 @@ export function parseCsv(text) {
 }
 
 // voice string → family name used in the summary
+// held-by-owner.txt → Map(file → { date, why })
+export function parseHeld(text) {
+  const held = new Map();
+  for (const line of String(text || '').split('\n')) {
+    const t = line.trim();
+    if (!t || t.startsWith('#')) continue;
+    const [file, date = '', ...why] = t.split('|').map((x) => x.trim());
+    if (file) held.set(file, { date, why: why.join(' | ') });
+  }
+  return held;
+}
+
 export function family(voice) {
   const v = String(voice || '').toLowerCase();
   if (/jenny/.test(v)) return 'jenny';
@@ -67,7 +84,9 @@ export function run() {
   }
   const base = new Map(parseCsv(readFileSync(join(PROV, 'baseline-2026-11-22.csv'), 'utf8')).map((r) => [r.file, r]));
   const ships = readdirSync(PROV).filter((f) => /^ship-\d+\.csv$/.test(f)).sort((a, b) => parseInt(a.slice(5)) - parseInt(b.slice(5)));
-  const shipRow = new Map(); const errors = [];
+  const heldPath = join(PROV, 'held-by-owner.txt');
+  const held = parseHeld(existsSync(heldPath) ? readFileSync(heldPath, 'utf8') : '');
+  const shipRow = new Map(); const errors = []; const stale = [];
   for (const s of ships) {
     for (const r of parseCsv(readFileSync(join(PROV, s), 'utf8'))) {
       if (shipRow.has(r.file)) errors.push(`${r.file}: listed in ${shipRow.get(r.file).ship} and ${s}`);
@@ -81,7 +100,13 @@ export function run() {
     const sha = createHash('sha1').update(readFileSync(join(ROOT, f))).digest('hex');
     const s = shipRow.get(f), b = base.get(f);
     let voice, source;
-    if (s && s.sha1 === sha) { voice = s.voice; source = s.ship; }
+    if (s && s.sha1 === sha) { voice = s.voice; source = s.ship; if (held.has(f)) stale.push(f); }
+    else if (held.has(f) && !s) {
+      if (b && b.sha1 === sha) { voice = b.voice; source = `HELD by owner ${held.get(f).date}`.trim(); }
+      else { voice = 'unrecorded'; source = 'held by owner, but the bytes are not the baseline file'; errors.push(`${f}: held by owner but its bytes changed since the baseline`); }
+      list.push({ file: f, voice, family: voice === 'unrecorded' ? 'unrecorded' : 'held-by-owner', held: true, source });
+      continue;
+    }
     else {
       if (s) errors.push(`${f}: ${s.ship} records sha1 ${s.sha1.slice(0, 10)}, file on disk is ${sha.slice(0, 10)}`);
       if (b && b.sha1 === sha) { voice = b.voice; source = 'baseline'; }
@@ -90,9 +115,11 @@ export function run() {
     list.push({ file: f, voice, family: voice === 'unrecorded' ? 'unrecorded' : family(voice), source });
   }
   for (const [f, s] of shipRow) if (!onDisk.has(f)) errors.push(`${f}: in ${s.ship} but missing on disk`);
+  for (const f of held.keys()) if (!onDisk.has(f)) errors.push(`${f}: in held-by-owner.txt but missing on disk`);
 
   const by = {}; for (const x of list) by[x.family] = (by[x.family] || 0) + 1;
-  const banned = list.filter((x) => BANNED.test(x.family));
+  const banned = list.filter((x) => !x.held && BANNED.test(x.family));
+  const heldList = list.filter((x) => x.held && x.family === 'held-by-owner');
   const unknown = list.filter((x) => x.family === 'unknown' || x.family === 'unrecorded');
   console.log(`voice-final-check: ${list.length} audio files · ship records: ${ships.length ? ships.map((s) => s.replace('.csv', '')).join(', ') : 'none'}`);
   for (const [k, n] of Object.entries(by).sort((a, b) => b[1] - a[1])) console.log(`  ${k.padEnd(16)} ${n}`);
@@ -107,10 +134,19 @@ export function run() {
     console.log(`${args.includes('--strict') ? 'FAIL' : 'WARN'} ${unknown.length} clips with no known voice (not in any batch; the 31 'unknown' rows were made by generators whose default was amy):`);
     for (const x of unknown) console.log(`  ${x.file} (${x.voice}; ${x.source})`);
   }
+  if (heldList.length) {
+    console.log(`HELD ${heldList.length} clip(s) by owner decision (not a failure; held-by-owner.txt, remove the line when cleared):`);
+    for (const x of heldList) console.log(`  ${x.file} (keeps ${x.voice}; ${x.source}; ${held.get(x.file).why})`);
+  }
+  if (stale.length) {
+    console.log(`${args.includes('--strict') ? 'FAIL' : 'WARN'} ${stale.length} stale hold(s): shipped by a batch but still in held-by-owner.txt:`);
+    for (const f of stale) console.log(`  ${f}`);
+  }
   for (const e of errors) console.log(`ERROR ${e}`);
-  if (opt('json')) writeFileSync(opt('json'), JSON.stringify({ by, banned, unknown, errors, list }, null, 1));
-  const fail = banned.length || errors.length || (args.includes('--strict') && unknown.length);
-  console.log(fail ? 'voice-final-check: FAIL' : 'voice-final-check: OK (no amy / lessac / hfc_female / ryan clip left)');
+  if (opt('json')) writeFileSync(opt('json'), JSON.stringify({ by, banned, unknown, held: heldList, stale, errors, list }, null, 1));
+  const fail = banned.length || errors.length || (args.includes('--strict') && (unknown.length || stale.length));
+  console.log(fail ? 'voice-final-check: FAIL'
+    : `voice-final-check: OK (no amy / lessac / hfc_female / ryan clip left${heldList.length ? `, except ${heldList.length} held by the owner` : ''})`);
   return fail ? 1 : 0;
 }
 

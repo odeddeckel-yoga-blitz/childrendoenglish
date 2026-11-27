@@ -9,3 +9,6 @@
 
 `node tools/voice-final-check.mjs` lists every clip by voice from these files (matched by sha1 of the bytes on disk) and
 fails while a clip is on amy, lessac, hfc_female or ryan. `src/__tests__/voiceShip.test.js` checks every batch present.
+`held-by-owner.txt`: clips the owner keeps on their old voice until they have listened (one `<file> | <date> | <why>` per
+line). The check lists them as HELD and does not fail on them (also with `--strict`) while their bytes are the baseline
+file; remove the line when the owner clears the clip and ship its re-render in a batch.

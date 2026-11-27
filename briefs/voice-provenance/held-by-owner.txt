@@ -1,0 +1,6 @@
+# Clips the owner is holding on their pre-redo voice until they have listened to the re-render.
+# tools/voice-final-check.mjs lists these as HELD (it does not fail on them, also with --strict) as long as the file on disk
+# is still the baseline bytes and no ship-<k>.csv records it. Remove the line when the owner clears the clip; then ship
+# its re-render in a batch with a provenance row. A line for a clip that a batch has shipped fails --strict (stale hold).
+# Format: <file> | <date held> | <why>
+public/audio/cvc/bit.mp3 | 2026-11-27 | whisper small.en heard the Jenny 1.1 render (J2, sha1 56ef49cec6) as an offensive word; owner listens first (ear check v2). Keeps en_US-amy-medium (sha1 69e6455cd2) meanwhile.

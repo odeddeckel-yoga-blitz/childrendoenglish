@@ -2,8 +2,13 @@
 
 Ships the final bytes at `3d3573c8` (tip of fix/voice-jenny-j6) for the 339 clips whose final voice was set in Jenny batch J2, on top of origin/main; nothing else from the amy/jenny chains. Size 1.74 MB. Per-clip rows: `ship-2.csv` (sha1 = shipped bytes, old_sha1 = the file it replaces on origin/main).
 
-- voices: en_GB-jenny_dioco-medium 223, en_US-kristin-medium 112, en_US-ljspeech-high 4
+- voices: en_GB-jenny_dioco-medium 222, en_US-kristin-medium 112, en_US-ljspeech-high 4 (338 clips; was 339 before the hold below)
 - failed the gate in every voice, jenny 1.1 kept (owner ear-check): 56
+- HELD by the owner (11-27), not shipped: `public/audio/cvc/bit.mp3` keeps its origin/main bytes (en_US-amy-medium, sha1
+  69e6455cd2). whisper small.en heard the Jenny 1.1 render (sha1 56ef49cec6, the J2 final) as an offensive word; the
+  owner listens first (ear check v2). Recorded in `held-by-owner.txt`; `tools/voice-final-check.mjs` lists it as HELD and
+  does not fail on it. When the owner clears it: re-render or ship the Jenny file in a new batch, add its row there, and
+  remove the line from `held-by-owner.txt`.
 
 The Jenny batch log follows unchanged.
 
