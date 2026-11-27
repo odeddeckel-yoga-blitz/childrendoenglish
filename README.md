@@ -69,4 +69,6 @@ The project auto-deploys to [Vercel](https://vercel.com) from the `main` branch.
 
 ## License
 
-MIT
+Code: MIT, see [LICENSE](LICENSE) (code only). Pictures, audio and written learning content are not covered:
+pictures and audio keep their own licences, listed in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and on
+the [image credits page](https://childrendoenglish.com/image-credits/).
