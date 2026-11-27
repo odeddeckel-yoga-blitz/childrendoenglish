@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Instruction clips for Simon Says (/games/simon-says/) from public/games/simon-says/data.js: "Simon says, clap your
 hands!" and the trap "Clap your hands!" for every action, plus level 3's fixed pairs ("Simon says, run and wave!" /
-"Run and wave!"). Same pipeline as feelings-audio.py: Piper en_US-amy-medium → 280 ms lead-in + tail → mono 22.05 kHz
+"Run and wave!"). Same pipeline as feelings-audio.py: Piper Jenny (Dioco, scripts/site_voice.py) → 280 ms lead-in + tail → mono 22.05 kHz
 mp3; the first speed (1.15, 1.3, 1.0) that faster-whisper base.en or small.en hears word for word is kept. Prints any
 sentence no speed passed (reword it, never ship it).
 
@@ -11,6 +11,7 @@ import os, re, json, wave, subprocess
 import numpy as np
 from piper import PiperVoice, SynthesisConfig
 from faster_whisper import WhisperModel
+import site_voice  # the site voice + fallback chain (scripts/site_voice.py)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'public', 'games', 'simon-says', 'audio')
@@ -25,7 +26,7 @@ for k in A:
 for a, b in D['SAYS_PAIRS']: sentences.append(f"Simon says, {A[a]['say']} and {A[b]['say']}!")
 for a, b in D['TRAP_PAIRS']: sentences.append(f"{cap(A[a]['say'])} and {A[b]['say']}!")
 
-voice = PiperVoice.load(os.path.expanduser('~/.venvs/piper-voices/en_US-amy-medium.onnx'))
+voice = PiperVoice.load(site_voice.model_path(site_voice.SITE_VOICE))
 models = [WhisperModel(n, device='cpu', compute_type='int8') for n in ('base.en', 'small.en')]
 norm = lambda s: re.sub(r'[^a-z ]', '', s.lower().replace('-', ' ')).split()
 slug = lambda s: re.sub(r'[^a-z0-9]+', '-', s.lower()).strip('-')
@@ -38,7 +39,7 @@ for s in sentences:
     final = os.path.join(OUT, slug(s) + '.mp3')
     if os.path.exists(final): continue
     ok, heard = None, []
-    for ls in (1.15, 1.3, 1.0):
+    for ls in site_voice.JENNY_SPEEDS:
         wav, mp3 = os.path.join(OUT, '_t.wav'), os.path.join(OUT, '_t.mp3')
         with wave.open(wav, 'wb') as f: voice.synthesize_wav(s, f, syn_config=SynthesisConfig(length_scale=ls))
         subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', wav, '-af', 'adelay=280|280,apad=pad_dur=0.28', '-ac', '1',

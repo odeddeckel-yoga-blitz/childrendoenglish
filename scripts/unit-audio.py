@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Audio for textbook-unit pages (src/data/units.js): every unit word without public/audio/<key>.mp3 and every example
 sentence without public/audio/s/<sha1-10>.mp3. Same pipeline as the site's clips (render-word-audio.py): Piper
-en_US-amy-medium → 280 ms lead-in + tail → mono 22.05 kHz mp3. A word must be heard by faster-whisper base.en AND
-small.en (homophones like for/four count: a word clip is only its sound); a sentence by base.en. A clip that fails at
-1.15 is retried slower (amy 1.35), then in Lessac; anything still unheard is printed and NOT written.
+site voice (scripts/site_voice.py: Jenny (Dioco)) → 280 ms lead-in + tail → mono 22.05 kHz mp3. A word must be heard by faster-whisper base.en AND
+small.en (homophones like for/four count: a word clip is only its sound); a sentence by base.en. A clip that fails Jenny at
+1.1 is retried at 1.0 / 0.95, then in Kristin, then LJ Speech (site_voice.CHAIN); anything still unheard is printed and NOT written.
 
   ~/.venvs/whisper/bin/python scripts/unit-audio.py [--only=<book>]     # e.g. --only=fantastic-five
 """
@@ -11,6 +11,7 @@ import os, re, sys, json, wave, hashlib, subprocess
 import numpy as np
 from piper import PiperVoice, SynthesisConfig
 from faster_whisper import WhisperModel
+import site_voice  # the site voice + fallback chain (scripts/site_voice.py)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AUD = os.path.join(ROOT, 'public', 'audio')
@@ -45,7 +46,7 @@ for u in units:
         if w.get('ex') and not os.path.exists(os.path.join(AUD, 's', skey(w['ex']) + '.mp3')): sents[skey(w['ex'])] = w['ex']
 print(f'{len(words)} words, {len(sents)} sentences to render', flush=True)
 
-VOICES = [('en_US-amy-medium', 1.15), ('en_US-amy-medium', 1.35), ('en_US-lessac-high', 1.15)]
+VOICES = site_voice.CHAIN
 loaded = {}
 models = {n: WhisperModel(n, device='cpu', compute_type='int8') for n in ('base.en', 'small.en')}
 def hear(path, names, prompt):
@@ -53,7 +54,7 @@ def hear(path, names, prompt):
                                        capture_output=True, check=True).stdout, np.int16).astype(np.float32) / 32768
     return [' '.join(s.text for s in models[n].transcribe(pcm, language='en', beam_size=5, initial_prompt=prompt)[0]).strip() for n in names]
 def render(text, mp3, model, ls):
-    if model not in loaded: loaded[model] = PiperVoice.load(os.path.expanduser(f'~/.venvs/piper-voices/{model}.onnx'))
+    if model not in loaded: loaded[model] = PiperVoice.load(site_voice.model_path(model))
     wav = mp3 + '.wav'
     with wave.open(wav, 'wb') as f: loaded[model].synthesize_wav(text, f, syn_config=SynthesisConfig(length_scale=ls))
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', wav, '-af', 'adelay=280|280,apad=pad_dur=0.28', '-ac', '1',

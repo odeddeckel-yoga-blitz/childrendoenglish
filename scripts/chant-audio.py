@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Audio for the chant-card pilot (src/data/chants.js): one clip per chant line, /audio/s/<sha1-10>.mp3 (the
-sentence-audio key, so sentenceAudio() finds it). Local and free: Piper en_US-amy-medium at a steadier pace (1.2),
+sentence-audio key, so sentenceAudio() finds it). Local and free: Piper site voice (scripts/site_voice.py: Jenny (Dioco)) at a steadier pace (1.2),
 280 ms lead-in + tail, mono 22.05 kHz mp3; a line must be heard back word for word by faster-whisper base.en, else it is
-retried at 1.35 and then in Lessac; anything still unheard is printed and NOT written.
+retried at 1.35 / 1.1, then in Kristin, then LJ Speech; anything still unheard is printed and NOT written.
 
   ~/.venvs/whisper/bin/python scripts/chant-audio.py
 """
@@ -10,6 +10,7 @@ import os, re, json, wave, hashlib, subprocess
 import numpy as np
 from piper import PiperVoice, SynthesisConfig
 from faster_whisper import WhisperModel
+import site_voice  # the site voice + fallback chain (scripts/site_voice.py)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AUD = os.path.join(ROOT, 'public', 'audio', 's')
@@ -31,7 +32,7 @@ for c in chants:
         if not os.path.exists(os.path.join(AUD, skey(text) + '.mp3')): lines[skey(text)] = text
 print(f'{len(lines)} chant lines to render', flush=True)
 
-VOICES = [('en_US-amy-medium', 1.2), ('en_US-amy-medium', 1.35), ('en_US-lessac-high', 1.2)]
+VOICES = site_voice.chain(jenny=(1.2, 1.35, 1.1))
 loaded = {}
 model = WhisperModel('base.en', device='cpu', compute_type='int8')
 def hear(path):
@@ -39,7 +40,7 @@ def hear(path):
                                        capture_output=True, check=True).stdout, np.int16).astype(np.float32) / 32768
     return ' '.join(s.text for s in model.transcribe(pcm, language='en', beam_size=5, initial_prompt='A short chant for children:')[0]).strip()
 def render(text, mp3, name, ls):
-    if name not in loaded: loaded[name] = PiperVoice.load(os.path.expanduser(f'~/.venvs/piper-voices/{name}.onnx'))
+    if name not in loaded: loaded[name] = PiperVoice.load(site_voice.model_path(name))
     wav = mp3 + '.wav'
     with wave.open(wav, 'wb') as f: loaded[name].synthesize_wav(text, f, syn_config=SynthesisConfig(length_scale=ls))
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', wav, '-af', 'adelay=280|280,apad=pad_dur=0.28', '-ac', '1',

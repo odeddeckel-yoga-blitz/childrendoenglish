@@ -1,6 +1,7 @@
 import os, json, re, wave, subprocess
 from piper import PiperVoice, SynthesisConfig
 from faster_whisper import WhisperModel
+import site_voice  # the site voice + fallback chain (scripts/site_voice.py; amy/lessac/ryan retired 11-27)
 
 scratch = os.path.dirname(os.path.abspath(__file__))
 audio_dir = os.path.expanduser('~/projects/childrendoenglish/public/audio')
@@ -19,11 +20,7 @@ def hears(path, expected):
          or heard in ACCEPT.get(expected, [])
     return ok, heard
 
-voices = {
-  'amy': PiperVoice.load(os.path.join(scratch, 'en_US-amy-medium.onnx')),
-  'lessac': PiperVoice.load(os.path.join(scratch, 'en_US-lessac-medium.onnx')),
-  'ryan': PiperVoice.load(os.path.join(scratch, 'en_US-ryan-high.onnx')),
-}
+voices = {m: PiperVoice.load(site_voice.model_path(m)) for m in site_voice.MODELS}
 
 still_ok, fixed2, unfixed2 = [], [], []
 for word in words:
@@ -33,12 +30,12 @@ for word in words:
     if ok:
         still_ok.append(word); continue
     winner = None
-    for vname, ls in [('amy', 1.15), ('amy', 1.35), ('lessac', 1.2), ('ryan', 1.2), ('lessac', 1.4)]:
+    for vname, ls in site_voice.CHAIN:
         wav = os.path.join(work, f'p2-{word.replace(" ","-")}-{vname}-{ls}.wav')
         with wave.open(wav, 'wb') as f:
             voices[vname].synthesize_wav(word, f, syn_config=SynthesisConfig(length_scale=ls))
         subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', wav, '-af',
-                        'adelay=250|250,apad=pad_dur=0.25', wav + '.p.wav'], check=True)
+                        site_voice.PAD_FILTER, wav + '.p.wav'], check=True)
         ok2, heard2 = hears(wav + '.p.wav', word)
         if ok2: winner = (vname, ls, wav + '.p.wav'); break
     if winner:

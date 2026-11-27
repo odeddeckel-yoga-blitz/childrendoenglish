@@ -1,12 +1,13 @@
 """Word Voice Improver — the audio twin of the image improver.
 For each flagged word: render candidates (voice x speed, with silence padding),
 transcribe each with Whisper, and install the first candidate in preference
-order that the machine hears correctly. Preference favors amy (app-wide voice
-consistency); alternatives only rescue words she genuinely can't say."""
+order that the machine hears correctly. Preference favors the site voice (Jenny (Dioco), scripts/site_voice.py; was amy
+until the 11-27 licence switch); Kristin / LJ Speech only rescue words she genuinely can't say."""
 import os, json, re, wave, subprocess, sys
 import numpy as np
 from piper import PiperVoice, SynthesisConfig
 from faster_whisper import WhisperModel
+import site_voice  # the site voice + fallback chain (scripts/site_voice.py)
 
 scratch = os.path.dirname(os.path.abspath(__file__))
 audio_dir = os.path.expanduser('~/projects/childrendoenglish/public/audio')
@@ -27,14 +28,8 @@ for r in audit:
     flagged.append(r['word'])
 print(f'{len(flagged)} words to improve', flush=True)
 
-voices = {
-  'amy':    PiperVoice.load(os.path.join(scratch, 'en_US-amy-medium.onnx')),
-  'lessac': PiperVoice.load(os.path.join(scratch, 'en_US-lessac-medium.onnx')),
-  'ryan':   PiperVoice.load(os.path.join(scratch, 'en_US-ryan-high.onnx')),
-}
-CONFIGS = [  # preference order
-  ('amy', 1.15), ('amy', 1.35), ('lessac', 1.2), ('ryan', 1.2), ('lessac', 1.4),
-]
+voices = {m: PiperVoice.load(site_voice.model_path(m)) for m in site_voice.MODELS}
+CONFIGS = site_voice.CHAIN  # preference order
 model = WhisperModel('base.en', device='cpu', compute_type='int8')
 norm = lambda s: re.sub(r'[^a-z ]', '', s.lower()).strip()
 
@@ -43,7 +38,7 @@ def render(voice, text, ls, out_wav):
         voices[voice].synthesize_wav(text, f, syn_config=SynthesisConfig(length_scale=ls))
     # pad 250ms silence both ends (Piper clips isolated words; whisper + human ears both suffer)
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', out_wav, '-af',
-                    'adelay=250|250,apad=pad_dur=0.25', out_wav + '.p.wav'], check=True)
+                    site_voice.PAD_FILTER, out_wav + '.p.wav'], check=True)
     return out_wav + '.p.wav'
 
 def hears(path, expected):
@@ -75,7 +70,7 @@ for i, word in enumerate(flagged):
 print(f'\nFIXED {len(fixed)}:')
 from collections import Counter
 print('  by voice:', Counter(v for _, v, _ in fixed))
-nonamy = [(w, v, l) for w, v, l in fixed if v != 'amy']
-print('  non-amy words:', ', '.join(f'{w}({v})' for w, v, _ in nonamy) or 'none')
+other = [(w, v, l) for w, v, l in fixed if v != site_voice.SITE_VOICE]
+print('  not in the site voice:', ', '.join(f'{w}({v})' for w, v, _ in other) or 'none')
 print(f'UNFIXED {len(unfixed)}: {", ".join(unfixed) or "none"}')
 json.dump({'fixed': fixed, 'unfixed': unfixed}, open(os.path.join(scratch, 'voice-fix-report.json'), 'w'))

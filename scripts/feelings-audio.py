@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Situation clips for Feelings (/games/feelings/), level 3: one sentence per feeling from public/games/feelings/data.js.
-Same pipeline as true-or-false-audio.py: Piper en_US-amy-medium → 280 ms lead-in + tail → mono 22.05 kHz mp3; the first
-speed (1.15, 1.3, 1.0) that faster-whisper base.en or small.en hears word for word is kept. Prints any sentence no speed
+Same pipeline as true-or-false-audio.py: Piper Jenny (Dioco, scripts/site_voice.py) → 280 ms lead-in + tail → mono 22.05 kHz mp3; the first
+speed (1.1, 1.0, 0.95) that faster-whisper base.en or small.en hears word for word is kept. Prints any sentence no speed
 passed (fix the wording, never ship it).
 
   ~/.venvs/whisper/bin/python scripts/feelings-audio.py
@@ -10,13 +10,14 @@ import os, re, json, wave, subprocess
 import numpy as np
 from piper import PiperVoice, SynthesisConfig
 from faster_whisper import WhisperModel
+import site_voice  # the site voice + fallback chain (scripts/site_voice.py)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'public', 'games', 'feelings', 'audio')
 os.makedirs(OUT, exist_ok=True)
 D = json.loads(subprocess.run(['node', '-e', "global.window={};require(process.argv[1]);console.log(JSON.stringify(window.FEEL_DATA))",
                               os.path.join(ROOT, 'public', 'games', 'feelings', 'data.js')], capture_output=True, text=True, check=True).stdout)
-voice = PiperVoice.load(os.path.expanduser('~/.venvs/piper-voices/en_US-amy-medium.onnx'))
+voice = PiperVoice.load(site_voice.model_path(site_voice.SITE_VOICE))
 models = [WhisperModel(n, device='cpu', compute_type='int8') for n in ('base.en', 'small.en')]
 norm = lambda s: re.sub(r'[^a-z ]', '', s.lower().replace('-', ' ')).split()
 slug = lambda s: re.sub(r'[^a-z0-9]+', '-', s.lower()).strip('-')
@@ -28,7 +29,7 @@ for sit in D['SITUATIONS']:
     s, final = sit['text'], os.path.join(OUT, slug(sit['text']) + '.mp3')
     if os.path.exists(final): continue
     ok = None
-    for ls in (1.15, 1.3, 1.0):
+    for ls in site_voice.JENNY_SPEEDS:
         wav, mp3 = os.path.join(OUT, '_t.wav'), os.path.join(OUT, '_t.mp3')
         with wave.open(wav, 'wb') as f: voice.synthesize_wav(s, f, syn_config=SynthesisConfig(length_scale=ls))
         subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', wav, '-af', 'adelay=280|280,apad=pad_dur=0.28', '-ac', '1',

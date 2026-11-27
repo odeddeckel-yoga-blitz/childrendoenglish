@@ -6,19 +6,23 @@ The loop (proven 2026-09-20: 124 flagged -> 103 fixed):
      vad_filter=False, initial_prompt='A single English word:'); flag words the
      model mishears. Accept homophones (bored/board, write/right, two/too...).
   2. IMPROVE each flagged word: render candidates in preference order —
-       amy@1.15, amy@1.35, lessac@1.2, ryan@1.2, lessac@1.4  (+slower rounds)
-     ALWAYS pad 250-300ms silence both ends (Piper clips isolated words —
-     the padding alone rescued a third of failures on the app-wide amy voice).
-     Install the FIRST candidate whisper hears correctly (preference keeps amy
-     for consistency; alternatives only rescue words she can't say).
+       site_voice.CHAIN (scripts/site_voice.py): jenny@1.1, 1.0, 0.95, then
+       kristin@1.1, 1.0, 0.95, then ljspeech-high@1.15, 1.0, 1.3
+     (owner 11-25/11-27: Jenny (Dioco) is the site voice; amy, lessac, hfc_female
+     and ryan have no commercial licence and are never used again).
+     ALWAYS pad 280 ms silence both ends (site_voice.PAD_FILTER; Piper clips
+     isolated words, the padding alone rescued a third of failures in 2026-09).
+     Install the FIRST candidate base.en AND small.en both hear correctly
+     (preference keeps Jenny for consistency; Kristin / LJ Speech only rescue
+     words she can't say).
   3. Words no config passes are usually STT limits on sub-second minimal pairs
      (ant/and, van, vest, teens/decades) — verify by ear before re-rendering.
 
 Setup (self-contained venv):
   python3 -m venv /tmp/voice-venv && /tmp/voice-venv/bin/pip install piper-tts faster-whisper
-  /tmp/voice-venv/bin/python -m piper.download_voices en_US-amy-medium en_US-lessac-medium en_US-ryan-high
-Then adapt the session scripts (voice-audit.py / voice-improver.py in git history
-of this file's commit message) — or ask Claude to re-run the loop; this header
+  /tmp/voice-venv/bin/python -m piper.download_voices en_GB-jenny_dioco-medium en_US-kristin-medium en_US-ljspeech-high
+Render + check candidates with scripts/render-word-audio.py (defaults to the site voice);
+voice-audit.py / voice-improver.py are the 2026-09 loop, now on site_voice.CHAIN. This header
 is the spec. After ANY mass audio replacement: bump the SW audio cache (add one file to
 scripts/audio-cache-bumps/, see sw-audio-cache.js) or devices serve the old voice for 30 days.
 """

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Sentence clips for True or False (/games/true-or-false/): "This is a cat." for every pool word and
 "A cat is an animal." for every level-2 word x every kind. Same pipeline as the word clips (render-word-audio.py):
-Piper en_US-amy-medium at 1.15 → 280 ms lead-in + tail → mono 22.05 kHz mp3, then faster-whisper base.en must hear
+Piper Jenny (Dioco, scripts/site_voice.py) at 1.1 → 280 ms lead-in + tail → mono 22.05 kHz mp3, then faster-whisper base.en must hear
 the sentence (words compared without punctuation). Writes public/games/true-or-false/audio/<slug>.mp3, skipping
 clips that already exist; prints every sentence whisper did not hear.
 
@@ -11,6 +11,7 @@ import os, re, json, wave, subprocess
 import numpy as np
 from piper import PiperVoice, SynthesisConfig
 from faster_whisper import WhisperModel
+import site_voice  # the site voice + fallback chain (scripts/site_voice.py)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'public', 'games', 'true-or-false', 'audio')
@@ -29,7 +30,7 @@ for k in W['KINDS']:
         for kind in W['KINDS']:
             sentences.append(f'{article(w).capitalize()} {name(w)} is {article(kind)} {kind}.')
 
-voice = PiperVoice.load(os.path.expanduser('~/.venvs/piper-voices/en_US-amy-medium.onnx'))
+voice = PiperVoice.load(site_voice.model_path(site_voice.SITE_VOICE))
 model = WhisperModel('base.en', device='cpu', compute_type='int8')
 norm = lambda s: re.sub(r'[^a-z ]', '', s.lower().replace('-', ' ')).split()
 missed, made = [], 0
@@ -38,7 +39,7 @@ for s in sentences:
     if os.path.exists(mp3): continue
     wav = os.path.join(OUT, '_tmp.wav')
     with wave.open(wav, 'wb') as f:
-        voice.synthesize_wav(s, f, syn_config=SynthesisConfig(length_scale=1.15))
+        voice.synthesize_wav(s, f, syn_config=SynthesisConfig(length_scale=site_voice.JENNY_SPEEDS[0]))
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', wav, '-af', 'adelay=280|280,apad=pad_dur=0.28', '-ac', '1',
                     '-ar', '22050', '-q:a', '7', mp3], check=True)
     os.remove(wav)

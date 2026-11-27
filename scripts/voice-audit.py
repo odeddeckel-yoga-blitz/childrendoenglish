@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Voice audit — transcribe every public/audio/*.mp3 and flag files whisper
 mishears. The AUDIT half of the word-voice-improver loop (see
-word-voice-improver.py for the FIX half: candidate voices amy/lessac/ryan at
+word-voice-improver.py for the FIX half: candidate voices = site_voice.CHAIN (Jenny, Kristin, LJ Speech; amy/lessac/ryan retired 11-27) at
 rising length_scales, 250-300ms padding, install the first that passes).
 
 Settings are load-bearing (proven 2026-09-20/26):

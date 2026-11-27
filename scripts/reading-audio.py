@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Read-along audio for the graded readers (src/data/readings.js): every text sentence and every question without
 public/audio/s/<sha1-10>.mp3. Same pipeline as unit-audio.py / render-word-audio.py: Piper (local, free; a computer
-voice, never a native speaker) en_US-amy-medium → 280 ms lead-in + tail → mono 22.05 kHz mp3, then faster-whisper
-base.en must hear the sentence word for word. A clip that fails at 1.15 is retried slower (amy 1.35), then in Lessac;
+voice, never a native speaker) site voice (scripts/site_voice.py: Jenny (Dioco)) → 280 ms lead-in + tail → mono 22.05 kHz mp3, then faster-whisper
+base.en must hear the sentence word for word. A clip that fails Jenny at 1.1 is retried at 1.0 / 0.95, then in Kristin, then LJ Speech;
 anything still unheard is printed and NOT written (the page shows no 🔊 for it and play-all skips it).
 
   ~/.venvs/whisper/bin/python scripts/reading-audio.py [--only=<slug>]
@@ -11,6 +11,7 @@ import os, re, sys, json, wave, hashlib, subprocess
 import numpy as np
 from piper import PiperVoice, SynthesisConfig
 from faster_whisper import WhisperModel
+import site_voice  # the site voice + fallback chain (scripts/site_voice.py)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AUD = os.path.join(ROOT, 'public', 'audio', 's')
@@ -36,7 +37,7 @@ for r in readings:
         if not os.path.exists(os.path.join(AUD, skey(s) + '.mp3')): sents[skey(s)] = s
 print(f'{len(sents)} sentences to render', flush=True)
 
-VOICES = [('en_US-amy-medium', 1.15), ('en_US-amy-medium', 1.35), ('en_US-lessac-high', 1.15)]
+VOICES = site_voice.CHAIN
 loaded = {}
 model = WhisperModel('base.en', device='cpu', compute_type='int8')
 def hear(path):
@@ -44,7 +45,7 @@ def hear(path):
                                        capture_output=True, check=True).stdout, np.int16).astype(np.float32) / 32768
     return ' '.join(s.text for s in model.transcribe(pcm, language='en', beam_size=5, initial_prompt='An English sentence for children:')[0]).strip()
 def render(text, mp3, voice, ls):
-    if voice not in loaded: loaded[voice] = PiperVoice.load(os.path.expanduser(f'~/.venvs/piper-voices/{voice}.onnx'))
+    if voice not in loaded: loaded[voice] = PiperVoice.load(site_voice.model_path(voice))
     wav = mp3 + '.wav'
     with wave.open(wav, 'wb') as f: loaded[voice].synthesize_wav(text, f, syn_config=SynthesisConfig(length_scale=ls))
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', wav, '-af', 'adelay=280|280,apad=pad_dur=0.28', '-ac', '1',
