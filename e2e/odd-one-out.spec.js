@@ -1,6 +1,6 @@
 // Odd One Out (/games/odd-one-out/, wave 1 11-07): word data, picture-style + ambiguity + position oracles over many
 // dealt rounds, nothing marked before the answer, the miss flow, a full run to the end card with zero errors,
-// phone fit + tap size, language leak, contrast and speech sync.
+// phone fit + tap size (320x568 up), no dead cards after a miss, language leak, contrast and speech sync.
 import { test, expect } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
@@ -150,6 +150,27 @@ test('a miss: the odd one turns green, both groups are named, Next moves on', as
   await page.waitForFunction(() => OO.S.round === 1, null, { timeout: 5000 });
 });
 
+test('after a miss the cards are not dead: a card tap moves on like Next, but a quick double tap keeps the reveal', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 568 });
+  await open(page);
+  await page.click('#startBtn');
+  const rd = await page.evaluate(() => OO.dbg.round);
+  const wrong = rd.cards.find((c) => c !== rd.odd);
+  await page.click(`#app .opt[data-word="${wrong}"]`);
+  await page.click(`#app .opt[data-word="${wrong}"]`);   // the double tap of a child who missed: must not skip the reveal
+  await page.waitForTimeout(900);
+  expect(await page.evaluate(() => OO.S.round)).toBe(0);
+  await expect(page.locator('.feedback .reveal')).toBeVisible();
+  await page.click(`#app .opt[data-word="${rd.odd}"]`);   // the child taps the green one
+  await page.waitForFunction(() => OO.S.round === 1, null, { timeout: 5000 });
+  // a card tap after a RIGHT answer changes nothing (the round already moves on by itself)
+  await page.evaluate(() => OO.dbg.solveForTest());
+  await page.click('#app .opt >> nth=0');
+  await page.waitForFunction(() => OO.S.round === 2, null, { timeout: 8000 });
+  await page.waitForTimeout(400);
+  expect(await page.evaluate(() => OO.S.round)).toBe(2);
+});
+
 test('full run: 3 levels to the end card, zero errors, no /api/land under automation', async ({ page }) => {
   test.setTimeout(150000);
   const errs = [];
@@ -177,7 +198,9 @@ test('full run: 3 levels to the end card, zero errors, no /api/land under automa
   expect(land).toEqual([]);
 });
 
-for (const vp of [{ width: 360, height: 640 }, { width: 390, height: 844 }]) {
+// 320x568 + 375x553 (iPhone SE / mini in Safari) added 11-27 (A442): there, Next sat 17-39 px below the fold after every
+// miss, in all three languages; with the cards inert, a child who missed was stuck (kit PATTERNS §23, §44).
+for (const vp of [{ width: 320, height: 568 }, { width: 375, height: 553 }, { width: 360, height: 640 }, { width: 390, height: 844 }]) {
   test(`phone fit ${vp.width}x${vp.height}: start, 4 cards, speakers and Next on screen, every control ≥ 44 px`, async ({ page }) => {
     await page.setViewportSize(vp);
     await open(page);

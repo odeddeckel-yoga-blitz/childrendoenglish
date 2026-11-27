@@ -13,6 +13,8 @@
      vehicle, hen = animal + food, tomato = fruit + vegetable, …) are left out of every
      group (AMBIGUOUS below, with the reason), and each pair's two groups share no word.
    · the odd card's position is uniform (shuffled), never highlighted before the answer.
+   After a miss the round waits for Next (time to read the reveal); a tap on any card then counts as Next too, and
+   Next stays on screen on short phones (11-27, A442: at 320x568 it was below the fold after every miss).
    Beacons (cookieless aggregates, same guards as land-beacon.js): g_open / g_start /
    g_lvl / g_cmp @ odd-one-out, and oo @ <pair>_<ok|no>. */
 (function(){
@@ -160,6 +162,7 @@ function plan(level){
 var app=document.getElementById('app');
 var S={lvl:0,round:0,score:0,rounds:[],misses:{},started:false,answered:false};
 var roundId=0;
+var cont=null;   // after a miss: what a tap on a card does (= Next); null otherwise
 
 function header(){
   var h=el('div','hud');
@@ -176,7 +179,7 @@ function startLevel(i){ S.lvl=i; S.round=0; S.score=0; S.rounds=plan(LEVELS[i]);
 function renderRound(){
   var r=S.rounds[S.round], my=++roundId;
   var live=function(){ return my===roundId; };
-  S.answered=false;
+  S.answered=false; cont=null;
   app.textContent='';
   app.appendChild(header());
   var grid=el('div','grid'); grid.setAttribute('dir','ltr');
@@ -190,7 +193,7 @@ function renderRound(){
     var tag=el('span','tag'); b.appendChild(tag);
     var sp=elh('button','say',IC('volume-2')); sp.type='button'; sp.setAttribute('aria-label',T('hear')+': '+w);
     sp.addEventListener('click',function(e){ e.stopPropagation(); say(w); });
-    b.addEventListener('click',function(){ answer(w,b); });
+    b.addEventListener('click',function(){ if(S.answered){ if(cont) cont(); return; } answer(w,b); });
     card.appendChild(b); card.appendChild(sp);
     grid.appendChild(card);
   });
@@ -223,7 +226,12 @@ function renderRound(){
       S.misses[LEVELS[S.lvl].id]=(S.misses[LEVELS[S.lvl].id]||0)+1;
       b.classList.add('no');
       var nx=elh('button','next',T('next')); nx.type='button'; nx.id='nextBtn';
-      nx.addEventListener('click',function(){ nx.disabled=true; sayDone(function(){ if(live()) next(); }); });
+      var go=function(){ if(nx.disabled||!live()) return; nx.disabled=true; sayDone(function(){ if(live()) next(); }); };
+      nx.addEventListener('click',go);
+      // After a miss the cards used to ignore taps (a dead board): a child who taps a card again — usually the green
+      // one — now moves on like Next. 700 ms guard so a double tap on the missed card can't skip the reveal.
+      var t0=Date.now();
+      cont=function(){ if(Date.now()-t0>=700) go(); };
       row.appendChild(nx);
     }
   }

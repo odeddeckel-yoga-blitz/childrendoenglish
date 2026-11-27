@@ -57,7 +57,9 @@
   .oo-card.is-group .opt:not(.no){opacity:.8;}
   .feedback{min-height:24px;font-size:17px;line-height:1.35;margin:10px 0 4px;}
   .feedback .reveal{font-weight:800;color:var(--gold);white-space:nowrap;}
-  .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+  /* sticky: after a miss, Next is the only way on; if a short screen pushes it below the fold it sticks to the bottom
+     edge instead (11-27: at 320x568 / 375x553 it sat 17-39 px off screen after every miss; the cards don't react). */
+  .row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;position:sticky;bottom:8px;z-index:2;}
   .next{background:var(--gold);color:#1e1b4b;border:0;border-radius:12px;padding:11px 22px;font-size:17px;font-weight:800;cursor:pointer;margin:2px;min-height:46px;}
   .tip{font-size:14px;color:var(--dim);margin-top:12px;}
   .card{background:var(--glass);border:1px solid var(--line);border-radius:18px;padding:26px 18px;}
@@ -66,6 +68,9 @@
   .stars .st{color:rgba(165,180,252,.3);} .stars .st.on{color:var(--gold);}
   .score{font-size:22px;font-weight:800;color:var(--gold);}
   @media(max-height:740px){ main{padding-top:52px;} .hud{margin-bottom:8px;} .hud-label{font-size:18px;margin:2px 0 6px;} .opt .word{font-size:18px;} }
+  /* short phones (iPhone SE / mini in Safari, small Androids): smaller pictures so the miss screen (reveal + Next)
+     fits without scrolling. Pay with the picture, not the answer row (kit PATTERNS §43). */
+  @media(max-height:620px){ .opt img{height:clamp(80px,15.5vh,150px);} .feedback{margin:8px 0 4px;} }
   [data-cde-lang="he"] main{direction:rtl;}
   [data-cde-lang="he"] .about{text-align:right;}
   @media(prefers-reduced-motion:reduce){ .opt{transition:none;} }
