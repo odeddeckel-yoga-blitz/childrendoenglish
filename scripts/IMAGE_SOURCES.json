@@ -779,8 +779,13 @@
   "match": 0.976
  },
  "clock": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Wall clock by Finn Juhl, V&A London.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Wall_clock_by_Finn_Juhl,_V%26A_London.jpg",
+  "author": "14GTR",
+  "licence": "CC0",
+  "licenceUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+  "match": 0.994
  },
  "cloud": {
   "source": "pixabay",
@@ -891,13 +896,8 @@
   "match": 0.763
  },
  "cucumber": {
-  "source": "wikimedia-commons",
-  "title": "File:Green Cucumbers 1.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Green_Cucumbers_1.jpg",
-  "author": "Inyor4mr",
-  "licence": "CC BY-SA 4.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "match": 0.948
+  "source": "unknown",
+  "note": "fetched from Wikimedia Commons before sources were recorded; 11-27 re-match found a likely source (File:Green Cucumbers 1.jpg, fingerprint 0.948) but below the 0.99 credit bar, so not credited; to be replaced (owner 11-27)"
  },
  "cup": {
   "source": "wikimedia-commons",
@@ -1859,13 +1859,8 @@
   "match": 0.989
  },
  "jacket": {
-  "source": "wikimedia-commons",
-  "title": "File:Leather jacket.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Leather_jacket.jpg",
-  "author": "Alec Xander",
-  "licence": "CC BY-SA 2.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-  "match": 0.98
+  "source": "unknown",
+  "note": "fetched from Wikimedia Commons before sources were recorded; 11-27 re-match found a likely source (File:Leather jacket.jpg, fingerprint 0.98) but below the 0.99 credit bar, so not credited; to be replaced (owner 11-27)"
  },
  "jam": {
   "source": "wikimedia-commons",
@@ -2188,8 +2183,13 @@
   "licence": "own work"
  },
  "magnet": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:A-1 horseshoe-magnet-red-silver-iron-filings-AHD.jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:A-1_horseshoe-magnet-red-silver-iron-filings-AHD.jpg",
+  "author": "Oguraclutch",
+  "licence": "CC BY-SA 3.0",
+  "licenceUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+  "match": 0.993
  },
  "magnifier": {
   "source": "wikimedia-commons",
@@ -2940,8 +2940,13 @@
   "match": 0.987
  },
  "read_verb": {
-  "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "source": "wikimedia-commons",
+  "title": "File:Jeanne-Elisabeth Chaudet - A child showing pictures from a book (Un enfant qui montre les images d'un livre).jpg",
+  "url": "https://commons.wikimedia.org/wiki/File:Jeanne-Elisabeth_Chaudet_-_A_child_showing_pictures_from_a_book_(Un_enfant_qui_montre_les_images_d%27un_livre).jpg",
+  "author": "Jeanne-Élisabeth Chaudet",
+  "licence": "Public domain",
+  "licenceUrl": "",
+  "match": 0.992
  },
  "red": {
   "source": "own",
@@ -3639,7 +3644,7 @@
  },
  "tiger": {
   "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "note": "fetched from Wikimedia Commons before sources were recorded; 11-27 re-match found a likely source (File:Tiger Face (10971343685).jpg, fingerprint 0.884) but below the 0.99 credit bar, so not credited; to be replaced (owner 11-27)"
  },
  "tired": {
   "source": "twemoji",
@@ -3676,13 +3681,8 @@
   "match": 0.994
  },
  "toothbrush": {
-  "source": "wikimedia-commons",
-  "title": "File:Oral-B Pro 2 2500 Electric Toothbrush - 41646996702.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Oral-B_Pro_2_2500_Electric_Toothbrush_-_41646996702.jpg",
-  "author": "electricteeth",
-  "licence": "CC BY 2.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by/2.0",
-  "match": 0.991
+  "source": "unknown",
+  "note": "fetched from Wikimedia Commons before sources were recorded; 11-27 re-match traced it to File:Oral-B Pro 2 2500 Electric Toothbrush - 41646996702.jpg, a branded product photo: replace, never credit (owner 11-27)"
  },
  "towel": {
   "source": "wikimedia-commons",
@@ -3756,13 +3756,8 @@
   "licence": "own work"
  },
  "turtle": {
-  "source": "wikimedia-commons",
-  "title": "File:Sea turtle swimming.jpg",
-  "url": "https://commons.wikimedia.org/wiki/File:Sea_turtle_swimming.jpg",
-  "author": "Simonverhamme",
-  "licence": "CC BY-SA 4.0",
-  "licenceUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-  "match": 0.968
+  "source": "unknown",
+  "note": "fetched from Wikimedia Commons before sources were recorded; 11-27 re-match found a likely source (File:Sea turtle swimming.jpg, fingerprint 0.968) but below the 0.99 credit bar, so not credited; to be replaced (owner 11-27)"
  },
  "twelve": {
   "source": "own",
@@ -3986,7 +3981,7 @@
  },
  "window": {
   "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "note": "fetched from Wikimedia Commons before sources were recorded; 11-27 re-match found a likely source (File:Double window of the D.A. Sturdza House, from Bucharest (Romania) 1.jpg, fingerprint 0.982) but below the 0.99 credit bar, so not credited; to be replaced (owner 11-27)"
  },
  "wizard": {
   "source": "fluent-emoji",
@@ -4021,7 +4016,7 @@
  },
  "write": {
   "source": "unknown",
-  "note": "fetched from Wikimedia Commons before sources were recorded; no exact file found (11-05 backfill)"
+  "note": "fetched from Wikimedia Commons before sources were recorded; 11-27 re-match found a likely source (File:Young female day school student concentrating on spelling work book - NARA - 295169.jpg, fingerprint 0.984) but below the 0.99 credit bar, so not credited; to be replaced (owner 11-27)"
  },
  "x-ray": {
   "source": "wikimedia-commons",
