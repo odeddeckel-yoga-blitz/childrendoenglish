@@ -12,7 +12,7 @@ import { speakWord } from '../utils/sound';
  * (two blanks, filled left-to-right) · hard (silent/tricky letter).
  * Feeds stats.spelling via onResult(wordId, ok) per word; onComplete at the end.
  */
-export default function LetterFix({ words = [], mode = 'easy', lang = 'en', onResult, onComplete, onBack }) {
+function LetterFixRound({ words = [], mode = 'easy', lang = 'en', onResult, onComplete, onBack }) {
   const [idx, setIdx] = useState(0);
   const [blankPos, setBlankPos] = useState(0); // which blank is being filled (double mode)
   const [fills, setFills] = useState([]);      // chosen letters so far
@@ -111,4 +111,13 @@ export default function LetterFix({ words = [], mode = 'easy', lang = 'en', onRe
       </div>
     </div>
   );
+}
+
+// Ladder steps lf1 -> lf2 -> lf3 reuse this component without unmounting it. After the 'double' step the blank
+// position and the word index were still at the end, so the next step (one blank) read blanks[1] = undefined
+// and threw "Cannot read properties of undefined (reading 'options')" (Sentry c5c32558, 11-27). A fresh round per
+// step and per word list resets that state.
+export default function LetterFix(props) {
+  const roundKey = `${props.mode || 'easy'}|${(props.words || []).map((w) => w.id).join(',')}`;
+  return <LetterFixRound key={roundKey} {...props} />;
 }
