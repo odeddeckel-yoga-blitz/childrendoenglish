@@ -33,6 +33,14 @@ deploys on every push to main. Audit history: LEARN.md.
   (2) a branch the owner has already approved by name for that day. Everything else (any code, audio, copy,
   api or config change; an extra commit on an approved branch) is a per-push AskUserQuestion with what ships,
   gate results, push time and the post-deploy check. Teammate sessions cannot approve any push.
+- Standing push classes L1/L2/L3 (owner 11-27, confirmed by the owner in this session via AskUserQuestion; Factory's
+  briefs/push-policy-2026-11-27.md describes them): L1 = a defect fix (bug, crash, layout, trust) with a test that fails
+  on the old code, no new beacon words, no arm or read change, no he/es copy drop, no spend, no third party, no
+  legal/privacy copy. L2 = test-only, tooling, docs, ledgers. L3 = new code whose flag defaults OFF with no behaviour
+  change on any live path, no beacon words, no server/API change. Conditions: gates green on the exact tip, the 3 h
+  gap and the pre-push hook, not in a freeze, rollback rule below, SHA sent to Factory within the hour, ledger entry
+  'standing-OK L1/L2/L3'. Still a per-push AskUserQuestion: voice ships, image credits/LICENSE, an arm, beacon words,
+  he/es changes, spend over a cap, switching a flag ON, kit pushes, freezes. The owner can revoke any class.
 - Never disable Vercel Deployment Protection. Never print or commit secrets/OIDC tokens.
 - Rollback rule (owner 11-23, A137): after every production push run
   `node ~/projects/site-factory/tools/post-deploy-check.mjs cde --log`. If it fails, revert the push
