@@ -43,9 +43,10 @@ export const initTTS = async () => {
 export const isTTSAvailable = () => ttsAvailable;
 
 // Speak a word using Web Speech API
-// Pre-rendered word audio (Piper en_US-amy voice, scripts/generate-word-audio.sh):
-// one consistent, friendly voice on every device instead of whatever TTS the
-// OS ships. Falls back to on-device TTS for any text without a file.
+// Pre-rendered word audio (scripts/generate-word-audio.sh): computer-generated
+// with Piper in Jenny (Dioco), with Kristin / LJ Speech as the fallback voices
+// (scripts/site_voice.py). One consistent, friendly voice on every device
+// instead of whatever TTS the OS ships. Falls back to on-device TTS for any text without a file.
 const wordAudioUrl = (text) =>
   '/audio/' + text.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-') + '.mp3';
 
